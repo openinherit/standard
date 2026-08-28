@@ -29,7 +29,7 @@ jobs:
     name: Grep lint — no v1/v2 schema URLs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Fail on v1/v2 schema URLs
         run: |

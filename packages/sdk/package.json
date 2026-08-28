@@ -55,7 +55,7 @@
   "devDependencies": {
     "@hey-api/client-fetch": "latest",
     "tsup": "^8.5.1",
-    "typescript": "^6.0.2"
+    "typescript": "^7.0.2"
   },
   "publishConfig": {
     "access": "public"

@@ -1,0 +1,164 @@
+{
+  "version": "1.0.0",
+  "description": "Standard event types for INHERIT estate administration audit trails",
+  "lastUpdated": "2026-03-28",
+  "eventTypes": [
+    {
+      "id": "death_registered",
+      "label": "Death registered",
+      "description": "The testator's death has been officially registered with the civil registration authority. This is typically the first formal step that unlocks estate administration.",
+      "typicalTrigger": "institutional_action",
+      "typicalActorType": "court",
+      "affectsEntityTypes": ["estate"],
+      "jurisdictionSpecific": false
+    },
+    {
+      "id": "probate_granted",
+      "label": "Probate granted",
+      "description": "The court has issued a grant of probate (or equivalent instrument) confirming the validity of the will and authorising the executor(s) to administer the estate.",
+      "typicalTrigger": "court_action",
+      "typicalActorType": "court",
+      "affectsEntityTypes": ["estate"],
+      "jurisdictionSpecific": true,
+      "jurisdictionNotes": {
+        "GB": {
+          "instrument": "Grant of Probate (testate) or Letters of Administration (intestate)",
+          "issuingBody": "HM Courts & Tribunals Service — Probate Registry",
+          "notes": "In England and Wales the grant is issued by the Probate Registry. Scotland uses Confirmation issued by the Sheriff Court. Northern Ireland uses its own Probate and Matrimonial Office. There is no formal probate requirement for estates below approximately £5,000–£10,000 depending on the institution."
+        },
+        "SG": {
+          "instrument": "Grant of Probate or Letters of Administration",
+          "issuingBody": "Family Justice Courts",
+          "notes": "For Muslim estates, administration may proceed under the Administration of Muslim Law Act (AMLA) through the Syariah Court. Non-Muslim estates use the Probate and Administration Act 1934. Small estates (below SGD 50,000) may use the Public Trustee's office."
+        },
+        "JP": {
+          "instrument": "Inheritance Certificate (相続証明書) or Family Register (戸籍謄本)",
+          "issuingBody": "Legal Affairs Bureau (法務局)",
+          "notes": "Japan does not have a probate court system. Instead, heirs prove entitlement through the family register (koseki) and, since 2017, a Legal Heir Certificate (hōteisōzokujoho-shōmei-sho) obtainable from the Legal Affairs Bureau. Inheritance by agreement (kyōgi bunkatsu) requires a written agreement signed by all heirs."
+        },
+        "AU": {
+          "instrument": "Grant of Probate or Letters of Administration",
+          "issuingBody": "Supreme Court of the relevant State or Territory",
+          "notes": "Each Australian state and territory issues its own grant. A Reseal of Foreign Probate is required to administer assets in a different jurisdiction. Small estate procedures vary by state (e.g. NSW threshold is AUD 15,000 for bank accounts)."
+        },
+        "US": {
+          "instrument": "Letters Testamentary (testate) or Letters of Administration (intestate)",
+          "issuingBody": "State Probate Court",
+          "notes": "Probate is administered at state level. Some states (e.g. California) allow summary administration for small estates (below USD 184,500 in CA). Many states recognise the Uniform Probate Code. Assets with beneficiary designations, joint tenancy, or held in a revocable living trust typically bypass probate entirely."
+        }
+      }
+    },
+    {
+      "id": "account_frozen",
+      "label": "Account frozen",
+      "description": "A financial account (bank, brokerage, or similar) has been frozen pending production of the grant of representation or equivalent authority.",
+      "typicalTrigger": "institutional_action",
+      "typicalActorType": "bank",
+      "affectsEntityTypes": ["asset"],
+      "jurisdictionSpecific": false
+    },
+    {
+      "id": "asset_valued",
+      "label": "Asset valued",
+      "description": "A formal valuation has been obtained for an estate asset. Required for inheritance tax calculations, court inventory submissions, and equitable distribution among beneficiaries.",
+      "typicalTrigger": "executor_action",
+      "typicalActorType": "valuer",
+      "affectsEntityTypes": ["asset", "property"],
+      "jurisdictionSpecific": false
+    },
+    {
+      "id": "tax_filing_deadline",
+      "label": "Tax filing deadline",
+      "description": "A statutory deadline for submitting an inheritance, estate, or related tax return to the relevant authority has been reached or is approaching.",
+      "typicalTrigger": "calendar_deadline",
+      "typicalActorType": "tax_authority",
+      "affectsEntityTypes": ["estate"],
+      "jurisdictionSpecific": false
+    },
+    {
+      "id": "item_listed",
+      "label": "Item listed for sale",
+      "description": "An estate asset has been listed on a marketplace, auction house, or similar platform for sale.",
+      "typicalTrigger": "marketplace_action",
+      "typicalActorType": "marketplace",
+      "affectsEntityTypes": ["asset", "property"],
+      "jurisdictionSpecific": false
+    },
+    {
+      "id": "item_sold",
+      "label": "Item sold",
+      "description": "An estate asset has been sold and proceeds received. Triggers capital gains calculations and updates the estate's cash position.",
+      "typicalTrigger": "marketplace_action",
+      "typicalActorType": "marketplace",
+      "affectsEntityTypes": ["asset", "property"],
+      "jurisdictionSpecific": false
+    },
+    {
+      "id": "beneficiary_notified",
+      "label": "Beneficiary notified",
+      "description": "A beneficiary has been formally notified of their entitlement under the will or intestacy rules. Starts the clock on any challenge or renunciation period.",
+      "typicalTrigger": "executor_action",
+      "typicalActorType": "executor",
+      "affectsEntityTypes": ["bequest", "estate"],
+      "jurisdictionSpecific": false
+    },
+    {
+      "id": "shariah_validation",
+      "label": "Shariah validation",
+      "description": "The estate distribution plan has been reviewed and validated by a qualified Shariah scholar or religious authority to confirm compliance with Islamic inheritance law (faraid).",
+      "typicalTrigger": "institutional_action",
+      "typicalActorType": "religious_body",
+      "affectsEntityTypes": ["estate", "bequest"],
+      "jurisdictionSpecific": true,
+      "jurisdictionNotes": {
+        "SG": {
+          "instrument": "Inheritance Certificate (Sijil Faraid)",
+          "issuingBody": "Syariah Court of Singapore",
+          "notes": "Under the Administration of Muslim Law Act (AMLA), the Syariah Court issues an Inheritance Certificate (Sijil Faraid) that specifies the shares of each heir according to Islamic law. This certificate is required by financial institutions before releasing assets of a Muslim estate. The certificate must be presented alongside the grant of letters of administration from the Family Justice Courts."
+        },
+        "MY": {
+          "instrument": "Faraid Certificate (Sijil Faraid)",
+          "issuingBody": "Syariah High Court of the relevant State",
+          "notes": "Malaysia's dual legal system applies Syariah law to Muslim estates for inheritance purposes. A Syariah court Faraid Certificate is required. Harta sepencarian (matrimonial property) is assessed separately before faraid shares are calculated. Non-Muslim estates follow the Distribution Act 1958."
+        },
+        "GB": {
+          "instrument": "Scholarly opinion (fatwa) — no statutory instrument",
+          "issuingBody": "Islamic Sharia Council; other recognised scholars",
+          "notes": "England and Wales have no separate Shariah probate court. Executors may seek a scholarly opinion to confirm distribution complies with faraid, but this is advisory only. The estate is administered under English law via the standard probate process. Many practitioners draft wills to mirror faraid shares within the constraints of English law."
+        },
+        "JP": {
+          "instrument": "Scholarly opinion — no statutory instrument",
+          "issuingBody": "Japan Muslim Association or qualified overseas scholars",
+          "notes": "Japan has no dedicated Islamic inheritance process. Muslim testators typically use a combination of a Japanese will and a faraid opinion from a recognised scholar. The Japanese inheritance rules (uniform 50% spouse / 50% children split by default) may not align with faraid, so careful estate planning is required."
+        }
+      }
+    },
+    {
+      "id": "distribution_complete",
+      "label": "Distribution complete",
+      "description": "All assets have been distributed to beneficiaries in accordance with the will or intestacy rules, and the estate administration is closed.",
+      "typicalTrigger": "executor_action",
+      "typicalActorType": "executor",
+      "affectsEntityTypes": ["estate", "bequest"],
+      "jurisdictionSpecific": false
+    },
+    {
+      "id": "nomination_expiry",
+      "label": "Nomination expiry",
+      "description": "A beneficiary nomination or binding death benefit nomination has expired and requires renewal. Common for superannuation (Australia) and CPF nominations (Singapore) where nominations lapse after a specified period.",
+      "typicalTrigger": "calendar_deadline",
+      "typicalActorType": "system",
+      "affectsEntityTypes": ["asset"],
+      "jurisdictionSpecific": false
+    },
+    {
+      "id": "legislative_change",
+      "label": "Legislative change",
+      "description": "A change in legislation or regulation has affected the estate — for example, a change to inheritance tax thresholds, pension rules, or intestacy law — requiring the estate plan or administration to be reviewed.",
+      "typicalTrigger": "legislative_change",
+      "typicalActorType": "tax_authority",
+      "affectsEntityTypes": ["estate"],
+      "jurisdictionSpecific": false
+    }
+  ]
+}

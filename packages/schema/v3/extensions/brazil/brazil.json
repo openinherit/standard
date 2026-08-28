@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/brazil/brazil.json",
+  "title": "Brazil Extension",
+  "description": "Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário process types, cartório attestation, disponível (testamentary freedom portion), and união estável (stable union recognition).",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": ["BR"],
+  "inheritVersion": ">=3.0.0 <4.0.0",
+  "legalSystems": ["civil_law"],
+  "dataProvenance": "Brazilian Civil Code (Lei 10.406/2002), Código de Processo Civil (Lei 13.105/2015)",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": [],
+  "type": "object",
+  "properties": {
+    "meacao": {
+      "description": "Meação — the surviving spouse's 50% community property entitlement that is separated before succession begins. Not an inheritance share — it is the spouse's own property",
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "description": "Whether meação applies to this estate",
+          "type": "boolean"
+        },
+        "propertyRegime": {
+          "description": "The matrimonial property regime governing the meação split",
+          "$comment": "comunhao_parcial_de_bens: partial community of property (default regime since 1977). comunhao_universal_de_bens: universal community of property. separacao_total_de_bens: total separation of property. participacao_final_nos_aquestos: participation in final acquisitions.",
+          "enum": [
+            "comunhao_parcial_de_bens",
+            "comunhao_universal_de_bens",
+            "separacao_total_de_bens",
+            "participacao_final_nos_aquestos"
+          ]
+        },
+        "spousePersonId": {
+          "description": "Reference to the Person.id of the surviving spouse entitled to meação",
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "communityPropertyValue": {
+          "description": "Total value of community property subject to meação split, in minor currency units",
+          "$ref": "../../common/money.json"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "legitima": {
+      "description": "Legítima — the mandatory 50% of the estate reserved for compulsory heirs (herdeiros necessários: descendants, ascendants, surviving spouse). Brazilian Civil Code Art. 1.846",
+      "type": "object",
+      "properties": {
+        "compulsoryHeirs": {
+          "description": "Array of persons who are compulsory heirs under Brazilian law",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["personId", "heirClass"],
+            "properties": {
+              "personId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "heirClass": {
+                "description": "Class of compulsory heir",
+                "enum": [
+                  "descendant",
+                  "ascendant",
+                  "surviving_spouse"
+                ]
+              },
+              "shareFraction": {
+                "description": "Share as a fraction, e.g. 1/3",
+                "type": "string",
+                "pattern": "^[0-9]+/[0-9]+$",
+                "maxLength": 20
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 2000
+              }
+            },
+            "additionalProperties": false
+          },
+          "maxItems": 50
+        },
+        "legitimaPortion": {
+          "description": "The legítima portion as a percentage (always 50% under current law)",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "disponivel": {
+      "description": "Disponível — the freely disposable portion of the estate (50% after legítima). The testator may bequeath this to anyone",
+      "type": "object",
+      "properties": {
+        "portion": {
+          "description": "The disponível portion as a percentage (50% under current law)",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "estimatedValue": {
+          "description": "Estimated value of the disponível portion in minor currency units",
+          "$ref": "../../common/money.json"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "inventarioType": {
+      "description": "Type of inventário (estate inventory and distribution process)",
+      "$comment": "judicial: mandatory when there are minor heirs, incapacitated heirs, or disputes. extrajudicial: permitted since Lei 11.441/2007 when all heirs are of age, capable, and in agreement — processed at a cartório (notary office). Required in both cases within 60 days of death (CPC Art. 611).",
+      "enum": [
+        "judicial",
+        "extrajudicial"
+      ]
+    },
+    "cartorioAttestation": {
+      "description": "Details of notarial attestation at a Brazilian cartório (notary office)",
+      "type": "object",
+      "properties": {
+        "cartorioName": {
+          "description": "Name of the cartório",
+          "type": "string",
+          "maxLength": 255
+        },
+        "tabeliao": {
+          "description": "Name of the tabelião (notary) who attested the document",
+          "type": "string",
+          "maxLength": 255
+        },
+        "livroNumber": {
+          "description": "Book (livro) number in the cartório registry",
+          "type": "string",
+          "maxLength": 100
+        },
+        "folhaNumber": {
+          "description": "Page (folha) number in the cartório registry",
+          "type": "string",
+          "maxLength": 100
+        },
+        "attestationDate": {
+          "description": "Date of the cartório attestation",
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "uniaoEstavel": {
+      "description": "União estável (stable union) — recognised as equivalent to marriage for inheritance purposes under Brazilian law (Art. 1.723 Civil Code). A partner in a stable union has the same inheritance rights as a spouse",
+      "type": "object",
+      "properties": {
+        "recognised": {
+          "description": "Whether the relationship is recognised as a stable union",
+          "type": "boolean"
+        },
+        "partnerPersonId": {
+          "description": "Reference to the Person.id of the stable union partner",
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "startDate": {
+          "description": "Approximate start date of the stable union",
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "judicialDeclaration": {
+          "description": "Whether the stable union has been judicially declared",
+          "type": "boolean"
+        },
+        "contractRegistered": {
+          "description": "Whether a stable union contract was registered at a cartório",
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "itcmdRate": {
+      "description": "ITCMD (Imposto sobre Transmissão Causa Mortis e Doação) — state-level inheritance tax rate. Varies by state, capped at 8% by the Federal Senate",
+      "type": "object",
+      "properties": {
+        "state": {
+          "description": "Brazilian state abbreviation (e.g. SP, RJ, MG)",
+          "type": "string",
+          "maxLength": 2,
+          "pattern": "^[A-Z]{2}$"
+        },
+        "ratePercentage": {
+          "description": "ITCMD rate as a percentage",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 8
+        },
+        "progressive": {
+          "description": "Whether the state applies progressive rates",
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

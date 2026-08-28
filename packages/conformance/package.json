@@ -1,0 +1,66 @@
+{
+  "name": "@openinherit/conformance",
+  "version": "6.6.0",
+  "description": "INHERIT Conformance Test Kit — validate your estate planning implementation against the open standard. 77 test suites, 2,000+ test cases across 31 entity schemas and 21 jurisdiction extensions. Levels 1 (schema valid), 2 (referentially intact), 3 (jurisdiction complete).",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Testate Technologies Ltd",
+    "url": "https://www.openinherit.org"
+  },
+  "contributors": [
+    {
+      "name": "Rich Davies",
+      "url": "https://github.com/davieshq"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openinherit/standard.git",
+    "directory": "packages/conformance"
+  },
+  "homepage": "https://dev.openinherit.org/sdk/conformance/",
+  "bugs": {
+    "url": "https://github.com/openinherit/standard/issues"
+  },
+  "funding": {
+    "type": "opencollective",
+    "url": "https://www.openinherit.org/support"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "inherit",
+    "estate-planning",
+    "json-schema",
+    "json-schema-2020-12",
+    "conformance",
+    "testing",
+    "validation",
+    "test-suite",
+    "open-standard",
+    "legal-tech",
+    "legaltech",
+    "probate",
+    "wills",
+    "trusts",
+    "succession",
+    "schema-validation",
+    "sourcemeta",
+    "data-interchange",
+    "compliance"
+  ],
+  "files": [
+    "schemas/",
+    "estate/",
+    "catalogue/",
+    "expected/",
+    "runners/",
+    "manifest.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,57 @@
+name: Extension Proposal
+description: Propose a new jurisdiction or cultural extension for INHERIT
+labels: ["extension-proposal"]
+body:
+  - type: input
+    id: jurisdiction
+    attributes:
+      label: Jurisdiction
+      description: The jurisdiction this extension covers (ISO 3166-2 code preferred)
+      placeholder: e.g. KR (South Korea), IN-KA (Karnataka, India)
+    validations:
+      required: true
+  - type: dropdown
+    id: legal-system
+    attributes:
+      label: Legal system(s)
+      description: Which legal tradition(s) does this jurisdiction follow?
+      multiple: true
+      options:
+        - Common law
+        - Civil law
+        - Islamic law
+        - Hindu law
+        - Jewish law
+        - Customary law
+        - Mixed/hybrid
+    validations:
+      required: true
+  - type: input
+    id: maintainer
+    attributes:
+      label: Proposed maintainer
+      description: Who will maintain this extension? (name and/or GitHub username)
+      placeholder: e.g. @username or "Seoul Estate Law LLP"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What does this extension add? What succession rules does it cover?
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example data
+      description: Provide an example of the data this extension would capture (JSON preferred)
+    validations:
+      required: false
+  - type: textarea
+    id: sources
+    attributes:
+      label: Legal sources
+      description: What legislation, regulations, or legal authorities does this extension draw from?
+    validations:
+      required: true

@@ -1,0 +1,283 @@
+{
+  "target": "../../../v3/guardian.json",
+  "tests": [
+    {
+      "description": "valid \u2014 minimal guardian with required fields only",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": "testamentary"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 fully populated testamentary guardian with conditions",
+      "data": {
+        "id": "ba350a28-d0a2-44ec-922e-5ce84fbf1426",
+        "personId": "03c9a644-9c33-4613-a01b-d300c829218d",
+        "childPersonId": "8b7edf63-7dd1-43f7-a861-f83d18e53cae",
+        "role": "primary",
+        "appointmentType": "testamentary",
+        "guardianshipStructure": "individual",
+        "conditions": "Takes effect only if both parents die before the child reaches 18. Guardian must maintain the child's existing school placement at Manchester Grammar School.",
+        "notes": "Auntie Lakshmi confirmed she is willing and able to act. Child to continue attending current school in Manchester. Speaks both English and Hindi."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 Shariah court guardian with collective structure",
+      "data": {
+        "id": "85f5ad33-84cc-4575-ac2c-c170de8a8885",
+        "personId": "d8c160ff-df68-4453-9788-da5e6e9f7111",
+        "childPersonId": "ebedabed-5f69-4ecc-bfaf-01295c0fbc4d",
+        "role": "primary",
+        "appointmentType": "shariah_court_appointed",
+        "guardianshipStructure": "collective",
+        "notes": "Guardianship follows hadanah principles \u2014 maternal family has priority for young children. Islamic Sharia Council London consulted."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 community-appointed guardian with family council decision",
+      "data": {
+        "id": "bcf42ff1-4af0-48b6-955f-b44040711e91",
+        "personId": "a351566a-c8d6-4c3c-a73c-ba120590918f",
+        "childPersonId": "af089454-ec90-43a0-a5b0-401d73159136",
+        "role": "secondary",
+        "appointmentType": "community_appointed",
+        "guardianshipStructure": "family_council_determined",
+        "familyCouncilDecisionRef": "FC/2025/003 \u2014 Okonkwo family council decision of 12 January 2025",
+        "notes": "Kwame Mensah agreed to act as guardian. Family council approved unanimously at the January 2025 meeting in Accra."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 substitute guardian for Canadian resident",
+      "data": {
+        "id": "ed8612c7-111e-46fa-8708-6a1dc87e9a25",
+        "personId": "29487023-ecb0-407f-9a2a-b9d62beb3df3",
+        "childPersonId": "4f5c351f-0fa7-4c65-b715-2668d3dd3c3a",
+        "role": "substitute",
+        "appointmentType": "parental_responsibility",
+        "guardianshipStructure": "individual",
+        "notes": "Guardian lives in Vancouver, Canada. May need to apply for child's visa. Has agreed to relocate temporarily if needed."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing required id",
+      "data": {
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": "testamentary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required childPersonId",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "role": "primary",
+        "appointmentType": "testamentary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 role is not a valid enum value",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "backup",
+        "appointmentType": "testamentary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 appointmentType is not a valid enum value",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": "informal"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required role",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "appointmentType": "testamentary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required appointmentType",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 role as number instead of enum string",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": 1,
+        "appointmentType": "testamentary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 appointmentType as boolean instead of enum string",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 childPersonId as number instead of UUID string",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": 99999,
+        "role": "primary",
+        "appointmentType": "testamentary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 conditions exceeds maxLength 255",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": "testamentary",
+        "conditions": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 notes exceeds maxLength 2000",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": "testamentary",
+        "notes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAx"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 id is not a valid UUID format",
+      "data": {
+        "id": "not-a-uuid",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": "testamentary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 childPersonId is not a valid UUID format",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "this-is-not-a-uuid-at-all",
+        "role": "primary",
+        "appointmentType": "testamentary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 personId is not a valid UUID format",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "invalid-uuid-format",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": "testamentary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 unknown additional property at root level (unevaluatedProperties false)",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": "testamentary",
+        "favouriteColour": "blue"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 guardian with organisationId instead of personId",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "organisationId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": "court_appointed"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 guardian for adult with disability",
+      "data": {
+        "id": "f1a2b3c4-d5e6-4f78-9a0b-c1d2e3f4a5b6",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": "court_appointed",
+        "dependantType": "adult_with_disability",
+        "notes": "Court-appointed guardian for adult son with Down syndrome. Son requires support with financial decisions and daily living."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 familyCouncilDecisionRef exceeds maxLength 500",
+      "data": {
+        "id": "2115262d-6487-49bc-9cc3-0cede66a6908",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": "community_appointed",
+        "guardianshipStructure": "family_council_determined",
+        "familyCouncilDecisionRef": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAX"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — guardian with family_council guardianship model",
+      "data": {
+        "id": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "childPersonId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "role": "primary",
+        "appointmentType": "community_appointed",
+        "guardianshipModel": "family_council"
+      },
+      "valid": true
+    }
+  ]
+}

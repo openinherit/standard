@@ -1,0 +1,689 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/trust.json",
+  "title": "Trust",
+  "description": "A trust instrument — testamentary or inter vivos. Covers discretionary, bare, life interest, charitable, nil rate band, and offshore structures with governance features (reserved powers, flee clauses, protector powers). Extension types (e.g. x-inherit-waqf) support cultural and jurisdiction-specific trust forms",
+  "type": "object",
+  "required": [ "id", "name", "trustType", "trustees", "beneficiaries" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this trust within the INHERIT document",
+      "examples": [ "b8c9d0e1-f2a3-4567-b890-123456789abc" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "name": {
+      "description": "Name of the trust, as it appears in the trust instrument",
+      "examples": [
+        "The Davies Family Trust",
+        "NRB Discretionary Trust",
+        "Al-Rahman Waqf",
+        "Tanaka Family Trust",
+        "Sharma Children's Trust",
+        "Okonkwo Education Trust"
+      ],
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "trustType": {
+      "description": "The category of trust. Extension types use x-inherit- prefix (e.g. x-inherit-waqf)",
+      "$comment": "discretionary: trustees have discretion over distributions. life_interest: beneficiary enjoys assets for life. bare: beneficiary has absolute right. accumulation_and_maintenance: for minor beneficiaries. disabled_persons: for disabled beneficiaries. charitable: established for charitable purposes. nil_rate_band: uses inheritance tax nil-rate band. other: any type not covered above. residence_nil_rate_band: uses residence nil-rate band (RNRB). a_b_marital: A/B marital trust for surviving spouse. bypass: bypass trust to exclude assets from surviving spouse's estate.",
+      "examples": [ "discretionary", "nil_rate_band", "x-inherit-waqf" ],
+      "anyOf": [
+        {
+          "enum": [
+            "discretionary",
+            "life_interest",
+            "bare",
+            "accumulation_and_maintenance",
+            "disabled_persons",
+            "charitable",
+            "nil_rate_band",
+            "other",
+            "residence_nil_rate_band",
+            "a_b_marital",
+            "bypass"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+$"
+        }
+      ]
+    },
+    "trustees": {
+      "description": "Persons appointed as trustees, protectors, or enforcers of this trust",
+      "type": "array",
+      "maxItems": 100,
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/TrustAppointee"
+      }
+    },
+    "beneficiaries": {
+      "description": "Beneficiaries of the trust — named individuals, classes, or organisations",
+      "type": "array",
+      "maxItems": 100,
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/TrustBeneficiary"
+      }
+    },
+    "settlor": {
+      "description": "Reference to the Person.id of the settlor (the person who created and funded the trust)",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "settlorDisplay": {
+      "description": "Human-readable display name for the referenced settlor",
+      "type": "string",
+      "maxLength": 255
+    },
+    "isTestamentary": {
+      "description": "Whether the trust is created by the will (testamentary) or was established during the settlor's lifetime (inter vivos)",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "createdAt": {
+      "description": "Timestamp when the trust instrument was executed",
+      "examples": [ "2020-04-15T10:00:00Z", "2024-11-01T09:00:00Z" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "creationType": {
+      "description": "How the trust was created",
+      "$comment": "testamentary: created by the will, takes effect on death. inter_vivos_revocable: created during lifetime, can be revoked by the settlor (common in US estate planning). inter_vivos_irrevocable: created during lifetime, cannot be revoked.",
+      "examples": [ "testamentary", "inter_vivos_revocable" ],
+      "enum": [
+        "testamentary",
+        "inter_vivos_revocable",
+        "inter_vivos_irrevocable"
+      ]
+    },
+    "revocability": {
+      "description": "Whether the trust can be revoked, and whether it is perpetual",
+      "$comment": "revocable: can be revoked by the settlor. irrevocable: cannot be revoked — common for asset protection. perpetual: no end date — waqf and certain Cayman STAR trusts. Distinct from creationType. A trust created as inter_vivos_revocable may become irrevocable on the settlor's death.",
+      "examples": [ "irrevocable", "perpetual" ],
+      "enum": [ "revocable", "irrevocable", "perpetual" ]
+    },
+    "perpetual": {
+      "description": "Whether the trust is perpetual (has no fixed end date). Waqf endowments and certain offshore trusts are perpetual by nature",
+      "$comment": "True for waqf and certain offshore perpetual trusts.",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "vestingAge": {
+      "description": "Age at which the beneficiary's interest vests absolutely (for A&M trusts and bare trusts for minors)",
+      "examples": [ 18, 21, 25 ],
+      "type": "integer",
+      "minimum": 0
+    },
+    "vestingDate": {
+      "description": "Fixed date on which the trust vests, if not age-based",
+      "examples": [ "2040-01-01" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "vestingConditions": {
+      "description": "Conditions that must be met for the trust to vest",
+      "examples": [
+        [ "Beneficiary must have graduated from university" ],
+        [ "Beneficiary must be in stable employment" ]
+      ],
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      }
+    },
+    "contingentInterests": {
+      "description": "Interests in the trust that are contingent on future events",
+      "examples": [
+        [
+          "If the life tenant dies without issue, capital passes to the charity"
+        ],
+        [ "On the youngest child reaching 25, the trust winds up" ]
+      ],
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      }
+    },
+    "trustPeriod": {
+      "description": "The trust period or perpetuity period, if applicable. In England and Wales, the statutory perpetuity period is 125 years (Perpetuities and Accumulations Act 2009)",
+      "examples": [
+        "125 years from date of settlement",
+        "80 years",
+        "Perpetual (waqf)"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "governingLaw": {
+      "description": "The jurisdiction whose law governs this trust",
+      "$ref": "common/jurisdiction.json"
+    },
+    "reservedPowers": {
+      "description": "Powers reserved by the settlor or granted to a third party. Offshore trusts frequently include reserved powers over investment or distributions",
+      "$comment": "Powers retained by the settlor or granted to a third party. Common in BVI VISTA trusts, Jersey trusts, and Cayman STAR trusts.",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "powerType" ],
+        "properties": {
+          "powerType": {
+            "description": "The type of reserved power",
+            "$comment": "investment: power to direct or veto investment decisions. distribution: power to direct distributions. amendment: power to amend trust terms. revocation: power to revoke the trust. addition_of_beneficiaries: power to add new beneficiaries. removal_of_trustees: power to remove and appoint trustees. change_of_governing_law: power to change the trust's governing jurisdiction.",
+            "enum": [
+              "investment",
+              "distribution",
+              "amendment",
+              "revocation",
+              "addition_of_beneficiaries",
+              "removal_of_trustees",
+              "change_of_governing_law"
+            ]
+          },
+          "heldByPersonId": {
+            "description": "Reference to the Person.id who holds this power",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "heldByPersonIdDisplay": {
+            "description": "Human-readable display name for the referenced held by person",
+            "type": "string",
+            "maxLength": 255
+          },
+          "conditions": {
+            "description": "Any conditions on the exercise of this power",
+            "examples": [
+              "May only be exercised with protector consent",
+              "Requires 30 days written notice"
+            ],
+            "type": "string",
+            "maxLength": 255
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "fleeClause": {
+      "description": "A flee clause allowing automatic or discretionary change of trust situs when triggering events occur. Standard in offshore trust planning",
+      "$comment": "Clause allowing automatic change of trust situs if triggering events occur (e.g., change of law, political instability). Standard in offshore trusts.",
+      "type": "object",
+      "properties": {
+        "present": {
+          "description": "Whether the trust contains a flee clause",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "triggerEvents": {
+          "description": "Events that trigger the flee clause",
+          "examples": [
+            [
+              "Change of law adverse to trust beneficiaries",
+              "Political instability",
+              "Exchange control imposition"
+            ]
+          ],
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "destinationJurisdiction": {
+          "description": "The jurisdiction the trust flees to when triggered",
+          "$ref": "common/jurisdiction.json"
+        },
+        "automaticOrDiscretionary": {
+          "description": "Whether the flee is triggered automatically or at trustee discretion",
+          "$comment": "automatic: trust moves automatically on trigger event. discretionary: trustee decides whether to move.",
+          "enum": [ "automatic", "discretionary" ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "protectorPowers": {
+      "description": "Powers held by the trust protector or enforcer. Offshore trusts commonly use protectors to oversee trustees",
+      "$comment": "Specific powers held by the trust protector. Cayman STAR trusts REQUIRE an enforcer. Jersey/Guernsey trusts commonly have protectors.",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "powerType", "protectorPersonId" ],
+        "properties": {
+          "powerType": {
+            "description": "The type of protector or enforcer power",
+            "$comment": "consent_to_distribution: trustee must obtain protector consent before distributing. remove_trustee: power to remove a trustee. appoint_trustee: power to appoint a replacement trustee. change_governing_law: power to change the trust's governing law. veto_investment: power to veto investment decisions. add_beneficiary: power to add persons to the beneficiary class. exclude_beneficiary: power to remove persons from the beneficiary class. enforce_purpose: enforce the trust's stated purpose (Cayman STAR enforcer role).",
+            "enum": [
+              "consent_to_distribution",
+              "remove_trustee",
+              "appoint_trustee",
+              "change_governing_law",
+              "veto_investment",
+              "add_beneficiary",
+              "exclude_beneficiary",
+              "enforce_purpose"
+            ]
+          },
+          "protectorPersonId": {
+            "description": "Reference to the Person.id who holds this power",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "protectorPersonIdDisplay": {
+            "description": "Human-readable display name for the referenced protector person",
+            "type": "string",
+            "maxLength": 255
+          },
+          "exerciseConditions": {
+            "description": "Conditions on how this power may be exercised",
+            "examples": [
+              "Must act in the best interests of the beneficiaries",
+              "Requires written resolution"
+            ],
+            "type": "string",
+            "maxLength": 255
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "jurisdictionalRecognition": {
+      "description": "How different jurisdictions recognise (or fail to recognise) this trust. Critical for cross-border trust structures",
+      "$comment": "How different jurisdictions recognise this trust. Critical for offshore trusts used by HK/Singapore/Geneva clients.",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "jurisdiction", "recognised" ],
+        "properties": {
+          "jurisdiction": {
+            "description": "The jurisdiction whose recognition status is recorded",
+            "$ref": "common/jurisdiction.json"
+          },
+          "recognised": {
+            "description": "Whether this jurisdiction recognises the trust",
+            "examples": [ true, false ],
+            "type": "boolean"
+          },
+          "recognisedAs": {
+            "description": "How the jurisdiction characterises the trust for legal and tax purposes",
+            "$comment": "e.g., 'transparent for tax' or 'opaque entity'",
+            "examples": [ "transparent for tax", "opaque entity", "fiducie" ],
+            "type": "string",
+            "maxLength": 255
+          },
+          "hagueTrustConventionApplies": {
+            "description": "Whether the Hague Trust Convention applies in this jurisdiction — determines automatic recognition of foreign trusts",
+            "$comment": "Switzerland ratified; France did not.",
+            "examples": [ true, false ],
+            "type": "boolean"
+          },
+          "notes": {
+            "description": "Additional context on recognition in this jurisdiction",
+            "examples": [
+              "France treats as a fiducie — different tax implications",
+              "Switzerland recognises under Hague Convention"
+            ],
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "assetProtectionFeatures": {
+      "description": "Asset protection features of the trust. Relevant for Cook Islands, Nevis, BVI, and domestic US asset protection trusts (Delaware, Nevada, South Dakota)",
+      "$comment": "For Cook Islands, Nevis, BVI, and domestic US asset protection trusts.",
+      "type": "object",
+      "properties": {
+        "selfSettled": {
+          "description": "Whether the settlor is also a beneficiary. Self-settled trusts face greater creditor vulnerability in most jurisdictions",
+          "$comment": "True if the settlor is also a beneficiary. Affects creditor claims.",
+          "examples": [ true, false ],
+          "type": "boolean"
+        },
+        "spendthriftClause": {
+          "description": "Whether the trust contains a spendthrift clause preventing beneficiaries from assigning their interest",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "fraudulentTransferLookback": {
+          "description": "The statutory lookback period for fraudulent transfer claims in the trust's jurisdiction",
+          "$comment": "Lookback period for fraudulent transfer claims (e.g., '2 years' for Cook Islands, '6 years' for BVI).",
+          "examples": [ "2 years", "6 years", "4 years" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "domesticationDate": {
+          "description": "Date the trust was domesticated (moved from offshore to onshore jurisdiction), if applicable",
+          "$comment": "If an offshore trust was domesticated (moved onshore).",
+          "examples": [ "2023-06-01" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "notes": {
+      "description": "Free-text notes about this trust. Use for trustee succession plans, special investment mandates, or other non-structured information",
+      "examples": [
+        "Trust was established to hold the family's BVI property portfolio",
+        "Waqf income designated for educational scholarships in perpetuity"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "visibility": {
+      "$ref": "common/visibility.json"
+    },
+    "trusteePersonIds": {
+      "description": "Person IDs of the trustees. A trust may have multiple trustees",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+        "format": "uuid"
+      }
+    },
+    "conditions": {
+      "description": "Conditions under which the trust activates, distributes, or terminates. Free text for complex conditions that cannot be fully structured",
+      "type": "string",
+      "maxLength": 2000
+    },
+    "conditionType": {
+      "description": "Category of the trust's primary activation condition",
+      "$comment": "age_attainment: trust activates or distributes when a beneficiary reaches a specified age. event_based: triggered by a specific life event. discretionary: trustees have full discretion over timing and distribution. fixed_date: activates or terminates on a specific calendar date. accumulation: income is accumulated rather than distributed until a future event. other: any condition type not covered above.",
+      "enum": [
+        "age_attainment",
+        "event_based",
+        "discretionary",
+        "fixed_date",
+        "accumulation",
+        "other"
+      ]
+    },
+    "reviewDate": {
+      "description": "Next scheduled review date for the trust terms",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "protectorPersonId": {
+      "description": "Person ID of the trust protector (if appointed). The protector oversees trustees and can modify trust terms",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "protectorPersonIdDisplay": {
+      "description": "Human-readable display name for the referenced protector person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    },
+    "petId": {
+      "description": "If this trust exists for the care of a specific pet, reference to Pet.id",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "generationSkipping": {
+      "description": "Generation-skipping transfer classification for US tax purposes (IRC Chapter 13)",
+      "type": "object",
+      "properties": {
+        "applies": {
+          "type": "boolean"
+        },
+        "classification": {
+          "description": "GST classification",
+          "enum": [
+            "direct_skip",
+            "taxable_distribution",
+            "taxable_termination"
+          ]
+        },
+        "gstExemptionAllocated": {
+          "description": "GST exemption amount allocated to this trust",
+          "$ref": "common/money.json"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "letterOfWishesDocumentId": {
+      "description": "Reference to Document.id containing the letter of wishes for this trust",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "letterOfWishesStatus": {
+      "description": "Binding status of the letter of wishes",
+      "enum": [ "non_binding", "morally_binding", "legally_binding" ]
+    },
+    "charitableRemainderDetails": {
+      "description": "Charitable remainder trust details — income interest to non-charitable beneficiary, remainder to charity",
+      "type": "object",
+      "properties": {
+        "crtType": {
+          "enum": [ "annuity", "unitrust" ]
+        },
+        "incomeInterestBeneficiaryId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "remainderBeneficiaryId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "payoutRate": {
+          "description": "Annual payout percentage",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "termType": {
+          "enum": [ "life", "fixed_years" ]
+        },
+        "termYears": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99
+        },
+        "taxDeductionClaimed": {
+          "$ref": "common/money.json"
+        }
+      },
+      "additionalProperties": false
+    },
+    "taxPlanningDetails": {
+      "description": "Tax planning configuration for nil-rate band, RNRB, A/B marital, or bypass trusts",
+      "type": "object",
+      "properties": {
+        "structure": {
+          "description": "The tax planning structure type",
+          "examples": [ "nil_rate_band_discretionary", "a_b_marital_bypass" ],
+          "type": "string",
+          "maxLength": 200
+        },
+        "fundingMechanism": {
+          "enum": [ "up_to_threshold", "fixed_amount", "formula" ]
+        },
+        "thresholdReference": {
+          "description": "Reference to the tax threshold being used",
+          "examples": [ "UK IHT nil-rate band (currently £325,000)" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "companionTrustId": {
+          "description": "UUID of the companion trust in an A/B pair",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    },
+    "conflictsOfInterest": {
+      "description": "Declared conflicts of interest — executor/trustee who is also a beneficiary, drafter, or family member",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [ "conflictType" ],
+        "properties": {
+          "conflictType": {
+            "enum": [
+              "beneficiary",
+              "drafter",
+              "family_member",
+              "business_associate"
+            ]
+          },
+          "relatedPersonId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "disclosed": {
+            "type": "boolean"
+          },
+          "independentOversightRequired": {
+            "type": "boolean"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "TrustAppointee": {
+      "description": "A person appointed to a governance role in the trust — trustee, protector, or enforcer",
+      "type": "object",
+      "anyOf": [
+        {
+          "required": [ "personId" ]
+        },
+        {
+          "required": [ "organisationId" ]
+        }
+      ],
+      "required": [ "role" ],
+      "properties": {
+        "personId": {
+          "description": "Reference to the Person.id of the appointee",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "personIdDisplay": {
+          "description": "Human-readable display name for the referenced person",
+          "type": "string",
+          "maxLength": 255
+        },
+        "role": {
+          "description": "The governance role this person holds in the trust",
+          "$comment": "trustee: manages trust assets and administers the trust. protector: oversees trustees and may have consent or veto powers. enforcer: enforces purpose trust terms — required for Cayman STAR trusts.",
+          "enum": [ "trustee", "protector", "enforcer" ]
+        },
+        "organisationId": {
+          "description": "Reference to the Organisation.id if the trustee is a corporate trustee. Mutually exclusive with personId",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "organisationIdDisplay": {
+          "description": "Human-readable display name for the referenced organisation",
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "TrustBeneficiary": {
+      "description": "A beneficiary of the trust — may be a named individual, a class, or an organisation",
+      "type": "object",
+      "required": [ "interestType" ],
+      "properties": {
+        "personId": {
+          "description": "Reference to the Person.id of the beneficiary, if a named individual",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "personIdDisplay": {
+          "description": "Human-readable display name for the referenced person",
+          "type": "string",
+          "maxLength": 255
+        },
+        "classDefinition": {
+          "description": "Natural-language description of the beneficiary class",
+          "examples": [
+            "All my grandchildren and their descendants",
+            "Any person the trustees may add to the class"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "organisationName": {
+          "description": "Name of the organisation beneficiary",
+          "examples": [ "British Red Cross", "Cambridge University" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "interestType": {
+          "description": "The nature of this beneficiary's interest in the trust",
+          "$comment": "income: entitled to income generated by trust assets only. capital: entitled to capital distributions only. both: entitled to both income and capital. discretionary: trustees have discretion over what and when to distribute.",
+          "enum": [ "income", "capital", "both", "discretionary" ]
+        },
+        "generationLevel": {
+          "description": "Generational distance from the testator. 1 = child, 2 = grandchild, 3+ = great-grandchild",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

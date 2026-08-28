@@ -1,0 +1,366 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/prc-china/prc-china.json",
+  "title": "PRC China Extension",
+  "description": "People's Republic of China succession law — forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling, intestacy order (Arts. 1127-1132), will forms (6 types, Art. 1142), community property division (Art. 1153), rural land rights, and inheritance tax status.",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "CN"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "civil_law"
+  ],
+  "dataProvenance": "PRC Civil Code Book Six (Succession), Regulations on Household Registration (hukou)",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "type": "object",
+  "$defs": {
+    "PRCForcedHeirship": {
+      "type": "object",
+      "properties": {
+        "firstOrderHeirs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "personId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "relationship": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "relationshipCategory": {
+                "description": "Relationship category under PRC Civil Code Article 1127 first order",
+                "type": "string",
+                "$comment": "spouse: surviving spouse. child: children including adopted, stepchildren who maintained the deceased, and children born out of wedlock (Article 1071). parent: parents including adoptive parents, stepparents who maintained the deceased",
+                "enum": [
+                  "spouse",
+                  "child",
+                  "parent"
+                ]
+              }
+            },
+            "required": [
+              "personId"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 50
+        },
+        "secondOrderHeirs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "personId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "relationship": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "relationshipCategory": {
+                "description": "Relationship category under PRC Civil Code Article 1127 second order",
+                "type": "string",
+                "$comment": "sibling: brothers and sisters including half-siblings, adoptive siblings, step-siblings who maintained each other. grandparent_paternal: paternal grandparents (祖父母). grandparent_maternal: maternal grandparents (外祖父母). PRC law treats paternal and maternal grandparents equally within second order but distinguishes them terminologically. Maps to core grandparent_grandchild kinship type with lineage property",
+                "enum": [
+                  "sibling",
+                  "grandparent_paternal",
+                  "grandparent_maternal"
+                ]
+              }
+            },
+            "required": [
+              "personId"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 50
+        },
+        "mandatoryShareRule": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "HukouReference": {
+      "type": "object",
+      "properties": {
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "hukouLocation": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "hukouType": {
+          "type": "string",
+          "enum": [
+            "agricultural",
+            "non_agricultural"
+          ]
+        }
+      },
+      "required": [
+        "personId"
+      ],
+      "additionalProperties": false
+    },
+    "CrossBorderHKPRC": {
+      "type": "object",
+      "properties": {
+        "hkAssets": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "prcAssets": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "applicableTreaty": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "IntestacyOrder": {
+      "description": "Statutory succession order under Civil Code Book Six Chapter 2 (Articles 1127-1132)",
+      "$comment": "Per stirpes representation (Article 1128): para 1 — predeceased child's lineal descendants inherit by representation. Para 2 (added by 2021 Civil Code) — predeceased sibling's children inherit by representation. The 2021 extension to siblings' children is a significant change from the 1985 Succession Law",
+      "type": "object",
+      "properties": {
+        "applicableOrder": {
+          "type": "string",
+          "enum": [
+            "first_order",
+            "second_order"
+          ]
+        },
+        "equalDistribution": {
+          "type": "boolean"
+        },
+        "dependantMaintenance": {
+          "description": "Non-heir who maintained the deceased may receive a share under Art. 1131",
+          "type": "boolean"
+        },
+        "contributingInLaws": {
+          "description": "Widowed daughters-in-law or sons-in-law who made predominant contributions to supporting their parents-in-law, treated as first-order heirs under Article 1129. Unique to PRC law — in-laws elevated to heir status based on conduct, not kinship",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "personId"
+            ],
+            "properties": {
+              "personId": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                "format": "uuid"
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 500
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "WillForm": {
+      "description": "Will form under PRC Civil Code — 6 types recognised, latest will prevails (Art. 1142)",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "notarised",
+            "holograph",
+            "scrivener",
+            "printed",
+            "audio_visual",
+            "oral_emergency"
+          ]
+        },
+        "dateExecuted": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "notarisationOffice": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "witnesses": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "validityNotes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "CommunityProperty": {
+      "description": "Division of joint marital property under Civil Code Book Five",
+      "type": "object",
+      "properties": {
+        "maritalPropertyRegime": {
+          "type": "string",
+          "enum": [
+            "community",
+            "separate",
+            "mixed_agreement"
+          ]
+        },
+        "communityPropertyIdentified": {
+          "type": "boolean"
+        },
+        "spouseShareExcluded": {
+          "description": "Surviving spouse's half of community property excluded from estate (Art. 1153)",
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "RuralLandRights": {
+      "description": "Rural collective land use rights — contracted land reverts to collective, homestead buildings inheritable",
+      "type": "object",
+      "properties": {
+        "hasContractedLand": {
+          "type": "boolean"
+        },
+        "landRevertsToCommunity": {
+          "type": "boolean"
+        },
+        "hasHomesteadLand": {
+          "type": "boolean"
+        },
+        "buildingsInheritable": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "InheritanceTaxStatus": {
+      "description": "Inheritance tax status — no tax currently, proposals under periodic discussion",
+      "type": "object",
+      "properties": {
+        "taxApplies": {
+          "description": "Currently false — China has no inheritance tax as of 2025",
+          "type": "boolean"
+        },
+        "proposedLegislation": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "applicableLaw": {
+      "description": "Which PRC legislative framework governs this succession — the 1985 Succession Law or the 2021 Civil Code (Book 6)",
+      "type": "string",
+      "enum": [
+        "prc_succession_law_1985",
+        "prc_civil_code_2021"
+      ]
+    },
+    "forcedHeirship": {
+      "$ref": "#/$defs/PRCForcedHeirship"
+    },
+    "hukouReferences": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/HukouReference"
+      },
+      "maxItems": 50
+    },
+    "notarisationRequired": {
+      "type": "boolean"
+    },
+    "notarisationDetails": {
+      "type": "string",
+      "maxLength": 255,
+      "$comment": "PRC requires notarised succession certificate"
+    },
+    "crossBorderHandling": {
+      "$ref": "#/$defs/CrossBorderHKPRC"
+    },
+    "intestacyOrder": {
+      "$ref": "#/$defs/IntestacyOrder"
+    },
+    "willForm": {
+      "$ref": "#/$defs/WillForm"
+    },
+    "communityProperty": {
+      "$ref": "#/$defs/CommunityProperty"
+    },
+    "ruralLandRights": {
+      "$ref": "#/$defs/RuralLandRights"
+    },
+    "inheritanceTaxStatus": {
+      "$ref": "#/$defs/InheritanceTaxStatus"
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "applicableLaw"
+  ],
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

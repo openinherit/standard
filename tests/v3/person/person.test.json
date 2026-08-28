@@ -1,0 +1,1573 @@
+{
+  "target": "../../../v3/person.json",
+  "tests": [
+    {
+      "description": "valid minimal person (id + givenName + roles)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "givenName": "Margaret",
+        "familyName": "Davies",
+        "roles": [
+          "testator"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid fully populated person",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440001",
+        "givenName": "Hiroshi",
+        "familyName": "Tanaka",
+        "additionalName": "Ken",
+        "preferredName": "Ken",
+        "dateOfBirth": "1955-03-15",
+        "dateOfDeath": "2025-11-01",
+        "gender": "male",
+        "domicile": {
+          "country": "JP",
+          "name": "Japan"
+        },
+        "roles": [
+          "testator"
+        ],
+        "contact": {
+          "email": "hiroshi@example.jp",
+          "phone": "+81-3-1234-5678",
+          "address": {
+            "streetAddress": "1-2-3 Chiyoda",
+            "addressLocality": "Tokyo",
+            "postalCode": "100-0001",
+            "addressCountry": "JP"
+          }
+        },
+        "identifiers": [
+          {
+            "system": "urn:jp:mynumber",
+            "value": "1234-5678-9012",
+            "type": "national_id"
+          }
+        ],
+        "language": "ja-JP",
+        "notes": "Primary testator. Dual citizen (JP/GB)."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid Tamil person with single name (no familyName)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440011",
+        "givenName": "Ramanathan",
+        "roles": [
+          "testator"
+        ],
+        "clanOrLineage": "Iyer"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "givenName": "Margaret",
+        "familyName": "Davies",
+        "roles": [
+          "testator"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required givenName",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "familyName": "Davies",
+        "roles": [
+          "testator"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required roles",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "givenName": "Margaret",
+        "familyName": "Davies"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — non-UUID id string rejected by pattern constraint",
+      "data": {
+        "id": "not-a-uuid",
+        "givenName": "Margaret",
+        "roles": [
+          "testator"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown role value",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "givenName": "Margaret",
+        "roles": [
+          "king"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — person with sameAs",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440022",
+        "givenName": "Alice",
+        "familyName": "Smith",
+        "roles": [
+          "testator"
+        ],
+        "sameAs": [
+          "https://www.wikidata.org/wiki/Q12345",
+          "https://www.linkedin.com/in/example"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with jurisdictionRoles (karta, faraid_heir)",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "givenName": "Arjun",
+        "familyName": "Sharma",
+        "roles": [
+          "beneficiary"
+        ],
+        "jurisdictionRoles": [
+          {
+            "extension": "hindu-succession",
+            "role": "karta"
+          },
+          {
+            "extension": "islamic-succession",
+            "role": "faraid_heir"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with posthumousAiConsent (prohibited)",
+      "data": {
+        "id": "6101470a-a634-4fc2-9faa-06bddcc08e5d",
+        "givenName": "James",
+        "familyName": "Davies",
+        "roles": [
+          "testator"
+        ],
+        "posthumousAiConsent": {
+          "aiRecreation": "prohibited",
+          "likenessUse": "prohibited",
+          "recordedAt": "2026-03-15T10:00:00Z",
+          "notes": "I do not consent to any AI recreation of my likeness"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with posthumousAiConsent (limited)",
+      "data": {
+        "id": "5e3de571-86a5-4b86-ac69-33d9dee9aafe",
+        "givenName": "Catherine",
+        "roles": [
+          "testator"
+        ],
+        "posthumousAiConsent": {
+          "aiRecreation": "limited",
+          "likenessUse": "limited",
+          "scope": "Memorial video only, no interactive chatbot"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with canonical identity fingerprint",
+      "data": {
+        "id": "a571357f-778f-4e24-a1bf-45558643c64c",
+        "givenName": "James",
+        "familyName": "Ashford",
+        "roles": [
+          "testator"
+        ],
+        "identity": {
+          "fingerprint": "ashford|james|1965-04-12|gb",
+          "algorithm": "inherit-ici-v1",
+          "components": {
+            "familyName": "Ashford",
+            "givenName": "James",
+            "dateOfBirth": "1965-04-12",
+            "countryOfBirth": "GB"
+          },
+          "confidence": "high"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with identity and external IDs (redacted passport)",
+      "data": {
+        "id": "9bacbc85-d9b0-49a5-9ad3-fa81a61e815a",
+        "givenName": "Maria",
+        "familyName": "Mueller",
+        "roles": [
+          "beneficiary"
+        ],
+        "identity": {
+          "fingerprint": "muller|maria|1970-08-22|de",
+          "algorithm": "inherit-ici-v1",
+          "components": {
+            "familyName": "Mueller",
+            "givenName": "Maria",
+            "dateOfBirth": "1970-08-22",
+            "countryOfBirth": "DE"
+          },
+          "externalIds": [
+            {
+              "system": "passport",
+              "value": "533****21",
+              "type": "travel_document",
+              "redacted": true
+            }
+          ],
+          "confidence": "medium"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with null fingerprint (missing familyName)",
+      "data": {
+        "id": "5cfc128c-82eb-44a9-976b-5e23393aa81f",
+        "givenName": "Suresh",
+        "roles": [
+          "beneficiary"
+        ],
+        "identity": {
+          "fingerprint": null,
+          "algorithm": "inherit-ici-v1",
+          "components": {
+            "givenName": "Suresh",
+            "dateOfBirth": "1985-01-15",
+            "countryOfBirth": "IN"
+          },
+          "confidence": "low"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with constrained x-inherit- extension block",
+      "data": {
+        "id": "a7b8c9d0-e1f2-4345-0123-567890123456",
+        "givenName": "Ahmed",
+        "roles": [
+          "beneficiary"
+        ],
+        "x-inherit-islamic-succession": {
+          "heirClass": "son",
+          "fixedShareFraction": "1/4"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — extension block is a string (must be object)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4456-1234-678901234567",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ],
+        "x-inherit-test": "not an object"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — givenName at maxLength boundary (255 chars)",
+      "data": {
+        "id": "a1000001-0000-4000-a000-000000001000",
+        "givenName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — givenName exceeds maxLength (256 chars)",
+      "data": {
+        "id": "a1000002-0000-4000-a000-000000001001",
+        "givenName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — givenName empty string (minLength 1)",
+      "data": {
+        "id": "a1000003-0000-4000-a000-000000001002",
+        "givenName": "",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — givenName is number (must be string)",
+      "data": {
+        "id": "a1000010-0000-4000-a000-000000001010",
+        "givenName": 12345,
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — roles is string (must be array)",
+      "data": {
+        "id": "a1000011-0000-4000-a000-000000001011",
+        "givenName": "Test",
+        "roles": "beneficiary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing id",
+      "data": {
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing roles",
+      "data": {
+        "id": "a1000024-0000-4000-a000-000000001024",
+        "givenName": "Test"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a UUID format",
+      "data": {
+        "id": "not-a-uuid",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is UUID-shaped but not hex",
+      "data": {
+        "id": "zzzzzzzz-zzzz-4zzz-azzz-zzzzzzzzzzzz",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — role value not in enum",
+      "data": {
+        "id": "a1000043-0000-4000-a000-000000001043",
+        "givenName": "Test",
+        "roles": [
+          "supreme_leader"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — posthumousAiConsent aiRecreation not in enum",
+      "data": {
+        "id": "a1000044-0000-4000-a000-000000001044",
+        "givenName": "Test",
+        "roles": [
+          "testator"
+        ],
+        "posthumousAiConsent": {
+          "aiRecreation": "maybe"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — accessibilityNeeds with preferredFormat: large_print",
+      "data": {
+        "id": "e2000001-0000-4000-a000-000000000001",
+        "givenName": "Dorothy",
+        "familyName": "Hargreaves",
+        "roles": [
+          "beneficiary"
+        ],
+        "accessibilityNeeds": {
+          "preferredFormat": "large_print",
+          "notes": "Severe macular degeneration — requires minimum 18pt font"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — accessibilityNeeds with preferredFormat: audio",
+      "data": {
+        "id": "e2000002-0000-4000-a000-000000000002",
+        "givenName": "Bernard",
+        "familyName": "Ashworth",
+        "roles": [
+          "beneficiary"
+        ],
+        "accessibilityNeeds": {
+          "preferredFormat": "audio",
+          "screenReaderUser": false,
+          "communicationPreference": "phone"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — accessibilityNeeds with preferredFormat: braille",
+      "data": {
+        "id": "e2000003-0000-4000-a000-000000000003",
+        "givenName": "Patricia",
+        "familyName": "Hendricks",
+        "roles": [
+          "beneficiary"
+        ],
+        "accessibilityNeeds": {
+          "preferredFormat": "braille",
+          "screenReaderUser": true,
+          "reducedMotion": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — accessibilityNeeds with preferredFormat: easy_read",
+      "data": {
+        "id": "e2000004-0000-4000-a000-000000000004",
+        "givenName": "Robert",
+        "familyName": "Chisholm",
+        "roles": [
+          "beneficiary"
+        ],
+        "accessibilityNeeds": {
+          "preferredFormat": "easy_read",
+          "communicationPreference": "in_person",
+          "notes": "Cognitive impairment — plain English required, no jargon"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — accessibilityNeeds with preferredFormat: other",
+      "data": {
+        "id": "e2000005-0000-4000-a000-000000000005",
+        "givenName": "Evangeline",
+        "familyName": "Bakker",
+        "roles": [
+          "beneficiary"
+        ],
+        "accessibilityNeeds": {
+          "preferredFormat": "other",
+          "notes": "Requires BSL interpreter for all meetings"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — accessibilityNeeds with preferredFormat: standard",
+      "data": {
+        "id": "e2000006-0000-4000-a000-000000000006",
+        "givenName": "Kwame",
+        "familyName": "Mensah",
+        "roles": [
+          "beneficiary"
+        ],
+        "accessibilityNeeds": {
+          "preferredFormat": "standard",
+          "communicationPreference": "email"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — accessibilityNeeds with communicationPreference: video_call",
+      "data": {
+        "id": "e2000007-0000-4000-a000-000000000007",
+        "givenName": "Chioma",
+        "familyName": "Okafor",
+        "roles": [
+          "beneficiary"
+        ],
+        "accessibilityNeeds": {
+          "preferredFormat": "standard",
+          "communicationPreference": "video_call",
+          "notes": "Mobility impairment — cannot travel to office"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — accessibilityNeeds with communicationPreference: post",
+      "data": {
+        "id": "e2000008-0000-4000-a000-000000000008",
+        "givenName": "Reginald",
+        "familyName": "Fortescue",
+        "roles": [
+          "beneficiary"
+        ],
+        "accessibilityNeeds": {
+          "preferredFormat": "large_print",
+          "communicationPreference": "post",
+          "reducedMotion": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated accessibilityNeeds",
+      "data": {
+        "id": "e2000009-0000-4000-a000-000000000009",
+        "givenName": "Beatrice",
+        "familyName": "Osei",
+        "roles": [
+          "beneficiary"
+        ],
+        "accessibilityNeeds": {
+          "preferredFormat": "braille",
+          "screenReaderUser": true,
+          "reducedMotion": true,
+          "communicationPreference": "in_person",
+          "notes": "Registered blind since 2018. Always contact carer first on +44 7700 900123."
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — title with type: academic",
+      "data": {
+        "id": "e2000010-0000-4000-a000-000000000010",
+        "givenName": "Priya",
+        "familyName": "Krishnamurthy",
+        "roles": [
+          "testator"
+        ],
+        "titles": [
+          {
+            "title": "Dr",
+            "type": "academic"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — title with type: attorney",
+      "data": {
+        "id": "e2000011-0000-4000-a000-000000000011",
+        "givenName": "Sophie",
+        "familyName": "Llewellyn",
+        "roles": [
+          "attorney"
+        ],
+        "titles": [
+          {
+            "title": "Solicitor",
+            "type": "professional"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — title with type: chieftaincy",
+      "data": {
+        "id": "e2000012-0000-4000-a000-000000000012",
+        "givenName": "Emeka",
+        "familyName": "Okoye",
+        "roles": [
+          "testator"
+        ],
+        "titles": [
+          {
+            "title": "Eze",
+            "type": "chieftaincy"
+          }
+        ],
+        "clanOrLineage": "Ogbuagu"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — title with type: clan",
+      "data": {
+        "id": "e2000013-0000-4000-a000-000000000013",
+        "givenName": "Rajesh",
+        "familyName": "Venkataraman",
+        "roles": [
+          "testator"
+        ],
+        "titles": [
+          {
+            "title": "Iyer",
+            "type": "clan"
+          }
+        ],
+        "clanOrLineage": "Bharadwaja"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — title with type: honorific",
+      "data": {
+        "id": "e2000014-0000-4000-a000-000000000014",
+        "givenName": "Harriet",
+        "familyName": "Forsythe",
+        "roles": [
+          "testator"
+        ],
+        "titles": [
+          {
+            "title": "Dame",
+            "type": "honorific"
+          },
+          {
+            "title": "DBE",
+            "type": "honorific"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — title with type: military",
+      "data": {
+        "id": "e2000015-0000-4000-a000-000000000015",
+        "givenName": "Geoffrey",
+        "familyName": "Hartley",
+        "roles": [
+          "testator"
+        ],
+        "titles": [
+          {
+            "title": "Colonel",
+            "type": "military"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — title with type: religious",
+      "data": {
+        "id": "e2000016-0000-4000-a000-000000000016",
+        "givenName": "Ibrahim",
+        "familyName": "Al-Rashid",
+        "roles": [
+          "witness"
+        ],
+        "titles": [
+          {
+            "title": "Imam",
+            "type": "religious"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — title with type: traditional",
+      "data": {
+        "id": "e2000017-0000-4000-a000-000000000017",
+        "givenName": "Saoirse",
+        "familyName": "O’Callaghan",
+        "roles": [
+          "testator"
+        ],
+        "titles": [
+          {
+            "title": "Tanist",
+            "type": "traditional"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with all roles simultaneously",
+      "data": {
+        "id": "e2000018-0000-4000-a000-000000000018",
+        "givenName": "Alexandra",
+        "familyName": "Whitmore",
+        "roles": [
+          "beneficiary",
+          "executor",
+          "trustee"
+        ],
+        "notes": "Appointed executor and trustee in addition to being a beneficiary under the residuary clause"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with role: proxy",
+      "data": {
+        "id": "e2000019-0000-4000-a000-000000000019",
+        "givenName": "Declan",
+        "familyName": "Murphy",
+        "roles": [
+          "proxy"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with role: protector",
+      "data": {
+        "id": "e2000020-0000-4000-a000-000000000020",
+        "givenName": "Simone",
+        "familyName": "Dubois",
+        "roles": [
+          "protector"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with role: enforcer",
+      "data": {
+        "id": "e2000021-0000-4000-a000-000000000021",
+        "givenName": "Fatima",
+        "familyName": "Hassan",
+        "roles": [
+          "enforcer"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — posthumousAiConsent: permitted with full details",
+      "data": {
+        "id": "e2000022-0000-4000-a000-000000000022",
+        "givenName": "Marcus",
+        "familyName": "Aldridge",
+        "roles": [
+          "testator"
+        ],
+        "posthumousAiConsent": {
+          "aiRecreation": "permitted",
+          "likenessUse": "permitted",
+          "scope": "Family memorial use only — must not be used commercially",
+          "recordedAt": "2026-04-06T11:00:00Z",
+          "notes": "Consented in the presence of solicitor Sarah Chen on Monday 6 April 2026"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — identity with null fingerprint (null allowed)",
+      "data": {
+        "id": "e2000023-0000-4000-a000-000000000023",
+        "givenName": "Aiko",
+        "roles": [
+          "beneficiary"
+        ],
+        "identity": {
+          "fingerprint": null,
+          "algorithm": "inherit-ici-v1",
+          "confidence": "low"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — identity with confidence: medium",
+      "data": {
+        "id": "e2000024-0000-4000-a000-000000000024",
+        "givenName": "William",
+        "familyName": "Forsythe",
+        "roles": [
+          "beneficiary"
+        ],
+        "identity": {
+          "fingerprint": "forsythe|william|1978-11-03|gb",
+          "algorithm": "inherit-ici-v1",
+          "components": {
+            "familyName": "Forsythe",
+            "givenName": "William",
+            "dateOfBirth": "1978-11-03",
+            "countryOfBirth": "GB"
+          },
+          "confidence": "medium"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — identity with externalIds (not redacted)",
+      "data": {
+        "id": "e2000025-0000-4000-a000-000000000025",
+        "givenName": "Haruki",
+        "familyName": "Watanabe",
+        "roles": [
+          "beneficiary"
+        ],
+        "identity": {
+          "fingerprint": "watanabe|haruki|1982-07-19|jp",
+          "algorithm": "inherit-ici-v1",
+          "components": {
+            "familyName": "Watanabe",
+            "givenName": "Haruki",
+            "dateOfBirth": "1982-07-19",
+            "countryOfBirth": "JP"
+          },
+          "externalIds": [
+            {
+              "system": "urn:jp:mynumber",
+              "value": "9876543210",
+              "type": "national_id",
+              "redacted": false
+            }
+          ],
+          "confidence": "high"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — legalPersonalities with customary system",
+      "data": {
+        "id": "e2000026-0000-4000-a000-000000000026",
+        "givenName": "Chukwuemeka",
+        "familyName": "Obiora",
+        "roles": [
+          "testator"
+        ],
+        "legalPersonalities": [
+          {
+            "system": "statutory",
+            "role": "property owner",
+            "notes": "Registered owner of 14 Owerri Road"
+          },
+          {
+            "system": "customary",
+            "role": "okpara",
+            "jurisdiction": {
+              "country": "NG"
+            },
+            "notes": "First son — custodial authority over family compound under Igbo customary law"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — legalPersonalities with religious system",
+      "data": {
+        "id": "e2000027-0000-4000-a000-000000000027",
+        "givenName": "Yosef",
+        "familyName": "Goldberg",
+        "roles": [
+          "testator"
+        ],
+        "legalPersonalities": [
+          {
+            "system": "religious",
+            "role": "Kohen",
+            "notes": "Priestly lineage recognised under halachic law"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — legalPersonalities with traditional system",
+      "data": {
+        "id": "e2000028-0000-4000-a000-000000000028",
+        "givenName": "Ama",
+        "familyName": "Asante",
+        "roles": [
+          "testator"
+        ],
+        "legalPersonalities": [
+          {
+            "system": "traditional",
+            "role": "clan elder",
+            "jurisdiction": {
+              "country": "GH"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — taxResidency single jurisdiction with FATCA",
+      "data": {
+        "id": "e2000029-0000-4000-a000-000000000029",
+        "givenName": "Jennifer",
+        "familyName": "Kowalski",
+        "roles": [
+          "testator"
+        ],
+        "taxResidency": [
+          {
+            "jurisdiction": {
+              "country": "US"
+            },
+            "taxpayerIdentifier": "123-45-6789",
+            "fatcaStatus": "us_person"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — taxResidency multi-jurisdiction with treaty",
+      "data": {
+        "id": "e2000030-0000-4000-a000-000000000030",
+        "givenName": "Kenji",
+        "familyName": "Miyamoto",
+        "roles": [
+          "testator"
+        ],
+        "taxResidency": [
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "taxpayerIdentifier": "1234 5678 9012",
+            "fatcaStatus": "non_us_person"
+          },
+          {
+            "jurisdiction": {
+              "country": "US"
+            },
+            "taxpayerIdentifier": "987-65-4321",
+            "fatcaStatus": "us_person",
+            "treatyPosition": "US-JP Estate Tax Treaty Art. 4"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — taxResidency with FATCA: exempt",
+      "data": {
+        "id": "e2000031-0000-4000-a000-000000000031",
+        "givenName": "Victoria",
+        "familyName": "Ramirez",
+        "roles": [
+          "testator"
+        ],
+        "taxResidency": [
+          {
+            "jurisdiction": {
+              "country": "MX"
+            },
+            "fatcaStatus": "exempt"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — taxResidency with FATCA: unknown",
+      "data": {
+        "id": "e2000032-0000-4000-a000-000000000032",
+        "givenName": "Nikolai",
+        "familyName": "Petrov",
+        "roles": [
+          "beneficiary"
+        ],
+        "taxResidency": [
+          {
+            "jurisdiction": {
+              "country": "RU"
+            },
+            "fatcaStatus": "unknown"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ritualName with hebrew nameSystem",
+      "data": {
+        "id": "e2000033-0000-4000-a000-000000000033",
+        "givenName": "David",
+        "familyName": "Levy",
+        "roles": [
+          "testator"
+        ],
+        "ritualName": {
+          "name": "Dovid ben Avraham",
+          "patronymic": "ben Avraham",
+          "nameSystem": "hebrew"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ritualName with arabic_nasab nameSystem",
+      "data": {
+        "id": "e2000034-0000-4000-a000-000000000034",
+        "givenName": "Ahmed",
+        "familyName": "Al-Farsi",
+        "roles": [
+          "testator"
+        ],
+        "ritualName": {
+          "name": "Ahmed ibn Muhammad",
+          "patronymic": "ibn Muhammad",
+          "nameSystem": "arabic_nasab"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — phoneticReading with full CJK readings",
+      "data": {
+        "id": "e2000035-0000-4000-a000-000000000035",
+        "givenName": "裕子",
+        "familyName": "田中",
+        "roles": [
+          "testator"
+        ],
+        "phoneticReading": {
+          "givenName": "ゆうこ",
+          "familyName": "たなか",
+          "fullName": "たなか ゆうこ"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — phoneticReading with fullName only",
+      "data": {
+        "id": "e2000036-0000-4000-a000-000000000036",
+        "givenName": "威",
+        "familyName": "张",
+        "roles": [
+          "beneficiary"
+        ],
+        "phoneticReading": {
+          "fullName": "Zhāng Wěi"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — preferredChannel: post",
+      "data": {
+        "id": "e2000037-0000-4000-a000-000000000037",
+        "givenName": "Constance",
+        "familyName": "Whitfield",
+        "roles": [
+          "beneficiary"
+        ],
+        "preferredChannel": "post"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — preferredChannel: in_person",
+      "data": {
+        "id": "e2000038-0000-4000-a000-000000000038",
+        "givenName": "Alistair",
+        "familyName": "Drummond",
+        "roles": [
+          "beneficiary"
+        ],
+        "preferredChannel": "in_person"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — preferredChannel: video_call",
+      "data": {
+        "id": "e2000039-0000-4000-a000-000000000039",
+        "givenName": "Ingrid",
+        "familyName": "Sorensen",
+        "roles": [
+          "beneficiary"
+        ],
+        "preferredChannel": "video_call"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — preferredChannel: messaging",
+      "data": {
+        "id": "e2000040-0000-4000-a000-000000000040",
+        "givenName": "Amir",
+        "familyName": "Tehrani",
+        "roles": [
+          "beneficiary"
+        ],
+        "preferredChannel": "messaging"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — gender: non_binary",
+      "data": {
+        "id": "e2000041-0000-4000-a000-000000000041",
+        "givenName": "Jordan",
+        "familyName": "Ellis",
+        "roles": [
+          "beneficiary"
+        ],
+        "gender": "non_binary"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — gender: other",
+      "data": {
+        "id": "e2000042-0000-4000-a000-000000000042",
+        "givenName": "River",
+        "familyName": "Lawson",
+        "roles": [
+          "beneficiary"
+        ],
+        "gender": "other"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — gender: prefer_not_to_say",
+      "data": {
+        "id": "e2000043-0000-4000-a000-000000000043",
+        "givenName": "Alex",
+        "familyName": "Cameron",
+        "roles": [
+          "beneficiary"
+        ],
+        "gender": "prefer_not_to_say"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — gender: unknown",
+      "data": {
+        "id": "e2000044-0000-4000-a000-000000000044",
+        "givenName": "Unnamed",
+        "roles": [
+          "beneficiary"
+        ],
+        "gender": "unknown"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — sharedWithCompanion: true",
+      "data": {
+        "id": "e2000045-0000-4000-a000-000000000045",
+        "givenName": "Eleanor",
+        "familyName": "Davies",
+        "roles": [
+          "beneficiary"
+        ],
+        "sharedWithCompanion": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with comments array",
+      "data": {
+        "id": "e2000046-0000-4000-a000-000000000046",
+        "givenName": "Hugo",
+        "familyName": "Blackwood",
+        "roles": [
+          "executor"
+        ],
+        "comments": [
+          {
+            "id": "e2000046-0000-4000-a000-000000000046",
+            "content": "Confirmed identity via certified passport copy received Wednesday 9 April 2026.",
+            "createdAt": "2026-04-09T10:15:00Z",
+            "authorPersonId": "e2000046-0000-4000-a000-000000000046",
+            "authorPersonIdDisplay": "Sarah Chen (Solicitor)"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — accessibilityNeeds preferredFormat with invalid enum value",
+      "data": {
+        "id": "e2000047-0000-4000-a000-000000000047",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ],
+        "accessibilityNeeds": {
+          "preferredFormat": "morse_code"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — accessibilityNeeds communicationPreference with invalid enum value",
+      "data": {
+        "id": "e2000048-0000-4000-a000-000000000048",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ],
+        "accessibilityNeeds": {
+          "communicationPreference": "telegram"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown property inside accessibilityNeeds",
+      "data": {
+        "id": "e2000049-0000-4000-a000-000000000049",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ],
+        "accessibilityNeeds": {
+          "preferredFormat": "standard",
+          "signLanguage": "BSL"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — gender with invalid enum value",
+      "data": {
+        "id": "e2000050-0000-4000-a000-000000000050",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ],
+        "gender": "fluid"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — preferredChannel with invalid enum value",
+      "data": {
+        "id": "e2000051-0000-4000-a000-000000000051",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ],
+        "preferredChannel": "carrier_pigeon"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — identity algorithm must be inherit-ici-v1",
+      "data": {
+        "id": "e2000052-0000-4000-a000-000000000052",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ],
+        "identity": {
+          "algorithm": "some-other-algorithm"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — identity fingerprint wrong format",
+      "data": {
+        "id": "e2000053-0000-4000-a000-000000000053",
+        "givenName": "Test",
+        "familyName": "User",
+        "roles": [
+          "beneficiary"
+        ],
+        "identity": {
+          "fingerprint": "not|valid|format",
+          "algorithm": "inherit-ici-v1"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — legalPersonalities system with invalid enum value",
+      "data": {
+        "id": "e2000054-0000-4000-a000-000000000054",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ],
+        "legalPersonalities": [
+          {
+            "system": "tribal",
+            "role": "elder"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — legalPersonalities missing required role",
+      "data": {
+        "id": "e2000055-0000-4000-a000-000000000055",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ],
+        "legalPersonalities": [
+          {
+            "system": "customary"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — taxResidency fatcaStatus with invalid enum value",
+      "data": {
+        "id": "e2000056-0000-4000-a000-000000000056",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ],
+        "taxResidency": [
+          {
+            "jurisdiction": {
+              "country": "US"
+            },
+            "fatcaStatus": "maybe_us_person"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — titles item missing required title field",
+      "data": {
+        "id": "e2000057-0000-4000-a000-000000000057",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ],
+        "titles": [
+          {
+            "type": "academic"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — titles item type with invalid enum value",
+      "data": {
+        "id": "e2000058-0000-4000-a000-000000000058",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary"
+        ],
+        "titles": [
+          {
+            "title": "Wizard",
+            "type": "magical"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — phoneticReading with no properties (minProperties: 1)",
+      "data": {
+        "id": "e2000059-0000-4000-a000-000000000059",
+        "givenName": "山本",
+        "roles": [
+          "beneficiary"
+        ],
+        "phoneticReading": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — roles with duplicate values (uniqueItems)",
+      "data": {
+        "id": "e2000060-0000-4000-a000-000000000060",
+        "givenName": "Test",
+        "roles": [
+          "beneficiary",
+          "beneficiary"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — pure Arabic name, no Latin characters",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440100",
+        "givenName": "فاطمة",
+        "familyName": "الرشيد",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — pure CJK name, no romanisation",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440101",
+        "givenName": "裕子",
+        "familyName": "田中",
+        "roles": [
+          "testator"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Hebrew name",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440102",
+        "givenName": "שרה",
+        "familyName": "כהן",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — combining diacritics (decomposed form)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440103",
+        "givenName": "José",
+        "familyName": "García",
+        "roles": [
+          "executor"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — givenName at exactly 255 characters (maxLength boundary)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440104",
+        "givenName": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — single-character givenName (minLength 1 boundary)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440105",
+        "givenName": "X",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — empty givenName (below minLength 1)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440106",
+        "givenName": "",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — givenName at 256 characters (exceeds maxLength 255)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440107",
+        "givenName": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — emoji in givenName (schema allows all Unicode)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440108",
+        "givenName": "🌸",
+        "roles": [
+          "beneficiary"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with empty roles array (deceased relative used as kinship node)",
+      "data": {
+        "id": "a0000001-0000-0000-0000-000000000201",
+        "givenName": "Siew Eng",
+        "familyName": "Lim",
+        "roles": [],
+        "notes": "Deceased mother. Kinship node only — no active role in the estate."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with empty roles and dateOfDeath (provenance reference)",
+      "data": {
+        "id": "a0000001-0000-0000-0000-000000000202",
+        "givenName": "Ahmed",
+        "familyName": "Al-Rashid",
+        "roles": [],
+        "dateOfDeath": "2020-03-15",
+        "notes": "Late father. Referenced in kinship graph and as provenance for inherited assets."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — person with religion (Buddhist)",
+      "data": {
+        "id": "a0000001-0000-0000-0000-000000000301",
+        "givenName": "Somchai",
+        "roles": [ "testator" ],
+        "religion": {
+          "faith": "buddhist",
+          "asAtDate": "2020-01-15"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — religion with unknown faith value",
+      "data": {
+        "id": "a0000001-0000-0000-0000-000000000302",
+        "givenName": "Bobby",
+        "roles": [ "testator" ],
+        "religion": {
+          "faith": "pastafarian"
+        }
+      },
+      "valid": false
+    }
+  ]
+}

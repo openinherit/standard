@@ -1,0 +1,221 @@
+{
+  "_disclaimer": "Bidirectional mapping between INHERIT asset categories and GS1 Global Product Classification (GPC) segments. GPC is designed for retail trade items, not financial instruments or services, so several INHERIT categories have no meaningful GPC equivalent. Mapping quality is indicated per entry. Not a substitute for professional classification advice.",
+  "_gpcStandard": "https://www.gs1.org/standards/gpc",
+  "_gpcVersion": "GPC Standard as of 2024",
+  "lastUpdated": "2026-03-29",
+  "mappings": [
+    {
+      "inheritCategory": "financial",
+      "inheritLabel": "Financial",
+      "primaryGpc": null,
+      "mappingQuality": "no_match",
+      "note": "GPC covers physical trade items and does not classify financial instruments, bank accounts, investments, pensions, or insurance products. No applicable segment exists.",
+      "additionalGpcSegments": []
+    },
+    {
+      "inheritCategory": "property_contents",
+      "inheritLabel": "Property Contents",
+      "primaryGpc": {
+        "segmentCode": "47000000",
+        "segmentName": "Cleaning/Hygiene Products"
+      },
+      "mappingQuality": "partial",
+      "note": "Property contents span multiple GPC segments. Segment 47000000 covers some household items, but furniture, electronics, and appliances each fall under different segments. No single GPC segment encompasses general household contents.",
+      "additionalGpcSegments": [
+        { "segmentCode": "72000000", "segmentName": "Furniture/Furnishings", "relevance": "Furniture and soft furnishings" },
+        { "segmentCode": "78000000", "segmentName": "Computing/Electronics", "relevance": "Consumer electronics and computing equipment" },
+        { "segmentCode": "50000000", "segmentName": "Electrical Supplies/Lighting", "relevance": "Lighting fixtures and electrical items" },
+        { "segmentCode": "65000000", "segmentName": "Household/Kitchen Tools/Utensils", "relevance": "Kitchenware, cooking utensils, and household tools" }
+      ]
+    },
+    {
+      "inheritCategory": "vehicle",
+      "inheritLabel": "Vehicle",
+      "primaryGpc": {
+        "segmentCode": "25000000",
+        "segmentName": "Automotive"
+      },
+      "mappingQuality": "close",
+      "note": "GPC segment 25000000 covers motor vehicles and automotive products. Boats and watercraft may fall under other segments. Classic and vintage vehicles are not distinguished in GPC.",
+      "additionalGpcSegments": [
+        { "segmentCode": "80000000", "segmentName": "Sports Equipment/Accessories", "relevance": "Bicycles and recreational watercraft" }
+      ]
+    },
+    {
+      "inheritCategory": "jewellery_watches",
+      "inheritLabel": "Jewellery & Watches",
+      "primaryGpc": {
+        "segmentCode": "73000000",
+        "segmentName": "Jewellery"
+      },
+      "mappingQuality": "close",
+      "note": "GPC segment 73000000 covers jewellery items. Watches are classified separately under timepieces. Together they provide good coverage of this INHERIT category.",
+      "additionalGpcSegments": [
+        { "segmentCode": "74000000", "segmentName": "Timepieces", "relevance": "Watches and clocks" }
+      ]
+    },
+    {
+      "inheritCategory": "art",
+      "inheritLabel": "Art",
+      "primaryGpc": {
+        "segmentCode": "82000000",
+        "segmentName": "Arts/Crafts/Needlework"
+      },
+      "mappingQuality": "partial",
+      "note": "GPC segment 82000000 covers art and craft supplies and some finished art products, but is oriented towards craft materials rather than fine art. Paintings, sculptures, and gallery-quality works are not well represented in GPC's retail-focused taxonomy.",
+      "additionalGpcSegments": []
+    },
+    {
+      "inheritCategory": "antiques",
+      "inheritLabel": "Antiques",
+      "primaryGpc": null,
+      "mappingQuality": "no_match",
+      "note": "GPC does not have a segment for antiques. Antique items would be classified by their product type (e.g. furniture, ceramics, silverware) rather than by age or collectability. No single segment captures the concept of antiques.",
+      "additionalGpcSegments": [
+        { "segmentCode": "72000000", "segmentName": "Furniture/Furnishings", "relevance": "Antique furniture" },
+        { "segmentCode": "73000000", "segmentName": "Jewellery", "relevance": "Antique jewellery and silverware" }
+      ]
+    },
+    {
+      "inheritCategory": "collectibles",
+      "inheritLabel": "Collectibles",
+      "primaryGpc": null,
+      "mappingQuality": "no_match",
+      "note": "GPC does not have a dedicated segment for collectibles (stamps, coins, trading cards, memorabilia). Individual collectible items might fall under their product type, but the concept of collectability is not a GPC classification axis.",
+      "additionalGpcSegments": [
+        { "segmentCode": "60000000", "segmentName": "Toys/Games", "relevance": "Model railways, die-cast models, and similar collectible toys" }
+      ]
+    },
+    {
+      "inheritCategory": "musical_instruments",
+      "inheritLabel": "Musical Instruments",
+      "primaryGpc": {
+        "segmentCode": "54000000",
+        "segmentName": "Musical Instruments"
+      },
+      "mappingQuality": "exact",
+      "note": "GPC segment 54000000 directly corresponds to musical instruments. This is the strongest mapping in the set.",
+      "additionalGpcSegments": []
+    },
+    {
+      "inheritCategory": "books_manuscripts",
+      "inheritLabel": "Books & Manuscripts",
+      "primaryGpc": {
+        "segmentCode": "55000000",
+        "segmentName": "Stationery/Office Machinery/Occasion Supplies"
+      },
+      "mappingQuality": "partial",
+      "note": "GPC segment 55000000 includes books and printed materials alongside stationery. Rare books, first editions, and manuscripts — the items most relevant to estate valuation — are not distinguished from mass-market publications in GPC.",
+      "additionalGpcSegments": [
+        { "segmentCode": "85000000", "segmentName": "Music/Movies/Video Games", "relevance": "Published media and recordings" }
+      ]
+    },
+    {
+      "inheritCategory": "wine_spirits",
+      "inheritLabel": "Wine & Spirits",
+      "primaryGpc": {
+        "segmentCode": "51000000",
+        "segmentName": "Beverages"
+      },
+      "mappingQuality": "close",
+      "note": "GPC segment 51000000 covers alcoholic and non-alcoholic beverages. Wine and spirits are well represented within this segment's families and classes, though GPC does not distinguish fine/investment wine from everyday retail stock.",
+      "additionalGpcSegments": []
+    },
+    {
+      "inheritCategory": "clothing_textiles",
+      "inheritLabel": "Clothing & Textiles",
+      "primaryGpc": {
+        "segmentCode": "67000000",
+        "segmentName": "Clothing"
+      },
+      "mappingQuality": "close",
+      "note": "GPC segment 67000000 covers clothing well. Textiles such as tapestries or vintage fabrics may fall outside this segment, but for most estate purposes the mapping is strong.",
+      "additionalGpcSegments": [
+        { "segmentCode": "62000000", "segmentName": "Footwear", "relevance": "Shoes and boots" },
+        { "segmentCode": "66000000", "segmentName": "Personal Accessories", "relevance": "Handbags, scarves, and fashion accessories" }
+      ]
+    },
+    {
+      "inheritCategory": "firearms_sporting",
+      "inheritLabel": "Firearms & Sporting",
+      "primaryGpc": {
+        "segmentCode": "86000000",
+        "segmentName": "Safety/Protection"
+      },
+      "mappingQuality": "partial",
+      "note": "GPC does not have a dedicated firearms segment. Segment 86000000 includes some safety and protective equipment. Sporting firearms and field sports equipment are split across multiple segments.",
+      "additionalGpcSegments": [
+        { "segmentCode": "80000000", "segmentName": "Sports Equipment/Accessories", "relevance": "Sporting and recreational equipment including field sports" }
+      ]
+    },
+    {
+      "inheritCategory": "digital",
+      "inheritLabel": "Digital",
+      "primaryGpc": {
+        "segmentCode": "78000000",
+        "segmentName": "Computing/Electronics"
+      },
+      "mappingQuality": "partial",
+      "note": "GPC segment 78000000 covers physical computing and electronic devices but not digital-only assets such as domain names, digital media libraries, cryptocurrency wallets, or online accounts. The physical hardware aspect maps well; the intangible digital asset aspect does not.",
+      "additionalGpcSegments": []
+    },
+    {
+      "inheritCategory": "business",
+      "inheritLabel": "Business",
+      "primaryGpc": null,
+      "mappingQuality": "no_match",
+      "note": "GPC classifies trade items, not business entities, ownership stakes, or intellectual property. Business interests, goodwill, and commercial holdings have no GPC equivalent.",
+      "additionalGpcSegments": []
+    },
+    {
+      "inheritCategory": "islamic_financial",
+      "inheritLabel": "Islamic Financial",
+      "primaryGpc": null,
+      "mappingQuality": "no_match",
+      "note": "GPC does not classify financial products of any kind, including Sharia-compliant instruments such as sukuk, takaful, or mudarabah contracts. This domain is entirely outside GPC's scope.",
+      "additionalGpcSegments": []
+    },
+    {
+      "inheritCategory": "other",
+      "inheritLabel": "Other",
+      "primaryGpc": null,
+      "mappingQuality": "no_match",
+      "note": "Catch-all category for items not fitting other INHERIT categories. No single GPC segment can serve as a catch-all equivalent; items would need to be classified individually by product type.",
+      "additionalGpcSegments": []
+    }
+  ],
+  "_reverseIndex": {
+    "_description": "Reverse lookup from GPC segment codes to INHERIT categories. A GPC segment may map to multiple INHERIT categories.",
+    "25000000": [{ "inheritCategory": "vehicle", "mappingQuality": "close" }],
+    "47000000": [{ "inheritCategory": "property_contents", "mappingQuality": "partial" }],
+    "50000000": [{ "inheritCategory": "property_contents", "mappingQuality": "partial" }],
+    "51000000": [{ "inheritCategory": "wine_spirits", "mappingQuality": "close" }],
+    "54000000": [{ "inheritCategory": "musical_instruments", "mappingQuality": "exact" }],
+    "55000000": [{ "inheritCategory": "books_manuscripts", "mappingQuality": "partial" }],
+    "60000000": [{ "inheritCategory": "collectibles", "mappingQuality": "partial" }],
+    "62000000": [{ "inheritCategory": "clothing_textiles", "mappingQuality": "partial" }],
+    "65000000": [{ "inheritCategory": "property_contents", "mappingQuality": "partial" }],
+    "66000000": [{ "inheritCategory": "clothing_textiles", "mappingQuality": "partial" }],
+    "67000000": [{ "inheritCategory": "clothing_textiles", "mappingQuality": "close" }],
+    "72000000": [
+      { "inheritCategory": "property_contents", "mappingQuality": "partial" },
+      { "inheritCategory": "antiques", "mappingQuality": "partial" }
+    ],
+    "73000000": [
+      { "inheritCategory": "jewellery_watches", "mappingQuality": "close" },
+      { "inheritCategory": "antiques", "mappingQuality": "partial" }
+    ],
+    "74000000": [{ "inheritCategory": "jewellery_watches", "mappingQuality": "close" }],
+    "78000000": [
+      { "inheritCategory": "property_contents", "mappingQuality": "partial" },
+      { "inheritCategory": "digital", "mappingQuality": "partial" }
+    ],
+    "80000000": [
+      { "inheritCategory": "vehicle", "mappingQuality": "partial" },
+      { "inheritCategory": "firearms_sporting", "mappingQuality": "partial" }
+    ],
+    "82000000": [{ "inheritCategory": "art", "mappingQuality": "partial" }],
+    "85000000": [{ "inheritCategory": "books_manuscripts", "mappingQuality": "partial" }],
+    "86000000": [{ "inheritCategory": "firearms_sporting", "mappingQuality": "partial" }]
+  }
+}

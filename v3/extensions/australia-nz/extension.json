@@ -1,0 +1,39 @@
+{
+  "name": "Australia & New Zealand",
+  "id": "https://openinherit.org/v3/extensions/australia-nz.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "AU",
+    "NZ"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "islamic-succession",
+    "hindu-succession"
+  ],
+  "legalSystems": [
+    "common_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-03-26",
+  "dataProvenance": "Succession Act 2006 (NSW), Property (Relationships) Act 1976 (NZ), Te Ture Whenua Maori Act 1993",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ testamentary promises, Maori land.",
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "partial",
+  "keyFeatures": "State/territory variation, family provision claims, superannuation death benefits, relationshipCategory enum on FamilyProvisionClaim (7 categories), whangai (Maori customary adoption) recognition on MaoriLandDetails, customaryAdoptionRecognised on AboriginalLandDetails (kupai omasker, NSW s4.4)",
+  "legalTradition": "Common law",
+  "seeking": "",
+  "tier": "core"
+}

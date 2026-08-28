@@ -1,0 +1,215 @@
+{
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal, tax, or regulatory advice. Always verify with current legislation and qualified professionals.",
+  "$deprecated": "This file is deprecated as of INHERIT v2.1.0. Use well-known-organisations.json instead, which provides a superset of this data including Wikidata identifiers, registration number formats, verification URLs, and merged activity data.",
+  "$schema": "https://openinherit.org/reference-data/regulatory-bodies-schema.json",
+  "version": "1.0.0",
+  "lastUpdated": "2026-03-26",
+  "_metadata": {
+    "lastVerified": "2026-04-06",
+    "source": "Official regulator websites per jurisdiction",
+    "jurisdiction": "multi",
+    "disclaimer": "This data is provided for interoperability purposes. It does not constitute legal, tax, or financial advice. Users must verify independently before relying on these figures for official purposes.",
+    "deprecationPattern": "Individual entries within this file may carry deprecated: true, deprecatedAt, deprecatedReason, and supersededBy fields. Deprecated entries are retained for historical reference and audit trail purposes. Applications should filter to non-deprecated entries for current data.",
+    "deprecated": false,
+    "deprecatedAt": null,
+    "deprecatedReason": null,
+    "supersededBy": null
+  },
+  "bodies": [
+    {
+      "id": "sra",
+      "name": "Solicitors Regulation Authority",
+      "jurisdiction": "GB-ENG",
+      "country": "GB",
+      "url": "https://www.sra.org.uk",
+      "regulates": [
+        "solicitors",
+        "law_firms"
+      ],
+      "activities": [
+        "will_drafting",
+        "probate_administration",
+        "trust_preparation",
+        "iht_planning"
+      ],
+      "deprecated": false,
+      "deprecatedAt": null,
+      "deprecatedReason": null,
+      "supersededBy": null
+    },
+    {
+      "id": "lss",
+      "name": "Law Society of Scotland",
+      "jurisdiction": "GB-SCT",
+      "country": "GB",
+      "url": "https://www.lawscot.org.uk",
+      "regulates": [
+        "solicitors"
+      ],
+      "activities": [
+        "will_drafting",
+        "probate_administration",
+        "trust_preparation"
+      ],
+      "deprecated": false,
+      "deprecatedAt": null,
+      "deprecatedReason": null,
+      "supersededBy": null
+    },
+    {
+      "id": "lsi",
+      "name": "Law Society of Ireland",
+      "jurisdiction": "IE",
+      "country": "IE",
+      "url": "https://www.lawsociety.ie",
+      "regulates": [
+        "solicitors"
+      ],
+      "activities": [
+        "will_drafting",
+        "probate_administration",
+        "trust_preparation"
+      ],
+      "deprecated": false,
+      "deprecatedAt": null,
+      "deprecatedReason": null,
+      "supersededBy": null
+    },
+    {
+      "id": "nysba",
+      "name": "New York State Bar Association",
+      "jurisdiction": "US-NY",
+      "country": "US",
+      "url": "https://nysba.org",
+      "regulates": [
+        "attorneys"
+      ],
+      "activities": [
+        "will_drafting",
+        "probate_administration",
+        "trust_preparation",
+        "estate_litigation"
+      ],
+      "deprecated": false,
+      "deprecatedAt": null,
+      "deprecatedReason": null,
+      "supersededBy": null
+    },
+    {
+      "id": "lso",
+      "name": "Law Society of Ontario",
+      "jurisdiction": "CA-ON",
+      "country": "CA",
+      "url": "https://lso.ca",
+      "regulates": [
+        "lawyers",
+        "paralegals"
+      ],
+      "activities": [
+        "will_drafting",
+        "probate_administration",
+        "trust_preparation"
+      ],
+      "deprecated": false,
+      "deprecatedAt": null,
+      "deprecatedReason": null,
+      "supersededBy": null
+    },
+    {
+      "id": "lsnsw",
+      "name": "Law Society of New South Wales",
+      "jurisdiction": "AU-NSW",
+      "country": "AU",
+      "url": "https://www.lawsociety.com.au",
+      "regulates": [
+        "solicitors"
+      ],
+      "activities": [
+        "will_drafting",
+        "probate_administration",
+        "trust_preparation",
+        "superannuation"
+      ],
+      "deprecated": false,
+      "deprecatedAt": null,
+      "deprecatedReason": null,
+      "supersededBy": null
+    },
+    {
+      "id": "sal",
+      "name": "Singapore Academy of Law",
+      "jurisdiction": "SG",
+      "country": "SG",
+      "url": "https://www.sal.org.sg",
+      "regulates": [
+        "advocates_solicitors"
+      ],
+      "activities": [
+        "will_drafting",
+        "probate_administration",
+        "cpf_nominations"
+      ],
+      "deprecated": false,
+      "deprecatedAt": null,
+      "deprecatedReason": null,
+      "supersededBy": null
+    },
+    {
+      "id": "difc",
+      "name": "DIFC Courts (Wills & Probate Registry)",
+      "jurisdiction": "AE",
+      "country": "AE",
+      "url": "https://www.difccourts.ae",
+      "regulates": [
+        "registered_practitioners"
+      ],
+      "activities": [
+        "will_drafting",
+        "probate_administration",
+        "cross_border"
+      ],
+      "deprecated": false,
+      "deprecatedAt": null,
+      "deprecatedReason": null,
+      "supersededBy": null
+    },
+    {
+      "id": "jfba",
+      "name": "Japan Federation of Bar Associations",
+      "jurisdiction": "JP",
+      "country": "JP",
+      "url": "https://www.nichibenren.or.jp",
+      "regulates": [
+        "bengoshi"
+      ],
+      "activities": [
+        "will_drafting",
+        "probate_administration",
+        "isan_bunkatsu"
+      ],
+      "deprecated": false,
+      "deprecatedAt": null,
+      "deprecatedReason": null,
+      "supersededBy": null
+    },
+    {
+      "id": "bci",
+      "name": "Bar Council of India",
+      "jurisdiction": "IN-MH",
+      "country": "IN",
+      "url": "https://www.barcouncilofindia.org",
+      "regulates": [
+        "advocates"
+      ],
+      "activities": [
+        "will_drafting",
+        "probate_administration",
+        "huf_matters"
+      ],
+      "deprecated": false,
+      "deprecatedAt": null,
+      "deprecatedReason": null,
+      "supersededBy": null
+    }
+  ]
+}

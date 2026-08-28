@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/asset-categories/general.json",
+  "title": "General Asset Properties",
+  "description": "Category-specific properties for general tangible assets: art, antiques, jewellery, collectibles, books, wine, clothing, firearms, musical instruments, property contents",
+  "$comment": "This schema is composed with asset.json via allOf+if/then. Do NOT use additionalProperties:false here — it would reject core asset fields. Covers 12 category values.",
+  "type": "object",
+  "properties": {
+    "stolenArtCheck": {
+      "description": "Result of a stolen art check against the Art Loss Register (ALR) or equivalent database. Required by auction houses before sale of art, antiques, and high-value collectibles",
+      "type": "object",
+      "required": [ "retrievedAt" ],
+      "properties": {
+        "retrievedAt": {
+          "description": "When the check was performed",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "result": {
+          "description": "Outcome of the stolen art check",
+          "anyOf": [
+            {
+              "enum": [ "clear", "flagged", "inconclusive" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "certificateReference": {
+          "description": "ALR certificate or search reference number",
+          "type": "string",
+          "maxLength": 100
+        },
+        "certificateUrl": {
+          "description": "URL to the ALR certificate or search result",
+          "type": "string",
+          "pattern": "^https?://",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "checkedBy": {
+          "description": "Who performed the check — person name, organisation, or system identifier",
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "gemologicalCertificate": {
+      "description": "Structured gemological certificate data from GIA, AGS, or other grading laboratory. Confirms stone identity, quality grades, and weight — essential for insurance and sale valuation",
+      "type": "object",
+      "required": [ "retrievedAt" ],
+      "properties": {
+        "retrievedAt": {
+          "description": "When this certificate data was retrieved or verified",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "laboratory": {
+          "description": "The grading laboratory that issued the certificate",
+          "anyOf": [
+            {
+              "enum": [ "gia", "ags", "igi", "hrd", "egl" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "certificateNumber": {
+          "description": "Certificate or report number",
+          "type": "string",
+          "maxLength": 100
+        },
+        "verificationUrl": {
+          "description": "URL to verify the certificate online with the issuing laboratory",
+          "type": "string",
+          "pattern": "^https?://",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "stoneType": {
+          "description": "Type of gemstone",
+          "examples": [ "diamond", "ruby", "sapphire", "emerald" ],
+          "type": "string",
+          "maxLength": 100
+        },
+        "caratWeight": {
+          "description": "Weight in carats",
+          "type": "number",
+          "minimum": 0
+        },
+        "colourGrade": {
+          "description": "Colour grade as assigned by the laboratory",
+          "examples": [ "D", "E", "F", "G", "fancy vivid yellow" ],
+          "type": "string",
+          "maxLength": 50
+        },
+        "clarityGrade": {
+          "description": "Clarity grade as assigned by the laboratory",
+          "examples": [ "FL", "IF", "VVS1", "VS1", "SI1", "I1" ],
+          "type": "string",
+          "maxLength": 50
+        },
+        "cutGrade": {
+          "description": "Cut grade as assigned by the laboratory (diamonds only — not all labs grade cut for coloured stones)",
+          "examples": [ "Excellent", "Very Good", "Good", "Fair" ],
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

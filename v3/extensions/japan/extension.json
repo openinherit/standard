@@ -1,0 +1,45 @@
+{
+  "name": "Japan",
+  "id": "https://openinherit.org/v3/extensions/japan.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "JP"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [],
+  "legalSystems": [
+    "civil_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-03-26",
+  "dataProvenance": "Japanese Civil Code (民法), Family Register Act (戸籍法), 2019 spousal residence right reform",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Koseki records, iryubun claims, yōshi adoption, spousal residence right, isan bunkatsu, saishi succession, local will formalities.",
+  "conformanceRules": [
+    {
+      "id": "jp-001",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "Koseki (family register) record is recommended for Japanese estates",
+      "check": "exists",
+      "path": "x-inherit-japan.kosekiRecord",
+      "severity": "warning"
+    }
+  ],
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "partial",
+  "keyFeatures": "Forced heirship (iryubun), family court mediation, inheritance tax brackets, agricultural succession, relationshipCategory on IryubunClaim (spouse/child/lineal_ascendant/sibling), yoshi adoption → core kinship type mapping (futsu_yoshi/tokubetsu_yoshi), saishi custodial succession clarification",
+  "legalTradition": "Civil law",
+  "seeking": "",
+  "tier": "core"
+}

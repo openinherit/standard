@@ -1,0 +1,1481 @@
+{
+  "target": "../../../v3/relationship.json",
+  "tests": [
+    {
+      "description": "valid minimal relationship (required fields only)",
+      "data": {
+        "id": "f2a3b4c5-d6e7-8901-f234-56789abcdef0",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "22222222-0000-0000-0000-000000000002",
+            "ordinal": 2
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid fully populated relationship — Islamic nikah with mahr",
+      "data": {
+        "id": "a3b4c5d6-e7f8-9012-a345-6789abcdef01",
+        "type": "marriage_religious",
+        "religiousSubtype": "nikah",
+        "selfDeclaredType": "married",
+        "partners": [
+          {
+            "personId": "33333333-0000-0000-0000-000000000003",
+            "ordinal": 1,
+            "displayLabel": "Husband"
+          },
+          {
+            "personId": "44444444-0000-0000-0000-000000000004",
+            "ordinal": 2,
+            "displayLabel": "Wife"
+          }
+        ],
+        "currentStatus": "active",
+        "propertyRegime": "separation_of_property",
+        "financialInstruments": [
+          {
+            "type": "mahr",
+            "status": "deferred",
+            "description": "Deferred mahr of 50,000 AED — payable on death or divorce",
+            "maharDetails": {
+              "maharType": "deferred",
+              "recipientPersonId": "44444444-0000-0000-0000-000000000004"
+            }
+          }
+        ],
+        "notes": "Nikah recognised in UK for succession purposes."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid relationship — de facto with events timeline",
+      "data": {
+        "id": "b4c5d6e7-f8a9-0123-b456-789abcdef012",
+        "type": "de_facto",
+        "partners": [
+          {
+            "personId": "55555555-0000-0000-0000-000000000005",
+            "ordinal": 1
+          },
+          {
+            "personId": "66666666-0000-0000-0000-000000000006",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "notes": "De facto couple — cohabitating since 2018 in New South Wales."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing type",
+      "data": {
+        "id": "f2a3b4c5-d6e7-8901-f234-56789abcdef0",
+        "partners": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "22222222-0000-0000-0000-000000000002",
+            "ordinal": 2
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — partners array has fewer than 2 items",
+      "data": {
+        "id": "f2a3b4c5-d6e7-8901-f234-56789abcdef0",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "ordinal": 1
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — type not in enum",
+      "data": {
+        "id": "f2a3b4c5-d6e7-8901-f234-56789abcdef0",
+        "type": "POLYAMOROUS",
+        "partners": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "22222222-0000-0000-0000-000000000002",
+            "ordinal": 2
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "22222222-0000-0000-0000-000000000002",
+            "ordinal": 2
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required partners",
+      "data": {
+        "id": "f2a3b4c5-d6e7-8901-f234-56789abcdef0",
+        "type": "marriage_civil"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — type as number instead of string",
+      "data": {
+        "id": "f2a3b4c5-d6e7-8901-f234-56789abcdef0",
+        "type": 42,
+        "partners": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "22222222-0000-0000-0000-000000000002",
+            "ordinal": 2
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — partners as string instead of array",
+      "data": {
+        "id": "f2a3b4c5-d6e7-8901-f234-56789abcdef0",
+        "type": "marriage_civil",
+        "partners": "not-an-array"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a valid UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "22222222-0000-0000-0000-000000000002",
+            "ordinal": 2
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — partner personId is not a valid UUID",
+      "data": {
+        "id": "f2a3b4c5-d6e7-8901-f234-56789abcdef0",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "bad-uuid",
+            "ordinal": 1
+          },
+          {
+            "personId": "22222222-0000-0000-0000-000000000002",
+            "ordinal": 2
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — event with invalid eventDate format",
+      "data": {
+        "id": "f2a3b4c5-d6e7-8901-f234-56789abcdef0",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "22222222-0000-0000-0000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "events": [
+          {
+            "type": "registration",
+            "eventDate": "20/06/2015"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — currentStatus not in enum",
+      "data": {
+        "id": "f2a3b4c5-d6e7-8901-f234-56789abcdef0",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "22222222-0000-0000-0000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "complicated"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown property at root level",
+      "data": {
+        "id": "f2a3b4c5-d6e7-8901-f234-56789abcdef0",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "22222222-0000-0000-0000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "favouriteColour": "blue"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — type: marriage_religious with religiousSubtype nikah",
+      "data": {
+        "id": "ac000001-0000-4000-a000-000000000001",
+        "type": "marriage_religious",
+        "religiousSubtype": "nikah",
+        "partners": [
+          {
+            "personId": "b0000001-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000001-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — type: marriage_customary (African customary marriage)",
+      "data": {
+        "id": "ac000002-0000-4000-a000-000000000002",
+        "type": "marriage_customary",
+        "partners": [
+          {
+            "personId": "b0000002-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000002-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "notes": "Marriage valid under Recognition of Customary Marriages Act 1998 (South Africa)."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — type: marriage_common_law",
+      "data": {
+        "id": "ac000003-0000-4000-a000-000000000003",
+        "type": "marriage_common_law",
+        "partners": [
+          {
+            "personId": "b0000003-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000003-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "notes": "Common-law marriage recognised in Texas."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — type: civil_partnership",
+      "data": {
+        "id": "ac000004-0000-4000-a000-000000000004",
+        "type": "civil_partnership",
+        "partners": [
+          {
+            "personId": "b0000004-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000004-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "jurisdiction": {
+          "country": "GB"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — type: civil_union (France PACS)",
+      "data": {
+        "id": "ac000005-0000-4000-a000-000000000005",
+        "type": "civil_union",
+        "partners": [
+          {
+            "personId": "b0000005-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000005-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "jurisdiction": {
+          "country": "FR"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — type: domestic_partnership",
+      "data": {
+        "id": "ac000006-0000-4000-a000-000000000006",
+        "type": "domestic_partnership",
+        "partners": [
+          {
+            "personId": "b0000006-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000006-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — type: cohabitation",
+      "data": {
+        "id": "ac000007-0000-4000-a000-000000000007",
+        "type": "cohabitation",
+        "partners": [
+          {
+            "personId": "b0000007-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000007-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — type: engagement (betrothal with lobola negotiations underway)",
+      "data": {
+        "id": "ac000008-0000-4000-a000-000000000008",
+        "type": "engagement",
+        "partners": [
+          {
+            "personId": "b0000008-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000008-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "notes": "Lobola negotiations in progress."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — currentStatus: separated_informal",
+      "data": {
+        "id": "ac000009-0000-4000-a000-000000000009",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000009-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000009-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "separated_informal"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — currentStatus: separated_legal",
+      "data": {
+        "id": "ac000010-0000-4000-a000-000000000010",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000010-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000010-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "separated_legal",
+        "events": [
+          {
+            "type": "separation_legal",
+            "eventDate": "2023-09-01"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — currentStatus: divorced with events timeline",
+      "data": {
+        "id": "ac000011-0000-4000-a000-000000000011",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000011-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000011-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "divorced",
+        "events": [
+          {
+            "type": "registration",
+            "eventDate": "2010-06-15"
+          },
+          {
+            "type": "divorce_filed",
+            "eventDate": "2022-01-10"
+          },
+          {
+            "type": "financial_order",
+            "eventDate": "2022-08-20"
+          },
+          {
+            "type": "divorce_finalised",
+            "eventDate": "2022-09-05",
+            "notes": "Decree absolute received"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — currentStatus: annulled",
+      "data": {
+        "id": "ac000012-0000-4000-a000-000000000012",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000012-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000012-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "annulled",
+        "events": [
+          {
+            "type": "annulment",
+            "eventDate": "2021-03-15"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — currentStatus: dissolved (civil partnership)",
+      "data": {
+        "id": "ac000013-0000-4000-a000-000000000013",
+        "type": "civil_partnership",
+        "partners": [
+          {
+            "personId": "b0000013-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000013-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "dissolved",
+        "events": [
+          {
+            "type": "dissolution",
+            "eventDate": "2023-04-20"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — currentStatus: widowed",
+      "data": {
+        "id": "ac000014-0000-4000-a000-000000000014",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000014-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000014-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "widowed",
+        "events": [
+          {
+            "type": "registration",
+            "eventDate": "1995-07-22"
+          },
+          {
+            "type": "death_of_partner",
+            "eventDate": "2024-11-30",
+            "notes": "Partner passed away following illness"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — currentStatus: void",
+      "data": {
+        "id": "ac000015-0000-4000-a000-000000000015",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000015-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000015-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "void",
+        "events": [
+          {
+            "type": "void_declaration",
+            "eventDate": "2020-05-10"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — currentStatus: putative (void but parties believed valid)",
+      "data": {
+        "id": "ac000016-0000-4000-a000-000000000016",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000016-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000016-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "putative",
+        "notes": "Marriage declared void ab initio but wife believed it to be valid — may confer limited inheritance rights."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — event types: ceremony, engagement, marriage_contract",
+      "data": {
+        "id": "ac000017-0000-4000-a000-000000000017",
+        "type": "marriage_religious",
+        "religiousSubtype": "kiddushin",
+        "partners": [
+          {
+            "personId": "b0000017-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000017-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "events": [
+          {
+            "type": "engagement",
+            "eventDate": "2015-01-14"
+          },
+          {
+            "type": "marriage_contract",
+            "eventDate": "2015-06-18",
+            "notes": "Ketubah signed"
+          },
+          {
+            "type": "ceremony",
+            "eventDate": "2015-06-20",
+            "notes": "Kiddushin ceremony held at Great Synagogue, Jerusalem"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — event types: mahr_payment + lobola_payment",
+      "data": {
+        "id": "ac000018-0000-4000-a000-000000000018",
+        "type": "marriage_customary",
+        "partners": [
+          {
+            "personId": "b0000018-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000018-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "events": [
+          {
+            "type": "lobola_payment",
+            "eventDate": "2018-12-15",
+            "notes": "11 cattle paid to Nkosi family"
+          },
+          {
+            "type": "ceremony",
+            "eventDate": "2019-02-08"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — event types: property_regime_change + reconciliation",
+      "data": {
+        "id": "ac000019-0000-4000-a000-000000000019",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000019-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000019-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "events": [
+          {
+            "type": "registration",
+            "eventDate": "2005-09-10"
+          },
+          {
+            "type": "separation_informal",
+            "eventDate": "2019-04-01"
+          },
+          {
+            "type": "reconciliation",
+            "eventDate": "2020-06-15",
+            "notes": "Couple reconciled and resumed cohabitation"
+          },
+          {
+            "type": "property_regime_change",
+            "eventDate": "2021-01-20",
+            "notes": "Postnuptial agreement changed regime to separation of property"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — financialInstruments: ketubah with required ketubahDetails",
+      "data": {
+        "id": "ac000020-0000-4000-a000-000000000020",
+        "type": "marriage_religious",
+        "religiousSubtype": "kiddushin",
+        "partners": [
+          {
+            "personId": "b0000020-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000020-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "financialInstruments": [
+          {
+            "type": "ketubah",
+            "status": "paid",
+            "instrumentDate": "2015-06-20",
+            "ketubahDetails": {
+              "principalAmount": { "amount": 20000, "currency": "ILS" },
+              "tosefetAmount": { "amount": 50000, "currency": "ILS" },
+              "brideStatus": "virgin",
+              "officiatingRabbi": "Rabbi David Goldstein",
+              "witnessPersonIds": [
+                "aa000020-0000-4000-a000-000000000001",
+                "aa000020-0000-4000-a000-000000000002"
+              ]
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — financialInstruments: lobola with lobolaDetails",
+      "data": {
+        "id": "ac000021-0000-4000-a000-000000000021",
+        "type": "marriage_customary",
+        "partners": [
+          {
+            "personId": "b0000021-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000021-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "financialInstruments": [
+          {
+            "type": "lobola",
+            "status": "paid",
+            "lobolaDetails": {
+              "negotiatedWith": "Nkosi family, Johannesburg",
+              "includesLivestock": true,
+              "livestockCount": 11
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — financialInstruments: prenuptial_agreement",
+      "data": {
+        "id": "ac000022-0000-4000-a000-000000000022",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000022-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000022-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "financialInstruments": [
+          {
+            "type": "prenuptial_agreement",
+            "status": "agreed",
+            "instrumentDate": "2018-03-01",
+            "description": "Prenuptial agreement governing UK and French assets",
+            "inheritanceImpact": "Prenuptial ring-fences pre-marital assets from the estate"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — financialInstruments: postnuptial_agreement",
+      "data": {
+        "id": "ac000023-0000-4000-a000-000000000023",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000023-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000023-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "financialInstruments": [
+          {
+            "type": "postnuptial_agreement",
+            "status": "agreed",
+            "description": "Postnuptial agreement after inheritance received"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — financialInstruments: marriage_settlement",
+      "data": {
+        "id": "ac000024-0000-4000-a000-000000000024",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000024-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000024-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "financialInstruments": [
+          {
+            "type": "marriage_settlement",
+            "status": "paid",
+            "description": "Formal property settlement on marriage"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — financialInstrument status: partially_paid",
+      "data": {
+        "id": "ac000025-0000-4000-a000-000000000025",
+        "type": "marriage_religious",
+        "religiousSubtype": "nikah",
+        "partners": [
+          {
+            "personId": "b0000025-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000025-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "financialInstruments": [
+          {
+            "type": "mahr",
+            "status": "partially_paid",
+            "description": "Prompt portion paid; deferred portion outstanding",
+            "maharDetails": {
+              "maharType": "combination",
+              "recipientPersonId": "b0000025-0000-4000-a000-000000000002"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — financialInstrument status: disputed",
+      "data": {
+        "id": "ac000026-0000-4000-a000-000000000026",
+        "type": "marriage_religious",
+        "religiousSubtype": "nikah",
+        "partners": [
+          {
+            "personId": "b0000026-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000026-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "divorced",
+        "financialInstruments": [
+          {
+            "type": "mahr",
+            "status": "disputed",
+            "description": "Deferred mahr disputed on divorce",
+            "maharDetails": {
+              "maharType": "deferred",
+              "recipientPersonId": "b0000026-0000-4000-a000-000000000002"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — financialInstrument status: waived",
+      "data": {
+        "id": "ac000027-0000-4000-a000-000000000027",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000027-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000027-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "divorced",
+        "financialInstruments": [
+          {
+            "type": "prenuptial_agreement",
+            "status": "waived",
+            "description": "Prenuptial waived by mutual consent"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyRegime: community_of_property (South Africa default)",
+      "data": {
+        "id": "ac000028-0000-4000-a000-000000000028",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000028-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000028-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "propertyRegime": "community_of_property"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyRegime: community_of_acquests (France default)",
+      "data": {
+        "id": "ac000029-0000-4000-a000-000000000029",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000029-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000029-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "propertyRegime": "community_of_acquests",
+        "jurisdiction": { "country": "FR" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyRegime: deferred_community (Scandinavia)",
+      "data": {
+        "id": "ac000030-0000-4000-a000-000000000030",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000030-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000030-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "propertyRegime": "deferred_community"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyRegime: separate_as_modified (prenuptial)",
+      "data": {
+        "id": "ac000031-0000-4000-a000-000000000031",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000031-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000031-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "propertyRegime": "separate_as_modified"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyRegime: islamic_dower",
+      "data": {
+        "id": "ac000032-0000-4000-a000-000000000032",
+        "type": "marriage_religious",
+        "religiousSubtype": "nikah",
+        "partners": [
+          {
+            "personId": "b0000032-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000032-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "propertyRegime": "islamic_dower"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyRegime: us_community_with_survivorship (Texas)",
+      "data": {
+        "id": "ac000033-0000-4000-a000-000000000033",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000033-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000033-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "propertyRegime": "us_community_with_survivorship"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyRegime: us_quasi_community (California)",
+      "data": {
+        "id": "ac000034-0000-4000-a000-000000000034",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000034-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000034-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "propertyRegime": "us_quasi_community",
+        "jurisdiction": { "country": "US", "subdivision": "US-CA" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyRegime: hindu_separate",
+      "data": {
+        "id": "ac000035-0000-4000-a000-000000000035",
+        "type": "marriage_religious",
+        "religiousSubtype": "hindu_vivah",
+        "partners": [
+          {
+            "personId": "b0000035-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000035-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "propertyRegime": "hindu_separate"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — polygamous marriage with 3 partners",
+      "data": {
+        "id": "ac000036-0000-4000-a000-000000000036",
+        "type": "marriage_customary",
+        "partners": [
+          {
+            "personId": "b0000036-0000-4000-a000-000000000001",
+            "ordinal": 1,
+            "displayLabel": "First Wife"
+          },
+          {
+            "personId": "b0000036-0000-4000-a000-000000000002",
+            "ordinal": 2,
+            "displayLabel": "Second Wife"
+          },
+          {
+            "personId": "b0000036-0000-4000-a000-000000000003",
+            "ordinal": 3,
+            "displayLabel": "Third Wife"
+          }
+        ],
+        "currentStatus": "active",
+        "notes": "Polygamous marriage valid under Nigerian customary law."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — jurisdictionalRecognition: UK recognises nikah, US does not",
+      "data": {
+        "id": "ac000037-0000-4000-a000-000000000037",
+        "type": "marriage_religious",
+        "religiousSubtype": "nikah",
+        "partners": [
+          {
+            "personId": "b0000037-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000037-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "jurisdictionalRecognition": [
+          {
+            "jurisdiction": { "country": "GB" },
+            "recognised": true,
+            "notes": "Recognised for succession purposes in England and Wales"
+          },
+          {
+            "jurisdiction": { "country": "US" },
+            "recognised": false,
+            "notes": "Not registered as a civil marriage in any US state"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — selfDeclaredType differs from legal type",
+      "data": {
+        "id": "ac000038-0000-4000-a000-000000000038",
+        "type": "civil_union",
+        "partners": [
+          {
+            "personId": "b0000038-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000038-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "currentStatus": "active",
+        "selfDeclaredType": "married"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — mahr financialInstrument missing required maharDetails",
+      "data": {
+        "id": "ac000039-0000-4000-a000-000000000039",
+        "type": "marriage_religious",
+        "religiousSubtype": "nikah",
+        "partners": [
+          {
+            "personId": "b0000039-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000039-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "financialInstruments": [
+          {
+            "type": "mahr",
+            "status": "deferred"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — ketubah financialInstrument missing required ketubahDetails",
+      "data": {
+        "id": "ac000040-0000-4000-a000-000000000040",
+        "type": "marriage_religious",
+        "religiousSubtype": "kiddushin",
+        "partners": [
+          {
+            "personId": "b0000040-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000040-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "financialInstruments": [
+          {
+            "type": "ketubah",
+            "status": "paid"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — financialInstrument type not in enum",
+      "data": {
+        "id": "ac000041-0000-4000-a000-000000000041",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000041-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000041-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "financialInstruments": [
+          {
+            "type": "dowry"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — financialInstrument status not in enum",
+      "data": {
+        "id": "ac000042-0000-4000-a000-000000000042",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000042-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000042-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "financialInstruments": [
+          {
+            "type": "prenuptial_agreement",
+            "status": "cancelled"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — propertyRegime not in enum",
+      "data": {
+        "id": "ac000043-0000-4000-a000-000000000043",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000043-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000043-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "propertyRegime": "joint_ownership"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — event type not in enum",
+      "data": {
+        "id": "ac000044-0000-4000-a000-000000000044",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000044-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000044-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "events": [
+          {
+            "type": "wedding",
+            "eventDate": "2010-06-15"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — event missing required eventDate",
+      "data": {
+        "id": "ac000045-0000-4000-a000-000000000045",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000045-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000045-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "events": [
+          {
+            "type": "registration"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — ketubahDetails brideStatus not in enum",
+      "data": {
+        "id": "ac000046-0000-4000-a000-000000000046",
+        "type": "marriage_religious",
+        "religiousSubtype": "kiddushin",
+        "partners": [
+          {
+            "personId": "b0000046-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000046-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "financialInstruments": [
+          {
+            "type": "ketubah",
+            "ketubahDetails": {
+              "brideStatus": "single"
+            }
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — maharDetails maharType not in enum",
+      "data": {
+        "id": "ac000047-0000-4000-a000-000000000047",
+        "type": "marriage_religious",
+        "religiousSubtype": "nikah",
+        "partners": [
+          {
+            "personId": "b0000047-0000-4000-a000-000000000001",
+            "ordinal": 1
+          },
+          {
+            "personId": "b0000047-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ],
+        "financialInstruments": [
+          {
+            "type": "mahr",
+            "maharDetails": {
+              "maharType": "installments"
+            }
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — partner missing required ordinal",
+      "data": {
+        "id": "ac000048-0000-4000-a000-000000000048",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000048-0000-4000-a000-000000000001"
+          },
+          {
+            "personId": "b0000048-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — partner ordinal below minimum (0)",
+      "data": {
+        "id": "ac000049-0000-4000-a000-000000000049",
+        "type": "marriage_civil",
+        "partners": [
+          {
+            "personId": "b0000049-0000-4000-a000-000000000001",
+            "ordinal": 0
+          },
+          {
+            "personId": "b0000049-0000-4000-a000-000000000002",
+            "ordinal": 2
+          }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

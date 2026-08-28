@@ -1,0 +1,318 @@
+{
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal, tax, or regulatory advice. Always verify with current legislation and qualified professionals.",
+  "$schema": "https://openinherit.org/reference-data/well-known-organisations-schema.json",
+  "version": "1.0.0",
+  "lastUpdated": "2026-03-30",
+  "description": "Well-known organisations that commonly interact with estates. Phase 1: UK + Ireland. Entries use the organisation.json schema structure with additional reference metadata for validation and verification.",
+  "phases": {
+    "1": { "jurisdictions": ["GB", "IE"], "status": "complete" },
+    "2": { "jurisdictions": ["US", "CA"], "status": "planned" },
+    "3": { "jurisdictions": ["SG", "JP", "IN", "AE", "HK"], "status": "planned" }
+  },
+  "organisations": [
+    {
+      "id": "sra",
+      "name": "Solicitors Regulation Authority",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-ENG",
+      "url": "https://www.sra.org.uk",
+      "wikidataId": "Q7558592",
+      "registrationNumberFormat": "^\\d{6}$",
+      "verificationUrl": "https://www.sra.org.uk/consumers/register/",
+      "verificationApi": "https://sra-prod-apim.developer.azure-api.net/",
+      "free": true,
+      "activities": [
+        "will_drafting", "probate_administration", "trust_preparation",
+        "iht_planning", "cross_border", "estate_litigation",
+        "power_of_attorney", "business_succession"
+      ]
+    },
+    {
+      "id": "lss",
+      "name": "Law Society of Scotland",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-SCT",
+      "url": "https://www.lawscot.org.uk",
+      "wikidataId": "Q6504564",
+      "registrationNumberFormat": "^\\d{5}$",
+      "verificationUrl": "https://www.lawscot.org.uk/find-a-solicitor/",
+      "free": true,
+      "activities": [
+        "will_drafting", "probate_administration", "trust_preparation",
+        "iht_planning", "cross_border", "estate_litigation", "power_of_attorney"
+      ]
+    },
+    {
+      "id": "lsni",
+      "name": "Law Society of Northern Ireland",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-NIR",
+      "url": "https://www.lawsoc-ni.org",
+      "registrationNumberFormat": "^\\d+$",
+      "verificationUrl": "https://www.lawsoc-ni.org/",
+      "free": true,
+      "activities": [
+        "will_drafting", "probate_administration", "trust_preparation",
+        "cross_border", "estate_litigation", "power_of_attorney"
+      ]
+    },
+    {
+      "id": "lsi",
+      "name": "Law Society of Ireland",
+      "organisationType": "government_body",
+      "jurisdiction": "IE",
+      "url": "https://www.lawsociety.ie",
+      "registrationNumberFormat": "^\\d+$",
+      "verificationUrl": "https://www.lawsociety.ie/Find-a-Solicitor/",
+      "free": true,
+      "activities": [
+        "will_drafting", "probate_administration", "trust_preparation",
+        "cross_border", "estate_litigation", "power_of_attorney"
+      ]
+    },
+    {
+      "id": "bsb",
+      "name": "Bar Standards Board",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-ENG",
+      "url": "https://www.barstandardsboard.org.uk",
+      "wikidataId": "Q4859236",
+      "registrationNumberFormat": "^\\d{5,6}$",
+      "verificationUrl": "https://www.barstandardsboard.org.uk/for-the-public/search-a-barristers-record.html",
+      "free": true,
+      "activities": [
+        "estate_litigation", "trust_preparation"
+      ]
+    },
+    {
+      "id": "faculty_office",
+      "name": "Faculty Office of the Archbishop of Canterbury",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-ENG",
+      "url": "https://www.facultyoffice.org.uk",
+      "verificationUrl": "https://www.thenotariessociety.org.uk/",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "clc",
+      "name": "Council for Licensed Conveyancers",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-ENG",
+      "url": "https://www.clc-uk.org",
+      "registrationNumberFormat": "^\\d+$",
+      "verificationUrl": "https://www.clc-uk.org/consumers/find-a-licensed-conveyancer/",
+      "free": true,
+      "activities": [
+        "probate_administration"
+      ]
+    },
+    {
+      "id": "ipw",
+      "name": "Institute of Professional Willwriters",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-ENG",
+      "url": "https://www.ipw.org.uk",
+      "verificationUrl": "https://www.ipw.org.uk/Membership-Directory/",
+      "free": true,
+      "activities": [
+        "will_drafting"
+      ]
+    },
+    {
+      "id": "fca",
+      "name": "Financial Conduct Authority",
+      "organisationType": "government_body",
+      "jurisdiction": "GB",
+      "url": "https://www.fca.org.uk",
+      "wikidataId": "Q3312845",
+      "registrationNumberFormat": "^\\d{6,7}$",
+      "verificationUrl": "https://register.fca.org.uk/s/",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "pra",
+      "name": "Prudential Regulation Authority",
+      "organisationType": "government_body",
+      "jurisdiction": "GB",
+      "url": "https://www.bankofengland.co.uk/prudential-regulation",
+      "wikidataId": "Q7252888",
+      "activities": []
+    },
+    {
+      "id": "companies_house",
+      "name": "Companies House",
+      "organisationType": "government_body",
+      "jurisdiction": "GB",
+      "url": "https://www.gov.uk/government/organisations/companies-house",
+      "wikidataId": "Q1141130",
+      "registrationNumberFormat": "^[A-Z]{0,2}\\d{6,8}$",
+      "verificationUrl": "https://find-and-update.company-information.service.gov.uk/",
+      "verificationApi": "https://api.company-information.service.gov.uk/",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "ccew",
+      "name": "Charity Commission for England and Wales",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-ENG",
+      "url": "https://www.gov.uk/government/organisations/charity-commission",
+      "wikidataId": "Q107583258",
+      "registrationNumberFormat": "^\\d{7,8}$",
+      "verificationUrl": "https://register-of-charities.charitycommission.gov.uk/charity-search",
+      "verificationApi": "https://api.charitycommission.gov.uk/",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "oscr",
+      "name": "Office of the Scottish Charity Regulator",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-SCT",
+      "url": "https://www.oscr.org.uk",
+      "wikidataId": "Q7079168",
+      "registrationNumberFormat": "^SC\\d{6}$",
+      "verificationUrl": "https://www.oscr.org.uk/search",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "ccni",
+      "name": "Charity Commission for Northern Ireland",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-NIR",
+      "url": "https://www.charitycommissionni.org.uk",
+      "registrationNumberFormat": "^NIC\\d{5,6}$",
+      "verificationUrl": "https://www.charitycommissionni.org.uk/charity-search/",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "cra_charities",
+      "name": "Charities Regulator (Ireland)",
+      "organisationType": "government_body",
+      "jurisdiction": "IE",
+      "url": "https://www.charitiesregulator.ie",
+      "registrationNumberFormat": "^\\d{5}$",
+      "verificationUrl": "https://www.charitiesregulator.ie/en/information-for-the-public/search-the-register-of-charities",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "rics",
+      "name": "Royal Institution of Chartered Surveyors",
+      "organisationType": "government_body",
+      "jurisdiction": "GB",
+      "url": "https://www.rics.org",
+      "wikidataId": "Q2115025",
+      "registrationNumberFormat": "^(MRICS|FRICS|AssocRICS)-\\d+$",
+      "verificationUrl": "https://www.rics.org/find-a-member",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "nafd",
+      "name": "National Association of Funeral Directors",
+      "organisationType": "government_body",
+      "jurisdiction": "GB",
+      "url": "https://www.nafd.org.uk",
+      "verificationUrl": "https://www.nafd.org.uk/funeral-advice/find-a-funeral-director/",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "saif",
+      "name": "National Society of Allied and Independent Funeral Directors",
+      "organisationType": "government_body",
+      "jurisdiction": "GB",
+      "url": "https://saif.org.uk",
+      "verificationUrl": "https://saif.org.uk/find-a-funeral-director/",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "hmrc",
+      "name": "HM Revenue & Customs",
+      "organisationType": "government_body",
+      "jurisdiction": "GB",
+      "url": "https://www.gov.uk/government/organisations/hm-revenue-customs",
+      "wikidataId": "Q2402878",
+      "activities": []
+    },
+    {
+      "id": "hmlr",
+      "name": "HM Land Registry",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-ENG",
+      "url": "https://www.gov.uk/government/organisations/land-registry",
+      "wikidataId": "Q2815684",
+      "verificationUrl": "https://search-property-information.service.gov.uk/",
+      "activities": []
+    },
+    {
+      "id": "ros",
+      "name": "Registers of Scotland",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-SCT",
+      "url": "https://www.ros.gov.uk",
+      "wikidataId": "Q7316777",
+      "verificationUrl": "https://www.ros.gov.uk/our-registers/land-register-of-scotland",
+      "activities": []
+    },
+    {
+      "id": "icaew",
+      "name": "Institute of Chartered Accountants in England and Wales",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-ENG",
+      "url": "https://www.icaew.com",
+      "wikidataId": "Q1140592",
+      "verificationUrl": "https://www.icaew.com/find-a-chartered-accountant",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "icas",
+      "name": "Institute of Chartered Accountants of Scotland",
+      "organisationType": "government_body",
+      "jurisdiction": "GB-SCT",
+      "url": "https://www.icas.com",
+      "wikidataId": "Q6039413",
+      "verificationUrl": "https://www.icas.com/ca-search",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "acca",
+      "name": "Association of Chartered Certified Accountants",
+      "organisationType": "government_body",
+      "jurisdiction": "GB",
+      "url": "https://www.accaglobal.com",
+      "wikidataId": "Q286238",
+      "verificationUrl": "https://www.accaglobal.com/gb/en/member/find-an-accountant.html",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "ciot",
+      "name": "Chartered Institute of Taxation",
+      "organisationType": "government_body",
+      "jurisdiction": "GB",
+      "url": "https://www.tax.org.uk",
+      "wikidataId": "Q5086089",
+      "verificationUrl": "https://www.tax.org.uk/find-a-chartered-tax-adviser",
+      "free": true,
+      "activities": []
+    },
+    {
+      "id": "ico",
+      "name": "Information Commissioner's Office",
+      "organisationType": "government_body",
+      "jurisdiction": "GB",
+      "url": "https://ico.org.uk",
+      "wikidataId": "Q3308579",
+      "activities": []
+    }
+  ]
+}

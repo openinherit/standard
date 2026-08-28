@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/asset-interest.json",
+  "title": "Asset Interest",
+  "description": "Captures expressions of interest about an asset, collection, or product from any perspective — owner wishlists, beneficiary preferences, executor observations, proxy-relayed interests, and cross-system collector interest. Qualified by expressedByRole (who), intentType (what kind), and optionally productMatch (product-level vs asset-level). Maps to Schema.org ReactAction + Role",
+  "type": "object",
+  "anyOf": [
+    {
+      "required": [ "personId" ]
+    },
+    {
+      "required": [ "organisationId" ]
+    }
+  ],
+  "required": [ "id", "rootDocumentId", "interestLevel" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this interest record",
+      "examples": [ "c3d4e5f6-a7b8-9012-cdef-3456789abcde" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "rootDocumentId": {
+      "description": "The root document this entity belongs to — either an estate document (schema.json) or a catalogue document (catalogue.json)",
+      "examples": [ "a1b2c3d4-e5f6-7890-abcd-ef1234567890" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "assetId": {
+      "description": "Reference to a specific Asset.id, if the interest is in a single asset",
+      "examples": [ "d4e5f6a7-b8c9-0123-def4-56789abcdef0" ],
+      "type": [ "string", "null" ],
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "collectionId": {
+      "description": "Reference to an AssetCollection.id, if the interest is in an entire collection",
+      "examples": [ "b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8" ],
+      "type": [ "string", "null" ],
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "personId": {
+      "description": "The person expressing interest (a Person.id). The person's relationship to the estate is qualified by expressedByRole",
+      "examples": [ "e5f6a7b8-c9d0-1234-ef56-789abcdef012" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "personIdDisplay": {
+      "description": "Human-readable display name for the referenced person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "interestLevel": {
+      "description": "How strongly the beneficiary has expressed interest",
+      "$comment": "mentioned = came up in conversation but no strong feeling. expressed_interest = person said they'd like it. strongly_wants = person has made it clear this matters to them. agreed = testator and beneficiary have informally agreed. When expressedByRole is 'testator', the levels carry directive weight: mentioned = noted as a possibility, expressed_interest = prefers this, strongly_wants = is clear about this, agreed = both parties have discussed and agreed.",
+      "examples": [ "expressed_interest", "agreed" ],
+      "enum": [ "mentioned", "expressed_interest", "strongly_wants", "agreed" ]
+    },
+    "sourceType": {
+      "description": "How this interest was communicated or recorded",
+      "$comment": "family_conversation = mentioned during a family discussion. written_request = beneficiary put it in writing. chat_message = expressed via the platform's messaging (generic). platform_private_message = private 1-to-1 message on the platform. platform_group_message = group message involving multiple parties. proxy_reported = a proxy relayed the interest on behalf of the beneficiary. testator_observed = testator noticed the person's attachment without them asking. manual = entered directly by the testator or proxy.",
+      "examples": [ "family_conversation", "platform_private_message" ],
+      "enum": [
+        "family_conversation",
+        "written_request",
+        "chat_message",
+        "platform_private_message",
+        "platform_group_message",
+        "proxy_reported",
+        "testator_observed",
+        "manual"
+      ]
+    },
+    "testatorAcknowledged": {
+      "description": "Whether the testator has seen and acknowledged this interest",
+      "examples": [ true, false ],
+      "default": false,
+      "type": "boolean"
+    },
+    "notes": {
+      "description": "Additional context about this interest",
+      "examples": [
+        "Sarah mentioned at Christmas 2024 that she'd love Mum's engagement ring. Mum seemed pleased.",
+        "Haruki has always admired the woodblock print collection — discussed at Obon 2024.",
+        "Amara expressed strong interest in the family compound during the last family council meeting."
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "organisationId": {
+      "description": "Reference to the Organisation.id expressing interest, if an organisation rather than a person. Mutually exclusive with personId",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "organisationIdDisplay": {
+      "description": "Human-readable display name for the referenced organisation",
+      "type": "string",
+      "maxLength": 255
+    },
+    "expressedByRole": {
+      "description": "The role of the person expressing this interest in relation to the estate or catalogue. Qualifies the authority and weight of the expression. Follows the Schema.org Role pattern",
+      "$comment": "testator = the estate/catalogue owner expressing a desire (directive weight). beneficiary = a named beneficiary expressing a preference. executor = an executor recording an observation or recommendation. proxy = relaying interest on behalf of another person. Extension values (x-inherit-) support additional roles such as collector interest from external systems.",
+      "examples": [ "testator", "beneficiary", "executor" ],
+      "anyOf": [
+        {
+          "enum": [ "testator", "beneficiary", "executor", "proxy" ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+"
+        }
+      ]
+    },
+    "intentType": {
+      "description": "The nature of the interest being expressed. Distinguishes between wanting to acquire, wanting to receive, wanting to allocate to someone, willingness to sell, and soft admiration",
+      "$comment": "acquire = wants to buy or obtain (collector wishlist, shopping list). receive = would like to be given or inherit (beneficiary preference). allocate = wants to give this to a specific person (testator directive). sell = willing to part with this item (signals availability). admire = appreciates the item, no action intended (soft signal).",
+      "examples": [ "acquire", "receive", "allocate" ],
+      "anyOf": [
+        {
+          "enum": [ "acquire", "receive", "allocate", "sell", "admire" ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+"
+        }
+      ]
+    },
+    "productMatch": {
+      "description": "Interest in any asset matching this product identity, rather than a specific asset. Use instead of assetId when the interest is in a product class, not a specific instance. Maps to Schema.org Product (vs IndividualProduct for assetId). Matching is by identifier (strongest), brand + category (medium), or category alone (weakest)",
+      "type": "object",
+      "properties": {
+        "identifierSystem": {
+          "description": "The identifier system, from reference-data/identifier-systems.json",
+          "examples": [ "manufacturer_sku", "ean" ],
+          "type": "string",
+          "maxLength": 100
+        },
+        "identifierValue": {
+          "description": "The product identifier value within the system",
+          "examples": [ "R3456", "5010963123456" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "brand": {
+          "description": "Brand name for matching",
+          "examples": [ "Hornby", "Bachmann" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "brandWikidataId": {
+          "description": "Wikidata entity ID for the brand — strongest cross-system brand match",
+          "examples": [ "Q1139498" ],
+          "type": "string",
+          "pattern": "^Q\\d+$"
+        },
+        "category": {
+          "description": "INHERIT product category for broad matching",
+          "type": "string",
+          "maxLength": 255
+        },
+        "subcategory": {
+          "description": "INHERIT subcategory for narrower matching",
+          "type": "string",
+          "maxLength": 255
+        },
+        "minimumCondition": {
+          "description": "Minimum acceptable condition. If absent, matches all conditions. Uses the same enum as asset.condition",
+          "enum": [ "excellent", "good", "fair", "poor" ]
+        },
+        "notes": {
+          "description": "Additional matching criteria in free text",
+          "examples": [
+            "1970s era locomotives only",
+            "DCC fitted preferred",
+            "Must be BR green livery"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "quantity": {
+      "description": "Number of items desired (for productMatch wishlist entries) or number of the specific asset being discussed. Default 1 if absent. Follows the same convention as asset.quantity",
+      "examples": [ 1, 3, 6 ],
+      "default": 1,
+      "type": "integer",
+      "maximum": 1000,
+      "minimum": 1
+    },
+    "expressedAt": {
+      "description": "When this interest was expressed or recorded",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "preOrderStatus": {
+      "description": "For wishlist items that have been pre-ordered from a dealer or manufacturer but not yet received. Tracks order status, payment, and expected delivery",
+      "type": "object",
+      "properties": {
+        "orderStatus": {
+          "description": "Current status of the pre-order",
+          "enum": [
+            "wanted",
+            "pre_ordered_unpaid",
+            "pre_ordered_paid",
+            "dispatched",
+            "received"
+          ]
+        },
+        "orderedFrom": {
+          "description": "The dealer or manufacturer the item was ordered from",
+          "type": "string",
+          "maxLength": 255
+        },
+        "orderReference": {
+          "description": "The dealer's or manufacturer's order reference number",
+          "type": "string",
+          "maxLength": 255
+        },
+        "orderDate": {
+          "description": "When the order was placed",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "expectedDeliveryDate": {
+          "description": "When the item is expected to arrive. Manufacturers often announce target quarters rather than exact dates",
+          "type": [ "string", "null" ],
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "paymentStatus": {
+          "description": "Whether the item has been paid for",
+          "enum": [ "unpaid", "deposit_paid", "fully_paid", "refunded" ]
+        },
+        "amountPaid": {
+          "description": "The amount paid so far, in minor currency units",
+          "$ref": "common/money.json"
+        },
+        "paymentMethod": {
+          "description": "How the payment was made",
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,721 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/reference-data/tax-rates.json",
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal or tax advice. Tax laws change frequently — always verify with current legislation and qualified professionals. Data current as of March 2026.",
+  "title": "Inheritance & Estate Tax Rates",
+  "description": "Tax rates, rate bands, and taper relief schedules for inheritance and estate taxes by jurisdiction. All rate values are wrapped in the temporal-rule pattern from v2/common/temporal-rule.json to enable date-of-death lookups.",
+  "lastUpdated": "2026-03-30",
+  "_metadata": {
+    "lastVerified": "2026-04-06",
+    "source": "HMRC published rates",
+    "jurisdiction": "GB",
+    "disclaimer": "This data is provided for interoperability purposes. It does not constitute legal, tax, or financial advice. Users must verify independently before relying on these figures for official purposes.",
+    "deprecationPattern": "Individual entries within this file may carry deprecated: true, deprecatedAt, deprecatedReason, and supersededBy fields. Deprecated entries are retained for historical reference and audit trail purposes. Applications should filter to non-deprecated entries for current data.",
+    "deprecated": false,
+    "deprecatedAt": null,
+    "deprecatedReason": null,
+    "supersededBy": null
+  },
+  "jurisdictions": {
+    "GB": {
+      "name": "United Kingdom",
+      "taxName": "Inheritance Tax (IHT)",
+      "currency": "GBP",
+      "standardRate": [
+        {
+          "value": 40,
+          "effectiveFrom": "1988-03-15",
+          "effectiveUntil": null,
+          "status": "enacted",
+          "legislativeReference": "Finance Act 1988 s.136; Inheritance Tax Act 1984 s.7, Schedule 1",
+          "predecessorValue": null,
+          "notes": "Single flat rate of 40% replaced the previous graduated scale. In effect continuously since March 1988.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "rates": [
+        {
+          "band": "charityReduced",
+          "rate": [
+            {
+              "value": 36,
+              "effectiveFrom": "2012-04-06",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Finance Act 2012, Schedule 33",
+              "predecessorValue": null,
+              "notes": "Reduced rate applies when 10% or more of the net estate (after deducting exemptions, reliefs, and the nil rate band) is left to qualifying charities. Introduced 6 April 2012."
+            }
+          ],
+          "description": "Reduced rate applies when 10% or more of the net estate (after deducting exemptions, reliefs, and the nil rate band) is left to qualifying charities.",
+          "condition": "Charitable bequests >= 10% of baseline amount",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "band": "standard",
+          "rate": [
+            {
+              "value": 40,
+              "effectiveFrom": "1988-03-15",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Finance Act 1988 s.136; Inheritance Tax Act 1984 s.7, Schedule 1",
+              "predecessorValue": null,
+              "notes": "Flat rate applied to the chargeable estate above the nil rate band."
+            }
+          ],
+          "description": "Flat rate applied to the chargeable estate above the nil rate band.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "taperRelief": {
+        "description": "Taper relief reduces the tax (not the value) on gifts made between 3 and 7 years before death. Only applies where the cumulative value of gifts exceeds the nil rate band.",
+        "effectiveFrom": "1986-03-18",
+        "status": "enacted",
+        "legislativeReference": "Inheritance Tax Act 1984 s.7(4); Finance Act 1986",
+        "notes": "Taper relief has applied since the introduction of IHT in 1986. The bands and percentages have remained unchanged.",
+        "bands": [
+          {
+            "yearsBeforeDeath": "0–3",
+            "taxReductionPercent": 0
+          },
+          {
+            "yearsBeforeDeath": "3–4",
+            "taxReductionPercent": 20
+          },
+          {
+            "yearsBeforeDeath": "4–5",
+            "taxReductionPercent": 40
+          },
+          {
+            "yearsBeforeDeath": "5–6",
+            "taxReductionPercent": 60
+          },
+          {
+            "yearsBeforeDeath": "6–7",
+            "taxReductionPercent": 80
+          },
+          {
+            "yearsBeforeDeath": "7+",
+            "taxReductionPercent": 100
+          }
+        ]
+      },
+      "source": "Inheritance Tax Act 1984, ss. 7, Schedule 1; Finance Act 2012, Schedule 33",
+      "regulatoryBody": "HM Revenue & Customs (HMRC)"
+    },
+    "US": {
+      "name": "United States",
+      "taxName": "Federal Estate Tax",
+      "currency": "USD",
+      "standardRate": [
+        {
+          "value": 40,
+          "effectiveFrom": "2013-01-01",
+          "effectiveUntil": null,
+          "status": "enacted",
+          "legislativeReference": "American Taxpayer Relief Act 2012 (P.L. 112-240) s.101",
+          "predecessorValue": 35,
+          "notes": "Top marginal rate restored to 40% from 35% (which applied 2010–2012 under the Tax Relief Act 2010). The TCJA 2017 did not change the rate, only the exemption.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "value": 35,
+          "effectiveFrom": "2010-01-01",
+          "effectiveUntil": "2012-12-31",
+          "status": "enacted",
+          "legislativeReference": "Tax Relief, Unemployment Insurance Reauthorization, and Job Creation Act of 2010 (P.L. 111-312)",
+          "predecessorValue": 45,
+          "notes": "Top rate reduced to 35% for 2010–2012. Estate tax was temporarily repealed for 2010 deaths but retroactively reinstated with a 35% option.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "rates": [
+        {
+          "band": "federal",
+          "rate": [
+            {
+              "value": 40,
+              "effectiveFrom": "2013-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "American Taxpayer Relief Act 2012 (P.L. 112-240) s.101; IRC § 2001(c)",
+              "predecessorValue": 35,
+              "notes": "Flat effective rate on taxable estate exceeding the basic exclusion amount. Technically the rate schedule is graduated from 18% to 40%, but the unified credit eliminates tax on lower brackets."
+            }
+          ],
+          "description": "Flat rate on taxable estate exceeding the basic exclusion amount. Technically the rate schedule is graduated from 18% to 40%, but the effective rate on estates exceeding the exemption is 40%.",
+          "graduatedSchedule": {
+            "effectiveFrom": "2013-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "IRC § 2001(c)",
+            "notes": "Graduated schedule has been stable since ATRA 2012. The unified credit effectively zeroes out tax on the first brackets up to the exemption amount.",
+            "bands": [
+              {
+                "over": 0,
+                "upTo": 10000,
+                "rate": 18
+              },
+              {
+                "over": 10000,
+                "upTo": 20000,
+                "rate": 20
+              },
+              {
+                "over": 20000,
+                "upTo": 40000,
+                "rate": 22
+              },
+              {
+                "over": 40000,
+                "upTo": 60000,
+                "rate": 24
+              },
+              {
+                "over": 60000,
+                "upTo": 80000,
+                "rate": 26
+              },
+              {
+                "over": 80000,
+                "upTo": 100000,
+                "rate": 28
+              },
+              {
+                "over": 100000,
+                "upTo": 150000,
+                "rate": 30
+              },
+              {
+                "over": 150000,
+                "upTo": 250000,
+                "rate": 32
+              },
+              {
+                "over": 250000,
+                "upTo": 500000,
+                "rate": 34
+              },
+              {
+                "over": 500000,
+                "upTo": 750000,
+                "rate": 37
+              },
+              {
+                "over": 750000,
+                "upTo": 1000000,
+                "rate": 39
+              },
+              {
+                "over": 1000000,
+                "upTo": null,
+                "rate": 40
+              }
+            ]
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "band": "stateLevelRange",
+          "rateMin": 0,
+          "rateMax": 20,
+          "description": "State estate/inheritance tax rates vary. Washington state has the highest top rate at 20%. Most states with estate taxes use graduated rates.",
+          "examples": [
+            {
+              "state": "Washington",
+              "topRate": 20
+            },
+            {
+              "state": "Hawaii",
+              "topRate": 20
+            },
+            {
+              "state": "Oregon",
+              "topRate": 16
+            },
+            {
+              "state": "New York",
+              "topRate": 16
+            },
+            {
+              "state": "Massachusetts",
+              "topRate": 16
+            },
+            {
+              "state": "Illinois",
+              "topRate": 16
+            },
+            {
+              "state": "Vermont",
+              "topRate": 16
+            },
+            {
+              "state": "Connecticut",
+              "topRate": 12
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Internal Revenue Code § 2001(c); state-specific statutes vary",
+      "regulatoryBody": "Internal Revenue Service (IRS)"
+    },
+    "AU": {
+      "name": "Australia",
+      "taxName": "N/A — No inheritance tax",
+      "rates": [],
+      "description": "No inheritance or estate tax. Capital gains tax applies on disposal of inherited assets at the beneficiary's marginal income tax rate. A 50% CGT discount is available for assets held longer than 12 months by the deceased.",
+      "source": "Income Tax Assessment Act 1997 (Cth), Division 115",
+      "regulatoryBody": "Australian Taxation Office (ATO)"
+    },
+    "CA": {
+      "name": "Canada",
+      "taxName": "N/A — No inheritance tax",
+      "rates": [],
+      "description": "No inheritance or estate tax. Deemed disposition at death triggers capital gains tax at the deceased's marginal income tax rate. The 2024 capital gains inclusion rate is 50% on the first $250,000 and 66.67% thereafter.",
+      "source": "Income Tax Act (R.S.C., 1985, c. 1 (5th Supp.)), s. 70(5)",
+      "regulatoryBody": "Canada Revenue Agency (CRA)"
+    },
+    "FR": {
+      "name": "France",
+      "taxName": "Droits de succession",
+      "currency": "EUR",
+      "rates": [
+        {
+          "band": "directDescendants",
+          "label": "En ligne directe (children, parents)",
+          "schedule": {
+            "effectiveFrom": "2011-08-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Code général des impôts, Article 777",
+            "notes": "Rate bands last modified by loi de finances rectificative pour 2011. The bracket thresholds have been stable since then.",
+            "bands": [
+              {
+                "over": 0,
+                "upTo": 8072,
+                "rate": 5
+              },
+              {
+                "over": 8072,
+                "upTo": 12109,
+                "rate": 10
+              },
+              {
+                "over": 12109,
+                "upTo": 15932,
+                "rate": 15
+              },
+              {
+                "over": 15932,
+                "upTo": 552324,
+                "rate": 20
+              },
+              {
+                "over": 552324,
+                "upTo": 902838,
+                "rate": 30
+              },
+              {
+                "over": 902838,
+                "upTo": 1805677,
+                "rate": 40
+              },
+              {
+                "over": 1805677,
+                "upTo": null,
+                "rate": 45
+              }
+            ]
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "band": "siblings",
+          "label": "Frères et sœurs",
+          "schedule": {
+            "effectiveFrom": "2007-08-22",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Code général des impôts, Article 777",
+            "bands": [
+              {
+                "over": 0,
+                "upTo": 24430,
+                "rate": 35
+              },
+              {
+                "over": 24430,
+                "upTo": null,
+                "rate": 45
+              }
+            ]
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "band": "unrelated",
+          "label": "Non-relatives (ni parents, ni alliés)",
+          "rate": [
+            {
+              "value": 60,
+              "effectiveFrom": "2007-08-22",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Code général des impôts, Article 777",
+              "predecessorValue": null,
+              "notes": "Flat 60% rate for unrelated beneficiaries."
+            }
+          ],
+          "description": "Flat 60% rate for unrelated beneficiaries.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Code général des impôts, Article 777",
+      "regulatoryBody": "Direction générale des finances publiques (DGFiP)"
+    },
+    "DE": {
+      "name": "Germany",
+      "taxName": "Erbschaftsteuer",
+      "currency": "EUR",
+      "rates": [
+        {
+          "band": "taxClassI",
+          "label": "Spouse, children, grandchildren, parents (on inheritance)",
+          "schedule": {
+            "effectiveFrom": "2009-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Erbschaftsteuer- und Schenkungsteuergesetz (ErbStG), § 19",
+            "notes": "Rate structure last reformed by the Erbschaftsteuerreformgesetz 2008, effective 1 January 2009.",
+            "bands": [
+              {
+                "over": 0,
+                "upTo": 75000,
+                "rate": 7
+              },
+              {
+                "over": 75000,
+                "upTo": 300000,
+                "rate": 11
+              },
+              {
+                "over": 300000,
+                "upTo": 600000,
+                "rate": 15
+              },
+              {
+                "over": 600000,
+                "upTo": 6000000,
+                "rate": 19
+              },
+              {
+                "over": 6000000,
+                "upTo": 13000000,
+                "rate": 23
+              },
+              {
+                "over": 13000000,
+                "upTo": 26000000,
+                "rate": 27
+              },
+              {
+                "over": 26000000,
+                "upTo": null,
+                "rate": 30
+              }
+            ]
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "band": "taxClassII",
+          "label": "Siblings, nieces, nephews, step-parents, in-laws",
+          "schedule": {
+            "effectiveFrom": "2010-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "ErbStG § 19; Wachstumsbeschleunigungsgesetz 2009",
+            "notes": "Class II rates were reduced by the Wachstumsbeschleunigungsgesetz (Growth Acceleration Act), effective 1 January 2010.",
+            "bands": [
+              {
+                "over": 0,
+                "upTo": 75000,
+                "rate": 15
+              },
+              {
+                "over": 75000,
+                "upTo": 300000,
+                "rate": 20
+              },
+              {
+                "over": 300000,
+                "upTo": 600000,
+                "rate": 25
+              },
+              {
+                "over": 600000,
+                "upTo": 6000000,
+                "rate": 30
+              },
+              {
+                "over": 6000000,
+                "upTo": 13000000,
+                "rate": 35
+              },
+              {
+                "over": 13000000,
+                "upTo": 26000000,
+                "rate": 40
+              },
+              {
+                "over": 26000000,
+                "upTo": null,
+                "rate": 43
+              }
+            ]
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "band": "taxClassIII",
+          "label": "All other beneficiaries",
+          "schedule": {
+            "effectiveFrom": "2010-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "ErbStG § 19; Wachstumsbeschleunigungsgesetz 2009",
+            "notes": "Class III rates simplified by the Wachstumsbeschleunigungsgesetz, effective 1 January 2010.",
+            "bands": [
+              {
+                "over": 0,
+                "upTo": 75000,
+                "rate": 30
+              },
+              {
+                "over": 75000,
+                "upTo": 300000,
+                "rate": 30
+              },
+              {
+                "over": 300000,
+                "upTo": 600000,
+                "rate": 30
+              },
+              {
+                "over": 600000,
+                "upTo": 6000000,
+                "rate": 30
+              },
+              {
+                "over": 6000000,
+                "upTo": 13000000,
+                "rate": 50
+              },
+              {
+                "over": 13000000,
+                "upTo": 26000000,
+                "rate": 50
+              },
+              {
+                "over": 26000000,
+                "upTo": null,
+                "rate": 50
+              }
+            ]
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Erbschaftsteuer- und Schenkungsteuergesetz (ErbStG), § 19",
+      "regulatoryBody": "Bundeszentralamt für Steuern"
+    },
+    "IN": {
+      "name": "India",
+      "taxName": "N/A — No inheritance tax",
+      "rates": [],
+      "description": "No inheritance or estate tax since 1985. Income from inherited assets is taxed at normal income tax rates.",
+      "source": "Estate Duty (Amendment) Act 1985",
+      "regulatoryBody": "Central Board of Direct Taxes (CBDT)"
+    },
+    "JP": {
+      "name": "Japan",
+      "taxName": "Sōzokuzei (相続税)",
+      "currency": "JPY",
+      "rates": [
+        {
+          "band": "graduated",
+          "schedule": {
+            "effectiveFrom": "2015-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Sōzokuzei-hō (相続税法), Article 16; 2013 tax reform",
+            "notes": "Current 8-bracket schedule effective from 1 January 2015 after the 2013 tax reform added the 50% and 55% brackets. Previously 6 brackets with a top rate of 50%.",
+            "predecessorValue": "6-bracket schedule, top rate 50%",
+            "bands": [
+              {
+                "over": 0,
+                "upTo": 10000000,
+                "rate": 10
+              },
+              {
+                "over": 10000000,
+                "upTo": 30000000,
+                "rate": 15
+              },
+              {
+                "over": 30000000,
+                "upTo": 50000000,
+                "rate": 20
+              },
+              {
+                "over": 50000000,
+                "upTo": 100000000,
+                "rate": 30
+              },
+              {
+                "over": 100000000,
+                "upTo": 200000000,
+                "rate": 40
+              },
+              {
+                "over": 200000000,
+                "upTo": 300000000,
+                "rate": 45
+              },
+              {
+                "over": 300000000,
+                "upTo": 600000000,
+                "rate": 50
+              },
+              {
+                "over": 600000000,
+                "upTo": null,
+                "rate": 55
+              }
+            ]
+          },
+          "description": "Rates applied to each statutory heir's share after the basic deduction. The tax is calculated per heir, then aggregated.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Sōzokuzei-hō (相続税法), Article 16",
+      "regulatoryBody": "National Tax Agency (国税庁)"
+    },
+    "SG": {
+      "name": "Singapore",
+      "taxName": "N/A — No estate duty",
+      "rates": [],
+      "description": "No estate duty, inheritance tax, or capital gains tax.",
+      "source": "Estate Duty (Abolition) Act 2008",
+      "regulatoryBody": "Inland Revenue Authority of Singapore (IRAS)"
+    },
+    "IE": {
+      "name": "Ireland",
+      "taxName": "Capital Acquisitions Tax (CAT)",
+      "currency": "EUR",
+      "standardRate": [
+        {
+          "value": 33,
+          "effectiveFrom": "2012-12-06",
+          "effectiveUntil": null,
+          "status": "enacted",
+          "legislativeReference": "Finance Act 2012 s.113",
+          "predecessorValue": 30,
+          "notes": "Rate increased from 30% to 33% in Budget 2013, effective 6 December 2012.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "value": 30,
+          "effectiveFrom": "2010-04-08",
+          "effectiveUntil": "2012-12-05",
+          "status": "enacted",
+          "legislativeReference": "Finance Act 2010 s.144",
+          "predecessorValue": 25,
+          "notes": "Rate increased from 25% to 30% in Budget 2010.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "rates": [
+        {
+          "band": "standard",
+          "rate": [
+            {
+              "value": 33,
+              "effectiveFrom": "2012-12-06",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Finance Act 2012 s.113",
+              "predecessorValue": 30,
+              "notes": "Flat rate applied to the taxable value of gifts and inheritances exceeding the relevant group threshold."
+            }
+          ],
+          "description": "Flat rate applied to the taxable value of gifts and inheritances exceeding the relevant group threshold.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Capital Acquisitions Tax Consolidation Act 2003, s. 30",
+      "regulatoryBody": "Revenue Commissioners"
+    },
+    "NZ": {
+      "name": "New Zealand",
+      "taxName": "N/A — No inheritance tax",
+      "rates": [],
+      "description": "No inheritance tax, estate tax, or general capital gains tax.",
+      "source": "Estate Duty Abolition Act 1993",
+      "regulatoryBody": "Inland Revenue (Te Tari Taake)"
+    }
+  }
+}

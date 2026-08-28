@@ -1,0 +1,1972 @@
+{
+  "target": "../../../v3/asset.json",
+  "tests": [
+    {
+      "description": "valid — minimal asset with required fields only",
+      "data": {
+        "id": "d73880dc-c616-4724-ad29-79364bad1719",
+        "name": "Barclays Current Account",
+        "category": "financial"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated jewellery asset with provenance and insurance",
+      "data": {
+        "id": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "name": "Grandmother's 18ct gold engagement ring",
+        "category": "jewellery_watches",
+        "subcategory": "engagement ring",
+        "description": "18ct yellow gold solitaire engagement ring, 1.2ct round brilliant diamond, GIA certified VS1/G. Purchased 1962.",
+        "brand": "Mappin & Webb",
+        "model": "Solitaire Brilliant",
+        "estimatedValue": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15",
+        "valuationConfidence": "professional",
+        "condition": "excellent",
+        "conditionSystem": "gia",
+        "conditionGrade": "VS1",
+        "originalPackaging": "none",
+        "location": "Home safe, Flat 4, Sunningdale Road, Manchester",
+        "purchaseDate": "1962-06-14",
+        "purchasedFrom": "Mappin & Webb, Manchester",
+        "possessionStatus": "possessed_at_death",
+        "mobilityType": "moveable",
+        "acquisitionType": "gifted",
+        "registrationStatus": "informally_held",
+        "ownershipEvidence": "receipts_only",
+        "notes": "Significant sentimental value to the family. Passed down from Priya Sharma's mother-in-law.",
+        "insurance": {
+          "provider": "Hiscox",
+          "policyReference": "HX-2025-9912",
+          "insuredValue": {
+            "amount": 500000,
+            "currency": "GBP"
+          },
+          "renewalDate": "2026-03-01",
+          "notes": "Cover continues 30 days after death per policy terms"
+        },
+        "urgency": "none",
+        "dataProvenance": "manual_entry"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — v1.3.0 fields: searchTerms, comparableSearchProfile, confidenceScores, valuationReliability, lastVerifiedAt, verifiedBy, suggestedSubcategory",
+      "data": {
+        "id": "b16cd101-c771-4299-9e5f-6dd9cf1d7c92",
+        "name": "Hornby R3456 Class 66 EWS Locomotive",
+        "category": "collectibles",
+        "subcategory": "model_railways",
+        "brand": "Hornby",
+        "model": "R3456 Class 66 EWS",
+        "condition": "excellent",
+        "originalPackaging": "complete",
+        "estimatedValue": {
+          "amount": 18500,
+          "currency": "GBP"
+        },
+        "valuationReliability": 82,
+        "searchTerms": [
+          "Hornby R3456",
+          "Class 66 OO gauge",
+          "EWS livery locomotive",
+          "DCC fitted boxed"
+        ],
+        "comparableSearchProfile": {
+          "platforms": [
+            "ebay",
+            "catawiki",
+            "rails_of_sheffield",
+            "hattons"
+          ],
+          "searchQuery": "Hornby R3456 Class 66 EWS OO gauge boxed DCC",
+          "filters": {
+            "condition": "good+",
+            "packaging": "with_box",
+            "gauge": "OO"
+          },
+          "excludePlatforms": [
+            "facebook_marketplace"
+          ],
+          "searchFrequency": "monthly"
+        },
+        "suggestedSubcategory": "OO gauge locomotive",
+        "lastVerifiedAt": "2026-02-15T14:30:00Z",
+        "verifiedBy": "INHERIT Scanner v2",
+        "dataProvenance": "ai_extracted",
+        "provenance": {
+          "confidence": 0.86
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital asset with RUFADAA consent and digital access fields",
+      "data": {
+        "id": "40858599-0515-4737-a4a9-fdaac104d909",
+        "name": "Gmail Account — haruki.tanaka@gmail.com",
+        "category": "digital",
+        "subcategory": "email account",
+        "notes": "Contains important financial correspondence. Password manager entry: Gmail Personal.",
+        "passesOutsideEstate": false,
+        "urgency": "within_30_days",
+        "urgencyReason": "Account may be reclaimed by Google if inactive for 2 years",
+        "digitalAccessConsent": {
+          "consentGiven": true,
+          "scope": "limited_access",
+          "designatedRecipientPersonId": "b3ae6c5a-c226-4e2e-bb41-57ae50bc066f",
+          "onlineToolDirective": false
+        },
+        "dataProvenance": "manual_entry"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "name": "Barclays Current Account",
+        "category": "financial"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required name",
+      "data": {
+        "id": "d73880dc-c616-4724-ad29-79364bad1719",
+        "category": "financial"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required category",
+      "data": {
+        "id": "d73880dc-c616-4724-ad29-79364bad1719",
+        "name": "Barclays Current Account"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — category is not a valid enum value",
+      "data": {
+        "id": "d73880dc-c616-4724-ad29-79364bad1719",
+        "name": "Mystery Asset",
+        "category": "treasure"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — confidenceScores contains a value > 100",
+      "data": {
+        "id": "884106a4-e869-4949-a7df-fe0996993d4e",
+        "name": "Rolex Submariner Date",
+        "category": "jewellery_watches",
+        "provenance": {
+          "confidence": 1.02
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — valuationReliability > 100",
+      "data": {
+        "id": "7c6f8771-8576-4c21-9796-af5251bf8a96",
+        "name": "Hermès Birkin 25",
+        "category": "clothing_textiles",
+        "valuationReliability": 150
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — asset with culturalDisposition (consecrated statue)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440099",
+        "name": "Consecrated Buddha statue",
+        "category": "antiques",
+        "culturalDisposition": {
+          "sacredStatus": "consecrated",
+          "culturalSignificance": "community",
+          "bequeathable": false,
+          "disposalRestrictions": [
+            {
+              "authority": "Wat Phra Kaew",
+              "authorityType": "religious_body",
+              "requirement": "Must be returned to temple",
+              "jurisdiction": {
+                "country": "TH"
+              }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with export restrictions (katana)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440098",
+        "name": "Masamune katana",
+        "category": "antiques",
+        "culturalDisposition": {
+          "sacredStatus": "secular",
+          "culturalSignificance": "national_heritage",
+          "exportRestrictions": [
+            {
+              "jurisdiction": {
+                "country": "JP"
+              },
+              "restrictionType": "cultural_property",
+              "authority": "Agency for Cultural Affairs",
+              "licenceRequired": true
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with communalAuthority (HUF)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440097",
+        "name": "Sharma family gold",
+        "category": "jewellery_watches",
+        "communalAuthority": {
+          "authorityType": "family_council",
+          "approvalRequired": true,
+          "authorityName": "Karta of Sharma HUF",
+          "jurisdiction": {
+            "country": "IN",
+            "subdivision": "IN-MH"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with successionRegime override",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440096",
+        "name": "Shenzhen apartment investment fund",
+        "category": "financial",
+        "successionRegime": {
+          "governingLaw": {
+            "jurisdiction": {
+              "country": "CN"
+            },
+            "legalTradition": "civil_law",
+            "statute": "PRC Civil Code",
+            "section": "Book VI Succession"
+          },
+          "determinedBy": "situs",
+          "binding": true,
+          "extensions": []
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — communalAuthority authorityType not in enum",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440095",
+        "name": "Family land",
+        "category": "other",
+        "communalAuthority": {
+          "authorityType": "village_elder",
+          "approvalRequired": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — successionRegime determinedBy not in enum",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440094",
+        "name": "Overseas asset",
+        "category": "financial",
+        "successionRegime": {
+          "governingLaw": {
+            "jurisdiction": {
+              "country": "GB"
+            }
+          },
+          "determinedBy": "birthplace",
+          "binding": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — asset with assetCollectionId",
+      "data": {
+        "id": "68736ae3-ce81-4078-9e85-7833335c0f08",
+        "name": "Hornby R3456 Class 66 EWS Locomotive",
+        "category": "collectibles",
+        "assetCollectionId": "482429af-1b9d-405c-a601-4c007f5156c3"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with spaceId",
+      "data": {
+        "id": "c5348318-edd9-4346-9ac2-f0a58c7a7efd",
+        "name": "Victorian writing desk",
+        "category": "property_contents",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceId": "7bc58028-1216-4931-a40c-9d81935087aa",
+        "location": "Against the west wall, near the window"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with splitFrom provenance",
+      "data": {
+        "id": "6157139a-ff62-4e81-8b1f-887515ab7d15",
+        "name": "4 × Mahogany dining chairs (from set of 6)",
+        "category": "property_contents",
+        "splitFrom": {
+          "entityType": "asset",
+          "entityId": "4807f694-fc41-4e92-bab6-ccb26c05d04e",
+          "splitAt": "2026-03-15T14:30:00Z",
+          "reason": "Beneficiary request from Gemma: 'Our new house only has room for 4, and David says he will have the other 2'"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — splitFrom with collection source",
+      "data": {
+        "id": "cb56efb3-e8b8-4f2d-ba12-b803c629aadf",
+        "name": "Hornby model trains (separated from mixed collection)",
+        "category": "collectibles",
+        "splitFrom": {
+          "entityType": "asset_collection",
+          "entityId": "0b2f2b95-93db-4681-bc07-f159be7472c4",
+          "splitAt": "2026-03-10T09:00:00Z"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — assetCollectionId wrong format (not UUID)",
+      "data": {
+        "id": "f891a23e-8cb8-492d-891e-e6f548f67dd3",
+        "name": "Test",
+        "category": "other",
+        "assetCollectionId": "not-a-uuid"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — splitFrom missing required entityType",
+      "data": {
+        "id": "a7ab6730-ede1-4e4b-9826-3dcb5767ce64",
+        "name": "Test",
+        "category": "other",
+        "splitFrom": {
+          "entityId": "4807f694-fc41-4e92-bab6-ccb26c05d04e",
+          "splitAt": "2026-03-15T14:30:00Z"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — splitFrom invalid entityType",
+      "data": {
+        "id": "550be388-74b5-4244-ad8a-3f848734ce2e",
+        "name": "Test",
+        "category": "other",
+        "splitFrom": {
+          "entityType": "bequest",
+          "entityId": "4807f694-fc41-4e92-bab6-ccb26c05d04e",
+          "splitAt": "2026-03-15T14:30:00Z"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — asset with full vehicle sub-object (car)",
+      "data": {
+        "id": "811be896-f939-4102-b195-c4948c5c8f02",
+        "name": "BMW M3 Competition",
+        "category": "vehicle",
+        "vehicle": {
+          "registrationNumber": "AB12 CDE",
+          "vin": "WBANE53516CK72834",
+          "make": "BMW",
+          "model": "M3 Competition",
+          "variant": "Competition",
+          "yearOfManufacture": 2021,
+          "dateOfFirstRegistration": "2021-06-15",
+          "colour": "BLACK",
+          "fuelType": "petrol",
+          "engineCapacity": 2993,
+          "co2Emissions": 227,
+          "vehicleType": "car",
+          "isClassic": false,
+          "keeperStatus": "registered_keeper",
+          "v5cStatus": "held",
+          "financeType": "none",
+          "sornDeclared": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with motorcycle vehicle sub-object",
+      "data": {
+        "id": "da2c1ef4-b1d1-43ec-98e7-882397fd1afd",
+        "name": "Triumph Bonneville T120",
+        "category": "vehicle",
+        "vehicle": {
+          "registrationNumber": "PG22 TRI",
+          "make": "TRIUMPH",
+          "model": "Bonneville T120",
+          "yearOfManufacture": 2022,
+          "colour": "SILVER",
+          "fuelType": "petrol",
+          "engineCapacity": 1200,
+          "vehicleType": "motorcycle",
+          "isClassic": false,
+          "keeperStatus": "registered_keeper",
+          "financeType": "pcp"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with classic vehicle (pre-1977 E-Type)",
+      "data": {
+        "id": "8eea4003-5167-460a-bd00-ded26d08a276",
+        "name": "1965 Jaguar E-Type Series 1 FHC",
+        "category": "vehicle",
+        "vehicle": {
+          "registrationNumber": "ABC 123C",
+          "make": "JAGUAR",
+          "model": "E-Type Series 1 FHC",
+          "yearOfManufacture": 1965,
+          "colour": "BRITISH RACING GREEN",
+          "fuelType": "petrol",
+          "engineCapacity": 4235,
+          "vehicleType": "car",
+          "isClassic": true,
+          "keeperStatus": "registered_keeper",
+          "v5cStatus": "held",
+          "financeType": "none"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with vehicle deathActions tracking",
+      "data": {
+        "id": "c8ee32d7-d691-48fe-8635-ede39fb4c7a3",
+        "name": "Ford Focus",
+        "category": "vehicle",
+        "vehicle": {
+          "registrationNumber": "EF67 GHI",
+          "make": "FORD",
+          "model": "Focus",
+          "vehicleType": "car",
+          "keeperStatus": "registered_keeper",
+          "financeType": "hp",
+          "deathActions": {
+            "dvlaNotified": true,
+            "dvlaNotifiedAt": "2026-03-20",
+            "insurerNotified": true,
+            "insurerNotifiedAt": "2026-03-20",
+            "financeCompanyNotified": true,
+            "financeSettled": false,
+            "taxRefundClaimed": false,
+            "intendedDisposal": "sell"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with full vehicleCheck (MOT, finance, write-off)",
+      "data": {
+        "id": "af9e6061-eddf-4079-a3b3-42b181e4bc0d",
+        "name": "BMW M3 Competition",
+        "category": "vehicle",
+        "vehicleCheck": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "motExpiry": "2027-01-15",
+          "motStatus": "valid",
+          "lastMileage": 34521,
+          "lastMileageDate": "2026-01-15",
+          "advisoryCount": 2,
+          "failureCount": 0,
+          "taxStatus": "taxed",
+          "taxDueDate": "2026-12-01",
+          "insuranceStatus": "insured",
+          "financeOutstanding": false,
+          "writeOffCategory": "none",
+          "stolenStatus": "clear",
+          "previousKeepers": 1,
+          "plateChanges": 0,
+          "mileageAnomaly": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with stolenArtCheck (clear result with certificate)",
+      "data": {
+        "id": "1ffa9e2e-ddfb-42c6-bc97-f96ce6f2f840",
+        "name": "Andy Warhol — Campbell's Soup Can (1962)",
+        "category": "art",
+        "stolenArtCheck": {
+          "retrievedAt": "2026-03-31T11:00:00Z",
+          "result": "clear",
+          "certificateReference": "ALR-2026-98765",
+          "certificateUrl": "https://www.artlossregister.com/certificates/ALR-2026-98765",
+          "checkedBy": "Bonhams pre-sale due diligence"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with gemologicalCertificate (GIA diamond)",
+      "data": {
+        "id": "f08b3049-339e-40ae-8aba-93d34053e050",
+        "name": "Grandmother's engagement ring — 1.52ct diamond solitaire",
+        "category": "jewellery_watches",
+        "gemologicalCertificate": {
+          "retrievedAt": "2026-03-31T12:00:00Z",
+          "laboratory": "gia",
+          "certificateNumber": "2215874690",
+          "verificationUrl": "https://www.gia.edu/report-check?reportno=2215874690",
+          "stoneType": "diamond",
+          "caratWeight": 1.52,
+          "colourGrade": "G",
+          "clarityGrade": "VS1",
+          "cutGrade": "Excellent"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with vehicle + vehicleCheck together",
+      "data": {
+        "id": "e6efa88e-7de2-4e80-a9b6-d99a5469a643",
+        "name": "Triumph Bonneville T120",
+        "category": "vehicle",
+        "vehicle": {
+          "registrationNumber": "PG22 TRI",
+          "make": "TRIUMPH",
+          "model": "Bonneville T120",
+          "vehicleType": "motorcycle",
+          "financeType": "pcp"
+        },
+        "vehicleCheck": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "motStatus": "valid",
+          "motExpiry": "2026-11-20",
+          "financeOutstanding": true,
+          "financeSettlementAmount": 450000,
+          "writeOffCategory": "none"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — vehicleCheck missing required retrievedAt",
+      "data": {
+        "id": "bb44df6d-955d-4d2e-b689-b0b7a6cdaa6d",
+        "name": "Test Vehicle",
+        "category": "vehicle",
+        "vehicleCheck": {
+          "motStatus": "valid"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — stolenArtCheck with unknown property",
+      "data": {
+        "id": "d39848cb-f858-41f5-8c61-94c8d296cfb3",
+        "name": "Test Art",
+        "category": "art",
+        "stolenArtCheck": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "result": "clear",
+          "unknownField": "should fail"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — gemologicalCertificate with invalid laboratory enum",
+      "data": {
+        "id": "2a150e15-fc71-498f-809f-f17c8ba76c72",
+        "name": "Test Gemstone",
+        "category": "jewellery_watches",
+        "gemologicalCertificate": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "laboratory": "fake_lab"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — vehicleCheck with invalid writeOffCategory",
+      "data": {
+        "id": "013e9793-4a61-45fe-9794-784dc0d2a0b8",
+        "name": "Test Vehicle",
+        "category": "vehicle",
+        "vehicleCheck": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "writeOffCategory": "X"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — asset without any enrichments (all optional)",
+      "data": {
+        "id": "a28f12df-6b78-4efa-aed7-2555143105b1",
+        "name": "Plain Asset",
+        "category": "collectibles"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital asset with domain name access",
+      "data": {
+        "id": "80fa10a0-0d46-469d-9aea-ad3d08941b95",
+        "name": "Family website — example.com",
+        "category": "digital",
+        "domainNameAccess": {
+          "domainName": "example.com",
+          "registrar": "GoDaddy",
+          "expiryDate": "2027-06-15",
+          "autoRenew": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital asset with NFT access",
+      "data": {
+        "id": "d25cc0d1-7709-455b-b688-8fb2a1cf24cf",
+        "name": "Bored Ape #42",
+        "category": "digital",
+        "nftAccess": {
+          "blockchain": "ethereum",
+          "contractAddress": "0x1234567890abcdef",
+          "tokenId": "42",
+          "tokenStandard": "erc_721"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital asset with monetised content",
+      "data": {
+        "id": "43f122c0-b0d5-4742-8faa-604c56189f79",
+        "name": "YouTube channel — Estate Planning Tips",
+        "category": "digital",
+        "monetisedContentAccess": {
+          "platform": "youtube",
+          "channelName": "Estate Planning Tips",
+          "subscriberCount": 15000,
+          "monetisationStatus": "active",
+          "monthlyRevenue": {
+            "amount": 120000,
+            "currency": "GBP"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital asset with loyalty points",
+      "data": {
+        "id": "2f3081e0-73e6-4678-a534-56b748aa39ab",
+        "name": "British Airways Avios",
+        "category": "digital",
+        "loyaltyAccess": {
+          "programme": "Avios",
+          "programmeProvider": "British Airways",
+          "pointsBalance": 85000,
+          "cashEquivalent": {
+            "amount": 42500,
+            "currency": "GBP"
+          },
+          "transferable": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital asset with gaming access",
+      "data": {
+        "id": "28d03bbc-03bd-40c1-a0ad-9dfbfd92374f",
+        "name": "Steam gaming account",
+        "category": "digital",
+        "gamingAccess": {
+          "platform": "steam",
+          "accountName": "testator_gamer",
+          "virtualCurrencyBalance": 2500,
+          "virtualCurrencyName": "Steam Wallet Funds"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with platform delegation",
+      "data": {
+        "id": "fb0009a3-5081-4875-99fc-a56d8f3081bd",
+        "name": "Personal blog",
+        "category": "digital",
+        "platformDelegation": {
+          "action": "delete",
+          "delayDuration": "P5Y",
+          "specificInstructions": "Delete all content after 5 years"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with fiduciary access",
+      "data": {
+        "id": "1471ac60-cef5-4650-9b5f-22df9fd1582a",
+        "name": "Gmail account",
+        "category": "digital",
+        "fiduciaryAccess": {
+          "accessMethod": "rufadaa_request",
+          "accessScope": "catalogue_only",
+          "accessConfigured": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — platform delegation with bad action",
+      "data": {
+        "id": "729d21c0-42db-4150-a90e-6b1c0076fc69",
+        "name": "Test digital asset",
+        "category": "digital",
+        "platformDelegation": {
+          "action": "destroy"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — fiduciary access with bad scope",
+      "data": {
+        "id": "c77451b4-00b9-4ab3-b638-c90d4d6300c2",
+        "name": "Test digital asset",
+        "category": "digital",
+        "fiduciaryAccess": {
+          "accessMethod": "rufadaa_request",
+          "accessScope": "everything"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — financial asset with category-specific shareholding field",
+      "data": {
+        "id": "c3d4e5f6-a7b8-4901-cdef-123456789012",
+        "name": "Barclays ISA",
+        "category": "financial",
+        "shareholding": {
+          "companyName": "Barclays PLC",
+          "shareClass": "ordinary",
+          "numberOfShares": 500
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — vehicle asset with category-specific vehicle field",
+      "data": {
+        "id": "d4e5f6a7-b8c9-4012-def0-234567890123",
+        "name": "2019 Toyota Corolla",
+        "category": "vehicle",
+        "vehicle": {
+          "make": "Toyota",
+          "model": "Corolla",
+          "registrationNumber": "AB19 XYZ",
+          "yearOfManufacture": 2019
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital asset with accessInstructions",
+      "data": {
+        "id": "e5f6a7b8-c9d0-4123-ef01-345678901234",
+        "name": "Bitcoin wallet",
+        "category": "digital",
+        "accessInstructions": {
+          "accessType": "cryptocurrency_wallet",
+          "platform": "Ledger Nano X",
+          "visibility": "executor_visible",
+          "requiredRole": "executor",
+          "steps": [
+            {
+              "step": 1,
+              "method": "physical_device",
+              "description": "Ledger in home safe",
+              "location": "42 Acacia Avenue, study safe"
+            },
+            {
+              "step": 2,
+              "method": "pin_code",
+              "description": "PIN in sealed envelope at solicitor"
+            },
+            {
+              "step": 3,
+              "method": "recovery_phrase",
+              "description": "24-word recovery in bank safe deposit box"
+            }
+          ],
+          "memorialisation": {
+            "preference": "transfer_to_beneficiary",
+            "instructions": "Transfer all BTC to beneficiary wallet"
+          },
+          "lastVerified": "2026-01-15",
+          "verifiedBy": "James Ashford"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — general asset (jewellery)",
+      "data": {
+        "id": "f6a7b8c9-d0e1-4234-f012-456789012345",
+        "name": "Grandmother engagement ring",
+        "category": "jewellery_watches",
+        "condition": "excellent"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with taxTreatment (Dubai flat, immoveable)",
+      "data": {
+        "id": "a7b8c9d0-0000-4000-a000-000000000300",
+        "name": "Dubai marina apartment",
+        "category": "other",
+        "taxTreatment": {
+          "jurisdiction": {
+            "country": "AE"
+          },
+          "assetType": "immoveable",
+          "exemptions": [],
+          "reliefClaimed": []
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — description at maxLength boundary (2000 chars)",
+      "data": {
+        "id": "a1000007-0000-4000-a000-000000001006",
+        "name": "Test asset",
+        "category": "other",
+        "description": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — name empty (minLength 1)",
+      "data": {
+        "id": "a1000008-0000-4000-a000-000000001007",
+        "name": "",
+        "category": "other"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — category not in enum",
+      "data": {
+        "id": "a1000047-0000-4000-a000-000000001047",
+        "name": "Test",
+        "category": "unicorns"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — asset with provenanceChain",
+      "data": {
+        "id": "e5f6a7b8-c9d0-1234-ef01-23456789abcd",
+        "name": "Monet Water Lilies (oil on canvas)",
+        "category": "art",
+        "provenanceChain": [
+          {
+            "description": "Acquired by the Durand-Ruel Gallery, Paris",
+            "ownerName": "Durand-Ruel Gallery",
+            "fromDate": "1909-01-01",
+            "toDate": "1923-06-15",
+            "acquisitionMethod": "purchase",
+            "source": "Christie's provenance research"
+          },
+          {
+            "description": "Private American collection",
+            "fromDate": "1923-06-15",
+            "acquisitionMethod": "auction",
+            "source": "Christie's sale catalogue, June 1923"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — id is not a valid UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "name": "Barclays Current Account",
+        "category": "financial"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — valuationDate is not ISO 8601 date format",
+      "data": {
+        "id": "d73880dc-c616-4724-ad29-79364bad1719",
+        "name": "Barclays Current Account",
+        "category": "financial",
+        "valuationDate": "15/01/2026"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — lastVerifiedAt is not ISO 8601 datetime format",
+      "data": {
+        "id": "d73880dc-c616-4724-ad29-79364bad1719",
+        "name": "Barclays Current Account",
+        "category": "financial",
+        "lastVerifiedAt": "15 January 2026 at 2pm"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — name is a number (type: string required)",
+      "data": {
+        "id": "d73880dc-c616-4724-ad29-79364bad1719",
+        "name": 42,
+        "category": "financial"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — category is a boolean (enum of strings required)",
+      "data": {
+        "id": "d73880dc-c616-4724-ad29-79364bad1719",
+        "name": "Barclays Current Account",
+        "category": true
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — name at maxLength boundary (255 characters)",
+      "data": {
+        "id": "d73880dc-c616-4724-ad29-79364bad1719",
+        "name": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "category": "financial"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — name exceeds maxLength (256 characters)",
+      "data": {
+        "id": "d73880dc-c616-4724-ad29-79364bad1719",
+        "name": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "category": "financial"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — notes exceeds maxLength (2001 characters)",
+      "data": {
+        "id": "d73880dc-c616-4724-ad29-79364bad1719",
+        "name": "Barclays Current Account",
+        "category": "financial",
+        "notes": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — asset with ownerIntent keep",
+      "data": {
+        "id": "a6000001-0000-4000-a000-000000006001",
+        "name": "Hornby R3456 Class 66 locomotive",
+        "category": "collectibles",
+        "ownerIntent": "keeping"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with listings array",
+      "data": {
+        "id": "a6000002-0000-4000-a000-000000006002",
+        "name": "Rolex Submariner Date 116610LN",
+        "category": "jewellery_watches",
+        "ownerIntent": "listed",
+        "listings": [
+          {
+            "channel": "ebay",
+            "status": "active",
+            "listingId": "393847201234",
+            "listingUrl": "https://www.ebay.co.uk/itm/393847201234",
+            "askingPrice": {
+              "amount": 850000,
+              "currency": "GBP"
+            },
+            "listedAt": "2026-03-01T09:00:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with service history",
+      "data": {
+        "id": "a6000003-0000-4000-a000-000000006003",
+        "name": "Rolex Datejust 36 ref 116200",
+        "category": "jewellery_watches",
+        "serviceHistory": [
+          {
+            "serviceDate": "2023-06-15",
+            "provider": "Rolex UK Service Centre, London",
+            "description": "Full service — movement cleaned and oiled, crown replaced, case and bracelet polished",
+            "cost": {
+              "amount": 85000,
+              "currency": "GBP"
+            },
+            "documentReference": "ROLEX-SVC-2023-78432"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with insurance cover",
+      "data": {
+        "id": "a6000004-0000-4000-a000-000000006004",
+        "name": "Grandfather’s vintage pocket watch",
+        "category": "jewellery_watches",
+        "insuranceCover": {
+          "insurer": "Hiscox",
+          "policyNumber": "HX-2026-4521",
+          "policyType": "jewellery",
+          "agreedValue": {
+            "amount": 200000,
+            "currency": "GBP"
+          },
+          "coverConfirmedAt": "2026-01-15"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with shipping class parcel",
+      "data": {
+        "id": "a6000005-0000-4000-a000-000000006005",
+        "name": "Hornby R3456 Class 66 EWS Locomotive",
+        "category": "collectibles",
+        "shippingClass": "parcel"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with included documents array",
+      "data": {
+        "id": "a6000006-0000-4000-a000-000000006006",
+        "name": "Rolex Submariner Date",
+        "category": "jewellery_watches",
+        "includedDocuments": [
+          "outer_box",
+          "warranty_card",
+          "purchase_receipt"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with watch_trade condition system",
+      "data": {
+        "id": "a6000007-0000-4000-a000-000000006007",
+        "name": "Patek Philippe Aquanaut 5167A",
+        "category": "jewellery_watches",
+        "conditionSystem": "watch_trade",
+        "conditionGrade": "LNIB"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — ownerIntent value not in enum",
+      "data": {
+        "id": "a6000008-0000-4000-a000-000000006008",
+        "name": "Test asset",
+        "category": "other",
+        "ownerIntent": "throw_away"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — shippingClass value not in enum",
+      "data": {
+        "id": "a6000009-0000-4000-a000-000000006009",
+        "name": "Test asset",
+        "category": "other",
+        "shippingClass": "teleport"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — conditionSystem value not in enum",
+      "data": {
+        "id": "a6000010-0000-4000-a000-000000006010",
+        "name": "Test asset",
+        "category": "other",
+        "conditionSystem": "made_up"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — asset with x-inherit extension conditionSystem",
+      "data": {
+        "id": "a6000011-0000-4000-a000-000000006011",
+        "name": "Vintage model train",
+        "category": "collectibles",
+        "conditionSystem": "x-inherit-custom-grading",
+        "conditionGrade": "A+"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with book_trade conditionSystem",
+      "data": {
+        "id": "a6000012-0000-4000-a000-000000006012",
+        "name": "First edition Pride and Prejudice",
+        "category": "collectibles",
+        "conditionSystem": "book_trade",
+        "conditionGrade": "Fine"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with classic_vehicle conditionSystem",
+      "data": {
+        "id": "a6000013-0000-4000-a000-000000006013",
+        "name": "1965 Aston Martin DB5",
+        "category": "vehicle",
+        "conditionSystem": "classic_vehicle",
+        "conditionGrade": "3"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — conditionSystem extension without x-inherit prefix",
+      "data": {
+        "id": "a6000014-0000-4000-a000-000000006014",
+        "name": "Test asset",
+        "category": "other",
+        "conditionSystem": "custom-grading"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — asset with vehicle-specific included documents",
+      "data": {
+        "id": "a6000015-0000-4000-a000-000000006015",
+        "name": "1972 Jaguar E-Type Series 3",
+        "category": "vehicle",
+        "includedDocuments": [
+          "v5c_logbook",
+          "mot_certificate",
+          "service_booklet"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with x-inherit extension document type",
+      "data": {
+        "id": "a6000016-0000-4000-a000-000000006016",
+        "name": "18th century oil painting",
+        "category": "art",
+        "includedDocuments": [
+          "certificate_of_authenticity",
+          "x-inherit-provenance-cert"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — includedDocuments non-extension unknown value",
+      "data": {
+        "id": "a6000017-0000-4000-a000-000000006017",
+        "name": "Test asset",
+        "category": "other",
+        "includedDocuments": [
+          "teleportation_permit"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — asset with large_item shippingClass",
+      "data": {
+        "id": "a6000018-0000-4000-a000-000000006018",
+        "name": "Victorian mahogany sideboard",
+        "category": "other",
+        "shippingClass": "large_item"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with specialist_transport shippingClass",
+      "data": {
+        "id": "a6000019-0000-4000-a000-000000006019",
+        "name": "Steinway Model D concert grand piano",
+        "category": "other",
+        "shippingClass": "specialist_transport"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with collection_only shippingClass",
+      "data": {
+        "id": "a6000020-0000-4000-a000-000000006020",
+        "name": "Architectural salvage beam",
+        "category": "other",
+        "shippingClass": "collection_only"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with spaceId and spaceIdDisplay",
+      "data": {
+        "id": "a6000021-0000-4000-a000-000000006021",
+        "name": "Silver candelabra set",
+        "category": "jewellery_watches",
+        "spaceId": "f1e2d3c4-b5a6-4789-8000-000000000001",
+        "spaceIdDisplay": "Wine cellar, The Old Rectory, Dorset"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with sold listing including soldAt, soldPrice, and channelName",
+      "data": {
+        "id": "a6000022-0000-4000-a000-000000006022",
+        "name": "Patek Philippe Calatrava 5196G",
+        "category": "jewellery_watches",
+        "listings": [
+          {
+            "channel": "auction_house",
+            "channelName": "Bonhams New Bond Street",
+            "status": "sold",
+            "askingPrice": {
+              "amount": 1200000,
+              "currency": "GBP"
+            },
+            "listedAt": "2026-01-10T10:00:00Z",
+            "soldAt": "2026-02-15T14:30:00Z",
+            "soldPrice": {
+              "amount": 1350000,
+              "currency": "GBP"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category: art",
+      "data": {
+        "id": "b7000001-0000-4000-b000-000000007001",
+        "name": "Andy Warhol screen print",
+        "category": "art",
+        "condition": "good"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category: antiques",
+      "data": {
+        "id": "b7000002-0000-4000-b000-000000007002",
+        "name": "Georgian silver candelabra set of four",
+        "category": "antiques",
+        "condition": "fair"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category: musical_instruments",
+      "data": {
+        "id": "b7000003-0000-4000-b000-000000007003",
+        "name": "Steinway Model B grand piano",
+        "category": "musical_instruments",
+        "condition": "excellent"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category: books_manuscripts",
+      "data": {
+        "id": "b7000004-0000-4000-b000-000000007004",
+        "name": "First edition — The Hobbit (1937)",
+        "category": "books_manuscripts",
+        "condition": "poor"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category: wine_spirits",
+      "data": {
+        "id": "b7000005-0000-4000-b000-000000007005",
+        "name": "Mixed cellar — approximately 400 bottles",
+        "category": "wine_spirits",
+        "condition": "unknown",
+        "quantity": 400
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category: clothing_textiles",
+      "data": {
+        "id": "b7000006-0000-4000-b000-000000007006",
+        "name": "Hermès Birkin 25 — Togo leather",
+        "category": "clothing_textiles",
+        "condition": "excellent"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category: firearms_sporting",
+      "data": {
+        "id": "b7000007-0000-4000-b000-000000007007",
+        "name": "Purdey over-under shotgun",
+        "category": "firearms_sporting",
+        "condition": "good",
+        "notes": "Section 1 certificate required. Must be surrendered or transferred to a licence holder within 7 days of death."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category: islamic_financial",
+      "data": {
+        "id": "b7000008-0000-4000-b000-000000007008",
+        "name": "Kuwait Finance House Sukuk",
+        "category": "islamic_financial"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — condition: fair",
+      "data": {
+        "id": "b7000009-0000-4000-b000-000000007009",
+        "name": "Victorian writing desk",
+        "category": "antiques",
+        "condition": "fair"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — condition: poor",
+      "data": {
+        "id": "b7000010-0000-4000-b000-000000007010",
+        "name": "Damaged garden statue",
+        "category": "other",
+        "condition": "poor"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — condition: not_applicable (financial asset)",
+      "data": {
+        "id": "b7000011-0000-4000-b000-000000007011",
+        "name": "Nationwide Building Society savings account",
+        "category": "financial",
+        "condition": "not_applicable"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — condition not in enum",
+      "data": {
+        "id": "b7000012-0000-4000-b000-000000007012",
+        "name": "Test asset",
+        "category": "other",
+        "condition": "broken"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — ownerIntent: thinning",
+      "data": {
+        "id": "b7000013-0000-4000-b000-000000007013",
+        "name": "Surplus model railway layout",
+        "category": "collectibles",
+        "ownerIntent": "thinning"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownerIntent: donated",
+      "data": {
+        "id": "b7000014-0000-4000-b000-000000007014",
+        "name": "Assorted clothing and textiles",
+        "category": "clothing_textiles",
+        "ownerIntent": "donated"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownerIntent: allocated",
+      "data": {
+        "id": "b7000015-0000-4000-b000-000000007015",
+        "name": "Family engagement ring",
+        "category": "jewellery_watches",
+        "ownerIntent": "allocated"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownerIntent: considering",
+      "data": {
+        "id": "b7000016-0000-4000-b000-000000007016",
+        "name": "Inherited artwork",
+        "category": "art",
+        "ownerIntent": "considering"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — listings channel: own_website",
+      "data": {
+        "id": "b7000017-0000-4000-b000-000000007017",
+        "name": "Vintage Rolex Datejust ref 1601",
+        "category": "jewellery_watches",
+        "listings": [
+          {
+            "channel": "own_website",
+            "status": "active",
+            "askingPrice": {
+              "amount": 650000,
+              "currency": "GBP"
+            },
+            "listedAt": "2026-03-01T09:00:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — valuationConfidence: official",
+      "data": {
+        "id": "b7000018-0000-4000-b000-000000007018",
+        "name": "Estate jewellery collection",
+        "category": "jewellery_watches",
+        "valuationConfidence": "official",
+        "estimatedValue": {
+          "amount": 2500000,
+          "currency": "GBP"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — valuationConfidence: unknown",
+      "data": {
+        "id": "b7000019-0000-4000-b000-000000007019",
+        "name": "Inherited painting (attribution unclear)",
+        "category": "art",
+        "valuationConfidence": "unknown"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — possessionStatus: receivable",
+      "data": {
+        "id": "b7000020-0000-4000-b000-000000007020",
+        "name": "Insurance payout pending",
+        "category": "financial",
+        "possessionStatus": "receivable"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — possessionStatus: contingent",
+      "data": {
+        "id": "b7000021-0000-4000-b000-000000007021",
+        "name": "Inheritance from surviving parent",
+        "category": "other",
+        "possessionStatus": "contingent"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acquisitionType: ancestral_joint",
+      "data": {
+        "id": "b7000022-0000-4000-b000-000000007022",
+        "name": "Joint family agricultural land",
+        "category": "other",
+        "acquisitionType": "ancestral_joint"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acquisitionType: stridhan",
+      "data": {
+        "id": "b7000023-0000-4000-b000-000000007023",
+        "name": "Dowry jewellery — absolute property",
+        "category": "jewellery_watches",
+        "acquisitionType": "stridhan"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — registrationStatus: formally_registered",
+      "data": {
+        "id": "b7000024-0000-4000-b000-000000007024",
+        "name": "Toyota Land Cruiser",
+        "category": "vehicle",
+        "registrationStatus": "formally_registered"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — registrationStatus: community_acknowledged",
+      "data": {
+        "id": "b7000025-0000-4000-b000-000000007025",
+        "name": "Village land — communally recognised",
+        "category": "other",
+        "registrationStatus": "community_acknowledged"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — mobilityType: immoveable",
+      "data": {
+        "id": "c8000001-0000-4000-c000-000000008001",
+        "name": "Land plot — Rajasthan, India",
+        "category": "other",
+        "mobilityType": "immoveable"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — mobilityType: mixed",
+      "data": {
+        "id": "c8000002-0000-4000-c000-000000008002",
+        "name": "Farm — building and equipment combined",
+        "category": "other",
+        "mobilityType": "mixed"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acquisitionType: self_acquired",
+      "data": {
+        "id": "c8000003-0000-4000-c000-000000008003",
+        "name": "Barclays savings account",
+        "category": "financial",
+        "acquisitionType": "self_acquired"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acquisitionType: ancestral_severed",
+      "data": {
+        "id": "c8000004-0000-4000-c000-000000008004",
+        "name": "Partitioned agricultural land — former coparcenary property",
+        "category": "other",
+        "acquisitionType": "ancestral_severed"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acquisitionType: inherited",
+      "data": {
+        "id": "c8000005-0000-4000-c000-000000008005",
+        "name": "Grandfather's pocket watch",
+        "category": "jewellery_watches",
+        "acquisitionType": "inherited"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acquisitionType: communal",
+      "data": {
+        "id": "c8000006-0000-4000-c000-000000008006",
+        "name": "Clan meeting house — shared ownership",
+        "category": "other",
+        "acquisitionType": "communal"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acquisitionType: waqf_endowed",
+      "data": {
+        "id": "c8000007-0000-4000-c000-000000008007",
+        "name": "Waqf-endowed property — held in Islamic trust",
+        "category": "other",
+        "acquisitionType": "waqf_endowed"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — registrationStatus: disputed",
+      "data": {
+        "id": "c8000008-0000-4000-c000-000000008008",
+        "name": "Disputed family land — Lagos",
+        "category": "other",
+        "registrationStatus": "disputed",
+        "notes": "Ownership contested by uncle. Legal proceedings ongoing."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — registrationStatus: undocumented",
+      "data": {
+        "id": "c8000009-0000-4000-c000-000000008009",
+        "name": "Village hut — no land title",
+        "category": "other",
+        "registrationStatus": "undocumented"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownershipEvidence: title_deed",
+      "data": {
+        "id": "c8000010-0000-4000-c000-000000008010",
+        "name": "Flat 4, Sunningdale Road",
+        "category": "other",
+        "ownershipEvidence": "title_deed"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownershipEvidence: certificate_of_occupancy",
+      "data": {
+        "id": "c8000011-0000-4000-c000-000000008011",
+        "name": "Lagos residential plot",
+        "category": "other",
+        "ownershipEvidence": "certificate_of_occupancy"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownershipEvidence: family_recognition",
+      "data": {
+        "id": "c8000012-0000-4000-c000-000000008012",
+        "name": "Family ancestral home — Igbo",
+        "category": "other",
+        "ownershipEvidence": "family_recognition"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownershipEvidence: community_testimony",
+      "data": {
+        "id": "c8000013-0000-4000-c000-000000008013",
+        "name": "Communal farmland",
+        "category": "other",
+        "ownershipEvidence": "community_testimony"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownershipEvidence: none",
+      "data": {
+        "id": "c8000014-0000-4000-c000-000000008014",
+        "name": "Unregistered item — no documentation",
+        "category": "other",
+        "ownershipEvidence": "none"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — communalAuthority authorityType: clan_association",
+      "data": {
+        "id": "c8000015-0000-4000-c000-000000008015",
+        "name": "Okonkwo clan ancestral compound",
+        "category": "other",
+        "communalAuthority": {
+          "authorityType": "clan_association",
+          "approvalRequired": true,
+          "authorityName": "Okonkwo Clan Association",
+          "jurisdiction": { "country": "NG" }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — communalAuthority authorityType: religious_body",
+      "data": {
+        "id": "c8000016-0000-4000-c000-000000008016",
+        "name": "Mosque land — Singapore",
+        "category": "other",
+        "communalAuthority": {
+          "authorityType": "religious_body",
+          "approvalRequired": true,
+          "authorityName": "MUIS",
+          "jurisdiction": { "country": "SG" }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — communalAuthority authorityType: tribal_council",
+      "data": {
+        "id": "c8000017-0000-4000-c000-000000008017",
+        "name": "Tribal land — New Zealand Maori",
+        "category": "other",
+        "communalAuthority": {
+          "authorityType": "tribal_council",
+          "approvalRequired": true,
+          "authorityName": "Ngāti Porou Iwi",
+          "jurisdiction": { "country": "NZ" }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — communalAuthority authorityType: government",
+      "data": {
+        "id": "c8000018-0000-4000-c000-000000008018",
+        "name": "Leasehold land — government approval required",
+        "category": "other",
+        "communalAuthority": {
+          "authorityType": "government",
+          "approvalRequired": true,
+          "authorityName": "Singapore Land Authority",
+          "jurisdiction": { "country": "SG" }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionRegime legalTradition: islamic_law with determinedBy: domicile",
+      "data": {
+        "id": "c8000019-0000-4000-c000-000000008019",
+        "name": "Malaysian property",
+        "category": "other",
+        "successionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "MY" },
+            "legalTradition": "islamic_law",
+            "statute": "Administration of Muslim Law Act"
+          },
+          "determinedBy": "domicile",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionRegime legalTradition: hindu_law with determinedBy: nationality",
+      "data": {
+        "id": "c8000020-0000-4000-c000-000000008020",
+        "name": "Sharma HUF ancestral property",
+        "category": "other",
+        "successionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "IN" },
+            "legalTradition": "hindu_law",
+            "statute": "Hindu Succession Act 1956",
+            "section": "s.6 (coparcenary)"
+          },
+          "determinedBy": "nationality",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionRegime legalTradition: jewish_law with determinedBy: personal_status",
+      "data": {
+        "id": "c8000021-0000-4000-c000-000000008021",
+        "name": "Israeli inheritance assets",
+        "category": "financial",
+        "successionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "IL" },
+            "legalTradition": "jewish_law"
+          },
+          "determinedBy": "personal_status",
+          "binding": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionRegime legalTradition: customary_law with determinedBy: choice_of_law",
+      "data": {
+        "id": "c8000022-0000-4000-c000-000000008022",
+        "name": "Igbo customary land",
+        "category": "other",
+        "successionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "NG" },
+            "legalTradition": "customary_law",
+            "statute": "Customary Law"
+          },
+          "determinedBy": "choice_of_law",
+          "binding": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionRegime legalTradition: common_law with determinedBy: treaty",
+      "data": {
+        "id": "c8000023-0000-4000-c000-000000008023",
+        "name": "UK bank account — treaty-governed",
+        "category": "financial",
+        "successionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+            "legalTradition": "common_law",
+            "statute": "Wills Act 1837"
+          },
+          "determinedBy": "treaty",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionRegime legalTradition: mixed",
+      "data": {
+        "id": "c8000024-0000-4000-c000-000000008024",
+        "name": "Singapore investment account",
+        "category": "financial",
+        "successionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "SG" },
+            "legalTradition": "mixed"
+          },
+          "determinedBy": "situs",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionRegime legalTradition: canon_law",
+      "data": {
+        "id": "c8000025-0000-4000-c000-000000008025",
+        "name": "Vatican property",
+        "category": "other",
+        "successionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "VA" },
+            "legalTradition": "canon_law"
+          },
+          "determinedBy": "situs",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — provenanceChain with acquisitionMethod: inheritance, gift, commission",
+      "data": {
+        "id": "c8000026-0000-4000-c000-000000008026",
+        "name": "19th century landscape oil painting",
+        "category": "art",
+        "provenanceChain": [
+          {
+            "description": "Commissioned by Lord Ashford for the library at Ashford Hall",
+            "ownerName": "Lord Ashford",
+            "fromDate": "1860-01-01",
+            "toDate": "1887-03-15",
+            "acquisitionMethod": "commission"
+          },
+          {
+            "description": "Passed to eldest son on Lord Ashford's death",
+            "ownerName": "The Hon. Edward Ashford",
+            "fromDate": "1887-03-15",
+            "toDate": "1920-06-01",
+            "acquisitionMethod": "inheritance"
+          },
+          {
+            "description": "Gifted to Manchester Art Gallery",
+            "ownerName": "Manchester Art Gallery",
+            "fromDate": "1920-06-01",
+            "toDate": "1990-01-01",
+            "acquisitionMethod": "gift"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — provenanceChain with acquisitionMethod: restitution and unknown",
+      "data": {
+        "id": "c8000027-0000-4000-c000-000000008027",
+        "name": "Pre-war European silver",
+        "category": "antiques",
+        "provenanceChain": [
+          {
+            "description": "Pre-war ownership by the Goldstein family, Vienna",
+            "ownerName": "Goldstein family",
+            "fromDate": "1900-01-01",
+            "toDate": "1938-11-09",
+            "acquisitionMethod": "unknown",
+            "source": "Family records"
+          },
+          {
+            "description": "Restituted to heirs via Austrian Restitution Fund",
+            "fromDate": "2005-01-01",
+            "acquisitionMethod": "restitution",
+            "source": "Austrian Restitution Fund certificate 2005/4521"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — condition: unknown",
+      "data": {
+        "id": "c8000028-0000-4000-c000-000000008028",
+        "name": "Contents of storage unit — not inspected",
+        "category": "other",
+        "condition": "unknown"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with business property relief",
+      "data": {
+        "id": "c8000029-0000-4000-c000-000000008029",
+        "name": "Davies Engineering Ltd — 60% shareholding",
+        "category": "financial",
+        "taxReliefEligibility": {
+          "reliefType": "business_property",
+          "eligible": true,
+          "percentage": 50
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset with cultural significance and disposal restriction",
+      "data": {
+        "id": "c8000030-0000-4000-c000-000000008030",
+        "name": "Grandmother's engagement ring",
+        "category": "jewellery_watches",
+        "significance": {
+          "type": "family_heirloom",
+          "description": "Passed down through four generations of the family since 1923",
+          "restrictionOnDisposal": {
+            "exists": true,
+            "nature": "Must stay in the family"
+          }
+        }
+      },
+      "valid": true
+    }
+  ]
+}

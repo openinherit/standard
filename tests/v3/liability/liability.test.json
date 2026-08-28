@@ -1,0 +1,428 @@
+{
+  "target": "../../../v3/liability.json",
+  "tests": [
+    {
+      "description": "valid minimal liability (required fields only)",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "liabilityType": "mortgage",
+        "amount": {
+          "amount": 18750000,
+          "currency": "GBP"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid fully populated liability \u2014 deferred mahr",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-a012-3456789abcde",
+        "liabilityType": "mahr",
+        "creditor": "Fatimah bint Hassan",
+        "amount": {
+          "amount": 5000000,
+          "currency": "AED"
+        },
+        "monthlyPayment": {
+          "amount": 0,
+          "currency": "AED"
+        },
+        "interestRate": 0,
+        "startDate": "2015-06-20",
+        "accountReference": "MAHR-2015-FH",
+        "notes": "Deferred mahr \u2014 becomes payable on death or divorce. Priority debt under Shariah law."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid liability \u2014 UK mortgage with full detail",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-3456789abcde",
+        "liabilityType": "mortgage",
+        "creditor": "Nationwide Building Society",
+        "amount": {
+          "amount": 23500000,
+          "currency": "GBP"
+        },
+        "securedAgainst": "d4e5f6a7-b8c9-0123-def0-123456789abc",
+        "monthlyPayment": {
+          "amount": 110000,
+          "currency": "GBP"
+        },
+        "interestRate": 4.5,
+        "startDate": "2020-06-01",
+        "endDate": "2045-06-01",
+        "accountReference": "MORT-2020-123456",
+        "notes": "Fixed rate until 2027, then reverts to SVR."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing liabilityType",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "amount": {
+          "amount": 18750000,
+          "currency": "GBP"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 amount missing currency",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "liabilityType": "credit_card",
+        "amount": {
+          "amount": 250000
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 liabilityType not in enum",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "liabilityType": "crypto_loan",
+        "amount": {
+          "amount": 500000,
+          "currency": "GBP"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 liability with full studentLoanInfo (Plan 2)",
+      "data": {
+        "id": "dbe15f30-ce34-496f-bf16-d48d828a67c9",
+        "liabilityType": "student_loan",
+        "creditor": "Student Loans Company",
+        "amount": {
+          "amount": 4523400,
+          "currency": "GBP"
+        },
+        "accountReference": "SL/2018/001234",
+        "studentLoanInfo": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "planType": "plan_2",
+          "writtenOffOnDeath": true,
+          "outstandingBalance": 4523400,
+          "repaymentThreshold": 2727500
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 studentLoanInfo with invalid planType enum",
+      "data": {
+        "id": "0b16e748-80eb-4433-8dec-8d925b4befcf",
+        "liabilityType": "student_loan",
+        "creditor": "Student Loans Company",
+        "amount": {
+          "amount": 2000000,
+          "currency": "GBP"
+        },
+        "studentLoanInfo": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "planType": "plan_99"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 liability without studentLoanInfo (optional)",
+      "data": {
+        "id": "0508df51-9cd6-49a9-8169-b7189178c984",
+        "liabilityType": "student_loan",
+        "creditor": "Student Loans Company",
+        "amount": {
+          "amount": 3000000,
+          "currency": "GBP"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing required id",
+      "data": {
+        "liabilityType": "mortgage",
+        "amount": {
+          "amount": 18750000,
+          "currency": "GBP"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required amount",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "liabilityType": "mortgage"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 liabilityType as number (wrong type)",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "liabilityType": 42,
+        "amount": {
+          "amount": 18750000,
+          "currency": "GBP"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 amount as string instead of money object",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "liabilityType": "credit_card",
+        "amount": "5000"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 id not a valid UUID",
+      "data": {
+        "id": "not-a-valid-uuid",
+        "liabilityType": "mortgage",
+        "amount": {
+          "amount": 18750000,
+          "currency": "GBP"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 startDate not a valid date format",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "liabilityType": "mortgage",
+        "amount": {
+          "amount": 18750000,
+          "currency": "GBP"
+        },
+        "startDate": "01/06/2020"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 interestRate negative value (below minimum 0)",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "liabilityType": "personal_loan",
+        "amount": {
+          "amount": 500000,
+          "currency": "GBP"
+        },
+        "interestRate": -1.5
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 unknown property at root level",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "liabilityType": "mortgage",
+        "amount": {
+          "amount": 18750000,
+          "currency": "GBP"
+        },
+        "secretField": "should not be here"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 creditor exceeds maxLength 255",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "liabilityType": "mortgage",
+        "amount": {
+          "amount": 18750000,
+          "currency": "GBP"
+        },
+        "creditor": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 notes exceeds maxLength 2000",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "liabilityType": "mortgage",
+        "amount": {
+          "amount": 18750000,
+          "currency": "GBP"
+        },
+        "notes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — overdraft liabilityType",
+      "data": {
+        "id": "ff000001-0000-4000-f000-000000000001",
+        "liabilityType": "overdraft",
+        "amount": { "amount": 250000, "currency": "GBP" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — car_finance and hire_purchase liabilityTypes",
+      "data": {
+        "id": "ff000002-0000-4000-f000-000000000002",
+        "liabilityType": "car_finance",
+        "amount": { "amount": 1500000, "currency": "GBP" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — hire_purchase liabilityType",
+      "data": {
+        "id": "ff000003-0000-4000-f000-000000000003",
+        "liabilityType": "hire_purchase",
+        "amount": { "amount": 800000, "currency": "GBP" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ketubah_debt liabilityType",
+      "data": {
+        "id": "ff000004-0000-4000-f000-000000000004",
+        "liabilityType": "ketubah_debt",
+        "creditor": "Rivka Cohen",
+        "amount": { "amount": 10000000, "currency": "ILS" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — lobola liabilityType",
+      "data": {
+        "id": "ff000005-0000-4000-f000-000000000005",
+        "liabilityType": "lobola",
+        "creditor": "Okonkwo family",
+        "amount": { "amount": 5000000, "currency": "ZAR" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — tax_liability liabilityType",
+      "data": {
+        "id": "ff000006-0000-4000-f000-000000000006",
+        "liabilityType": "tax_liability",
+        "creditor": "HMRC",
+        "amount": { "amount": 3500000, "currency": "GBP" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral_costs liabilityType",
+      "data": {
+        "id": "ff000007-0000-4000-f000-000000000007",
+        "liabilityType": "funeral_costs",
+        "creditor": "Co-operative Funeralcare",
+        "amount": { "amount": 450000, "currency": "GBP" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — care_fees liabilityType",
+      "data": {
+        "id": "ff000008-0000-4000-f000-000000000008",
+        "liabilityType": "care_fees",
+        "creditor": "Sunrise Care Homes Ltd",
+        "amount": { "amount": 1200000, "currency": "GBP" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — mezonot liabilityType",
+      "data": {
+        "id": "ff000009-0000-4000-f000-000000000009",
+        "liabilityType": "mezonot",
+        "creditor": "Estate beneficiary",
+        "amount": { "amount": 600000, "currency": "ILS" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — other liabilityType",
+      "data": {
+        "id": "ff000010-0000-4000-f000-000000000010",
+        "liabilityType": "other",
+        "amount": { "amount": 100000, "currency": "GBP" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — studentLoanInfo with plan_1 planType",
+      "data": {
+        "id": "ff000011-0000-4000-f000-000000000011",
+        "liabilityType": "student_loan",
+        "amount": { "amount": 1500000, "currency": "GBP" },
+        "studentLoanInfo": {
+          "retrievedAt": "2026-03-01T10:00:00Z",
+          "planType": "plan_1",
+          "writtenOffOnDeath": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — studentLoanInfo with plan_4 planType",
+      "data": {
+        "id": "ff000012-0000-4000-f000-000000000012",
+        "liabilityType": "student_loan",
+        "amount": { "amount": 2000000, "currency": "GBP" },
+        "studentLoanInfo": {
+          "retrievedAt": "2026-03-01T10:00:00Z",
+          "planType": "plan_4",
+          "writtenOffOnDeath": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — studentLoanInfo with plan_5 planType",
+      "data": {
+        "id": "ff000013-0000-4000-f000-000000000013",
+        "liabilityType": "student_loan",
+        "amount": { "amount": 2500000, "currency": "GBP" },
+        "studentLoanInfo": {
+          "retrievedAt": "2026-03-01T10:00:00Z",
+          "planType": "plan_5",
+          "writtenOffOnDeath": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — studentLoanInfo with postgraduate planType",
+      "data": {
+        "id": "ff000014-0000-4000-f000-000000000014",
+        "liabilityType": "student_loan",
+        "amount": { "amount": 1200000, "currency": "GBP" },
+        "studentLoanInfo": {
+          "retrievedAt": "2026-03-01T10:00:00Z",
+          "planType": "postgraduate",
+          "writtenOffOnDeath": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 securedAgainst not a valid UUID",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "liabilityType": "mortgage",
+        "amount": {
+          "amount": 18750000,
+          "currency": "GBP"
+        },
+        "securedAgainst": "bad-uuid-value"
+      },
+      "valid": false
+    }
+  ]
+}

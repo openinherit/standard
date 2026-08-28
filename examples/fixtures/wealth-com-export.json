@@ -1,0 +1,344 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-04-01T14:30:00Z",
+  "generator": {
+    "name": "WealthCom Platform",
+    "version": "4.2.1",
+    "url": "https://www.wealthcom.example.com"
+  },
+  "estate": {
+    "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+    "testatorPersonId": "10000001-0000-4000-a000-000000000001",
+    "status": "confirmed",
+    "revocationClause": true,
+    "notes": "Complete estate export from WealthCom wealth management platform. Client has an NRB discretionary trust and a life interest trust in place. Estate planning was reviewed in January 2026.",
+    "createdAt": "2024-06-15T09:00:00Z",
+    "lastModifiedAt": "2026-04-01T14:30:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    }
+  },
+  "people": [
+    {
+      "id": "10000001-0000-4000-a000-000000000001",
+      "givenName": "Edward",
+      "familyName": "Hargreaves",
+      "dateOfBirth": "1962-03-18",
+      "roles": [
+        "testator"
+      ],
+      "contact": {
+        "email": "edward.hargreaves@example.com",
+        "address": {
+          "streetAddress": "The Old Rectory, Church Lane",
+          "addressLocality": "Henley-on-Thames",
+          "addressRegion": "Oxfordshire",
+          "postalCode": "RG9 1AE",
+          "addressCountry": "GB"
+        }
+      }
+    },
+    {
+      "id": "10000001-0000-4000-a000-000000000002",
+      "givenName": "Victoria",
+      "familyName": "Hargreaves",
+      "dateOfBirth": "1965-11-02",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ]
+    },
+    {
+      "id": "10000001-0000-4000-a000-000000000003",
+      "givenName": "James",
+      "familyName": "Hargreaves",
+      "dateOfBirth": "1992-07-14",
+      "roles": [
+        "beneficiary"
+      ]
+    },
+    {
+      "id": "10000001-0000-4000-a000-000000000004",
+      "givenName": "Sophie",
+      "familyName": "Hargreaves",
+      "dateOfBirth": "1995-01-29",
+      "roles": [
+        "beneficiary"
+      ]
+    }
+  ],
+  "kinships": [
+    {
+      "id": "10000001-0000-4000-b000-000000000001",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "10000001-0000-4000-a000-000000000001",
+      "toPersonId": "10000001-0000-4000-a000-000000000003"
+    },
+    {
+      "id": "10000001-0000-4000-b000-000000000002",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "10000001-0000-4000-a000-000000000001",
+      "toPersonId": "10000001-0000-4000-a000-000000000004"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "10000001-0000-4000-c000-000000000001",
+      "type": "marriage_civil",
+      "partners": [
+        {
+          "personId": "10000001-0000-4000-a000-000000000001",
+          "ordinal": 1
+        },
+        {
+          "personId": "10000001-0000-4000-a000-000000000002",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "10000001-0000-4000-d000-000000000001",
+      "name": "The Old Rectory, Church Lane",
+      "propertyType": "detached",
+      "address": {
+        "streetAddress": "The Old Rectory, Church Lane",
+        "addressLocality": "Henley-on-Thames",
+        "addressRegion": "Oxfordshire",
+        "postalCode": "RG9 1AE",
+        "addressCountry": "GB"
+      },
+      "estimatedValue": {
+        "amount": 185000000,
+        "currency": "GBP"
+      },
+      "tenureType": "ownership",
+      "ownershipPercentage": 100,
+      "notes": "Family home since 2002. Grade II listed Georgian rectory."
+    }
+  ],
+  "assets": [
+    {
+      "id": "10000001-0000-4000-e000-000000000001",
+      "name": "Hargreaves Lansdown ISA",
+      "category": "financial",
+      "subcategory": "ISA",
+      "estimatedValue": {
+        "amount": 42500000,
+        "currency": "GBP"
+      },
+      "notes": "Stocks and shares ISA. Managed portfolio — global equity focus."
+    },
+    {
+      "id": "10000001-0000-4000-e000-000000000002",
+      "name": "Aviva Pension Fund",
+      "category": "financial",
+      "subcategory": "self-invested personal pension",
+      "estimatedValue": {
+        "amount": 87500000,
+        "currency": "GBP"
+      },
+      "notes": "SIPP with drawdown in effect since age 60. Expression of wish nominates Victoria."
+    },
+    {
+      "id": "10000001-0000-4000-e000-000000000003",
+      "name": "Barclays Current Account",
+      "category": "financial",
+      "subcategory": "current account",
+      "estimatedValue": {
+        "amount": 1250000,
+        "currency": "GBP"
+      }
+    },
+    {
+      "id": "10000001-0000-4000-e000-000000000004",
+      "name": "Victorian Watercolour Collection",
+      "category": "art",
+      "subcategory": "watercolour",
+      "estimatedValue": {
+        "amount": 3500000,
+        "currency": "GBP"
+      },
+      "notes": "Collection of 12 Victorian watercolours, principally works by John Sell Cotman and Peter De Wint. Professionally valued by Bonhams in 2025."
+    },
+    {
+      "id": "10000001-0000-4000-e000-000000000005",
+      "name": "1967 Jaguar E-Type Series 1",
+      "category": "vehicle",
+      "estimatedValue": {
+        "amount": 12500000,
+        "currency": "GBP"
+      },
+      "notes": "Fully restored Jaguar E-Type. Opalescent Dark Blue. Matching numbers. MOT exempt as historic vehicle."
+    },
+    {
+      "id": "10000001-0000-4000-e000-000000000006",
+      "name": "Vanguard Global All Cap Index Fund",
+      "category": "financial",
+      "subcategory": "investment fund",
+      "estimatedValue": {
+        "amount": 15000000,
+        "currency": "GBP"
+      },
+      "notes": "Held in general investment account. Accumulation units."
+    }
+  ],
+  "trusts": [
+    {
+      "id": "10000001-0000-4000-f000-000000000001",
+      "name": "Hargreaves NRB Discretionary Trust",
+      "trustType": "nil_rate_band",
+      "isTestamentary": true,
+      "creationType": "testamentary",
+      "trustees": [
+        {
+          "personId": "10000001-0000-4000-a000-000000000002",
+          "role": "trustee"
+        }
+      ],
+      "beneficiaries": [
+        {
+          "personId": "10000001-0000-4000-a000-000000000003",
+          "interestType": "discretionary"
+        },
+        {
+          "personId": "10000001-0000-4000-a000-000000000004",
+          "interestType": "discretionary"
+        }
+      ],
+      "trustPeriod": "125 years from date of death",
+      "governingLaw": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      },
+      "notes": "Nil rate band discretionary trust. Up to the IHT nil rate band (currently £325,000) passes into this trust on death. Trustees have discretion to distribute to any of the beneficiary class."
+    },
+    {
+      "id": "10000001-0000-4000-f000-000000000002",
+      "name": "Hargreaves Life Interest Trust",
+      "trustType": "life_interest",
+      "isTestamentary": true,
+      "creationType": "testamentary",
+      "trustees": [
+        {
+          "personId": "10000001-0000-4000-a000-000000000002",
+          "role": "trustee"
+        }
+      ],
+      "beneficiaries": [
+        {
+          "personId": "10000001-0000-4000-a000-000000000002",
+          "interestType": "income"
+        },
+        {
+          "personId": "10000001-0000-4000-a000-000000000003",
+          "interestType": "capital"
+        },
+        {
+          "personId": "10000001-0000-4000-a000-000000000004",
+          "interestType": "capital"
+        }
+      ],
+      "trustPeriod": "Until the death of the life tenant",
+      "governingLaw": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      },
+      "notes": "Life interest trust. Victoria has income for life from the trust fund. On her death, capital passes to James and Sophie in equal shares."
+    }
+  ],
+  "documents": [
+    {
+      "id": "10000001-0000-4000-9000-000000000001",
+      "type": "will",
+      "title": "Last Will and Testament of Edward Hargreaves",
+      "fileFormat": "pdf",
+      "createdAt": "2024-06-28T10:00:00Z",
+      "notes": "Executed will incorporating NRB discretionary trust and life interest trust. Executed 28 June 2024."
+    },
+    {
+      "id": "10000001-0000-4000-9000-000000000002",
+      "type": "trust_deed",
+      "title": "Hargreaves NRB Discretionary Trust Deed",
+      "fileFormat": "pdf",
+      "createdAt": "2024-06-28T10:00:00Z",
+      "notes": "Trust deed for the nil rate band discretionary trust established by the will."
+    }
+  ],
+  "valuations": [
+    {
+      "id": "10000001-0000-4000-8000-000000000001",
+      "entityType": "asset",
+      "entityId": "10000001-0000-4000-e000-000000000004",
+      "valuedAmount": {
+        "amount": 3800000,
+        "currency": "GBP"
+      },
+      "valuationDate": "2025-09-15",
+      "provider": "Bonhams",
+      "providerType": "auction_house",
+      "valuationPurpose": "insurance",
+      "confidence": "high",
+      "notes": "Insurance valuation for 12 Victorian watercolours. Auction estimate would be 10-15% lower."
+    },
+    {
+      "id": "10000001-0000-4000-8000-000000000002",
+      "entityType": "property",
+      "entityId": "10000001-0000-4000-d000-000000000001",
+      "valuedAmount": {
+        "amount": 190000000,
+        "currency": "GBP"
+      },
+      "valuationDate": "2025-11-01",
+      "provider": "Knight Frank",
+      "providerType": "professional_valuer",
+      "valuationPurpose": "current_estimate",
+      "confidence": "high",
+      "notes": "Desktop valuation by Knight Frank. Grade II listed property — comparable sales limited."
+    }
+  ],
+  "executors": [
+    {
+      "id": "10000001-0000-4000-7000-000000000001",
+      "personId": "10000001-0000-4000-a000-000000000002",
+      "role": "primary",
+      "isProfessional": false
+    }
+  ],
+  "bequests": [],
+  "liabilities": [],
+  "guardians": [],
+  "wishes": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "organisations": [
+    {
+      "id": "10000001-0000-4000-6000-000000000001",
+      "name": "WealthCom Ltd",
+      "organisationType": "financial_institution",
+      "estateRoles": [
+        "asset_holder"
+      ],
+      "notes": "Wealth management platform holding the ISA and GIA."
+    }
+  ],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-04-01T14:30:00Z",
+    "validatedBy": "WealthCom Platform",
+    "schemaVersion": "6.3.0"
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "version": "1.0.0",
+  "description": "Standard aggregate data products derivable from anonymised INHERIT documents",
+  "dimensions": [
+    {
+      "id": "estate-value-by-jurisdiction",
+      "label": "Estate value by jurisdiction",
+      "description": "Average estate value by jurisdiction, using value brackets to prevent re-identification of high-value estates",
+      "sourceFields": [
+        "estate.totalEstimatedValue",
+        "estate.jurisdiction.country"
+      ],
+      "anonymisationApplied": [
+        "estate.totalEstimatedValue generalised to value brackets",
+        "estate.jurisdiction.subdivision suppressed to country level"
+      ],
+      "minimumCohort": "default"
+    },
+    {
+      "id": "asset-categories-by-region",
+      "label": "Asset category distribution by region",
+      "description": "Distribution of asset categories across regions, showing which asset types are most prevalent in each jurisdiction",
+      "sourceFields": [
+        "assets[].category",
+        "assets[].subcategory",
+        "estate.jurisdiction.country"
+      ],
+      "anonymisationApplied": [
+        "assets[].id suppressed",
+        "assets[].name suppressed",
+        "estate.jurisdiction.subdivision suppressed to country level"
+      ],
+      "minimumCohort": "default"
+    },
+    {
+      "id": "common-plan-gaps",
+      "label": "Common estate plan gaps",
+      "description": "Most common gaps in estate plans, derived from completeness scoring and missing field analysis",
+      "sourceFields": [
+        "estate.status",
+        "estate.willType",
+        "bequests[].bequestType",
+        "executors[].isProfessional"
+      ],
+      "anonymisationApplied": [
+        "All identifying fields suppressed",
+        "Analysis based on structural completeness only, not content"
+      ],
+      "minimumCohort": "default"
+    },
+    {
+      "id": "forced-heirship-prevalence",
+      "label": "Forced heirship prevalence",
+      "description": "Proportion of estates with forced heirship constraints, broken down by jurisdiction and legal tradition",
+      "sourceFields": [
+        "bequests[].constrainedBy",
+        "estate.jurisdiction.country",
+        "properties[].successionRegime.governingLaw.legalTradition"
+      ],
+      "anonymisationApplied": [
+        "bequests[].beneficiaryPersonId suppressed",
+        "estate.jurisdiction.subdivision suppressed to country level"
+      ],
+      "minimumCohort": "default"
+    },
+    {
+      "id": "sacred-asset-prevalence",
+      "label": "Sacred asset prevalence by region",
+      "description": "Prevalence of sacred or ceremonial assets by region, supporting cultural sensitivity analysis",
+      "sourceFields": [
+        "assets[].culturalDisposition.sacredStatus",
+        "assets[].category",
+        "estate.jurisdiction.country"
+      ],
+      "anonymisationApplied": [
+        "assets[].id suppressed",
+        "assets[].name suppressed",
+        "assets[].communalAuthority.communityName suppressed",
+        "estate.jurisdiction.subdivision suppressed to country level"
+      ],
+      "minimumCohort": "default"
+    },
+    {
+      "id": "cross-border-estates",
+      "label": "Cross-border estates",
+      "description": "Proportion of estates with assets in multiple jurisdictions, indicating complexity of cross-border estate planning",
+      "sourceFields": [
+        "estate.jurisdiction.country",
+        "assets[].location",
+        "properties[].successionRegime.governingLaw.legalTradition"
+      ],
+      "anonymisationApplied": [
+        "assets[].location generalised to country only",
+        "properties[].address suppressed",
+        "estate.jurisdiction.subdivision suppressed to country level"
+      ],
+      "minimumCohort": "default"
+    },
+    {
+      "id": "will-type-distribution",
+      "label": "Will type distribution by jurisdiction",
+      "description": "Distribution of will types (e.g. simple, mirror, mutual, holographic) across jurisdictions",
+      "sourceFields": [
+        "estate.willType",
+        "estate.jurisdiction.country"
+      ],
+      "anonymisationApplied": [
+        "estate.jurisdiction.subdivision suppressed to country level"
+      ],
+      "minimumCohort": "default"
+    },
+    {
+      "id": "executor-professional-rate",
+      "label": "Professional vs family executor rate",
+      "description": "Rate of professional versus family executors by jurisdiction, indicating market penetration of professional estate services",
+      "sourceFields": [
+        "executors[].isProfessional",
+        "estate.jurisdiction.country"
+      ],
+      "anonymisationApplied": [
+        "executors[].personId suppressed",
+        "executors[].firmName suppressed",
+        "estate.jurisdiction.subdivision suppressed to country level"
+      ],
+      "minimumCohort": "default"
+    },
+    {
+      "id": "religious-consideration-prevalence",
+      "label": "Religious consideration prevalence",
+      "description": "Estates with religious considerations broken down by tradition, showing how faith influences estate planning",
+      "sourceFields": [
+        "estate.religiousConsideration.tradition",
+        "estate.jurisdiction.country"
+      ],
+      "anonymisationApplied": [
+        "estate.religiousConsideration.specificRequirements suppressed",
+        "estate.jurisdiction.subdivision suppressed to country level"
+      ],
+      "minimumCohort": "default"
+    },
+    {
+      "id": "communal-ownership-prevalence",
+      "label": "Communal ownership prevalence by region",
+      "description": "Assets with communal ownership arrangements by region, highlighting the importance of collective land and resource rights",
+      "sourceFields": [
+        "assets[].communalAuthority.authorityType",
+        "assets[].category",
+        "estate.jurisdiction.country"
+      ],
+      "anonymisationApplied": [
+        "assets[].communalAuthority.communityName suppressed",
+        "assets[].id suppressed",
+        "estate.jurisdiction.subdivision suppressed to country level"
+      ],
+      "minimumCohort": "default"
+    },
+    {
+      "id": "export-restricted-assets",
+      "label": "Export-restricted assets by category and jurisdiction",
+      "description": "Prevalence of export-restricted assets by category and jurisdiction, relevant for cross-border estate transfers",
+      "sourceFields": [
+        "assets[].culturalDisposition.exportRestrictions",
+        "assets[].category",
+        "estate.jurisdiction.country"
+      ],
+      "anonymisationApplied": [
+        "assets[].culturalDisposition.exportRestrictions used as aggregate_only counts",
+        "assets[].id suppressed",
+        "assets[].name suppressed",
+        "estate.jurisdiction.subdivision suppressed to country level"
+      ],
+      "minimumCohort": "default"
+    },
+    {
+      "id": "trending-collectible-categories",
+      "label": "Trending collectible categories by region",
+      "description": "Most catalogued collectible categories by region, indicating which types of collectible assets are most commonly included in estate plans",
+      "sourceFields": [
+        "assets[].category",
+        "assets[].subcategory",
+        "estate.jurisdiction.country"
+      ],
+      "anonymisationApplied": [
+        "assets[].id suppressed",
+        "assets[].name suppressed",
+        "assets[].estimatedValue generalised to value brackets",
+        "estate.jurisdiction.subdivision suppressed to country level"
+      ],
+      "minimumCohort": "default"
+    }
+  ]
+}

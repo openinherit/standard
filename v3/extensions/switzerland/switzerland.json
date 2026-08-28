@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/switzerland/switzerland.json",
+  "title": "Switzerland Extension",
+  "description": "Swiss succession rules: Pflichtteil (forced heirship, 2023 Erbrechtsrevision), cantonal inheritance tax variation, matrimonial property regimes, Erbschein (certificate of inheritance), and notarial will forms.",
+  "$comment": "Swiss succession law recognises only three parenteles (ZGB Art. 457-466): 1. Descendants. 2. Parents and their issue (siblings, nephews/nieces). 3. Grandparents and their issue (uncles/aunts, cousins). There is no fourth parentele — unlike Germany which extends to unlimited Ordnungen. If no heir is found in the three parenteles, the estate goes to the canton.",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": ["CH"],
+  "inheritVersion": ">=3.0.0 <4.0.0",
+  "legalSystems": ["civil_law"],
+  "dataProvenance": "Swiss Civil Code (ZGB) Art. 457–640, January 2023 succession law reform (Erbrechtsrevision)",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": [],
+  "type": "object",
+  "properties": {
+    "pflichtteil": {
+      "description": "Pflichtteil — the statutory reserved portion under Swiss law. Since the 2023 Erbrechtsrevision (ZGB Art. 470–480), parents are no longer protected heirs; descendants retain 1/2 of their intestate share and the surviving spouse 1/2 of their intestate share.",
+      "type": "object",
+      "properties": {
+        "reformApplies": {
+          "description": "Whether the January 2023 Erbrechtsrevision rules apply (deaths on or after 1 January 2023)",
+          "type": "boolean"
+        },
+        "protectedHeirs": {
+          "description": "Array of persons entitled to a Pflichtteil under Swiss law",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["personId", "heirClass"],
+            "properties": {
+              "personId": {
+                "description": "Reference to the Person.id of the protected heir",
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "heirClass": {
+                "description": "Class of protected heir. Since 2023, only descendants and surviving_spouse are protected heirs; parent is included for pre-2023 deaths.",
+                "$comment": "parent is no longer a protected heir since the 1 January 2023 reform (revision of the Swiss Civil Code, in force 1 January 2023). The enum value is retained for pre-2023 estates. The 2023 reform increased the freely disposable share from 3/8 to 1/2 (when there are descendants and a surviving spouse).",
+                "enum": [
+                  "descendant",
+                  "surviving_spouse",
+                  "parent"
+                ]
+              },
+              "statutoryShareFraction": {
+                "description": "The heir's intestate statutory share as a fraction, e.g. 1/2",
+                "type": "string",
+                "pattern": "^[0-9]+/[0-9]+$",
+                "maxLength": 20
+              },
+              "pflichtteilFraction": {
+                "description": "The Pflichtteil as a fraction of the estate (half the statutory share since 2023), e.g. 1/4",
+                "type": "string",
+                "pattern": "^[0-9]+/[0-9]+$",
+                "maxLength": 20
+              }
+            },
+            "additionalProperties": false
+          },
+          "maxItems": 50
+        },
+        "availableQuota": {
+          "description": "The freely disposable quota remaining after all Pflichtteile are reserved",
+          "type": "object",
+          "properties": {
+            "fraction": {
+              "description": "Available quota as a fraction of the net estate, e.g. 1/2",
+              "type": "string",
+              "pattern": "^[0-9]+/[0-9]+$",
+              "maxLength": 20
+            },
+            "estimatedValue": {
+              "description": "Estimated monetary value of the available quota in minor currency units",
+              "$ref": "../../common/money.json"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "cantonalVariation": {
+      "description": "Cantonal inheritance tax and succession law variation. Switzerland has 26 cantons; direct-line heirs are exempt in most cantons, but rates and exemptions differ significantly.",
+      "type": "object",
+      "properties": {
+        "canton": {
+          "description": "Two-letter canton abbreviation (e.g. ZH, BE, GE, VD, BS)",
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "cantonalTaxApplies": {
+          "description": "Whether cantonal inheritance tax applies to this estate",
+          "type": "boolean"
+        },
+        "cantonalTaxRate": {
+          "description": "Cantonal inheritance tax rate as a percentage",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "linealHeirsExempt": {
+          "description": "Whether lineal heirs (descendants and surviving spouse) are exempt from cantonal inheritance tax in this canton",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "matrimonialPropertyRegime": {
+      "description": "The matrimonial property regime governing the split of matrimonial property before succession begins. participation_in_acquisitions is the default regime under ZGB Art. 181.",
+      "enum": [
+        "participation_in_acquisitions",
+        "community_of_property",
+        "separation_of_property"
+      ]
+    },
+    "erbschein": {
+      "description": "Erbschein — the Swiss certificate of inheritance (Erbenbescheinigung) issued by the competent cantonal authority confirming the identity of heirs and their shares.",
+      "type": "object",
+      "properties": {
+        "issued": {
+          "description": "Whether an Erbschein has been issued",
+          "type": "boolean"
+        },
+        "issuingAuthority": {
+          "description": "Name of the cantonal authority that issued the Erbschein",
+          "type": "string",
+          "maxLength": 255
+        },
+        "issueDate": {
+          "description": "Date on which the Erbschein was issued",
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "referenceNumber": {
+          "description": "Reference or case number of the Erbschein",
+          "type": "string",
+          "maxLength": 100
+        }
+      },
+      "additionalProperties": false
+    },
+    "notarialWillForm": {
+      "description": "Form of will used under Swiss law. public_will: notarially authenticated before two witnesses (ZGB Art. 499–508). holographic_will: entirely handwritten, dated, and signed by the testator (ZGB Art. 505). oral_will: emergency oral will before two witnesses when notarial form is impossible (ZGB Art. 506–508).",
+      "enum": [
+        "public_will",
+        "holographic_will",
+        "oral_will"
+      ]
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

@@ -1,0 +1,362 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/insurance-policy.json",
+  "title": "InsurancePolicy",
+  "description": "A standalone insurance policy entity — life, home, health, motor, travel, pet, or professional indemnity. Life insurance is often the single largest estate asset. Policies written in trust pass outside the estate",
+  "type": "object",
+  "required": [ "id", "policyType", "providerOrganisationId" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this insurance policy within the INHERIT document",
+      "examples": [ "f1234567-89ab-4cde-8012-3456789abcde" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "policyType": {
+      "description": "The type of insurance policy",
+      "$comment": "life: life insurance (term, whole life, endowment). home: buildings and contents insurance. health: private medical or health insurance. motor: car, motorcycle, or vehicle insurance. travel: travel insurance policy. pet: pet insurance policy. professional_indemnity: professional indemnity or liability insurance. other: any other insurance type.",
+      "examples": [ "life", "home", "motor" ],
+      "anyOf": [
+        {
+          "enum": [
+            "life",
+            "home",
+            "health",
+            "motor",
+            "travel",
+            "pet",
+            "professional_indemnity",
+            "other"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+"
+        }
+      ]
+    },
+    "providerOrganisationId": {
+      "description": "Reference to the Organisation.id of the insurance provider",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "providerOrganisationIdDisplay": {
+      "description": "Human-readable display name for the referenced provider organisation",
+      "type": "string",
+      "maxLength": 255
+    },
+    "policyNumber": {
+      "description": "The insurance policy number or reference",
+      "examples": [ "LG-LIFE-2020-789", "HX-HOME-2024-001" ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "coverAmount": {
+      "description": "Total cover amount (sum assured for life, rebuild cost for home, etc.) in minor currency units",
+      "$ref": "common/money.json"
+    },
+    "premiumAmount": {
+      "description": "Premium amount per payment period, in minor currency units",
+      "$ref": "common/money.json"
+    },
+    "premiumFrequency": {
+      "description": "How often premiums are paid",
+      "$comment": "monthly: paid every month. annual: paid once per year. single_premium: one-off payment. paid_up: no further premiums due. other: any other frequency.",
+      "examples": [ "monthly", "annual" ],
+      "enum": [ "monthly", "annual", "single_premium", "paid_up", "other" ]
+    },
+    "renewalDate": {
+      "description": "Next renewal date. Important — cover may lapse if not renewed after death",
+      "examples": [ "2027-01-01" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "maturityDate": {
+      "description": "Date the policy matures (for endowment policies and investment-linked policies)",
+      "examples": [ "2035-06-01" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "deathBenefit": {
+      "description": "Death benefit details — what is payable on the policyholder's death, to whom, and how",
+      "type": "object",
+      "properties": {
+        "amount": {
+          "description": "Death benefit amount in minor currency units",
+          "$ref": "common/money.json"
+        },
+        "nomineePersonId": {
+          "description": "Reference to the Person.id of the nominated death benefit recipient",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "nomineePersonIdDisplay": {
+          "description": "Human-readable display name for the referenced nominee person",
+          "type": "string",
+          "maxLength": 255
+        },
+        "nomineeOrganisationId": {
+          "description": "Reference to the Organisation.id of the nominated death benefit recipient, if an organisation. Mutually exclusive with nomineePersonId",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "nomineeOrganisationIdDisplay": {
+          "description": "Human-readable display name for the referenced nominee organisation",
+          "type": "string",
+          "maxLength": 255
+        },
+        "nominationCurrent": {
+          "description": "Whether the death benefit nomination is believed to be current and valid",
+          "examples": [ true, false ],
+          "type": "boolean"
+        },
+        "benefitType": {
+          "description": "How the death benefit is paid",
+          "$comment": "lump_sum: one-off payment. income: regular income payments. pension: pension benefit to dependant. discretionary: insurer or trustees decide.",
+          "examples": [ "lump_sum", "income" ],
+          "enum": [ "lump_sum", "income", "pension", "discretionary" ]
+        },
+        "beneficiaryVerificationStatus": {
+          "description": "Verification status of the death benefit beneficiary",
+          "$comment": "AXA-requested: enables insurers to track beneficiary verification progress",
+          "enum": [
+            "unverified",
+            "identity_confirmed",
+            "entitlement_confirmed"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "writtenInTrust": {
+      "description": "Whether the policy is written in trust. If true, proceeds pass outside the estate and are not subject to inheritance tax",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "trustDetails": {
+      "description": "Details of the trust holding this policy, if writtenInTrust is true",
+      "type": "object",
+      "properties": {
+        "trusteePersonId": {
+          "description": "Reference to the Person.id of the policy trustee",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "trusteePersonIdDisplay": {
+          "description": "Human-readable display name for the referenced trustee person",
+          "type": "string",
+          "maxLength": 255
+        },
+        "trusteeOrganisationId": {
+          "description": "Reference to the Organisation.id of a corporate trustee",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "trusteeOrganisationIdDisplay": {
+          "description": "Human-readable display name for the referenced trustee organisation",
+          "type": "string",
+          "maxLength": 255
+        },
+        "trustName": {
+          "description": "Name of the trust",
+          "examples": [ "Davies Family Life Policy Trust" ],
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "claimStatus": {
+      "description": "Current status of any claim against this policy",
+      "$comment": "active: policy is active, no claim. claim_submitted: death benefit claim submitted to insurer. claim_approved: claim approved by insurer. claim_paid: claim paid out. claim_disputed: claim disputed — may be under investigation or legally contested. pending: legacy value — claim submitted, awaiting decision. approved: legacy value — claim approved. paid: legacy value — claim paid out. declined: claim declined by insurer.",
+      "examples": [ "active", "claim_submitted", "claim_paid" ],
+      "enum": [
+        "active",
+        "claim_submitted",
+        "claim_approved",
+        "claim_paid",
+        "claim_disputed",
+        "pending",
+        "approved",
+        "paid",
+        "declined"
+      ]
+    },
+    "externalPolicyRef": {
+      "description": "URI pointing to an external policy record (FHIR Coverage resource, or any external insurance management system)",
+      "$comment": "FHIR R5 Coverage resource reference. Generic — works with any insurance system.",
+      "type": "string",
+      "pattern": "^https?://",
+      "format": "uri",
+      "maxLength": 2048
+    },
+    "nominationLifecycle": {
+      "description": "Lifecycle tracking for policy nominations — tracks the current nomination status and any superseding nominations",
+      "$comment": "CPF Board-requested: Central Provident Fund requires precise nomination tracking for death benefit distribution",
+      "type": "object",
+      "properties": {
+        "nominationStatus": {
+          "description": "Current status of the nomination",
+          "enum": [ "active", "revoked", "superseded", "expired", "disputed" ]
+        },
+        "verifiedAt": {
+          "description": "When the nomination was last verified as current",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "lastUpdated": {
+          "description": "When the nomination was last updated by the policyholder",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "supersedesNominationId": {
+          "description": "Reference to a previous nomination that this one replaces",
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "policyConditions": {
+      "description": "Conditions, exclusions, or clauses that affect the policy — e.g. suicide clause, contestability period, pre-existing condition exclusions",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "properties": {
+          "condition": {
+            "description": "Description of the condition or clause",
+            "examples": [
+              "2-year suicide exclusion clause",
+              "Pre-existing condition exclusion: heart disease"
+            ],
+            "type": "string",
+            "maxLength": 500
+          },
+          "expiryDate": {
+            "description": "Date the condition expires, if applicable",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "format": "date"
+          },
+          "impact": {
+            "description": "How this condition affects a claim",
+            "examples": [
+              "Claim void if death by suicide within 2 years of policy start"
+            ],
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "notes": {
+      "description": "Free-text notes about this insurance policy",
+      "examples": [
+        "Policy written in trust — proceeds bypass probate",
+        "Contact Sarah at Legal & General for claims: 0800 123 456"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "funeralPlanDetails": {
+      "description": "Details specific to funeral plan insurance",
+      "type": "object",
+      "properties": {
+        "coveredFuneralProviderOrganisationId": {
+          "description": "Reference to the Organisation.id of the covered funeral provider",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "coveredFuneralProviderOrganisationIdDisplay": {
+          "description": "Human-readable display name for the referenced covered funeral provider organisation",
+          "type": "string",
+          "maxLength": 255
+        },
+        "transferableOnDeath": {
+          "description": "Whether the plan is transferable on death",
+          "type": "boolean"
+        },
+        "advancePayments": {
+          "description": "Total advance payments made",
+          "$ref": "common/money.json"
+        }
+      },
+      "additionalProperties": false
+    },
+    "depositorProtection": {
+      "description": "Financial compensation scheme protection status. In the UK, the FSCS protects insurance policyholders if the insurer fails. Knowing whether a policy is protected matters for estate risk assessment",
+      "type": "object",
+      "required": [ "retrievedAt" ],
+      "properties": {
+        "retrievedAt": {
+          "description": "When this protection status was checked",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "scheme": {
+          "description": "The compensation or protection scheme",
+          "$comment": "fscs: Financial Services Compensation Scheme (UK). mib: Motor Insurers' Bureau (UK, compulsory motor insurance guarantee)",
+          "anyOf": [
+            {
+              "enum": [ "fscs", "mib" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "protected": {
+          "description": "Whether this policy is protected by the scheme",
+          "type": "boolean"
+        },
+        "protectionLimit": {
+          "description": "Maximum protection amount in minor units (pennies). FSCS insurance limit is unlimited for compulsory insurance, £85,000 for non-compulsory",
+          "type": "integer",
+          "minimum": 0
+        },
+        "claimProcessUrl": {
+          "description": "URL to the scheme's claim process or guidance page",
+          "type": "string",
+          "pattern": "^https?://",
+          "format": "uri",
+          "maxLength": 2048
+        }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

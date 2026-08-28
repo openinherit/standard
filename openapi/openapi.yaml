@@ -1,0 +1,517 @@
+openapi: '3.1.1'
+info:
+  title: INHERIT — Open Estate Data Interchange Standard
+  version: '6.4.2'
+  description: |
+    INHERIT is an open data standard for estate planning information,
+    supporting succession law across common law, civil law, Islamic,
+    Jewish, Hindu, Japanese, and African customary legal traditions.
+
+    This document serves two purposes:
+    1. Schema bundle — all 32 core entity schemas, 14 common types,
+       5 asset categories, and 21 jurisdiction extensions as OpenAPI
+       components for TypeScript type generation, Zod schema generation,
+       and SDK creation
+    2. Validation endpoints — reference endpoints for document validation
+
+    For the full specification, visit https://openinherit.org
+  license:
+    name: Apache 2.0
+    identifier: Apache-2.0
+  contact:
+    name: OpenInherit
+    url: https://openinherit.org
+    email: hello@openinherit.org
+
+servers:
+  - url: https://api.openinherit.org/v1
+    description: Reference validation server
+
+security: []
+
+paths:
+  /validate:
+    post:
+      operationId: validateDocument
+      summary: Validate an INHERIT estate document
+      description: |
+        Accepts a complete INHERIT estate document and returns validation results
+        at three conformance levels: Schema Valid, Referentially Intact,
+        and Jurisdiction Complete.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InheritDocument'
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+        '400':
+          description: Invalid JSON payload
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '413':
+          description: Payload too large
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '422':
+          description: Validation failed
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /validate/catalogue:
+    post:
+      operationId: validateCatalogueDocument
+      summary: Validate an INHERIT catalogue document
+      description: |
+        Accepts a complete INHERIT catalogue document and returns validation results.
+        Catalogues are dealer/platform asset collections distinct from individual
+        estates. The same three conformance levels apply.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Catalogue'
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+        '400':
+          description: Invalid JSON payload
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '413':
+          description: Payload too large
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '422':
+          description: Validation failed
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+components:
+  schemas:
+    # Root document
+    InheritDocument:
+      description: The top-level INHERIT document envelope
+      x-inherit-maturity: candidate
+      $ref: '../v3/schema.json'
+
+    # Core entities (31)
+    Estate:
+      description: The estate — links all entities together
+      x-inherit-maturity: candidate
+      $ref: '../v3/estate.json'
+    Person:
+      description: Any person referenced in the estate
+      x-inherit-maturity: candidate
+      $ref: '../v3/person.json'
+    Relationship:
+      description: Relationship between two people
+      x-inherit-maturity: candidate
+      $ref: '../v3/relationship.json'
+    Kinship:
+      description: Family group structure
+      x-inherit-maturity: candidate
+      $ref: '../v3/kinship.json'
+    Property:
+      description: Real property (land, buildings)
+      x-inherit-maturity: candidate
+      $ref: '../v3/property.json'
+    Asset:
+      description: Non-property assets (bank accounts, investments, etc.)
+      x-inherit-maturity: candidate
+      $ref: '../v3/asset.json'
+    Liability:
+      description: Debts, mortgages, loans
+      x-inherit-maturity: candidate
+      $ref: '../v3/liability.json'
+    Bequest:
+      description: A gift in a will
+      x-inherit-maturity: candidate
+      $ref: '../v3/bequest.json'
+    Trust:
+      description: Trust arrangements
+      x-inherit-maturity: candidate
+      $ref: '../v3/trust.json'
+    Executor:
+      description: Named executor or administrator
+      x-inherit-maturity: candidate
+      $ref: '../v3/executor.json'
+    Guardian:
+      description: Guardian appointment for minor children
+      x-inherit-maturity: candidate
+      $ref: '../v3/guardian.json'
+    Wish:
+      description: Non-binding wishes (funeral, organ donation, etc.)
+      x-inherit-maturity: candidate
+      $ref: '../v3/wish.json'
+    Document:
+      description: Legal documents (wills, codicils, powers of attorney)
+      x-inherit-maturity: candidate
+      $ref: '../v3/document.json'
+    Attestation:
+      description: Witness attestation of a document
+      x-inherit-maturity: candidate
+      $ref: '../v3/attestation.json'
+    ProxyAuthorisation:
+      description: Power of attorney or deputyship
+      x-inherit-maturity: candidate
+      $ref: '../v3/proxy-authorisation.json'
+    DealerInterest:
+      description: Professional interest in the estate
+      x-inherit-maturity: candidate
+      $ref: '../v3/dealer-interest.json'
+    NonprobateTransfer:
+      description: Assets that pass outside the will
+      x-inherit-maturity: candidate
+      $ref: '../v3/nonprobate-transfer.json'
+    Catalogue:
+      description: Dealer or platform asset catalogue (distinct from an individual estate)
+      x-inherit-maturity: draft
+      $ref: '../v3/catalogue.json'
+    AssetCollection:
+      description: A named grouping of assets within an estate or catalogue
+      x-inherit-maturity: draft
+      $ref: '../v3/asset-collection.json'
+    AssetInterest:
+      description: A fractional or beneficial interest in an asset
+      x-inherit-maturity: draft
+      $ref: '../v3/asset-interest.json'
+    Valuation:
+      description: A formal or estimated valuation of an asset or estate
+      x-inherit-maturity: draft
+      $ref: '../v3/valuation.json'
+    InsurancePolicy:
+      description: Life or other insurance policy linked to the estate
+      x-inherit-maturity: draft
+      $ref: '../v3/insurance-policy.json'
+    Notification:
+      description: A notification event recorded against the estate
+      x-inherit-maturity: draft
+      $ref: '../v3/notification.json'
+    Pet:
+      description: A pet or animal with care arrangements
+      x-inherit-maturity: draft
+      $ref: '../v3/pet.json'
+    Acknowledgement:
+      description: A formal acknowledgement of receipt or consent
+      x-inherit-maturity: draft
+      $ref: '../v3/acknowledgement.json'
+    Subscription:
+      description: A recurring digital or financial subscription held by the estate
+      x-inherit-maturity: draft
+      $ref: '../v3/subscription.json'
+    Space:
+      description: A physical or virtual space associated with the estate
+      x-inherit-maturity: draft
+      $ref: '../v3/space.json'
+    Organisation:
+      description: An organisation (charity, company, institution) referenced in the estate
+      x-inherit-maturity: draft
+      $ref: '../v3/organisation.json'
+    Event:
+      description: A significant lifecycle event recorded against the estate
+      x-inherit-maturity: draft
+      $ref: '../v3/event.json'
+    ConformanceDeclaration:
+      description: A declaration that an implementation conforms to the INHERIT standard
+      x-inherit-maturity: draft
+      $ref: '../v3/conformance-declaration.json'
+    LifetimeTransfer:
+      description: A transfer of assets made during the deceased's lifetime
+      x-inherit-maturity: draft
+      $ref: '../v3/lifetime-transfer.json'
+    PowerOfAppointment:
+      description: Testamentary power granting authority to decide distribution (general, special, hybrid)
+      x-inherit-maturity: draft
+      $ref: '../v3/power-of-appointment.json'
+
+    # Common types (14)
+    Money:
+      description: Monetary amounts (integer minor units + currency)
+      x-inherit-maturity: candidate
+      $ref: '../v3/common/money.json'
+    Address:
+      description: Postal addresses
+      x-inherit-maturity: candidate
+      $ref: '../v3/common/address.json'
+    Jurisdiction:
+      description: ISO 3166-2 jurisdiction codes
+      x-inherit-maturity: candidate
+      $ref: '../v3/common/jurisdiction.json'
+    Identifier:
+      description: External identifiers (NI number, passport, etc.)
+      x-inherit-maturity: candidate
+      $ref: '../v3/common/identifier.json'
+    TemporalRule:
+      description: Time-bound legislation rules
+      x-inherit-maturity: candidate
+      $ref: '../v3/common/temporal-rule.json'
+    Completeness:
+      description: Completeness scoring for an estate or entity
+      x-inherit-maturity: draft
+      $ref: '../v3/common/completeness.json'
+    Media:
+      description: Media attachments (images, documents, audio)
+      x-inherit-maturity: draft
+      $ref: '../v3/common/media.json'
+    TaxPosition:
+      description: Tax liability or exemption position
+      x-inherit-maturity: draft
+      $ref: '../v3/common/tax-position.json'
+    Visibility:
+      description: Access control visibility rules for an entity
+      x-inherit-maturity: draft
+      $ref: '../v3/common/visibility.json'
+    AiProvenance:
+      description: Provenance metadata for AI-generated content
+      x-inherit-maturity: draft
+      $ref: '../v3/common/ai-provenance.json'
+    FieldProvenance:
+      description: Field-level provenance tracking
+      x-inherit-maturity: draft
+      $ref: '../v3/common/field-provenance.json'
+    CulturalDisposition:
+      description: Cultural and religious disposition preferences
+      x-inherit-maturity: draft
+      $ref: '../v3/common/cultural-disposition.json'
+    Provenance:
+      description: Document or asset provenance chain
+      x-inherit-maturity: draft
+      $ref: '../v3/common/provenance.json'
+    AuditEvent:
+      description: An auditable event recorded against an entity
+      x-inherit-maturity: draft
+      $ref: '../v3/common/audit-event.json'
+
+    # Asset category schemas (5)
+    AssetCategoryFinancial:
+      description: Financial asset category details (accounts, investments, pensions)
+      x-inherit-maturity: draft
+      $ref: '../v3/asset-categories/financial.json'
+    AssetCategoryVehicle:
+      description: Vehicle asset category details (cars, boats, aircraft)
+      x-inherit-maturity: draft
+      $ref: '../v3/asset-categories/vehicle.json'
+    AssetCategoryDigital:
+      description: Digital asset category details (crypto, accounts, domains)
+      x-inherit-maturity: draft
+      $ref: '../v3/asset-categories/digital.json'
+    AssetCategoryBusiness:
+      description: Business asset category details (shares, partnerships, sole trader)
+      x-inherit-maturity: draft
+      $ref: '../v3/asset-categories/business.json'
+    AssetCategoryGeneral:
+      description: General asset category details (personal property, collectibles)
+      x-inherit-maturity: draft
+      $ref: '../v3/asset-categories/general.json'
+
+    # Extensions (21)
+    ExtensionUkEnglandWales:
+      description: IHT thresholds, intestacy rules, IFPA 1975 for England & Wales
+      x-inherit-maturity: candidate
+      $ref: '../v3/extensions/uk-england-wales/uk-england-wales.json'
+    ExtensionUsEstate:
+      description: US estate planning — community property, elective share, homestead
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/us-estate/us-estate.json'
+    ExtensionCanada:
+      description: Canadian provincial succession rules
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/canada/canada.json'
+    ExtensionAustraliaNz:
+      description: AU/NZ superannuation, family provision, Maori land
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/australia-nz/australia-nz.json'
+    ExtensionEuSuccession:
+      description: Brussels IV, European Certificate of Succession, forced heirship
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/eu-succession/eu-succession.json'
+    ExtensionJapan:
+      description: Japanese succession — koseki, iryubun, yōshi, isan bunkatsu
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/japan/japan.json'
+    ExtensionPrcChina:
+      description: PRC succession — forced heirship, hukou, notarised certificates
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/prc-china/prc-china.json'
+    ExtensionSingaporeMalaysia:
+      description: SG/MY — ISA, AMLA, CPF/EPF nominations, Distribution Act
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/singapore-malaysia/singapore-malaysia.json'
+    ExtensionLatinAmerica:
+      description: Latin American succession — legítima, forced heirship, fourths system
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/latin-america/latin-america.json'
+    ExtensionIslamicSuccession:
+      description: Faraid — fixed shares, residuary, awl/radd, wasiyya, waqf
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/islamic-succession/islamic-succession.json'
+    ExtensionJewishSuccession:
+      description: Halachic inheritance — bekhor, mezonot, kinyan
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/jewish-succession/jewish-succession.json'
+    ExtensionHinduSuccession:
+      description: Hindu succession — Mitakshara/Dayabhaga, HUF, stridhan
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/hindu-succession/hindu-succession.json'
+    ExtensionAfricaCustomary:
+      description: Customary succession — patrilineal/matrilineal, family council, lobola
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/africa-customary/africa-customary.json'
+    ExtensionBrazil:
+      description: Brazilian succession — meação, legítima, inventário, ITCMD
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/brazil/brazil.json'
+    ExtensionHongKong:
+      description: Hong Kong succession — Intestates Estates Ordinance, MPF, probate
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/hong-kong/hong-kong.json'
+    ExtensionSwitzerland:
+      description: Swiss succession — Pflichtteil, Erbvertrag, ZGB, IPRG
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/switzerland/switzerland.json'
+    ExtensionIsrael:
+      description: Israeli succession — Inheritance Law 1965, religious community rules
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/israel/israel.json'
+    ExtensionScotland:
+      description: Scottish succession — prior rights, legal rights, confirmation
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/scotland/scotland.json'
+    ExtensionIreland:
+      description: Irish succession — legal right share, Section 117, CAT
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/ireland/ireland.json'
+    ExtensionIndia:
+      description: Indian succession — Hindu Succession Act, personal law plurality
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/india/india.json'
+    ExtensionUae:
+      description: UAE succession — federal law, DIFC/ADGM wills, Sharia default
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/uae/uae.json'
+
+    # Validation result (inline)
+    ValidationResult:
+      type: object
+      required:
+        - valid
+        - conformanceLevel
+        - errors
+      properties:
+        valid:
+          type: boolean
+        conformanceLevel:
+          type: integer
+          enum: [0, 1, 2, 3]
+          description: |
+            0 = Invalid, 1 = Schema Valid, 2 = Referentially Intact,
+            3 = Jurisdiction Complete
+        schemaMode:
+          type: string
+          enum: [estate, catalogue]
+          description: |
+            The schema mode used for validation. Defaults to 'estate'.
+            Use 'catalogue' when validating dealer or platform catalogues.
+        errors:
+          type: array
+          items:
+            type: object
+            required:
+              - path
+              - message
+              - level
+            properties:
+              path:
+                type: string
+              message:
+                type: string
+              level:
+                type: string
+                enum: [error, warning, info]
+        disclaimer:
+          type: string
+          description: |
+            Optional disclaimer provided by the validation service, for example
+            noting that AI-extracted data has not been independently verified.
+
+    ProblemDetails:
+      description: "RFC 9457 Problem Details for HTTP APIs"
+      type: object
+      required:
+        - type
+        - title
+        - status
+      properties:
+        type:
+          type: string
+          format: uri
+          description: "A URI reference that identifies the problem type"
+          example: "https://openinherit.org/errors/schema-validation"
+        title:
+          type: string
+          description: "A short, human-readable summary of the problem type"
+          example: "Schema Validation Failed"
+        status:
+          type: integer
+          description: "The HTTP status code"
+          example: 422
+        detail:
+          type: string
+          description: "A human-readable explanation specific to this occurrence"
+          example: "The estate document failed Level 1 (Schema Valid) conformance."
+        instance:
+          type: string
+          format: uri
+          description: "A URI reference that identifies the specific occurrence"
+          example: "/validate"
+        errors:
+          type: array
+          description: "Detailed validation errors"
+          items:
+            type: object
+            required:
+              - pointer
+              - message
+              - level
+            properties:
+              pointer:
+                type: string
+                description: "JSON Pointer to the failing field"
+                example: "/persons/0/dateOfBirth"
+              message:
+                type: string
+                description: "Human-readable error description"
+                example: "Must match format 'date' (YYYY-MM-DD)"
+              level:
+                type: string
+                enum:
+                  - error
+                  - warning
+                  - info
+                description: "Severity level"

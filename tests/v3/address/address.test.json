@@ -1,0 +1,119 @@
+{
+  "target": "../../../v3/common/address.json",
+  "tests": [
+    {
+      "description": "valid — empty object (no required fields)",
+      "data": {},
+      "valid": true
+    },
+    {
+      "description": "valid — minimal UK address with street and postcode",
+      "data": {
+        "streetAddress": "14 Coronation Street",
+        "addressLocality": "Salford",
+        "addressRegion": "Greater Manchester",
+        "postalCode": "M5 3RW",
+        "addressCountry": "GB"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated Japanese address with addressOrder",
+      "data": {
+        "formattedAddress": "〒100-0001 東京都千代田区千代田1-1",
+        "streetAddress": "千代田1-1",
+        "addressLocality": "千代田区",
+        "addressRegion": "東京都",
+        "postalCode": "100-0001",
+        "addressCountry": "JP",
+        "latitude": 35.6762,
+        "longitude": 139.7503,
+        "addressOrder": "japanese"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Indian address with landmark and arabic addressOrder",
+      "data": {
+        "streetAddress": "42 MG Road",
+        "addressLocality": "Bengaluru",
+        "addressRegion": "Karnataka",
+        "postalCode": "560001",
+        "addressCountry": "IN",
+        "landmark": "Near Cubbon Park Metro Station",
+        "addressOrder": "indian"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Nigerian informal address with directionNotes and GPS coordinates",
+      "data": {
+        "addressLocality": "Lekki Phase 1",
+        "addressRegion": "Lagos",
+        "addressCountry": "NG",
+        "landmark": "Behind Shoprite",
+        "directionNotes": "Take the second left after the roundabout, red gate on the right",
+        "latitude": 6.4281,
+        "longitude": 3.4219
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Arabic address convention",
+      "data": {
+        "streetAddress": "King Fahd Road",
+        "addressLine2": "Building 7, Floor 3",
+        "addressLocality": "Riyadh",
+        "addressCountry": "SA",
+        "addressOrder": "arabic"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — addressCountry wrong length (3 chars)",
+      "data": {
+        "addressCountry": "GBR"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — addressCountry lowercase",
+      "data": {
+        "addressCountry": "gb"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — latitude out of range (above 90)",
+      "data": {
+        "streetAddress": "1 Test Street",
+        "latitude": 91.5
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — longitude out of range (below -180)",
+      "data": {
+        "streetAddress": "1 Test Street",
+        "longitude": -181
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — addressOrder not in enum",
+      "data": {
+        "streetAddress": "1 Test Street",
+        "addressOrder": "nordic"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additional property not allowed",
+      "data": {
+        "streetAddress": "1 Test Street",
+        "county": "Cheshire"
+      },
+      "valid": false
+    }
+  ]
+}

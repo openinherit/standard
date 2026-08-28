@@ -1,0 +1,149 @@
+{
+  "target": "../../../v3/common/ai-provenance.json",
+  "tests": [
+    {
+      "description": "valid — empty ai-provenance (all fields optional)",
+      "data": {},
+      "valid": true
+    },
+    {
+      "description": "valid — Claude with high confidence and review",
+      "data": {
+        "model": "claude",
+        "confidence": 92,
+        "generatedAt": "2026-03-30T14:00:00Z",
+        "humanReviewed": true,
+        "reviewedBy": "James Davies",
+        "reviewedAt": "2026-03-30T16:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — GPT with low confidence, not reviewed",
+      "data": {
+        "model": "gpt",
+        "confidence": 45,
+        "generatedAt": "2026-04-01T10:00:00Z",
+        "humanReviewed": false
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Gemini model",
+      "data": {
+        "model": "gemini",
+        "confidence": 80
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — other model family",
+      "data": {
+        "model": "other",
+        "confidence": 60
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — custom model via x-inherit- prefix",
+      "data": {
+        "model": "x-inherit-willscan-v2"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — confidence at boundary 0",
+      "data": {
+        "confidence": 0
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — confidence at boundary 100",
+      "data": {
+        "confidence": 100
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with x-inherit- extension data",
+      "data": {
+        "model": "claude",
+        "confidence": 88,
+        "x-inherit-tt-pipeline": {
+          "pipelineVersion": "2.1.0",
+          "extractionCost": 0.003
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — grok model",
+      "data": {
+        "model": "grok",
+        "confidence": 70
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — llama model",
+      "data": {
+        "model": "llama",
+        "confidence": 65
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — mistral model",
+      "data": {
+        "model": "mistral",
+        "confidence": 78
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — model value not in enum and not x-inherit- prefix",
+      "data": {
+        "model": "some-random-model"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — confidence below 0",
+      "data": {
+        "confidence": -1
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — confidence above 100",
+      "data": {
+        "confidence": 101
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — confidence is float (must be integer)",
+      "data": {
+        "confidence": 92.5
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additional property not allowed (outside x-inherit-)",
+      "data": {
+        "model": "claude",
+        "pipelineVersion": "not-allowed-here"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — extension block is string not object",
+      "data": {
+        "model": "claude",
+        "x-inherit-test": "must be object"
+      },
+      "valid": false
+    }
+  ]
+}

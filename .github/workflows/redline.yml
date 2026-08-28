@@ -1,0 +1,25 @@
+name: Publication redline
+
+# TT-1604 — this repo is the working, public home of the standard, so every
+# commit lands directly in public. This is the non-bypassable backstop the local
+# pre-commit hook (--no-verify-able) cannot be. Exit 0 = clean, 1 = hits, 2 =
+# cannot answer (all non-zero fail the job).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  redline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Redline sweep (must exit 0)
+        run: python3 scripts/check-publication-redline.py --tree .

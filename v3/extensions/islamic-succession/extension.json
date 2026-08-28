@@ -1,0 +1,69 @@
+{
+  "name": "Islamic Succession",
+  "id": "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "tradition",
+  "applicableJurisdictions": [
+    "SG",
+    "MY",
+    "ID",
+    "AE",
+    "SA",
+    "PK",
+    "BD",
+    "GB",
+    "US",
+    "AU",
+    "CA"
+  ],
+  "providesOwnProcedure": true,
+  "compatibleWith": [
+    "singapore-malaysia",
+    "uk-england-wales",
+    "us-estate",
+    "canada",
+    "australia-nz"
+  ],
+  "legalSystems": [
+    "islamic_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-03-26",
+  "dataProvenance": "Quranic inheritance verses (Surah An-Nisa 4:11-12), classical fiqh (Hanafi, Shafi'i, Maliki, Hanbali schools)",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Faraid rules: heir classification, fixed shares, residuary (asaba), awl/radd adjustments, wasiyya limits, iddah periods, waqf, mahr.",
+  "conformanceRules": [
+    {
+      "id": "isl-001",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "Islamic school of jurisprudence must be specified",
+      "check": "exists",
+      "path": "x-inherit-islamic-succession.school",
+      "severity": "error"
+    },
+    {
+      "id": "isl-002",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "Whether faraid applies must be specified",
+      "check": "exists",
+      "path": "x-inherit-islamic-succession.faraidApplies",
+      "severity": "error"
+    }
+  ],
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "outline",
+  "keyFeatures": "Fixed-share inheritance (fara'id), wasiyyah (bequest limit 1/3), awl/radd calculation, madhab variation, asabaRank (1-15), expanded heirClass (22 values), full asaba hierarchy documentation, uncle/cousin/nephew types, dhawu al-arham mapping",
+  "legalTradition": "Islamic (Sharia)",
+  "seeking": "",
+  "tier": "core"
+}

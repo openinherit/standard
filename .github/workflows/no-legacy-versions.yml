@@ -1,0 +1,59 @@
+name: No Legacy Versions
+
+# Belt-and-braces guard against v1 or v2 INHERIT schema URLs sneaking back
+# into the codebase. v1 and v2 were removed in v6.6.0 — only v3 is
+# supported.
+#
+# The lint scopes itself to source code, fixtures, generated SDK, examples,
+# OpenAPI specs and the v3 schema directory. It deliberately excludes
+# narrative documentation (CHANGELOG, _archive_, planning docs, proposals)
+# where v1/v2 are mentioned in historical/contractual context — those are
+# correct as-is.
+#
+# Match patterns:
+#   - openinherit.org/v[12]/(schema|vocab|dialect|extensions)
+#     — the actual schema-URL leak vector
+#
+# What we do NOT match here:
+#   - openapi/openapi*.yaml uses api.openinherit.org/v1 — that's REST API
+#     versioning, independent from the schema. If/when the API bumps to v2
+#     this lint should grow a separate matcher.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    name: Grep lint — no v1/v2 schema URLs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Fail on v1/v2 schema URLs
+        run: |
+          set -e
+          # Match openinherit.org/v1/ or v2/ followed by schema, vocab,
+          # dialect, or extensions — the four URI families that are
+          # legitimately schema identifiers.
+          PATTERN='openinherit\.org/v[12]/(schema|vocab|dialect|extensions)'
+          MATCHES=$(grep -rnE "$PATTERN" \
+              --include='*.json' \
+              --include='*.ts' \
+              --include='*.mjs' \
+              --include='*.js' \
+              --include='*.yaml' \
+              --include='*.yml' \
+              --include='*.md' \
+              v3/ examples/ packages/schema/v3/ generated/ src/ openapi/ 2>/dev/null \
+            || true)
+
+          if [ -n "$MATCHES" ]; then
+            echo "::error::Found v1/v2 INHERIT schema URLs in source. Only v3 is supported."
+            echo ""
+            echo "$MATCHES" | sed 's/^/  /'
+            exit 1
+          fi
+
+          echo "::notice::No v1/v2 schema URLs in source. ✓"

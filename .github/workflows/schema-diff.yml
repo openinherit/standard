@@ -1,0 +1,37 @@
+name: Schema Diff & Contract Tests
+
+on:
+  pull_request:
+    paths:
+      - 'v3/**'
+      - 'tests/contract/**'
+
+jobs:
+  contract-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install Sourcemeta CLI
+        run: |
+          TAG=$(gh api repos/sourcemeta/jsonschema/releases/latest --jq '.tag_name')
+          VERSION="${TAG#v}"
+          curl -fsSL "https://github.com/sourcemeta/jsonschema/releases/download/${TAG}/jsonschema-${VERSION}-linux-x86_64.zip" -o /tmp/jsonschema.zip
+          unzip -o /tmp/jsonschema.zip -d /tmp/jsonschema-extract
+          cp /tmp/jsonschema-extract/*/bin/jsonschema /usr/local/bin/jsonschema
+          chmod +x /usr/local/bin/jsonschema
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Run contract tests
+        run: bash scripts/contract-test.sh
+
+      - name: Run schema diff
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: bash scripts/schema-diff.sh "$BASE_REF"

@@ -1,0 +1,482 @@
+{
+  "target": "../../../v3/attestation.json",
+  "tests": [
+    {
+      "description": "valid \u2014 minimal attestation with required id only",
+      "valid": true,
+      "data": {
+        "id": "b53e7ef6-c836-4311-97e7-47344e4305ec"
+      }
+    },
+    {
+      "description": "valid \u2014 fully populated attestation",
+      "valid": true,
+      "data": {
+        "id": "b43bfe0e-16b5-410d-a822-b5ca53a815f2",
+        "attestationDate": "2026-03-28T00:00:00Z",
+        "witnessPersonIds": [
+          "550e8400-e29b-41d4-a716-446655440001",
+          "550e8400-e29b-41d4-a716-446655440002"
+        ],
+        "method": "in_person",
+        "attestationType": "written_signed",
+        "solicitorSupervised": true,
+        "testatorSignedInPresenceOfWitnesses": true,
+        "witnessesSignedInPresenceOfTestator": true,
+        "witnessConflictCheck": true,
+        "witnessConflictCheckScope": "english_law",
+        "notes": "Executed at Ashford & Partners, 12 High Street, Guildford"
+      }
+    },
+    {
+      "description": "invalid \u2014 missing required id",
+      "valid": false,
+      "data": {
+        "attestationDate": "2026-03-28T00:00:00Z",
+        "method": "in_person"
+      }
+    },
+    {
+      "description": "invalid \u2014 method must be valid enum",
+      "valid": false,
+      "data": {
+        "id": "ecb70da2-0579-4287-b410-a379cdf43426",
+        "method": "telepathy"
+      }
+    },
+    {
+      "description": "invalid \u2014 solicitorSupervised must be boolean",
+      "valid": false,
+      "data": {
+        "id": "a1067376-13c9-4e86-91f3-1c004ad83381",
+        "solicitorSupervised": "yes"
+      }
+    },
+    {
+      "description": "valid \u2014 electronic will execution with RON",
+      "valid": true,
+      "data": {
+        "id": "67d67e29-8966-495a-880d-5cbaf22a0abc",
+        "attestationDate": "2026-01-15T00:00:00Z",
+        "method": "remote",
+        "attestationType": "written_signed",
+        "executionType": "electronic",
+        "ronSessionId": "RON-2026-FL-001234",
+        "ronPlatform": "Notarize",
+        "ronRecordingContentUrl": "https://storage.notarize.com/recording/abc123",
+        "identityVerificationMethod": "government_id",
+        "selfProvingAffidavit": true
+      }
+    },
+    {
+      "description": "valid \u2014 video witnessed attestation",
+      "valid": true,
+      "data": {
+        "id": "700f73a6-5567-496f-a2de-31640bc2a6ff",
+        "attestationDate": "2026-02-20T00:00:00Z",
+        "method": "video",
+        "attestationType": "written_signed",
+        "videoRecordingContentUrl": "https://storage.example.com/recordings/will-execution-20260220.mp4",
+        "videoUninterrupted": true,
+        "videoLive": true,
+        "videoPlatform": "Zoom"
+      }
+    },
+    {
+      "description": "valid \u2014 attestation with video declaration",
+      "valid": true,
+      "data": {
+        "id": "4305315f-4917-4a58-afe4-e7ed56130125",
+        "attestationDate": "2026-03-10T00:00:00Z",
+        "method": "in_person",
+        "attestationType": "written_signed",
+        "videoDeclaration": {
+          "declarantPersonId": "550e8400-e29b-41d4-a716-446655440010",
+          "declarationType": "testamentary_intent",
+          "contentUrl": "https://storage.example.com/declarations/testamentary-intent-001.mp4",
+          "legalWeight": "evidential"
+        }
+      }
+    },
+    {
+      "description": "valid \u2014 hybrid execution with tamper evidence",
+      "valid": true,
+      "data": {
+        "id": "33c9dc38-bb65-4117-9328-74b8a455b865",
+        "attestationDate": "2026-03-25T00:00:00Z",
+        "method": "remote",
+        "attestationType": "written_signed",
+        "executionType": "hybrid",
+        "tamperEvidenceMethod": "SHA-256",
+        "tamperEvidenceValue": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+      }
+    },
+    {
+      "description": "invalid \u2014 video declaration missing required declarantPersonId",
+      "valid": false,
+      "data": {
+        "id": "7a2b1176-3be2-45f7-8afb-5eec37a9e0ae",
+        "attestationDate": "2026-03-28T00:00:00Z",
+        "method": "video",
+        "videoDeclaration": {
+          "declarationType": "testamentary_intent"
+        }
+      }
+    },
+    {
+      "description": "invalid \u2014 id is not a UUID",
+      "valid": false,
+      "data": {
+        "id": "not-a-uuid"
+      }
+    },
+    {
+      "description": "invalid \u2014 attestationDate is not ISO date-time format",
+      "valid": false,
+      "data": {
+        "id": "b53e7ef6-c836-4311-97e7-47344e4305ec",
+        "attestationDate": "28/03/2026"
+      }
+    },
+    {
+      "description": "invalid \u2014 witnessPersonIds contains non-UUID",
+      "valid": false,
+      "data": {
+        "id": "b53e7ef6-c836-4311-97e7-47344e4305ec",
+        "witnessPersonIds": [
+          "not-a-uuid"
+        ]
+      }
+    },
+    {
+      "description": "invalid \u2014 notes exceeds maxLength 2000",
+      "valid": false,
+      "data": {
+        "id": "b53e7ef6-c836-4311-97e7-47344e4305ec",
+        "notes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      }
+    },
+    {
+      "description": "invalid \u2014 tamperEvidenceValue exceeds maxLength 1000",
+      "valid": false,
+      "data": {
+        "id": "b53e7ef6-c836-4311-97e7-47344e4305ec",
+        "tamperEvidenceValue": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      }
+    },
+    {
+      "description": "invalid \u2014 unknown property at root level",
+      "valid": false,
+      "data": {
+        "id": "b53e7ef6-c836-4311-97e7-47344e4305ec",
+        "madeUpField": "should be rejected"
+      }
+    },
+    {
+      "description": "invalid \u2014 attestationType not in enum",
+      "valid": false,
+      "data": {
+        "id": "b53e7ef6-c836-4311-97e7-47344e4305ec",
+        "attestationType": "digital_thumbprint"
+      }
+    },
+    {
+      "description": "invalid \u2014 executionType not in enum",
+      "valid": false,
+      "data": {
+        "id": "b53e7ef6-c836-4311-97e7-47344e4305ec",
+        "executionType": "quantum"
+      }
+    },
+    {
+      "description": "invalid \u2014 videoDeclaration declarationType not in enum",
+      "valid": false,
+      "data": {
+        "id": "b53e7ef6-c836-4311-97e7-47344e4305ec",
+        "videoDeclaration": {
+          "declarantPersonId": "550e8400-e29b-41d4-a716-446655440010",
+          "declarationType": "final_wishes"
+        }
+      }
+    },
+    {
+      "description": "invalid \u2014 ronRecordingRetentionYears is negative",
+      "valid": false,
+      "data": {
+        "id": "b53e7ef6-c836-4311-97e7-47344e4305ec",
+        "ronRecordingRetentionYears": -1
+      }
+    },
+    {
+      "description": "valid \u2014 method none (nuncupative oral will)",
+      "valid": true,
+      "data": {
+        "id": "a0000001-0000-4000-a000-000000000001",
+        "attestationType": "oral_witnessed",
+        "method": "none",
+        "notes": "Oral will made on deathbed in presence of three witnesses"
+      }
+    },
+    {
+      "description": "valid \u2014 method kinyan_sudar with oral_community attestationType",
+      "valid": true,
+      "data": {
+        "id": "a0000002-0000-4000-a000-000000000002",
+        "method": "kinyan_sudar",
+        "attestationType": "oral_community"
+      }
+    },
+    {
+      "description": "valid \u2014 method kinyan_agav",
+      "valid": true,
+      "data": {
+        "id": "a0000003-0000-4000-a000-000000000003",
+        "method": "kinyan_agav",
+        "attestationType": "written_signed"
+      }
+    },
+    {
+      "description": "valid \u2014 method seal_based with seal_based attestationType",
+      "valid": true,
+      "data": {
+        "id": "a0000004-0000-4000-a000-000000000004",
+        "method": "seal_based",
+        "attestationType": "seal_based",
+        "notes": "Sealed with personal chop (도장) per Korean custom"
+      }
+    },
+    {
+      "description": "valid \u2014 method inkan_registered with executionType physical",
+      "valid": true,
+      "data": {
+        "id": "a0000005-0000-4000-a000-000000000005",
+        "method": "inkan_registered",
+        "attestationType": "written_signed",
+        "executionType": "physical",
+        "notes": "Registered inkan (jitsuin) verified against Shinjuku Ward seal registration"
+      }
+    },
+    {
+      "description": "valid \u2014 witnessConflictCheckScope halachic_broad, civil_law_standard, customary_oral, community_testimony",
+      "valid": true,
+      "data": {
+        "id": "a0000006-0000-4000-a000-000000000006",
+        "method": "in_person",
+        "attestationType": "oral_witnessed",
+        "witnessConflictCheck": true,
+        "witnessConflictCheckScope": "halachic_broad"
+      }
+    },
+    {
+      "description": "valid \u2014 witnessConflictCheckScope civil_law_standard",
+      "valid": true,
+      "data": {
+        "id": "a0000007-0000-4000-a000-000000000007",
+        "method": "in_person",
+        "attestationType": "written_signed",
+        "witnessConflictCheck": true,
+        "witnessConflictCheckScope": "civil_law_standard"
+      }
+    },
+    {
+      "description": "valid \u2014 witnessConflictCheckScope customary_oral",
+      "valid": true,
+      "data": {
+        "id": "a0000008-0000-4000-a000-000000000008",
+        "method": "in_person",
+        "attestationType": "oral_community",
+        "witnessConflictCheck": true,
+        "witnessConflictCheckScope": "customary_oral"
+      }
+    },
+    {
+      "description": "valid \u2014 witnessConflictCheckScope community_testimony",
+      "valid": true,
+      "data": {
+        "id": "a0000009-0000-4000-a000-000000000009",
+        "method": "in_person",
+        "attestationType": "oral_witnessed",
+        "witnessConflictCheck": true,
+        "witnessConflictCheckScope": "community_testimony"
+      }
+    },
+    {
+      "description": "valid \u2014 identityVerificationMethod credential_analysis, knowledge_based_authentication, biometric, personal_knowledge",
+      "valid": true,
+      "data": {
+        "id": "a0000010-0000-4000-a000-000000000010",
+        "method": "remote",
+        "executionType": "electronic",
+        "identityVerificationMethod": "credential_analysis"
+      }
+    },
+    {
+      "description": "valid \u2014 identityVerificationMethod knowledge_based_authentication",
+      "valid": true,
+      "data": {
+        "id": "a0000011-0000-4000-a000-000000000011",
+        "method": "remote",
+        "executionType": "electronic",
+        "identityVerificationMethod": "knowledge_based_authentication"
+      }
+    },
+    {
+      "description": "valid \u2014 identityVerificationMethod biometric",
+      "valid": true,
+      "data": {
+        "id": "a0000012-0000-4000-a000-000000000012",
+        "method": "remote",
+        "executionType": "electronic",
+        "identityVerificationMethod": "biometric"
+      }
+    },
+    {
+      "description": "valid \u2014 identityVerificationMethod personal_knowledge",
+      "valid": true,
+      "data": {
+        "id": "a0000013-0000-4000-a000-000000000013",
+        "method": "video",
+        "executionType": "electronic",
+        "identityVerificationMethod": "personal_knowledge"
+      }
+    },
+    {
+      "description": "valid \u2014 videoDeclaration declarationType codicil_confirmation",
+      "valid": true,
+      "data": {
+        "id": "a0000014-0000-4000-a000-000000000014",
+        "method": "video",
+        "videoDeclaration": {
+          "declarantPersonId": "dd000001-0000-4000-d000-000000000001",
+          "declarationType": "codicil_confirmation",
+          "legalWeight": "supplementary"
+        }
+      }
+    },
+    {
+      "description": "valid \u2014 videoDeclaration declarationType capacity_demonstration with legalWeight non_binding",
+      "valid": true,
+      "data": {
+        "id": "a0000015-0000-4000-a000-000000000015",
+        "method": "video",
+        "videoDeclaration": {
+          "declarantPersonId": "dd000002-0000-4000-d000-000000000002",
+          "declarationType": "capacity_demonstration",
+          "legalWeight": "non_binding"
+        }
+      }
+    },
+    {
+      "description": "valid \u2014 videoDeclaration declarationType other with legalWeight unknown",
+      "valid": true,
+      "data": {
+        "id": "a0000016-0000-4000-a000-000000000016",
+        "method": "video",
+        "videoDeclaration": {
+          "declarantPersonId": "dd000003-0000-4000-d000-000000000003",
+          "declarationType": "other",
+          "legalWeight": "unknown"
+        }
+      }
+    },
+    {
+      "description": "valid — attestation with detailed witnesses array",
+      "valid": true,
+      "data": {
+        "id": "a0000017-0000-4000-a000-000000000017",
+        "attestationDate": "2026-03-15T00:00:00Z",
+        "method": "in_person",
+        "attestationType": "written_signed",
+        "witnesses": [
+          {
+            "name": "Sarah Jane Thompson",
+            "address": "14 Elm Grove, Guildford, Surrey GU1 3EH",
+            "occupation": "Solicitor"
+          },
+          {
+            "name": "David Robert Chen",
+            "address": "28 Victoria Road, Woking, Surrey GU21 5AB",
+            "occupation": "Retired teacher"
+          }
+        ]
+      }
+    },
+    {
+      "description": "valid — witness with personId reference",
+      "valid": true,
+      "data": {
+        "id": "a0000018-0000-4000-a000-000000000018",
+        "method": "in_person",
+        "attestationType": "written_signed",
+        "witnesses": [
+          {
+            "personId": "550e8400-e29b-41d4-a716-446655440001",
+            "name": "Margaret Anne Wilson"
+          }
+        ]
+      }
+    },
+    {
+      "description": "valid — attestation with both witnessPersonIds and witnesses",
+      "valid": true,
+      "data": {
+        "id": "a0000019-0000-4000-a000-000000000019",
+        "attestationDate": "2026-04-01T00:00:00Z",
+        "method": "in_person",
+        "attestationType": "written_signed",
+        "witnessPersonIds": [
+          "550e8400-e29b-41d4-a716-446655440001",
+          "550e8400-e29b-41d4-a716-446655440002"
+        ],
+        "witnesses": [
+          {
+            "personId": "550e8400-e29b-41d4-a716-446655440001",
+            "name": "Sarah Jane Thompson",
+            "address": "14 Elm Grove, Guildford, Surrey GU1 3EH",
+            "occupation": "Solicitor"
+          },
+          {
+            "personId": "550e8400-e29b-41d4-a716-446655440002",
+            "name": "David Robert Chen",
+            "address": "28 Victoria Road, Woking, Surrey GU21 5AB",
+            "occupation": "Retired teacher"
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — witness with additional property",
+      "valid": false,
+      "data": {
+        "id": "a0000020-0000-4000-a000-000000000020",
+        "method": "in_person",
+        "witnesses": [
+          {
+            "name": "John Smith",
+            "email": "john@example.com"
+          }
+        ]
+      }
+    },
+    {
+      "description": "valid — attestation with page tracking",
+      "valid": true,
+      "data": {
+        "id": "a0000021-0000-4000-a000-000000000021",
+        "attestationDate": "2023-08-22T00:00:00Z",
+        "pageCount": 3,
+        "pagesSignedByTestator": 3,
+        "pagesSignedByWitnesses": 3,
+        "allPagesSigned": true
+      }
+    },
+    {
+      "description": "valid — attestation with datetime precision",
+      "valid": true,
+      "data": {
+        "id": "a0000022-0000-4000-a000-000000000022",
+        "attestationDate": "2023-08-22T14:30:00+08:00"
+      }
+    }
+  ]
+}

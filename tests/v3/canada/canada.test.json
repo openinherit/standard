@@ -1,0 +1,211 @@
+{
+  "target": "../../../v3/extensions/canada/canada.json",
+  "tests": [
+    {
+      "description": "valid — minimal Canada extension (province only)",
+      "data": {
+        "province": "CA-ON"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Ontario with equalization",
+      "data": {
+        "province": "CA-ON",
+        "ontarioEqualization": {
+          "netFamilyProperty": { "amount": 50000, "currency": "CAD" },
+          "equalizationPayment": { "amount": 25000, "currency": "CAD" },
+          "canBeNegative": false,
+          "notes": "Net family property calculated as of valuation date."
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Quebec with patrimony",
+      "data": {
+        "province": "CA-QC",
+        "quebecPatrimony": {
+          "applicable": true,
+          "patrimonyValue": { "amount": 120000, "currency": "CAD" },
+          "equalisation": "50% division of family patrimony applies",
+          "notes": "Civil Code of Quebec Art. 414-430."
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — BC with WESA variation",
+      "data": {
+        "province": "CA-BC",
+        "bcWesaVariation": {
+          "variationApplied": true,
+          "courtReference": "BC-WESA-2024-00123",
+          "notes": "Variation application filed under WESA s.60."
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Alberta with dower rights",
+      "data": {
+        "province": "CA-AB",
+        "albertaDower": {
+          "dowerRight": true,
+          "spousePersonId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+          "consentGiven": true,
+          "notes": "Spouse consent to disposition registered."
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Indigenous land details",
+      "data": {
+        "province": "CA-MB",
+        "indigenousLandDetails": [
+          {
+            "propertyId": "a1b2c3d4-e5f6-7890-abcd-ef1234567891",
+            "landType": "reserve",
+            "reserveName": "Example First Nation",
+            "treatyNumber": "Treaty 1",
+            "successionRestrictions": "Subject to Indian Act s.48.",
+            "notes": "Reserve land held under certificate of possession."
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated",
+      "data": {
+        "province": "CA-ON",
+        "quebecPatrimony": {
+          "applicable": false
+        },
+        "ontarioEqualization": {
+          "netFamilyProperty": { "amount": 80000, "currency": "CAD" },
+          "equalizationPayment": { "amount": 40000, "currency": "CAD" },
+          "canBeNegative": true,
+          "notes": "Negative NFP possible due to pre-marital debts."
+        },
+        "bcWesaVariation": {
+          "variationApplied": false
+        },
+        "albertaDower": {
+          "dowerRight": false,
+          "propertyId": "a1b2c3d4-e5f6-7890-abcd-ef1234567892"
+        },
+        "indigenousLandDetails": [
+          {
+            "propertyId": "a1b2c3d4-e5f6-7890-abcd-ef1234567893",
+            "landType": "certificate_of_possession"
+          },
+          {
+            "propertyId": "a1b2c3d4-e5f6-7890-abcd-ef1234567894",
+            "landType": "fee_simple_on_reserve",
+            "reserveName": "Northern First Nation",
+            "notes": "Fee simple granted under land transfer agreement."
+          }
+        ],
+        "notes": "Multi-provincial estate — primary succession law is Ontario."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing province (required)",
+      "data": {},
+      "valid": false
+    },
+    {
+      "description": "invalid — province wrong format (does not match ^CA-[A-Z]{2}$)",
+      "data": {
+        "province": "Ontario"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — Alberta dower missing required dowerRight",
+      "data": {
+        "province": "CA-AB",
+        "albertaDower": {
+          "spousePersonId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — Indigenous land missing required landType",
+      "data": {
+        "province": "CA-MB",
+        "indigenousLandDetails": [
+          {
+            "propertyId": "a1b2c3d4-e5f6-7890-abcd-ef1234567891",
+            "reserveName": "Example First Nation"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — Indigenous land invalid landType enum value",
+      "data": {
+        "province": "CA-MB",
+        "indigenousLandDetails": [
+          {
+            "propertyId": "a1b2c3d4-e5f6-7890-abcd-ef1234567891",
+            "landType": "freehold"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additional properties in Quebec patrimony (additionalProperties: false)",
+      "data": {
+        "province": "CA-QC",
+        "quebecPatrimony": {
+          "applicable": true,
+          "courtOrder": "QC-2024-99999"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — province too long (exceeds maxLength 255)",
+      "data": {
+        "province": "CA-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — Ontario with intestacyRules and preferentialShare",
+      "data": {
+        "province": "CA-ON",
+        "intestacyRules": {
+          "distributionOrder": "spouse_and_children",
+          "preferentialShare": { "amount": 35000000, "currency": "CAD" }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Quebec with civil law provisions",
+      "data": {
+        "province": "CA-QC",
+        "quebecCivilLaw": {
+          "forcedHeirship": true,
+          "familyPatrimonyApplies": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — province CA-ZZ not in enum",
+      "data": {
+        "province": "CA-ZZ"
+      },
+      "valid": false
+    }
+  ]
+}

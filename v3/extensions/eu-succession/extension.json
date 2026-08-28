@@ -1,0 +1,63 @@
+{
+  "name": "EU Succession",
+  "id": "https://openinherit.org/v3/extensions/eu-succession.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "AT",
+    "BE",
+    "BG",
+    "HR",
+    "CY",
+    "CZ",
+    "DK",
+    "EE",
+    "FI",
+    "FR",
+    "DE",
+    "GR",
+    "HU",
+    "IT",
+    "LV",
+    "LT",
+    "LU",
+    "MT",
+    "NL",
+    "PL",
+    "PT",
+    "RO",
+    "SK",
+    "SI",
+    "ES",
+    "SE"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "islamic-succession",
+    "jewish-succession"
+  ],
+  "legalSystems": [
+    "civil_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-03-26",
+  "dataProvenance": "Regulation (EU) No 650/2012 (Brussels IV), Spanish Civil Code, French Code civil, German BGB",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Brussels IV choice of law, European Certificate of Succession, Spanish regional regimes, forced heirship variants, post-Brexit UK asset handling.",
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "partial",
+  "keyFeatures": "EU Regulation 650/2012, European Certificate of Succession, habitual residence rule, choice-of-law",
+  "legalTradition": "Mixed civil law",
+  "seeking": "Country-specific reviewers (DE, FR, NL, PL)",
+  "tier": "core"
+}

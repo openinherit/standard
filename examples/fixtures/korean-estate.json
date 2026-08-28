@@ -1,0 +1,352 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-03-27T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "9fcc7606-af1f-440b-8a62-5f61c55eb165",
+    "testatorPersonId": "84d03a0f-c786-404d-8da8-e1af0a448439",
+    "status": "confirmed",
+    "forcedHeirship": {
+      "applies": true,
+      "reservedPortion": 50,
+      "disposableQuota": 50,
+      "claimNature": "cash_claim",
+      "calculationBasis": "per_child_sliding",
+      "applicableTo": "children_and_spouse",
+      "notes": "Korean Civil Code Articles 1112-1118 govern the yuryubun (유류분) — the legally reserved portion. A spouse and lineal descendants may claim one-half of their statutory intestate share. Lineal ascendants and siblings may claim one-third. The yuryubun claim is monetary and must be exercised within one year of learning of the infringement, or within ten years of the testator's death."
+    },
+    "defaultSuccessionRegime": {
+      "governingLaw": {
+        "jurisdiction": {
+          "country": "KR"
+        },
+        "legalTradition": "civil_law",
+        "statute": "Korean Civil Code (민법)",
+        "section": "Book V Succession (Articles 1000–1118)"
+      },
+      "determinedBy": "nationality",
+      "binding": true,
+      "notes": "Korean law applies to succession of Korean nationals. The Family Court handles probate and issues certificates of inheritance."
+    },
+    "notes": "Korean succession is governed by the Korean Civil Code (민법), Book V: Succession (Articles 1000-1118). A will (유언) may be holographic (자필증서), audio/video recorded (녹음), notarised (공정증서), sealed (비밀증서), or orally dictated (구수증서). Intestate shares follow Article 1009: a spouse receives 1.5× a child's share. The Family Court (가정법원) handles probate. Korea has no inheritance tax exemption for the primary residence — estate tax applies to worldwide assets.",
+    "createdAt": "2026-01-15T00:00:00Z",
+    "lastModifiedAt": "2026-03-27T00:00:00Z",
+    "domicile": {
+      "country": "KR",
+      "legalSystems": [
+        "civil_law"
+      ],
+      "name": "South Korea"
+    }
+  },
+  "people": [
+    {
+      "id": "84d03a0f-c786-404d-8da8-e1af0a448439",
+      "givenName": "Soo-jin",
+      "familyName": "Kim",
+      "phoneticReading": {
+        "givenName": "수진",
+        "familyName": "김"
+      },
+      "dateOfBirth": "1965-04-10",
+      "roles": [
+        "testator"
+      ],
+      "language": "ko",
+      "contact": {
+        "address": {
+          "addressCountry": "KR",
+          "addressRegion": "Seoul",
+          "addressLocality": "Gangnam-gu",
+          "streetAddress": "Teheran-ro 152, Apt 3204",
+          "postalCode": "06236",
+          "addressOrder": "japanese"
+        }
+      }
+    },
+    {
+      "id": "132f2665-9506-4484-a642-e8f7bf2b329b",
+      "givenName": "Min-ho",
+      "familyName": "Park",
+      "phoneticReading": {
+        "givenName": "민호",
+        "familyName": "박"
+      },
+      "dateOfBirth": "1967-09-22",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ],
+      "language": "ko"
+    },
+    {
+      "id": "d18df9a3-3c76-4f7e-903c-00070b09d4ed",
+      "givenName": "Ji-yeon",
+      "familyName": "Kim",
+      "phoneticReading": {
+        "givenName": "지연",
+        "familyName": "김"
+      },
+      "dateOfBirth": "1995-06-18",
+      "roles": [
+        "beneficiary"
+      ],
+      "language": "ko"
+    }
+  ],
+  "kinships": [
+    {
+      "id": "2da01bbb-21b3-46d5-92c6-a20bf633e5fd",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "84d03a0f-c786-404d-8da8-e1af0a448439",
+      "toPersonId": "d18df9a3-3c76-4f7e-903c-00070b09d4ed"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "a846a27b-f4c1-422c-b070-362d5ca7cc4e",
+      "type": "marriage_civil",
+      "partners": [
+        {
+          "personId": "84d03a0f-c786-404d-8da8-e1af0a448439",
+          "ordinal": 1
+        },
+        {
+          "personId": "132f2665-9506-4484-a642-e8f7bf2b329b",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "KR"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "ec33a57d-f4c3-4003-b330-c1bf99307a07",
+      "name": "Gangnam Apartment, Teheran-ro 152",
+      "propertyType": "apartment",
+      "tenureType": "ownership",
+      "isPrimaryResidence": true,
+      "ownershipType": "sole",
+      "estimatedValue": {
+        "amount": 1800000000,
+        "currency": "KRW"
+      },
+      "address": {
+        "addressCountry": "KR",
+        "addressRegion": "Seoul",
+        "addressLocality": "Gangnam-gu",
+        "streetAddress": "Teheran-ro 152, Apt 3204",
+        "postalCode": "06236",
+        "addressOrder": "japanese"
+      },
+      "notes": "KRW has ISO 4217 exponent 0 — the amount field IS the face value. 1,800,000,000 KRW ≈ ₩1.8 billion (approx. USD 1.35M). Korean apartment ownership is full ownership (소유권) of the unit plus a proportional share of the common areas and land. This is distinct from jeonse tenants who hold a deposit right, not ownership."
+    }
+  ],
+  "assets": [
+    {
+      "id": "51000010-0000-4000-a000-000000000001",
+      "name": "Shinhan Bank Savings Account",
+      "category": "financial",
+      "estimatedValue": {
+        "amount": 450000000,
+        "currency": "KRW"
+      },
+      "notes": "₩450,000,000 held in a Shinhan Bank savings account. Korean bank accounts are frozen upon death — the Family Court must issue a certificate of inheritance (상속재산분할협의서) or court order before funds are released.",
+      "subcategory": "savings_account"
+    },
+    {
+      "id": "51000010-0000-4000-a000-000000000002",
+      "name": "Samsung Securities Investment Account",
+      "category": "financial",
+      "estimatedValue": {
+        "amount": 300000000,
+        "currency": "KRW"
+      },
+      "notes": "₩300,000,000 in Korean equities and ETFs held at Samsung Securities.",
+      "subcategory": "investment"
+    },
+    {
+      "id": "51000010-0000-4000-a000-000000000004",
+      "name": "Goryeo Celadon Vase (고려청자)",
+      "category": "collectibles",
+      "subcategory": "antique_ceramics",
+      "estimatedValue": {
+        "amount": 85000000,
+        "currency": "KRW"
+      },
+      "culturalDisposition": {
+        "sacredStatus": "secular",
+        "culturalSignificance": "family_heirloom",
+        "bequeathable": true,
+        "disposalRestrictions": [
+          {
+            "authority": "Cultural Heritage Administration (문화재청)",
+            "authorityType": "heritage_authority",
+            "requirement": "If classified as a Registered Cultural Heritage (등록문화재), sale or transfer must be notified to the Cultural Heritage Administration within 30 days. Export is prohibited without special permission.",
+            "jurisdiction": {
+              "country": "KR"
+            }
+          }
+        ],
+        "exportRestrictions": [
+          {
+            "jurisdiction": {
+              "country": "KR"
+            },
+            "restrictionType": "cultural_property",
+            "authority": "Cultural Heritage Administration (문화재청)",
+            "licenceRequired": true,
+            "notes": "Under the Cultural Heritage Protection Act (문화재보호법), Goryeo celadon may be classified as a cultural heritage item. Export of classified items is prohibited. Unclassified items of significant age require an export inspection."
+          }
+        ]
+      },
+      "notes": "Goryeo dynasty celadon vase (circa 12th century), passed down through the Kim family for generations. ₩85,000,000 valuation. Currently not formally classified as a Registered Cultural Heritage, but may be subject to inspection if export is attempted."
+    },
+    {
+      "id": "51000010-0000-4000-a000-000000000003",
+      "name": "Jeonse (전세) Deposit — Mapo-gu Apartment",
+      "category": "other",
+      "subcategory": "jeonse_deposit",
+      "estimatedValue": {
+        "amount": 500000000,
+        "currency": "KRW"
+      },
+      "notes": "Jeonse (전세) is a uniquely Korean housing deposit system where a tenant pays a large lump-sum deposit (typically 50-80% of the property value) instead of monthly rent. The landlord returns the full deposit at the end of the lease (usually 2 years). The jeonse deposit is a receivable asset of the estate — the executor must arrange return from the landlord upon lease termination. Under the Housing Lease Protection Act (주택임대차보호법), the deposit has priority-creditor protection if the lease was registered. Categorised as 'other' with subcategory 'jeonse_deposit' because no standard asset category covers this Korean-specific concept."
+    }
+  ],
+  "assetCollections": [],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "910a9e2d-a6a5-423f-98a5-67b45c091825",
+      "bequestType": "specific",
+      "beneficiaryId": "132f2665-9506-4484-a642-e8f7bf2b329b",
+      "description": "I give my apartment at Teheran-ro 152, Gangnam-gu, Seoul to my husband Park Min-ho.",
+      "notes": "Under Korean Civil Code Article 1009, the surviving spouse's intestate share is 1.5× a child's share. By specifically bequeathing the apartment, the testator ensures Min-ho receives the primary residence without the need for partition proceedings (상속재산분할)."
+    },
+    {
+      "id": "9bf6eac4-8922-49eb-9c3f-7d94cf4d05f7",
+      "bequestType": "residuary",
+      "beneficiaryId": "d18df9a3-3c76-4f7e-903c-00070b09d4ed",
+      "description": "I give the residue of my estate, including the jeonse deposit and all financial accounts, to my daughter Kim Ji-yeon."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "861684fa-2feb-4a56-bbb4-17f944e2dca7",
+      "personId": "132f2665-9506-4484-a642-e8f7bf2b329b",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-03-28T12:00:00Z",
+    "validatedBy": "INHERIT Examples",
+    "schemaVersion": "6.3.0"
+  },
+  "applicationState": {
+    "assetInterests": [],
+    "dealerInterests": [],
+    "events": [
+      {
+        "id": "450022a7-babe-41a8-a2fc-a80a863f0cb9",
+        "eventType": "death_registered",
+        "occurredAt": "2026-01-15T10:00:00+09:00",
+        "trigger": "institutional_action",
+        "description": "Death of Kim Soo-jin registered at the Gangnam-gu District Office (강남구청). Death certificate issued under the Act on the Registration of Family Relations (가족관계의 등록 등에 관한 법률).",
+        "affectedEntityIds": [
+          "9fcc7606-af1f-440b-8a62-5f61c55eb165"
+        ],
+        "affectedEntityTypes": [
+          "estate"
+        ],
+        "actor": {
+          "name": "Gangnam-gu District Office (강남구청)",
+          "type": "court",
+          "jurisdiction": {
+            "country": "KR"
+          }
+        }
+      },
+      {
+        "id": "ef4aeb6e-da16-4343-9af8-a58681a94b99",
+        "eventType": "x-inherit-account-frozen",
+        "occurredAt": "2026-01-17T09:30:00+09:00",
+        "trigger": "institutional_action",
+        "description": "Shinhan Bank savings account frozen upon notification of death. Release requires a certificate of inheritance (상속재산분할협의서) or Family Court order.",
+        "affectedEntityIds": [
+          "51000010-0000-4000-a000-000000000001"
+        ],
+        "affectedEntityTypes": [
+          "asset"
+        ],
+        "actor": {
+          "name": "Shinhan Bank — Gangnam Branch",
+          "type": "bank",
+          "jurisdiction": {
+            "country": "KR"
+          }
+        }
+      },
+      {
+        "id": "aa993e26-29f2-4333-807d-b9b765167a66",
+        "eventType": "x-inherit-tax-filing-deadline",
+        "occurredAt": "2026-07-15T23:59:59+09:00",
+        "trigger": "calendar_deadline",
+        "description": "Inheritance tax return due within 6 months of death. Deadline: 15 July 2026. Filing at the National Tax Service district office with jurisdiction over the deceased's last domicile.",
+        "affectedEntityIds": [
+          "9fcc7606-af1f-440b-8a62-5f61c55eb165"
+        ],
+        "affectedEntityTypes": [
+          "estate"
+        ],
+        "actor": {
+          "name": "National Tax Service — Gangnam District (국세청 강남세무서)",
+          "type": "tax_authority",
+          "jurisdiction": {
+            "country": "KR"
+          }
+        },
+        "metadata": {
+          "deadlineType": "inheritance_tax_return",
+          "monthsFromDeath": "6",
+          "statute": "Inheritance Tax and Gift Tax Act (상속세 및 증여세법) Article 67"
+        }
+      }
+    ],
+    "completeness": {
+      "score": 0,
+      "maxScore": 100,
+      "checklist": [],
+      "jurisdiction": "KR",
+      "estateStatus": "confirmed"
+    },
+    "taxPosition": {
+      "jurisdiction": "KR",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 0,
+        "currency": "KRW"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    },
+    "recommendedActions": []
+  }
+}

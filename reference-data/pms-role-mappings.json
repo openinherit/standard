@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/reference-data/pms-role-mappings.json",
+  "$comment": "Maps INHERIT person roles to Practice Management Software role taxonomies. Used by WillScan.ai and other export tools to create contacts with correct roles in target PMS systems.",
+  "title": "PMS Role Mappings",
+  "description": "Mapping of INHERIT person roles to role names in major legal Practice Management Software systems.",
+  "lastUpdated": "2026-04-01",
+  "systems": {
+    "clio": {
+      "name": "Clio (Manage & Grow)",
+      "apiVersion": "v4",
+      "documentation": "https://docs.developers.clio.com/",
+      "notes": "Clio uses preconfigured Wills & Estates custom field sets with up to 4 executor slots and 10 beneficiary slots. Contacts are created first, then linked to matters via relationships.",
+      "roleMappings": {
+        "executor": "Personal Representative / Executor",
+        "administrator": "Administrator",
+        "trustee": "Trustee",
+        "beneficiary": "Beneficiary",
+        "guardian": "Guardian",
+        "witness": "Witness",
+        "legal_professional": "Attorney",
+        "testator": "Client",
+        "companion": "Related Contact",
+        "proxy": "Power of Attorney",
+        "financial_adviser": "Related Contact",
+        "accountant": "Related Contact",
+        "funeral_provider": "Related Contact"
+      }
+    },
+    "actionstep": {
+      "name": "Actionstep",
+      "apiVersion": "REST",
+      "documentation": "https://docs.actionstep.com/",
+      "notes": "Actionstep uses typed Participants linked to Actions (matters). Each participant type can have its own custom data fields. Best data model fit for INHERIT's people-with-roles concept. $500 API setup fee.",
+      "roleMappings": {
+        "executor": "Executor",
+        "administrator": "Administrator",
+        "trustee": "Trustee",
+        "beneficiary": "Beneficiary",
+        "guardian": "Guardian",
+        "witness": "Witness",
+        "legal_professional": "Solicitor",
+        "testator": "Client",
+        "companion": "Spouse / Partner",
+        "proxy": "Attorney (Power of)",
+        "financial_adviser": "Financial Adviser",
+        "accountant": "Accountant",
+        "funeral_provider": "Service Provider"
+      }
+    },
+    "leap": {
+      "name": "LEAP Legal Software",
+      "apiVersion": "REST (gated — register at leap.build)",
+      "documentation": "https://leap.build/",
+      "notes": "LEAP uses Cards (contacts) linked to Matters via participant roles. Pre-built matter types for wills and probate. API access requires developer registration. Zapier integration available.",
+      "roleMappings": {
+        "executor": "Executor",
+        "administrator": "Administrator",
+        "trustee": "Trustee",
+        "beneficiary": "Beneficiary",
+        "guardian": "Guardian",
+        "witness": "Witness",
+        "legal_professional": "Solicitor",
+        "testator": "Client",
+        "companion": "Related Party",
+        "proxy": "Attorney",
+        "financial_adviser": "Related Party",
+        "accountant": "Related Party",
+        "funeral_provider": "Related Party"
+      }
+    },
+    "mycase": {
+      "name": "MyCase",
+      "apiVersion": "REST (Advanced tier only)",
+      "documentation": "https://mycaseapi.stoplight.io/",
+      "notes": "MyCase uses Contacts and Companies linked to Cases. Estate-specific data captured via DecisionVault integration or custom fields. Custom fields must be pre-created before import.",
+      "roleMappings": {
+        "executor": "Executor",
+        "administrator": "Administrator",
+        "trustee": "Trustee",
+        "beneficiary": "Beneficiary",
+        "guardian": "Guardian",
+        "witness": "Witness",
+        "legal_professional": "Attorney",
+        "testator": "Client",
+        "companion": "Related Contact",
+        "proxy": "Power of Attorney",
+        "financial_adviser": "Related Contact",
+        "accountant": "Related Contact",
+        "funeral_provider": "Related Contact"
+      }
+    },
+    "practicepanther": {
+      "name": "PracticePanther",
+      "apiVersion": "KISS API (gated — request via support)",
+      "documentation": "https://app.practicepanther.com/content/apidocs/index.html",
+      "notes": "PracticePanther uses Accounts (contacts) linked to Matters. No pre-built estate planning field sets — custom fields and custom contact types must be created. Zapier is the primary integration route for most firms.",
+      "roleMappings": {
+        "executor": "Executor",
+        "administrator": "Administrator",
+        "trustee": "Trustee",
+        "beneficiary": "Beneficiary",
+        "guardian": "Guardian",
+        "witness": "Witness",
+        "legal_professional": "Attorney",
+        "testator": "Client",
+        "companion": "Related Contact",
+        "proxy": "Power of Attorney",
+        "financial_adviser": "Related Contact",
+        "accountant": "Related Contact",
+        "funeral_provider": "Related Contact"
+      }
+    }
+  }
+}

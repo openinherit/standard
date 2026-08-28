@@ -1,0 +1,411 @@
+{
+  "_disclaimer": "This file defines the multi-agent task protocol for INHERIT. Agent implementations should consume these definitions to understand their inputs, outputs, and applicable platforms. This is reference data — the schema files in v1/ are the source of truth for field definitions.",
+  "platformAccess": {
+    "amazon": {
+      "displayName": "Amazon",
+      "accessMethod": "api",
+      "apiDocUrl": "https://webservices.amazon.com/paapi5/documentation/",
+      "authType": "api_key",
+      "rateLimitNotes": "1 request/second initially, scales with revenue generation. Requires Associates account with qualifying sales",
+      "tosPermitsAutomation": true,
+      "notes": "Product Advertising API 5.0. Requires active Associates account with recent qualifying purchases to maintain access"
+    },
+    "anthropic_claude": {
+      "displayName": "Anthropic Claude",
+      "accessMethod": "api",
+      "apiDocUrl": "https://docs.anthropic.com/en/api/messages",
+      "authType": "api_key",
+      "rateLimitNotes": "Tier-based rate limits; default 60 requests/minute, higher tiers available",
+      "tosPermitsAutomation": true,
+      "notes": "Messages API. Used for valuation synthesis, dealer recommendations, and general reasoning tasks"
+    },
+    "anthropic_claude_vision": {
+      "displayName": "Anthropic Claude (Vision)",
+      "accessMethod": "api",
+      "apiDocUrl": "https://docs.anthropic.com/en/docs/build-with-claude/vision",
+      "authType": "api_key",
+      "rateLimitNotes": "Same rate limits as Messages API; image tokens count towards context window",
+      "tosPermitsAutomation": true,
+      "notes": "Same Messages API with image content blocks. Used for item identification from photographs"
+    },
+    "art_loss_register": {
+      "displayName": "Art Loss Register",
+      "accessMethod": "manual_only",
+      "apiDocUrl": null,
+      "authType": null,
+      "rateLimitNotes": "Paid per-search service; no automated access available",
+      "tosPermitsAutomation": false,
+      "notes": "World's largest private database of stolen art. Searches must be submitted manually or via their due diligence service. Fee per item searched"
+    },
+    "assay_office_hallmark_db": {
+      "displayName": "Assay Office Hallmark Database",
+      "accessMethod": "manual_only",
+      "apiDocUrl": null,
+      "authType": null,
+      "rateLimitNotes": "No public API; manual lookup only",
+      "tosPermitsAutomation": false,
+      "notes": "UK assay offices (Birmingham, Edinburgh, London, Sheffield) maintain hallmark records. Verification requires manual submission or in-person inspection"
+    },
+    "catawiki": {
+      "displayName": "Catawiki",
+      "accessMethod": "scrape_only",
+      "apiDocUrl": null,
+      "authType": null,
+      "rateLimitNotes": "No public API — web scraping required",
+      "tosPermitsAutomation": false,
+      "notes": "ToS prohibits scraping. Consider as manual-only data source. European auction platform with expert-curated lots"
+    },
+    "dealer_directory_api": {
+      "displayName": "Dealer Directory",
+      "accessMethod": "internal",
+      "apiDocUrl": null,
+      "authType": null,
+      "rateLimitNotes": "Internal service — no external rate limits",
+      "tosPermitsAutomation": true,
+      "notes": "Internal/custom implementation. Curated directory of specialist dealers, auction houses, and brokers by category and region"
+    },
+    "dvla_vehicle_check": {
+      "displayName": "DVLA Vehicle Enquiry Service",
+      "accessMethod": "api",
+      "apiDocUrl": "https://developer-portal.driver-vehicle-licensing.api.gov.uk/apis/vehicle-enquiry-service/vehicle-enquiry-service-description.html",
+      "authType": "api_key",
+      "rateLimitNotes": "No published rate limit for approved users; must register for API key via DVLA developer portal",
+      "tosPermitsAutomation": true,
+      "notes": "UK Government VES API. Returns tax status, MOT status, CO2 emissions, engine size, colour, and year of manufacture. Free to use"
+    },
+    "ebay": {
+      "displayName": "eBay",
+      "accessMethod": "api",
+      "apiDocUrl": "https://developer.ebay.com/api-docs/buy/browse/overview.html",
+      "authType": "oauth2",
+      "rateLimitNotes": "5,000 calls/day on basic tier, 1.5M/day on compatible application",
+      "tosPermitsAutomation": true,
+      "notes": "Browse API for searching active and sold listings. Finding API for product matching. Marketplace Insights API for pricing trends"
+    },
+    "google_search": {
+      "displayName": "Google Custom Search",
+      "accessMethod": "api",
+      "apiDocUrl": "https://developers.google.com/custom-search/v1/overview",
+      "authType": "api_key",
+      "rateLimitNotes": "100 queries/day free; 10,000 queries/day at $5 per 1,000 queries",
+      "tosPermitsAutomation": true,
+      "notes": "Custom Search JSON API. Requires a Programmable Search Engine ID. Used for finding specialist dealers and auction houses"
+    },
+    "google_vision": {
+      "displayName": "Google Cloud Vision",
+      "accessMethod": "api",
+      "apiDocUrl": "https://cloud.google.com/vision/docs",
+      "authType": "api_key",
+      "rateLimitNotes": "1,800 requests/minute; first 1,000 units/month free, then $1.50 per 1,000",
+      "tosPermitsAutomation": true,
+      "notes": "Cloud Vision API. Label detection, object localisation, text detection, logo detection, and web entity detection. Useful for item identification"
+    },
+    "immobilise_uk": {
+      "displayName": "Immobilise UK",
+      "accessMethod": "api",
+      "apiDocUrl": "https://www.immobilise.com/help/api",
+      "authType": "api_key",
+      "rateLimitNotes": "Rate limits apply per account; contact Immobilise for commercial API access",
+      "tosPermitsAutomation": true,
+      "notes": "UK national property register. Used by police to check ownership of recovered items. API access available for commercial integrations"
+    },
+    "internal_valuation_model": {
+      "displayName": "Internal Valuation Model",
+      "accessMethod": "internal",
+      "apiDocUrl": null,
+      "authType": null,
+      "rateLimitNotes": "Internal service — no external rate limits",
+      "tosPermitsAutomation": true,
+      "notes": "Implementation's own valuation model. Combines comparable data, condition factors, and market trends to produce value estimates"
+    },
+    "interpol_stolen_works": {
+      "displayName": "INTERPOL Stolen Works of Art Database",
+      "accessMethod": "api",
+      "apiDocUrl": "https://www.interpol.int/How-we-work/Databases/Stolen-Works-of-Art-Database",
+      "authType": "none",
+      "rateLimitNotes": "Public database; no published rate limits but reasonable use expected",
+      "tosPermitsAutomation": "unknown",
+      "notes": "Public database of stolen works of art. Searchable by object type, period, and description. No authentication required for public searches"
+    },
+    "isbn_registry": {
+      "displayName": "ISBN Registry / Open Library",
+      "accessMethod": "api",
+      "apiDocUrl": "https://openlibrary.org/developers/api",
+      "authType": "none",
+      "rateLimitNotes": "Open Library: no strict limit but requests should be throttled to 1/second. ISBNdb: tiered plans from 1,000 to unlimited requests/day",
+      "tosPermitsAutomation": true,
+      "notes": "Open Library API is free and open. ISBNdb (isbndb.com) offers a paid API with richer metadata. Both can be used for book verification and valuation"
+    },
+    "liveauctioneers": {
+      "displayName": "LiveAuctioneers",
+      "accessMethod": "scrape_only",
+      "apiDocUrl": null,
+      "authType": null,
+      "rateLimitNotes": "No public API — web scraping required",
+      "tosPermitsAutomation": false,
+      "notes": "ToS prohibits automated data collection. Extensive archive of auction results. Consider as manual-only or explore partnership API access"
+    },
+    "openai_gpt4": {
+      "displayName": "OpenAI GPT-4",
+      "accessMethod": "api",
+      "apiDocUrl": "https://platform.openai.com/docs/api-reference/chat/create",
+      "authType": "api_key",
+      "rateLimitNotes": "Tier-based; Tier 1: 500 requests/minute, scales with usage and spend",
+      "tosPermitsAutomation": true,
+      "notes": "Chat Completions API. Used as an alternative to Claude for valuation synthesis and reasoning tasks"
+    },
+    "openai_gpt4_vision": {
+      "displayName": "OpenAI GPT-4 (Vision)",
+      "accessMethod": "api",
+      "apiDocUrl": "https://platform.openai.com/docs/implement/vision",
+      "authType": "api_key",
+      "rateLimitNotes": "Same rate limits as Chat Completions API; image tokens count towards context",
+      "tosPermitsAutomation": true,
+      "notes": "Same Chat Completions API with image inputs. Used for item identification from photographs as an alternative to Claude Vision"
+    },
+    "specialist_dealers": {
+      "displayName": "Specialist Dealers",
+      "accessMethod": "manual_only",
+      "apiDocUrl": null,
+      "authType": null,
+      "rateLimitNotes": "Human contact required — no automated access",
+      "tosPermitsAutomation": false,
+      "notes": "Direct contact with specialist dealers for niche categories. Requires phone/email outreach. Results feed back into comparable data"
+    },
+    "worthpoint": {
+      "displayName": "WorthPoint",
+      "accessMethod": "api",
+      "apiDocUrl": "https://www.worthpoint.com/api",
+      "authType": "api_key",
+      "rateLimitNotes": "Rate limits depend on subscription tier; contact WorthPoint for commercial API access",
+      "tosPermitsAutomation": true,
+      "notes": "Historical sold-price database covering 700M+ items from auctions, antiques, and collectibles markets. Valuable for comparable pricing"
+    }
+  },
+  "tasks": {
+    "find_comparables": {
+      "description": "Search marketplaces for items comparable to the input asset. Uses brand, model, category, subcategory, and comparableSearchProfile to construct searches. Returns a ranked list of comparable listings with prices, condition notes, and source URLs.",
+      "inputFields": [
+        "id",
+        "name",
+        "brand",
+        "model",
+        "category",
+        "subcategory",
+        "condition",
+        "searchTerms",
+        "comparableSearchProfile",
+        "images"
+      ],
+      "outputFields": [
+        "comparables",
+        "searchTerms",
+        "comparableSearchProfile.lastSearchedAt",
+        "comparableSearchProfile.searchCount"
+      ],
+      "applicablePlatforms": [
+        "ebay",
+        "catawiki",
+        "amazon",
+        "worthpoint",
+        "liveauctioneers",
+        "specialist_dealers"
+      ],
+      "applicableCategories": [
+        "collectibles",
+        "jewellery",
+        "art",
+        "antiques",
+        "vehicles",
+        "electronics",
+        "firearms_sporting",
+        "watches_clocks",
+        "wine_spirits",
+        "coins_medals"
+      ]
+    },
+    "estimate_value": {
+      "description": "Produce an AI-generated valuation for the asset based on comparable listings previously gathered. Synthesises comparables, condition, provenance, and market trends into a low/mid/high estimate range with a recommended insurance value.",
+      "inputFields": [
+        "id",
+        "name",
+        "brand",
+        "model",
+        "category",
+        "subcategory",
+        "condition",
+        "provenance",
+        "comparables",
+        "comparableSearchProfile",
+        "valuations",
+        "images"
+      ],
+      "outputFields": [
+        "valuations",
+        "valuations[].estimatedValue",
+        "valuations[].valuationRangeLow",
+        "valuations[].valuationRangeHigh",
+        "valuations[].valuationBasis",
+        "valuations[].confidence",
+        "valuations[].valuedAt",
+        "valuations[].valuedBy",
+        "valuations[].notes"
+      ],
+      "applicablePlatforms": [
+        "anthropic_claude",
+        "openai_gpt4",
+        "internal_valuation_model"
+      ],
+      "applicableCategories": [
+        "collectibles",
+        "jewellery",
+        "art",
+        "antiques",
+        "vehicles",
+        "electronics",
+        "firearms_sporting",
+        "watches_clocks",
+        "wine_spirits",
+        "coins_medals",
+        "property",
+        "financial_assets"
+      ]
+    },
+    "identify_item": {
+      "description": "Identify an item from one or more photographs using vision AI. Determines category, subcategory, brand, model, and key attributes. Populates or confirms existing metadata fields. Used when an asset record is sparse or when photos alone are provided.",
+      "inputFields": [
+        "id",
+        "images",
+        "name",
+        "category",
+        "subcategory",
+        "brand",
+        "model",
+        "description"
+      ],
+      "outputFields": [
+        "name",
+        "category",
+        "subcategory",
+        "brand",
+        "model",
+        "description",
+        "attributes",
+        "condition",
+        "searchTerms",
+        "identificationConfidence"
+      ],
+      "applicablePlatforms": [
+        "anthropic_claude_vision",
+        "google_vision",
+        "openai_gpt4_vision"
+      ],
+      "applicableCategories": [
+        "collectibles",
+        "jewellery",
+        "art",
+        "antiques",
+        "vehicles",
+        "electronics",
+        "firearms_sporting",
+        "watches_clocks",
+        "wine_spirits",
+        "coins_medals",
+        "furniture",
+        "clothing_accessories"
+      ]
+    },
+    "find_dealers": {
+      "description": "Identify specialist dealers, auction houses, or brokers appropriate for the asset category and subcategory. Returns a list of recommended contacts with name, location, speciality, and contact details where available.",
+      "inputFields": [
+        "id",
+        "name",
+        "category",
+        "subcategory",
+        "brand",
+        "model",
+        "attributes",
+        "location"
+      ],
+      "outputFields": [
+        "recommendedDealers",
+        "recommendedDealers[].name",
+        "recommendedDealers[].type",
+        "recommendedDealers[].speciality",
+        "recommendedDealers[].location",
+        "recommendedDealers[].website",
+        "recommendedDealers[].contactEmail",
+        "recommendedDealers[].notes",
+        "recommendedDealers[].confidence"
+      ],
+      "applicablePlatforms": [
+        "anthropic_claude",
+        "google_search",
+        "dealer_directory_api"
+      ],
+      "applicableCategories": [
+        "collectibles",
+        "jewellery",
+        "art",
+        "antiques",
+        "vehicles",
+        "firearms_sporting",
+        "watches_clocks",
+        "wine_spirits",
+        "coins_medals",
+        "furniture"
+      ]
+    },
+    "verify_authenticity": {
+      "description": "Check identifiers (serial numbers, hallmarks, VINs, ISBNs, certificate numbers) against known databases and registries to verify authenticity and detect stolen or counterfeit items. Returns a verification status and supporting evidence.",
+      "inputFields": [
+        "id",
+        "name",
+        "category",
+        "subcategory",
+        "brand",
+        "model",
+        "serialNumber",
+        "hallmarks",
+        "vin",
+        "isbn",
+        "certificateNumber",
+        "provenance",
+        "images",
+        "attributes"
+      ],
+      "outputFields": [
+        "authenticityVerification",
+        "authenticityVerification.status",
+        "authenticityVerification.verifiedAt",
+        "authenticityVerification.verifiedBy",
+        "authenticityVerification.registriesChecked",
+        "authenticityVerification.matchFound",
+        "authenticityVerification.stolenFlagRaised",
+        "authenticityVerification.notes",
+        "authenticityVerification.confidence",
+        "authenticityVerification.evidenceUrls"
+      ],
+      "applicablePlatforms": [
+        "art_loss_register",
+        "dvla_vehicle_check",
+        "assay_office_hallmark_db",
+        "interpol_stolen_works",
+        "isbn_registry",
+        "immobilise_uk",
+        "anthropic_claude"
+      ],
+      "applicableCategories": [
+        "jewellery",
+        "art",
+        "antiques",
+        "vehicles",
+        "firearms_sporting",
+        "watches_clocks",
+        "coins_medals",
+        "collectibles",
+        "wine_spirits"
+      ]
+    }
+  }
+}

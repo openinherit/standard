@@ -1,0 +1,413 @@
+{
+  "target": "../../../v3/lifetime-transfer.json",
+  "tests": [
+    {
+      "description": "valid minimal lifetime transfer (required fields only)",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "2020-03-15",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "gift"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid fully populated lifetime transfer — UK PET with taper relief",
+      "data": {
+        "id": "e5f6a7b8-c9d0-1234-e567-89abcdef0123",
+        "transferDate": "2021-04-06",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "doneePersonIds": [
+          "22222222-0000-0000-0000-000000000002",
+          "33333333-0000-0000-0000-000000000003"
+        ],
+        "transferType": "potentially_exempt_transfer",
+        "value": {
+          "amount": 15000000,
+          "currency": "GBP"
+        },
+        "exemptionsClaimed": [
+          {
+            "type": "annual_exemption",
+            "amount": {
+              "amount": 300000,
+              "currency": "GBP"
+            },
+            "notes": "Annual exemption for 2021/22 tax year"
+          }
+        ],
+        "taxReturnFiled": false,
+        "lookbackRelevant": true,
+        "lookbackYearsRemaining": 3.5,
+        "taperReliefPercentage": 20,
+        "notes": "PET made 4 years before death — taper relief reduces IHT by 20%."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing transferDate",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "gift"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — transferType not in enum",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "2020-03-15",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "donation"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing donorPersonId",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "2020-03-15",
+        "transferType": "gift"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — lifetime transfer with 7-year lookback period (UK IHT)",
+      "data": {
+        "id": "b8c9d0e1-0000-4000-a000-000000000300",
+        "transferType": "gift",
+        "transferDate": "2022-06-15",
+        "lookbackPeriod": {
+          "lookbackYears": 7,
+          "taperRelief": {
+            "yearsElapsed": 4,
+            "reliefPercentage": 0.4
+          }
+        },
+        "donorPersonId": "c9d0e1f2-0000-4000-a000-000000000300",
+        "value": {
+          "amount": 5000000,
+          "currency": "GBP"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — PET (potentially exempt transfer) gift to child",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000700",
+        "donorPersonId": "b2c3d4e5-0000-4000-a000-000000000700",
+        "transferType": "gift",
+        "transferDate": "2020-06-15",
+        "value": {
+          "amount": 5000000,
+          "currency": "GBP"
+        },
+        "doneePersonIds": [
+          "c3d4e5f6-0000-4000-a000-000000000700"
+        ],
+        "lookbackRelevant": true,
+        "lookbackYearsRemaining": 1,
+        "taperReliefPercentage": 0.4
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — transfer to charity (exempt)",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000701",
+        "donorPersonId": "b2c3d4e5-0000-4000-a000-000000000701",
+        "transferType": "gift",
+        "transferDate": "2023-12-25",
+        "value": {
+          "amount": 10000000,
+          "currency": "GBP"
+        },
+        "doneeOrganisationIds": [
+          "d4e5f6a7-0000-4000-a000-000000000701"
+        ],
+        "exemptionsClaimed": [
+          {
+            "type": "charity_exemption"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — transfer with Japanese 3-year lookback",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000702",
+        "donorPersonId": "b2c3d4e5-0000-4000-a000-000000000702",
+        "transferType": "gift",
+        "transferDate": "2024-01-01",
+        "value": {
+          "amount": 5000000,
+          "currency": "JPY",
+          "exponent": 0
+        },
+        "jurisdiction": {
+          "country": "JP"
+        },
+        "lookbackPeriod": {
+          "lookbackYears": 3
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing id (required field)",
+      "data": {
+        "transferDate": "2020-03-15",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "gift"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing transferType (required field)",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "2020-03-15",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — transferDate as number instead of string",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": 20200315,
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "gift"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — donorPersonId as number instead of string",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "2020-03-15",
+        "donorPersonId": 12345,
+        "transferType": "gift"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a valid UUID format",
+      "data": {
+        "id": "not-a-uuid",
+        "transferDate": "2020-03-15",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "gift"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — transferDate is not a valid date format",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "15/03/2020",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "gift"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — donorPersonId is not a valid UUID format",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "2020-03-15",
+        "donorPersonId": "not-a-valid-uuid",
+        "transferType": "gift"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — taperReliefPercentage exceeds maximum (100)",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "2020-03-15",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "gift",
+        "taperReliefPercentage": 101
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — taperReliefPercentage below minimum (0)",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "2020-03-15",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "gift",
+        "taperReliefPercentage": -1
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — taperReliefPercentage at boundary maximum (100)",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "2020-03-15",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "gift",
+        "taperReliefPercentage": 100
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — taperReliefPercentage at boundary minimum (0)",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "2020-03-15",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "gift",
+        "taperReliefPercentage": 0
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — unknown property at root level",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "2020-03-15",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "gift",
+        "unknownField": "should not be here"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — chargeable_lifetime_transfer with small_gift and marriage_gift exemptions",
+      "data": {
+        "id": "bb000001-0000-4000-b000-000000000001",
+        "transferDate": "2023-04-01",
+        "donorPersonId": "aa000001-0000-4000-a000-000000000001",
+        "transferType": "chargeable_lifetime_transfer",
+        "exemptionsClaimed": [
+          { "type": "small_gift" },
+          { "type": "marriage_gift" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — gift_with_reservation with normal_expenditure and business_property_relief",
+      "data": {
+        "id": "bb000002-0000-4000-b000-000000000002",
+        "transferDate": "2022-06-15",
+        "donorPersonId": "aa000001-0000-4000-a000-000000000001",
+        "transferType": "gift_with_reservation",
+        "exemptionsClaimed": [
+          { "type": "normal_expenditure" },
+          { "type": "business_property_relief" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — failed_pet with agricultural_property_relief and spouse_exemption",
+      "data": {
+        "id": "bb000003-0000-4000-b000-000000000003",
+        "transferDate": "2019-03-20",
+        "donorPersonId": "aa000001-0000-4000-a000-000000000001",
+        "transferType": "failed_pet",
+        "exemptionsClaimed": [
+          { "type": "agricultural_property_relief" },
+          { "type": "spouse_exemption" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — settlement with taper_relief exemption",
+      "data": {
+        "id": "bb000004-0000-4000-b000-000000000004",
+        "transferDate": "2021-09-10",
+        "donorPersonId": "aa000001-0000-4000-a000-000000000001",
+        "transferType": "settlement",
+        "exemptionsClaimed": [
+          { "type": "taper_relief" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — advancement with annual_exclusion and lifetime_exemption (US)",
+      "data": {
+        "id": "bb000005-0000-4000-b000-000000000005",
+        "transferDate": "2024-01-15",
+        "donorPersonId": "aa000001-0000-4000-a000-000000000001",
+        "transferType": "advancement",
+        "exemptionsClaimed": [
+          { "type": "annual_exclusion" },
+          { "type": "lifetime_exemption" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — loan_forgiveness with gift_splitting exemption",
+      "data": {
+        "id": "bb000006-0000-4000-b000-000000000006",
+        "transferDate": "2023-07-04",
+        "donorPersonId": "aa000001-0000-4000-a000-000000000001",
+        "transferType": "loan_forgiveness",
+        "exemptionsClaimed": [
+          { "type": "gift_splitting" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — sale_at_undervalue with other exemption",
+      "data": {
+        "id": "bb000007-0000-4000-b000-000000000007",
+        "transferDate": "2022-11-30",
+        "donorPersonId": "aa000001-0000-4000-a000-000000000001",
+        "transferType": "sale_at_undervalue",
+        "exemptionsClaimed": [
+          { "type": "other", "notes": "Custom jurisdictional relief applied" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — gift_of_shares transferType",
+      "data": {
+        "id": "bb000008-0000-4000-b000-000000000008",
+        "transferDate": "2023-12-01",
+        "donorPersonId": "aa000001-0000-4000-a000-000000000001",
+        "transferType": "gift_of_shares"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — other transferType",
+      "data": {
+        "id": "bb000009-0000-4000-b000-000000000009",
+        "transferDate": "2024-02-14",
+        "donorPersonId": "aa000001-0000-4000-a000-000000000001",
+        "transferType": "other"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — exemptionsClaimed contains invalid type enum",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-d456-789abcdef012",
+        "transferDate": "2020-03-15",
+        "donorPersonId": "11111111-0000-0000-0000-000000000001",
+        "transferType": "gift",
+        "exemptionsClaimed": [
+          {
+            "type": "inheritance_tax_relief"
+          }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

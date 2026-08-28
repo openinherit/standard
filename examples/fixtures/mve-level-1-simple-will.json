@@ -1,0 +1,105 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-04-07T12:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "extensions": [
+    {
+      "id": "uk-england-wales",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json",
+      "scope": [
+        "estate"
+      ],
+      "dataBlock": "x-inherit-uk-england-wales"
+    }
+  ],
+  "estate": {
+    "id": "c3d4e5f6-0000-4000-8000-000000000001",
+    "testatorPersonId": "d4e5f6a7-0000-4000-8000-000000000001",
+    "status": "planning",
+    "createdAt": "2026-04-07T12:00:00Z",
+    "lastModifiedAt": "2026-04-07T12:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    }
+  },
+  "people": [
+    {
+      "id": "d4e5f6a7-0000-4000-8000-000000000001",
+      "givenName": "Jane",
+      "familyName": "Thompson",
+      "dateOfBirth": "1968-03-14",
+      "roles": [
+        "testator"
+      ]
+    },
+    {
+      "id": "e5f6a7b8-0000-4000-8000-000000000001",
+      "givenName": "David",
+      "familyName": "Thompson",
+      "dateOfBirth": "1965-11-02",
+      "roles": [
+        "executor"
+      ]
+    },
+    {
+      "id": "f6a7b8c9-0000-4000-8000-000000000001",
+      "givenName": "Sophie",
+      "familyName": "Thompson",
+      "dateOfBirth": "1994-06-20",
+      "roles": [
+        "beneficiary"
+      ]
+    }
+  ],
+  "kinships": [],
+  "relationships": [],
+  "properties": [],
+  "assets": [
+    {
+      "id": "a7b8c9d0-0000-4000-8000-000000000001",
+      "name": "Nationwide FlexDirect Savings Account",
+      "category": "financial",
+      "subcategory": "savings_account",
+      "estimatedValue": {
+        "amount": 2450000,
+        "currency": "GBP"
+      }
+    }
+  ],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "b8c9d0e1-0000-4000-8000-000000000001",
+      "bequestType": "specific",
+      "beneficiaryId": "f6a7b8c9-0000-4000-8000-000000000001",
+      "description": "I give my Nationwide savings account to my daughter Sophie Thompson absolutely."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "c9d0e1f2-0000-4000-8000-000000000001",
+      "personId": "e5f6a7b8-0000-4000-8000-000000000001",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": []
+}

@@ -1,0 +1,276 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "1.9.0",
+  "exportedAt": "2026-04-07T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Conformance Kit",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "d3a2b3c4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "testatorPersonId": "a3000001-0000-4000-a000-000000000001",
+    "status": "confirmed",
+    "defaultSuccessionRegime": {
+      "governingLaw": {
+        "jurisdiction": {
+          "country": "US",
+          "subdivision": "US-CA",
+          "legalSystems": ["common_law"],
+          "name": "California"
+        },
+        "legalTradition": "common_law",
+        "statute": "California Probate Code"
+      },
+      "determinedBy": "domicile",
+      "binding": true,
+      "notes": "California is a community property state."
+    },
+    "religiousConsideration": {
+      "tradition": "civil_law",
+      "binding": false,
+      "notes": "The family observes Japanese Buddhist traditions."
+    },
+    "notes": "US citizen of Japanese heritage, domiciled in California. Required fields stripped from extension subobjects to test extension validation boundary.",
+    "createdAt": "2026-03-01T00:00:00Z",
+    "lastModifiedAt": "2026-04-07T00:00:00Z",
+    "domicile": {
+      "country": "US",
+      "subdivision": "US-CA",
+      "legalSystems": ["common_law"],
+      "name": "California"
+    }
+  },
+  "people": [
+    {
+      "id": "a3000001-0000-4000-a000-000000000001",
+      "givenName": "Kenji",
+      "familyName": "Tanaka",
+      "dateOfBirth": "1960-04-15",
+      "gender": "male",
+      "roles": ["testator"],
+      "phoneticReading": {
+        "givenName": "けんじ",
+        "familyName": "たなか",
+        "fullName": "たなか けんじ"
+      },
+      "domicile": {
+        "country": "US",
+        "subdivision": "US-CA",
+        "name": "California"
+      },
+      "contact": {
+        "address": {
+          "streetAddress": "2847 Cherry Blossom Lane",
+          "addressLocality": "San Jose",
+          "addressRegion": "California",
+          "postalCode": "95125",
+          "addressCountry": "US"
+        }
+      }
+    },
+    {
+      "id": "a3000001-0000-4000-a000-000000000002",
+      "givenName": "Yuki",
+      "familyName": "Tanaka",
+      "dateOfBirth": "1963-10-28",
+      "gender": "female",
+      "roles": ["beneficiary", "executor"]
+    },
+    {
+      "id": "a3000001-0000-4000-a000-000000000003",
+      "givenName": "Hana",
+      "familyName": "Tanaka",
+      "dateOfBirth": "1992-06-12",
+      "gender": "female",
+      "roles": ["beneficiary"],
+      "phoneticReading": {
+        "givenName": "はな",
+        "familyName": "たなか",
+        "fullName": "たなか はな"
+      }
+    }
+  ],
+  "kinships": [
+    {
+      "id": "b3000001-0000-4000-a000-000000000001",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "a3000001-0000-4000-a000-000000000001",
+      "toPersonId": "a3000001-0000-4000-a000-000000000003"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "c3000001-0000-4000-a000-000000000001",
+      "type": "marriage_civil",
+      "partners": [
+        {
+          "personId": "a3000001-0000-4000-a000-000000000001",
+          "ordinal": 1
+        },
+        {
+          "personId": "a3000001-0000-4000-a000-000000000002",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "US",
+        "subdivision": "US-CA"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "d3000001-0000-4000-a000-000000000001",
+      "name": "2847 Cherry Blossom Lane, San Jose, California",
+      "propertyType": "detached",
+      "tenureType": "ownership",
+      "isPrimaryResidence": true,
+      "ownershipType": "joint_tenants",
+      "estimatedValue": {
+        "amount": 125000000,
+        "currency": "USD"
+      },
+      "address": {
+        "streetAddress": "2847 Cherry Blossom Lane",
+        "addressLocality": "San Jose",
+        "addressRegion": "California",
+        "postalCode": "95125",
+        "addressCountry": "US"
+      }
+    }
+  ],
+  "assets": [
+    {
+      "id": "e3000001-0000-4000-a000-000000000001",
+      "name": "Fidelity Investment Account",
+      "category": "financial",
+      "subcategory": "investment_account",
+      "estimatedValue": {
+        "amount": 45000000,
+        "currency": "USD"
+      }
+    }
+  ],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "f3000001-0000-4000-a000-000000000001",
+      "bequestType": "specific",
+      "beneficiaryId": "a3000001-0000-4000-a000-000000000002",
+      "description": "I give my interest in the family home to my wife Yuki Tanaka."
+    },
+    {
+      "id": "f3000001-0000-4000-a000-000000000002",
+      "bequestType": "residuary",
+      "beneficiaryId": "a3000001-0000-4000-a000-000000000002",
+      "description": "I give one-half of the residue of my separate property to my wife Yuki Tanaka."
+    },
+    {
+      "id": "f3000001-0000-4000-a000-000000000003",
+      "bequestType": "residuary",
+      "beneficiaryId": "a3000001-0000-4000-a000-000000000003",
+      "description": "I give one-half of the residue of my separate property to my daughter Hana Tanaka."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "63000001-0000-4000-a000-000000000001",
+      "personId": "a3000001-0000-4000-a000-000000000002",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [
+    {
+      "id": "us-estate",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/us-estate/us-estate.json",
+      "scope": ["estate"],
+      "dataBlock": "x-inherit-us-estate"
+    },
+    {
+      "id": "japan",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/japan/japan.json",
+      "scope": ["estate"],
+      "dataBlock": "x-inherit-japan"
+    }
+  ],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_2",
+    "validatedAt": "2026-04-07T12:00:00Z",
+    "validatedBy": "INHERIT Conformance Kit",
+    "schemaVersion": "1.9.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 0,
+      "maxScore": 100,
+      "checklist": [],
+      "jurisdiction": "US",
+      "estateStatus": "confirmed"
+    },
+    "taxPosition": {
+      "jurisdiction": "US",
+      "calculatedAt": "2026-04-07T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 170000000,
+        "currency": "USD"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax adviser."
+    },
+    "recommendedActions": []
+  },
+  "x-inherit-us-estate": {
+    "state": "US-CA",
+    "propertyRegime": "community_property",
+    "homesteadExemptions": [
+      {
+        "exemptionAmount": {
+          "amount": 30000000,
+          "currency": "USD"
+        },
+        "constitutional": false,
+        "notes": "propertyId intentionally omitted — required field missing from homesteadExemptions item."
+      }
+    ],
+    "perStirpesVariant": "modern_per_stirpes",
+    "noContestEnforceable": true,
+    "rufadaaAdopted": true,
+    "notes": "homesteadExemptions item is missing the required 'propertyId' field."
+  },
+  "x-inherit-japan": {
+    "kosekiRecords": [
+      {
+        "honseki": "東京都新宿区",
+        "kosekiHead": "田中健二",
+        "kosekiReference": "Tokyo Shinjuku Ward Family Register No. 12345",
+        "registrationType": "birth"
+      }
+    ],
+    "iryubunClaims": [
+      {
+        "relationship": "spouse",
+        "reservedFraction": "1/4",
+        "claimFiled": false,
+        "claimOutcome": "waived"
+      }
+    ],
+    "saishiSuccessor": "a3000001-0000-4000-a000-000000000003",
+    "localWillFormality": "kosei_shosho",
+    "inkanVerified": true,
+    "notes": "kosekiRecords[0] and iryubunClaims[0] are each missing their required 'personId' field."
+  }
+}

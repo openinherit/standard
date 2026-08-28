@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: "INHERIT — Open Estate Data Interchange Standard"
+message: "If you use INHERIT in your research or software, please cite it using these metadata."
+type: standard
+authors:
+  - name: "Testate Technologies Ltd"
+    website: "https://www.openinherit.org"
+repository-code: "https://github.com/openinherit/standard"
+url: "https://www.openinherit.org"
+license: Apache-2.0
+version: "3.0.0"
+date-released: "2026-04-04"
+keywords:
+  - estate-planning
+  - open-standard
+  - json-schema
+  - probate
+  - wills
+  - trusts
+  - succession
+  - legal-tech
+abstract: >-
+  INHERIT is an open data standard for estate planning information.
+  It provides a common JSON format for representing people, assets,
+  liabilities, bequests, trusts, executors, and all the other entities
+  that make up an estate plan — across common law, civil law, Islamic,
+  Jewish, Hindu, Japanese, and African customary legal traditions.

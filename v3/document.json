@@ -1,0 +1,481 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/document.json",
+  "title": "Document",
+  "description": "A document associated with an estate — wills, codicils, trust deeds, and other legal documents. Extension types use the x-inherit- prefix for jurisdiction-specific or religious document types",
+  "type": "object",
+  "required": [ "id", "type", "title" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this document within the INHERIT document",
+      "examples": [ "b4c5d6e7-f8a9-0123-b456-789abcdef012" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "type": {
+      "description": "The type of document. Core types cover common law and civil law documents. Extension types use the x-inherit- prefix",
+      "$comment": "anyOf: first branch validates core types via closed enum. Second branch allows extension types matching ^x-inherit-.+$ pattern.",
+      "anyOf": [
+        {
+          "enum": [
+            "will",
+            "codicil",
+            "trust_deed",
+            "power_of_attorney",
+            "death_certificate",
+            "grant_of_probate",
+            "letters_of_administration",
+            "marriage_certificate",
+            "divorce_decree",
+            "prenuptial_agreement",
+            "property_deed",
+            "valuation_report",
+            "tax_return",
+            "insurance_policy",
+            "deed_of_variation",
+            "family_settlement",
+            "other",
+            "invoice",
+            "receipt"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+$"
+        }
+      ]
+    },
+    "title": {
+      "description": "Human-readable title of the document",
+      "examples": [
+        "Last Will and Testament of James Davies",
+        "First Codicil dated 15 June 2024",
+        "Nikah Nama — Ahmed and Fatimah",
+        "遺言書 — 田中裕子",
+        "Will of Amara Okonkwo",
+        "Testament de Priya Sharma"
+      ],
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "fileFormat": {
+      "description": "File format or extension. Use lowercase without a leading dot",
+      "$comment": "File extension or format identifier (e.g. pdf, docx, jpg).",
+      "examples": [ "pdf", "docx", "jpg", "png", "tiff" ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "storageRef": {
+      "description": "Storage reference — an S3 URI, file path, external system reference, or document management system identifier",
+      "examples": [
+        "s3://estate-docs/wills/davies-2024.pdf",
+        "DMS/2024/EST/001234",
+        "/vault/wills/tanaka-2025.pdf"
+      ],
+      "type": "string",
+      "maxLength": 2048
+    },
+    "fileSizeBytes": {
+      "description": "File size in bytes. Zero for metadata-only entries where the document content is stored externally",
+      "examples": [ 245760, 1048576, 0 ],
+      "type": "integer",
+      "minimum": 0
+    },
+    "mimeType": {
+      "description": "MIME type of the document file",
+      "examples": [
+        "application/pdf",
+        "image/jpeg",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "createdAt": {
+      "description": "Timestamp when the document was created or executed",
+      "examples": [ "2024-06-15T09:00:00Z", "2025-01-20T14:30:00Z" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "notes": {
+      "description": "Free-text notes about this document. Use for provenance, authenticity concerns, or handling instructions",
+      "examples": [
+        "Original held by Irwin Mitchell LLP, Manchester",
+        "Certified copy — original lost in 2020 house fire"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "entityType": {
+      "description": "The type of entity this document relates to. Combined with entityId, creates a contextual link: 'this PDF is the valuation certificate for asset X'",
+      "examples": [
+        "asset",
+        "property",
+        "person",
+        "estate",
+        "asset-collection"
+      ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "entityId": {
+      "description": "The ID of the entity this document relates to. Combined with entityType, links the document to its subject",
+      "examples": [ "a1b2c3d4-0000-4000-a000-000000000001" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "content": {
+      "description": "Base64-encoded file content for self-contained documents. Use for small, critical files (wills, certificates, attestations) that must travel with the estate plan. For large files, use storageRef instead",
+      "$comment": "Enables fully self-contained INHERIT documents per the data product model (data + structure + meaning + context in one artefact). Archival-safe: no external URL dependencies. Size limit ~7.5MB decoded (10MB base64). The mimeType field describes the decoded content type.",
+      "examples": [ "JVBERi0xLjQK..." ],
+      "type": "string",
+      "maxLength": 10485760,
+      "contentEncoding": "base64",
+      "contentMediaType": "application/pdf"
+    },
+    "images": {
+      "description": "Scans or photographs of this document — useful when the original is a physical paper document",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "common/media.json"
+      }
+    },
+    "clauses": {
+      "description": "Structured clauses of a will or testamentary document — enables per-clause provenance tracking, succession regime tagging, and validating authority assignment",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/WillClause"
+      }
+    },
+    "formalityStatus": {
+      "description": "Whether the document meets strict formalities or was admitted under a curative/dispensing power",
+      "$comment": "Australian Succession Act s.18, BC WESA s.58",
+      "enum": [
+        "formal",
+        "informal_admitted",
+        "informal_contested",
+        "holographic",
+        "nuncupative",
+        "unknown"
+      ]
+    },
+    "formalityAdmittedBy": {
+      "description": "Court or authority that admitted the informal document",
+      "type": "string",
+      "maxLength": 255
+    },
+    "formalityAdmittedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "formalityJurisdiction": {
+      "$ref": "common/jurisdiction.json"
+    },
+    "formalityNotes": {
+      "description": "Circumstances of informal execution",
+      "type": "string",
+      "maxLength": 500
+    },
+    "registryReference": {
+      "description": "Structured reference to a government registry entry",
+      "$comment": "Japan Legal Affairs Bureau, France FCDDV, UK HMCTS Probate Registry, Singapore OPG",
+      "type": "object",
+      "required": [ "registryName" ],
+      "properties": {
+        "registryName": {
+          "description": "e.g. Legal Affairs Bureau, FCDDV, HMCTS Probate Registry",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "registryType": {
+          "enum": [
+            "will_registry",
+            "probate_court",
+            "notarial_registry",
+            "death_registry",
+            "lpa_registry",
+            "seal_registry",
+            "other"
+          ]
+        },
+        "referenceNumber": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "registeredAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "registryJurisdiction": {
+          "$ref": "common/jurisdiction.json"
+        },
+        "verificationUrl": {
+          "type": "string",
+          "pattern": "^https?://",
+          "format": "uri"
+        },
+        "registryOrganisationId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "registryOrganisationIdDisplay": {
+          "description": "Human-readable display name for the referenced registry organisation",
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "registrations": {
+      "description": "Registries where this document has been registered. Tracks will registration with services such as the National Will Register (England & Wales) or the Register of Deeds (Scotland). Maps to Schema.org RegisterAction",
+      "type": "array",
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": [ "registry", "registeredAt" ],
+        "properties": {
+          "registry": {
+            "description": "Name of the registry",
+            "examples": [
+              "National Will Register",
+              "Register of Deeds (Scotland)",
+              "HMCTS Safe Custody"
+            ],
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "reference": {
+            "description": "Registration reference number",
+            "examples": [ "NWR-2025-123456", "RD/2025/001234" ],
+            "type": "string",
+            "maxLength": 255
+          },
+          "registeredAt": {
+            "description": "Date of registration",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "format": "date"
+          },
+          "jurisdiction": {
+            "$ref": "common/jurisdiction.json"
+          },
+          "registryUrl": {
+            "description": "URL of the registry for verification",
+            "examples": [
+              "https://www.nationalwillregister.co.uk/",
+              "https://www.ros.gov.uk/our-registers/register-of-deeds"
+            ],
+            "type": "string",
+            "pattern": "^https?://",
+            "format": "uri",
+            "maxLength": 2048
+          },
+          "verifiedAt": {
+            "description": "When the registration was last verified as current",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "dependentRequired": {
+    "entityId": [ "entityType" ],
+    "entityType": [ "entityId" ]
+  },
+  "$defs": {
+    "WillClause": {
+      "description": "A single clause within a will or testamentary document",
+      "type": "object",
+      "required": [ "id" ],
+      "properties": {
+        "id": {
+          "description": "Unique identifier for this clause",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "clauseNumber": {
+          "description": "The clause number within the document",
+          "type": "integer"
+        },
+        "title": {
+          "description": "Human-readable title of the clause",
+          "type": "string",
+          "maxLength": 255
+        },
+        "content": {
+          "description": "The clause text",
+          "type": "string",
+          "maxLength": 5000
+        },
+        "relatedEntityIds": {
+          "description": "IDs of related entities — bequests, assets, people, etc",
+          "type": "array",
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        },
+        "successionRegime": {
+          "description": "The succession regime governing this clause",
+          "type": "object",
+          "properties": {
+            "governingLaw": {
+              "description": "The law governing succession for this clause",
+              "type": "object",
+              "properties": {
+                "jurisdiction": {
+                  "description": "Jurisdiction whose succession law applies",
+                  "$ref": "common/jurisdiction.json"
+                },
+                "legalTradition": {
+                  "description": "Which legal tradition applies",
+                  "enum": [
+                    "common_law",
+                    "civil_law",
+                    "mixed",
+                    "customary_law",
+                    "islamic_law",
+                    "hindu_law",
+                    "jewish_law",
+                    "canon_law"
+                  ]
+                },
+                "statute": {
+                  "description": "Name of the governing statute",
+                  "type": "string",
+                  "maxLength": 255
+                },
+                "section": {
+                  "description": "Specific section of the statute",
+                  "type": "string",
+                  "maxLength": 255
+                }
+              },
+              "additionalProperties": false
+            },
+            "determinedBy": {
+              "description": "How the governing law was determined",
+              "enum": [
+                "domicile",
+                "situs",
+                "nationality",
+                "personal_status",
+                "choice_of_law",
+                "treaty"
+              ]
+            },
+            "binding": {
+              "description": "Whether this succession regime is legally binding",
+              "type": "boolean"
+            },
+            "extensions": {
+              "description": "INHERIT extension IDs that apply to this clause's succession",
+              "type": "array",
+              "maxItems": 50,
+              "items": {
+                "type": "string",
+                "maxLength": 500
+              }
+            },
+            "notes": {
+              "description": "Additional context about the succession regime",
+              "type": "string",
+              "maxLength": 2000
+            }
+          },
+          "additionalProperties": false
+        },
+        "provenance": {
+          "description": "Provenance information — who or what created this clause and who reviewed it",
+          "type": "object",
+          "properties": {
+            "source": {
+              "description": "How this clause was created",
+              "enum": [
+                "ai_generated",
+                "solicitor_drafted",
+                "imported",
+                "template",
+                "scanned"
+              ]
+            },
+            "generatedBy": {
+              "description": "The tool, person, or system that generated this clause",
+              "type": "string",
+              "maxLength": 255
+            },
+            "reviewedBy": {
+              "description": "The person who reviewed this clause",
+              "type": "string",
+              "maxLength": 255
+            },
+            "reviewedDate": {
+              "description": "Date the clause was reviewed",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            }
+          },
+          "additionalProperties": false
+        },
+        "validatingAuthority": {
+          "description": "The authority that must validate or has validated this clause",
+          "type": "object",
+          "properties": {
+            "name": {
+              "description": "Name of the validating authority",
+              "type": "string",
+              "maxLength": 255
+            },
+            "type": {
+              "description": "Type of validating authority",
+              "enum": [ "court", "religious_body", "notary", "registrar" ]
+            },
+            "jurisdiction": {
+              "description": "Jurisdiction of the validating authority",
+              "$ref": "common/jurisdiction.json"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

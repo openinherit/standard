@@ -1,0 +1,82 @@
+{
+  "$schema": "https://openinherit.org/reference-data/practitioner-activities-schema.json",
+  "version": "1.0.0",
+  "lastUpdated": "2026-03-26",
+  "activities": [
+    {
+      "code": "will_drafting",
+      "label": "Will Drafting",
+      "description": "Preparation and drafting of testamentary documents"
+    },
+    {
+      "code": "probate_administration",
+      "label": "Probate & Estate Administration",
+      "description": "Obtaining grant of probate/letters of administration and managing estate distribution"
+    },
+    {
+      "code": "trust_preparation",
+      "label": "Trust Preparation",
+      "description": "Establishment and documentation of trust arrangements"
+    },
+    {
+      "code": "iht_planning",
+      "label": "Inheritance Tax Planning",
+      "description": "Tax-efficient estate structuring and mitigation strategies"
+    },
+    {
+      "code": "cross_border",
+      "label": "Cross-Border Succession",
+      "description": "Estates spanning multiple jurisdictions, conflict of laws, Brussels IV"
+    },
+    {
+      "code": "estate_litigation",
+      "label": "Estate Litigation",
+      "description": "Contested wills, family provision claims, undue influence"
+    },
+    {
+      "code": "power_of_attorney",
+      "label": "Powers of Attorney",
+      "description": "Lasting/enduring powers of attorney, deputyship applications"
+    },
+    {
+      "code": "superannuation",
+      "label": "Superannuation & Pension Nominations",
+      "description": "Binding death benefit nominations, pension trust arrangements"
+    },
+    {
+      "code": "cpf_nominations",
+      "label": "CPF/EPF Nominations",
+      "description": "Central/Employee Provident Fund nomination management"
+    },
+    {
+      "code": "islamic_succession",
+      "label": "Islamic Succession (Faraid)",
+      "description": "Faraid distribution, wasiyya compliance, Shariah court matters"
+    },
+    {
+      "code": "huf_matters",
+      "label": "Hindu Undivided Family Matters",
+      "description": "HUF coparcenary, partition, Mitakshara/Dayabhaga issues"
+    },
+    {
+      "code": "isan_bunkatsu",
+      "label": "Estate Division (Isan Bunkatsu)",
+      "description": "Japanese estate division proceedings, family court mediation"
+    },
+    {
+      "code": "customary_succession",
+      "label": "Customary Succession",
+      "description": "Traditional/customary inheritance practices, family council proceedings"
+    },
+    {
+      "code": "digital_assets",
+      "label": "Digital Asset Management",
+      "description": "Cryptocurrency, online accounts, digital property succession"
+    },
+    {
+      "code": "business_succession",
+      "label": "Business Succession Planning",
+      "description": "Company shares, partnership interests, agricultural property"
+    }
+  ]
+}

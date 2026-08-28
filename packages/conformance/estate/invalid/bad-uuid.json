@@ -1,0 +1,18 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "schemaVersion": "1.0.0",
+  "estate": {
+    "id": "not-a-uuid",
+    "testatorPersonId": "also-not-a-uuid",
+    "status": "planning",
+    "createdAt": "2026-01-01T00:00:00Z",
+    "lastModifiedAt": "2026-01-01T00:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": ["common_law"],
+      "name": "England"
+    }
+  },
+  "people": []
+}

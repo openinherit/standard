@@ -1,0 +1,397 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/valuation.json",
+  "title": "Valuation",
+  "description": "A valuation of an estate asset, property, or asset collection. Supports multiple valuations per entity over time — owner estimates, professional valuations, AI analyses, dealer offers, and probate-agreed figures",
+  "type": "object",
+  "required": [
+    "id",
+    "entityType",
+    "entityId",
+    "valuedAmount",
+    "valuationDate"
+  ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this valuation within the INHERIT document",
+      "examples": [ "a1b2c3d4-e5f6-7890-abcd-ef0123456789" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "entityType": {
+      "description": "The type of entity being valued",
+      "$comment": "asset: a valuation of a single Asset. property: a valuation of a Property. asset_collection: a valuation of an AssetCollection as a whole (which may differ from the sum of individual asset valuations).",
+      "examples": [ "asset", "property" ],
+      "enum": [ "asset", "property", "asset_collection" ]
+    },
+    "entityId": {
+      "description": "Reference to the entity being valued — an Asset.id, Property.id, or AssetCollection.id",
+      "examples": [ "e5f6a7b8-c9d0-1234-ef01-23456789abcd" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "valuedAmount": {
+      "description": "The valuation amount, in minor currency units",
+      "$ref": "common/money.json"
+    },
+    "valuationDate": {
+      "description": "Date the valuation was performed or assessed",
+      "examples": [ "2025-01-15", "2025-03-28" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "provider": {
+      "description": "Who performed the valuation — the name of the person, firm, or service",
+      "examples": [
+        "Bonhams",
+        "RICS Surveyor — John Smith FRICS",
+        "HMRC Shares & Assets Valuation",
+        "OpenInherit AI",
+        "Estate owner"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "providerType": {
+      "description": "The type of person or organisation that provided the valuation",
+      "$comment": "owner: the asset owner's own estimate. professional_valuer: a qualified valuer (RICS, ASA, IVSC-accredited). auction_house: valuation by an auction house (Bonhams, Christie's, Sotheby's). dealer: valuation by a specialist dealer. insurance_assessor: valuation for insurance purposes. tax_authority: valuation agreed with or imposed by a tax authority (HMRC, IRS). ai_estimate: automated valuation by an AI or algorithmic model. other: any other type of valuer.",
+      "examples": [ "professional_valuer", "auction_house", "ai_estimate" ],
+      "enum": [
+        "owner",
+        "professional_valuer",
+        "auction_house",
+        "dealer",
+        "insurance_assessor",
+        "tax_authority",
+        "ai_estimate",
+        "other"
+      ]
+    },
+    "valuerRegistration": {
+      "description": "The professional body registration of the valuer. A valuation from a RICS-registered surveyor or ASA-accredited appraiser carries significantly more weight with tax authorities and probate courts",
+      "$comment": "Common professional bodies: RICS (Royal Institution of Chartered Surveyors, UK/global), ASA (American Society of Appraisers, US), IVSC (International Valuation Standards Council), AAA (Association of Accredited Appraisers), ISA (International Society of Appraisers).",
+      "type": "object",
+      "properties": {
+        "body": {
+          "description": "The professional body or accreditation organisation",
+          "examples": [ "RICS", "ASA", "IVSC", "AAA", "ISA" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "membershipId": {
+          "description": "The valuer's membership or registration number with the professional body",
+          "examples": [ "MRICS-1234567", "ASA-AM-56789" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "designation": {
+          "description": "The valuer's professional designation or qualification level",
+          "examples": [ "FRICS", "MRICS", "AssocRICS", "AM", "ASA" ],
+          "type": "string",
+          "maxLength": 100
+        },
+        "verificationUrl": {
+          "description": "URL to verify the valuer's registration with the professional body",
+          "examples": [ "https://www.rics.org/find-a-member" ],
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9+.-]*://",
+          "format": "uri",
+          "maxLength": 2048
+        }
+      },
+      "additionalProperties": false
+    },
+    "method": {
+      "description": "The valuation methodology used",
+      "$comment": "comparable_sales: based on recent sales of similar items — the most common method for personal property and real estate. replacement_cost: cost to replace the item with an equivalent — common for insurance valuations. income_approach: value based on income the asset generates (rental yield, dividend income) — common for investment properties and business interests. market_listing: value derived from current market listings for similar items. insurance_schedule: value stated on an existing insurance schedule or policy. ai_analysis: automated valuation using AI, machine learning, or algorithmic models. expert_opinion: professional judgement by a qualified expert without formal methodology. other: any other valuation method.",
+      "examples": [ "comparable_sales", "expert_opinion", "ai_analysis" ],
+      "enum": [
+        "comparable_sales",
+        "replacement_cost",
+        "income_approach",
+        "market_listing",
+        "insurance_schedule",
+        "ai_analysis",
+        "expert_opinion",
+        "other"
+      ]
+    },
+    "valuationPurpose": {
+      "description": "The purpose for which this valuation was obtained",
+      "$comment": "current_estimate: a current market value estimate for planning purposes. date_of_death: valuation as at the date of death — required for IHT and estate tax. insurance: valuation for insurance cover (often replacement cost, which may exceed market value). official: valuation agreed with or imposed by an official body. tax_return: valuation for inclusion on a tax return. dealer_offer: a valuation implicit in a dealer's offer to purchase. ai_estimate: an automated estimate for initial triage and planning. pre_sale: valuation in anticipation of sale. probate: valuation submitted for and accepted by the probate court.",
+      "examples": [ "date_of_death", "insurance", "probate" ],
+      "enum": [
+        "current_estimate",
+        "date_of_death",
+        "insurance",
+        "official",
+        "tax_return",
+        "dealer_offer",
+        "ai_estimate",
+        "pre_sale",
+        "probate"
+      ]
+    },
+    "confidence": {
+      "description": "Confidence level in this valuation",
+      "$comment": "high: strong evidential basis — professional valuation, multiple close comparables, or agreed with tax authority. medium: reasonable basis but some uncertainty — fewer comparables, older data, or owner estimate with domain knowledge. low: limited evidence — rough estimate, weak comparables, or unfamiliar category. unknown: confidence has not been assessed.",
+      "examples": [ "high", "medium" ],
+      "enum": [ "high", "medium", "low", "unknown" ]
+    },
+    "comparables": {
+      "description": "Comparable items found on marketplaces — used to support the valuation. Agent-generated comparables should include matchScore for quantitative filtering and will accumulate humanVerdict feedback over time",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/Comparable"
+      }
+    },
+    "notes": {
+      "description": "Free-text notes about this valuation — methodology details, caveats, market conditions, or disagreements with other valuations",
+      "examples": [
+        "RICS Red Book valuation — market value basis. Assumes vacant possession.",
+        "AI estimate based on 47 eBay sold listings over the past 90 days. Excludes outliers above £500.",
+        "Owner estimate — collected model railways for 30 years, knowledgeable about market values in this niche."
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "fieldProvenance": {
+      "description": "Per-field provenance records — how each field's value was obtained",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "common/field-provenance.json"
+      }
+    },
+    "auctionData": {
+      "description": "Auction house estimate and result data",
+      "type": "object",
+      "properties": {
+        "auctionHouseOrganisationId": {
+          "description": "Organisation.id of the auction house",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "auctionHouseOrganisationIdDisplay": {
+          "description": "Human-readable display name for the referenced auction house organisation",
+          "type": "string",
+          "maxLength": 255
+        },
+        "saleDate": {
+          "description": "Date of the auction sale",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "lotNumber": {
+          "description": "Auction lot number",
+          "examples": [ "Lot 247" ],
+          "type": "string",
+          "maxLength": 100
+        },
+        "estimateLow": {
+          "description": "Low estimate",
+          "$ref": "common/money.json"
+        },
+        "estimateHigh": {
+          "description": "High estimate",
+          "$ref": "common/money.json"
+        },
+        "hammerPrice": {
+          "description": "Hammer price (winning bid before premium)",
+          "$ref": "common/money.json"
+        },
+        "buyersPremiumPercentage": {
+          "description": "Buyer's premium as a percentage",
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "totalRealised": {
+          "description": "Total amount realised including premium",
+          "$ref": "common/money.json"
+        },
+        "sold": {
+          "description": "Whether the lot was sold",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "validUntil": {
+      "description": "The date until which this valuation is considered valid. Common for insurance valuations which require annual renewal. After this date, the valuation may need to be refreshed",
+      "type": [ "string", "null" ],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "Comparable": {
+      "description": "A comparable sale or listing used to support the valuation. Capturing comparables with screenshots and metadata creates an auditable evidence trail for executors, HMRC, and probate courts",
+      "type": "object",
+      "properties": {
+        "url": {
+          "description": "Link to the comparable sale or listing",
+          "examples": [
+            "https://www.ebay.co.uk/itm/123456789",
+            "https://www.sothebys.com/en/buy/auction/2025/lot-42"
+          ],
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9+.-]*://",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "screenshotUrl": {
+          "description": "Screenshot of the listing at the time it was captured. Listings are often removed after sale — the screenshot preserves the evidence",
+          "examples": [
+            "https://storage.example.com/comparables/ebay-123456789.png"
+          ],
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9+.-]*://",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "title": {
+          "description": "Description of the comparable item",
+          "examples": [
+            "Hornby R3456 Class 66 EWS DCC Fitted — mint, boxed",
+            "18ct gold solitaire diamond ring, 1.1ct, VS2/H"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "salePrice": {
+          "description": "The sale price of the comparable item, in minor currency units",
+          "$ref": "common/money.json"
+        },
+        "saleDate": {
+          "description": "Date the comparable item sold",
+          "examples": [ "2025-01-15", "2024-11-20" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "platform": {
+          "description": "Where the comparable sold — marketplace, auction house, or dealer",
+          "examples": [
+            "eBay",
+            "Sotheby's",
+            "Bonhams",
+            "Catawiki",
+            "1stDibs",
+            "The Saleroom",
+            "Rightmove",
+            "Zoopla"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "platformListingId": {
+          "description": "The platform-specific listing or item identifier. Enables API-driven price lookups — e.g. eBay item ID resolves via the Browse API, Chrono24 ref resolves to watch data, Discogs release ID resolves to vinyl data",
+          "$comment": "Store the raw platform ID, not a URL. The platform field identifies which API to query. Examples: eBay item number, Catawiki lot ID, Rightmove property ID, Chrono24 listing ref, Discogs release ID.",
+          "examples": [ "123456789012", "LOT-2025-04-0042", "82347291" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "auctionLotRef": {
+          "description": "Structured auction lot reference for provenance tracking — house, sale, and lot number. Enables lookups against auction house archives and provenance databases",
+          "$comment": "Use the format the auction house uses in its own records. For Christie's: 'Christie's / Sale 21234 / Lot 42'. For Bonhams: 'Bonhams / Sale 28901 / Lot 115'. This field is for formal auction sales; for online marketplace listings, use platformListingId instead.",
+          "examples": [
+            "Christie's / Sale 21234 / Lot 42",
+            "Bonhams / Sale 28901 / Lot 115",
+            "Sotheby's / L25010 / Lot 203"
+          ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "capturedAt": {
+          "description": "Timestamp when the comparable was captured or recorded. Important because market values shift and stale comparables lose evidential weight",
+          "examples": [ "2025-02-01T10:00:00Z", "2025-03-10T15:30:00Z" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "matchConfidence": {
+          "description": "How closely the comparable matches the item being valued",
+          "$comment": "exact: same item, same condition, same era — direct comparison. close: very similar item with minor differences (e.g. different colourway, slightly different specification). approximate: broadly similar item — same category and era but notable differences. weak: loosely related — useful for establishing a price range but not a direct comparison.",
+          "examples": [ "close", "approximate" ],
+          "enum": [ "exact", "close", "approximate", "weak" ]
+        },
+        "matchFactors": {
+          "description": "What makes this item comparable — the specific attributes that justify the comparison",
+          "examples": [
+            [
+              "same manufacturer",
+              "same era",
+              "similar condition",
+              "original box"
+            ],
+            [ "same carat weight", "similar clarity grade", "same metal" ]
+          ],
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "matchNotes": {
+          "description": "Free-text notes explaining the comparison — differences, adjustments, or caveats",
+          "examples": [
+            "Slightly lower carat weight (1.1ct vs 1.2ct) but same clarity — adjust upward ~8%",
+            "US sale — add 5% for UK market premium on this brand"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        },
+        "matchScore": {
+          "description": "Numeric match confidence (0-100). Companion to the matchConfidence categorical enum. Agents use this for filtering and ranking — 'show me everything above 70' is quantitative reasoning that categorical enums don't support",
+          "type": "integer",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "humanVerdict": {
+          "description": "Human feedback on this comparable. Creates the learning feedback loop — agents learn which comparables humans accept, improving future searches",
+          "$comment": "accepted: human confirmed this is a good comparable. rejected: human said this is not comparable. adjusted: human accepted but modified the match. not_reviewed: no human has reviewed this yet.",
+          "enum": [ "accepted", "rejected", "adjusted", "not_reviewed" ]
+        },
+        "rejectionReason": {
+          "description": "Why this comparable was rejected. Feeds back into agent learning — future searches avoid this type of mismatch",
+          "examples": [
+            "Wrong gauge — this is HO not OO",
+            "Repainted model, not original livery"
+          ],
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false,
+      "dependentRequired": {
+        "rejectionReason": [ "humanVerdict" ]
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "target": "../../../v3/extensions/canada/canada.json",
+  "tests": [
+    {
+      "description": "valid — minimal with required province",
+      "data": {
+        "province": "CA-ON"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Quebec patrimony",
+      "data": {
+        "province": "CA-QC",
+        "quebecPatrimony": {
+          "applicable": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required province",
+      "data": {
+        "ontarioEqualization": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — province not matching pattern",
+      "data": {
+        "province": "Ontario"
+      },
+      "valid": false
+    }
+  ]
+}

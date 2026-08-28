@@ -1,0 +1,244 @@
+{
+  "$schema": "https://openinherit.org/v3/catalogue.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "1.3.0",
+  "exportedAt": "2026-03-28T00:00:00Z",
+  "generator": {
+    "name": "LegacyLists",
+    "version": "1.0.0",
+    "url": "https://www.legacylists.com"
+  },
+  "assets": [
+    {
+      "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+      "name": "Hornby R3456 Class 66 EWS Livery",
+      "category": "collectibles",
+      "subcategory": "model_railways",
+      "description": "OO gauge Hornby R3456 Class 66 locomotive in EWS livery, DCC fitted, with original box and instructions.",
+      "brand": "Hornby",
+      "model": "R3456",
+      "condition": "excellent",
+      "conditionSystem": "bsc",
+      "conditionGrade": "Near Mint",
+      "originalPackaging": "complete",
+      "estimatedValue": {
+        "amount": 12500,
+        "currency": "GBP"
+      },
+      "purchasedFrom": "Rails of Sheffield",
+      "purchaseDate": "2019-06-15",
+      "searchTerms": [
+        "Hornby R3456",
+        "Class 66 OO gauge",
+        "EWS livery locomotive",
+        "DCC fitted"
+      ],
+      "comparableSearchProfile": {
+        "platforms": [
+          "ebay",
+          "hattons",
+          "rails_of_sheffield",
+          "catawiki"
+        ],
+        "searchQuery": "Hornby R3456 Class 66 EWS OO gauge boxed",
+        "filters": {
+          "condition": "excellent",
+          "packaging": "with_box",
+          "gauge": "OO"
+        },
+        "searchFrequency": "monthly"
+      },
+      "identifiers": [
+        {
+          "system": "https://hornby.com/catalogue",
+          "value": "R3456",
+          "type": "catalogue_number"
+        }
+      ],
+      "dataProvenance": "imported"
+    },
+    {
+      "id": "af76dfd8-9f59-4d83-8d1f-2cb0122ee648",
+      "name": "Bachmann 32-225 Class 45 Peak BR Blue",
+      "category": "collectibles",
+      "subcategory": "model_railways",
+      "description": "OO gauge Bachmann 32-225 Class 45 Peak in BR Blue livery.",
+      "brand": "Bachmann",
+      "model": "32-225",
+      "condition": "good",
+      "originalPackaging": "box_only",
+      "estimatedValue": {
+        "amount": 8500,
+        "currency": "GBP"
+      },
+      "purchasedFrom": "Hattons of Liverpool",
+      "purchaseDate": "2021-03-10",
+      "searchTerms": [
+        "Bachmann 32-225",
+        "Class 45 Peak",
+        "BR Blue OO gauge"
+      ],
+      "dataProvenance": "imported"
+    },
+    {
+      "id": "69cc9622-ab7d-46f0-bac6-e00f0158f2d2",
+      "name": "Hornby R4527 GWR Centenary Coach Pack",
+      "category": "collectibles",
+      "subcategory": "model_railways",
+      "description": "OO gauge Hornby R4527 GWR Centenary coach pack, 3 coaches in chocolate and cream livery.",
+      "brand": "Hornby",
+      "model": "R4527",
+      "condition": "excellent",
+      "originalPackaging": "complete",
+      "estimatedValue": {
+        "amount": 9500,
+        "currency": "GBP"
+      },
+      "purchasedFrom": "eBay - vintage-trains-uk",
+      "purchaseDate": "2022-11-20",
+      "searchTerms": [
+        "Hornby R4527",
+        "GWR Centenary coach",
+        "OO gauge coach pack"
+      ],
+      "dataProvenance": "imported"
+    },
+    {
+      "id": "49ea62a8-5f52-45d8-9736-60c53ece169b",
+      "name": "Heljan 2601 Class 26 BR Green",
+      "category": "collectibles",
+      "subcategory": "model_railways",
+      "description": "OO gauge Heljan 2601 Class 26 in BR Green livery with small yellow warning panel.",
+      "brand": "Heljan",
+      "model": "2601",
+      "condition": "good",
+      "originalPackaging": "complete",
+      "estimatedValue": {
+        "amount": 11000,
+        "currency": "GBP"
+      },
+      "purchasedFrom": "Kempton Park Model Show",
+      "purchaseDate": "2020-07-04",
+      "dataProvenance": "imported"
+    },
+    {
+      "id": "02e4e1f4-aee5-43b8-b05f-3c79e41e5b53",
+      "name": "Dapol 4D-006-021 Class 73 Pullman Grey",
+      "category": "collectibles",
+      "subcategory": "model_railways",
+      "description": "OO gauge Dapol 4D-006-021 Class 73 in Pullman grey and blue livery.",
+      "brand": "Dapol",
+      "model": "4D-006-021",
+      "condition": "excellent",
+      "originalPackaging": "complete",
+      "estimatedValue": {
+        "amount": 14000,
+        "currency": "GBP"
+      },
+      "purchasedFrom": "Rails of Sheffield",
+      "purchaseDate": "2023-01-12",
+      "searchTerms": [
+        "Dapol 4D-006-021",
+        "Class 73 Pullman",
+        "OO gauge"
+      ],
+      "comparableSearchProfile": {
+        "platforms": [
+          "ebay",
+          "rails_of_sheffield"
+        ],
+        "searchQuery": "Dapol Class 73 Pullman OO gauge",
+        "filters": {
+          "condition": "excellent"
+        },
+        "searchFrequency": "monthly"
+      },
+      "dataProvenance": "imported"
+    }
+  ],
+  "assetCollections": [
+    {
+      "id": "4563c802-8362-4c69-a473-a811e658ad35",
+      "rootDocumentId": "00000000-0000-0000-0000-000000000000",
+      "name": "Bill's OO Gauge Collection",
+      "description": "OO gauge model railway collection started in 1985. Mostly Hornby with Bachmann, Heljan, and Dapol. Layout stored in the loft at Oakfield Road, Flint Mountain.",
+      "category": "model_railways",
+      "estimatedValue": {
+        "amount": 5550000,
+        "currency": "GBP"
+      },
+      "valuationSource": "self_estimated",
+      "valuationDate": "2026-03-28",
+      "disposalWishes": "Keep the collection together if possible. Contact Dave at Manchester Model Railway Club — he knows the right dealers. Do not sell on eBay individually.",
+      "disposalStrategy": "dealer_bids",
+      "specialistDealerNotes": "Rails of Sheffield (01onal@railsofsheffield.com) — largest UK model railway dealer. Hattons of Liverpool — strong on Bachmann and Hornby. Avoid eBay 'lot sellers' — they undervalue specialist items."
+    }
+  ],
+  "valuations": [],
+  "dataProvenance": "imported",
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-03-28T12:00:00Z",
+    "validatedBy": "LegacyLists",
+    "schemaVersion": "1.3.0"
+  },
+  "legacyContacts": [
+    {
+      "id": "10000001-0000-4000-b000-000000000001",
+      "name": "Paul Frith",
+      "relationship": "son",
+      "email": "paul.frith@example.com",
+      "notificationMethod": "email",
+      "accessLevel": "full",
+      "letterGenerated": true,
+      "letterGeneratedAt": "2026-03-28T10:00:00Z",
+      "letterDeliveryMethod": "printed",
+      "notes": "Letter is in the sideboard drawer in the living room."
+    }
+  ],
+  "completeness": {
+    "score": 65,
+    "maxScore": 100,
+    "checklist": [
+      {
+        "category": "assets_and_valuations",
+        "item": "Items catalogued",
+        "weight": 10,
+        "status": "complete"
+      },
+      {
+        "category": "assets_and_valuations",
+        "item": "Professional valuations",
+        "weight": 8,
+        "status": "incomplete",
+        "details": "Self-estimated only — consider dealer valuation"
+      },
+      {
+        "category": "pension_and_insurance",
+        "item": "Insurance documented",
+        "weight": 5,
+        "status": "incomplete"
+      }
+    ]
+  },
+  "recommendedActions": [
+    {
+      "id": "act-001",
+      "category": "valuation",
+      "priority": "high",
+      "title": "Get dealer valuation for the collection",
+      "description": "The collection is self-estimated at £555. A specialist dealer valuation would provide a more accurate figure for insurance and for Paul.",
+      "status": "pending",
+      "triggeredBy": "Collection valuationSource is self_estimated"
+    },
+    {
+      "id": "act-002",
+      "category": "completeness",
+      "priority": "medium",
+      "title": "Add photographs of key items",
+      "description": "No images are attached to any items. Photographs significantly increase dealer confidence and comparable matching accuracy.",
+      "status": "pending",
+      "triggeredBy": "Zero images across all assets"
+    }
+  ]
+}

@@ -1,0 +1,1135 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-04-02T10:00:00Z",
+  "exportedBy": {
+    "name": "Sarah Thompson",
+    "email": "sarah.thompson@idrlaw.co.uk",
+    "organisationName": "IDR Law"
+  },
+  "generator": {
+    "name": "INHERIT CLI",
+    "version": "2.10.0",
+    "url": "https://openinherit.org"
+  },
+  "dataProvenance": "manual_entry",
+  "extensions": [
+    {
+      "id": "islamic-succession",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json",
+      "scope": [
+        "estate"
+      ],
+      "dataBlock": "x-inherit-islamic-succession"
+    },
+    {
+      "id": "uk-england-wales",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json",
+      "scope": [
+        "estate"
+      ],
+      "dataBlock": "x-inherit-uk-england-wales"
+    }
+  ],
+  "estate": {
+    "id": "36319cec-e6c9-449d-b52b-94b14b4c9868",
+    "testatorPersonId": "7bc58028-1216-4931-a40c-9d81935087aa",
+    "status": "confirmed",
+    "willType": "dual",
+    "primaryInstrument": "will",
+    "defaultPropertyRegime": "islamic_dower",
+    "createdAt": "2026-03-01T09:00:00Z",
+    "lastModifiedAt": "2026-03-20T16:00:00Z",
+    "revocationClause": true,
+    "attestation": {
+      "id": "351d991f-97d1-40c7-84b0-a636dac67eb4",
+      "attestationDate": "2026-03-20T00:00:00Z",
+      "witnessPersonIds": [
+        "3390ce51-7a06-4d40-9243-50aa4b7c0512",
+        "c6ba33c4-7c48-456b-8e08-31c4c2e6c911"
+      ],
+      "method": "video",
+      "attestationType": "written_signed",
+      "solicitorSupervised": true,
+      "testatorSignedInPresenceOfWitnesses": true,
+      "witnessesSignedInPresenceOfTestator": true,
+      "witnessConflictCheck": true,
+      "witnessConflictCheckScope": "english_law",
+      "selfProvingAffidavit": true,
+      "videoPlatform": "Zoom",
+      "videoLive": true,
+      "videoUninterrupted": true,
+      "videoParticipantPersonIds": [
+        "7bc58028-1216-4931-a40c-9d81935087aa",
+        "3390ce51-7a06-4d40-9243-50aa4b7c0512",
+        "c6ba33c4-7c48-456b-8e08-31c4c2e6c911"
+      ],
+      "videoDeclaration": {
+        "declarantPersonId": "7bc58028-1216-4931-a40c-9d81935087aa",
+        "declarationType": "testamentary_intent",
+        "recordingDate": "2026-03-15",
+        "recordingDuration": "PT12M",
+        "legalWeight": "evidential"
+      },
+      "notes": "Video-witnessed execution via Zoom on 2026-03-20. Fatima recorded a separate video declaration on 2026-03-15 in English and Arabic confirming the will respects both English law and her Islamic wishes. Declaration witnessed by Imam Patel at her home."
+    },
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England and Wales"
+    }
+  },
+  "people": [
+    {
+      "id": "7bc58028-1216-4931-a40c-9d81935087aa",
+      "givenName": "Fatima",
+      "familyName": "Al-Rashid",
+      "dateOfBirth": "1958-03-15",
+      "gender": "female",
+      "roles": [
+        "testator"
+      ],
+      "domicile": {
+        "country": "GB",
+        "subdivision": "GB-ENG",
+        "name": "England and Wales"
+      },
+      "contact": {
+        "address": {
+          "streetAddress": "42 Edgbaston Park Road",
+          "addressLocality": "Birmingham",
+          "addressRegion": "West Midlands",
+          "postalCode": "B15 2RS",
+          "addressCountry": "GB"
+        }
+      },
+      "language": "en-GB",
+      "ritualName": {
+        "name": "Fatima bint Ibrahim",
+        "nameSystem": "arabic_nasab"
+      },
+      "legalPersonalities": [
+        {
+          "system": "statutory",
+          "role": "property owner",
+          "jurisdiction": {
+            "country": "GB",
+            "subdivision": "GB-ENG"
+          },
+          "notes": "Sole owner of 42 Edgbaston Park Road, Birmingham"
+        },
+        {
+          "system": "religious",
+          "role": "testator under Hanafi law",
+          "notes": "Subject to Hanafi Islamic succession rules by personal choice — not legally binding in England and Wales but respected in the will"
+        }
+      ],
+      "taxResidency": [
+        {
+          "jurisdiction": {
+            "country": "GB",
+            "subdivision": "GB-ENG"
+          },
+          "fatcaStatus": "non_us_person"
+        }
+      ],
+      "notes": "British citizen of Iraqi heritage. Muslim (Hanafi school). Widowed — husband Khalid died November 2020. Retired teacher."
+    },
+    {
+      "id": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+      "givenName": "Omar",
+      "familyName": "Al-Rashid",
+      "dateOfBirth": "1984-06-12",
+      "gender": "male",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ],
+      "domicile": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      },
+      "contact": {
+        "address": {
+          "addressLocality": "London",
+          "addressCountry": "GB"
+        }
+      },
+      "language": "en-GB",
+      "notes": "Eldest son, age 42. Appointed sole executor."
+    },
+    {
+      "id": "1f016e38-67f7-4e6f-8b45-697b8c97e203",
+      "givenName": "Layla",
+      "familyName": "Hassan",
+      "dateOfBirth": "1988-02-20",
+      "gender": "female",
+      "roles": [
+        "beneficiary"
+      ],
+      "domicile": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      },
+      "contact": {
+        "address": {
+          "addressLocality": "Birmingham",
+          "addressCountry": "GB"
+        }
+      },
+      "language": "en-GB",
+      "notes": "Daughter, age 38. Née Al-Rashid, married name Hassan. Lives in Birmingham."
+    },
+    {
+      "id": "3087e16c-325f-41b7-9716-dd22fe01778c",
+      "givenName": "Zara",
+      "familyName": "Al-Rashid",
+      "dateOfBirth": "1991-09-05",
+      "gender": "female",
+      "roles": [
+        "beneficiary"
+      ],
+      "domicile": {
+        "country": "AE"
+      },
+      "contact": {
+        "address": {
+          "addressLocality": "Dubai",
+          "addressCountry": "AE"
+        }
+      },
+      "language": "en-GB",
+      "notes": "Youngest daughter, age 35. Lives in Dubai, UAE."
+    },
+    {
+      "id": "3390ce51-7a06-4d40-9243-50aa4b7c0512",
+      "givenName": "Yusuf",
+      "familyName": "Patel",
+      "gender": "male",
+      "roles": [
+        "witness"
+      ],
+      "titles": [
+        {
+          "title": "Imam",
+          "type": "religious"
+        },
+        {
+          "title": "Dr",
+          "type": "academic"
+        }
+      ],
+      "contact": {
+        "address": {
+          "addressLocality": "Birmingham",
+          "addressCountry": "GB"
+        }
+      },
+      "language": "en-GB",
+      "notes": "Fatima's local imam at Birmingham Central Mosque. Witness to the will and video declaration."
+    },
+    {
+      "id": "c6ba33c4-7c48-456b-8e08-31c4c2e6c911",
+      "givenName": "Sarah",
+      "familyName": "Thompson",
+      "gender": "female",
+      "roles": [
+        "witness"
+      ],
+      "titles": [
+        {
+          "title": "Solicitor",
+          "type": "professional"
+        }
+      ],
+      "contact": {
+        "email": "sarah.thompson@idrlaw.co.uk",
+        "address": {
+          "addressLocality": "Harrogate",
+          "addressRegion": "North Yorkshire",
+          "addressCountry": "GB"
+        }
+      },
+      "language": "en-GB",
+      "notes": "Fatima's solicitor at IDR Law, Harrogate. Second witness to the will."
+    },
+    {
+      "id": "493f0c82-28fb-4445-a956-8af6d751a1cd",
+      "givenName": "Khalid",
+      "familyName": "Al-Rashid",
+      "dateOfBirth": "1955-08-22",
+      "dateOfDeath": "2020-11-03",
+      "gender": "male",
+      "roles": [
+        "beneficiary"
+      ],
+      "domicile": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      },
+      "language": "en-GB",
+      "notes": "Fatima's deceased husband. Died 3 November 2020. His unused nil-rate band transfers to Fatima's estate."
+    }
+  ],
+  "kinships": [
+    {
+      "id": "634c2160-8c8c-412d-a54a-3165838fa983",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "7bc58028-1216-4931-a40c-9d81935087aa",
+      "toPersonId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+      "legalStatus": "recognised",
+      "legitimacy": "legitimate"
+    },
+    {
+      "id": "e0ca6b4c-7334-46dd-a5b5-bb8de4891427",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "7bc58028-1216-4931-a40c-9d81935087aa",
+      "toPersonId": "1f016e38-67f7-4e6f-8b45-697b8c97e203",
+      "legalStatus": "recognised",
+      "legitimacy": "legitimate"
+    },
+    {
+      "id": "b4a521c2-b89e-45c2-a53e-6ab91d8e7943",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "7bc58028-1216-4931-a40c-9d81935087aa",
+      "toPersonId": "3087e16c-325f-41b7-9716-dd22fe01778c",
+      "legalStatus": "recognised",
+      "legitimacy": "legitimate"
+    },
+    {
+      "id": "49b1fb0f-7d96-4206-8257-6a99b8e11bd6",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "493f0c82-28fb-4445-a956-8af6d751a1cd",
+      "toPersonId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+      "legalStatus": "recognised",
+      "legitimacy": "legitimate"
+    },
+    {
+      "id": "270a4997-7894-4ecb-a28b-85e412e0488a",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "493f0c82-28fb-4445-a956-8af6d751a1cd",
+      "toPersonId": "1f016e38-67f7-4e6f-8b45-697b8c97e203",
+      "legalStatus": "recognised",
+      "legitimacy": "legitimate"
+    },
+    {
+      "id": "f8d832d6-3084-4847-8180-6a43b494aa87",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "493f0c82-28fb-4445-a956-8af6d751a1cd",
+      "toPersonId": "3087e16c-325f-41b7-9716-dd22fe01778c",
+      "legalStatus": "recognised",
+      "legitimacy": "legitimate"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "b359225f-6430-4054-92f0-0c062bb20589",
+      "type": "marriage_religious",
+      "religiousSubtype": "nikah",
+      "partners": [
+        {
+          "personId": "493f0c82-28fb-4445-a956-8af6d751a1cd",
+          "ordinal": 1
+        },
+        {
+          "personId": "7bc58028-1216-4931-a40c-9d81935087aa",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "widowed",
+      "jurisdiction": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      },
+      "propertyRegime": "islamic_dower",
+      "events": [
+        {
+          "type": "ceremony",
+          "eventDate": "1982-06-15",
+          "notes": "Nikah ceremony held in Birmingham"
+        },
+        {
+          "type": "registration",
+          "eventDate": "1982-06-15",
+          "jurisdiction": {
+            "country": "GB",
+            "subdivision": "GB-ENG"
+          }
+        },
+        {
+          "type": "death_of_partner",
+          "eventDate": "2020-11-03",
+          "notes": "Khalid Al-Rashid died"
+        }
+      ],
+      "financialInstruments": [
+        {
+          "type": "mahr",
+          "value": {
+            "amount": 1000000,
+            "currency": "GBP"
+          },
+          "status": "partially_paid",
+          "description": "Deferred mahr of £10,000. £5,000 paid; £5,000 outstanding — priority debt on Fatima's estate (owed to estate of Khalid, but since Khalid predeceased, the outstanding mahr is a liability of the estate payable to their children as Khalid's heirs)",
+          "instrumentDate": "1982-06-15",
+          "inheritanceImpact": "Outstanding mahr is a priority debt — paid before inheritance distribution",
+          "maharDetails": {
+            "maharType": "combination",
+            "recipientPersonId": "7bc58028-1216-4931-a40c-9d81935087aa"
+          }
+        }
+      ],
+      "notes": "Fatima and Khalid married 1982. Both civil and Islamic (nikah) marriage. Khalid died 3 November 2020."
+    }
+  ],
+  "properties": [
+    {
+      "id": "dfd359d7-ec54-4114-afc1-aa9d2ad6bb00",
+      "name": "42 Edgbaston Park Road, Birmingham",
+      "propertyType": "detached",
+      "address": {
+        "streetAddress": "42 Edgbaston Park Road",
+        "addressLocality": "Birmingham",
+        "addressRegion": "West Midlands",
+        "postalCode": "B15 2RS",
+        "addressCountry": "GB"
+      },
+      "estimatedValue": {
+        "amount": 65000000,
+        "currency": "GBP"
+      },
+      "valuationConfidence": "estimated",
+      "isPrimaryResidence": true,
+      "ownershipType": "sole",
+      "ownershipPercentage": 100,
+      "ownershipModel": "individual",
+      "acquisitionType": "self_acquired",
+      "tenureType": "ownership",
+      "registrationStatus": "formally_registered",
+      "ownershipEvidence": "title_deed",
+      "notes": "Family home since 1990. Sole ownership transferred to Fatima after Khalid's death in 2020."
+    }
+  ],
+  "assets": [
+    {
+      "id": "2225444c-806e-4af4-8629-bdd752b3b7cb",
+      "name": "Barclays Current Account",
+      "category": "financial",
+      "subcategory": "current account",
+      "estimatedValue": {
+        "amount": 4500000,
+        "currency": "GBP"
+      },
+      "valuationConfidence": "estimated",
+      "location": "Barclays Bank, Birmingham",
+      "condition": "not_applicable",
+      "notes": "Main current account used for daily expenses and pension income."
+    },
+    {
+      "id": "6af66b64-5601-47f2-8332-08f87afd29ac",
+      "name": "HSBC Savings Account",
+      "category": "financial",
+      "subcategory": "savings account",
+      "estimatedValue": {
+        "amount": 12000000,
+        "currency": "GBP"
+      },
+      "valuationConfidence": "estimated",
+      "location": "HSBC, Birmingham",
+      "condition": "not_applicable",
+      "notes": "Long-term savings account."
+    },
+    {
+      "id": "dbe7f477-5f13-4b1f-834e-e856af9727a6",
+      "name": "Teachers' Pension",
+      "category": "financial",
+      "subcategory": "pension",
+      "condition": "not_applicable",
+      "pension": {
+        "schemeType": "defined_benefit",
+        "provider": "Teachers' Pension Scheme",
+        "pensionType": "occupational",
+        "deathBenefitType": "lump_sum",
+        "nominatedBeneficiaries": [
+          "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+          "1f016e38-67f7-4e6f-8b45-697b8c97e203",
+          "3087e16c-325f-41b7-9716-dd22fe01778c"
+        ]
+      },
+      "passesOutsideEstate": true,
+      "notes": "Defined benefit pension. Estimated £18,000/year. Death benefits pass outside the estate via nomination."
+    },
+    {
+      "id": "b7105a25-b7ba-4660-958c-54deb749310c",
+      "name": "Gold Jewellery Collection",
+      "category": "jewellery_watches",
+      "subcategory": "gold jewellery",
+      "estimatedValue": {
+        "amount": 3500000,
+        "currency": "GBP"
+      },
+      "valuationConfidence": "estimated",
+      "condition": "good",
+      "description": "22ct gold necklaces and bracelets from Iraq. Collection brought from Baghdad in 1985. Culturally significant family heirlooms.",
+      "propertyId": "dfd359d7-ec54-4114-afc1-aa9d2ad6bb00",
+      "location": "Home safe, 42 Edgbaston Park Road",
+      "culturalDisposition": {
+        "culturalSignificance": "family_heirloom",
+        "bequeathable": true
+      },
+      "notes": "22ct gold necklaces and bracelets brought from Baghdad in 1985. Significant sentimental and cultural value. To be divided equally between Layla and Zara per Fatima's wishes."
+    },
+    {
+      "id": "f42e6021-e162-4b21-a55d-8a1eaefdfe66",
+      "name": "Gmail Account",
+      "category": "digital",
+      "subcategory": "email",
+      "condition": "not_applicable",
+      "digitalAccess": {
+        "username": "fatima.alrashid@gmail.com",
+        "passwordStorageLocation": "Sealed envelope with solicitor Sarah Thompson at IDR Law",
+        "twoFactorEnabled": true,
+        "platformDeathPolicy": "archive",
+        "legacyContactConfigured": true,
+        "recoveryMethods": [
+          {
+            "type": "phone",
+            "location": "Recovery phone registered to Omar Al-Rashid"
+          }
+        ]
+      },
+      "digitalAccessConsent": {
+        "consentGiven": true,
+        "scope": "full_access",
+        "designatedRecipientPersonId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+        "onlineToolDirective": true
+      },
+      "notes": "Google Inactive Account Manager configured. 15 years of family emails. Omar designated as recipient."
+    },
+    {
+      "id": "611e5628-e973-4d70-ac79-71fa8b9d45bf",
+      "name": "Facebook Account",
+      "category": "digital",
+      "subcategory": "social media",
+      "condition": "not_applicable",
+      "socialMedia": {
+        "platform": "facebook",
+        "postDeathAction": "memorialise",
+        "transferToPersonId": "1f016e38-67f7-4e6f-8b45-697b8c97e203"
+      },
+      "digitalAccess": {
+        "platformDeathPolicy": "memorialise",
+        "legacyContactConfigured": true,
+        "legacyContactPersonId": "1f016e38-67f7-4e6f-8b45-697b8c97e203"
+      },
+      "notes": "Memorialise after 1 year. Layla is the configured legacy contact on Facebook."
+    },
+    {
+      "id": "9619b6d7-53d0-4747-8094-c3129b3d728b",
+      "name": "WhatsApp Account",
+      "category": "digital",
+      "subcategory": "messaging",
+      "condition": "not_applicable",
+      "digitalAccess": {
+        "platformDeathPolicy": "delete"
+      },
+      "digitalAccessConsent": {
+        "consentGiven": true,
+        "scope": "full_access",
+        "designatedRecipientPersonId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96"
+      },
+      "notes": "Family group chats. Transfer chat history to Omar before account deletion."
+    },
+    {
+      "id": "0f7d0d28-0424-4d20-b586-34aaab40b43c",
+      "name": "YouTube Channel — Fatima's Kitchen",
+      "category": "digital",
+      "subcategory": "content platform",
+      "condition": "not_applicable",
+      "monetisedContentAccess": {
+        "platform": "youtube",
+        "channelName": "Fatima's Kitchen",
+        "subscriberCount": 8500,
+        "monthlyRevenue": {
+          "amount": 20000,
+          "currency": "GBP"
+        },
+        "monetisationStatus": "active",
+        "contentType": "video",
+        "revenueModel": "advertising"
+      },
+      "socialMedia": {
+        "platform": "youtube",
+        "monetised": true,
+        "followerCount": 8500,
+        "postDeathAction": "transfer",
+        "transferToPersonId": "1f016e38-67f7-4e6f-8b45-697b8c97e203"
+      },
+      "digitalAccessConsent": {
+        "consentGiven": true,
+        "scope": "full_access",
+        "designatedRecipientPersonId": "1f016e38-67f7-4e6f-8b45-697b8c97e203"
+      },
+      "notes": "Iraqi cooking channel with 8,500 subscribers generating approximately £200/month from advertising revenue. Transfer ownership to Layla."
+    },
+    {
+      "id": "8d828600-b4ff-425d-b0a5-187d4979ab77",
+      "name": "Avios Loyalty Points",
+      "category": "digital",
+      "subcategory": "loyalty programme",
+      "condition": "not_applicable",
+      "loyaltyAccess": {
+        "programme": "Avios",
+        "programmeProvider": "British Airways",
+        "pointsBalance": 125000,
+        "cashEquivalent": {
+          "amount": 62500,
+          "currency": "GBP"
+        },
+        "transferable": true
+      },
+      "estimatedValue": {
+        "amount": 62500,
+        "currency": "GBP"
+      },
+      "notes": "125,000 Avios points. Cash equivalent approximately £625. Avios are transferable after death."
+    },
+    {
+      "id": "9f06f526-3bbc-49e7-a31d-21f53d65b6e6",
+      "name": "Bitcoin — Ledger Hardware Wallet",
+      "category": "digital",
+      "subcategory": "cryptocurrency",
+      "condition": "not_applicable",
+      "cryptoAccess": {
+        "blockchain": "bitcoin",
+        "walletType": "hardware",
+        "seedPhraseLocation": "Sealed envelope in safe deposit box at Barclays Birmingham. Second copy held by solicitor Sarah Thompson at IDR Law, Harrogate.",
+        "privateKeyLocation": "Derived from seed phrase — see seedPhraseLocation"
+      },
+      "description": "0.35 BTC held in a Ledger Nano X hardware wallet. Seed phrase stored separately from the device.",
+      "location": "Ledger Nano X device in home safe, 42 Edgbaston Park Road",
+      "notes": "0.35 BTC in Ledger hardware wallet. Seed phrase location documented. Device is in the home safe."
+    },
+    {
+      "id": "7b21867c-a132-4579-a8b3-3e9e43357b68",
+      "name": "khalid-engineering.co.uk Domain",
+      "category": "digital",
+      "subcategory": "domain name",
+      "condition": "not_applicable",
+      "domainNameAccess": {
+        "domainName": "khalid-engineering.co.uk",
+        "registrar": "GoDaddy",
+        "autoRenew": true,
+        "transferLocked": false
+      },
+      "notes": "Her late husband Khalid's business website domain. Fatima's wish: keep for 5 years as a memorial, then let expire."
+    },
+    {
+      "id": "9ebbc67b-7b33-40d0-b233-f15426797339",
+      "name": "iCloud Account",
+      "category": "digital",
+      "subcategory": "cloud storage",
+      "condition": "not_applicable",
+      "cloudStorage": {
+        "provider": "icloud",
+        "familyPhotoAccess": true,
+        "importantFolders": [
+          {
+            "name": "Family Photos",
+            "contents": "Decades of family photographs from Iraq and Birmingham",
+            "action": "transfer"
+          }
+        ]
+      },
+      "digitalAccessConsent": {
+        "consentGiven": true,
+        "scope": "full_access"
+      },
+      "notes": "Family photos spanning decades. Transfer to all three children."
+    }
+  ],
+  "liabilities": [
+    {
+      "id": "bbb9ec3a-8f12-49c2-bac0-72bb2a75ce18",
+      "liabilityType": "mahr",
+      "creditor": "Estate of Khalid Al-Rashid (heirs: Omar, Layla, Zara)",
+      "amount": {
+        "amount": 500000,
+        "currency": "GBP"
+      },
+      "notes": "Outstanding deferred mahr — originally £10,000, £5,000 paid. The remaining £5,000 is a priority debt under Islamic law. Since Khalid predeceased Fatima, the debt passes to his heirs (the three children)."
+    }
+  ],
+  "bequests": [
+    {
+      "id": "efc4eb20-5c96-495e-9d35-9acc1274225a",
+      "bequestType": "x-inherit-wasiyya",
+      "beneficiaryOrganisation": {
+        "name": "Birmingham Central Mosque",
+        "type": "charity"
+      },
+      "sharePercentage": 33.33,
+      "description": "One-third of the estate bequeathed to Birmingham Central Mosque as a charitable gift (khairi waqf / sadaqah jariyah)",
+      "constrainedBy": "religious_rule",
+      "notes": "Wasiyya limited to one-third under Hanafi law. This bequest is a charitable wasiyya (khairi waqf) — permissible without heir consent as it is to a non-heir."
+    },
+    {
+      "id": "90bde746-16dc-4e08-b408-2eb4bc535933",
+      "bequestType": "residuary",
+      "beneficiaryId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+      "sharePercentage": 50,
+      "description": "Omar's share of the remaining two-thirds under Hanafi faraid — son receives double the daughter's share. With one son and two daughters (total 4 shares), Omar receives 2/4 = 50%.",
+      "constrainedBy": "religious_rule",
+      "customaryOverride": true,
+      "notes": "Faraid distribution of the remaining two-thirds. Under Hanafi rules with one son and two daughters: son gets twice each daughter's share. Omar: 2 parts out of 4 = 50%."
+    },
+    {
+      "id": "b6b73d62-d017-4c88-a29c-60b6ebeaa4f6",
+      "bequestType": "residuary",
+      "beneficiaryId": "1f016e38-67f7-4e6f-8b45-697b8c97e203",
+      "sharePercentage": 25,
+      "description": "Layla's share of the remaining two-thirds under Hanafi faraid — each daughter receives half the son's share. Layla: 1 part out of 4 = 25%.",
+      "constrainedBy": "religious_rule",
+      "customaryOverride": true,
+      "notes": "Faraid distribution. Layla: 1 part out of 4 = 25% of the remaining two-thirds."
+    },
+    {
+      "id": "78c15320-7f3f-4c86-8d9e-7979fe4ac7c4",
+      "bequestType": "residuary",
+      "beneficiaryId": "3087e16c-325f-41b7-9716-dd22fe01778c",
+      "sharePercentage": 25,
+      "description": "Zara's share of the remaining two-thirds under Hanafi faraid — each daughter receives half the son's share. Zara: 1 part out of 4 = 25%.",
+      "constrainedBy": "religious_rule",
+      "customaryOverride": true,
+      "notes": "Faraid distribution. Zara: 1 part out of 4 = 25% of the remaining two-thirds."
+    },
+    {
+      "id": "ff691822-ef01-4933-bfef-0b7edc38e1b6",
+      "bequestType": "specific",
+      "beneficiaryId": "1f016e38-67f7-4e6f-8b45-697b8c97e203",
+      "assetIds": [
+        "b7105a25-b7ba-4660-958c-54deb749310c"
+      ],
+      "sharePercentage": 50,
+      "description": "Half of the gold jewellery collection to Layla — cultural tradition, not part of faraid",
+      "constrainedBy": "testamentary_freedom",
+      "notes": "Gold jewellery divided equally between daughters per Iraqi cultural tradition (similar to streedhan). Not counted as part of faraid distribution."
+    },
+    {
+      "id": "0e89e909-52e1-42b3-9e7e-0336d2f9fa55",
+      "bequestType": "specific",
+      "beneficiaryId": "3087e16c-325f-41b7-9716-dd22fe01778c",
+      "assetIds": [
+        "b7105a25-b7ba-4660-958c-54deb749310c"
+      ],
+      "sharePercentage": 50,
+      "description": "Half of the gold jewellery collection to Zara — cultural tradition, not part of faraid",
+      "constrainedBy": "testamentary_freedom",
+      "notes": "Gold jewellery divided equally between daughters per Iraqi cultural tradition."
+    }
+  ],
+  "executors": [
+    {
+      "id": "182f7be4-bfba-475f-9581-173d1ca43da0",
+      "personId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+      "role": "primary",
+      "primary": true,
+      "isProfessional": false,
+      "grantType": "grant_of_probate",
+      "consultWith": [
+        "3390ce51-7a06-4d40-9243-50aa4b7c0512"
+      ],
+      "notes": "Omar appointed as sole executor. Should consult Imam Dr Yusuf Patel on matters relating to Islamic succession."
+    }
+  ],
+  "wishes": [
+    {
+      "id": "dc092d35-e9e3-4078-b069-5a95e578cb37",
+      "wishType": "funeral",
+      "title": "Islamic burial wishes",
+      "content": "I wish to be buried in accordance with Islamic rites. No cremation under any circumstances. Burial within 24 hours if possible. Ghusl (ritual washing) to be performed. Simple white kafan (shroud). No extravagant coffin — a simple wooden casket is acceptable if required by law.",
+      "bindingNature": "religiously_obligatory",
+      "funeralArrangementType": "burial",
+      "funeralCeremonyType": "religious",
+      "funeralCeremonyReligion": "Hanafi Islam",
+      "funeralLocationPreference": "Gardens of Peace Islamic Cemetery, Hainault, London",
+      "funeralBudgetSource": "estate",
+      "notes": "Burial at Gardens of Peace Islamic Cemetery, London. Islamic burial — no cremation. Within 24 hours if possible."
+    },
+    {
+      "id": "142032fb-6897-4684-95a4-1563a0f8a2f0",
+      "wishType": "distribution",
+      "title": "Gold jewellery distribution",
+      "content": "My gold jewellery collection — the 22ct necklaces and bracelets brought from Baghdad in 1985 — is to be divided equally between my daughters Layla and Zara. This is a family cultural tradition and is not part of the faraid distribution.",
+      "bindingNature": "culturally_obligatory",
+      "relatedAssetId": "b7105a25-b7ba-4660-958c-54deb749310c",
+      "notes": "Cultural tradition — gold jewellery to daughters equally. Similar to streedhan custom."
+    },
+    {
+      "id": "d0e580f5-1dbf-4325-b9fd-f7222ced35f4",
+      "wishType": "digital",
+      "title": "Domain name memorial",
+      "content": "The domain khalid-engineering.co.uk should be maintained for 5 years after my death as a memorial to my late husband Khalid. After 5 years, let it expire.",
+      "bindingNature": "non_binding",
+      "relatedAssetId": "7b21867c-a132-4579-a8b3-3e9e43357b68",
+      "addresseePersonId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96"
+    },
+    {
+      "id": "76b92539-97bf-4b11-b717-e7da2b195ab0",
+      "wishType": "digital_likeness",
+      "title": "Prohibition on posthumous AI recreation",
+      "content": "I expressly prohibit any artificial intelligence recreation of my likeness after my death. This includes voice cloning, visual avatars, chatbots, and any form of digital replica. In Islamic tradition, the voice is part of a person's dignity — I do not consent to it being replicated. My grandson created a memorial chatbot on HereAfter without my permission — I want it deleted.",
+      "bindingNature": "religiously_obligatory",
+      "likenessConsent": "prohibited",
+      "likenessScope": [
+        "voice",
+        "visual_appearance",
+        "writing_style",
+        "personality_model",
+        "full_avatar"
+      ],
+      "likenessProhibitedUses": [
+        "memorial",
+        "family_private",
+        "educational",
+        "commercial",
+        "legal_proceedings",
+        "artistic"
+      ],
+      "likenessControllerPersonId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+      "syntheticMediaPolicy": "prohibit_all",
+      "existingDigitalModels": [
+        {
+          "provider": "HereAfter",
+          "modelType": "chatbot",
+          "action": "delete",
+          "controllerPersonId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96"
+        }
+      ],
+      "likenessEnforcement": [
+        {
+          "platform": "HereAfter",
+          "requestType": "takedown",
+          "status": "pending",
+          "legalBasis": "Estate executor authority and testamentary wish",
+          "notes": "Memorial chatbot created by grandson without Fatima's consent. Executor to request deletion."
+        }
+      ],
+      "notes": "Cultural and religious sensitivity — in Islamic tradition, the voice is part of the person's dignity. All AI recreation prohibited. Existing HereAfter chatbot must be deleted."
+    }
+  ],
+  "documents": [
+    {
+      "id": "f00000a0-0000-4000-a000-000000000001",
+      "type": "will",
+      "title": "Last Will and Testament of Fatima Al-Rashid",
+      "fileFormat": "pdf",
+      "createdAt": "2026-03-20T14:00:00Z",
+      "notes": "Dual-jurisdiction will respecting both English common law and Hanafi Islamic succession. Original held by IDR Law, Harrogate.",
+      "formalityStatus": "formal"
+    },
+    {
+      "id": "f00000a0-0000-4000-a000-000000000002",
+      "type": "x-inherit-nikah-nama",
+      "title": "Nikah Nama — Khalid and Fatima Al-Rashid",
+      "createdAt": "1982-06-15T12:00:00Z",
+      "notes": "Original nikah nama (Islamic marriage contract) from 1982. Records the mahr agreement of £10,000."
+    }
+  ],
+  "organisations": [
+    {
+      "id": "f00000b0-0000-4000-a000-000000000001",
+      "name": "IDR Law",
+      "organisationType": "legal_firm",
+      "estateRoles": [
+        "will_writer",
+        "professional_adviser"
+      ],
+      "jurisdiction": "GB",
+      "url": "https://www.idrlaw.co.uk",
+      "contactPerson": "Sarah Thompson",
+      "address": {
+        "addressLocality": "Harrogate",
+        "addressRegion": "North Yorkshire",
+        "addressCountry": "GB"
+      },
+      "notes": "Fatima's solicitors. Drafted the will and hold the original."
+    },
+    {
+      "id": "f00000b0-0000-4000-a000-000000000002",
+      "name": "Birmingham Central Mosque",
+      "organisationType": "religious_institution",
+      "estateRoles": [
+        "beneficiary"
+      ],
+      "jurisdiction": "GB",
+      "address": {
+        "addressLocality": "Birmingham",
+        "addressCountry": "GB"
+      },
+      "notes": "Recipient of the wasiyya (one-third charitable bequest). Fatima's local mosque — Imam Dr Yusuf Patel is the imam."
+    },
+    {
+      "id": "f00000b0-0000-4000-a000-000000000003",
+      "name": "Gardens of Peace Islamic Cemetery",
+      "organisationType": "funeral_provider",
+      "estateRoles": [
+        "funeral_provider"
+      ],
+      "jurisdiction": "GB",
+      "address": {
+        "addressLocality": "Hainault",
+        "addressRegion": "Essex",
+        "addressCountry": "GB"
+      },
+      "notes": "Preferred burial location per Fatima's wishes."
+    },
+    {
+      "id": "f00000b0-0000-4000-a000-000000000004",
+      "name": "Barclays Bank UK PLC",
+      "organisationType": "financial_institution",
+      "estateRoles": [
+        "asset_holder"
+      ],
+      "jurisdiction": "GB"
+    },
+    {
+      "id": "f00000b0-0000-4000-a000-000000000005",
+      "name": "HSBC UK",
+      "organisationType": "financial_institution",
+      "estateRoles": [
+        "asset_holder"
+      ],
+      "jurisdiction": "GB"
+    },
+    {
+      "id": "f00000b0-0000-4000-a000-000000000006",
+      "name": "Teachers' Pension Scheme",
+      "organisationType": "pension_provider",
+      "estateRoles": [
+        "asset_holder"
+      ],
+      "jurisdiction": "GB"
+    }
+  ],
+  "proxyAuthorisations": [
+    {
+      "id": "f00000d0-0000-4000-a000-000000000001",
+      "proxyPersonId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+      "testatorPersonId": "7bc58028-1216-4931-a40c-9d81935087aa",
+      "scope": "full",
+      "delegateType": "person",
+      "activationTrigger": "on_death",
+      "activationVerificationMethod": "death_certificate",
+      "auditTrailEnabled": true,
+      "consentRecord": {
+        "consentGiven": true,
+        "consentDate": "2026-03-20",
+        "consentMethod": "in_person_written",
+        "witnesses": [
+          {
+            "personId": "3390ce51-7a06-4d40-9243-50aa4b7c0512",
+            "role": "imam",
+            "witnessedDate": "2026-03-20"
+          },
+          {
+            "personId": "c6ba33c4-7c48-456b-8e08-31c4c2e6c911",
+            "role": "solicitor",
+            "witnessedDate": "2026-03-20"
+          }
+        ]
+      },
+      "notes": "Omar authorised as full proxy to manage estate affairs on Fatima's death. Consent witnessed by both Imam Patel and solicitor Sarah Thompson."
+    }
+  ],
+  "integrity": {
+    "algorithm": "ES256",
+    "canonicalisationMethod": "JCS",
+    "signedAt": "2026-03-20T16:00:00Z",
+    "verificationMethod": "IDR Law, Harrogate",
+    "proofPurpose": "assertionMethod"
+  },
+  "x-inherit-islamic-succession": {
+    "school": "hanafi",
+    "faraidApplies": true,
+    "heirClassifications": [
+      {
+        "personId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+        "heirClass": "son",
+        "residuaryClass": "asaba_by_self",
+        "blocked": false,
+        "notes": "Omar — son. Asaba (residuary heir) by himself. Receives double each daughter's share."
+      },
+      {
+        "personId": "1f016e38-67f7-4e6f-8b45-697b8c97e203",
+        "heirClass": "daughter",
+        "residuaryClass": "asaba_with_other",
+        "blocked": false,
+        "notes": "Layla — daughter. Becomes asaba with the son. Each daughter receives half the son's share."
+      },
+      {
+        "personId": "3087e16c-325f-41b7-9716-dd22fe01778c",
+        "heirClass": "daughter",
+        "residuaryClass": "asaba_with_other",
+        "blocked": false,
+        "notes": "Zara — daughter. Becomes asaba with the son. Each daughter receives half the son's share."
+      }
+    ],
+    "wasiyyaRules": {
+      "maxPortion": 33.33,
+      "toNonHeirsOnly": true,
+      "requiresHeirConsent": false,
+      "notes": "Under Hanafi law, wasiyya limited to one-third and to non-heirs only. The bequest to Birmingham Central Mosque is permissible as it is charitable (khairi waqf) and to a non-heir."
+    },
+    "priorityDebts": [
+      {
+        "description": "Outstanding deferred mahr from 1982 nikah. Original mahr £10,000; £5,000 paid. Balance of £5,000 is a priority debt.",
+        "type": "mahr",
+        "amount": {
+          "amount": 500000,
+          "currency": "GBP"
+        }
+      }
+    ],
+    "hijriDates": {
+      "willDateHijri": "1447-09-20"
+    },
+    "islamicFormalities": {
+      "certifiedByScholar": true,
+      "scholarName": "Imam Dr Yusuf Patel",
+      "notes": "Will reviewed and certified as compliant with Hanafi succession principles by Imam Dr Yusuf Patel of Birmingham Central Mosque."
+    },
+    "notes": "Dual-jurisdiction estate: English common law governs probate and IHT; Hanafi Islamic law governs distribution of the estate. Fatima's testamentary wishes respect both systems — the one-third wasiyya to charity is permissible under both English law (testamentary freedom) and Islamic law (wasiyya limit). The remaining two-thirds is distributed per Hanafi faraid rules."
+  },
+  "x-inherit-uk-england-wales": {
+    "nilRateBand": {
+      "value": 32500000,
+      "effectiveFrom": "2009-04-06",
+      "effectiveUntil": null,
+      "status": "enacted",
+      "legislativeReference": "Inheritance Tax Act 1984 s.7",
+      "notes": "Frozen at £325,000 since 2009."
+    },
+    "residenceNilRateBand": {
+      "value": 17500000,
+      "effectiveFrom": "2020-04-06",
+      "effectiveUntil": null,
+      "status": "enacted",
+      "legislativeReference": "Inheritance Tax Act 1984 s.8D",
+      "notes": "£175,000 residence nil rate band. Available as primary residence passes to direct descendants."
+    },
+    "transferableNilRateBand": true,
+    "transferableNilRateBandPercentage": 100,
+    "localPropertyTypes": [
+      {
+        "propertyId": "dfd359d7-ec54-4114-afc1-aa9d2ad6bb00",
+        "localType": "detached_house"
+      }
+    ],
+    "localTenureTypes": [
+      {
+        "propertyId": "dfd359d7-ec54-4114-afc1-aa9d2ad6bb00",
+        "localType": "freehold"
+      }
+    ],
+    "localGrantTypes": [
+      {
+        "executorId": "182f7be4-bfba-475f-9581-173d1ca43da0",
+        "localType": "grant_of_probate"
+      }
+    ],
+    "ifpa1975Eligible": [
+      {
+        "personId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+        "category": "child"
+      },
+      {
+        "personId": "1f016e38-67f7-4e6f-8b45-697b8c97e203",
+        "category": "child"
+      },
+      {
+        "personId": "3087e16c-325f-41b7-9716-dd22fe01778c",
+        "category": "child"
+      }
+    ]
+  },
+  "applicationState": {
+    "notifications": [
+      {
+        "id": "f00000c0-0000-4000-a000-000000000001",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+        "channel": "email",
+        "sentAt": "2026-03-25T10:00:00Z",
+        "status": "delivered",
+        "notes": "Omar notified of executor appointment and will contents."
+      },
+      {
+        "id": "f00000c0-0000-4000-a000-000000000002",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "1f016e38-67f7-4e6f-8b45-697b8c97e203",
+        "channel": "email",
+        "sentAt": "2026-03-25T10:15:00Z",
+        "status": "delivered",
+        "notes": "Layla notified of beneficiary status."
+      },
+      {
+        "id": "f00000c0-0000-4000-a000-000000000003",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "3087e16c-325f-41b7-9716-dd22fe01778c",
+        "channel": "email",
+        "sentAt": "2026-03-25T10:30:00Z",
+        "status": "delivered",
+        "notes": "Zara notified of beneficiary status — sent to Dubai address."
+      }
+    ],
+    "deathNotifications": [
+      {
+        "institution": "Barclays Bank UK PLC",
+        "institutionType": "bank",
+        "institutionOrganisationId": "f00000b0-0000-4000-a000-000000000004",
+        "status": "pending"
+      },
+      {
+        "institution": "HSBC UK",
+        "institutionType": "bank",
+        "institutionOrganisationId": "f00000b0-0000-4000-a000-000000000005",
+        "status": "pending"
+      },
+      {
+        "institution": "Teachers' Pension Scheme",
+        "institutionType": "pension_provider",
+        "institutionOrganisationId": "f00000b0-0000-4000-a000-000000000006",
+        "status": "pending"
+      },
+      {
+        "institution": "HMRC",
+        "institutionType": "tax_authority",
+        "status": "pending"
+      },
+      {
+        "institution": "Birmingham City Council",
+        "institutionType": "government",
+        "status": "pending"
+      },
+      {
+        "institution": "Facebook",
+        "institutionType": "social_media",
+        "status": "pending"
+      },
+      {
+        "institution": "Google",
+        "institutionType": "email_provider",
+        "status": "pending"
+      }
+    ]
+  }
+}

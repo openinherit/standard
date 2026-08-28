@@ -1,0 +1,114 @@
+{
+  "_disclaimer": "This file defines the standardised output format for INHERIT agent responses. All agents — regardless of task type — produce output conforming to this schema. Results are then written back into the INHERIT document with appropriate provenance.",
+  "schema": {
+    "agentId": {
+      "type": "string",
+      "description": "Unique identifier for the agent that produced this output."
+    },
+    "taskType": {
+      "type": "string",
+      "enum": [
+        "find_comparables",
+        "estimate_value",
+        "identify_item",
+        "find_dealers",
+        "verify_authenticity"
+      ],
+      "description": "Which task type was executed."
+    },
+    "executedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the task was executed (ISO 8601 UTC)."
+    },
+    "inputEntityId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "The asset.id this task was run against."
+    },
+    "confidence": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Overall confidence in the output (0–100). Derived from source quality, result count, and model certainty."
+    },
+    "results": {
+      "type": "object",
+      "description": "Task-specific output. Structure varies by taskType — see agent-task-definitions.json outputFields for the expected keys per task."
+    },
+    "searchesPerformed": {
+      "type": "array",
+      "description": "Record of all searches or external lookups executed during this task run.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "description": "The platform or registry queried (e.g. 'ebay', 'art_loss_register')."
+          },
+          "query": {
+            "type": "string",
+            "description": "The search query or identifier submitted."
+          },
+          "resultCount": {
+            "type": "integer",
+            "description": "Number of results returned by this search."
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this individual search was performed (ISO 8601 UTC)."
+          }
+        }
+      }
+    },
+    "tokensUsed": {
+      "type": "integer",
+      "description": "Total LLM tokens consumed during this task — used for cost tracking and audit."
+    },
+    "modelId": {
+      "type": "string",
+      "description": "Identifier of the LLM model invoked (e.g. 'claude-opus-4-5', 'gpt-4o'). Enables reproducibility auditing."
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Audit trail linking this agent output back to the originating request.",
+      "properties": {
+        "requestedBy": {
+          "type": "string",
+          "description": "User ID or system identifier that triggered this task."
+        },
+        "requestedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the task was originally requested (may differ from executedAt if queued)."
+        },
+        "orchestratorVersion": {
+          "type": "string",
+          "description": "Version of the orchestration layer that dispatched this task."
+        }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "description": "Any errors or issues encountered during task execution. Non-fatal errors are logged here; the task may still produce partial results.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Machine-readable error code (e.g. 'PLATFORM_TIMEOUT', 'RATE_LIMITED', 'NO_RESULTS')."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable description of the error."
+          },
+          "platform": {
+            "type": "string",
+            "description": "The platform where the error occurred, if applicable."
+          }
+        }
+      }
+    }
+  }
+}

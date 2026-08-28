@@ -1,0 +1,211 @@
+{
+  "_disclaimer": "Informational reference data only. Not legal, tax, or financial advice. Verify with qualified professionals before relying on any values. Current as of March 2026.",
+  "title": "INHERIT Validation Rules",
+  "description": "Declarative cross-reference and integrity rules for INHERIT documents. Used by validators to check Level 2+ conformance.",
+  "lastUpdated": "2026-03-28",
+  "rules": [
+    {
+      "id": "bequest_beneficiary_exists",
+      "level": 2,
+      "severity": "error",
+      "description": "Every bequest beneficiaryId must reference a person in the people array",
+      "check": {
+        "source": "bequests[].beneficiaryId",
+        "target": "people[].id",
+        "type": "reference"
+      }
+    },
+    {
+      "id": "executor_person_exists",
+      "level": 2,
+      "severity": "error",
+      "description": "Every executor personId must reference a person in the people array",
+      "check": {
+        "source": "executors[].personId",
+        "target": "people[].id",
+        "type": "reference"
+      }
+    },
+    {
+      "id": "guardian_person_exists",
+      "level": 2,
+      "severity": "error",
+      "description": "Every guardian personId must reference a person in the people array",
+      "check": {
+        "source": "guardians[].personId",
+        "target": "people[].id",
+        "type": "reference"
+      }
+    },
+    {
+      "id": "testator_person_exists",
+      "level": 2,
+      "severity": "error",
+      "description": "The estate testatorPersonId must reference a person in the people array",
+      "check": {
+        "source": "estate.testatorPersonId",
+        "target": "people[].id",
+        "type": "reference"
+      }
+    },
+    {
+      "id": "bequest_asset_exists",
+      "level": 2,
+      "severity": "error",
+      "description": "Every bequest assetId must reference an asset in the assets, properties, or assetCollections arrays",
+      "check": {
+        "source": "bequests[].assetId",
+        "target": ["assets[].id", "properties[].id", "assetCollections[].id"],
+        "type": "reference"
+      }
+    },
+    {
+      "id": "bequest_property_exists",
+      "level": 2,
+      "severity": "error",
+      "description": "Every bequest propertyId must reference a property in the properties array",
+      "check": {
+        "source": "bequests[].propertyId",
+        "target": "properties[].id",
+        "type": "reference"
+      }
+    },
+    {
+      "id": "valuation_entity_exists",
+      "level": 2,
+      "severity": "error",
+      "description": "Every valuation entityId must reference an asset, property, or asset collection",
+      "check": {
+        "source": "valuations[].entityId",
+        "target": ["assets[].id", "properties[].id", "assetCollections[].id"],
+        "type": "reference"
+      }
+    },
+    {
+      "id": "lifetime_transfer_donor_matches_testator",
+      "level": 2,
+      "severity": "warning",
+      "description": "The donorPersonId in lifetime transfers should match the estate testatorPersonId",
+      "check": {
+        "source": "lifetimeTransfers[].donorPersonId",
+        "target": "estate.testatorPersonId",
+        "type": "equality"
+      }
+    },
+    {
+      "id": "lifetime_transfer_donee_exists",
+      "level": 2,
+      "severity": "warning",
+      "description": "Every doneePersonId in lifetime transfers should reference a person in the people array",
+      "check": {
+        "source": "lifetimeTransfers[].doneePersonIds[]",
+        "target": "people[].id",
+        "type": "reference"
+      }
+    },
+    {
+      "id": "hotchpot_transfer_exists",
+      "level": 2,
+      "severity": "error",
+      "description": "Every hotchpotTransferId in bequests must reference an existing lifetime transfer",
+      "check": {
+        "source": "bequests[].hotchpotTransferIds[]",
+        "target": "lifetimeTransfers[].id",
+        "type": "reference"
+      }
+    },
+    {
+      "id": "tax_position_jurisdiction_matches_estate",
+      "level": 2,
+      "severity": "warning",
+      "description": "The tax position jurisdiction should match the estate jurisdiction",
+      "check": {
+        "source": "taxPosition.jurisdiction",
+        "target": "estate.jurisdiction",
+        "type": "equality"
+      }
+    },
+    {
+      "id": "conformance_schema_version_matches",
+      "level": 2,
+      "severity": "error",
+      "description": "The conformance schemaVersion should match the document-level schemaVersion",
+      "check": {
+        "source": "conformance.schemaVersion",
+        "target": "schemaVersion",
+        "type": "equality"
+      }
+    },
+    {
+      "id": "co_owner_person_exists",
+      "level": 2,
+      "severity": "error",
+      "description": "Every coOwnerPersonId in asset coOwnership must reference a person in the people array",
+      "check": {
+        "source": "assets[].coOwnership.coOwnerPersonIds[]",
+        "target": "people[].id",
+        "type": "reference"
+      }
+    },
+    {
+      "id": "pension_beneficiary_person_exists",
+      "level": 2,
+      "severity": "warning",
+      "description": "Every beneficiaryPersonId in a pension nomination must reference a person in the people array",
+      "check": {
+        "source": "pensions[].nominatedBeneficiaryPersonIds[]",
+        "target": "people[].id",
+        "type": "reference"
+      }
+    },
+    {
+      "id": "insurance_beneficiary_person_exists",
+      "level": 2,
+      "severity": "warning",
+      "description": "Every beneficiaryPersonId in an insurance policy must reference a person in the people array",
+      "check": {
+        "source": "insurancePolicies[].beneficiaryPersonIds[]",
+        "target": "people[].id",
+        "type": "reference"
+      }
+    },
+    {
+      "id": "debt_receivable_debtor_exists",
+      "level": 2,
+      "severity": "error",
+      "description": "Every debtorPersonId in a debt receivable must reference a person in the people array",
+      "check": {
+        "source": "debtsReceivable[].debtorPersonId",
+        "target": "people[].id",
+        "type": "reference"
+      }
+    },
+    {
+      "id": "asset_collection_category_consistent",
+      "level": 3,
+      "severity": "warning",
+      "description": "Assets within an asset collection should have a category matching the collection's category",
+      "check": {
+        "source": "assetCollections[].assetIds[]",
+        "target": "assets[].id",
+        "type": "reference",
+        "additionalCheck": {
+          "field": "category",
+          "matchAgainst": "assetCollections[].category",
+          "type": "consistency"
+        }
+      }
+    },
+    {
+      "id": "residuary_shares_total_100",
+      "level": 2,
+      "severity": "error",
+      "description": "Residuary estate bequest shares must total exactly 100 percent",
+      "check": {
+        "source": "bequests[?type=='residuary'].sharePercentage",
+        "type": "sum",
+        "expectedValue": 100
+      }
+    }
+  ]
+}

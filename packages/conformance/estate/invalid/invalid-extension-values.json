@@ -1,0 +1,366 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "1.9.0",
+  "exportedAt": "2026-04-07T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Conformance Kit",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "d2a2b3c4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "testatorPersonId": "a2000001-0000-4000-a000-000000000001",
+    "status": "confirmed",
+    "defaultSuccessionRegime": {
+      "governingLaw": {
+        "jurisdiction": {
+          "country": "SG",
+          "legalSystems": ["common_law"],
+          "name": "Singapore"
+        },
+        "legalTradition": "common_law",
+        "statute": "Intestate Succession Act (Cap 146)"
+      },
+      "determinedBy": "domicile",
+      "binding": true,
+      "notes": "Non-Muslim estates in Singapore are governed by the Intestate Succession Act and Wills Act. Hindu succession rules recorded for family reference and Indian-situs assets."
+    },
+    "religiousConsideration": {
+      "tradition": "hindu_law",
+      "binding": false,
+      "notes": "Rajesh's family follows Mitakshara school of Hindu law. HUF coparcenary property in India is subject to the Hindu Succession Act 1956 (as amended 2005). Singaporean assets are governed by the ISA."
+    },
+    "notes": "Singaporean Hindu estate. Local assets governed by the ISA. CPF savings distributed per CPF nomination. Hindu succession rules relevant for Indian-situs HUF property.",
+    "createdAt": "2026-02-01T00:00:00Z",
+    "lastModifiedAt": "2026-04-07T00:00:00Z",
+    "domicile": {
+      "country": "SG",
+      "legalSystems": ["common_law"],
+      "name": "Singapore"
+    }
+  },
+  "people": [
+    {
+      "id": "a2000001-0000-4000-a000-000000000001",
+      "givenName": "Rajesh",
+      "familyName": "Krishnamurthy",
+      "dateOfBirth": "1962-08-14",
+      "gender": "male",
+      "roles": ["testator"],
+      "domicile": {
+        "country": "SG",
+        "name": "Singapore"
+      },
+      "contact": {
+        "address": {
+          "streetAddress": "Block 456 Ang Mo Kio Avenue 3",
+          "addressLine2": "#12-789",
+          "addressLocality": "Ang Mo Kio",
+          "postalCode": "560456",
+          "addressCountry": "SG"
+        }
+      }
+    },
+    {
+      "id": "a2000001-0000-4000-a000-000000000002",
+      "givenName": "Priya",
+      "familyName": "Krishnamurthy",
+      "dateOfBirth": "1965-12-03",
+      "gender": "female",
+      "roles": ["beneficiary", "executor"]
+    },
+    {
+      "id": "a2000001-0000-4000-a000-000000000003",
+      "givenName": "Arjun",
+      "familyName": "Krishnamurthy",
+      "dateOfBirth": "1990-05-21",
+      "gender": "male",
+      "roles": ["beneficiary"]
+    },
+    {
+      "id": "a2000001-0000-4000-a000-000000000004",
+      "givenName": "Deepa",
+      "familyName": "Krishnamurthy",
+      "dateOfBirth": "1993-09-07",
+      "gender": "female",
+      "roles": ["beneficiary"]
+    }
+  ],
+  "kinships": [
+    {
+      "id": "b2000001-0000-4000-a000-000000000001",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "a2000001-0000-4000-a000-000000000001",
+      "toPersonId": "a2000001-0000-4000-a000-000000000003"
+    },
+    {
+      "id": "b2000001-0000-4000-a000-000000000002",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "a2000001-0000-4000-a000-000000000001",
+      "toPersonId": "a2000001-0000-4000-a000-000000000004"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "c2000001-0000-4000-a000-000000000001",
+      "type": "marriage_religious",
+      "religiousSubtype": "hindu_vivah",
+      "partners": [
+        {
+          "personId": "a2000001-0000-4000-a000-000000000001",
+          "ordinal": 1
+        },
+        {
+          "personId": "a2000001-0000-4000-a000-000000000002",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "SG"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "d2000001-0000-4000-a000-000000000001",
+      "name": "HDB Flat, Block 456 Ang Mo Kio",
+      "propertyType": "apartment",
+      "tenureType": "lease",
+      "isPrimaryResidence": true,
+      "ownershipType": "joint_tenants",
+      "estimatedValue": {
+        "amount": 48000000,
+        "currency": "SGD"
+      },
+      "address": {
+        "streetAddress": "Block 456 Ang Mo Kio Avenue 3",
+        "addressLine2": "#12-789",
+        "addressLocality": "Ang Mo Kio",
+        "postalCode": "560456",
+        "addressCountry": "SG"
+      },
+      "passesOutsideEstate": true,
+      "notes": "HDB flat held as joint tenants with Priya. Passes by survivorship — not part of the probate estate."
+    }
+  ],
+  "assets": [
+    {
+      "id": "e2000001-0000-4000-a000-000000000001",
+      "name": "CPF Account (Ordinary, Special, Medisave)",
+      "category": "financial",
+      "subcategory": "pension",
+      "estimatedValue": {
+        "amount": 28000000,
+        "currency": "SGD"
+      },
+      "passesOutsideEstate": true,
+      "notes": "CPF savings are NOT part of the estate. Distribution follows the CPF nomination made with the CPF Board."
+    },
+    {
+      "id": "e2000001-0000-4000-a000-000000000002",
+      "name": "DBS Savings Account",
+      "category": "financial",
+      "subcategory": "savings_account",
+      "estimatedValue": {
+        "amount": 15000000,
+        "currency": "SGD"
+      }
+    }
+  ],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "f2000001-0000-4000-a000-000000000001",
+      "bequestType": "residuary",
+      "beneficiaryId": "a2000001-0000-4000-a000-000000000002",
+      "description": "I give one-half of the residue of my estate to my wife Priya Krishnamurthy."
+    },
+    {
+      "id": "f2000001-0000-4000-a000-000000000002",
+      "bequestType": "residuary",
+      "beneficiaryId": "a2000001-0000-4000-a000-000000000003",
+      "description": "I give one-quarter of the residue of my estate to my son Arjun Krishnamurthy."
+    },
+    {
+      "id": "f2000001-0000-4000-a000-000000000003",
+      "bequestType": "residuary",
+      "beneficiaryId": "a2000001-0000-4000-a000-000000000004",
+      "description": "I give one-quarter of the residue of my estate to my daughter Deepa Krishnamurthy."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "62000001-0000-4000-a000-000000000001",
+      "personId": "a2000001-0000-4000-a000-000000000002",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [
+    {
+      "id": "72000001-0000-4000-a000-000000000001",
+      "transferType": "cpf_nomination",
+      "passesOutsideEstate": true,
+      "assetIds": ["e2000001-0000-4000-a000-000000000001"],
+      "beneficiaryPersonIds": [
+        "a2000001-0000-4000-a000-000000000002",
+        "a2000001-0000-4000-a000-000000000003",
+        "a2000001-0000-4000-a000-000000000004"
+      ],
+      "bindingNomination": true,
+      "description": "CPF nomination: 50% to Priya, 25% to Arjun, 25% to Deepa.",
+      "jurisdiction": {
+        "country": "SG"
+      }
+    }
+  ],
+  "proxyAuthorisations": [],
+  "extensions": [
+    {
+      "id": "singapore-malaysia",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json",
+      "scope": ["estate"],
+      "dataBlock": "x-inherit-singapore-malaysia"
+    },
+    {
+      "id": "hindu-succession",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/hindu-succession/hindu-succession.json",
+      "scope": ["estate"],
+      "dataBlock": "x-inherit-hindu-succession"
+    }
+  ],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_2",
+    "validatedAt": "2026-04-07T12:00:00Z",
+    "validatedBy": "INHERIT Conformance Kit",
+    "schemaVersion": "1.9.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 0,
+      "maxScore": 100,
+      "checklist": [],
+      "jurisdiction": "SG",
+      "estateStatus": "confirmed"
+    },
+    "taxPosition": {
+      "jurisdiction": "SG",
+      "calculatedAt": "2026-04-07T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 91000000,
+        "currency": "SGD"
+      },
+      "taxableEstate": {
+        "amount": 0,
+        "currency": "SGD"
+      },
+      "estimatedLiability": {
+        "amount": 0,
+        "currency": "SGD"
+      },
+      "effectiveRate": 0,
+      "warnings": ["Singapore abolished estate duty in February 2008. No estate tax applies."],
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax adviser."
+    },
+    "recommendedActions": []
+  },
+  "x-inherit-singapore-malaysia": {
+    "country": "SG",
+    "singaporeISA": {
+      "applicable": true,
+      "shareSchedule": [
+        {
+          "relationship": "spouse",
+          "share": "1/2",
+          "notes": "Under ISA s.7, where the intestate leaves a spouse and children, the spouse receives one-half."
+        },
+        {
+          "relationship": "children",
+          "share": "1/2 equally",
+          "notes": "Children share the remaining one-half equally under ISA s.7."
+        }
+      ],
+      "notes": "ISA intestacy schedule applies as fallback. Rajesh has a will directing the same proportions."
+    },
+    "cpfNominations": [
+      {
+        "accountId": "e2000001-0000-4000-a000-000000000001",
+        "nominatedPersonIds": [
+          "a2000001-0000-4000-a000-000000000002",
+          "a2000001-0000-4000-a000-000000000003",
+          "a2000001-0000-4000-a000-000000000004"
+        ],
+        "binding": true,
+        "nominationDate": "2024-06-15",
+        "notes": "CPF nomination: 50% to Priya, 25% to Arjun, 25% to Deepa. CPF monies do not form part of the estate."
+      }
+    ],
+    "notes": "Non-Muslim estate governed by the ISA and Wills Act. CPF nominations are binding and operate outside the estate."
+  },
+  "x-inherit-hindu-succession": {
+    "applicableLaw": "hindu_succession_act_1956",
+    "school": "invalid_school",
+    "hufProperty": true,
+    "hufDetails": {
+      "kartaPersonId": "a2000001-0000-4000-a000-000000000001",
+      "coparceners": [
+        {
+          "personId": "a2000001-0000-4000-a000-000000000001",
+          "relationship": "karta (father)",
+          "coparcenaryShareFraction": "1/3"
+        },
+        {
+          "personId": "a2000001-0000-4000-a000-000000000003",
+          "relationship": "son",
+          "coparcenaryShareFraction": "1/3"
+        },
+        {
+          "personId": "a2000001-0000-4000-a000-000000000004",
+          "relationship": "daughter",
+          "coparcenaryShareFraction": "1/3"
+        }
+      ],
+      "notes": "HUF property held in India. Under the 2005 Amendment, daughters have equal coparcenary rights."
+    },
+    "heirClassifications": [
+      {
+        "personId": "a2000001-0000-4000-a000-000000000002",
+        "heirClass": "class_I",
+        "scheduleParagraph": "Schedule, Class I — widow"
+      },
+      {
+        "personId": "a2000001-0000-4000-a000-000000000003",
+        "heirClass": "class_I",
+        "scheduleParagraph": "Schedule, Class I — son"
+      },
+      {
+        "personId": "a2000001-0000-4000-a000-000000000004",
+        "heirClass": "class_I",
+        "scheduleParagraph": "Schedule, Class I — daughter"
+      }
+    ],
+    "nriComplications": {
+      "applicable": true,
+      "foreignJurisdiction": {
+        "country": "SG",
+        "name": "Singapore"
+      },
+      "taxImplications": "No estate duty in Singapore. Indian HUF property subject to Indian tax rules.",
+      "notes": "Rajesh is an NRI (Non-Resident Indian) domiciled in Singapore. Indian-situs HUF property is subject to the Hindu Succession Act."
+    },
+    "probateAdvisable": true,
+    "crossStateAssets": false,
+    "notes": "Mitakshara coparcenary rules apply to the HUF property in India. The 2005 Amendment gives Deepa equal coparcenary rights. Singaporean assets are governed by the ISA, not Hindu law."
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "target": "../../../v3/asset-categories/vehicle.json",
+  "tests": [
+    {
+      "description": "valid — empty (all fields optional)",
+      "data": {},
+      "valid": true
+    },
+    {
+      "description": "valid — car with full details",
+      "data": {
+        "vehicle": {
+          "make": "Toyota",
+          "model": "Corolla",
+          "registrationNumber": "AB19 XYZ",
+          "yearOfManufacture": 2019,
+          "colour": "Silver",
+          "fuelType": "petrol"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — vehicle with MOT check",
+      "data": {
+        "vehicleCheck": {
+          "retrievedAt": "2026-01-15T10:00:00Z"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — electric vehicle with zero engine capacity",
+      "data": {
+        "vehicle": {
+          "make": "Tesla",
+          "model": "Model 3",
+          "yearOfManufacture": 2023,
+          "fuelType": "electric",
+          "engineCapacity": 0,
+          "vehicleType": "car",
+          "financeType": "none"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — van vehicle type",
+      "data": {
+        "vehicle": {
+          "make": "Ford",
+          "model": "Transit Custom",
+          "vehicleType": "van",
+          "financeType": "lease"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — motorhome vehicle type",
+      "data": {
+        "vehicle": {
+          "make": "Hymer",
+          "model": "ML-T 580",
+          "vehicleType": "motorhome",
+          "isClassic": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — vehicle fuelType not in enum and not x-inherit prefixed",
+      "data": {
+        "vehicle": {
+          "make": "Honda",
+          "fuelType": "hydrogen_cell"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — vehicle vehicleType not in enum and not x-inherit prefixed",
+      "data": {
+        "vehicle": {
+          "make": "Citroën",
+          "vehicleType": "scooter"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — vehicle financeType not in enum and not x-inherit prefixed",
+      "data": {
+        "vehicle": {
+          "make": "BMW",
+          "financeType": "balloon_payment"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — vehicle yearOfManufacture before 1886 (cars did not exist)",
+      "data": {
+        "vehicle": {
+          "make": "Test",
+          "yearOfManufacture": 1800
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — vehicle with additional property in deathActions",
+      "data": {
+        "vehicle": {
+          "deathActions": {
+            "dvlaNotified": true,
+            "unknownAction": "not allowed"
+          }
+        }
+      },
+      "valid": false
+    }
+  ]
+}

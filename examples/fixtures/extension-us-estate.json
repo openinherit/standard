@@ -1,0 +1,56 @@
+{
+  "$comment": "Test fixture exercising all fields of the us-estate extension",
+  "state": "US-LA",
+  "propertyRegime": "community_property",
+  "electiveShareDetails": {
+    "available": false,
+    "electedPercentage": 33.33,
+    "augmentedEstateIncludes": "Revocable trusts, joint accounts, life insurance payable to third parties",
+    "statute": "Louisiana Civil Code Art. 890",
+    "notes": "Louisiana is a community property state; elective share is not available as such, but forced heirship provides similar protections for qualifying children."
+  },
+  "homesteadExemptions": [
+    {
+      "propertyId": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+      "exemptionAmount": {
+        "amount": 7500000,
+        "currency": "USD"
+      },
+      "constitutional": true,
+      "notes": "Louisiana homestead exemption protects up to $75,000 of equity in the family home from seizure by creditors."
+    },
+    {
+      "propertyId": "2b3c4d5e-6f7a-4b8c-9d0e-1f2a3b4c5d6e",
+      "exemptionAmount": {
+        "amount": 3500000,
+        "currency": "USD"
+      },
+      "constitutional": false,
+      "notes": "Rental property with partial exemption under parish ordinance."
+    }
+  ],
+  "perStirpesVariant": "strict_per_stirpes",
+  "noContestEnforceable": true,
+  "pretermittedHeirStatute": "Louisiana Civil Code Art. 1493",
+  "rufadaaAdopted": true,
+  "louisianaForcedHeirship": {
+    "applicable": true,
+    "eligibleChildren": [
+      {
+        "personId": "3c4d5e6f-7a8b-4c9d-0e1f-2a3b4c5d6e7f",
+        "ageOrCondition": "Under 24 years of age"
+      },
+      {
+        "personId": "4d5e6f7a-8b9c-4d0e-1f2a-3b4c5d6e7f8a",
+        "ageOrCondition": "Permanently incapable of caring for their person or administering their estate"
+      }
+    ],
+    "reservedPortion": 50,
+    "basis": "conditional",
+    "notes": "Louisiana forced heirship applies to children under 24 and children of any age who are permanently incapable. The reserved portion is 25% for one forced heir or 50% for two or more."
+  },
+  "notes": "This fixture represents a Louisiana estate with community property, forced heirship for two qualifying children, and homestead exemptions on two properties.",
+  "x-inherit-taxAdvisorRef": {
+    "value": "Boudreaux & Associates, Baton Rouge, file ref BR-2026-0442"
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/nonprobate-transfer.json",
+  "title": "Nonprobate Transfer",
+  "description": "Assets that pass outside the probate estate — revocable trusts, TOD deeds, POD accounts, JTWROS, beneficiary designations, superannuation/CPF/EPF nominations",
+  "type": "object",
+  "required": [ "id", "transferType", "passesOutsideEstate" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this nonprobate transfer within the INHERIT document",
+      "examples": [ "c5d6e7f8-a9b0-1234-c567-89abcdef0123" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "transferType": {
+      "description": "The mechanism by which this asset passes outside the probate estate",
+      "$comment": "revocable_trust: assets in a revocable (living) trust pass to beneficiaries outside probate. tod_deed: transfer-on-death deed — property transfers automatically on death (US states). pod_account: payable-on-death bank account. jtwros: joint tenancy with right of survivorship — deceased's share passes automatically to survivor(s). tenancy_by_entirety: US spousal joint tenancy — creditor-protected. beneficiary_designation: named beneficiary on a financial account. life_insurance_nomination: named beneficiary on a life insurance policy. superannuation_nomination: Australian superannuation death benefit nomination. cpf_nomination: Singapore Central Provident Fund nomination. epf_nomination: Malaysian Employees Provident Fund nomination. mandatory_savings_nomination: generic for other national provident fund nominations.",
+      "examples": [
+        "jtwros",
+        "life_insurance_nomination",
+        "superannuation_nomination"
+      ],
+      "enum": [
+        "revocable_trust",
+        "tod_deed",
+        "pod_account",
+        "jtwros",
+        "tenancy_by_entirety",
+        "beneficiary_designation",
+        "life_insurance_nomination",
+        "superannuation_nomination",
+        "cpf_nomination",
+        "epf_nomination",
+        "mandatory_savings_nomination"
+      ]
+    },
+    "designationType": {
+      "description": "More specific description of the transfer mechanism",
+      "examples": [
+        "JTWROS bank account",
+        "TOD deed on investment property",
+        "Binding death benefit nomination"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "description": {
+      "description": "Free-text description of the nonprobate transfer",
+      "examples": [
+        "Joint bank account with spouse — passes by survivorship",
+        "Life insurance policy with Aviva — daughter named as sole beneficiary"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "trustId": {
+      "description": "Reference to a Trust.id if this transfer is via a revocable trust",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "propertyId": {
+      "description": "Reference to a Property.id if this transfer relates to real estate (e.g. TOD deed, JTWROS property)",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "assetIds": {
+      "description": "References to Asset.id(s) that pass via this nonprobate transfer",
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+        "format": "uuid"
+      }
+    },
+    "beneficiaryPersonIds": {
+      "description": "Person IDs of the primary beneficiaries or surviving owners who receive the asset",
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+        "format": "uuid"
+      }
+    },
+    "contingentBeneficiaryPersonIds": {
+      "description": "Person IDs of contingent beneficiaries who receive if the primary beneficiaries predecease",
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+        "format": "uuid"
+      }
+    },
+    "survivingOwnerPersonIds": {
+      "description": "Person IDs of surviving joint owners for JTWROS and tenancy by entirety transfers",
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+        "format": "uuid"
+      }
+    },
+    "passesOutsideEstate": {
+      "description": "Confirmation that this asset passes outside the probate estate. Should always be true for nonprobate transfers",
+      "examples": [ true ],
+      "type": "boolean"
+    },
+    "bindingNomination": {
+      "description": "Whether the beneficiary nomination is legally binding on the fund trustee. Australian superannuation nominations may be binding (valid for 3 years) or non-binding (trustee has discretion)",
+      "$comment": "Whether the nomination is binding on the fund trustee. Australian super nominations may be binding or non-binding.",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "nominationExpiryDate": {
+      "description": "Date the nomination expires, if applicable. Australian binding nominations expire after 3 years and must be renewed",
+      "examples": [ "2027-06-15" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "recordingReference": {
+      "description": "Recording or filing reference for the transfer instrument (e.g. county recorder reference for a TOD deed)",
+      "examples": [ "RECORDER-2024-TOD-001234" ],
+      "type": "string",
+      "maxLength": 500
+    },
+    "jurisdiction": {
+      "description": "Jurisdiction governing this nonprobate transfer",
+      "$ref": "common/jurisdiction.json"
+    },
+    "notes": {
+      "description": "Free-text notes about this nonprobate transfer",
+      "examples": [
+        "Binding nomination renewed March 2024 — expires March 2027",
+        "TOD deed recorded in Los Angeles County"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "designationConflict": {
+      "description": "Documents a conflict between this beneficiary designation and another instrument (will, later nomination, court order)",
+      "type": "object",
+      "properties": {
+        "exists": {
+          "type": "boolean"
+        },
+        "conflictsWith": {
+          "enum": [ "bequest", "later_nomination", "court_order", "other" ]
+        },
+        "conflictingEntityId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "resolution": {
+          "enum": [
+            "nomination_prevails",
+            "will_prevails",
+            "court_order",
+            "unresolved"
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "revocationDetails": {
+      "description": "How and when a beneficiary designation was revoked",
+      "type": "object",
+      "properties": {
+        "revokedDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "revokedByDocumentId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "revokedBy": {
+          "enum": [ "testator", "court", "beneficiary", "insurer" ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,45 @@
+{
+  "name": "Switzerland",
+  "id": "https://openinherit.org/v3/extensions/switzerland/switzerland.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "CH"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [],
+  "legalSystems": [
+    "civil_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-04-05",
+  "dataProvenance": "Swiss Civil Code (ZGB) Art. 457–640, January 2023 succession law reform (Erbrechtsrevision)",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Swiss succession rules: Pflichtteil (forced heirship after 2023 Erbrechtsrevision), cantonal inheritance tax variation, matrimonial property regimes, Erbschein (certificate of inheritance), and notarial will forms.",
+  "conformanceRules": [
+    {
+      "id": "ch-001",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "Matrimonial property regime should be specified for Swiss estates where a surviving spouse exists",
+      "check": "exists",
+      "path": "x-inherit-switzerland.matrimonialPropertyRegime",
+      "severity": "warning"
+    }
+  ],
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-05",
+  "successionCoverage": "partial",
+  "taxCoverage": "outline",
+  "keyFeatures": "2023 revised forced heirship rules, cantonal succession tax variation, usufruct rights",
+  "legalTradition": "Civil law",
+  "seeking": "Cantonal succession law expertise",
+  "tier": "core"
+}

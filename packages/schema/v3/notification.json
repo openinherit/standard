@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/notification.json",
+  "title": "Notification",
+  "description": "A notification sent to a person or organisation during estate administration — beneficiary notifications, executor appointments, probate grants, document requests",
+  "type": "object",
+  "required": [
+    "id",
+    "notificationType",
+    "recipientType",
+    "recipientId",
+    "channel",
+    "sentAt"
+  ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this notification",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "notificationType": {
+      "description": "The type of notification sent",
+      "anyOf": [
+        {
+          "enum": [
+            "beneficiary_notified",
+            "executor_appointed",
+            "probate_granted",
+            "asset_identified",
+            "asset_sold",
+            "document_request",
+            "other"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+"
+        }
+      ]
+    },
+    "recipientType": {
+      "description": "Whether the recipient is a person or an organisation",
+      "enum": [ "person", "organisation" ]
+    },
+    "recipientId": {
+      "description": "Reference to the Person.id or Organisation.id of the recipient",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "recipientIdDisplay": {
+      "description": "Human-readable display name for the referenced recipient",
+      "type": "string",
+      "maxLength": 255
+    },
+    "channel": {
+      "description": "The communication channel used",
+      "enum": [ "email", "post", "phone", "sms", "in_app", "other" ]
+    },
+    "sentAt": {
+      "description": "When the notification was sent",
+      "examples": [ "2026-03-30T10:00:00Z" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "status": {
+      "description": "Current delivery status",
+      "enum": [ "pending", "sent", "delivered", "failed", "bounced" ]
+    },
+    "templateId": {
+      "description": "Identifier of the notification template used",
+      "examples": [ "TMPL-BENEF-001" ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "notes": {
+      "description": "Additional notes about this notification",
+      "type": "string",
+      "maxLength": 2000
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

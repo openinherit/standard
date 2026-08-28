@@ -1,0 +1,359 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "1.9.0",
+  "exportedAt": "2026-04-07T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Conformance Kit",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "d1a2b3c4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "testatorPersonId": "a1000001-0000-4000-a000-000000000001",
+    "status": "confirmed",
+    "defaultSuccessionRegime": {
+      "governingLaw": {
+        "jurisdiction": {
+          "country": "GB",
+          "subdivision": "GB-ENG",
+          "legalSystems": ["common_law"],
+          "name": "England"
+        },
+        "legalTradition": "common_law",
+        "statute": "Administration of Estates Act 1925"
+      },
+      "determinedBy": "domicile",
+      "binding": true,
+      "notes": "English probate governs administration. Net estate distributed according to Islamic faraid rules as directed by the will. IFPA 1975 claims may override faraid allocations."
+    },
+    "religiousConsideration": {
+      "tradition": "islamic_law",
+      "binding": false,
+      "notes": "Yusuf directed that the net distributable estate (after IHT, debts, and administration expenses) be divided according to Hanafi faraid rules. The wasiyya (one-third bequest) goes to charity."
+    },
+    "notes": "British Muslim estate administered under English probate with Islamic faraid distribution. IHT applies to the gross estate; faraid applies to the net distributable estate.",
+    "createdAt": "2026-01-15T00:00:00Z",
+    "lastModifiedAt": "2026-04-07T00:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": ["common_law"],
+      "name": "England"
+    }
+  },
+  "people": [
+    {
+      "id": "a1000001-0000-4000-a000-000000000001",
+      "givenName": "Yusuf",
+      "familyName": "Ibrahim",
+      "dateOfBirth": "1958-03-22",
+      "gender": "male",
+      "roles": ["testator"],
+      "domicile": {
+        "country": "GB",
+        "subdivision": "GB-ENG",
+        "name": "England"
+      },
+      "contact": {
+        "address": {
+          "streetAddress": "14 Crescent Road",
+          "addressLocality": "Tower Hamlets",
+          "addressRegion": "London",
+          "postalCode": "E1 4AB",
+          "addressCountry": "GB"
+        }
+      }
+    },
+    {
+      "id": "a1000001-0000-4000-a000-000000000002",
+      "givenName": "Amina",
+      "familyName": "Ibrahim",
+      "dateOfBirth": "1962-07-10",
+      "gender": "female",
+      "roles": ["beneficiary"]
+    },
+    {
+      "id": "a1000001-0000-4000-a000-000000000003",
+      "givenName": "Omar",
+      "familyName": "Ibrahim",
+      "dateOfBirth": "1988-11-05",
+      "gender": "male",
+      "roles": ["beneficiary", "executor"]
+    },
+    {
+      "id": "a1000001-0000-4000-a000-000000000004",
+      "givenName": "Layla",
+      "familyName": "Ibrahim",
+      "dateOfBirth": "1991-02-18",
+      "gender": "female",
+      "roles": ["beneficiary"]
+    }
+  ],
+  "kinships": [
+    {
+      "id": "b1000001-0000-4000-a000-000000000001",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "a1000001-0000-4000-a000-000000000001",
+      "toPersonId": "a1000001-0000-4000-a000-000000000003"
+    },
+    {
+      "id": "b1000001-0000-4000-a000-000000000002",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "a1000001-0000-4000-a000-000000000001",
+      "toPersonId": "a1000001-0000-4000-a000-000000000004"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "c1000001-0000-4000-a000-000000000001",
+      "type": "marriage_religious",
+      "religiousSubtype": "nikah",
+      "partners": [
+        {
+          "personId": "a1000001-0000-4000-a000-000000000001",
+          "ordinal": 1
+        },
+        {
+          "personId": "a1000001-0000-4000-a000-000000000002",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "d1000001-0000-4000-a000-000000000001",
+      "name": "14 Crescent Road, Tower Hamlets, London",
+      "propertyType": "attached",
+      "tenureType": "ownership",
+      "isPrimaryResidence": true,
+      "ownershipType": "sole",
+      "estimatedValue": {
+        "amount": 65000000,
+        "currency": "GBP"
+      },
+      "address": {
+        "streetAddress": "14 Crescent Road",
+        "addressLocality": "Tower Hamlets",
+        "addressRegion": "London",
+        "postalCode": "E1 4AB",
+        "addressCountry": "GB"
+      }
+    }
+  ],
+  "assets": [
+    {
+      "id": "e1000001-0000-4000-a000-000000000001",
+      "name": "Al Rayan Bank Savings Account",
+      "category": "financial",
+      "subcategory": "savings_account",
+      "estimatedValue": {
+        "amount": 12000000,
+        "currency": "GBP"
+      },
+      "notes": "Shariah-compliant savings account held with Al Rayan Bank."
+    }
+  ],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "f1000001-0000-4000-a000-000000000001",
+      "bequestType": "x-inherit-wasiyya",
+      "beneficiaryOrganisation": {
+        "name": "Islamic Relief UK",
+        "type": "charity"
+      },
+      "description": "Wasiyya: I bequeath one-third of my net estate to Islamic Relief UK for charitable purposes, in accordance with Islamic law.",
+      "notes": "Wasiyya limited to one-third of the net estate under Hanafi fiqh. Bequests to non-heirs only."
+    },
+    {
+      "id": "f1000001-0000-4000-a000-000000000002",
+      "bequestType": "residuary",
+      "beneficiaryId": "a1000001-0000-4000-a000-000000000002",
+      "description": "Wife's faraid share: one-eighth of the remaining estate (after wasiyya and debts), as Yusuf has children."
+    },
+    {
+      "id": "f1000001-0000-4000-a000-000000000003",
+      "bequestType": "residuary",
+      "beneficiaryId": "a1000001-0000-4000-a000-000000000003",
+      "description": "Son's faraid share: Omar receives a residuary (asaba) share equal to twice that of each daughter."
+    },
+    {
+      "id": "f1000001-0000-4000-a000-000000000004",
+      "bequestType": "residuary",
+      "beneficiaryId": "a1000001-0000-4000-a000-000000000004",
+      "description": "Daughter's faraid share: Layla receives a residuary (asaba) share equal to half that of each son."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "61000001-0000-4000-a000-000000000001",
+      "personId": "a1000001-0000-4000-a000-000000000003",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [
+    {
+      "id": "uk-england-wales",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json",
+      "scope": ["estate"],
+      "dataBlock": "x-inherit-uk-england-wales"
+    },
+    {
+      "id": "islamic-succession",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json",
+      "scope": ["estate"],
+      "dataBlock": "x-inherit-islamic-succession"
+    }
+  ],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_2",
+    "validatedAt": "2026-04-07T12:00:00Z",
+    "validatedBy": "INHERIT Conformance Kit",
+    "schemaVersion": "1.9.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 0,
+      "maxScore": 100,
+      "checklist": [],
+      "jurisdiction": "GB",
+      "estateStatus": "confirmed"
+    },
+    "taxPosition": {
+      "jurisdiction": "GB",
+      "calculatedAt": "2026-04-07T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 77000000,
+        "currency": "GBP"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax adviser."
+    },
+    "recommendedActions": []
+  },
+  "x-inherit-uk-england-wales": {
+    "nilRateBand": {
+      "value": 32500000,
+      "effectiveFrom": "2009-04-06",
+      "status": "enacted",
+      "legislativeReference": "Inheritance Tax Act 1984 s.7",
+      "notes": "Frozen at £325,000 since 2009."
+    },
+    "residenceNilRateBand": {
+      "value": 17500000,
+      "effectiveFrom": "2017-04-06",
+      "status": "enacted",
+      "legislativeReference": "Inheritance Tax Act 1984 s.8D",
+      "notes": "RNRB £175,000 for estates passing the main residence to direct descendants."
+    },
+    "inheritanceTaxRate": {
+      "value": 40,
+      "effectiveFrom": "2009-04-06",
+      "status": "enacted",
+      "legislativeReference": "Inheritance Tax Act 1984 s.7"
+    },
+    "transferableNilRateBand": false,
+    "ifpa1975Eligible": [
+      {
+        "personId": "a1000001-0000-4000-a000-000000000002",
+        "category": "spouse"
+      },
+      {
+        "personId": "a1000001-0000-4000-a000-000000000003",
+        "category": "child"
+      },
+      {
+        "personId": "a1000001-0000-4000-a000-000000000004",
+        "category": "child"
+      }
+    ],
+    "localPropertyTypes": [
+      {
+        "propertyId": "d1000001-0000-4000-a000-000000000001",
+        "localType": "terraced_house"
+      }
+    ],
+    "localTenureTypes": [
+      {
+        "propertyId": "d1000001-0000-4000-a000-000000000001",
+        "localType": "freehold"
+      }
+    ],
+    "localGrantTypes": [
+      {
+        "executorId": "61000001-0000-4000-a000-000000000001",
+        "localType": "grant_of_probate"
+      }
+    ]
+  },
+  "x-inherit-islamic-succession": {
+    "school": "hanafi",
+    "faraidApplies": true,
+    "heirClassifications": [
+      {
+        "personId": "a1000001-0000-4000-a000-000000000002",
+        "heirClass": "wife",
+        "fixedShareFraction": "1/8",
+        "residuaryClass": "none",
+        "notes": "Wife receives one-eighth when the deceased has children (Quran 4:12)."
+      },
+      {
+        "personId": "a1000001-0000-4000-a000-000000000003",
+        "heirClass": "son",
+        "residuaryClass": "asaba_by_self",
+        "notes": "Son is asaba bi-nafsihi — takes the residue after fixed shares."
+      },
+      {
+        "personId": "a1000001-0000-4000-a000-000000000004",
+        "heirClass": "daughter",
+        "residuaryClass": "asaba_with_other",
+        "notes": "Daughter becomes asaba with brother — receives half the son's share (Quran 4:11)."
+      }
+    ],
+    "awlApplied": false,
+    "raddApplied": false,
+    "wasiyyaRules": {
+      "maxPortion": 33.33,
+      "toNonHeirsOnly": true,
+      "requiresHeirConsent": false,
+      "notes": "Under Hanafi fiqh, a wasiyya is limited to one-third of the net estate and may only be made to non-heirs without heir consent."
+    },
+    "mahr": {
+      "amount": {
+        "amount": 500000,
+        "currency": "GBP"
+      },
+      "agreed": true,
+      "paidInFull": true,
+      "creditorPersonId": "a1000001-0000-4000-a000-000000000002",
+      "notes": "Mahr of £5,000 was agreed in the nikah contract and paid in full during the marriage."
+    },
+    "hijriDates": {
+      "deathDateHijri": "1447-09-10"
+    },
+    "islamicFormalities": {
+      "certifiedByScholar": true,
+      "scholarName": "Sheikh Ahmad Al-Mahmoud",
+      "notes": "Faraid calculation certified by a qualified Islamic scholar at East London Mosque."
+    },
+    "notes": "English probate takes precedence for tax and administration. Faraid distribution applies to the net distributable estate after IHT, debts, and administration expenses."
+  }
+}

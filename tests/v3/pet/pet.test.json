@@ -1,0 +1,249 @@
+{
+  "target": "../../../v3/pet.json",
+  "tests": [
+    {
+      "description": "valid — minimal pet (required fields only)",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "petName": "Biscuit",
+        "species": "dog"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated pet",
+      "data": {
+        "id": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "petName": "Mochi",
+        "species": "cat",
+        "breed": "British Shorthair",
+        "dateOfBirth": "2020-06-15",
+        "microchipNumber": "985141000123456",
+        "vaccinesUpToDate": true,
+        "healthConditions": [
+          "Mild arthritis"
+        ],
+        "medicationRequired": [
+          "Metacam 0.5mg daily"
+        ],
+        "dietaryNeeds": "Hypoallergenic dry food only",
+        "temperament": "Friendly, indoor cat",
+        "caregiverPersonId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "alternativeCaregiverPersonId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "veterinarianOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "estimatedMonthlyCareCost": {
+          "amount": 15000,
+          "currency": "GBP"
+        },
+        "fundingForCare": {
+          "amount": 500000,
+          "currency": "GBP"
+        },
+        "immediateActionRequired": "Cat needs feeding twice daily — food in kitchen cupboard",
+        "keyLocationForPet": "Indoor cat — does not go outside",
+        "notes": "Mochi is very bonded to the family — prefers female carers"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — x-inherit- extension species",
+      "data": {
+        "id": "b3f2a357-814f-46ab-ac49-715dcf86314d",
+        "petName": "Shelley",
+        "species": "x-inherit-tortoise"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required petName",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "species": "dog"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required species",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "petName": "Biscuit"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown species value",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "petName": "Nessie",
+        "species": "dragon"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unevaluated property",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "petName": "Biscuit",
+        "species": "dog",
+        "favouriteToy": "ball"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — pet with petCareArrangement (Helmsley pattern)",
+      "data": {
+        "id": "6e52090a-6924-4707-a1c3-3883bd7e364b",
+        "petName": "Trouble",
+        "species": "dog",
+        "breed": "Maltese",
+        "petCareArrangement": {
+          "trustId": "9d331770-8c6d-4a06-b1ed-e9dec7ecefd8",
+          "nominatedCarerPersonId": "9bacbc85-d9b0-49a5-9ad3-fa81a61e815a",
+          "careInstructions": "Trouble must be cared for in the manner to which she is accustomed. Premium dog food only. Weekly grooming appointments."
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — pet with bequest-based care (simpler pattern)",
+      "data": {
+        "id": "01e03696-7a78-491c-b09d-289f50aa2684",
+        "petName": "Biscuit",
+        "species": "cat",
+        "petCareArrangement": {
+          "bequestId": "482429af-1b9d-405c-a601-4c007f5156c3",
+          "nominatedCarerPersonId": "5cfc128c-82eb-44a9-976b-5e23393aa81f",
+          "careInstructions": "Indoor cat, needs daily medication for thyroid"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "petName": "Biscuit",
+        "species": "dog"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — petName as number (wrong type)",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "petName": 42,
+        "species": "dog"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — species as boolean (wrong type)",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "petName": "Biscuit",
+        "species": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id not a valid UUID",
+      "data": {
+        "id": "not-a-valid-uuid",
+        "petName": "Biscuit",
+        "species": "dog"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — dateOfBirth not a valid date format",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "petName": "Biscuit",
+        "species": "dog",
+        "dateOfBirth": "15/06/2020"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — petName empty string (below minLength 1)",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "petName": "",
+        "species": "dog"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — petName exceeds maxLength 255",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "petName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "species": "dog"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — bird species",
+      "data": {
+        "id": "ee000001-0000-4000-e000-000000000001",
+        "petName": "Polly",
+        "species": "bird"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — horse species",
+      "data": {
+        "id": "ee000002-0000-4000-e000-000000000002",
+        "petName": "Thunder",
+        "species": "horse"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — rabbit species",
+      "data": {
+        "id": "ee000003-0000-4000-e000-000000000003",
+        "petName": "Flopsy",
+        "species": "rabbit"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fish species",
+      "data": {
+        "id": "ee000004-0000-4000-e000-000000000004",
+        "petName": "Nemo",
+        "species": "fish"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — reptile species",
+      "data": {
+        "id": "ee000005-0000-4000-e000-000000000005",
+        "petName": "Slinky",
+        "species": "reptile"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — other species",
+      "data": {
+        "id": "ee000006-0000-4000-e000-000000000006",
+        "petName": "Pinchy",
+        "species": "other"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — caregiverPersonId not a valid UUID",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "petName": "Biscuit",
+        "species": "dog",
+        "caregiverPersonId": "bad-uuid"
+      },
+      "valid": false
+    }
+  ]
+}

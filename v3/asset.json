@@ -1,0 +1,1600 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/asset.json",
+  "title": "Asset",
+  "description": "A non-property asset: financial accounts, personal property, vehicles, digital assets, business interests, Islamic finance instruments, etc",
+  "$comment": "Asset decomposition: core fields are in this file. Category-specific fields are in asset-categories/*.json, composed via allOf+if/then. Category schemas MUST NOT use additionalProperties:false.",
+  "type": "object",
+  "allOf": [
+    {
+      "if": {
+        "required": [ "category" ],
+        "properties": {
+          "category": {
+            "const": "financial"
+          }
+        }
+      },
+      "then": {
+        "$ref": "asset-categories/financial.json"
+      }
+    },
+    {
+      "if": {
+        "required": [ "category" ],
+        "properties": {
+          "category": {
+            "const": "vehicle"
+          }
+        }
+      },
+      "then": {
+        "$ref": "asset-categories/vehicle.json"
+      }
+    },
+    {
+      "if": {
+        "required": [ "category" ],
+        "properties": {
+          "category": {
+            "const": "digital"
+          }
+        }
+      },
+      "then": {
+        "$ref": "asset-categories/digital.json"
+      }
+    },
+    {
+      "if": {
+        "required": [ "category" ],
+        "properties": {
+          "category": {
+            "const": "business"
+          }
+        }
+      },
+      "then": {
+        "$ref": "asset-categories/business.json"
+      }
+    },
+    {
+      "if": {
+        "required": [ "category" ],
+        "properties": {
+          "category": {
+            "enum": [
+              "property_contents",
+              "jewellery_watches",
+              "art",
+              "antiques",
+              "collectibles",
+              "musical_instruments",
+              "books_manuscripts",
+              "wine_spirits",
+              "clothing_textiles",
+              "firearms_sporting",
+              "islamic_financial",
+              "other"
+            ]
+          }
+        }
+      },
+      "then": {
+        "$ref": "asset-categories/general.json"
+      }
+    }
+  ],
+  "required": [ "id", "name", "category" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this asset within the INHERIT document",
+      "examples": [ "e5f6a7b8-c9d0-1234-ef01-23456789abcd" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "name": {
+      "description": "Display name for this asset. Should be specific enough to identify the item during probate",
+      "examples": [
+        "Grandmother's engagement ring",
+        "Barclays Current Account",
+        "2019 Toyota Corolla",
+        "Bitcoin wallet",
+        "Stradivarius violin"
+      ],
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "category": {
+      "description": "Top-level category from the INHERIT Product Taxonomy. Use the `subcategory` field for finer classification. See `reference-data/category-guidance.json` for valid subcategories, recommended identifiers, and photography guidance per category",
+      "$comment": "Top-level categories from the INHERIT Product Taxonomy (derived from the Standard Product Taxonomy, MIT licence). financial: bank accounts, savings, investments, pensions, shares, bonds, cryptocurrency, insurance. property_contents: furniture, kitchenware, electronics, tools, garden and outdoor items. vehicle: cars, motorcycles, boats, caravans, classic vehicles. jewellery_watches: jewellery, watches, precious stones, costume jewellery. art: paintings, sculptures, prints, photography, mixed media. antiques: antique furniture, ceramics, silverware, clocks. collectibles: stamps, coins, model railways, vinyl records, trading cards, memorabilia. musical_instruments: pianos, guitars, orchestral instruments, vintage instruments. books_manuscripts: rare books, first editions, manuscripts, maps. wine_spirits: wine collections, whisky, spirits, cellar contents. clothing_textiles: designer clothing, vintage fashion, textiles, rugs. firearms_sporting: firearms (require licensing), sporting equipment, fishing tackle. digital: domain names, social media accounts, subscriptions, digital media, crypto wallets. business: business interests, partnerships, intellectual property, stock compensation. islamic_financial: sukuk, takaful, Islamic deposits — internationally recognized financial instruments defined by AAOIFI standards and regulated by secular financial authorities. other: any asset not covered above. Use the subcategory field for finer classification — valid subcategories per category are listed in reference-data/category-guidance.json.",
+      "examples": [
+        "financial",
+        "collectibles",
+        "vehicle",
+        "jewellery_watches"
+      ],
+      "enum": [
+        "financial",
+        "vehicle",
+        "digital",
+        "business",
+        "property_contents",
+        "jewellery_watches",
+        "art",
+        "antiques",
+        "collectibles",
+        "musical_instruments",
+        "books_manuscripts",
+        "wine_spirits",
+        "clothing_textiles",
+        "firearms_sporting",
+        "islamic_financial",
+        "other"
+      ]
+    },
+    "subcategory": {
+      "description": "Finer classification within the top-level category. Values are defined in reference-data/category-guidance.json but the field is freeform to accommodate jurisdiction-specific asset types. Examples: financial → 'pension', collectibles → 'model_railways', vehicle → 'classic_vehicle'",
+      "examples": [
+        "engagement ring",
+        "ISA",
+        "self-invested personal pension",
+        "NFT",
+        "vintage wine"
+      ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "estimatedValue": {
+      "description": "Owner's estimate of the asset's current value, in minor currency units",
+      "$ref": "common/money.json"
+    },
+    "professionalValuation": {
+      "description": "Professional valuation of the asset, in minor currency units",
+      "$ref": "common/money.json"
+    },
+    "valuationDate": {
+      "description": "Date of the most recent valuation",
+      "examples": [ "2024-11-01", "2025-02-14" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "valuationConfidence": {
+      "description": "Level of confidence in the stated valuation",
+      "$comment": "estimated: owner's own estimate. professional: assessed by a qualified valuer. official: valuation agreed with tax authority for probate, inheritance tax, or equivalent official purpose — territory-neutral term replacing 'probate'. unknown: basis of valuation is unknown.",
+      "examples": [ "estimated", "professional" ],
+      "enum": [ "estimated", "professional", "official", "unknown" ]
+    },
+    "condition": {
+      "description": "Physical condition of the asset. Affects resale value — dealers use this to price items. Pair with conditionSystem and conditionGrade for domain-specific grading. Use 'not_applicable' for financial assets where condition is meaningless",
+      "$comment": "excellent: like new or pristine. good: normal wear, fully functional. fair: showing age, may need minor repair. poor: significant wear, may need major repair. unknown: condition has not been assessed. not_applicable: condition is not relevant (e.g. bank accounts, pensions).",
+      "examples": [ "good", "not_applicable" ],
+      "enum": [
+        "excellent",
+        "good",
+        "fair",
+        "poor",
+        "unknown",
+        "not_applicable"
+      ]
+    },
+    "quantity": {
+      "description": "Number of items if this represents multiple identical or similar items",
+      "examples": [ 1, 12, 500 ],
+      "type": "integer",
+      "minimum": 1
+    },
+    "location": {
+      "description": "Where this asset is physically stored or held — a bank, safe, property, or institution",
+      "examples": [
+        "Barclays Bank, Manchester branch",
+        "Home safe",
+        "Bonhams storage, London",
+        "Coinbase exchange"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "propertyId": {
+      "description": "Reference to a Property.id if this asset is located at a specific property in the estate",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "assetCollectionId": {
+      "description": "Reference to the AssetCollection.id this asset belongs to. An asset may belong to at most one collection. If set, this asset's value contributes to the collection's total",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "spaceId": {
+      "description": "Reference to a Space.id representing where this item is physically stored. Critical for collections spread across multiple properties or countries — affects probate jurisdiction and dealer collection logistics",
+      "type": [ "string", "null" ],
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "identifiers": {
+      "description": "External identifiers — serial numbers, account numbers, policy references, registration numbers, etc",
+      "examples": [
+        [
+          {
+            "system": "urn:barclays:sort-code-account",
+            "value": "20-45-67 12345678",
+            "type": "bank_account"
+          }
+        ],
+        [
+          {
+            "value": "DVLA: AB12 CDE",
+            "type": "vehicle_registration"
+          }
+        ]
+      ],
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common/identifier.json"
+      }
+    },
+    "externalLinks": {
+      "description": "Links to this asset in external databases, marketplaces, and registries. The universal connector — any external system can be referenced without a schema change. Use identifiers for formal identifier schemes (ISBN, VIN, NINO); use externalLinks for platform-specific references, product pages, and database entries",
+      "$comment": "Each link has a system (which database), an id (the platform-specific identifier), and an optional url (direct link). The system field should use a short, recognisable name — implementations can maintain a registry of known systems. Examples: chrono24 (watch marketplace), discogs (vinyl database), artnet (art market data), rightmove (UK property), companieshouse (UK company registry), landregistry (UK property titles).",
+      "examples": [
+        [
+          {
+            "system": "chrono24",
+            "id": "12345678",
+            "url": "https://www.chrono24.co.uk/rolex/ref-116610ln--id12345678.htm"
+          },
+          {
+            "system": "watchchartsRef",
+            "id": "rolex-submariner-116610ln"
+          }
+        ],
+        [
+          {
+            "system": "discogs",
+            "id": "1234567",
+            "url": "https://www.discogs.com/release/1234567"
+          }
+        ],
+        [
+          {
+            "system": "companieshouse",
+            "id": "12345678",
+            "url": "https://find-and-update.company-information.service.gov.uk/company/12345678"
+          }
+        ],
+        [
+          {
+            "system": "artnet",
+            "id": "andy-warhol-campbells-soup-can",
+            "url": "https://www.artnet.com/artists/andy-warhol/"
+          },
+          {
+            "system": "artlossregister",
+            "id": "ALR-2025-98765"
+          }
+        ]
+      ],
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [ "system", "id" ],
+        "properties": {
+          "system": {
+            "description": "The external system or platform name. Use lowercase, no spaces",
+            "examples": [
+              "chrono24",
+              "discogs",
+              "artnet",
+              "ebay",
+              "catawiki",
+              "rightmove",
+              "zoopla",
+              "companieshouse",
+              "landregistry",
+              "artlossregister",
+              "watchchartsRef",
+              "livex",
+              "gtin"
+            ],
+            "type": "string",
+            "pattern": "^[a-z][a-zA-Z0-9]*$",
+            "maxLength": 100
+          },
+          "id": {
+            "description": "The platform-specific identifier for this asset",
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          },
+          "url": {
+            "description": "Direct URL to the asset's page on the external platform. Optional — some systems are API-only",
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9+.-]*://",
+            "format": "uri",
+            "maxLength": 2048
+          },
+          "label": {
+            "description": "Human-readable label for display. Optional — defaults to the system name",
+            "examples": [
+              "Chrono24 listing",
+              "Discogs release page",
+              "Companies House filing"
+            ],
+            "type": "string",
+            "maxLength": 255
+          },
+          "retrievedAt": {
+            "description": "Timestamp when this link was last verified or data was last retrieved",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "productPage": {
+      "description": "URI pointing to the manufacturer's or retailer's official product page for this exact item. Distinct from storageRef (document storage) and externalLinks (database references). Enables direct linking to manufacturer specifications, manuals, and warranty information",
+      "examples": [
+        "https://www.rolex.com/watches/submariner/m126610ln-0001",
+        "https://www.gibson.com/en-US/Electric-Guitar/Les-Paul-Standard-50s",
+        "https://www.hornby.com/shop/r30350"
+      ],
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9+.-]*://",
+      "format": "uri",
+      "maxLength": 2048
+    },
+    "provenanceChain": {
+      "description": "Prior ownership records — establishes the chain of provenance for the asset. Critical for art, antiques, and high-value collectibles",
+      "$comment": "Christie's-requested: provenance chain is a standard requirement for auction house estate valuations",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "description" ],
+        "properties": {
+          "description": {
+            "description": "Description of this provenance record",
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1
+          },
+          "ownerName": {
+            "description": "Name of the previous owner (may be anonymised)",
+            "type": "string",
+            "maxLength": 255
+          },
+          "fromDate": {
+            "description": "Approximate start date of this ownership period",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "format": "date"
+          },
+          "toDate": {
+            "description": "Approximate end date of this ownership period",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "format": "date"
+          },
+          "acquisitionMethod": {
+            "description": "How the owner acquired the asset",
+            "enum": [
+              "purchase",
+              "inheritance",
+              "gift",
+              "commission",
+              "restitution",
+              "auction",
+              "unknown"
+            ]
+          },
+          "source": {
+            "description": "Where this provenance information came from",
+            "type": "string",
+            "maxLength": 500
+          },
+          "evidenceUrl": {
+            "description": "Link to supporting evidence (sale record, catalogue entry, etc.)",
+            "type": "string",
+            "pattern": "^https?://",
+            "format": "uri",
+            "maxLength": 2048
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "images": {
+      "description": "Photographs, videos, and document scans. Vision-capable AI agents use these to identify items, assess condition, and find visual matches on marketplaces. Use viewType from media.json to categorize each media item",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "common/media.json"
+      }
+    },
+    "possessionStatus": {
+      "description": "Whether the asset was held at death, is receivable post-death, or is contingent on a future event",
+      "$comment": "possessed_at_death: asset was in the deceased's possession or control at death (muchzak in halacha). receivable: asset is owed to the estate but not yet received — e.g. insurance payouts, debts owed to the deceased (ra'ui in halacha). contingent: asset depends on a future event that may or may not occur. Under halacha, the bekhor's double portion applies only to 'possessed_at_death' (muchzak), not 'receivable' (ra'ui). Useful for probate valuations universally.",
+      "examples": [ "possessed_at_death", "receivable" ],
+      "enum": [ "possessed_at_death", "receivable", "contingent" ]
+    },
+    "mobilityType": {
+      "description": "Whether this asset is classified as immoveable or moveable property. Affects which conflict-of-laws rules apply in cross-border estates",
+      "$comment": "immoveable: land or buildings (rare for assets — typically use Property). moveable: personal property, financial assets, vehicles. mixed: combination. Relevant for Shia inheritance and French lex rei sitae.",
+      "examples": [ "moveable" ],
+      "enum": [ "immoveable", "moveable", "mixed" ]
+    },
+    "acquisitionType": {
+      "description": "How this asset was acquired. Determines succession rules in Indian and other customary systems",
+      "$comment": "self_acquired: purchased or earned by the owner. ancestral_joint: undivided coparcenary property. ancestral_severed: partitioned former joint property. inherited: received through inheritance. gifted: received as a gift. stridhan: Hindu woman's absolute property. communal: communal or clan property. waqf_endowed: Islamic endowment.",
+      "examples": [ "self_acquired", "inherited" ],
+      "enum": [
+        "self_acquired",
+        "ancestral_joint",
+        "ancestral_severed",
+        "inherited",
+        "gifted",
+        "stridhan",
+        "communal",
+        "waqf_endowed"
+      ]
+    },
+    "registrationStatus": {
+      "description": "Whether ownership of this asset is formally registered or documented",
+      "$comment": "formally_registered: documented with an official authority. informally_held: possessed but not registered. community_acknowledged: community recognises ownership. disputed: ownership is contested. undocumented: no documentation exists.",
+      "examples": [ "formally_registered" ],
+      "enum": [
+        "formally_registered",
+        "informally_held",
+        "community_acknowledged",
+        "disputed",
+        "undocumented"
+      ]
+    },
+    "ownershipEvidence": {
+      "description": "The type of evidence available to prove ownership of this asset",
+      "$comment": "title_deed: formal ownership document. certificate_of_occupancy: Nigerian occupancy certificate. family_recognition: family acknowledges ownership. community_testimony: community can attest. receipts_only: purchase receipts only. none: no evidence available.",
+      "examples": [ "receipts_only", "title_deed" ],
+      "enum": [
+        "title_deed",
+        "certificate_of_occupancy",
+        "family_recognition",
+        "community_testimony",
+        "receipts_only",
+        "none"
+      ]
+    },
+    "culturalDisposition": {
+      "description": "Cultural, religious, and regulatory constraints on disposal of this asset",
+      "$ref": "common/cultural-disposition.json"
+    },
+    "communalAuthority": {
+      "description": "The communal or family authority whose approval is required to dispose of this asset",
+      "type": "object",
+      "properties": {
+        "authorityType": {
+          "description": "Category of communal authority",
+          "enum": [
+            "family_council",
+            "clan_association",
+            "religious_body",
+            "tribal_council",
+            "government"
+          ]
+        },
+        "approvalRequired": {
+          "description": "Whether approval from this authority is legally required before disposal",
+          "type": "boolean"
+        },
+        "authorityName": {
+          "description": "Name of the specific authority or person",
+          "examples": [
+            "Karta of Sharma HUF",
+            "Okonkwo Family Council",
+            "MUIS"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "jurisdiction": {
+          "description": "Jurisdiction where this communal authority has legal standing",
+          "$ref": "common/jurisdiction.json"
+        }
+      },
+      "additionalProperties": false
+    },
+    "successionRegime": {
+      "description": "The succession regime governing this specific asset. Overrides estate.defaultSuccessionRegime when present",
+      "type": "object",
+      "properties": {
+        "governingLaw": {
+          "description": "The law governing succession for this asset",
+          "type": "object",
+          "properties": {
+            "jurisdiction": {
+              "description": "Jurisdiction whose succession law applies",
+              "$ref": "common/jurisdiction.json"
+            },
+            "legalTradition": {
+              "description": "Which legal tradition applies",
+              "enum": [
+                "common_law",
+                "civil_law",
+                "mixed",
+                "customary_law",
+                "islamic_law",
+                "hindu_law",
+                "jewish_law",
+                "canon_law"
+              ]
+            },
+            "statute": {
+              "description": "Name of the governing statute",
+              "examples": [
+                "Wills Act 1837",
+                "PRC Civil Code",
+                "Hindu Succession Act 1956"
+              ],
+              "type": "string",
+              "maxLength": 255
+            },
+            "section": {
+              "description": "Specific section of the statute",
+              "examples": [ "s.9", "Book VI Succession", "s.6 (coparcenary)" ],
+              "type": "string",
+              "maxLength": 255
+            }
+          },
+          "additionalProperties": false
+        },
+        "determinedBy": {
+          "description": "How the governing law was determined",
+          "enum": [
+            "domicile",
+            "situs",
+            "nationality",
+            "personal_status",
+            "choice_of_law",
+            "treaty"
+          ]
+        },
+        "binding": {
+          "description": "Whether this succession regime is legally binding",
+          "type": "boolean"
+        },
+        "extensions": {
+          "description": "INHERIT extension IDs that apply to this asset's succession",
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "notes": {
+          "description": "Additional context about the succession regime",
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "beneficiaryDesignation": {
+      "description": "Named beneficiary designation for this asset. Assets with beneficiary designations pass outside the probate estate — the will does not control their distribution",
+      "$comment": "For assets with named beneficiaries (retirement accounts, life insurance, POD bank accounts). These pass OUTSIDE the estate.",
+      "type": "object",
+      "properties": {
+        "primaryBeneficiaryPersonIds": {
+          "description": "Person IDs of the primary beneficiaries",
+          "type": "array",
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        },
+        "contingentBeneficiaryPersonIds": {
+          "description": "Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)",
+          "type": "array",
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        },
+        "designationType": {
+          "description": "The type of beneficiary designation",
+          "$comment": "retirement_account: 401(k), IRA, SIPP, etc. life_insurance: life insurance policy. superannuation: Australian superannuation fund. pod_account: payable-on-death bank account. other: any other type of beneficiary designation.",
+          "examples": [ "life_insurance", "retirement_account" ],
+          "enum": [
+            "retirement_account",
+            "life_insurance",
+            "superannuation",
+            "pod_account",
+            "other"
+          ]
+        },
+        "linkedNonprobateTransferId": {
+          "description": "Reference to the NonprobateTransfer entity that tracks this designation",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    },
+    "digitalAccessConsent": {
+      "description": "Digital access consent under RUFADAA or equivalent legislation. Governs whether executors and fiduciaries can access the deceased's digital accounts and assets",
+      "$comment": "RUFADAA (Revised Uniform Fiduciary Access to Digital Assets Act) — adopted by ~47 US states. Controls whether fiduciaries can access digital assets.",
+      "type": "object",
+      "properties": {
+        "consentGiven": {
+          "description": "Whether the account holder has given consent for fiduciary access",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "scope": {
+          "description": "The scope of access granted to fiduciaries",
+          "$comment": "full_access: fiduciary may access all content and account data. limited_access: fiduciary may access only specified data (e.g. financial records but not personal messages). no_access: fiduciary may not access any content.",
+          "examples": [ "full_access", "limited_access" ],
+          "enum": [ "full_access", "limited_access", "no_access" ]
+        },
+        "designatedRecipientPersonId": {
+          "description": "Reference to the Person.id designated to receive access to this digital asset",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "designatedRecipientPersonIdDisplay": {
+          "description": "Human-readable display name for the referenced designated recipient person",
+          "type": "string",
+          "maxLength": 255
+        },
+        "onlineToolDirective": {
+          "description": "Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA",
+          "$comment": "Whether the user set access directives via the platform's own tool (takes priority under RUFADAA).",
+          "examples": [ true, false ],
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "passesOutsideEstate": {
+      "description": "Whether this asset passes outside the probate estate. Beneficiary designations, POD accounts, and jointly held assets typically bypass the will",
+      "$comment": "True if this asset passes outside probate (beneficiary designation, POD, TOD). NOT distributed under the will.",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "notes": {
+      "description": "Free-text notes about this asset. Use for provenance, sentimental value, special handling instructions, or anything not captured by structured fields",
+      "examples": [
+        "Belonged to great-grandmother — significant sentimental value to the family",
+        "Firearm requires Section 1 certificate — must be surrendered or transferred to a licence holder within 7 days of death"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "description": {
+      "description": "Structured description of the asset — what it is, its significance, and key details a dealer or executor would need. Distinct from 'notes' which is free-form",
+      "examples": [
+        "OO gauge Hornby R3456 Class 66 locomotive in EWS livery, DCC fitted, with original box and instructions",
+        "18ct yellow gold solitaire engagement ring, 1.2ct round brilliant diamond, GIA certified VS1/G"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "brand": {
+      "description": "The manufacturer or brand name. Accepts a plain string (backwards compatible) or a structured object with Wikidata linkage for rich product data. AI agents should use this as a primary search dimension when finding comparables",
+      "$comment": "Structured form enables: brand logos via Wikidata, founding year, parent company, official website, product catalogues. The wikidataId field (Q-number) unlocks the entire Wikidata knowledge graph for this brand. Plain string form remains valid for simplicity.",
+      "examples": [
+        "Rolex",
+        {
+          "name": "Rolex",
+          "wikidataId": "Q62288"
+        },
+        {
+          "name": "Hornby",
+          "wikidataId": "Q1567489",
+          "website": "https://www.hornby.com"
+        }
+      ],
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 255
+        },
+        {
+          "type": "object",
+          "required": [ "name" ],
+          "properties": {
+            "name": {
+              "description": "Brand or manufacturer name",
+              "type": "string",
+              "maxLength": 255
+            },
+            "wikidataId": {
+              "description": "Wikidata Q-number for this brand. Resolves to structured data via the Wikidata API — founding year, country, parent company, logo, official website, product categories",
+              "examples": [ "Q62288", "Q1567489", "Q538587" ],
+              "type": "string",
+              "pattern": "^Q[1-9][0-9]*$",
+              "maxLength": 20
+            },
+            "website": {
+              "description": "Official brand website",
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9+.-]*://",
+              "format": "uri",
+              "maxLength": 2048
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "model": {
+      "description": "The specific model, product line, or range name. Combined with brand and identifiers, this is the primary key for marketplace search. AI agents construct search queries from brand + model + subcategory",
+      "examples": [
+        "Class 66",
+        "Submariner Date",
+        "Perfect Reel",
+        "Model D Grand Piano",
+        "Birkin 25",
+        "Les Paul Standard"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "purchaseDate": {
+      "description": "Date the asset was acquired by the current owner. Used for capital gains tax calculations, insurance claims, and provenance. Maps to Schema.org purchaseDate",
+      "examples": [ "2015-06-20", "1998-12-25" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "originalPackaging": {
+      "description": "Whether original packaging, documentation, and accessories are present. Affects value by 20–40% across watches, model railways, jewellery, and many other domains",
+      "$comment": "complete: original box, papers/certificates, all accessories present. partial: some original packaging elements present. box_only: original box but no papers. papers_only: certificates/papers but no box. none: no original packaging. unknown: packaging status not assessed.",
+      "examples": [ "complete", "none", "unknown" ],
+      "enum": [
+        "complete",
+        "partial",
+        "box_only",
+        "papers_only",
+        "none",
+        "unknown"
+      ]
+    },
+    "custodian": {
+      "description": "Third party currently holding this asset — a bank (safe deposit), storage facility (bonded wine), repairer (watch at jeweller), gallery (art on loan), or institution. The executor needs to know who to contact",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the person or organisation holding the asset",
+          "examples": [
+            "London City Bond",
+            "Barclays Bank, Manchester branch",
+            "Sotheby's (on consignment)"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "contactEmail": {
+          "description": "Email address for the custodian",
+          "type": "string",
+          "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+          "format": "email"
+        },
+        "contactPhone": {
+          "description": "Phone number for the custodian",
+          "examples": [ "+44 20 7293 5000" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "relationship": {
+          "description": "The nature of the custodial relationship",
+          "examples": [
+            "bonded storage",
+            "safe deposit box",
+            "repair/service",
+            "consignment",
+            "loan",
+            "pawn"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "reference": {
+          "description": "Account or reference number with the custodian",
+          "examples": [
+            "Account #LC-2024-5678",
+            "Box 247",
+            "Repair ticket #R-4521"
+          ],
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "additionalProperties": false
+    },
+    "conditionSystem": {
+      "description": "The grading system used for the conditionGrade value. Allows domain-specific condition assessment alongside the generic condition field",
+      "$comment": "goldmine: Goldmine Grading Standard for vinyl records (M/NM/VG+/VG/G+/G/F/P). sheldon: Sheldon scale for coins (1-70, where 70 is perfect). ags: American Gem Society for gemstones (0-10). bsc: British Standards for antiques. gia: Gemological Institute of America for diamonds. watch_trade: Watch trade conventions (BNIB/LNIB/Excellent/Very Good/Good/Fair). classic_vehicle: Classic vehicle grading (Concours/Excellent/Very Good/Good/Fair/Project). book_trade: Antiquarian book trade (Fine/Near Fine/Very Good/Good/Fair/Poor).",
+      "examples": [
+        "goldmine",
+        "sheldon",
+        "gia",
+        "watch_trade",
+        "classic_vehicle"
+      ],
+      "anyOf": [
+        {
+          "enum": [
+            "goldmine",
+            "sheldon",
+            "ags",
+            "bsc",
+            "gia",
+            "watch_trade",
+            "classic_vehicle",
+            "book_trade"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+",
+          "maxLength": 100
+        }
+      ]
+    },
+    "conditionGrade": {
+      "description": "The specific grade within the conditionSystem. Meaningful only when conditionSystem is set",
+      "examples": [ "VG+", "MS-65", "VS1", "Fine" ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "conditionStandard": {
+      "description": "URI pointing to the official documentation of the grading standard used. Enables tools to display the correct grading scale and interpret the conditionGrade value",
+      "$comment": "Machine-resolvable link to the standard's definition. For well-known standards that don't have a canonical URI, use the most authoritative reference page.",
+      "examples": [
+        "https://www.goldminemag.com/collector-resources/record-grading-101",
+        "https://www.pcgs.com/grades",
+        "https://www.gia.edu/gem-grading",
+        "https://www.bada-antiques.org/guides/condition-grading"
+      ],
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9+.-]*://",
+      "format": "uri",
+      "maxLength": 2048
+    },
+    "urgency": {
+      "description": "How urgently this asset needs attention after the testator's death. Drives the executor's priority list",
+      "$comment": "immediate: must be dealt with at once — live animals, perishable goods, firearms (7-day surrender in UK). within_7_days: urgent but not immediate — vehicles with insurance expiring, time-limited subscriptions. within_30_days: should be addressed within a month — tenanted property, business interests needing continuity. none: no time pressure — most personal possessions, financial accounts.",
+      "examples": [ "immediate", "none" ],
+      "enum": [ "immediate", "within_7_days", "within_30_days", "none" ]
+    },
+    "urgencyReason": {
+      "description": "Explanation of why this asset is urgent. Particularly important for 'immediate' items",
+      "examples": [
+        "Firearm requires Section 1 certificate — must be surrendered or transferred to a licence holder within 7 days of death",
+        "Live animals requiring daily care",
+        "Perishable wine collection in temperature-controlled storage — power must be maintained"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "containedInAssetId": {
+      "description": "Reference to another Asset.id if this asset is physically contained within or logically part of another asset. Enables hierarchical asset nesting — e.g. a watch inside a safe, tools inside a toolbox",
+      "examples": [ "a1b2c3d4-e5f6-7890-abcd-ef1234567890" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "insurance": {
+      "description": "Insurance coverage for this asset. The executor needs to know what's insured, by whom, and whether cover continues after death",
+      "type": "object",
+      "properties": {
+        "provider": {
+          "description": "Name of the insurance provider",
+          "examples": [ "Hiscox", "Chubb", "NFU Mutual", "Allianz" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "policyReference": {
+          "description": "Policy reference number",
+          "examples": [ "HX-2024-5678", "CHB/ART/2024/001" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "insuredValue": {
+          "description": "The insured value in minor currency units",
+          "$ref": "common/money.json"
+        },
+        "renewalDate": {
+          "description": "Next renewal date. Important — cover may lapse if not renewed after death",
+          "examples": [ "2026-09-01" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "notes": {
+          "description": "Additional insurance notes",
+          "examples": [
+            "Cover continues for 30 days after death per policy terms"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "purchasedFrom": {
+      "description": "Where the asset was purchased or acquired from. Collectors track provenance — valuable for dealers and for establishing authenticity",
+      "examples": [
+        "Rails of Sheffield",
+        "Christie's",
+        "Sotheby's",
+        "Private sale",
+        "eBay seller vintage-trains-uk",
+        "Car boot sale, Wrexham"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "splitFrom": {
+      "description": "Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split",
+      "type": "object",
+      "required": [ "entityType", "entityId", "splitAt" ],
+      "properties": {
+        "entityType": {
+          "description": "The type of entity that was split",
+          "enum": [ "asset", "asset_collection" ]
+        },
+        "entityId": {
+          "description": "The id of the original entity that was split",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "splitAt": {
+          "description": "When the split occurred",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "reason": {
+          "description": "Why the split was requested",
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "dataProvenance": {
+      "description": "How this specific entity's data was captured. Overrides the document-level default if set",
+      "$comment": "Per-entity override of the document-level dataProvenance. Same values as the root field.",
+      "enum": [
+        "manual_entry",
+        "ai_extracted",
+        "ocr_scanned",
+        "imported",
+        "migrated",
+        "system_generated"
+      ]
+    },
+    "searchTerms": {
+      "description": "Keywords for marketplace search — AI-generated or human-curated. Memoization: once derived, cached here so subsequent agents reuse them instantly rather than re-deriving",
+      "examples": [
+        [ "Hornby R3456", "Class 66 OO gauge", "EWS livery locomotive" ]
+      ],
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      }
+    },
+    "comparableSearchProfile": {
+      "description": "Structured search instructions for comparable-finding agents. Acts as agent memory — the item teaches future agents how to find its peers",
+      "type": "object",
+      "properties": {
+        "platforms": {
+          "description": "Marketplaces and platforms to search",
+          "examples": [
+            [ "ebay", "catawiki", "rails_of_sheffield", "hattons" ]
+          ],
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "searchQuery": {
+          "description": "Natural-language query an agent should use",
+          "examples": [ "Hornby R3456 Class 66 OO gauge boxed" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "filters": {
+          "description": "Key-value filters to narrow results. Agents map to platform-specific parameters",
+          "examples": [
+            {
+              "condition": "good+",
+              "packaging": "with_box",
+              "gauge": "OO"
+            }
+          ],
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "maxLength": 255
+          }
+        },
+        "excludePlatforms": {
+          "description": "Platforms explicitly excluded",
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "lastSearchedAt": {
+          "description": "When an agent last executed this search profile",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "searchFrequency": {
+          "description": "How often this item should be re-searched",
+          "$comment": "once: search once and cache. weekly: re-search weekly for price trends. monthly: monthly refresh. on_demand: only when explicitly triggered.",
+          "enum": [ "once", "weekly", "monthly", "on_demand" ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "suggestedSubcategory": {
+      "description": "AI-suggested subcategory refinement, kept separate from the human-set subcategory. Accepted when the user confirms. Provenance: always AI-generated",
+      "type": "string",
+      "maxLength": 255
+    },
+    "valuationReliability": {
+      "description": "Numeric reliability score (0-100) for the current valuation. Computed from: recency, method, corroborating comparables, variance between estimates. Companion to the categorical valuationConfidence enum — the enum captures source, this number captures trustworthiness now. Agents use this to prioritise which assets need re-valuation",
+      "type": "integer",
+      "maximum": 100,
+      "minimum": 0
+    },
+    "lastVerifiedAt": {
+      "description": "When this entity's data was last verified by a human or authoritative source. Agents use this to decide whether to trust existing values or re-derive them",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "verifiedBy": {
+      "description": "Who or what verified this entity — a person's name, a tool, or 'owner'",
+      "examples": [
+        "James Ashford",
+        "INHERIT Scanner v2",
+        "Rails of Sheffield (dealer)"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "visibility": {
+      "description": "Controls who can see this asset. Some assets (firearms, digital accounts, sensitive collections) may need restricted visibility",
+      "$ref": "common/visibility.json"
+    },
+    "fieldProvenance": {
+      "description": "Per-field provenance records — how each field's value was obtained",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "common/field-provenance.json"
+      }
+    },
+    "comments": {
+      "description": "Discussion comments on this entity",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "id", "content", "createdAt" ],
+        "properties": {
+          "id": {
+            "description": "Unique identifier for this comment",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "authorPersonId": {
+            "description": "Person.id of the comment author",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "authorPersonIdDisplay": {
+            "description": "Human-readable display name for the referenced author person",
+            "type": "string",
+            "maxLength": 255
+          },
+          "content": {
+            "description": "Comment text",
+            "type": "string",
+            "maxLength": 5000,
+            "minLength": 1
+          },
+          "createdAt": {
+            "description": "When the comment was created",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "format": "date-time"
+          },
+          "visibility": {
+            "$ref": "common/visibility.json"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "mergedInto": {
+      "description": "Records that this entity was merged into another entity — the target entity is the canonical version",
+      "type": "object",
+      "properties": {
+        "entityType": {
+          "description": "Type of the target entity",
+          "enum": [ "asset", "asset_collection" ]
+        },
+        "entityId": {
+          "description": "ID of the target entity",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "mergedAt": {
+          "description": "When the merge occurred",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "reason": {
+          "description": "Why the entities were merged",
+          "examples": [ "Duplicate entries identified during estate inventory" ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "spaceIdDisplay": {
+      "description": "Human-readable display name for the referenced storage location",
+      "type": "string",
+      "maxLength": 255
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    },
+    "applicableLaw": {
+      "description": "The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile",
+      "$ref": "common/jurisdiction.json"
+    },
+    "taxTreatment": {
+      "description": "Per-asset tax treatment — how this asset is classified for tax purposes in a specific jurisdiction",
+      "type": "object",
+      "properties": {
+        "jurisdiction": {
+          "$ref": "common/jurisdiction.json"
+        },
+        "assetType": {
+          "enum": [ "immoveable", "moveable", "mixed", "exempt" ]
+        },
+        "exemptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "reliefClaimed": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "accessInstructions": {
+      "description": "Instructions for accessing this asset after death — steps, locations, holders. No secrets in the document, just instructions for finding them. Available for all asset categories (digital: crypto wallets, social media; physical: safes, storage units)",
+      "type": "object",
+      "properties": {
+        "accessType": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "platform": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "visibility": {
+          "$ref": "common/visibility.json"
+        },
+        "requiredRole": {
+          "description": "The estate role required to follow these instructions",
+          "$comment": "Should match a value from person.roles. Not an enum here because extension roles may also be valid.",
+          "type": "string",
+          "maxLength": 50
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [ "step", "method" ],
+            "properties": {
+              "step": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "method": {
+                "type": "string",
+                "maxLength": 100,
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "location": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "holderPersonId": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                "format": "uuid"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "memorialisation": {
+          "type": "object",
+          "properties": {
+            "preference": {
+              "enum": [
+                "transfer_to_beneficiary",
+                "memorialise",
+                "delete",
+                "archive",
+                "no_preference"
+              ]
+            },
+            "instructions": {
+              "type": "string",
+              "maxLength": 1000
+            }
+          },
+          "additionalProperties": false
+        },
+        "lastVerified": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "verifiedBy": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "ownerIntent": {
+      "description": "The owner's current intention for this item. Absent means keeping (the default). Used by catalogue applications to track whether items are being actively managed, offered for sale, or allocated to specific people",
+      "$comment": "keeping: the owner intends to retain this item. considering: undecided — may sell, may keep. thinning: actively looking to sell or dispose of. listed: currently listed for sale on one or more channels. sold: sold and awaiting removal from the catalogue. allocated: earmarked for a specific person (see asset-interest with intentType allocate). donated: given to charity or institution.",
+      "enum": [
+        "keeping",
+        "considering",
+        "thinning",
+        "listed",
+        "sold",
+        "allocated",
+        "donated"
+      ]
+    },
+    "listings": {
+      "description": "Active or historical listings of this item for sale on external channels. Tracks where the item is listed, its status, and sale outcome. Application-level data — not part of the estate interchange but carried alongside it for catalogue and dealer workflows",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "required": [ "channel", "status" ],
+        "properties": {
+          "channel": {
+            "description": "The sales channel where this item is listed",
+            "enum": [
+              "ebay",
+              "amazon",
+              "shopify",
+              "etsy",
+              "own_website",
+              "auction_house",
+              "other"
+            ]
+          },
+          "channelName": {
+            "description": "Human-readable name of the channel, especially when channel is other",
+            "type": "string",
+            "maxLength": 255
+          },
+          "listingId": {
+            "description": "The platform-specific listing identifier",
+            "type": "string",
+            "maxLength": 255
+          },
+          "listingUrl": {
+            "description": "Direct URL to the listing on the external platform",
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9+.-]*://",
+            "format": "uri",
+            "maxLength": 2048
+          },
+          "status": {
+            "description": "Current status of this listing",
+            "enum": [ "draft", "active", "sold", "withdrawn", "expired" ]
+          },
+          "askingPrice": {
+            "description": "The listed asking price",
+            "$ref": "common/money.json"
+          },
+          "listedAt": {
+            "description": "When this listing was created or last activated",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "format": "date-time"
+          },
+          "soldAt": {
+            "description": "When the item was sold via this listing, if applicable",
+            "type": [ "string", "null" ],
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "format": "date-time"
+          },
+          "soldPrice": {
+            "description": "The actual sale price, if sold",
+            "$ref": "common/money.json"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "serviceHistory": {
+      "description": "Service, maintenance, and restoration records. Critical for watches (service intervals affect value), vehicles (MOT history, restoration), clocks, and musical instruments",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/ServiceRecord"
+      }
+    },
+    "insuranceCover": {
+      "description": "Insurance details for this item. Tracks which policy covers it, the agreed value, and when cover was last confirmed. Essential for executors who need to claim on the correct policy",
+      "type": "object",
+      "properties": {
+        "insurer": {
+          "description": "Name of the insurance company",
+          "type": "string",
+          "maxLength": 255
+        },
+        "policyNumber": {
+          "description": "The insurance policy number",
+          "type": "string",
+          "maxLength": 100
+        },
+        "policyType": {
+          "description": "The type of insurance policy covering this item",
+          "enum": [
+            "home_contents",
+            "specialist_collectibles",
+            "classic_vehicle",
+            "individual_item",
+            "fine_art",
+            "jewellery",
+            "other"
+          ]
+        },
+        "agreedValue": {
+          "description": "The agreed or insured value, in minor currency units. May differ from market value",
+          "$ref": "common/money.json"
+        },
+        "coverConfirmedAt": {
+          "description": "When the insurance cover for this item was last confirmed or reviewed",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shippingClass": {
+      "description": "How this item can be transported for selling or verification. Determines which logistics path the Deal Comparison uses",
+      "$comment": "parcel: fits in a standard parcel (model railways, watches, books, vinyl, coins). large_item: requires a van or large vehicle (furniture, large art, equipment). specialist_transport: needs a specialist carrier (vehicles, pianos, very fragile items). collection_only: cannot be shipped — buyer or dealer must collect in person.",
+      "enum": [
+        "parcel",
+        "large_item",
+        "specialist_transport",
+        "collection_only"
+      ]
+    },
+    "includedDocuments": {
+      "description": "Original documents, certificates, and packaging elements present with this item. Affects value significantly across many categories. Cross-category: watches, vehicles, books, art, and collectibles share some document types",
+      "type": "array",
+      "maxItems": 30,
+      "items": {
+        "anyOf": [
+          {
+            "enum": [
+              "outer_box",
+              "inner_box",
+              "warranty_card",
+              "cosc_certificate",
+              "instruction_manual",
+              "hang_tags",
+              "service_booklet",
+              "purchase_receipt",
+              "original_invoice",
+              "v5c_logbook",
+              "mot_certificate",
+              "provenance_letter",
+              "certificate_of_authenticity",
+              "appraisal_certificate",
+              "export_licence",
+              "customs_declaration"
+            ]
+          },
+          {
+            "type": "string",
+            "pattern": "^x-inherit-.+",
+            "maxLength": 100
+          }
+        ]
+      }
+    },
+    "taxReliefEligibility": {
+      "description": "Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)",
+      "type": "object",
+      "properties": {
+        "reliefType": {
+          "description": "The type of tax relief claimed",
+          "enum": [
+            "agricultural_property",
+            "business_property",
+            "woodland",
+            "heritage",
+            "charitable"
+          ]
+        },
+        "eligible": {
+          "type": "boolean"
+        },
+        "percentage": {
+          "description": "Relief percentage (e.g. 100 for full APR, 50 for partial BPR)",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "conditions": {
+          "description": "Conditions for maintaining eligibility",
+          "examples": [ "Beneficiary must actively farm for minimum 2 years" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "jurisdiction": {
+          "$ref": "common/jurisdiction.json"
+        },
+        "statute": {
+          "examples": [ "IHTA 1984 s.115-124C" ],
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "additionalProperties": false
+    },
+    "significance": {
+      "description": "Cultural, religious, sentimental, or professional significance beyond monetary value",
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "sentimental",
+            "cultural",
+            "religious",
+            "historical",
+            "family_heirloom",
+            "professional"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "restrictionOnDisposal": {
+          "description": "Whether and how the testator has restricted disposal of this asset",
+          "type": "object",
+          "properties": {
+            "exists": {
+              "type": "boolean"
+            },
+            "nature": {
+              "examples": [ "Must not be sold", "Must stay in the family" ],
+              "type": "string",
+              "maxLength": 500
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "ServiceRecord": {
+      "description": "A single service, maintenance, or restoration record for a mechanical or valuable item. Used for watches, vehicles, clocks, musical instruments, and any item with a service lifecycle",
+      "type": "object",
+      "required": [ "serviceDate" ],
+      "properties": {
+        "serviceDate": {
+          "description": "When the service was performed",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "provider": {
+          "description": "Who performed the service (manufacturer service centre, independent specialist, etc.)",
+          "type": "string",
+          "maxLength": 255
+        },
+        "description": {
+          "description": "What was done",
+          "type": "string",
+          "maxLength": 2000
+        },
+        "cost": {
+          "description": "Cost of the service, in minor currency units",
+          "$ref": "common/money.json"
+        },
+        "documentReference": {
+          "description": "Reference to a service certificate, receipt, or MOT certificate",
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

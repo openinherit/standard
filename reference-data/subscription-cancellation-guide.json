@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "INHERIT Subscription Cancellation Guide",
+  "description": "Reference data for cancelling common UK subscriptions after death. Per-service entries with cancellation method, URL, processing time",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "serviceName",
+      "cancellationMethod"
+    ],
+    "properties": {
+      "serviceName": {
+        "type": "string"
+      },
+      "cancellationMethod": {
+        "enum": [
+          "online",
+          "phone",
+          "email",
+          "post"
+        ]
+      },
+      "cancellationUrl": {
+        "type": "string",
+        "format": "uri"
+      },
+      "typicalProcessingTime": {
+        "type": "string",
+        "description": "How long cancellation typically takes"
+      },
+      "earlyTerminationFee": {
+        "type": "boolean"
+      },
+      "deathCertificateRequired": {
+        "type": "boolean"
+      },
+      "notes": {
+        "type": "string"
+      }
+    }
+  }
+}

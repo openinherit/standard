@@ -1,0 +1,55 @@
+{
+  "$comment": "Test fixture exercising all fields of the PRC China extension schema",
+  "applicableLaw": "prc_civil_code_2021",
+  "forcedHeirship": {
+    "firstOrderHeirs": [
+      {
+        "personId": "04acdb85-9b9a-4707-8341-26fbc75f2fd5",
+        "relationship": "Spouse"
+      },
+      {
+        "personId": "59f22e2f-5594-411c-a1df-4313361f2924",
+        "relationship": "Son"
+      },
+      {
+        "personId": "cdb65e93-dcca-438b-8ace-e9117638d24a",
+        "relationship": "Daughter"
+      }
+    ],
+    "secondOrderHeirs": [
+      {
+        "personId": "75ea8346-a2fb-4aff-a867-48f4b9c829a5",
+        "relationship": "Elder brother"
+      },
+      {
+        "personId": "d7d2100f-738f-42ba-a0b4-83a88017b4ae",
+        "relationship": "Paternal grandmother"
+      }
+    ],
+    "mandatoryShareRule": "Equal division among first-order heirs per PRC Civil Code Article 1130; second-order heirs inherit only if no first-order heirs survive"
+  },
+  "hukouReferences": [
+    {
+      "personId": "04acdb85-9b9a-4707-8341-26fbc75f2fd5",
+      "hukouLocation": "Pudong New Area, Shanghai",
+      "hukouType": "non_agricultural"
+    },
+    {
+      "personId": "59f22e2f-5594-411c-a1df-4313361f2924",
+      "hukouLocation": "Haidian District, Beijing",
+      "hukouType": "non_agricultural"
+    }
+  ],
+  "notarisationRequired": true,
+  "notarisationDetails": "Succession certificate notarised at Shanghai Dongfang Notary Office, ref. SH-2025-NOT-08834",
+  "crossBorderHandling": {
+    "hkAssets": "Two residential properties in Kowloon; one brokerage account with HSBC Hong Kong",
+    "prcAssets": "Apartment in Pudong, Shanghai; bank deposits at ICBC Lujiazui Branch",
+    "applicableTreaty": "Arrangement on Reciprocal Recognition and Enforcement of Judgments in Civil and Commercial Matters (2019)",
+    "notes": "Deceased held dual PRC-HK assets. PRC succession law governs mainland property; HK common law governs HK-situs assets. Separate grants required in each jurisdiction."
+  },
+  "notes": "Fictional estate of Li Wei, deceased 3 August 2025 in Shanghai. Three first-order heirs under PRC Civil Code Book Six. Cross-border complications with Hong Kong property holdings.",
+  "x-inherit-communityPropertyRegime": {
+    "value": "Statutory community of property under PRC Marriage Law — half of community assets excluded from estate before succession"
+  }
+}

@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/asset-categories/business.json",
+  "title": "Business Asset Properties",
+  "description": "Category-specific properties for business assets: partnerships, company holdings, intellectual property, stock compensation",
+  "$comment": "This schema is composed with asset.json via allOf+if/then. Do NOT use additionalProperties:false here — it would reject core asset fields.",
+  "type": "object",
+  "properties": {
+    "businessInterest": {
+      "description": "Detailed business interest information — partnership shares, LLP membership, sole trader business. Relevant for BPR (UK), QFOBI (US), and succession planning",
+      "$comment": "Category-specific sub-object for business interests. Use when category is 'business_interest'.",
+      "type": "object",
+      "properties": {
+        "businessName": {
+          "description": "Trading name of the business",
+          "examples": [ "Davies & Sons Builders", "Manchester Model Supplies" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "businessType": {
+          "description": "Legal structure of the business",
+          "$comment": "sole_trader: individual trading. partnership: traditional partnership. llp: limited liability partnership. limited_company: private limited company (Ltd). plc: public limited company. franchise: franchise operation. cooperative: cooperative business. other: any other structure.",
+          "enum": [
+            "sole_trader",
+            "partnership",
+            "llp",
+            "limited_company",
+            "plc",
+            "franchise",
+            "cooperative",
+            "other"
+          ]
+        },
+        "ownershipPercentage": {
+          "description": "The testator's ownership percentage",
+          "examples": [ 50, 33.33, 100 ],
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "controllingInterest": {
+          "description": "Whether the testator holds a controlling interest. Affects BPR eligibility and valuation discounts",
+          "examples": [ true, false ],
+          "type": "boolean"
+        },
+        "partnershipAgreement": {
+          "description": "Whether a written partnership/operating agreement exists",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "successionProvision": {
+          "description": "What the partnership/operating agreement says about succession on death",
+          "examples": [
+            "Surviving partners must buy out deceased's share at book value",
+            "Option to purchase at market value within 90 days"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "annualTurnover": {
+          "description": "Approximate annual turnover — helps with BPR qualification and valuation",
+          "$ref": "../common/money.json"
+        },
+        "employees": {
+          "description": "Number of employees",
+          "examples": [ 5, 50 ],
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "intellectualProperty": {
+      "description": "Intellectual property details — patents, copyrights, trademarks, trade secrets. IP succession varies by jurisdiction and type",
+      "$comment": "Category-specific sub-object for IP assets. Use when category is 'intellectual_property'.",
+      "type": "object",
+      "properties": {
+        "ipType": {
+          "description": "Type of intellectual property",
+          "$comment": "patent: registered invention. copyright: creative works (literary, artistic, musical). trademark: registered brand/logo. design_right: registered or unregistered design. trade_secret: confidential business information. database_right: sui generis database right (EU/UK). other: any other IP type.",
+          "enum": [
+            "patent",
+            "copyright",
+            "trademark",
+            "design_right",
+            "trade_secret",
+            "database_right",
+            "other"
+          ]
+        },
+        "registrationNumber": {
+          "description": "Registration or application number",
+          "examples": [ "GB2345678", "US10,123,456" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "registrationOffice": {
+          "description": "Intellectual property office where registered",
+          "examples": [ "UK IPO", "USPTO", "EPO", "WIPO" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "expiryDate": {
+          "description": "Date the IP right expires",
+          "examples": [ "2040-03-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "annualRevenue": {
+          "description": "Approximate annual revenue generated from this IP (licensing, royalties, etc.)",
+          "$ref": "../common/money.json"
+        },
+        "licensees": {
+          "description": "Current licensees of this IP",
+          "examples": [
+            [ "Publisher A", "Manufacturer B" ]
+          ],
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "stockCompensation": {
+      "description": "Employee stock compensation details — options, RSUs, ESPPs. Vesting schedules and exercise windows are critical on death",
+      "$comment": "Category-specific sub-object for employee stock options, RSUs, and equity compensation. Common in tech sector estates.",
+      "type": "object",
+      "properties": {
+        "compensationType": {
+          "description": "Type of stock compensation",
+          "$comment": "iso: incentive stock option (US tax-advantaged). nso: non-qualified stock option. rsu: restricted stock unit. espp: employee stock purchase plan. phantom_stock: phantom equity (cash settlement). sar: stock appreciation right. other: any other type.",
+          "enum": [
+            "iso",
+            "nso",
+            "rsu",
+            "espp",
+            "phantom_stock",
+            "sar",
+            "other"
+          ]
+        },
+        "grantDate": {
+          "description": "Date the award was granted",
+          "examples": [ "2022-03-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "vestingSchedule": {
+          "description": "Description of the vesting schedule",
+          "examples": [
+            "4-year vest with 1-year cliff",
+            "3-year monthly vesting",
+            "Fully vested"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "vestedQuantity": {
+          "description": "Number of shares/units currently vested",
+          "examples": [ 2500 ],
+          "type": "integer",
+          "minimum": 0
+        },
+        "unvestedQuantity": {
+          "description": "Number of shares/units not yet vested. May be forfeited on death depending on plan terms",
+          "examples": [ 7500 ],
+          "type": "integer",
+          "minimum": 0
+        },
+        "exercisePrice": {
+          "description": "Strike/exercise price per share for options",
+          "$ref": "../common/money.json"
+        },
+        "expirationDate": {
+          "description": "Date the options expire. Estate typically has limited window to exercise after death",
+          "examples": [ "2032-03-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "postDeathExerciseWindow": {
+          "description": "Time allowed for estate to exercise options after death",
+          "examples": [
+            "12 months from date of death",
+            "90 days",
+            "Per plan administrator discretion"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "acceleratesOnDeath": {
+          "description": "Whether unvested awards accelerate (fully vest) on death",
+          "examples": [ true, false ],
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "coOwnership": {
+      "description": "Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will",
+      "$comment": "Category-specific sub-object for co-owned assets. Use when the asset has shared ownership that affects how it passes on death.",
+      "type": "object",
+      "properties": {
+        "coOwnerPersonIds": {
+          "description": "Person IDs of co-owners",
+          "type": "array",
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        },
+        "ownershipType": {
+          "description": "How ownership is structured between co-owners",
+          "$comment": "joint_tenants: right of survivorship — passes automatically to survivor(s). tenants_in_common: no survivorship — each owner's share passes under their will. community_property: marital community property (US). partnership: business partnership asset. other: other arrangement.",
+          "enum": [
+            "joint_tenants",
+            "tenants_in_common",
+            "community_property",
+            "partnership",
+            "other"
+          ]
+        },
+        "ownershipPercentage": {
+          "description": "The testator's ownership percentage",
+          "examples": [ 50, 33.33 ],
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "severanceDate": {
+          "description": "Date joint tenancy was severed to become tenants in common (if applicable)",
+          "examples": [ "2024-06-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

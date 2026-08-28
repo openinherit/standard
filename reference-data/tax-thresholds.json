@@ -1,0 +1,633 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/reference-data/tax-thresholds.json",
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal or tax advice. Tax laws change frequently — always verify with current legislation and qualified professionals. Data current as of March 2026.",
+  "title": "Inheritance & Estate Tax Thresholds",
+  "description": "Tax-free thresholds, nil rate bands, and exemption amounts for inheritance and estate taxes by jurisdiction. These determine the value below which no tax is payable. All threshold values are wrapped in the temporal-rule pattern from v2/common/temporal-rule.json to enable date-of-death lookups.",
+  "lastUpdated": "2026-03-30",
+  "_metadata": {
+    "lastVerified": "2026-04-06",
+    "source": "HMRC Inheritance Tax thresholds",
+    "jurisdiction": "GB",
+    "disclaimer": "This data is provided for interoperability purposes. It does not constitute legal, tax, or financial advice. Users must verify independently before relying on these figures for official purposes.",
+    "deprecationPattern": "Individual entries within this file may carry deprecated: true, deprecatedAt, deprecatedReason, and supersededBy fields. Deprecated entries are retained for historical reference and audit trail purposes. Applications should filter to non-deprecated entries for current data.",
+    "deprecated": false,
+    "deprecatedAt": null,
+    "deprecatedReason": null,
+    "supersededBy": null
+  },
+  "jurisdictions": {
+    "GB": {
+      "name": "United Kingdom",
+      "taxName": "Inheritance Tax (IHT)",
+      "currency": "GBP",
+      "thresholds": [
+        {
+          "type": "nilRateBand",
+          "label": "Nil Rate Band (NRB)",
+          "transferable": true,
+          "transferableNote": "Unused NRB can be transferred to a surviving spouse or civil partner, effectively doubling the threshold to £650,000.",
+          "history": [
+            {
+              "value": 325000,
+              "effectiveFrom": "2009-04-06",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Finance Act 2009 s.4; Inheritance Tax Act 1984 s.7",
+              "predecessorValue": 312000,
+              "notes": "Frozen at £325,000 since 2009. Freeze extended to April 2028 by Autumn Statement 2022 and again by Spring Budget 2024."
+            },
+            {
+              "value": 312000,
+              "effectiveFrom": "2008-04-06",
+              "effectiveUntil": "2009-04-05",
+              "status": "enacted",
+              "legislativeReference": "Finance Act 2008",
+              "predecessorValue": 300000,
+              "notes": null
+            },
+            {
+              "value": 300000,
+              "effectiveFrom": "2007-04-06",
+              "effectiveUntil": "2008-04-05",
+              "status": "enacted",
+              "legislativeReference": "Finance Act 2007",
+              "predecessorValue": 285000,
+              "notes": null
+            },
+            {
+              "value": 285000,
+              "effectiveFrom": "2006-04-06",
+              "effectiveUntil": "2007-04-05",
+              "status": "enacted",
+              "legislativeReference": "Finance Act 2006",
+              "predecessorValue": 275000,
+              "notes": null
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "residenceNilRateBand",
+          "label": "Residence Nil Rate Band (RNRB)",
+          "transferable": true,
+          "taperThreshold": 2000000,
+          "taperRate": "£1 reduction per £2 over threshold",
+          "history": [
+            {
+              "value": 175000,
+              "effectiveFrom": "2020-04-06",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Finance (No. 2) Act 2015, s.9; Inheritance Tax Act 1984 s.8D",
+              "predecessorValue": 150000,
+              "notes": "Final step of the phased introduction. Frozen at £175,000 until April 2028. Additional threshold available when a main residence is passed to direct descendants (children, grandchildren)."
+            },
+            {
+              "value": 150000,
+              "effectiveFrom": "2019-04-06",
+              "effectiveUntil": "2020-04-05",
+              "status": "enacted",
+              "legislativeReference": "Finance (No. 2) Act 2015, s.9",
+              "predecessorValue": 125000,
+              "notes": "Third step of phased introduction."
+            },
+            {
+              "value": 125000,
+              "effectiveFrom": "2018-04-06",
+              "effectiveUntil": "2019-04-05",
+              "status": "enacted",
+              "legislativeReference": "Finance (No. 2) Act 2015, s.9",
+              "predecessorValue": 100000,
+              "notes": "Second step of phased introduction."
+            },
+            {
+              "value": 100000,
+              "effectiveFrom": "2017-04-06",
+              "effectiveUntil": "2018-04-05",
+              "status": "enacted",
+              "legislativeReference": "Finance (No. 2) Act 2015, s.9",
+              "predecessorValue": null,
+              "notes": "First year of the RNRB. Introduced at £100,000 with planned annual increases to £175,000."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "combinedMaximum",
+          "label": "Maximum Combined Threshold (married/civil partner)",
+          "history": [
+            {
+              "value": 1000000,
+              "effectiveFrom": "2020-04-06",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Inheritance Tax Act 1984 ss. 7, 8A–8M; Finance (No. 2) Act 2015, s.9",
+              "predecessorValue": 950000,
+              "notes": "Where both NRB and RNRB are transferable between spouses: £325,000 + £175,000 = £500,000 per person, £1,000,000 for a couple."
+            }
+          ],
+          "conditions": [
+            "Residence passed to direct descendants",
+            "Estate value does not exceed taper threshold",
+            "Surviving spouse/civil partner transfers unused allowances"
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Inheritance Tax Act 1984, ss. 7, 8A–8M; Finance (No. 2) Act 2015, s. 9",
+      "regulatoryBody": "HM Revenue & Customs (HMRC)"
+    },
+    "US": {
+      "name": "United States",
+      "taxName": "Federal Estate Tax",
+      "currency": "USD",
+      "thresholds": [
+        {
+          "type": "federalExemption",
+          "label": "Federal Estate Tax Exemption",
+          "indexedForInflation": true,
+          "portability": true,
+          "portabilityNote": "Deceased spousal unused exclusion (DSUE) can be transferred to the surviving spouse by filing Form 706 within 9 months of death.",
+          "history": [
+            {
+              "value": 13990000,
+              "effectiveFrom": "2025-01-01",
+              "effectiveUntil": "2025-12-31",
+              "status": "enacted",
+              "legislativeReference": "IRC § 2010; Tax Cuts and Jobs Act 2017 (P.L. 115-97); Rev. Proc. 2024-40",
+              "predecessorValue": 13610000,
+              "notes": "Inflation-adjusted for 2025. Final year of the TCJA doubled exemption unless extended. Unified with the lifetime gift tax exemption."
+            },
+            {
+              "value": 13610000,
+              "effectiveFrom": "2024-01-01",
+              "effectiveUntil": "2024-12-31",
+              "status": "enacted",
+              "legislativeReference": "IRC § 2010; Tax Cuts and Jobs Act 2017 (P.L. 115-97); Rev. Proc. 2023-34",
+              "predecessorValue": 12920000,
+              "notes": "Inflation-adjusted for 2024."
+            },
+            {
+              "value": 12920000,
+              "effectiveFrom": "2023-01-01",
+              "effectiveUntil": "2023-12-31",
+              "status": "enacted",
+              "legislativeReference": "IRC § 2010; Rev. Proc. 2022-38",
+              "predecessorValue": 12060000,
+              "notes": "Inflation-adjusted for 2023."
+            },
+            {
+              "value": 7000000,
+              "effectiveFrom": "2026-01-01",
+              "effectiveUntil": null,
+              "status": "announced",
+              "legislativeReference": "Tax Cuts and Jobs Act 2017 (P.L. 115-97) s.11061 — sunset provision",
+              "predecessorValue": 13990000,
+              "notes": "The TCJA doubled exemption is scheduled to sunset on 1 January 2026, reverting to approximately $7,000,000 (inflation-adjusted pre-TCJA baseline). Exact amount depends on inflation adjustment. Status is 'announced' as Congress may extend or modify."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "stateLevelExemptions",
+          "label": "State-Level Estate/Inheritance Tax Thresholds",
+          "description": "Several US states impose their own estate or inheritance taxes with lower thresholds than the federal exemption. These vary widely.",
+          "examples": [
+            {
+              "state": "Massachusetts",
+              "amount": 1000000,
+              "note": "No inflation indexing. Lowest state threshold."
+            },
+            {
+              "state": "Oregon",
+              "amount": 1000000,
+              "note": "No inflation indexing."
+            },
+            {
+              "state": "New York",
+              "amount": 6940000,
+              "note": "2024 amount. Indexed for inflation. Cliff provision: if estate exceeds 105% of exemption, entire estate is taxable."
+            },
+            {
+              "state": "Connecticut",
+              "amount": 13610000,
+              "note": "Matches federal exemption."
+            },
+            {
+              "state": "Washington",
+              "amount": 2193000,
+              "note": "2024 amount. Indexed for inflation."
+            }
+          ],
+          "statesWithEstateTax": [
+            "Connecticut",
+            "Hawaii",
+            "Illinois",
+            "Maine",
+            "Maryland",
+            "Massachusetts",
+            "Minnesota",
+            "New York",
+            "Oregon",
+            "Rhode Island",
+            "Vermont",
+            "Washington",
+            "District of Columbia"
+          ],
+          "statesWithInheritanceTax": [
+            "Iowa",
+            "Kentucky",
+            "Maryland",
+            "Nebraska",
+            "New Jersey",
+            "Pennsylvania"
+          ],
+          "note": "Maryland is the only jurisdiction with both an estate tax and an inheritance tax.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Internal Revenue Code §§ 2001, 2010; Tax Cuts and Jobs Act 2017 (P.L. 115-97)",
+      "regulatoryBody": "Internal Revenue Service (IRS)"
+    },
+    "AU": {
+      "name": "Australia",
+      "taxName": "N/A — No inheritance or estate tax",
+      "currency": "AUD",
+      "thresholds": [],
+      "description": "Australia abolished federal estate duty in 1979 and state-level death duties by 1984. There is no inheritance tax. However, capital gains tax (CGT) may apply when beneficiaries dispose of inherited assets. The deceased's cost base transfers to the beneficiary.",
+      "cgtNote": "Assets acquired by the deceased before 20 September 1985 receive a market value cost base as at the date of death. Assets acquired after that date retain the deceased's original cost base.",
+      "source": "Income Tax Assessment Act 1997 (Cth), Subdivision 128-A",
+      "regulatoryBody": "Australian Taxation Office (ATO)"
+    },
+    "CA": {
+      "name": "Canada",
+      "taxName": "N/A — No inheritance or estate tax",
+      "currency": "CAD",
+      "thresholds": [],
+      "description": "Canada has no inheritance or estate tax. However, there is a deemed disposition at fair market value on death, triggering capital gains tax. The first $250,000 of capital gains above the annual exemption is taxed at 50% inclusion; amounts above $250,000 are taxed at 66.67% inclusion (from 2024).",
+      "principalResidenceExemption": true,
+      "principalResidenceNote": "A principal residence is exempt from capital gains tax on deemed disposition at death.",
+      "source": "Income Tax Act (R.S.C., 1985, c. 1 (5th Supp.)), s. 70(5)",
+      "regulatoryBody": "Canada Revenue Agency (CRA)"
+    },
+    "FR": {
+      "name": "France",
+      "taxName": "Droits de succession",
+      "currency": "EUR",
+      "thresholds": [
+        {
+          "type": "directDescendants",
+          "label": "Abattement en ligne directe",
+          "description": "Tax-free allowance per child (or parent inheriting from child). Applied per beneficiary.",
+          "history": [
+            {
+              "value": 100000,
+              "effectiveFrom": "2012-08-17",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Loi n° 2012-958 du 16 août 2012, Article 5",
+              "predecessorValue": 159325,
+              "notes": "Reduced from €159,325 to €100,000 by the loi de finances rectificative pour 2012."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "spouse",
+          "label": "Exemption for surviving spouse/civil partner (PACS)",
+          "history": [
+            {
+              "value": null,
+              "effectiveFrom": "2007-08-22",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Loi TEPA n° 2007-1223 du 21 août 2007, Article 8",
+              "predecessorValue": 76000,
+              "notes": "Surviving spouse or PACS partner is fully exempt from succession tax since August 2007. Value is null to indicate complete exemption (no threshold — no tax at all)."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "siblings",
+          "label": "Abattement entre frères et sœurs",
+          "history": [
+            {
+              "value": 15932,
+              "effectiveFrom": "2012-08-17",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Code général des impôts, Article 779-IV",
+              "predecessorValue": null,
+              "notes": "Tax-free allowance for siblings."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "other",
+          "label": "General allowance for other beneficiaries",
+          "history": [
+            {
+              "value": 1594,
+              "effectiveFrom": "2012-08-17",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Code général des impôts, Article 788-VI",
+              "predecessorValue": null,
+              "notes": "Default allowance for unrelated beneficiaries."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Code général des impôts, Articles 779–786",
+      "regulatoryBody": "Direction générale des finances publiques (DGFiP)"
+    },
+    "DE": {
+      "name": "Germany",
+      "taxName": "Erbschaftsteuer",
+      "currency": "EUR",
+      "thresholds": [
+        {
+          "type": "taxClassI_spouse",
+          "label": "Spouse/civil partner allowance",
+          "history": [
+            {
+              "value": 500000,
+              "effectiveFrom": "2009-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "ErbStG § 16 Abs. 1 Nr. 1; Erbschaftsteuerreformgesetz 2008",
+              "predecessorValue": 307000,
+              "notes": "Tax-free allowance for surviving spouse or registered civil partner. Increased from €307,000 by the 2008 reform."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "taxClassI_children",
+          "label": "Children allowance",
+          "history": [
+            {
+              "value": 400000,
+              "effectiveFrom": "2009-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "ErbStG § 16 Abs. 1 Nr. 2; Erbschaftsteuerreformgesetz 2008",
+              "predecessorValue": 205000,
+              "notes": "Tax-free allowance per child. Increased from €205,000 by the 2008 reform."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "taxClassI_grandchildren",
+          "label": "Grandchildren allowance",
+          "history": [
+            {
+              "value": 200000,
+              "effectiveFrom": "2009-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "ErbStG § 16 Abs. 1 Nr. 3; Erbschaftsteuerreformgesetz 2008",
+              "predecessorValue": 51200,
+              "notes": "Tax-free allowance per grandchild. Increased from €51,200 by the 2008 reform."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "taxClassII",
+          "label": "Siblings, nieces, nephews, etc.",
+          "history": [
+            {
+              "value": 20000,
+              "effectiveFrom": "2009-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "ErbStG § 16 Abs. 1 Nr. 5; Erbschaftsteuerreformgesetz 2008",
+              "predecessorValue": 10300,
+              "notes": "Tax-free allowance for Tax Class II beneficiaries. Increased from €10,300 by the 2008 reform."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "taxClassIII",
+          "label": "All other beneficiaries",
+          "history": [
+            {
+              "value": 20000,
+              "effectiveFrom": "2009-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "ErbStG § 16 Abs. 1 Nr. 7; Erbschaftsteuerreformgesetz 2008",
+              "predecessorValue": 5200,
+              "notes": "Tax-free allowance for unrelated persons (Tax Class III). Increased from €5,200 by the 2008 reform."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Erbschaftsteuer- und Schenkungsteuergesetz (ErbStG), §§ 15–16",
+      "regulatoryBody": "Bundeszentralamt für Steuern"
+    },
+    "IN": {
+      "name": "India",
+      "taxName": "N/A — No inheritance or estate tax",
+      "currency": "INR",
+      "thresholds": [],
+      "description": "India abolished estate duty in 1985 via the Estate Duty (Amendment) Act 1985. There is currently no inheritance tax, estate tax, or gift tax on inheritances. However, income earned from inherited assets is taxable as normal income.",
+      "note": "Gifts received from non-relatives exceeding ₹50,000 are taxable under Section 56(2)(x) of the Income Tax Act 1961, but inheritances are specifically excluded.",
+      "source": "Estate Duty (Amendment) Act 1985; Income Tax Act 1961, s. 56(2)(x)",
+      "regulatoryBody": "Central Board of Direct Taxes (CBDT)"
+    },
+    "JP": {
+      "name": "Japan",
+      "taxName": "Sōzokuzei (相続税)",
+      "currency": "JPY",
+      "thresholds": [
+        {
+          "type": "basicDeduction",
+          "label": "Basic deduction",
+          "formula": "30000000 + (6000000 × numberOfStatutoryHeirs)",
+          "history": [
+            {
+              "value": 30000000,
+              "effectiveFrom": "2015-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Sōzokuzei-hō (相続税法), Article 15; 2013 tax reform",
+              "predecessorValue": 50000000,
+              "notes": "¥30,000,000 base plus ¥6,000,000 per statutory heir. Reduced from ¥50,000,000 + ¥10,000,000 per heir by the 2013 reform, effective 1 January 2015. For example, a spouse and two children yields a threshold of ¥48,000,000."
+            },
+            {
+              "value": 50000000,
+              "effectiveFrom": "1988-01-01",
+              "effectiveUntil": "2014-12-31",
+              "status": "enacted",
+              "legislativeReference": "Sōzokuzei-hō (相続税法), Article 15",
+              "predecessorValue": null,
+              "notes": "¥50,000,000 base plus ¥10,000,000 per statutory heir. Long-standing threshold before the 2013 reform."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "spouseDeduction",
+          "label": "Spouse tax credit",
+          "history": [
+            {
+              "value": 160000000,
+              "effectiveFrom": "1994-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Sōzokuzei-hō (相続税法), Article 19-2",
+              "predecessorValue": null,
+              "notes": "The surviving spouse pays no inheritance tax on the greater of ¥160,000,000 or their statutory share (typically one-half)."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Sōzokuzei-hō (相続税法), Articles 15–19-2",
+      "regulatoryBody": "National Tax Agency (国税庁)"
+    },
+    "SG": {
+      "name": "Singapore",
+      "taxName": "N/A — No estate duty",
+      "currency": "SGD",
+      "thresholds": [],
+      "description": "Singapore abolished estate duty on 15 February 2008. There is no inheritance tax, estate tax, or capital gains tax on inherited assets.",
+      "source": "Estate Duty (Abolition) Act 2008",
+      "regulatoryBody": "Inland Revenue Authority of Singapore (IRAS)"
+    },
+    "IE": {
+      "name": "Ireland",
+      "taxName": "Capital Acquisitions Tax (CAT)",
+      "currency": "EUR",
+      "thresholds": [
+        {
+          "type": "groupA",
+          "label": "Group A — Child of the disponer",
+          "description": "Lifetime threshold for gifts/inheritances from a parent to a child (including adopted children and certain foster children).",
+          "history": [
+            {
+              "value": 335000,
+              "effectiveFrom": "2023-10-11",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Finance Act 2023 s.53",
+              "predecessorValue": 335000,
+              "notes": "Maintained at €335,000 by Budget 2024. This threshold has been €335,000 since 12 October 2016."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "groupB",
+          "label": "Group B — Linear ancestor, descendant, sibling, niece, nephew",
+          "history": [
+            {
+              "value": 32500,
+              "effectiveFrom": "2023-10-11",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Finance Act 2023 s.53",
+              "predecessorValue": 32500,
+              "notes": "Lifetime threshold for gifts/inheritances from close relatives."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "groupC",
+          "label": "Group C — All other relationships",
+          "history": [
+            {
+              "value": 16250,
+              "effectiveFrom": "2023-10-11",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Finance Act 2023 s.53",
+              "predecessorValue": 16250,
+              "notes": "Lifetime threshold for all other beneficiaries."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "note": "Thresholds are cumulative over a lifetime — all taxable gifts and inheritances from persons in the same group are aggregated.",
+      "source": "Capital Acquisitions Tax Consolidation Act 2003, Part 2",
+      "regulatoryBody": "Revenue Commissioners"
+    },
+    "NZ": {
+      "name": "New Zealand",
+      "taxName": "N/A — No inheritance or estate tax",
+      "currency": "NZD",
+      "thresholds": [],
+      "description": "New Zealand abolished estate duty on 1 January 1993 and gift duty on 1 October 2011. There is no inheritance tax, estate tax, or capital gains tax (with limited exceptions for certain property transactions).",
+      "source": "Estate Duty Abolition Act 1993; Taxation (Tax Administration and Remedial Matters) Act 2011",
+      "regulatoryBody": "Inland Revenue (Te Tari Taake)"
+    }
+  }
+}

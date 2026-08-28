@@ -1,0 +1,281 @@
+{
+  "target": "../../../v3/extensions/prc-china/prc-china.json",
+  "tests": [
+    {
+      "description": "valid — minimal with required applicableLaw",
+      "data": {
+        "applicableLaw": "prc_succession_law_1985"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with hukou",
+      "data": {
+        "applicableLaw": "prc_succession_law_1985",
+        "notes": "Test with hukou"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required applicableLaw",
+      "data": {
+        "notarisationRequired": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "applicableLaw": "civil_code_2021",
+        "japaneseKoseki": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — minimal with prc_civil_code_2021",
+      "data": {
+        "applicableLaw": "prc_civil_code_2021"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with hukou references (agricultural type)",
+      "data": {
+        "applicableLaw": "prc_civil_code_2021",
+        "hukouReferences": [
+          {
+            "personId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "hukouLocation": "Sichuan Province",
+            "hukouType": "agricultural"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with hukou references (non_agricultural type)",
+      "data": {
+        "applicableLaw": "prc_civil_code_2021",
+        "hukouReferences": [
+          {
+            "personId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+            "hukouLocation": "Shanghai",
+            "hukouType": "non_agricultural"
+          },
+          {
+            "personId": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+            "hukouLocation": "Beijing",
+            "hukouType": "non_agricultural"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with first and second order forced heirship",
+      "data": {
+        "applicableLaw": "prc_civil_code_2021",
+        "forcedHeirship": {
+          "firstOrderHeirs": [
+            {
+              "personId": "d4e5f6a7-b8c9-0123-defa-234567890123",
+              "relationship": "spouse"
+            },
+            {
+              "personId": "e5f6a7b8-c9d0-1234-efab-345678901234",
+              "relationship": "child"
+            }
+          ],
+          "secondOrderHeirs": [
+            {
+              "personId": "f6a7b8c9-d0e1-2345-fabc-456789012345",
+              "relationship": "parent"
+            }
+          ],
+          "mandatoryShareRule": "Equal division among first-order heirs per Article 1130 PRC Civil Code"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — cross-border HK-PRC scenario",
+      "data": {
+        "applicableLaw": "prc_civil_code_2021",
+        "crossBorderHandling": {
+          "hkAssets": "Residential property in Kowloon Tong held under HKSAR land grant",
+          "prcAssets": "Bank deposits at Bank of China Guangzhou branch",
+          "applicableTreaty": "Mainland-Hong Kong Mutual Legal Assistance Agreement",
+          "notes": "Dual probate proceedings required — HKSAR grant of probate does not automatically apply in PRC"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated",
+      "data": {
+        "applicableLaw": "prc_civil_code_2021",
+        "forcedHeirship": {
+          "firstOrderHeirs": [
+            {
+              "personId": "11111111-2222-3333-4444-555555555555",
+              "relationship": "spouse"
+            },
+            {
+              "personId": "22222222-3333-4444-5555-666666666666",
+              "relationship": "child"
+            }
+          ],
+          "secondOrderHeirs": [
+            {
+              "personId": "33333333-4444-5555-6666-777777777777",
+              "relationship": "sibling"
+            }
+          ],
+          "mandatoryShareRule": "Statutory share per PRC Civil Code Article 1141"
+        },
+        "hukouReferences": [
+          {
+            "personId": "11111111-2222-3333-4444-555555555555",
+            "hukouLocation": "Guangzhou, Guangdong Province",
+            "hukouType": "non_agricultural"
+          }
+        ],
+        "notarisationRequired": true,
+        "notarisationDetails": "Notarised succession certificate required from local notary office per PRC regulations",
+        "crossBorderHandling": {
+          "hkAssets": "Investment portfolio held at HSBC Hong Kong",
+          "prcAssets": "Apartment in Shenzhen registered under decedent's name",
+          "applicableTreaty": "Mainland-Hong Kong Mutual Legal Assistance Agreement",
+          "notes": "Assets in PRC to be administered under PRC Civil Code; HK assets under HKSAR probate"
+        },
+        "notes": "Deceased held dual domicile — legal advice obtained from both PRC and HK counsel"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — applicableLaw enum violation (common_law is not a valid value)",
+      "data": {
+        "applicableLaw": "common_law"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — HukouReference missing required personId",
+      "data": {
+        "applicableLaw": "prc_succession_law_1985",
+        "hukouReferences": [
+          {
+            "hukouLocation": "Chengdu",
+            "hukouType": "agricultural"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — hukouType enum violation",
+      "data": {
+        "applicableLaw": "prc_civil_code_2021",
+        "hukouReferences": [
+          {
+            "personId": "44444444-5555-6666-7777-888888888888",
+            "hukouType": "urban"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — firstOrderHeir missing required personId",
+      "data": {
+        "applicableLaw": "prc_civil_code_2021",
+        "forcedHeirship": {
+          "firstOrderHeirs": [
+            {
+              "relationship": "child"
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalProperties in nested HukouReference object",
+      "data": {
+        "applicableLaw": "prc_succession_law_1985",
+        "hukouReferences": [
+          {
+            "personId": "55555555-6666-7777-8888-999999999999",
+            "hukouLocation": "Wuhan",
+            "hukouType": "agricultural",
+            "registrationNumber": "HK-2024-0042"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — first order heir with relationshipCategory child",
+      "data": {
+        "applicableLaw": "prc_civil_code_2021",
+        "forcedHeirship": {
+          "firstOrderHeirs": [
+            {
+              "personId": "ff000007-0000-4000-f000-000000000001",
+              "relationshipCategory": "child",
+              "relationship": "adopted daughter"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — second order heir with grandparent_maternal",
+      "data": {
+        "applicableLaw": "prc_civil_code_2021",
+        "forcedHeirship": {
+          "secondOrderHeirs": [
+            {
+              "personId": "ff000007-0000-4000-f000-000000000002",
+              "relationshipCategory": "grandparent_maternal",
+              "relationship": "maternal grandmother (外祖母)"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — intestacy order with contributing in-laws (Article 1129)",
+      "data": {
+        "applicableLaw": "prc_civil_code_2021",
+        "intestacyOrder": {
+          "applicableOrder": "first_order",
+          "contributingInLaws": [
+            {
+              "personId": "ff000007-0000-4000-f000-000000000003",
+              "notes": "Widowed daughter-in-law who supported parents-in-law for 15 years"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — first order relationshipCategory 'uncle' not in enum",
+      "data": {
+        "applicableLaw": "prc_civil_code_2021",
+        "forcedHeirship": {
+          "firstOrderHeirs": [
+            {
+              "personId": "ff000007-0000-4000-f000-000000000004",
+              "relationshipCategory": "uncle"
+            }
+          ]
+        }
+      },
+      "valid": false
+    }
+  ]
+}

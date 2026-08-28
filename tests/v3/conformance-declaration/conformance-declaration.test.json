@@ -1,0 +1,345 @@
+{
+  "target": "../../../v3/conformance-declaration.json",
+  "tests": [
+    {
+      "description": "valid — complete conformance declaration",
+      "data": {
+        "implementation": "EstatePro",
+        "implementationVersion": "3.1.0",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": 2,
+        "declaredAt": "2026-03-28T14:30:00Z",
+        "validatorDetails": {
+          "name": "ajv",
+          "version": "8.17.1"
+        },
+        "entities": {
+          "estate": {
+            "level": 2,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0
+          },
+          "person": {
+            "level": 2,
+            "passed": true,
+            "errors": 0,
+            "warnings": 1,
+            "notes": "Advisory warning for optional fields"
+          },
+          "bequest": {
+            "level": 2,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0
+          }
+        },
+        "extensions": {
+          "uk-england-wales": {
+            "level": 3,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0,
+            "jurisdictionsVerified": [
+              "GB"
+            ]
+          }
+        },
+        "notes": "Full test run against v2.0.0 fixtures"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — minimal declaration (required fields only)",
+      "data": {
+        "implementation": "MinimalTool",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": 1,
+        "declaredAt": "2026-03-28T10:00:00Z",
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required implementation field",
+      "data": {
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": 1,
+        "declaredAt": "2026-03-28T10:00:00Z",
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — conformanceLevel out of range (4)",
+      "data": {
+        "implementation": "BadTool",
+        "implementationVersion": "0.1.0",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": 4,
+        "declaredAt": "2026-03-28T10:00:00Z",
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — declaration with extensions",
+      "data": {
+        "implementation": "JurisdictionSuite",
+        "implementationVersion": "2.5.0",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": 2,
+        "declaredAt": "2026-03-28T16:00:00Z",
+        "entities": {
+          "estate": {
+            "level": 2,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0
+          },
+          "person": {
+            "level": 2,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0
+          }
+        },
+        "extensions": {
+          "uk-england-wales": {
+            "level": 3,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0,
+            "jurisdictionsVerified": [
+              "GB"
+            ]
+          },
+          "islamic-succession": {
+            "level": 2,
+            "passed": true,
+            "errors": 0,
+            "warnings": 2,
+            "notes": "Faraidh edge cases flagged as warnings"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing implementationVersion (required field)",
+      "data": {
+        "implementation": "SomeTool",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": 1,
+        "declaredAt": "2026-03-28T10:00:00Z",
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing inheritVersion (required field)",
+      "data": {
+        "implementation": "SomeTool",
+        "implementationVersion": "1.0.0",
+        "conformanceLevel": 1,
+        "declaredAt": "2026-03-28T10:00:00Z",
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing conformanceLevel (required field)",
+      "data": {
+        "implementation": "SomeTool",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "2.0.0",
+        "declaredAt": "2026-03-28T10:00:00Z",
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing declaredAt (required field)",
+      "data": {
+        "implementation": "SomeTool",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": 1,
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing entities (required field)",
+      "data": {
+        "implementation": "SomeTool",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": 1,
+        "declaredAt": "2026-03-28T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — conformanceLevel as string instead of integer",
+      "data": {
+        "implementation": "SomeTool",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": "1",
+        "declaredAt": "2026-03-28T10:00:00Z",
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — declaredAt as number instead of string",
+      "data": {
+        "implementation": "SomeTool",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": 1,
+        "declaredAt": 1711633800,
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — declaredAt is not a valid datetime format",
+      "data": {
+        "implementation": "SomeTool",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": 1,
+        "declaredAt": "28/03/2026 14:30",
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — conformanceLevel below valid range (0)",
+      "data": {
+        "implementation": "SomeTool",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": 0,
+        "declaredAt": "2026-03-28T10:00:00Z",
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown property at root level",
+      "data": {
+        "implementation": "SomeTool",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "2.0.0",
+        "conformanceLevel": 1,
+        "declaredAt": "2026-03-28T10:00:00Z",
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        },
+        "unknownField": "should not be here"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — conformance declaration with correct disclaimer const",
+      "data": {
+        "implementation": "OpenInherit SDK",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "3.0.0",
+        "conformanceLevel": 2,
+        "declaredAt": "2026-04-01T09:00:00Z",
+        "entities": {
+          "estate": {
+            "level": 2,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0
+          }
+        },
+        "disclaimer": "Validation results are informational. They verify schema conformance and data structure, not legal accuracy or completeness. Do not rely on validation results as the sole basis for legal or financial decisions."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — conformance declaration with wrong disclaimer value",
+      "data": {
+        "implementation": "OpenInherit SDK",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "3.0.0",
+        "conformanceLevel": 2,
+        "declaredAt": "2026-04-01T09:00:00Z",
+        "entities": {
+          "estate": {
+            "level": 2,
+            "passed": true
+          }
+        },
+        "disclaimer": "This is not the correct disclaimer text."
+      },
+      "valid": false
+    }
+  ]
+}

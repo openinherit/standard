@@ -1,0 +1,103 @@
+{
+  "target": "../../../v3/asset-categories/digital.json",
+  "tests": [
+    {
+      "description": "valid — empty (all fields optional)",
+      "data": {},
+      "valid": true
+    },
+    {
+      "description": "valid — social media account",
+      "data": {
+        "socialMedia": {
+          "platform": "facebook"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — crypto access details",
+      "data": {
+        "cryptoAccess": {
+          "walletType": "hardware"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — cloud storage",
+      "data": {
+        "cloudStorage": {
+          "provider": "google_drive"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — domain name",
+      "data": {
+        "domainNameAccess": {
+          "registrar": "namecheap"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — socialMedia platform not in enum and not x-inherit prefixed",
+      "data": {
+        "socialMedia": {
+          "platform": "myspace"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — cryptoAccess walletType not in enum",
+      "data": {
+        "cryptoAccess": {
+          "walletType": "brain_wallet"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — cloudStorage provider not in enum and not x-inherit prefixed",
+      "data": {
+        "cloudStorage": {
+          "provider": "mega_cloud"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — digitalAccess with additional property",
+      "data": {
+        "digitalAccess": {
+          "username": "user@example.com",
+          "unknownField": "should fail"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — socialMedia with additional property",
+      "data": {
+        "socialMedia": {
+          "platform": "facebook",
+          "extraField": "not allowed"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — socialMedia followerCount as string (must be integer)",
+      "data": {
+        "socialMedia": {
+          "platform": "instagram",
+          "followerCount": "ten thousand"
+        }
+      },
+      "valid": false
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://openinherit.org/reference-data/body-activity-map-schema.json",
+  "version": "1.0.0",
+  "lastUpdated": "2026-03-26",
+  "description": "Maps regulatory bodies to the practitioner activities they authorise",
+  "mappings": [
+    {
+      "bodyId": "sra",
+      "activities": ["will_drafting", "probate_administration", "trust_preparation", "iht_planning", "cross_border", "estate_litigation", "power_of_attorney", "business_succession"]
+    },
+    {
+      "bodyId": "lss",
+      "activities": ["will_drafting", "probate_administration", "trust_preparation", "iht_planning", "cross_border", "estate_litigation", "power_of_attorney"]
+    },
+    {
+      "bodyId": "lsi",
+      "activities": ["will_drafting", "probate_administration", "trust_preparation", "cross_border", "estate_litigation", "power_of_attorney"]
+    },
+    {
+      "bodyId": "nysba",
+      "activities": ["will_drafting", "probate_administration", "trust_preparation", "iht_planning", "cross_border", "estate_litigation", "power_of_attorney", "business_succession"]
+    },
+    {
+      "bodyId": "lso",
+      "activities": ["will_drafting", "probate_administration", "trust_preparation", "iht_planning", "cross_border", "estate_litigation", "power_of_attorney"]
+    },
+    {
+      "bodyId": "lsnsw",
+      "activities": ["will_drafting", "probate_administration", "trust_preparation", "iht_planning", "cross_border", "estate_litigation", "power_of_attorney", "superannuation"]
+    },
+    {
+      "bodyId": "sal",
+      "activities": ["will_drafting", "probate_administration", "trust_preparation", "cross_border", "islamic_succession", "cpf_nominations"]
+    },
+    {
+      "bodyId": "difc",
+      "activities": ["will_drafting", "probate_administration", "cross_border", "islamic_succession"]
+    },
+    {
+      "bodyId": "jfba",
+      "activities": ["will_drafting", "probate_administration", "trust_preparation", "cross_border", "isan_bunkatsu"]
+    },
+    {
+      "bodyId": "bci",
+      "activities": ["will_drafting", "probate_administration", "trust_preparation", "cross_border", "estate_litigation", "huf_matters"]
+    }
+  ]
+}

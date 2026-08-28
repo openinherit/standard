@@ -1,0 +1,802 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/reference-data/pension-types.json",
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal or tax advice. Tax laws change frequently — always verify with current legislation and qualified professionals. Data current as of March 2026.",
+  "title": "Pension & Retirement Account Types",
+  "description": "Pension and retirement account types by jurisdiction, including tax treatment on death and whether beneficiary designations are supported.",
+  "lastUpdated": "2026-03-28",
+  "_metadata": {
+    "lastVerified": "2026-04-06",
+    "source": "UK pension scheme types from HMRC and The Pensions Regulator",
+    "jurisdiction": "GB",
+    "disclaimer": "This data is provided for interoperability purposes. It does not constitute legal, tax, or financial advice. Users must verify independently before relying on these figures for official purposes.",
+    "deprecationPattern": "Individual entries within this file may carry deprecated: true, deprecatedAt, deprecatedReason, and supersededBy fields. Deprecated entries are retained for historical reference and audit trail purposes. Applications should filter to non-deprecated entries for current data.",
+    "deprecated": false,
+    "deprecatedAt": null,
+    "deprecatedReason": null,
+    "supersededBy": null
+  },
+  "jurisdictions": {
+    "GB": {
+      "name": "United Kingdom",
+      "currency": "GBP",
+      "pensionTypes": [
+        {
+          "type": "definedBenefit",
+          "label": "Defined Benefit (DB) / Final Salary Pension",
+          "description": "Employer-sponsored scheme paying a guaranteed income in retirement based on salary and years of service. Benefits are typically paid as an annuity.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "beforeRetirement": "Lump sum death benefit typically payable to nominated beneficiaries. Usually tax-free if paid within 2 years of death and within the lump sum allowance.",
+            "afterRetirement": "Dependant's pension (typically 50% of member's pension) paid to surviving spouse/civil partner or eligible dependants. Taxed as income.",
+            "note": "From April 2027, inherited pension benefits will be subject to income tax on the recipient regardless of the member's age at death (removing the current age-75 distinction)."
+          },
+          "outsideEstate": true,
+          "outsideEstateNote": "Pension death benefits are normally held in trust and fall outside the estate for IHT purposes, provided discretionary nomination is used.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "definedContribution",
+          "label": "Defined Contribution (DC) / Money Purchase Pension",
+          "description": "Pension pot built from contributions and investment returns. No guaranteed income — the member chooses how to access funds (drawdown, annuity, or lump sum).",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "before75": "Remaining fund can be paid to nominated beneficiaries as a lump sum or drawdown, currently tax-free if death occurs before age 75.",
+            "after75": "Remaining fund can be paid to nominated beneficiaries as a lump sum or drawdown, taxed at the recipient's marginal income tax rate.",
+            "note": "From April 2027, all inherited DC pension benefits will be subject to income tax on the recipient, regardless of the member's age at death. Additionally, unused DC pension funds will be included in the estate for IHT purposes.",
+            "rules": [
+              {
+                "effectiveFrom": "2015-04-06",
+                "effectiveUntil": "2027-04-05",
+                "status": "enacted",
+                "description": "Pension freedom rules: before 75, benefits pass tax-free to nominees; after 75, taxed at recipient's marginal rate. DC pensions are outside the estate for IHT.",
+                "outsideEstate": true
+              },
+              {
+                "effectiveFrom": "2027-04-06",
+                "status": "announced",
+                "source": "Autumn Budget 2024",
+                "description": "All inherited DC pension benefits subject to income tax regardless of age at death. Unused DC pension funds included in the estate for IHT purposes.",
+                "outsideEstate": false
+              }
+            ]
+          },
+          "outsideEstate": true,
+          "outsideEstateNote": "Currently outside the estate for IHT. From April 2027, unused DC pension funds will be included in the estate for IHT (Autumn Budget 2024 announcement).",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "sipp",
+          "label": "Self-Invested Personal Pension (SIPP)",
+          "description": "A type of defined contribution pension that offers a wider range of investment choices, including individual stocks, commercial property, and alternative assets.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "before75": "Same as DC — currently tax-free to beneficiaries.",
+            "after75": "Same as DC — taxed at recipient's marginal rate.",
+            "note": "From April 2027, same income tax and IHT treatment as DC pensions (see definedContribution rules).",
+            "rules": [
+              {
+                "effectiveFrom": "2015-04-06",
+                "effectiveUntil": "2027-04-05",
+                "status": "enacted",
+                "description": "Same as DC — before 75 tax-free, after 75 marginal rate. Outside estate for IHT.",
+                "outsideEstate": true
+              },
+              {
+                "effectiveFrom": "2027-04-06",
+                "status": "announced",
+                "source": "Autumn Budget 2024",
+                "description": "Same as DC — income tax on all inherited benefits regardless of age. Included in estate for IHT.",
+                "outsideEstate": false
+              }
+            ]
+          },
+          "outsideEstate": true,
+          "outsideEstateNote": "Currently outside the estate for IHT. From April 2027, included in the estate (Autumn Budget 2024).",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "statePension",
+          "label": "State Pension",
+          "description": "Government pension based on National Insurance contribution record. Full new State Pension is £221.20 per week (2024/25). Not inheritable as a fund — stops on death.",
+          "beneficiaryDesignation": false,
+          "taxTreatmentOnDeath": {
+            "description": "State Pension ceases on death. A surviving spouse may inherit up to 50% of the deceased's additional State Pension (S2P/SERPS) or protected payment, depending on when the deceased reached pension age."
+          },
+          "outsideEstate": true,
+          "outsideEstateNote": "Not a fund — no value passes to the estate.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "lgps",
+          "label": "Local Government Pension Scheme (LGPS)",
+          "description": "Defined benefit scheme for local government employees in England and Wales. Similar schemes exist in Scotland and Northern Ireland.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "beforeRetirement": "Lump sum death grant (typically 3x annual pensionable pay) payable to nominated beneficiaries. Survivor's pension payable to eligible dependants.",
+            "afterRetirement": "Survivor's pension (approximately 1/160th of pensionable pay for each year of membership) payable to eligible spouse, civil partner, or cohabiting partner."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Pension Schemes Act 1993; Finance Act 2004, Part 4; The Pensions Regulator guidance; HMRC Pensions Tax Manual",
+      "regulatoryBody": "The Pensions Regulator; HM Revenue & Customs"
+    },
+    "US": {
+      "name": "United States",
+      "currency": "USD",
+      "pensionTypes": [
+        {
+          "type": "401k",
+          "label": "401(k) Plan",
+          "description": "Employer-sponsored defined contribution retirement plan. Contributions are pre-tax (traditional) or after-tax (Roth 401(k)). Subject to required minimum distributions (RMDs) from age 73.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "traditional": "Inherited funds are taxable as ordinary income to the beneficiary when withdrawn. Non-spouse beneficiaries must generally withdraw all funds within 10 years of the participant's death (SECURE Act).",
+            "roth": "Qualified distributions from an inherited Roth 401(k) are tax-free. Non-spouse beneficiaries are still subject to the 10-year withdrawal rule.",
+            "spousalOptions": "Surviving spouse can roll over to their own IRA/401(k), treat as their own, or elect the 10-year rule."
+          },
+          "outsideEstate": false,
+          "outsideEstateNote": "Included in the gross estate for federal estate tax purposes, though income tax and estate tax are not both fully applied (IRC § 691(c) deduction).",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "traditionalIRA",
+          "label": "Traditional IRA",
+          "description": "Individual Retirement Account with tax-deductible contributions and tax-deferred growth. Subject to RMDs from age 73.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Inherited IRA distributions are taxable as ordinary income. Non-spouse beneficiaries must withdraw all funds within 10 years (SECURE Act). Eligible designated beneficiaries (surviving spouse, minor children, disabled/chronically ill, beneficiaries not more than 10 years younger) may use life expectancy method."
+          },
+          "outsideEstate": false,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "rothIRA",
+          "label": "Roth IRA",
+          "description": "Individual Retirement Account funded with after-tax contributions. Qualified withdrawals are tax-free. No RMDs during the owner's lifetime.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Inherited Roth IRA distributions are generally tax-free (provided the 5-year holding period is met). Non-spouse beneficiaries must still withdraw all funds within 10 years. No income tax on qualified distributions, making Roth IRAs highly efficient for wealth transfer."
+          },
+          "outsideEstate": false,
+          "outsideEstateNote": "Included in gross estate for estate tax purposes despite income-tax-free withdrawals.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "403b",
+          "label": "403(b) Plan",
+          "description": "Tax-sheltered annuity plan for employees of public schools, tax-exempt organisations, and certain ministers. Similar to 401(k) in structure.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Same treatment as 401(k) — taxable as ordinary income for traditional contributions, tax-free for Roth contributions. 10-year rule applies to non-spouse beneficiaries."
+          },
+          "outsideEstate": false,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "pension",
+          "label": "Defined Benefit Pension Plan",
+          "description": "Employer-sponsored plan providing a guaranteed monthly benefit in retirement. Increasingly rare in the private sector.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "If the plan offers a survivor benefit (e.g. joint-and-survivor annuity), payments continue to the surviving spouse and are taxed as ordinary income. If no survivor benefit was elected, the pension typically ceases at death with no residual value."
+          },
+          "outsideEstate": false,
+          "outsideEstateNote": "Present value of survivor annuity may be included in gross estate.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "socialSecurity",
+          "label": "Social Security",
+          "description": "Federal retirement benefit based on lifetime earnings and work credits. Full retirement age ranges from 66 to 67 depending on birth year.",
+          "beneficiaryDesignation": false,
+          "taxTreatmentOnDeath": {
+            "description": "Benefits cease at death. A surviving spouse may be eligible for survivor benefits (up to 100% of the deceased's benefit at full retirement age). A one-time lump sum death payment of $255 may be payable to a surviving spouse or eligible child.",
+            "survivorBenefit": true,
+            "lumpSumDeathPayment": 255
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Internal Revenue Code §§ 401–408A; SECURE Act 2019; SECURE 2.0 Act 2022; Social Security Act",
+      "regulatoryBody": "Internal Revenue Service (IRS); Department of Labor; Social Security Administration"
+    },
+    "AU": {
+      "name": "Australia",
+      "currency": "AUD",
+      "pensionTypes": [
+        {
+          "type": "superAccumulation",
+          "label": "Superannuation — Accumulation Phase",
+          "description": "Compulsory employer contributions (11.5% of ordinary time earnings from 1 July 2024) plus voluntary contributions, invested and accumulated until retirement.",
+          "beneficiaryDesignation": true,
+          "beneficiaryDesignationNote": "Binding death benefit nominations (BDBN) direct the trustee. Non-binding nominations are advisory only. BDBNs typically expire after 3 years unless non-lapsing.",
+          "taxTreatmentOnDeath": {
+            "taxDependant": "Tax-free lump sum to a tax dependant (spouse, child under 18, person in interdependency relationship, financial dependant).",
+            "nonTaxDependant": "Taxable component taxed at up to 30% (plus Medicare levy) for non-tax dependants (e.g. adult children). Tax-free component is always tax-free.",
+            "note": "Superannuation death benefits do not automatically form part of the deceased's estate unless no valid nomination exists and the trustee pays to the estate."
+          },
+          "outsideEstate": true,
+          "outsideEstateNote": "Super is held in trust and passes according to binding nominations or trustee discretion, not the will. It only enters the estate if the trustee directs it there.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "superDefinedBenefit",
+          "label": "Superannuation — Defined Benefit",
+          "description": "Employer-sponsored scheme paying a benefit based on salary and years of service. Mostly found in public sector and older private sector schemes.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Same tax treatment as accumulation phase. Reversionary pension to a dependant is taxed as income. Lump sum rules apply as per accumulation phase."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "smsf",
+          "label": "Self-Managed Super Fund (SMSF)",
+          "description": "Superannuation fund with 1–6 members who are also trustees (or directors of the corporate trustee). Offers maximum investment flexibility.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Same death benefit tax rules as other super funds. Estate planning is critical — the trust deed and binding nominations must be properly maintained."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "agePension",
+          "label": "Age Pension",
+          "description": "Government pension for eligible residents, means-tested. Not a fund — ceases on death.",
+          "beneficiaryDesignation": false,
+          "taxTreatmentOnDeath": {
+            "description": "Age Pension ceases on death. A surviving partner may claim bereavement payment (lump sum of up to 14 weeks) and may be eligible for their own Age Pension."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Superannuation Industry (Supervision) Act 1993 (Cth); Income Tax Assessment Act 1997 (Cth), Division 302; Social Security Act 1991 (Cth)",
+      "regulatoryBody": "Australian Prudential Regulation Authority (APRA); Australian Taxation Office (ATO)"
+    },
+    "CA": {
+      "name": "Canada",
+      "currency": "CAD",
+      "pensionTypes": [
+        {
+          "type": "rrsp",
+          "label": "Registered Retirement Savings Plan (RRSP)",
+          "description": "Tax-deferred individual retirement savings. Contributions are tax-deductible. Must be converted to RRIF or annuity by 31 December of the year the holder turns 71.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "spouse": "Tax-free rollover to surviving spouse's RRSP or RRIF.",
+            "other": "Full fair market value of the RRSP is included in the deceased's final income tax return and taxed at their marginal rate.",
+            "dependantChild": "Tax-deferred rollover possible for financially dependent child or grandchild."
+          },
+          "outsideEstate": true,
+          "outsideEstateNote": "With a valid beneficiary designation, RRSP proceeds pass outside the estate (in most provinces). Quebec requires designation in the will.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "rrif",
+          "label": "Registered Retirement Income Fund (RRIF)",
+          "description": "Provides retirement income from converted RRSP funds. Minimum annual withdrawals are mandatory.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Same treatment as RRSP. Spouse rollover available. Otherwise, fair market value included in deceased's final return."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "tfsa",
+          "label": "Tax-Free Savings Account (TFSA)",
+          "description": "After-tax contributions with tax-free growth and withdrawals. Contribution room accumulates annually ($7,000 for 2024).",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "successorHolder": "Surviving spouse named as successor holder takes over the TFSA tax-free with no impact on their own contribution room.",
+            "beneficiary": "Fair market value at date of death passes to named beneficiary tax-free. Any growth after death is taxable to the beneficiary.",
+            "noDesignation": "Paid to estate; growth after death is taxable."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "cpp",
+          "label": "Canada Pension Plan (CPP)",
+          "description": "Contributory social insurance programme. Provides retirement, disability, and survivor benefits.",
+          "beneficiaryDesignation": false,
+          "taxTreatmentOnDeath": {
+            "description": "CPP retirement benefits cease on death. Surviving spouse and dependent children may be eligible for survivor benefits. A one-time death benefit of up to $2,500 is payable.",
+            "deathBenefit": 2500,
+            "survivorPension": true
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Income Tax Act (R.S.C., 1985, c. 1 (5th Supp.)), ss. 146, 146.3, 146.2; Canada Pension Plan Act",
+      "regulatoryBody": "Canada Revenue Agency (CRA); Office of the Superintendent of Financial Institutions (OSFI)"
+    },
+    "FR": {
+      "name": "France",
+      "currency": "EUR",
+      "pensionTypes": [
+        {
+          "type": "regimeGeneral",
+          "label": "Régime Général (General Scheme)",
+          "description": "Mandatory state pension for private sector employees. Pay-as-you-go system.",
+          "beneficiaryDesignation": false,
+          "taxTreatmentOnDeath": {
+            "description": "Pension ceases on death. Surviving spouse may receive a reversion pension (pension de réversion) of 54% of the deceased's pension, subject to income conditions."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "agirc_arrco",
+          "label": "Agirc-Arrco Complementary Pension",
+          "description": "Mandatory supplementary pension for private sector employees, based on points accumulated during career.",
+          "beneficiaryDesignation": false,
+          "taxTreatmentOnDeath": {
+            "description": "Reversion pension of 60% payable to surviving spouse. Orphan's pension may apply."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "per",
+          "label": "Plan d'Épargne Retraite (PER)",
+          "description": "Individual retirement savings plan introduced in 2019, replacing PERP, Madelin, and PERCO. Tax-deductible contributions.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Benefits the favourable life insurance tax regime if the designated beneficiary clause is used. Proceeds may be excluded from succession tax up to certain thresholds depending on the member's age at death."
+          },
+          "outsideEstate": true,
+          "outsideEstateNote": "With a beneficiary designation, PER benefits can pass outside the estate under the life insurance tax rules.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Code de la sécurité sociale; Loi PACTE 2019 (PER); Code général des impôts, Article 990I",
+      "regulatoryBody": "Caisse Nationale d'Assurance Vieillesse (CNAV); Autorité de Contrôle Prudentiel et de Résolution (ACPR)"
+    },
+    "DE": {
+      "name": "Germany",
+      "currency": "EUR",
+      "pensionTypes": [
+        {
+          "type": "gesetzlicheRente",
+          "label": "Gesetzliche Rentenversicherung (Statutory Pension Insurance)",
+          "description": "Mandatory state pension for employees. Pay-as-you-go system.",
+          "beneficiaryDesignation": false,
+          "taxTreatmentOnDeath": {
+            "description": "Pension ceases on death. Surviving spouse may receive a widow/widower's pension (kleine or große Witwenrente). Orphan's pension available for children."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "betrieblicheAltersversorgung",
+          "label": "Betriebliche Altersversorgung (Occupational Pension)",
+          "description": "Employer-sponsored pension. Can be structured as direct commitment, support fund, pension fund, or direct insurance.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Death benefits may be payable to nominated beneficiaries. Subject to inheritance tax. Income tax treatment depends on the vehicle."
+          },
+          "outsideEstate": false,
+          "outsideEstateNote": "Generally included in the taxable estate unless structured as life insurance with irrevocable beneficiary designation.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "riesterRente",
+          "label": "Riester-Rente (Riester Pension)",
+          "description": "State-subsidised private pension with government bonuses and tax deductions. Primarily for employees and certain self-employed persons.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Capital can be transferred to the surviving spouse's Riester contract without repaying subsidies. Otherwise, subsidies must be repaid. Remaining capital may be subject to inheritance tax."
+          },
+          "outsideEstate": false,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "ruerupRente",
+          "label": "Rürup-Rente / Basisrente (Rürup Pension)",
+          "description": "Tax-advantaged pension primarily for self-employed persons. Annuity-only — no lump sum withdrawal.",
+          "beneficiaryDesignation": false,
+          "beneficiaryDesignationNote": "Limited — only spouse and children under 25 can receive survivor benefits. No lump sum death benefit.",
+          "taxTreatmentOnDeath": {
+            "description": "No lump sum payment on death. Surviving spouse may receive a reversion pension if the contract includes this option. Otherwise, remaining capital is forfeited to the insurance pool."
+          },
+          "outsideEstate": true,
+          "outsideEstateNote": "No transferable capital — pension rights extinguish on death (subject to any survivor pension).",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Sozialgesetzbuch VI (SGB VI); Einkommensteuergesetz (EStG), §§ 10a, 79ff., 22",
+      "regulatoryBody": "Deutsche Rentenversicherung; Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin)"
+    },
+    "IN": {
+      "name": "India",
+      "currency": "INR",
+      "pensionTypes": [
+        {
+          "type": "epf",
+          "label": "Employees' Provident Fund (EPF)",
+          "description": "Mandatory contributory fund for salaried employees earning above the threshold. Both employer and employee contribute 12% of basic salary.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "EPF balance is paid to the nominated beneficiary or legal heir. Lump sum payment is tax-free to the recipient."
+          },
+          "outsideEstate": false,
+          "outsideEstateNote": "Passes to nominee, but may form part of the estate for succession purposes in the absence of a valid nomination.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "nps",
+          "label": "National Pension System (NPS)",
+          "description": "Defined contribution pension scheme regulated by PFRDA. Available to all Indian citizens aged 18–70.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Entire accumulated corpus is paid to the nominee/legal heir as a lump sum. The lump sum is tax-free in the hands of the nominee."
+          },
+          "outsideEstate": false,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "ppf",
+          "label": "Public Provident Fund (PPF)",
+          "description": "Government-backed long-term savings scheme with a 15-year lock-in. Interest rate set quarterly by the government.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Balance is paid to the nominee. The proceeds are tax-free."
+          },
+          "outsideEstate": false,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Employees' Provident Funds and Miscellaneous Provisions Act 1952; Pension Fund Regulatory and Development Authority Act 2013; Public Provident Fund Act 1968",
+      "regulatoryBody": "Employees' Provident Fund Organisation (EPFO); Pension Fund Regulatory and Development Authority (PFRDA)"
+    },
+    "JP": {
+      "name": "Japan",
+      "currency": "JPY",
+      "pensionTypes": [
+        {
+          "type": "koseiNenkin",
+          "label": "Kōsei Nenkin (厚生年金) — Employees' Pension Insurance",
+          "description": "Mandatory earnings-related pension for employees of companies. Includes the basic National Pension component.",
+          "beneficiaryDesignation": false,
+          "taxTreatmentOnDeath": {
+            "description": "Pension ceases on death. Surviving spouse may receive a survivor's pension (izoku nenkin). A lump sum death benefit of ¥120,000–¥320,000 may be payable depending on contribution months."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "kokuminNenkin",
+          "label": "Kokumin Nenkin (国民年金) — National Pension",
+          "description": "Basic universal pension for all residents aged 20–59. Self-employed persons, students, and others not covered by Employees' Pension pay contributions directly.",
+          "beneficiaryDesignation": false,
+          "taxTreatmentOnDeath": {
+            "description": "Pension ceases on death. Surviving spouse with dependent children may receive a basic survivor's pension (izoku kiso nenkin). A lump sum death benefit of ¥120,000–¥320,000 may be payable."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "iDeCo",
+          "label": "iDeCo (個人型確定拠出年金) — Individual-type Defined Contribution",
+          "description": "Voluntary individual defined contribution pension. Contributions are fully tax-deductible. Available to most residents aged 20–64.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Accumulated funds are paid to the designated beneficiary as a lump sum death benefit. Treated as deemed inheritance (minashi sōzoku zaisan) and subject to inheritance tax, with a non-taxable amount of ¥5,000,000 × number of statutory heirs.",
+            "nonTaxableAmount": "5000000 × numberOfStatutoryHeirs"
+          },
+          "outsideEstate": false,
+          "outsideEstateNote": "Treated as deemed inherited property (みなし相続財産) — not part of the civil estate but subject to inheritance tax.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "corporateDB",
+          "label": "Kakutei Kyūfu Nenkin (確定給付企業年金) — Corporate Defined Benefit",
+          "description": "Employer-sponsored defined benefit pension. Benefits are based on salary and service years.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Death benefit paid as lump sum to beneficiaries. Subject to inheritance tax with the same deemed inheritance treatment as iDeCo."
+          },
+          "outsideEstate": false,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Kokumin Nenkin-hō (国民年金法); Kōsei Nenkin Hoken-hō (厚生年金保険法); Kakutei Kyoshutsu Nenkin-hō (確定拠出年金法)",
+      "regulatoryBody": "Japan Pension Service (日本年金機構); Financial Services Agency (金融庁)"
+    },
+    "SG": {
+      "name": "Singapore",
+      "currency": "SGD",
+      "pensionTypes": [
+        {
+          "type": "cpfOrdinary",
+          "label": "Central Provident Fund — Ordinary Account (OA)",
+          "description": "Used for housing, insurance, investment, and education. Receives the largest share of CPF contributions for members under 55.",
+          "beneficiaryDesignation": true,
+          "beneficiaryDesignationNote": "CPF nominations must be made using the CPF Board's official process. Without a valid nomination, CPF monies are distributed under the Intestate Succession Act (or Muslim law for Muslims).",
+          "taxTreatmentOnDeath": {
+            "description": "CPF monies are not subject to estate duty (abolished 2008). Paid to nominees as a tax-free lump sum. Singapore has no inheritance tax."
+          },
+          "outsideEstate": true,
+          "outsideEstateNote": "With a valid CPF nomination, monies pass outside the estate directly to nominees.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "cpfSpecial",
+          "label": "Central Provident Fund — Special Account (SA)",
+          "description": "Dedicated to retirement and investment in approved retirement products. Higher interest rate than OA (currently 4.08% p.a.).",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Same as OA — paid to nominees tax-free."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "cpfMedisave",
+          "label": "Central Provident Fund — MediSave Account (MA)",
+          "description": "Used for hospitalisation expenses, approved medical insurance, and certain outpatient treatments.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "MediSave balance is paid to nominees as a tax-free lump sum. If transferred to a nominee's own MediSave account, it is subject to the MediSave Basic Healthcare Sum ceiling."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "cpfRetirement",
+          "label": "Central Provident Fund — Retirement Account (RA)",
+          "description": "Created at age 55 by combining OA and SA savings up to the Full Retirement Sum. Provides lifelong retirement income through CPF LIFE or the Retirement Sum Scheme.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Remaining balance (after CPF LIFE bequest or Retirement Sum Scheme balance) is paid to nominees tax-free. Under CPF LIFE, the bequest is the unused premiums (if any) and varies by plan chosen.",
+            "cpfLifeNote": "CPF LIFE pays lifelong income — on death, a bequest is payable only if remaining balance exceeds payouts received."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "srs",
+          "label": "Supplementary Retirement Scheme (SRS)",
+          "description": "Voluntary savings scheme complementing CPF. Contributions are tax-deductible. Withdrawals from the statutory retirement age attract 50% tax concession.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "SRS savings of a deceased member are deemed withdrawn on death. 50% of the balance is subject to income tax (regardless of the member's age at death). No penalty for premature withdrawal. Payable to nominees or estate.",
+            "taxablePercent": 50
+          },
+          "outsideEstate": false,
+          "outsideEstateNote": "SRS monies with a valid beneficiary nomination pass outside the estate. Without a nomination, they form part of the estate.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Central Provident Fund Act 1953; Supplementary Retirement Scheme (SRS) conditions; Income Tax Act 1947 (Cap. 134)",
+      "regulatoryBody": "Central Provident Fund Board; Ministry of Manpower; Inland Revenue Authority of Singapore (IRAS)"
+    },
+    "IE": {
+      "name": "Ireland",
+      "currency": "EUR",
+      "pensionTypes": [
+        {
+          "type": "occupationalScheme",
+          "label": "Occupational Pension Scheme",
+          "description": "Employer-sponsored pension scheme. Can be defined benefit or defined contribution.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Death-in-service lump sum typically payable tax-free to dependants (up to 4x salary). Remaining fund for DC schemes payable to dependants or estate — subject to income tax or CAT depending on structure."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "prsa",
+          "label": "Personal Retirement Savings Account (PRSA)",
+          "description": "Portable individual pension account. Standard and non-standard variants.",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "description": "Fund passes to estate or nominated beneficiaries. Subject to income tax (if paid as pension) or CAT (if paid as lump sum after any tax-free element)."
+          },
+          "outsideEstate": false,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "arf",
+          "label": "Approved Retirement Fund (ARF)",
+          "description": "Post-retirement investment vehicle. Subject to imputed distribution (minimum annual deemed withdrawal for income tax purposes).",
+          "beneficiaryDesignation": true,
+          "taxTreatmentOnDeath": {
+            "spouse": "ARF transfers to surviving spouse as an ARF — no immediate income tax charge.",
+            "child": "Taxed at 30% (standard income tax) if child is over 21, tax-free if under 21.",
+            "other": "Taxed at the deceased's marginal income tax rate. Also potentially subject to CAT."
+          },
+          "outsideEstate": false,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "statePension",
+          "label": "State Pension (Contributory / Non-Contributory)",
+          "description": "Government pension based on PRSI contributions (contributory) or means-tested (non-contributory).",
+          "beneficiaryDesignation": false,
+          "taxTreatmentOnDeath": {
+            "description": "Pension ceases on death. Surviving spouse may receive a Widow's/Widower's/Surviving Civil Partner's Contributory Pension based on either partner's PRSI record."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Pensions Act 1990; Taxes Consolidation Act 1997, Part 30; Social Welfare Consolidation Act 2005",
+      "regulatoryBody": "The Pensions Authority; Revenue Commissioners"
+    },
+    "NZ": {
+      "name": "New Zealand",
+      "currency": "NZD",
+      "pensionTypes": [
+        {
+          "type": "kiwiSaver",
+          "label": "KiwiSaver",
+          "description": "Voluntary (auto-enrolled with opt-out) workplace savings scheme. Contributions from employee, employer, and government. Accessible from age 65 or after 5 years of membership.",
+          "beneficiaryDesignation": false,
+          "beneficiaryDesignationNote": "KiwiSaver does not support beneficiary nominations. On death, the balance is paid to the member's estate and distributed according to the will or intestacy rules.",
+          "taxTreatmentOnDeath": {
+            "description": "KiwiSaver balance is paid to the estate. No inheritance tax or estate duty applies. Income earned by the fund is taxed within the fund (PIE tax), not on distribution."
+          },
+          "outsideEstate": false,
+          "outsideEstateNote": "KiwiSaver funds form part of the estate — there is no beneficiary nomination mechanism.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "nzSuper",
+          "label": "New Zealand Superannuation (NZ Super)",
+          "description": "Universal government pension for residents aged 65 and over. Not means-tested (but subject to tax).",
+          "beneficiaryDesignation": false,
+          "taxTreatmentOnDeath": {
+            "description": "NZ Super ceases on death. A surviving spouse may receive a survivor's grant (lump sum of up to 8 weeks of payment). The surviving partner then claims NZ Super in their own right at age 65."
+          },
+          "outsideEstate": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "KiwiSaver Act 2006; New Zealand Superannuation and Retirement Income Act 2001",
+      "regulatoryBody": "Financial Markets Authority (FMA); Ministry of Social Development"
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "target": "../../../v3/common/jurisdiction.json",
+  "tests": [
+    {
+      "description": "valid — country only",
+      "data": {
+        "country": "GB"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — country with subdivision",
+      "data": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — single legalSystems entry",
+      "data": {
+        "country": "GB",
+        "subdivision": "GB-ENG",
+        "legalSystems": [
+          "common_law"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — plural legalSystems (Singapore)",
+      "data": {
+        "country": "SG",
+        "legalSystems": [
+          "common_law",
+          "islamic_law"
+        ],
+        "name": "Singapore"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — all legalSystems enum values accepted",
+      "data": {
+        "country": "XX",
+        "legalSystems": [
+          "common_law",
+          "civil_law",
+          "mixed",
+          "customary_law",
+          "islamic_law",
+          "hindu_law",
+          "jewish_law",
+          "canon_law"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — empty legalSystems array",
+      "data": {
+        "country": "GB",
+        "legalSystems": []
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with name",
+      "data": {
+        "country": "JP",
+        "name": "Japan"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required country",
+      "data": {
+        "subdivision": "GB-ENG"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — empty object",
+      "data": {},
+      "valid": false
+    },
+    {
+      "description": "invalid — old legalSystem singular field rejected",
+      "data": {
+        "country": "GB",
+        "legalSystem": "common_law"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — legalSystems value not in enum",
+      "data": {
+        "country": "GB",
+        "legalSystems": [
+          "religious"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — legalSystems value 'plural' rejected",
+      "data": {
+        "country": "SG",
+        "legalSystems": [
+          "plural"
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

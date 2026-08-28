@@ -1,0 +1,53 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-04-07T12:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "a1b2c3d4-0000-4000-8000-000000000001",
+    "testatorPersonId": "b2c3d4e5-0000-4000-8000-000000000001",
+    "status": "planning",
+    "createdAt": "2026-04-07T12:00:00Z",
+    "lastModifiedAt": "2026-04-07T12:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    }
+  },
+  "people": [
+    {
+      "id": "b2c3d4e5-0000-4000-8000-000000000001",
+      "givenName": "Jane",
+      "familyName": "Thompson",
+      "dateOfBirth": "1968-03-14",
+      "roles": [
+        "testator"
+      ]
+    }
+  ],
+  "kinships": [],
+  "relationships": [],
+  "properties": [],
+  "assets": [],
+  "liabilities": [],
+  "bequests": [],
+  "trusts": [],
+  "executors": [],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": []
+}

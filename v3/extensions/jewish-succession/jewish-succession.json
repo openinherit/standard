@@ -1,0 +1,334 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json",
+  "$comment": "This extension implements succession rules derived from Jewish law as codified in specific jurisdictions. The extension name references the legal tradition, not the personal religious beliefs of any individual. A person of any faith (or none) may be subject to these rules depending on their jurisdiction of domicile. Extension type values: x-inherit-ketubah (document), x-inherit-shtar-chov (document), x-inherit-halachic-yerusha (distribution method), x-inherit-halachic-matanah (bequest)",
+  "title": "Jewish Succession Extension",
+  "description": "Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law.",
+  "maturity": "draft",
+  "extensionType": "tradition",
+  "applicableJurisdictions": [
+    "IL",
+    "GB",
+    "US",
+    "CA",
+    "AU",
+    "FR"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "jewish_law"
+  ],
+  "dataProvenance": "Talmudic law (Bava Batra), Shulchan Aruch (Choshen Mishpat), Israeli Succession Law 5765-1965",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": [
+    "uk-england-wales",
+    "us-estate",
+    "canada",
+    "australia-nz",
+    "eu-succession"
+  ],
+  "type": "object",
+  "$defs": {
+    "HalachicHeir": {
+      "type": "object",
+      "properties": {
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "relationship": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "heirOrder": {
+          "type": "string",
+          "enum": [
+            "bechor",
+            "regular"
+          ]
+        },
+        "halachicClass": {
+          "$comment": "ben: son (ibn). bat: daughter. av: father. em: mother — included for mezonot (maintenance) eligibility, NOT for inheritance. Under halacha the mother does not inherit from her children and maternal relatives have no inheritance rights. ach: brother. achot: sister. ben_ben: son's son. av_av: father's father (paternal grandfather) — inherits when father predeceases. ach_av: father's brother (paternal uncle) — inherits after father's father. ben_ach: brother's son (nephew) — inherits when brothers predecease. ben_ach_av: father's brother's son (paternal cousin) — inherits after father's brothers. other: catch-all for more distant patrilineal relatives. Full halachic inheritance order (Numbers 27 + Bava Batra): 1. Sons and their descendants (ben, ben_ben). 2. Daughters and their descendants (bat). 3. Father (av). 4. Father's brothers and their descendants (ach_av, ben_ach_av). 5. Father's father (av_av). 6. Ascending paternal line indefinitely. Inheritance is strictly patrilineal — maternal relatives never inherit under halacha.",
+          "type": "string",
+          "enum": [
+            "ben",
+            "bat",
+            "av",
+            "em",
+            "ach",
+            "achot",
+            "ben_ben",
+            "av_av",
+            "ach_av",
+            "ben_ach",
+            "ben_ach_av",
+            "other"
+          ]
+        }
+      },
+      "required": [
+        "personId",
+        "relationship",
+        "halachicClass"
+      ],
+      "additionalProperties": false
+    },
+    "MezonotDetails": {
+      "type": "object",
+      "properties": {
+        "eligible": {
+          "type": "boolean"
+        },
+        "amount": {
+          "$ref": "../../common/money.json"
+        },
+        "duration": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "eligible"
+      ],
+      "additionalProperties": false
+    },
+    "BekhorRules": {
+      "$comment": "The firstborn (bechor) double portion applies ONLY to the father's estate (not the mother's), only to biological firstborn (not adopted), and only to property held at death (not property acquired after death, e.g. debts repaid). Connected to the core schema's lineage concept — bechor rights are strictly patrilineal",
+      "type": "object",
+      "properties": {
+        "applies": {
+          "type": "boolean"
+        },
+        "bekhorPersonId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "doubleShareApplicable": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "applies"
+      ],
+      "additionalProperties": false
+    },
+    "HebrewName": {
+      "type": "object",
+      "properties": {
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "hebrewGivenName": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "hebrewFamilyName": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "benOrBat": {
+          "type": "string",
+          "enum": [
+            "ben",
+            "bat"
+          ]
+        }
+      },
+      "required": [
+        "personId",
+        "hebrewGivenName",
+        "benOrBat"
+      ],
+      "additionalProperties": false
+    },
+    "HalachicWitnessValidity": {
+      "type": "object",
+      "properties": {
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "halachicallyValid": {
+          "type": "boolean"
+        },
+        "disqualificationReason": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "personId",
+        "halachicallyValid"
+      ],
+      "additionalProperties": false
+    },
+    "KinyanDetails": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "kinyan_sudar",
+            "kinyan_agav",
+            "kinyan_meshichah",
+            "kinyan_hagbahah"
+          ]
+        },
+        "performed": {
+          "type": "boolean"
+        },
+        "witnessPersonIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "maxItems": 50,
+          "uniqueItems": true
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "type",
+        "performed"
+      ],
+      "additionalProperties": false
+    },
+    "BequestClassification": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "matanah",
+            "yerusha",
+            "shtar_chov_gift"
+          ]
+        },
+        "bequestId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "type",
+        "bequestId"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "denomination": {
+      "description": "Jewish denominational tradition — affects interpretation of halachic succession rules and mechanisms (e.g. Orthodox requires kinyan, Reform may not)",
+      "type": "string",
+      "enum": [
+        "orthodox",
+        "conservative",
+        "reform",
+        "reconstructionist",
+        "traditional",
+        "unaffiliated"
+      ]
+    },
+    "halachicHeirs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/HalachicHeir"
+      },
+      "maxItems": 50
+    },
+    "mezonotDetails": {
+      "$ref": "#/$defs/MezonotDetails"
+    },
+    "halachicMechanism": {
+      "type": "string",
+      "enum": [
+        "shtar_chov",
+        "matnat_bari",
+        "matnat_shechiv_mera",
+        "matnat_bari_conditional"
+      ]
+    },
+    "bekhorRules": {
+      "$ref": "#/$defs/BekhorRules"
+    },
+    "hebrewNames": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/HebrewName"
+      },
+      "maxItems": 50
+    },
+    "halachicWitnessValidity": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/HalachicWitnessValidity"
+      },
+      "maxItems": 50
+    },
+    "kinyanDetails": {
+      "$ref": "#/$defs/KinyanDetails"
+    },
+    "bequestClassifications": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/BequestClassification"
+      },
+      "maxItems": 50
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "denomination"
+  ],
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

@@ -1,0 +1,678 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/asset-categories/financial.json",
+  "title": "Financial Asset Properties",
+  "description": "Category-specific properties for financial assets: bank accounts, pensions, ISAs, shares, bonds, crypto wallets, insurance policies, debts receivable",
+  "$comment": "This schema is composed with asset.json via allOf+if/then. Do NOT use additionalProperties:false here — it would reject core asset fields.",
+  "type": "object",
+  "properties": {
+    "shareholding": {
+      "description": "Detailed shareholding information — company, share class, voting rights, restrictions. Relevant for BPR (UK), stepped-up basis (US), and controlling interest calculations",
+      "$comment": "Category-specific sub-object for shares and shareholdings. Use when category is 'shares' or 'investment'.",
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "description": "Name of the company in which shares are held",
+          "examples": [
+            "Acme Ltd",
+            "Berkshire Hathaway Inc",
+            "Toyota Motor Corporation"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "companyNumber": {
+          "description": "Company registration number",
+          "examples": [ "12345678", "DE-HRB-12345" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "shareClass": {
+          "description": "Class of shares held",
+          "examples": [ "Ordinary", "Preference", "Class A", "Class B" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "numberOfShares": {
+          "description": "Number of shares held",
+          "examples": [ 1000, 50000 ],
+          "type": "integer",
+          "minimum": 1
+        },
+        "totalSharesIssued": {
+          "description": "Total shares issued by the company (for calculating percentage ownership)",
+          "examples": [ 100000, 1000000 ],
+          "type": "integer",
+          "minimum": 1
+        },
+        "votingRights": {
+          "description": "Whether these shares carry voting rights",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "restrictedTransfer": {
+          "description": "Whether transfer of these shares is restricted (e.g. pre-emption rights, shareholder agreement)",
+          "examples": [ true, false ],
+          "type": "boolean"
+        },
+        "listedExchange": {
+          "description": "Stock exchange where shares are listed, if publicly traded. Null/absent for private companies",
+          "examples": [ "LSE", "NYSE", "TSE", "ASX" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "ticker": {
+          "description": "Stock ticker symbol",
+          "examples": [ "AAPL", "TSCO.L", "7203.T" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "cusip": {
+          "description": "CUSIP identifier (US/Canada). 9-character alphanumeric",
+          "examples": [ "037833100" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "isin": {
+          "description": "International Securities Identification Number",
+          "examples": [ "US0378331005", "GB0031215220" ],
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "businessInterest": {
+      "description": "Detailed business interest information — partnership shares, LLP membership, sole trader business. Relevant for BPR (UK), QFOBI (US), and succession planning",
+      "$comment": "Category-specific sub-object for business interests. Use when category is 'business_interest'.",
+      "type": "object",
+      "properties": {
+        "businessName": {
+          "description": "Trading name of the business",
+          "examples": [ "Davies & Sons Builders", "Manchester Model Supplies" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "businessType": {
+          "description": "Legal structure of the business",
+          "$comment": "sole_trader: individual trading. partnership: traditional partnership. llp: limited liability partnership. limited_company: private limited company (Ltd). plc: public limited company. franchise: franchise operation. cooperative: cooperative business. other: any other structure.",
+          "enum": [
+            "sole_trader",
+            "partnership",
+            "llp",
+            "limited_company",
+            "plc",
+            "franchise",
+            "cooperative",
+            "other"
+          ]
+        },
+        "ownershipPercentage": {
+          "description": "The testator's ownership percentage",
+          "examples": [ 50, 33.33, 100 ],
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "controllingInterest": {
+          "description": "Whether the testator holds a controlling interest. Affects BPR eligibility and valuation discounts",
+          "examples": [ true, false ],
+          "type": "boolean"
+        },
+        "partnershipAgreement": {
+          "description": "Whether a written partnership/operating agreement exists",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "successionProvision": {
+          "description": "What the partnership/operating agreement says about succession on death",
+          "examples": [
+            "Surviving partners must buy out deceased's share at book value",
+            "Option to purchase at market value within 90 days"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "annualTurnover": {
+          "description": "Approximate annual turnover — helps with BPR qualification and valuation",
+          "$ref": "../common/money.json"
+        },
+        "employees": {
+          "description": "Number of employees",
+          "examples": [ 5, 50 ],
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "pension": {
+      "description": "Detailed pension information — scheme type, nominated beneficiaries, death benefits. Pensions often pass outside the estate via nomination",
+      "$comment": "Category-specific sub-object for pension and retirement accounts. Use when category is 'pension'.",
+      "type": "object",
+      "properties": {
+        "schemeType": {
+          "description": "The type of pension scheme",
+          "$comment": "defined_benefit: employer guarantees a specific retirement income. defined_contribution: value depends on contributions and investment returns. sipp: self-invested personal pension (UK). state_pension: government state pension. annuity: purchased annuity providing guaranteed income. drawdown: flexible drawdown from pension pot. other: any other pension type.",
+          "enum": [
+            "defined_benefit",
+            "defined_contribution",
+            "sipp",
+            "state_pension",
+            "annuity",
+            "drawdown",
+            "other"
+          ]
+        },
+        "provider": {
+          "description": "Pension provider name",
+          "examples": [
+            "Aviva",
+            "Scottish Widows",
+            "Fidelity",
+            "Vanguard",
+            "LGPS"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "policyReference": {
+          "description": "Policy or membership reference number",
+          "examples": [ "PEN-2015-123456" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "nominatedBeneficiaries": {
+          "description": "Person IDs of nominated beneficiaries. Pension trustees usually have discretion but will consider nominations",
+          "type": "array",
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        },
+        "nominationDate": {
+          "description": "Date the beneficiary nomination was last updated",
+          "examples": [ "2024-01-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "deathBenefitType": {
+          "description": "Type of death benefit payable from this pension",
+          "$comment": "lump_sum: a one-off payment to beneficiaries. dependants_pension: ongoing pension payments to dependants. drawdown_transfer: pension pot transfers to beneficiary for drawdown. annuity_guarantee: guaranteed payments for remaining guarantee period. none: no death benefit (e.g. annuity with no guarantee).",
+          "enum": [
+            "lump_sum",
+            "dependants_pension",
+            "drawdown_transfer",
+            "annuity_guarantee",
+            "none"
+          ]
+        },
+        "crystallised": {
+          "description": "Whether the pension has been accessed/crystallised. Affects tax treatment on death (UK: pre-75 tax-free, post-75 taxed as income)",
+          "examples": [ false, true ],
+          "type": "boolean"
+        },
+        "lifetimeAllowanceUsed": {
+          "description": "Percentage of lifetime allowance used (UK). Abolished April 2024 but transitional protections remain",
+          "examples": [ 45.5 ],
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "pensionType": {
+          "description": "The broad pension category, covering international pension types",
+          "$comment": "occupational: employer-sponsored scheme. personal: individual pension plan. stakeholder: low-cost UK pension. sipp: self-invested personal pension. ssas: small self-administered scheme. workplace: auto-enrolment workplace pension. state: government state pension. cpf: Singapore Central Provident Fund. epf: Malaysia/India Employees Provident Fund. other: any other pension type.",
+          "examples": [ "occupational", "sipp", "workplace" ],
+          "anyOf": [
+            {
+              "enum": [
+                "occupational",
+                "personal",
+                "stakeholder",
+                "sipp",
+                "ssas",
+                "workplace",
+                "state",
+                "cpf",
+                "epf",
+                "other"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "pensionProviderOrganisationId": {
+          "description": "Reference to the Organisation.id of the pension provider",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "pensionMemberNumber": {
+          "description": "Membership or scheme reference number",
+          "examples": [ "MEM-2015-123456", "NI: AB123456C" ],
+          "type": "string",
+          "maxLength": 100
+        },
+        "deathBenefitNomination": {
+          "description": "Structured death benefit nomination — who receives pension benefits on death, and the terms",
+          "type": "object",
+          "properties": {
+            "nomineePersonId": {
+              "description": "Reference to the Person.id of the nominated beneficiary",
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+              "format": "uuid"
+            },
+            "nominationDate": {
+              "description": "Date the nomination was made or last updated",
+              "examples": [ "2024-01-15" ],
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            },
+            "nominationReviewDate": {
+              "description": "Date the nomination should next be reviewed",
+              "examples": [ "2026-01-15" ],
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            },
+            "nominationCurrent": {
+              "description": "Whether the nomination is believed to be current and valid",
+              "examples": [ true, false ],
+              "type": "boolean"
+            },
+            "nominationExpiryDate": {
+              "description": "Date the nomination expires, if applicable",
+              "examples": [ "2027-01-15" ],
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            },
+            "benefitType": {
+              "description": "Type of death benefit the nominee would receive",
+              "$comment": "lump_sum: one-off payment. income: ongoing pension income to dependant. pension: full pension passed to nominee. discretionary: trustees decide distribution.",
+              "enum": [ "lump_sum", "income", "pension", "discretionary" ]
+            },
+            "estimatedAmount": {
+              "description": "Estimated death benefit amount, in minor currency units",
+              "$ref": "../common/money.json"
+            }
+          },
+          "additionalProperties": false
+        },
+        "drawdownStartDate": {
+          "description": "Date drawdown commenced, if the pension is in drawdown",
+          "examples": [ "2025-04-06" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "pensionValuationAtDeath": {
+          "description": "Pension fund valuation at date of death",
+          "type": "object",
+          "properties": {
+            "estimatedValue": {
+              "description": "Estimated value at death",
+              "$ref": "../common/money.json"
+            },
+            "valuationMethod": {
+              "description": "Method used",
+              "examples": [ "Provider statement", "Actuary estimate" ],
+              "type": "string",
+              "maxLength": 255
+            },
+            "valuationDate": {
+              "description": "Date of valuation",
+              "examples": [ "2026-03-30" ],
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            }
+          },
+          "additionalProperties": false
+        },
+        "annuityContinuation": {
+          "description": "Details of annuity continuation on death — whether payments continue and to whom",
+          "type": "object",
+          "properties": {
+            "annuityInForce": {
+              "description": "Whether an annuity is currently in force",
+              "type": "boolean"
+            },
+            "annuityAmount": {
+              "description": "Annual annuity amount in minor currency units",
+              "$ref": "../common/money.json"
+            },
+            "continuationOnDeath": {
+              "description": "What happens to the annuity on the holder's death",
+              "enum": [
+                "terminates",
+                "continues_to_spouse",
+                "continues_to_beneficiary",
+                "fixed_term"
+              ]
+            },
+            "continuationBeneficiaryPersonId": {
+              "description": "Person.id of the beneficiary who receives continuation payments",
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+              "format": "uuid"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "insurancePolicy": {
+      "description": "Life insurance policy details — type, sum assured, beneficiaries, trust status. Policies written in trust pass outside the estate",
+      "$comment": "Category-specific sub-object for life insurance and endowment policies. Use when category is 'insurance'.",
+      "type": "object",
+      "properties": {
+        "policyType": {
+          "description": "Type of insurance policy",
+          "$comment": "term_life: pays out on death within term. whole_life: pays out whenever death occurs. endowment: savings + life cover, matures at set date. critical_illness: pays on diagnosis of specified illness. income_protection: replaces income during illness. key_person: business policy on key employee. other: any other type.",
+          "enum": [
+            "term_life",
+            "whole_life",
+            "endowment",
+            "critical_illness",
+            "income_protection",
+            "key_person",
+            "other"
+          ]
+        },
+        "provider": {
+          "description": "Insurance company name",
+          "examples": [ "Aviva", "Legal & General", "Prudential", "MetLife" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "policyReference": {
+          "description": "Policy reference number",
+          "examples": [ "LG-LIFE-2020-789" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "sumAssured": {
+          "description": "The amount payable on death, in minor currency units",
+          "$ref": "../common/money.json"
+        },
+        "writtenInTrust": {
+          "description": "Whether the policy is written in trust. If true, proceeds pass outside the estate and are not subject to inheritance tax",
+          "examples": [ true, false ],
+          "type": "boolean"
+        },
+        "trusteeNames": {
+          "description": "Names of the policy trustees, if written in trust",
+          "examples": [
+            [ "Sarah Davies", "James Davies" ]
+          ],
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "beneficiaryPersonIds": {
+          "description": "Person IDs of named beneficiaries",
+          "type": "array",
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        },
+        "premiumFrequency": {
+          "description": "How often premiums are paid",
+          "enum": [ "monthly", "annual", "single_premium", "paid_up" ]
+        },
+        "expiryDate": {
+          "description": "Policy expiry date (for term policies)",
+          "examples": [ "2035-06-01" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "coOwnership": {
+      "description": "Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will",
+      "$comment": "Category-specific sub-object for co-owned assets. Use when the asset has shared ownership that affects how it passes on death.",
+      "type": "object",
+      "properties": {
+        "coOwnerPersonIds": {
+          "description": "Person IDs of co-owners",
+          "type": "array",
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        },
+        "ownershipType": {
+          "description": "How ownership is structured between co-owners",
+          "$comment": "joint_tenants: right of survivorship — passes automatically to survivor(s). tenants_in_common: no survivorship — each owner's share passes under their will. community_property: marital community property (US). partnership: business partnership asset. other: other arrangement.",
+          "enum": [
+            "joint_tenants",
+            "tenants_in_common",
+            "community_property",
+            "partnership",
+            "other"
+          ]
+        },
+        "ownershipPercentage": {
+          "description": "The testator's ownership percentage",
+          "examples": [ 50, 33.33 ],
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "severanceDate": {
+          "description": "Date joint tenancy was severed to become tenants in common (if applicable)",
+          "examples": [ "2024-06-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "intellectualProperty": {
+      "description": "Intellectual property details — patents, copyrights, trademarks, trade secrets. IP succession varies by jurisdiction and type",
+      "$comment": "Category-specific sub-object for IP assets. Use when category is 'intellectual_property'.",
+      "type": "object",
+      "properties": {
+        "ipType": {
+          "description": "Type of intellectual property",
+          "$comment": "patent: registered invention. copyright: creative works (literary, artistic, musical). trademark: registered brand/logo. design_right: registered or unregistered design. trade_secret: confidential business information. database_right: sui generis database right (EU/UK). other: any other IP type.",
+          "enum": [
+            "patent",
+            "copyright",
+            "trademark",
+            "design_right",
+            "trade_secret",
+            "database_right",
+            "other"
+          ]
+        },
+        "registrationNumber": {
+          "description": "Registration or application number",
+          "examples": [ "GB2345678", "US10,123,456" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "registrationOffice": {
+          "description": "Intellectual property office where registered",
+          "examples": [ "UK IPO", "USPTO", "EPO", "WIPO" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "expiryDate": {
+          "description": "Date the IP right expires",
+          "examples": [ "2040-03-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "annualRevenue": {
+          "description": "Approximate annual revenue generated from this IP (licensing, royalties, etc.)",
+          "$ref": "../common/money.json"
+        },
+        "licensees": {
+          "description": "Current licensees of this IP",
+          "examples": [
+            [ "Publisher A", "Manufacturer B" ]
+          ],
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "stockCompensation": {
+      "description": "Employee stock compensation details — options, RSUs, ESPPs. Vesting schedules and exercise windows are critical on death",
+      "$comment": "Category-specific sub-object for employee stock options, RSUs, and equity compensation. Common in tech sector estates.",
+      "type": "object",
+      "properties": {
+        "compensationType": {
+          "description": "Type of stock compensation",
+          "$comment": "iso: incentive stock option (US tax-advantaged). nso: non-qualified stock option. rsu: restricted stock unit. espp: employee stock purchase plan. phantom_stock: phantom equity (cash settlement). sar: stock appreciation right. other: any other type.",
+          "enum": [
+            "iso",
+            "nso",
+            "rsu",
+            "espp",
+            "phantom_stock",
+            "sar",
+            "other"
+          ]
+        },
+        "grantDate": {
+          "description": "Date the award was granted",
+          "examples": [ "2022-03-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "vestingSchedule": {
+          "description": "Description of the vesting schedule",
+          "examples": [
+            "4-year vest with 1-year cliff",
+            "3-year monthly vesting",
+            "Fully vested"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "vestedQuantity": {
+          "description": "Number of shares/units currently vested",
+          "examples": [ 2500 ],
+          "type": "integer",
+          "minimum": 0
+        },
+        "unvestedQuantity": {
+          "description": "Number of shares/units not yet vested. May be forfeited on death depending on plan terms",
+          "examples": [ 7500 ],
+          "type": "integer",
+          "minimum": 0
+        },
+        "exercisePrice": {
+          "description": "Strike/exercise price per share for options",
+          "$ref": "../common/money.json"
+        },
+        "expirationDate": {
+          "description": "Date the options expire. Estate typically has limited window to exercise after death",
+          "examples": [ "2032-03-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "postDeathExerciseWindow": {
+          "description": "Time allowed for estate to exercise options after death",
+          "examples": [
+            "12 months from date of death",
+            "90 days",
+            "Per plan administrator discretion"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "acceleratesOnDeath": {
+          "description": "Whether unvested awards accelerate (fully vest) on death",
+          "examples": [ true, false ],
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "debtReceivable": {
+      "description": "Details of money owed to the testator by others. These are estate assets that the executor must collect",
+      "$comment": "Category-specific sub-object for debts owed TO the estate. The mirror of a liability — someone else owes the testator money.",
+      "type": "object",
+      "properties": {
+        "debtorName": {
+          "description": "Name of the person or organisation that owes the debt",
+          "examples": [ "John Smith", "Acme Trading Ltd" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "debtorPersonId": {
+          "description": "Reference to Person.id if the debtor is in the people array",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "originalAmount": {
+          "description": "Original amount of the debt",
+          "$ref": "../common/money.json"
+        },
+        "outstandingAmount": {
+          "description": "Amount currently outstanding",
+          "$ref": "../common/money.json"
+        },
+        "interestRate": {
+          "description": "Annual interest rate on the debt, as a percentage",
+          "examples": [ 0, 3.5, 8 ],
+          "type": "number",
+          "minimum": 0
+        },
+        "secured": {
+          "description": "Whether the debt is secured against collateral",
+          "examples": [ false ],
+          "type": "boolean"
+        },
+        "documentRef": {
+          "description": "Reference to any loan agreement or promissory note",
+          "examples": [ "Promissory note dated 15 March 2023" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "collectibility": {
+          "description": "Likelihood of collecting this debt",
+          "$comment": "likely: debtor is solvent and able to pay. uncertain: some risk of non-payment. doubtful: significant risk of non-payment. uncollectible: debt is effectively worthless.",
+          "enum": [ "likely", "uncertain", "doubtful", "uncollectible" ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

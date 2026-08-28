@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "no_empty_description",
+  "description": "Descriptions must not be empty strings",
+  "if": {
+    "required": ["description"]
+  },
+  "then": {
+    "properties": {
+      "description": {
+        "minLength": 1
+      }
+    }
+  }
+}

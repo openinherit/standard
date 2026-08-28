@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/error-codes.json",
+  "title": "INHERIT Error Code Registry",
+  "description": "Machine-readable registry of all INHERIT error codes. Used by validators, SDKs, and tooling",
+  "default": {
+    "codes": [
+      {
+        "code": "INHERIT_SCHEMA_INVALID",
+        "level": 1,
+        "description": "Document does not conform to JSON Schema",
+        "severity": "error"
+      },
+      {
+        "code": "INHERIT_REF_BROKEN",
+        "level": 2,
+        "description": "Referential integrity constraint violated — referenced ID does not exist in target array",
+        "severity": "error"
+      },
+      {
+        "code": "INHERIT_REF_ORPHAN",
+        "level": 2,
+        "description": "Entity exists but is not referenced by any other entity",
+        "severity": "warning"
+      },
+      {
+        "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+        "level": 3,
+        "description": "Required jurisdiction-specific field is absent",
+        "severity": "warning"
+      },
+      {
+        "code": "INHERIT_COMPLETENESS_FIELD_EMPTY",
+        "level": 3,
+        "description": "Required jurisdiction-specific field is present but empty",
+        "severity": "warning"
+      },
+      {
+        "code": "INHERIT_COMPLETENESS_COUNT_LOW",
+        "level": 3,
+        "description": "Minimum count for a jurisdiction-specific array not met",
+        "severity": "warning"
+      },
+      {
+        "code": "INHERIT_COMPLETENESS_VALUE_LOW",
+        "level": 3,
+        "description": "Minimum value threshold for a jurisdiction-specific field not met",
+        "severity": "warning"
+      },
+      {
+        "code": "INHERIT_EXTENSION_VERSION_MISMATCH",
+        "level": 3,
+        "description": "Extension version in document does not match supported version",
+        "severity": "error"
+      }
+    ]
+  },
+  "type": "object",
+  "properties": {
+    "codes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [ "code", "level", "description" ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "level": {
+            "type": "integer",
+            "maximum": 3,
+            "minimum": 1
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          },
+          "severity": {
+            "enum": [ "error", "warning", "info" ]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -1,0 +1,1042 @@
+{
+  "target": "../../../v3/catalogue.json",
+  "tests": [
+    {
+      "description": "valid — minimal catalogue with required fields only (empty assets array)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": []
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — catalogue with one asset and basic metadata",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "schemaVersion": "1.3.0",
+        "exportedAt": "2026-03-28T12:00:00Z",
+        "exportedBy": {
+          "name": "Hiroshi Tanaka",
+          "email": "hiroshi.tanaka@example.com"
+        },
+        "generator": {
+          "name": "INHERIT Catalogue Export",
+          "version": "1.3.0",
+          "url": "https://openinherit.org"
+        },
+        "dataProvenance": "manual_entry",
+        "assets": [
+          {
+            "id": "d73880dc-c616-4724-ad29-79364bad1719",
+            "name": "Hornby R3456 Class 66 EWS Locomotive",
+            "category": "collectibles",
+            "subcategory": "model_railways",
+            "brand": "Hornby",
+            "model": "R3456 Class 66 EWS",
+            "estimatedValue": {
+              "amount": 18500,
+              "currency": "GBP"
+            },
+            "condition": "excellent",
+            "originalPackaging": "complete"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — catalogue with legacyContacts and agent fields on embedded assets",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "schemaVersion": "1.3.0",
+        "exportedAt": "2026-03-28T12:00:00Z",
+        "dataProvenance": "ai_extracted",
+        "assets": [
+          {
+            "id": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+            "name": "Grandmother's engagement ring",
+            "category": "jewellery_watches",
+            "subcategory": "engagement ring",
+            "brand": "Mappin & Webb",
+            "estimatedValue": {
+              "amount": 450000,
+              "currency": "GBP"
+            },
+            "condition": "excellent",
+            "searchTerms": [
+              "Mappin Webb engagement ring",
+              "18ct gold solitaire diamond ring",
+              "1960s engagement ring diamond"
+            ],
+            "comparableSearchProfile": {
+              "platforms": [
+                "ebay",
+                "1stdibs",
+                "bonhams"
+              ],
+              "searchQuery": "18ct gold solitaire diamond engagement ring 1ct vintage",
+              "filters": {
+                "metal": "18ct_gold",
+                "stone": "diamond"
+              },
+              "searchFrequency": "on_demand"
+            },
+            "valuationReliability": 60,
+            "suggestedSubcategory": "vintage solitaire ring",
+            "lastVerifiedAt": "2026-01-10T09:00:00Z",
+            "verifiedBy": "owner",
+            "dataProvenance": "manual_entry",
+            "provenance": {
+              "confidence": 0.82
+            }
+          },
+          {
+            "id": "b16cd101-c771-4299-9e5f-6dd9cf1d7c92",
+            "name": "鈴木香里 パーフェクトリール フィッシングロッド",
+            "category": "firearms_sporting",
+            "subcategory": "fishing rod",
+            "brand": "Hardy Bros",
+            "model": "Perfect Reel LHW",
+            "estimatedValue": {
+              "amount": 85000,
+              "currency": "JPY"
+            },
+            "condition": "good",
+            "dataProvenance": "ai_extracted",
+            "provenance": {
+              "confidence": 0.78
+            }
+          }
+        ],
+        "assetCollections": [
+          {
+            "id": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+            "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+            "name": "Vintage fishing tackle collection",
+            "category": "fishing_gear",
+            "estimatedValue": {
+              "amount": 250000,
+              "currency": "GBP"
+            },
+            "disposalStrategy": "dealer_bids"
+          }
+        ],
+        "valuations": [
+          {
+            "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+            "entityType": "asset",
+            "entityId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+            "valuedAmount": {
+              "amount": 450000,
+              "currency": "GBP"
+            },
+            "valuationDate": "2026-01-10",
+            "providerType": "owner",
+            "confidence": "medium"
+          }
+        ],
+        "legacyContacts": [
+          {
+            "id": "d74a20d3-e422-4db5-a2db-b2716a33354c",
+            "personId": "5a3137d4-8fff-4103-bd42-6e52dfc827a3",
+            "name": "Yuki Tanaka",
+            "relationship": "daughter",
+            "email": "yuki.tanaka@example.com",
+            "phone": "+44 7700 900000",
+            "notificationMethod": "email",
+            "accessLevel": "full",
+            "letterGenerated": true,
+            "letterGeneratedAt": "2026-03-01T10:00:00Z",
+            "letterDeliveryMethod": "both",
+            "notes": "Primary family contact. Has a copy of the access instructions."
+          },
+          {
+            "id": "4da8efea-0148-4afa-86e6-e212fc7f9329",
+            "name": "Ananya Sharma",
+            "relationship": "solicitor",
+            "email": "ananya.sharma@irwinmitchell.com",
+            "notificationMethod": "email",
+            "accessLevel": "read_only",
+            "letterGenerated": false
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — catalogue with organisations and spaces",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [
+          {
+            "id": "33104a0a-ddb0-4358-9ce3-08a189f88e7e",
+            "name": "Victorian writing desk",
+            "category": "property_contents"
+          }
+        ],
+        "organisations": [
+          {
+            "id": "38116420-d911-42b3-8d5d-10b2247597ce",
+            "name": "Rails of Sheffield",
+            "organisationType": "dealer"
+          }
+        ],
+        "spaces": [
+          {
+            "id": "7ae33446-3738-4ff7-8038-6ef24932ab5f",
+            "propertyId": "fe89ca51-af10-4ec4-a495-75c930d6de01",
+            "spaceType": "study"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required assets field",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — embedded asset missing required name field",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [
+          {
+            "id": "d73880dc-c616-4724-ad29-79364bad1719",
+            "category": "financial"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — v2.6.0 catalogue with assetInterests (wishlist) and wishes (letters + care)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [
+          {
+            "id": "c9c7fb6f-2de7-4364-80c0-c7d50971d952",
+            "name": "Hornby R3456 BR Class 9F",
+            "category": "collectibles"
+          },
+          {
+            "id": "74a2b1ef-0f1b-4fb3-a1a7-16300dd71254",
+            "name": "Longcase Clock (Grandfather Clock)",
+            "category": "property_contents"
+          }
+        ],
+        "wishes": [
+          {
+            "id": "2bec7aab-d4a4-4e4c-a596-40aef2c68b74",
+            "wishType": "letter",
+            "title": "Letter to Paul",
+            "addresseePersonId": "03c9a644-9c33-4613-a01b-d300c829218d",
+            "content": "Dear Paul, I hope you'll take good care of the grandfather clock."
+          },
+          {
+            "id": "e37c5200-0ed4-4440-b846-a99e167c77f5",
+            "wishType": "care",
+            "title": "Grandfather Clock Maintenance",
+            "content": "Wind every Sunday evening using the brass key."
+          }
+        ],
+        "assetInterests": [
+          {
+            "id": "40932cc7-1354-4f09-a02c-9629d22005e2",
+            "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+            "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+            "expressedByRole": "testator",
+            "intentType": "acquire",
+            "productMatch": {
+              "identifierSystem": "manufacturer_sku",
+              "identifierValue": "R3457",
+              "brand": "Hornby",
+              "category": "model_railways"
+            },
+            "quantity": 3,
+            "interestLevel": "strongly_wants"
+          },
+          {
+            "id": "5370beea-196f-4442-a7a0-261840815b18",
+            "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+            "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+            "assetId": "74a2b1ef-0f1b-4fb3-a1a7-16300dd71254",
+            "expressedByRole": "testator",
+            "intentType": "allocate",
+            "interestLevel": "strongly_wants"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — assets is string (must be array)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": "not an array"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — dataProvenance not in enum",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [],
+        "dataProvenance": "psychic_vision"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — exportedAt is not ISO datetime",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [],
+        "exportedAt": "28/03/2026"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — $schema wrong const value",
+      "data": {
+        "$schema": "https://openinherit.org/v2/catalogue.json",
+        "assets": []
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — catalogue with document versioning fields",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "documentVersion": 2,
+        "versionedAt": "2026-04-06T10:00:00Z",
+        "previousVersionId": "a1b2c3d4-e5f6-4789-abcd-ef1234567890",
+        "changeDescription": "Added two new locomotive models to the collection",
+        "assets": [
+          {
+            "id": "d1e2f3a4-b5c6-4789-abcd-ef0123456789",
+            "name": "Hornby R3456 Class 66 EWS Locomotive",
+            "category": "collectibles"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — catalogue with audit log",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "auditLog": [
+          {
+            "action": "modified",
+            "performedAt": "2026-04-06T10:00:00Z",
+            "agentPersonId": "f3a4b5c6-d7e8-4901-cdef-012345678901",
+            "detail": "Updated estimated value for Hornby locomotive after market check"
+          }
+        ],
+        "assets": [
+          {
+            "id": "e2f3a4b5-c6d7-4890-bcde-f01234567890",
+            "name": "Hornby R3457 BR Class 9F",
+            "category": "collectibles"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — catalogue with full versioning and audit trail",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "documentVersion": 3,
+        "versionedAt": "2026-04-06T11:00:00Z",
+        "previousVersionId": "e5f6a7b8-c9d0-4234-fabc-345678901234",
+        "changeDescription": "Added provenance details and updated valuations",
+        "auditLog": [
+          {
+            "action": "version_created",
+            "performedAt": "2026-04-06T11:00:00Z",
+            "agentPersonId": "f6a7b8c9-d0e1-4345-abcd-456789012345",
+            "detail": "Version 3 created: added provenance details and updated valuations"
+          },
+          {
+            "action": "modified",
+            "performedAt": "2026-04-05T14:30:00Z",
+            "agentDescription": "LegacyLists Catalogue v1.3.0",
+            "detail": "Estimated value updated following recent auction results"
+          }
+        ],
+        "assets": [
+          {
+            "id": "a7b8c9d0-e1f2-4456-bcde-567890123456",
+            "name": "Bassett-Lowke A1 Pacific Locomotive",
+            "category": "collectibles",
+            "subcategory": "model_railways",
+            "brand": "Bassett-Lowke",
+            "estimatedValue": {
+              "amount": 250000,
+              "currency": "GBP"
+            },
+            "condition": "excellent"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — documentVersion not an integer",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "documentVersion": "one",
+        "assets": []
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — versionedAt bad date format",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "versionedAt": "not-a-date",
+        "assets": []
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — previousVersionId bad UUID",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "previousVersionId": "not-a-uuid",
+        "assets": []
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — auditLog not an array",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "auditLog": "should be an array",
+        "assets": []
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — auditLog entry missing required fields",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "auditLog": [
+          {}
+        ],
+        "assets": []
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — catalogue with legacy letter (all sub-fields populated)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [
+          {
+            "id": "c1a2b3d4-e5f6-4789-abcd-ef0123456789",
+            "name": "Hornby R3460 Class 390 Pendolino",
+            "category": "collectibles",
+            "subcategory": "model_railways"
+          }
+        ],
+        "legacyLetter": {
+          "lastGenerated": "2026-04-01T09:30:00Z",
+          "version": 3,
+          "delivered": true,
+          "deliveryMethod": "both",
+          "itemCountAtGeneration": 42
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — legacyLetter with wrong types (itemCountAtGeneration as string)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [],
+        "legacyLetter": {
+          "lastGenerated": "2026-04-01T09:30:00Z",
+          "version": 2,
+          "delivered": false,
+          "deliveryMethod": "digital",
+          "itemCountAtGeneration": "forty-two"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — catalogue with gift list settings (all sub-fields populated)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [
+          {
+            "id": "d2b3c4e5-f6a7-4890-bcde-f01234567890",
+            "name": "Bachmann 32-935 Class 08 Shunter",
+            "category": "collectibles",
+            "subcategory": "model_railways"
+          }
+        ],
+        "giftListSettings": {
+          "enabled": true,
+          "personalMessage": "Welcome to my wishlist! I'd be delighted with any of these items.",
+          "visibility": "link_only",
+          "fulfilledItems": [
+            "a1b2c3d4-e5f6-4789-abcd-ef0123456781",
+            "b2c3d4e5-f6a7-4890-bcde-f01234567892"
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — giftListSettings with wrong fulfilledItems type (non-array)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [],
+        "giftListSettings": {
+          "enabled": true,
+          "visibility": "public",
+          "fulfilledItems": "a1b2c3d4-e5f6-4789-abcd-ef0123456781"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — catalogue with populated dealer interests",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [],
+        "dealerInterests": [
+          {
+            "id": "d1000001-0000-4000-b000-000000001001",
+            "interestedParty": {
+              "name": "Heritage Rail Auctions Ltd",
+              "type": "auction_house"
+            },
+            "offerStatus": "written_offer",
+            "privacyLevel": "executor_visible"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — catalogue with 101 assets (within new 10,000 limit)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [
+          {
+            "id": "95cff33f-28b2-4205-809c-4512fe75d7df",
+            "name": "Asset 1",
+            "category": "other"
+          },
+          {
+            "id": "7b42c312-cbec-415b-87e4-5ab8397f960e",
+            "name": "Asset 2",
+            "category": "other"
+          },
+          {
+            "id": "ddcb7279-51ae-4222-ac74-1f61676d5c63",
+            "name": "Asset 3",
+            "category": "other"
+          },
+          {
+            "id": "04b370cc-850f-4516-8a8c-26f296fe66ce",
+            "name": "Asset 4",
+            "category": "other"
+          },
+          {
+            "id": "b35052da-aef9-464f-9028-752ad061f8e3",
+            "name": "Asset 5",
+            "category": "other"
+          },
+          {
+            "id": "3b9184e0-2cab-4524-8013-a286bd8937bb",
+            "name": "Asset 6",
+            "category": "other"
+          },
+          {
+            "id": "04987735-128d-4dee-a8aa-c7456782a62a",
+            "name": "Asset 7",
+            "category": "other"
+          },
+          {
+            "id": "4aaa36b1-f74e-4179-be57-02972581dd28",
+            "name": "Asset 8",
+            "category": "other"
+          },
+          {
+            "id": "9573b85f-8ede-45b3-ab42-2e5d3a7b2d62",
+            "name": "Asset 9",
+            "category": "other"
+          },
+          {
+            "id": "d999f977-1719-401d-8019-593d533565e0",
+            "name": "Asset 10",
+            "category": "other"
+          },
+          {
+            "id": "5920cc22-c359-4b81-ba28-ce6a0316d800",
+            "name": "Asset 11",
+            "category": "other"
+          },
+          {
+            "id": "ab18ac68-185b-4524-925a-ac829efffd15",
+            "name": "Asset 12",
+            "category": "other"
+          },
+          {
+            "id": "56d85513-8799-4f22-94b1-d0cb6ee1d934",
+            "name": "Asset 13",
+            "category": "other"
+          },
+          {
+            "id": "506e120e-2a65-4f4e-926d-d7c89eb09b8e",
+            "name": "Asset 14",
+            "category": "other"
+          },
+          {
+            "id": "3f4dd12d-3111-4356-a663-ec9290d296cd",
+            "name": "Asset 15",
+            "category": "other"
+          },
+          {
+            "id": "e4674966-4f11-491e-aed7-bdf4c7b04892",
+            "name": "Asset 16",
+            "category": "other"
+          },
+          {
+            "id": "f4abdf94-43e7-4a08-80f1-8c0d65958d36",
+            "name": "Asset 17",
+            "category": "other"
+          },
+          {
+            "id": "0d9e39ff-47d6-472b-8a97-8a10910c7001",
+            "name": "Asset 18",
+            "category": "other"
+          },
+          {
+            "id": "0041b27a-35f6-4cee-810c-0c24b4348da7",
+            "name": "Asset 19",
+            "category": "other"
+          },
+          {
+            "id": "dafc0abd-d638-4f8b-9830-0920a7094e33",
+            "name": "Asset 20",
+            "category": "other"
+          },
+          {
+            "id": "ce030633-c235-4241-8d2d-188684b54968",
+            "name": "Asset 21",
+            "category": "other"
+          },
+          {
+            "id": "4a2a496f-54ae-4b8c-8356-b35a2fb44261",
+            "name": "Asset 22",
+            "category": "other"
+          },
+          {
+            "id": "21b288e7-ddd9-40ee-9a48-9883550be25a",
+            "name": "Asset 23",
+            "category": "other"
+          },
+          {
+            "id": "412e2dd6-de2c-4997-855b-4b4d1ae5fde5",
+            "name": "Asset 24",
+            "category": "other"
+          },
+          {
+            "id": "0d7b084e-22fd-46cf-a60a-8ae373d61c36",
+            "name": "Asset 25",
+            "category": "other"
+          },
+          {
+            "id": "710be4ae-cfac-490e-968f-94a69d74f0eb",
+            "name": "Asset 26",
+            "category": "other"
+          },
+          {
+            "id": "8abb72ae-becb-4f73-a63a-8e7a1d4998c1",
+            "name": "Asset 27",
+            "category": "other"
+          },
+          {
+            "id": "7500d8de-393b-4f7e-aeb4-626f63b04155",
+            "name": "Asset 28",
+            "category": "other"
+          },
+          {
+            "id": "f6315169-de2d-46c8-9c00-7a68822de5a8",
+            "name": "Asset 29",
+            "category": "other"
+          },
+          {
+            "id": "0327d7a9-3cff-488b-98b4-4e22e452e336",
+            "name": "Asset 30",
+            "category": "other"
+          },
+          {
+            "id": "a822eae2-ae6c-49c3-af93-a41ed5862e45",
+            "name": "Asset 31",
+            "category": "other"
+          },
+          {
+            "id": "0ad0a6bf-8dc9-429b-8580-9c18ad9e333d",
+            "name": "Asset 32",
+            "category": "other"
+          },
+          {
+            "id": "ef173411-ce11-48ac-b9a3-bd6374db49ee",
+            "name": "Asset 33",
+            "category": "other"
+          },
+          {
+            "id": "b313a50a-bceb-4444-9edf-06bb84e9292c",
+            "name": "Asset 34",
+            "category": "other"
+          },
+          {
+            "id": "07c9fe3a-fb21-4451-9fdc-a728050dec29",
+            "name": "Asset 35",
+            "category": "other"
+          },
+          {
+            "id": "adc5f8b3-a8a9-44cc-8873-7164fe0d33ad",
+            "name": "Asset 36",
+            "category": "other"
+          },
+          {
+            "id": "fd14d7d5-2516-4767-9951-f7b006e07ebb",
+            "name": "Asset 37",
+            "category": "other"
+          },
+          {
+            "id": "89a8d7be-859a-470e-ad3c-5016c0894434",
+            "name": "Asset 38",
+            "category": "other"
+          },
+          {
+            "id": "68cb28c7-d7fd-428d-bc4e-b54e6993b9d4",
+            "name": "Asset 39",
+            "category": "other"
+          },
+          {
+            "id": "76088cba-3d36-4528-88f7-04c8cd5b45ba",
+            "name": "Asset 40",
+            "category": "other"
+          },
+          {
+            "id": "03f709bf-0dbf-4371-b6a5-da420b4057e7",
+            "name": "Asset 41",
+            "category": "other"
+          },
+          {
+            "id": "d8013735-b14f-409c-8695-9928c80449b7",
+            "name": "Asset 42",
+            "category": "other"
+          },
+          {
+            "id": "aa268a4b-2c3b-46fe-a6f2-3d4332f5dbe8",
+            "name": "Asset 43",
+            "category": "other"
+          },
+          {
+            "id": "d6f1ae7c-9e1a-417a-831a-a8c2fc3f070f",
+            "name": "Asset 44",
+            "category": "other"
+          },
+          {
+            "id": "d3a7fdc7-03f1-4628-9c7b-82077616f577",
+            "name": "Asset 45",
+            "category": "other"
+          },
+          {
+            "id": "cfc115ac-27b0-4fae-b5dd-f619ac6015ec",
+            "name": "Asset 46",
+            "category": "other"
+          },
+          {
+            "id": "45fe24dc-969a-46ba-ae02-f0f289c80163",
+            "name": "Asset 47",
+            "category": "other"
+          },
+          {
+            "id": "8791e09a-b751-4fea-b8e5-d6ead67370fe",
+            "name": "Asset 48",
+            "category": "other"
+          },
+          {
+            "id": "dd740c54-f22f-4683-bd68-cec1ec7c9a41",
+            "name": "Asset 49",
+            "category": "other"
+          },
+          {
+            "id": "91f5fca5-d7a3-4dec-895b-0b7962113e40",
+            "name": "Asset 50",
+            "category": "other"
+          },
+          {
+            "id": "3cf7a552-d7a7-4f0f-bb76-3fb537f99755",
+            "name": "Asset 51",
+            "category": "other"
+          },
+          {
+            "id": "070b459c-48b8-4212-8a47-8ab3122d2e14",
+            "name": "Asset 52",
+            "category": "other"
+          },
+          {
+            "id": "24641662-d553-426a-83c6-b5e880c0d47b",
+            "name": "Asset 53",
+            "category": "other"
+          },
+          {
+            "id": "6093ea6b-7b01-44a3-b4b6-f9184ec86355",
+            "name": "Asset 54",
+            "category": "other"
+          },
+          {
+            "id": "f7bb96d7-ec5f-4aa7-a970-32be37323528",
+            "name": "Asset 55",
+            "category": "other"
+          },
+          {
+            "id": "bd644de8-e295-443e-85e5-d9257efa46c7",
+            "name": "Asset 56",
+            "category": "other"
+          },
+          {
+            "id": "e38c30a6-af7b-4acd-821a-99aaca5b84fc",
+            "name": "Asset 57",
+            "category": "other"
+          },
+          {
+            "id": "b1a51e1d-1d0b-4995-bd66-90eeb7d16abd",
+            "name": "Asset 58",
+            "category": "other"
+          },
+          {
+            "id": "9c616f61-83bf-4f2a-861b-22f361e5372b",
+            "name": "Asset 59",
+            "category": "other"
+          },
+          {
+            "id": "bfd3f578-862b-4ba5-82c5-bf2569727737",
+            "name": "Asset 60",
+            "category": "other"
+          },
+          {
+            "id": "052ce2b2-fc21-4e24-86f1-019f76bf5d17",
+            "name": "Asset 61",
+            "category": "other"
+          },
+          {
+            "id": "aa39867a-3a67-444f-ad72-32b77b950237",
+            "name": "Asset 62",
+            "category": "other"
+          },
+          {
+            "id": "6e0e4ee4-79e7-46cb-918b-330625d23fec",
+            "name": "Asset 63",
+            "category": "other"
+          },
+          {
+            "id": "e39f132c-33c7-46b6-bb67-4aa03838d352",
+            "name": "Asset 64",
+            "category": "other"
+          },
+          {
+            "id": "b87272d8-2f93-4c01-ab40-206f59204824",
+            "name": "Asset 65",
+            "category": "other"
+          },
+          {
+            "id": "9f747907-c374-4ca3-870e-8eab2773cbd9",
+            "name": "Asset 66",
+            "category": "other"
+          },
+          {
+            "id": "868993f1-1b40-4096-ae55-f7c9baeb5469",
+            "name": "Asset 67",
+            "category": "other"
+          },
+          {
+            "id": "f9094db8-ea51-4239-b51f-8a77c2bbde01",
+            "name": "Asset 68",
+            "category": "other"
+          },
+          {
+            "id": "fe1c0586-c3c4-4f2c-829e-434393b92818",
+            "name": "Asset 69",
+            "category": "other"
+          },
+          {
+            "id": "ac190dd2-4cf8-4ac1-8a4b-9d64321500c3",
+            "name": "Asset 70",
+            "category": "other"
+          },
+          {
+            "id": "69bacaba-7dcf-4e8c-9c78-497c6c3cc892",
+            "name": "Asset 71",
+            "category": "other"
+          },
+          {
+            "id": "f6373341-b18c-43d0-8346-f9c14e13dfd4",
+            "name": "Asset 72",
+            "category": "other"
+          },
+          {
+            "id": "ad8b798a-e0aa-4bd6-8377-e37334ccdb79",
+            "name": "Asset 73",
+            "category": "other"
+          },
+          {
+            "id": "d28995dc-8844-412e-b28f-a4d5b7dbde3f",
+            "name": "Asset 74",
+            "category": "other"
+          },
+          {
+            "id": "3728fcf5-9ed0-4d31-b289-2c44bdbb7b8f",
+            "name": "Asset 75",
+            "category": "other"
+          },
+          {
+            "id": "2fd871b3-0247-4b38-8bc5-5b9de48f4076",
+            "name": "Asset 76",
+            "category": "other"
+          },
+          {
+            "id": "ede3a40b-c859-4851-9cbd-a42f4c5fcd97",
+            "name": "Asset 77",
+            "category": "other"
+          },
+          {
+            "id": "fb1d70d8-9305-48e0-93d2-ee68630dd436",
+            "name": "Asset 78",
+            "category": "other"
+          },
+          {
+            "id": "a1f91d7d-dfe4-494f-962f-fe4b104b87c3",
+            "name": "Asset 79",
+            "category": "other"
+          },
+          {
+            "id": "e3fd35b8-5f13-4b3c-ae59-9dea9d54a1aa",
+            "name": "Asset 80",
+            "category": "other"
+          },
+          {
+            "id": "3ce0db8a-54dd-4c3e-9ac7-fc3deb1a09ed",
+            "name": "Asset 81",
+            "category": "other"
+          },
+          {
+            "id": "3d9d74fd-14d2-4487-91c2-358153b9b6b8",
+            "name": "Asset 82",
+            "category": "other"
+          },
+          {
+            "id": "242397a0-ecba-4933-9556-93eb2b5218a2",
+            "name": "Asset 83",
+            "category": "other"
+          },
+          {
+            "id": "f9e466c3-b867-43bf-92f8-ea1c32129b86",
+            "name": "Asset 84",
+            "category": "other"
+          },
+          {
+            "id": "98ecd90d-44d0-418c-9295-eec06a03a43d",
+            "name": "Asset 85",
+            "category": "other"
+          },
+          {
+            "id": "b542e519-77cc-4e61-bd32-6386783433e3",
+            "name": "Asset 86",
+            "category": "other"
+          },
+          {
+            "id": "8084a42f-5772-48c1-909b-7f83bd5d1e75",
+            "name": "Asset 87",
+            "category": "other"
+          },
+          {
+            "id": "f189fd00-2365-4c61-8b1c-9a4df84a1c2d",
+            "name": "Asset 88",
+            "category": "other"
+          },
+          {
+            "id": "8660f13c-03af-4225-9a40-3c1fbf1d54ee",
+            "name": "Asset 89",
+            "category": "other"
+          },
+          {
+            "id": "76b286a6-810e-4a30-9434-adbebf4cd860",
+            "name": "Asset 90",
+            "category": "other"
+          },
+          {
+            "id": "89ce288d-fff7-4d4d-9bd2-4cf7af437c54",
+            "name": "Asset 91",
+            "category": "other"
+          },
+          {
+            "id": "31a6aae0-a63a-4ab1-83de-75132d9b5125",
+            "name": "Asset 92",
+            "category": "other"
+          },
+          {
+            "id": "dad6ebee-4f07-407a-b8e1-078f2b62c449",
+            "name": "Asset 93",
+            "category": "other"
+          },
+          {
+            "id": "ce808848-eeac-4dc6-9047-3e6a0aab7ac7",
+            "name": "Asset 94",
+            "category": "other"
+          },
+          {
+            "id": "ec767144-b458-4091-90b3-e1d72d4c8448",
+            "name": "Asset 95",
+            "category": "other"
+          },
+          {
+            "id": "9045eabb-74e1-4e3e-b612-0405da3ed539",
+            "name": "Asset 96",
+            "category": "other"
+          },
+          {
+            "id": "56bdd6e2-0bfc-47da-ba50-fc2e0b083921",
+            "name": "Asset 97",
+            "category": "other"
+          },
+          {
+            "id": "73bdfc8c-f23f-43f9-8947-accd5a49b847",
+            "name": "Asset 98",
+            "category": "other"
+          },
+          {
+            "id": "0aeb8831-d2cc-4aa3-ad90-ec76dabc56e1",
+            "name": "Asset 99",
+            "category": "other"
+          },
+          {
+            "id": "49472c88-b19d-44a8-b10d-c1bd901b97b7",
+            "name": "Asset 100",
+            "category": "other"
+          },
+          {
+            "id": "8f37e92e-4a63-4080-808d-bfb8d1b049fa",
+            "name": "Asset 101",
+            "category": "other"
+          }
+        ]
+      },
+      "valid": true
+    }
+  ]
+}

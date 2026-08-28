@@ -1,0 +1,51 @@
+{
+  "name": "India",
+  "id": "https://openinherit.org/v3/extensions/india/extension.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "IN"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "hindu-succession",
+    "islamic-succession"
+  ],
+  "legalSystems": [
+    "mixed",
+    "hindu_law",
+    "islamic_law",
+    "common_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-04-04",
+  "dataProvenance": "Hindu Succession Act 1956, Indian Succession Act 1925, Muslim Personal Law (Application) Act 1937, Indian Registration Act 1908",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Indian succession law — multi-personal-law system (Hindu, Muslim, Christian, Parsi), state-level variations, NRI complications, Goa exception.",
+  "conformanceRules": [
+    {
+      "id": "in-001",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "Applicable personal law must be specified for Indian estates",
+      "check": "exists",
+      "path": "x-inherit-india.personalLaw",
+      "severity": "error"
+    }
+  ],
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "partial",
+  "taxCoverage": "outline",
+  "keyFeatures": "Hindu Succession Act coparcenary, Muslim personal law, Indian Succession Act, stamp duty variation, Parsi succession rules (ISA 1925 Part V), Christian succession rules, coparcenary deprecation notes",
+  "legalTradition": "Mixed statutory",
+  "seeking": "Practitioners across Hindu, Muslim, Parsi, and statutory succession",
+  "tier": "core"
+}

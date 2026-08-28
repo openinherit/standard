@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/hong-kong/hong-kong.json",
+  "title": "Hong Kong Extension",
+  "description": "Hong Kong succession rules: local grant types under Cap. 10, MPF death benefit nominations under Cap. 485, cross-border PRC asset considerations, intestacy distribution under the Intestates' Estates Ordinance (Cap. 73), and small estate grants.",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": ["HK"],
+  "compatibleWith": ["prc-china"],
+  "inheritVersion": ">=3.0.0 <4.0.0",
+  "legalSystems": ["common_law"],
+  "dataProvenance": "Wills Ordinance (Cap. 30), Intestates' Estates Ordinance (Cap. 73), Probate and Administration Ordinance (Cap. 10), Non-Contentious Probate Rules (Cap. 10A), Mandatory Provident Fund Schemes Ordinance (Cap. 485)",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "localGrantTypes": {
+      "description": "Local grant types issued by the Probate Registry of the High Court of Hong Kong under the Probate and Administration Ordinance (Cap. 10). Each entry links an executor to the type of grant obtained",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["executorId", "localType"],
+        "properties": {
+          "executorId": {
+            "description": "Reference to the Executor.id of the person or organisation holding this grant",
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "localType": {
+            "description": "Type of grant issued by the Hong Kong Probate Registry",
+            "$comment": "probate_grant: grant of probate where a valid will exists. letters_of_administration: grant on intestacy or where no executor proves the will. small_estate_grant: summary procedure for estates below the small estate threshold. limited_grant: grant limited in time, property, or purpose (e.g. ad colligenda bona).",
+            "enum": [
+              "probate_grant",
+              "letters_of_administration",
+              "small_estate_grant",
+              "limited_grant"
+            ]
+          },
+          "grantDate": {
+            "description": "Date the grant was issued by the Probate Registry",
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      },
+      "maxItems": 20
+    },
+    "mpfNomination": {
+      "description": "Mandatory Provident Fund (MPF) death benefit nomination under the Mandatory Provident Fund Schemes Ordinance (Cap. 485). MPF accrued benefits pass directly to nominated beneficiaries outside the estate and are not subject to probate",
+      "type": "object",
+      "properties": {
+        "schemeProviderOrganisationId": {
+          "description": "Reference to the Organisation.id of the MPF trustee or scheme provider",
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "nominees": {
+          "description": "Array of nominated beneficiaries for the MPF death benefit",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["personId", "sharePercentage"],
+            "properties": {
+              "personId": {
+                "description": "Reference to the Person.id of the nominated beneficiary",
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "sharePercentage": {
+                "description": "Percentage of the MPF death benefit allocated to this nominee",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 2000
+              }
+            },
+            "additionalProperties": false
+          },
+          "maxItems": 20
+        },
+        "nominationDate": {
+          "description": "Date the nomination form was submitted to the MPF trustee",
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "nominationCurrent": {
+          "description": "Whether the nomination is current and has not been superseded or revoked",
+          "type": "boolean"
+        },
+        "accruedBenefitEstimate": {
+          "description": "Estimated total accrued MPF benefit at date of death, in minor currency units (HKD cents)",
+          "$ref": "../../common/money.json"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "crossBorderPrcAssets": {
+      "description": "Cross-border considerations where the deceased held assets in mainland China (PRC). Hong Kong common law and PRC succession law differ significantly; separate PRC legal advice is typically required",
+      "type": "object",
+      "properties": {
+        "prcAssetsExist": {
+          "description": "Whether the deceased held assets situated in mainland China",
+          "type": "boolean"
+        },
+        "prcNotarisedWill": {
+          "description": "Whether a will dealing with PRC assets was notarised in accordance with PRC requirements",
+          "type": "boolean"
+        },
+        "prcSuccessionLawApplies": {
+          "description": "Whether PRC succession law (rather than Hong Kong law) governs any portion of the estate",
+          "type": "boolean"
+        },
+        "prcContactOrganisationId": {
+          "description": "Reference to the Organisation.id of the PRC legal adviser or notary handling the mainland assets",
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "intestacyDistribution": {
+      "description": "Intestacy distribution rules under the Intestates' Estates Ordinance (Cap. 73). Applicable when the deceased dies wholly or partly intestate",
+      "type": "object",
+      "properties": {
+        "survivingSpouseEntitlement": {
+          "description": "Entitlement of the surviving spouse on intestacy under Cap. 73",
+          "type": "object",
+          "properties": {
+            "personalChattels": {
+              "description": "Whether the surviving spouse is entitled to the personal chattels of the intestate",
+              "type": "boolean"
+            },
+            "statutoryLegacy": {
+              "description": "The fixed statutory legacy payable to the surviving spouse before the residue is divided, in minor currency units (HKD cents)",
+              "$ref": "../../common/money.json"
+            },
+            "residueShare": {
+              "description": "The surviving spouse's share of the residue as a fraction (e.g. 1/2), applicable where there are surviving issue",
+              "type": "string",
+              "pattern": "^[0-9]+/[0-9]+$",
+              "maxLength": 20
+            },
+            "notes": {
+              "type": "string",
+              "maxLength": 2000
+            }
+          },
+          "additionalProperties": false
+        },
+        "issueDistribution": {
+          "description": "Method of distribution to issue (descendants) on intestacy",
+          "$comment": "per_stirpes: each branch of the family receives the share their deceased ancestor would have taken. per_capita: each surviving issue at the same generation takes an equal share.",
+          "enum": [
+            "per_stirpes",
+            "per_capita"
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "smallEstateGrant": {
+      "description": "Small estate grant procedure available under the Probate and Administration Ordinance (Cap. 10) for estates below the prescribed threshold. Allows a simplified application without full probate",
+      "type": "object",
+      "properties": {
+        "eligible": {
+          "description": "Whether the estate qualifies for the small estate summary procedure",
+          "type": "boolean"
+        },
+        "estateValue": {
+          "description": "Gross value of the estate as assessed for small estate purposes, in minor currency units (HKD cents)",
+          "$ref": "../../common/money.json"
+        },
+        "threshold": {
+          "description": "Prescribed small estate threshold in force at the date of death, in minor currency units (HKD cents)",
+          "$ref": "../../common/money.json"
+        },
+        "confirmationDate": {
+          "description": "Date on which the small estate grant or confirmation was issued",
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "intestacyHierarchy": {
+      "description": "Intestacy distribution hierarchy under the Intestates' Estates Ordinance (Cap. 73). Mirrors AEA 1925 s.46 — each tier takes priority over all lower tiers. Whole blood takes absolute priority over half blood at sibling and uncle/aunt levels",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tier", "relationshipCategory"],
+        "properties": {
+          "tier": {
+            "description": "Priority rank (1 = highest)",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9
+          },
+          "relationshipCategory": {
+            "description": "Kinship category for this tier",
+            "enum": [
+              "spouse",
+              "children_and_issue",
+              "parents",
+              "siblings_whole",
+              "siblings_half",
+              "grandparents",
+              "uncles_aunts_whole",
+              "uncles_aunts_half",
+              "crown"
+            ]
+          },
+          "bloodRequirement": {
+            "description": "Whether this tier requires whole or half blood",
+            "$comment": "Maps to core bloodDegree property. whole: only whole-blood relatives at this level. half: only half-blood relatives at this level. not_applicable: blood degree is irrelevant (e.g. spouse, parents, crown)",
+            "enum": ["whole", "half", "not_applicable"]
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "newTerritoriesCustomaryLaw": {
+      "description": "New Territories customary law — tso/tong ancestral trusts with patrilineal succession to communal land",
+      "$comment": "Tso (祖) and tong (堂) are ancestral trusts holding land in the New Territories. Membership is based on patrilineal descent from a common ancestor. The New Territories Ordinance (Cap. 97) preserves Chinese customary law for these trusts",
+      "type": "object",
+      "properties": {
+        "tsoTongMembership": {
+          "description": "Whether the deceased was a member of a tso or tong",
+          "type": "boolean"
+        },
+        "patrilinealSuccession": {
+          "description": "Whether patrilineal succession applies to the communal land",
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      }
+    },
+    "preReformCustomaryLaw": {
+      "description": "Pre-1971 Chinese customary law applicability. The Marriage Reform Ordinance 1971 abolished Chinese customary marriages, but for estates of persons who died or acquired concubines before 7 October 1971, customary law may still apply",
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "description": "Whether pre-1971 Chinese customary law applies to this estate",
+          "type": "boolean"
+        },
+        "concubineChildrenRecognised": {
+          "description": "Whether children of concubines have inheritance rights under the applicable customary law",
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

@@ -1,0 +1,1 @@
+{ "valid": false, "schemaMode": "estate", "minErrors": 1, "note": "Level 1 valid — the root schema treats the extensions array as declarative only and does not require a corresponding x-inherit-* data block. Invalid at Level 2: declaring an extension without providing its data block is a conformance violation. A compliant Level 2 validator MUST reject this document." }

@@ -1,0 +1,180 @@
+{
+  "target": "../../../v3/subscription.json",
+  "tests": [
+    {
+      "description": "valid — minimal subscription",
+      "data": {
+        "id": "f60ec201-3110-43e6-a264-7073673183e7",
+        "serviceName": "Netflix"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated subscription",
+      "data": {
+        "id": "73e3c74f-35fa-4ce3-a934-924b324bbd8f",
+        "serviceName": "Spotify Premium",
+        "cost": {
+          "amount": 1099,
+          "currency": "GBP"
+        },
+        "billingFrequency": "monthly",
+        "renewalDate": "2026-04-15",
+        "accountIdentifier": "john.davies@example.com",
+        "cancelAction": "cancel",
+        "notes": "Family plan — check if other members need their own accounts"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — subscription to transfer",
+      "data": {
+        "id": "83a8363a-ca08-4219-b583-0b37cd170265",
+        "serviceName": "Amazon Prime",
+        "cancelAction": "transfer_to_person",
+        "transferToPersonId": "d73880dc-c616-4724-ad29-79364bad1719"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required serviceName",
+      "data": {
+        "id": "f60ec201-3110-43e6-a264-7073673183e7"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown cancelAction",
+      "data": {
+        "id": "f60ec201-3110-43e6-a264-7073673183e7",
+        "serviceName": "Netflix",
+        "cancelAction": "destroy"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unevaluated property",
+      "data": {
+        "id": "f60ec201-3110-43e6-a264-7073673183e7",
+        "serviceName": "Netflix",
+        "badField": true
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — subscription with full cancellationInfo",
+      "data": {
+        "id": "40c73b3d-3346-48d8-ae86-68d0049d9fa3",
+        "serviceName": "Netflix Premium",
+        "cost": {
+          "amount": 1799,
+          "currency": "GBP"
+        },
+        "billingFrequency": "monthly",
+        "cancelAction": "cancel",
+        "cancellationInfo": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "difficulty": "easy",
+          "cancellationUrl": "https://www.netflix.com/cancelplan",
+          "noticePeriod": "end of billing cycle",
+          "deathCertificateRequired": true,
+          "refundAvailable": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — subscription with minimal cancellationInfo",
+      "data": {
+        "id": "47d137b5-600e-4e03-b1f0-b4d3cef6d0c2",
+        "serviceName": "Sky TV",
+        "cost": {
+          "amount": 4300,
+          "currency": "GBP"
+        },
+        "billingFrequency": "monthly",
+        "cancelAction": "cancel",
+        "cancellationInfo": {
+          "retrievedAt": "2026-03-31T09:00:00Z"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — cancellationInfo missing required retrievedAt",
+      "data": {
+        "id": "27529a5b-845d-4b39-99a6-68759c66337c",
+        "serviceName": "BT Broadband",
+        "cost": {
+          "amount": 3299,
+          "currency": "GBP"
+        },
+        "billingFrequency": "monthly",
+        "cancelAction": "cancel",
+        "cancellationInfo": {
+          "difficulty": "hard",
+          "cancellationPhone": "0800 800 150"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "serviceName": "Netflix"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — serviceName as number instead of string",
+      "data": {
+        "id": "f60ec201-3110-43e6-a264-7073673183e7",
+        "serviceName": 12345
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — cancelAction as boolean instead of string",
+      "data": {
+        "id": "f60ec201-3110-43e6-a264-7073673183e7",
+        "serviceName": "Netflix",
+        "cancelAction": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a valid UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "serviceName": "Netflix"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — renewalDate in wrong format",
+      "data": {
+        "id": "f60ec201-3110-43e6-a264-7073673183e7",
+        "serviceName": "Netflix",
+        "renewalDate": "15/04/2026"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — billingFrequency not in enum",
+      "data": {
+        "id": "f60ec201-3110-43e6-a264-7073673183e7",
+        "serviceName": "Netflix",
+        "billingFrequency": "weekly"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — serviceName empty string (below minLength 1)",
+      "data": {
+        "id": "f60ec201-3110-43e6-a264-7073673183e7",
+        "serviceName": ""
+      },
+      "valid": false
+    }
+  ]
+}

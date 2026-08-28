@@ -1,0 +1,13 @@
+# Redocly configuration for INHERIT OpenAPI specs
+# The INHERIT extension JSON Schema files contain custom root-level properties
+# (maturity, extensionType, applicableJurisdictions, etc.) that are valid
+# JSON Schema vocabulary extensions but trigger Redocly's struct rule.
+# We disable the struct rule to allow these through.
+apis:
+  schema-bundle:
+    root: openapi/openapi.yaml
+  reference-api:
+    root: openapi/reference-api.yaml
+
+rules:
+  struct: off

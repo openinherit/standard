@@ -1,0 +1,154 @@
+{
+  "target": "../../../v3/extensions/singapore-malaysia/singapore-malaysia.json",
+  "tests": [
+    {
+      "description": "valid — minimal with required country",
+      "data": {
+        "country": "SG"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Singapore with CPF",
+      "data": {
+        "country": "SG",
+        "notes": "Singapore CPF applies"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Malaysia",
+      "data": {
+        "country": "MY"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required country",
+      "data": {
+        "cpfNominations": []
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "country": "SG",
+        "ukIhtThreshold": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — Singapore ISA with relationshipCategory",
+      "data": {
+        "country": "SG",
+        "singaporeISA": {
+          "applicable": true,
+          "shareSchedule": [
+            {
+              "relationshipCategory": "spouse",
+              "relationship": "surviving wife",
+              "share": "1/2"
+            },
+            {
+              "relationshipCategory": "children",
+              "relationship": "two children equally",
+              "share": "1/4 each"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Malaysian Distribution Act with uncles_aunts",
+      "data": {
+        "country": "MY",
+        "malaysianDistributionAct": {
+          "applicable": true,
+          "shareSchedule": [
+            {
+              "relationshipCategory": "uncles_aunts",
+              "relationship": "maternal uncle",
+              "share": "1/4"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — relationshipCategory 'cousin' not in ISA hierarchy",
+      "data": {
+        "country": "SG",
+        "singaporeISA": {
+          "applicable": true,
+          "shareSchedule": [
+            {
+              "relationshipCategory": "cousin",
+              "share": "1/8"
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — CPF nomination with sub-account allocations",
+      "data": {
+        "country": "SG",
+        "cpfNominations": [
+          {
+            "accountId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "nominatedPersonIds": [
+              "11111111-2222-3333-4444-555555555555"
+            ],
+            "binding": true,
+            "nominationDate": "2024-03-15",
+            "nominationFormVersion": "post_2010",
+            "revokedByMarriage": false,
+            "subAccountAllocations": [
+              {
+                "accountType": "ordinary",
+                "beneficiaryPersonId": "11111111-2222-3333-4444-555555555555",
+                "percentage": 60
+              },
+              {
+                "accountType": "special",
+                "beneficiaryPersonId": "11111111-2222-3333-4444-555555555555",
+                "percentage": 40
+              }
+            ]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — marriageRevocation (Wills Act (Cap 352) s.13)",
+      "data": {
+        "country": "SG",
+        "marriageRevocation": {
+          "revokesPriorWill": true,
+          "statute": "Wills Act (Cap 352) s.13",
+          "statuteUrl": "https://sso.agc.gov.sg/Act/WA1838#pr13-",
+          "contemplationException": true,
+          "contemplationRule": "A will made in contemplation of a particular marriage survives that marriage (s.13 proviso). Applies to non-Muslim testators; Muslims are governed by AMLA and Sharia."
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — marriageRevocation with unknown property",
+      "data": {
+        "country": "SG",
+        "marriageRevocation": {
+          "revokesPriorWill": true,
+          "statute": "Wills Act (Cap 352) s.13",
+          "bogusField": "nope"
+        }
+      },
+      "valid": false
+    }
+  ]
+}

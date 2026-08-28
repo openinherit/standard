@@ -1,0 +1,132 @@
+{
+  "target": "../../../v3/extensions/hong-kong/hong-kong.json",
+  "tests": [
+    {
+      "description": "valid — minimal Hong Kong extension (notes only)",
+      "data": {
+        "notes": "Standard Hong Kong estate."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with local grant types and MPF nomination",
+      "data": {
+        "localGrantTypes": [
+          {
+            "executorId": "a0000001-0000-4000-a000-000000000001",
+            "localType": "probate_grant",
+            "grantDate": "2026-03-15"
+          }
+        ],
+        "mpfNomination": {
+          "schemeProviderOrganisationId": "b0000001-0000-4000-a000-000000000001",
+          "nominees": [
+            {
+              "personId": "c0000001-0000-4000-a000-000000000001",
+              "sharePercentage": 60
+            },
+            {
+              "personId": "c0000002-0000-4000-a000-000000000002",
+              "sharePercentage": 40
+            }
+          ],
+          "nominationDate": "2024-01-10",
+          "nominationCurrent": true,
+          "accruedBenefitEstimate": {
+            "amount": 120000000,
+            "currency": "HKD"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with cross-border PRC assets and intestacy distribution",
+      "data": {
+        "crossBorderPrcAssets": {
+          "prcAssetsExist": true,
+          "prcNotarisedWill": true,
+          "prcSuccessionLawApplies": true,
+          "prcContactOrganisationId": "d0000001-0000-4000-a000-000000000001"
+        },
+        "intestacyDistribution": {
+          "survivingSpouseEntitlement": {
+            "personalChattels": true,
+            "statutoryLegacy": {
+              "amount": 50000000,
+              "currency": "HKD"
+            },
+            "residueShare": "1/2"
+          },
+          "issueDistribution": "per_stirpes"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with small estate grant",
+      "data": {
+        "smallEstateGrant": {
+          "eligible": true,
+          "estateValue": {
+            "amount": 15000000,
+            "currency": "HKD"
+          },
+          "threshold": {
+            "amount": 50000000,
+            "currency": "HKD"
+          },
+          "confirmationDate": "2026-02-20"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — grant type not in enum",
+      "data": {
+        "localGrantTypes": [
+          {
+            "executorId": "a0000001-0000-4000-a000-000000000001",
+            "localType": "full_probate"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown property at root level",
+      "data": {
+        "notes": "Valid note.",
+        "unknownHkField": "should be rejected"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — intestacyHierarchy, customary law, and pre-reform",
+      "data": {
+        "intestacyHierarchy": [
+          { "tier": 1, "relationshipCategory": "spouse", "bloodRequirement": "not_applicable" },
+          { "tier": 2, "relationshipCategory": "children_and_issue", "bloodRequirement": "not_applicable" },
+          { "tier": 3, "relationshipCategory": "parents", "bloodRequirement": "not_applicable" }
+        ],
+        "newTerritoriesCustomaryLaw": {
+          "tsoTongMembership": true,
+          "patrilinealSuccession": true
+        },
+        "preReformCustomaryLaw": {
+          "applicable": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — intestacyHierarchy relationshipCategory 'nephew' not in enum",
+      "data": {
+        "intestacyHierarchy": [
+          { "tier": 1, "relationshipCategory": "nephew" }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

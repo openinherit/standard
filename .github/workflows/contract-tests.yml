@@ -1,0 +1,55 @@
+name: Contract Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Sourcemeta CLI
+        run: |
+          TAG=$(gh api repos/sourcemeta/jsonschema/releases/latest --jq '.tag_name')
+          VERSION="${TAG#v}"
+          curl -fsSL "https://github.com/sourcemeta/jsonschema/releases/download/${TAG}/jsonschema-${VERSION}-linux-x86_64.zip" -o /tmp/jsonschema.zip
+          unzip -o /tmp/jsonschema.zip -d /tmp/jsonschema-extract
+          cp /tmp/jsonschema-extract/*/bin/jsonschema /usr/local/bin/jsonschema
+          chmod +x /usr/local/bin/jsonschema
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Run contract tests
+        run: |
+          echo "INHERIT Contract Tests"
+          echo "---"
+          PASS=0
+          FAIL=0
+          for fixture in tests/contract/golden-*.json; do
+            name="$(basename "$fixture")"
+            echo -n "  $name ... "
+            if jsonschema validate v3/schema.json "$fixture" \
+              --resolve v3/ \
+              --resolve v3/common/ \
+              --resolve v3/asset-categories/ \
+              --resolve v3/extensions/ 2>/dev/null; then
+              echo "PASS"
+              PASS=$((PASS + 1))
+            else
+              echo "FAIL"
+              FAIL=$((FAIL + 1))
+            fi
+          done
+          echo "---"
+          echo "Results: $PASS passed, $FAIL failed"
+          if [ "$FAIL" -gt 0 ]; then
+            echo ""
+            echo "::error::Contract test failure — a golden document no longer validates."
+            echo "This means a backwards-incompatible change was introduced."
+            echo "If intentional, bump the major version and update the golden documents."
+            exit 1
+          fi

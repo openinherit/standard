@@ -1,0 +1,594 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/organisation.json",
+  "title": "Organisation",
+  "description": "An organisation that interacts with the estate — legal firms, financial institutions, charities, dealers, funeral providers, employers, government bodies, and others. Maps to schema:Organization in JSON-LD",
+  "type": "object",
+  "required": [ "id", "name", "organisationType" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this organisation within the INHERIT document",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "name": {
+      "description": "The organisation's legal or trading name",
+      "examples": [
+        "IDR Law",
+        "Barclays Bank UK PLC",
+        "Macmillan Cancer Support",
+        "Rails of Sheffield",
+        "Dignity Funerals Ltd"
+      ],
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "organisationType": {
+      "description": "The nature of the organisation. Use x-inherit- prefix for jurisdiction-specific or niche types not covered by the core enum",
+      "$comment": "legal_firm: solicitors, attorneys, notaries, licensed conveyancers, will writers. financial_institution: banks, building societies, investment platforms, stockbrokers. pension_provider: workplace pensions, personal pensions, SIPPs, CPF/EPF. insurance_provider: life, home, asset, health, motor insurance. dealer: specialist dealers in antiques, collectibles, art, wine. auction_house: auction houses and salerooms. valuation_firm: professional valuers and surveyors. funeral_provider: funeral directors, crematoriums, memorial services. charity: registered charities, foundations, charitable trusts. religious_institution: mosques, temples, churches, synagogues, gurdwaras. employer: current or former employers. trust_corporation: corporate executors and trustee services. accountancy_firm: accountants and tax advisers. government_body: tax authorities, probate registries, land registries, charity commissions. retailer: retailers from whom items were purchased (provenance). manufacturer: makers of items (warranty, specifications, product pages). property_management: leasehold management companies, strata corporations. storage_facility: self-storage and specialist storage providers. digital_platform: social media platforms, cloud storage, cryptocurrency exchanges. utility_provider: electricity, gas, water, broadband, mobile providers. other: any organisation not covered by the above.",
+      "anyOf": [
+        {
+          "enum": [
+            "legal_firm",
+            "financial_institution",
+            "pension_provider",
+            "insurance_provider",
+            "dealer",
+            "auction_house",
+            "valuation_firm",
+            "funeral_provider",
+            "charity",
+            "religious_institution",
+            "employer",
+            "trust_corporation",
+            "accountancy_firm",
+            "government_body",
+            "retailer",
+            "manufacturer",
+            "property_management",
+            "storage_facility",
+            "digital_platform",
+            "utility_provider",
+            "other"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+"
+        }
+      ]
+    },
+    "estateRoles": {
+      "description": "The roles this organisation plays in this specific estate. An organisation may play multiple roles",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "anyOf": [
+          {
+            "enum": [
+              "beneficiary",
+              "will_writer",
+              "executor",
+              "trustee",
+              "asset_holder",
+              "liability_holder",
+              "insurer",
+              "valuer",
+              "recommended_dealer",
+              "funeral_provider",
+              "professional_adviser",
+              "regulatory_body",
+              "employer",
+              "retailer",
+              "service_provider"
+            ]
+          },
+          {
+            "type": "string",
+            "pattern": "^x-inherit-.+"
+          }
+        ]
+      }
+    },
+    "jurisdiction": {
+      "description": "Primary jurisdiction where this organisation operates. ISO 3166-1 alpha-2 or ISO 3166-2 code",
+      "examples": [ "GB", "GB-ENG", "US-NY", "SG", "JP" ],
+      "type": "string",
+      "maxLength": 10
+    },
+    "address": {
+      "description": "The organisation's address",
+      "$ref": "common/address.json"
+    },
+    "url": {
+      "description": "The organisation's website",
+      "examples": [ "https://www.idrlaw.co.uk", "https://www.macmillan.org.uk" ],
+      "type": "string",
+      "pattern": "^https?://",
+      "format": "uri",
+      "maxLength": 2048
+    },
+    "email": {
+      "description": "Primary contact email",
+      "examples": [ "enquiries@idrlaw.co.uk" ],
+      "type": "string",
+      "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+      "format": "email",
+      "maxLength": 255
+    },
+    "phone": {
+      "description": "Primary contact phone number",
+      "examples": [ "+44 1234 567890" ],
+      "type": "string",
+      "maxLength": 50
+    },
+    "logo": {
+      "description": "URL to the organisation's logo",
+      "type": "string",
+      "pattern": "^https?://",
+      "format": "uri",
+      "maxLength": 2048
+    },
+    "wikidataId": {
+      "description": "Wikidata Q-number for this organisation, enabling linked data resolution. Many major organisations have Wikidata entries with structured data (founding date, parent company, headquarters, etc.)",
+      "$comment": "Q2402878 = HMRC, Q4424418 = Macmillan Cancer Support, Q5277509 = Dignity plc. Resolve via https://www.wikidata.org/wiki/Special:EntityData/{Q-number}.json",
+      "examples": [ "Q2402878", "Q4424418", "Q5277509" ],
+      "type": "string",
+      "pattern": "^Q[0-9]+$",
+      "maxLength": 20
+    },
+    "description": {
+      "description": "Brief description of the organisation and its relevance to this estate",
+      "examples": [
+        "Family solicitor since 2018. Handled the purchase of 42 Oak Lane."
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "registrations": {
+      "description": "Registrations with regulatory bodies, professional associations, and government registries. An organisation may hold multiple registrations across jurisdictions",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "$ref": "#/$defs/Registration"
+      }
+    },
+    "contactPerson": {
+      "description": "Name of the primary contact person at this organisation for estate matters",
+      "examples": [ "Sarah Chen", "Dave at the model railway desk" ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "notes": {
+      "description": "Free-text notes about this organisation's relationship to the estate",
+      "examples": [
+        "Contact Dave at Manchester Model Railway Club — he knows the right dealers. Do not sell on eBay individually.",
+        "Margaret's employer. Death-in-service benefit: 4x salary. HR contact: Jane Williams."
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "ratings": {
+      "description": "Aggregate ratings from review platforms. One entry per platform. Supports user decision-making, agent filtering/ranking, and point-in-time audit trails",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "required": [ "platform", "ratingValue", "retrievedAt" ],
+        "properties": {
+          "platform": {
+            "description": "The review platform",
+            "anyOf": [
+              {
+                "enum": [
+                  "trustpilot",
+                  "google",
+                  "feefo",
+                  "reviews_io",
+                  "funeral_guide",
+                  "checkatrade"
+                ]
+              },
+              {
+                "type": "string",
+                "pattern": "^x-inherit-.+",
+                "maxLength": 100
+              }
+            ]
+          },
+          "ratingValue": {
+            "description": "The aggregate rating score",
+            "$comment": "Maximum is 10 to accommodate Checkatrade's 10-point scale. Most platforms use 1–5. Cross-field validation (ratingValue <= bestRating) is application-side — JSON Schema cannot express cross-field constraints",
+            "type": "number",
+            "maximum": 10,
+            "minimum": 0
+          },
+          "bestRating": {
+            "description": "Maximum possible score on this platform. Default 5 if absent",
+            "default": 5,
+            "type": "number",
+            "maximum": 10,
+            "minimum": 0
+          },
+          "worstRating": {
+            "description": "Minimum possible score on this platform. Default 1 if absent",
+            "default": 1,
+            "type": "number",
+            "maximum": 10,
+            "minimum": 0
+          },
+          "reviewCount": {
+            "description": "Total number of reviews on this platform",
+            "type": "integer",
+            "minimum": 0
+          },
+          "profileUrl": {
+            "description": "URL to the organisation's profile on this platform",
+            "type": "string",
+            "pattern": "^https?://",
+            "format": "uri",
+            "maxLength": 2048
+          },
+          "retrievedAt": {
+            "description": "When this rating data was retrieved or verified",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "sameAs": {
+      "description": "URIs identifying this entity elsewhere (schema.org sameAs). e.g. Wikidata, LinkedIn, DBpedia",
+      "$comment": "https://schema.org/sameAs",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    },
+    "vatConfiguration": {
+      "description": "The organisation's VAT registration status and scheme. Affects how VAT is calculated on transactions involving this organisation",
+      "type": "object",
+      "properties": {
+        "vatRegistered": {
+          "description": "Whether the organisation is VAT registered",
+          "type": "boolean"
+        },
+        "vatScheme": {
+          "description": "Which VAT scheme the organisation uses. Only relevant if vatRegistered is true",
+          "enum": [ "margin_scheme", "global_accounting", "standard_vat" ]
+        },
+        "vatNumber": {
+          "description": "The organisation's VAT registration number",
+          "type": "string",
+          "maxLength": 50
+        },
+        "vatCountry": {
+          "description": "The country of VAT registration, as ISO 3166-1 alpha-2",
+          "type": "string",
+          "pattern": "^[A-Z]{2}$",
+          "maxLength": 2
+        }
+      },
+      "additionalProperties": false
+    },
+    "internationalShipping": {
+      "description": "International shipping capabilities and policies for this organisation",
+      "type": "object",
+      "properties": {
+        "shipsToCountries": {
+          "description": "ISO 3166-1 alpha-2 country codes this organisation ships to",
+          "type": "array",
+          "maxItems": 250,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$",
+            "maxLength": 2
+          }
+        },
+        "receivesFromCountries": {
+          "description": "ISO 3166-1 alpha-2 country codes this organisation receives items from",
+          "type": "array",
+          "maxItems": 250,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$",
+            "maxLength": 2
+          }
+        },
+        "customsHandling": {
+          "description": "Whether this organisation handles customs declarations for international shipments",
+          "type": "boolean"
+        },
+        "importDutyPolicy": {
+          "description": "Who pays import duties on international transactions",
+          "enum": [ "dealer_absorbs", "buyer_pays", "included_in_shipping" ]
+        },
+        "currency": {
+          "description": "The primary currency this organisation trades in, as ISO 4217",
+          "type": "string",
+          "pattern": "^[A-Z]{3}$",
+          "maxLength": 3
+        }
+      },
+      "additionalProperties": false
+    },
+    "identifiers": {
+      "description": "External identifiers — charity number, company registration, UEN, etc.",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "$ref": "common/identifier.json"
+      }
+    },
+    "dealerProfile": {
+      "description": "Dealer-specific profile information. Only relevant for organisations that operate as dealers on marketplace or catalogue platforms",
+      "type": "object",
+      "properties": {
+        "categories": {
+          "description": "Asset categories this dealer specialises in",
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "dealerTier": {
+          "description": "The dealer's subscription tier on the platform",
+          "enum": [ "free", "standard", "professional" ]
+        },
+        "fulfilmentCapabilities": {
+          "description": "Physical services this dealer can provide",
+          "type": "array",
+          "maxItems": 10,
+          "items": {
+            "enum": [
+              "inspection",
+              "grading",
+              "photography",
+              "storage",
+              "shipping",
+              "restoration"
+            ]
+          }
+        },
+        "geographicReach": {
+          "description": "How far the dealer operates",
+          "enum": [ "local", "national", "international" ]
+        },
+        "averageResponseTime": {
+          "description": "Typical time to respond to a valuation request or offer",
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "Registration": {
+      "description": "A registration with a regulatory body, professional association, or government registry",
+      "type": "object",
+      "required": [ "body", "number" ],
+      "properties": {
+        "body": {
+          "description": "The regulatory body or registry. Use an id from well-known-organisations.json where available, or a descriptive string for unlisted bodies",
+          "examples": [
+            "sra",
+            "ccew",
+            "oscr",
+            "companies_house",
+            "fca",
+            "rics",
+            "nafd"
+          ],
+          "type": "string",
+          "maxLength": 100
+        },
+        "number": {
+          "description": "The registration number. Format varies by body — see well-known-organisations.json for expected patterns",
+          "examples": [
+            "642790",
+            "1089471",
+            "SC012345",
+            "01234567",
+            "MRICS-1234567"
+          ],
+          "type": "string",
+          "maxLength": 100
+        },
+        "status": {
+          "description": "Current status of this registration",
+          "$comment": "active: currently registered and in good standing. suspended: temporarily suspended by the regulatory body. revoked: registration has been revoked or struck off. voluntary: voluntary membership (not statutory regulation). expired: registration has lapsed or not been renewed.",
+          "enum": [ "active", "suspended", "revoked", "voluntary", "expired" ]
+        },
+        "jurisdiction": {
+          "description": "Jurisdiction this registration applies to. ISO 3166-1 alpha-2 or ISO 3166-2 code",
+          "type": "string",
+          "maxLength": 10
+        },
+        "verificationUrl": {
+          "description": "URL to verify this registration with the regulatory body",
+          "examples": [
+            "https://www.sra.org.uk/consumers/register/organisation/?sraNumber=642790"
+          ],
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "verifiedAt": {
+          "description": "When this registration was last verified",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "liveCheck": {
+          "description": "Result of a live API check against this registry. Snapshot at retrievedAt. Registry-specific fields are validated conditionally based on the parent body field",
+          "type": "object",
+          "required": [ "retrievedAt" ],
+          "properties": {
+            "retrievedAt": {
+              "description": "When this check was performed",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+              "format": "date-time"
+            },
+            "companyStatus": {
+              "description": "Companies House company status",
+              "$comment": "active: company is active and trading. dissolved: company has been dissolved. liquidation: company is being wound up. receivership: company is in receivership. administration: company is in administration. voluntary-arrangement: company has a voluntary arrangement. converted-closed: company has been converted or closed",
+              "anyOf": [
+                {
+                  "enum": [
+                    "active",
+                    "dissolved",
+                    "liquidation",
+                    "receivership",
+                    "administration",
+                    "voluntary-arrangement",
+                    "converted-closed"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^x-inherit-.+",
+                  "maxLength": 100
+                }
+              ]
+            },
+            "sicCodes": {
+              "description": "Standard Industrial Classification codes from Companies House",
+              "type": "array",
+              "maxItems": 10,
+              "items": {
+                "type": "string",
+                "maxLength": 10
+              }
+            },
+            "incorporatedAt": {
+              "description": "Date of incorporation",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            },
+            "accountsOverdue": {
+              "description": "Whether accounts are overdue at Companies House",
+              "type": "boolean"
+            },
+            "insolvencyFlag": {
+              "description": "Whether there are active insolvency proceedings",
+              "type": "boolean"
+            },
+            "authorisationStatus": {
+              "description": "FCA authorisation status",
+              "$comment": "authorised: firm is authorised to conduct regulated activities. revoked: authorisation has been revoked. suspended: authorisation temporarily suspended. cancelled: firm requested cancellation. no-longer-authorised: authorisation lapsed or withdrawn",
+              "anyOf": [
+                {
+                  "enum": [
+                    "authorised",
+                    "revoked",
+                    "suspended",
+                    "cancelled",
+                    "no-longer-authorised"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^x-inherit-.+",
+                  "maxLength": 100
+                }
+              ]
+            },
+            "firmReference": {
+              "description": "FCA firm reference number",
+              "type": "string",
+              "maxLength": 50
+            },
+            "permissions": {
+              "description": "Regulated activities the firm is authorised for",
+              "type": "array",
+              "maxItems": 50,
+              "items": {
+                "type": "string",
+                "maxLength": 500
+              }
+            },
+            "effectiveFrom": {
+              "description": "When FCA authorisation took effect",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            },
+            "charityStatus": {
+              "description": "Charity Commission or OSCR registration status",
+              "$comment": "registered: charity is registered and active. removed: charity has been removed from the register. suspended: charity operations suspended by the regulator. in-default: charity has failed to meet reporting requirements",
+              "anyOf": [
+                {
+                  "enum": [ "registered", "removed", "suspended", "in-default" ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^x-inherit-.+",
+                  "maxLength": 100
+                }
+              ]
+            },
+            "income": {
+              "description": "Latest reported annual income in minor units (pennies/cents)",
+              "type": "integer",
+              "minimum": 0
+            },
+            "objects": {
+              "description": "Charitable objects or purposes",
+              "type": "string",
+              "maxLength": 2000
+            },
+            "dateRegistered": {
+              "description": "Date the charity was registered",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            },
+            "reportingStatus": {
+              "description": "Whether the charity's reporting is up to date",
+              "$comment": "up-to-date: all required filings submitted on time. overdue: one or more required filings are late. not-required: reporting is not required for this entity",
+              "anyOf": [
+                {
+                  "enum": [ "up-to-date", "overdue", "not-required" ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^x-inherit-.+",
+                  "maxLength": 100
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  }
+}

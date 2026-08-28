@@ -1,0 +1,321 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-03-27T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "91cf9bf6-2b17-4fc5-a3fb-33efe4f9329b",
+    "testatorPersonId": "ce6f9508-ed9e-452e-9f83-f3c4615a9dd5",
+    "status": "confirmed",
+    "defaultSuccessionRegime": {
+      "governingLaw": {
+        "jurisdiction": {
+          "country": "IN",
+          "subdivision": "IN-MH"
+        },
+        "legalTradition": "hindu_law",
+        "statute": "Hindu Succession Act 1956",
+        "section": "s.30 (testamentary succession)"
+      },
+      "determinedBy": "personal_status",
+      "binding": true,
+      "notes": "Hindu Succession Act 1956 governs. Self-acquired property is freely bequeathable; coparcenary property devolves by survivorship."
+    },
+    "religiousConsideration": {
+      "tradition": "hindu_law",
+      "binding": true,
+      "notes": "Hindu personal law governs succession. The Hindu Succession Act 1956 codifies customary Hindu inheritance rules. Marriage was performed under Hindu rites (vivah)."
+    },
+    "notes": "Indian succession is governed by personal law based on religion. For Hindus: the Hindu Succession Act 1956 (as amended in 2005) governs both testamentary and intestate succession. The 2005 amendment gave daughters equal coparcenary rights in HUF property. Self-acquired property can be willed freely; ancestral coparcenary property devolves by survivorship among coparceners.",
+    "createdAt": "2026-02-20T00:00:00Z",
+    "lastModifiedAt": "2026-03-27T00:00:00Z",
+    "domicile": {
+      "country": "IN",
+      "subdivision": "IN-MH",
+      "legalSystems": [
+        "mixed"
+      ],
+      "name": "Maharashtra"
+    }
+  },
+  "people": [
+    {
+      "id": "ce6f9508-ed9e-452e-9f83-f3c4615a9dd5",
+      "givenName": "Rajesh",
+      "familyName": "Sharma",
+      "dateOfBirth": "1958-04-10",
+      "roles": [
+        "testator"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "14 Carter Road",
+          "addressLocality": "Bandra West",
+          "addressRegion": "Maharashtra",
+          "postalCode": "400050",
+          "addressCountry": "IN",
+          "landmark": "Near Mount Mary Church"
+        }
+      }
+    },
+    {
+      "id": "b1eb52ef-4992-4b0b-ba8e-2ee6e417b4c0",
+      "givenName": "Priya",
+      "familyName": "Sharma",
+      "dateOfBirth": "1962-09-28",
+      "roles": [
+        "beneficiary"
+      ]
+    },
+    {
+      "id": "84df66f6-d4d3-4186-9ad8-54f302820f8b",
+      "givenName": "Arjun",
+      "familyName": "Sharma",
+      "dateOfBirth": "1988-01-15",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ]
+    }
+  ],
+  "kinships": [
+    {
+      "id": "2732dea9-baa3-41ec-8b7b-886db54a418f",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "ce6f9508-ed9e-452e-9f83-f3c4615a9dd5",
+      "toPersonId": "84df66f6-d4d3-4186-9ad8-54f302820f8b"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "2997bb8c-39b2-4ec6-9b47-b76e2ad70bda",
+      "type": "marriage_religious",
+      "religiousSubtype": "hindu_vivah",
+      "partners": [
+        {
+          "personId": "ce6f9508-ed9e-452e-9f83-f3c4615a9dd5",
+          "ordinal": 1
+        },
+        {
+          "personId": "b1eb52ef-4992-4b0b-ba8e-2ee6e417b4c0",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "IN",
+        "subdivision": "IN-MH"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "70c86859-de9a-4772-ba5f-4ddd34713e91",
+      "name": "14 Carter Road, Bandra West, Mumbai",
+      "propertyType": "apartment",
+      "tenureType": "ownership",
+      "isPrimaryResidence": true,
+      "ownershipModel": "huf_coparcenary",
+      "acquisitionType": "ancestral_joint",
+      "estimatedValue": {
+        "amount": 2500000000,
+        "currency": "INR"
+      },
+      "successionRegime": {
+        "governingLaw": {
+          "jurisdiction": {
+            "country": "IN",
+            "subdivision": "IN-MH"
+          },
+          "legalTradition": "hindu_law",
+          "statute": "Hindu Succession Act 1956",
+          "section": "s.6 (coparcenary property — as amended 2005)"
+        },
+        "determinedBy": "personal_status",
+        "binding": true,
+        "notes": "HUF coparcenary property devolves by survivorship among coparceners. The 2005 amendment gave daughters equal coparcenary rights."
+      },
+      "communalAuthority": {
+        "authorityType": "family_council",
+        "approvalRequired": true,
+        "authorityName": "Karta of Sharma HUF",
+        "jurisdiction": {
+          "country": "IN",
+          "subdivision": "IN-MH"
+        }
+      },
+      "address": {
+        "streetAddress": "14 Carter Road",
+        "addressLocality": "Bandra West",
+        "addressRegion": "Maharashtra",
+        "postalCode": "400050",
+        "addressCountry": "IN",
+        "landmark": "Near Mount Mary Church"
+      },
+      "notes": "HUF coparcenary property devolves by survivorship. The karta cannot will away the coparcenary interest — only his notional share on partition is bequeathable."
+    }
+  ],
+  "assets": [
+    {
+      "id": "51000007-0000-4000-a000-000000000001",
+      "name": "Gold Jewellery (Priya's Stridhan)",
+      "category": "jewellery_watches",
+      "acquisitionType": "stridhan",
+      "estimatedValue": {
+        "amount": 1500000000,
+        "currency": "INR"
+      },
+      "culturalDisposition": {
+        "sacredStatus": "ritually_significant",
+        "culturalSignificance": "family_heirloom",
+        "bequeathable": false,
+        "disposalRestrictions": [
+          {
+            "authority": "Hindu personal law",
+            "authorityType": "religious_body",
+            "requirement": "Stridhan is the wife's absolute property and cannot be bequeathed by the husband"
+          }
+        ]
+      },
+      "notes": "Stridhan — Priya's absolute property under Hindu law. Not part of Rajesh's bequeathable estate. Includes wedding jewellery and gifts received at marriage.",
+      "subcategory": "jewellery"
+    },
+    {
+      "id": "51000007-0000-4000-a000-000000000002",
+      "name": "State Bank of India Savings Account",
+      "category": "financial",
+      "estimatedValue": {
+        "amount": 300000000,
+        "currency": "INR"
+      },
+      "subcategory": "savings_account"
+    }
+  ],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "bcd50d7e-fbfb-4e36-b420-706f21a98017",
+      "bequestType": "residuary",
+      "beneficiaryId": "b1eb52ef-4992-4b0b-ba8e-2ee6e417b4c0",
+      "description": "I give the residue of my self-acquired property to my wife Priya Sharma.",
+      "notes": "This bequest covers self-acquired property only. Coparcenary property devolves by survivorship and is outside the scope of this will."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "dbf6b43f-1497-4ff6-a05c-52c5ea9ca57d",
+      "personId": "84df66f6-d4d3-4186-9ad8-54f302820f8b",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-03-28T12:00:00Z",
+    "validatedBy": "INHERIT Examples",
+    "schemaVersion": "6.3.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "events": [
+      {
+        "id": "06e7e6d8-38b6-47e9-843e-59add6509dd3",
+        "eventType": "death_registered",
+        "occurredAt": "2026-02-20T11:00:00+05:30",
+        "trigger": "institutional_action",
+        "description": "Death of Rajesh Sharma registered with the Municipal Corporation of Greater Mumbai (MCGM). Death certificate issued under the Registration of Births and Deaths Act 1969.",
+        "affectedEntityIds": [
+          "91cf9bf6-2b17-4fc5-a3fb-33efe4f9329b"
+        ],
+        "affectedEntityTypes": [
+          "estate"
+        ],
+        "actor": {
+          "name": "Municipal Corporation of Greater Mumbai (MCGM)",
+          "type": "court",
+          "jurisdiction": {
+            "country": "IN",
+            "subdivision": "IN-MH"
+          }
+        }
+      },
+      {
+        "id": "5ce38f5b-d879-4228-a3fe-035e7a095e72",
+        "eventType": "probate_granted",
+        "occurredAt": "2026-03-25T15:30:00+05:30",
+        "trigger": "court_action",
+        "description": "Probate granted by the Bombay High Court under the Indian Succession Act 1925 (s.276), confirming validity of Rajesh Sharma's will and authorising Arjun Sharma as executor.",
+        "affectedEntityIds": [
+          "91cf9bf6-2b17-4fc5-a3fb-33efe4f9329b"
+        ],
+        "affectedEntityTypes": [
+          "estate"
+        ],
+        "actor": {
+          "name": "Bombay High Court — Probate Division",
+          "type": "court",
+          "jurisdiction": {
+            "country": "IN",
+            "subdivision": "IN-MH"
+          }
+        },
+        "metadata": {
+          "grantReference": "BHC/PROB/2026/04567",
+          "notes": "Probate is mandatory in Mumbai (one of the three Presidency Towns where the Indian Succession Act 1925 s.213 applies)."
+        }
+      },
+      {
+        "id": "713bda6b-a82f-4b3a-ad5a-351c09cf5c8f",
+        "eventType": "x-inherit-account-frozen",
+        "occurredAt": "2026-02-22T09:00:00+05:30",
+        "trigger": "institutional_action",
+        "description": "SBI savings account frozen pending production of probate and succession certificate.",
+        "affectedEntityIds": [
+          "51000007-0000-4000-a000-000000000002"
+        ],
+        "affectedEntityTypes": [
+          "asset"
+        ],
+        "actor": {
+          "name": "State Bank of India — Bandra West Branch",
+          "type": "bank",
+          "jurisdiction": {
+            "country": "IN",
+            "subdivision": "IN-MH"
+          }
+        }
+      }
+    ],
+    "completeness": {
+      "score": 0,
+      "maxScore": 100,
+      "checklist": [],
+      "jurisdiction": "IN-MH",
+      "estateStatus": "confirmed"
+    },
+    "taxPosition": {
+      "jurisdiction": "IN-MH",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 0,
+        "currency": "INR"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    },
+    "recommendedActions": []
+  }
+}

@@ -1,0 +1,24 @@
+title: "Extension partnership enquiry"
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Interested in maintaining an INHERIT extension for your jurisdiction?
+        See [Becoming a Partner](https://www.openinherit.org/docs/partners/becoming-a-partner) for full details.
+  - type: input
+    attributes:
+      label: Jurisdiction
+      description: Which jurisdiction or legal tradition would the extension cover?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Background
+      description: Tell us about your experience with this jurisdiction's succession and estate law.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Organisation (optional)
+      description: Your company or institution, if applicable.

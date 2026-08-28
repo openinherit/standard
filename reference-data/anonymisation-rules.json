@@ -1,0 +1,299 @@
+{
+  "version": "1.0.0",
+  "description": "Per-field anonymisation rules for INHERIT data products. Defines how each field should be treated when creating anonymised aggregates",
+  "minimumCohortSizes": {
+    "default": 5,
+    "GDPR": 5,
+    "PDPA_SG": 10,
+    "PDPA_TH": 10,
+    "PDP_IN": 10
+  },
+  "fieldRules": [
+    {
+      "path": "people[].id",
+      "action": "suppress",
+      "reason": "Directly identifying — unique identifier for each person"
+    },
+    {
+      "path": "people[].givenName",
+      "action": "suppress",
+      "reason": "Directly identifying — personal name"
+    },
+    {
+      "path": "people[].familyName",
+      "action": "suppress",
+      "reason": "Directly identifying — personal name"
+    },
+    {
+      "path": "people[].dateOfBirth",
+      "action": "generalise",
+      "reason": "Quasi-identifying — exact date enables re-identification when combined with other fields",
+      "generalisation": "Decade band derived from birth year",
+      "example": "1985-03-14 → 1980s"
+    },
+    {
+      "path": "people[].contact",
+      "action": "suppress",
+      "reason": "Directly identifying — contains address, phone number, and email"
+    },
+    {
+      "path": "people[].nationality",
+      "action": "generalise",
+      "reason": "Quasi-identifying — may enable re-identification in small cohorts",
+      "generalisation": "Retained only when cohort size exceeds minimum threshold for the applicable jurisdiction",
+      "example": "GB → GB (retained if cohort >= 5 under GDPR)"
+    },
+    {
+      "path": "people[].gender",
+      "action": "generalise",
+      "reason": "Quasi-identifying — non-binary or less common values may identify individuals in small cohorts",
+      "generalisation": "Collapsed to broad categories when cohort is below threshold",
+      "example": "non-binary → other (if cohort < minimum)"
+    },
+    {
+      "path": "estate.id",
+      "action": "suppress",
+      "reason": "Directly identifying — unique identifier for the estate"
+    },
+    {
+      "path": "estate.testatorPersonId",
+      "action": "suppress",
+      "reason": "Directly identifying — links to a specific person record"
+    },
+    {
+      "path": "estate.jurisdiction.country",
+      "action": "passthrough",
+      "reason": "Safe aggregation dimension — country-level geography does not identify individuals"
+    },
+    {
+      "path": "estate.jurisdiction.subdivision",
+      "action": "generalise",
+      "reason": "Quasi-identifying — small subdivisions may identify individuals",
+      "generalisation": "Generalised to country only",
+      "example": "GB-SCT → GB"
+    },
+    {
+      "path": "estate.status",
+      "action": "passthrough",
+      "reason": "Safe categorical value — estate lifecycle status does not identify individuals"
+    },
+    {
+      "path": "estate.willType",
+      "action": "passthrough",
+      "reason": "Safe categorical value — will type is a standard classification"
+    },
+    {
+      "path": "estate.religiousConsideration.tradition",
+      "action": "passthrough",
+      "reason": "Safe aggregation dimension — religious tradition is used for aggregate analysis only"
+    },
+    {
+      "path": "estate.religiousConsideration.specificRequirements",
+      "action": "suppress",
+      "reason": "May contain free-text personal details or unique instructions"
+    },
+    {
+      "path": "estate.totalEstimatedValue",
+      "action": "generalise",
+      "reason": "Quasi-identifying — exact values may enable re-identification of high-value estates",
+      "generalisation": "Value brackets: [0, 10000, 50000, 100000, 500000, 1000000, 5000000]",
+      "example": "347500 → 100000–500000"
+    },
+    {
+      "path": "assets[].id",
+      "action": "suppress",
+      "reason": "Directly identifying — unique identifier for each asset"
+    },
+    {
+      "path": "assets[].name",
+      "action": "suppress",
+      "reason": "Directly identifying — may contain property addresses, account numbers, or other personal details"
+    },
+    {
+      "path": "assets[].description",
+      "action": "suppress",
+      "reason": "May contain free-text personal details or identifiable information"
+    },
+    {
+      "path": "assets[].category",
+      "action": "passthrough",
+      "reason": "Safe aggregation dimension — broad asset category does not identify individuals"
+    },
+    {
+      "path": "assets[].subcategory",
+      "action": "passthrough",
+      "reason": "Safe aggregation dimension — asset subcategory is a standard classification"
+    },
+    {
+      "path": "assets[].estimatedValue",
+      "action": "generalise",
+      "reason": "Quasi-identifying — exact values may enable re-identification",
+      "generalisation": "Value brackets: [0, 10000, 50000, 100000, 500000, 1000000, 5000000]",
+      "example": "75000 → 50000–100000"
+    },
+    {
+      "path": "assets[].culturalDisposition.sacredStatus",
+      "action": "passthrough",
+      "reason": "Safe categorical value — sacred status classification for aggregate analysis"
+    },
+    {
+      "path": "assets[].culturalDisposition.exportRestrictions",
+      "action": "aggregate_only",
+      "reason": "Sensitive in combination — safe only as aggregate counts, not per-record"
+    },
+    {
+      "path": "assets[].communalAuthority.authorityType",
+      "action": "passthrough",
+      "reason": "Safe categorical value — communal authority type for aggregate analysis"
+    },
+    {
+      "path": "assets[].communalAuthority.communityName",
+      "action": "suppress",
+      "reason": "Quasi-identifying — specific community names may identify individuals in small groups"
+    },
+    {
+      "path": "assets[].location",
+      "action": "generalise",
+      "reason": "Quasi-identifying — exact location may identify property and therefore owner",
+      "generalisation": "Generalised to country only",
+      "example": "{ country: 'GB', subdivision: 'GB-SCT', city: 'Edinburgh' } → { country: 'GB' }"
+    },
+    {
+      "path": "bequests[].id",
+      "action": "suppress",
+      "reason": "Directly identifying — unique identifier for each bequest"
+    },
+    {
+      "path": "bequests[].beneficiaryPersonId",
+      "action": "suppress",
+      "reason": "Directly identifying — links to a specific person record"
+    },
+    {
+      "path": "bequests[].assetId",
+      "action": "suppress",
+      "reason": "Directly identifying — links to a specific asset record"
+    },
+    {
+      "path": "bequests[].bequestType",
+      "action": "passthrough",
+      "reason": "Safe categorical value — bequest type is a standard classification"
+    },
+    {
+      "path": "bequests[].constrainedBy",
+      "action": "passthrough",
+      "reason": "Safe categorical value — constraint type (e.g. forced heirship) for aggregate analysis"
+    },
+    {
+      "path": "bequests[].conditions",
+      "action": "suppress",
+      "reason": "May contain free-text personal details or uniquely identifying conditions"
+    },
+    {
+      "path": "executors[].id",
+      "action": "suppress",
+      "reason": "Directly identifying — unique identifier for each executor"
+    },
+    {
+      "path": "executors[].personId",
+      "action": "suppress",
+      "reason": "Directly identifying — links to a specific person record"
+    },
+    {
+      "path": "executors[].isProfessional",
+      "action": "passthrough",
+      "reason": "Safe boolean value — professional vs family executor for aggregate analysis"
+    },
+    {
+      "path": "executors[].firmName",
+      "action": "suppress",
+      "reason": "Quasi-identifying — specific firm name combined with jurisdiction may identify the estate"
+    },
+    {
+      "path": "properties[].id",
+      "action": "suppress",
+      "reason": "Directly identifying — unique identifier for each property"
+    },
+    {
+      "path": "properties[].address",
+      "action": "suppress",
+      "reason": "Directly identifying — full property address"
+    },
+    {
+      "path": "properties[].successionRegime.governingLaw.legalTradition",
+      "action": "passthrough",
+      "reason": "Safe categorical value — legal tradition for aggregate analysis"
+    },
+    {
+      "path": "trusts[].id",
+      "action": "suppress",
+      "reason": "Directly identifying — unique identifier for each trust"
+    },
+    {
+      "path": "trusts[].name",
+      "action": "suppress",
+      "reason": "Directly identifying — trust name may reveal the settlor or beneficiaries"
+    },
+    {
+      "path": "trusts[].trustType",
+      "action": "passthrough",
+      "reason": "Safe categorical value — trust type for aggregate analysis"
+    },
+    {
+      "path": "liabilities[].id",
+      "action": "suppress",
+      "reason": "Directly identifying — unique identifier for each liability"
+    },
+    {
+      "path": "liabilities[].creditorName",
+      "action": "suppress",
+      "reason": "Quasi-identifying — specific creditor combined with amount may identify the estate"
+    },
+    {
+      "path": "liabilities[].amount",
+      "action": "generalise",
+      "reason": "Quasi-identifying — exact liability values may enable re-identification",
+      "generalisation": "Value brackets: [0, 10000, 50000, 100000, 500000, 1000000, 5000000]",
+      "example": "23500 → 10000–50000"
+    },
+    {
+      "path": "documents[].id",
+      "action": "suppress",
+      "reason": "Directly identifying — unique identifier for each document"
+    },
+    {
+      "path": "documents[].type",
+      "action": "passthrough",
+      "reason": "Safe categorical value — document type for aggregate analysis"
+    },
+    {
+      "path": "documents[].content",
+      "action": "suppress",
+      "reason": "Directly identifying — document content contains personal information"
+    },
+    {
+      "path": "attestations[].id",
+      "action": "suppress",
+      "reason": "Directly identifying — unique identifier for each attestation"
+    },
+    {
+      "path": "attestations[].witnessPersonId",
+      "action": "suppress",
+      "reason": "Directly identifying — links to a specific person record"
+    },
+    {
+      "path": "wishes[].id",
+      "action": "suppress",
+      "reason": "Directly identifying — unique identifier for each wish"
+    },
+    {
+      "path": "wishes[].description",
+      "action": "suppress",
+      "reason": "May contain free-text personal details or uniquely identifying wishes"
+    },
+    {
+      "path": "wishes[].wishType",
+      "action": "passthrough",
+      "reason": "Safe categorical value — wish type for aggregate analysis"
+    }
+  ]
+}

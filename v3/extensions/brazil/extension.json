@@ -1,0 +1,45 @@
+{
+  "name": "Brazil",
+  "id": "https://openinherit.org/v3/extensions/brazil/brazil.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "BR"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [],
+  "legalSystems": [
+    "civil_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-04-05",
+  "dataProvenance": "Brazilian Civil Code (Lei 10.406/2002), Código de Processo Civil (Lei 13.105/2015), Lei dos Registros Públicos (Lei 6.015/1973)",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário (judicial/extrajudicial), cartório notarial system, união estável (stable union).",
+  "conformanceRules": [
+    {
+      "id": "br-001",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "Inventário type must be specified for Brazilian estates",
+      "check": "exists",
+      "path": "x-inherit-brazil.inventarioType",
+      "severity": "warning"
+    }
+  ],
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-05",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "partial",
+  "keyFeatures": "Legítima (forced heirship 50%), meação (spousal share), ITCMD state tax, inventário/arrolamento",
+  "legalTradition": "Civil law",
+  "seeking": "",
+  "tier": "core"
+}

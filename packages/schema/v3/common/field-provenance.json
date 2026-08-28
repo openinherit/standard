@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/field-provenance.json",
+  "title": "FieldProvenance",
+  "description": "Records how a specific field's value was obtained — manual entry, AI extraction, import, OCR, or computation",
+  "type": "object",
+  "required": [ "field", "method", "extractedAt" ],
+  "properties": {
+    "field": {
+      "description": "The field name this provenance record applies to",
+      "examples": [ "estimatedValue", "name", "category" ],
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "method": {
+      "description": "How the field value was obtained",
+      "anyOf": [
+        {
+          "enum": [
+            "manual_entry",
+            "ai_extracted",
+            "imported",
+            "computed",
+            "ocr_scanned"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+"
+        }
+      ]
+    },
+    "confidence": {
+      "description": "Confidence in the field value (0-100)",
+      "type": "integer",
+      "maximum": 100,
+      "minimum": 0
+    },
+    "verifiedAt": {
+      "description": "When this field was last verified",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "verifiedBy": {
+      "description": "Who verified this field",
+      "examples": [ "James Davies", "INHERIT Scanner v2" ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "sourceDocumentId": {
+      "description": "Reference to the document.json entity this value was extracted from",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "sourcePageNumber": {
+      "description": "Page number in the source document where this value was found",
+      "type": "integer",
+      "minimum": 1
+    },
+    "sourceRegion": {
+      "description": "Location within the page where this value was found",
+      "examples": [
+        "top-right",
+        "paragraph 3",
+        "signature block",
+        "attestation clause"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "originalText": {
+      "description": "The raw text as extracted before any normalisation or structuring. Preserves exactly what the source document said",
+      "examples": [
+        "born on the 15th day of March nineteen forty eight",
+        "I appoint my wife Margaret Anne Frith"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "originalScript": {
+      "description": "Writing system of the source document. Critical for handwritten wills in non-Latin scripts",
+      "$comment": "latin: English, French, German, etc. kanji: Japanese kanji characters. hiragana/katakana: Japanese syllabaries. arabic: Arabic script (also used for Urdu, Farsi). hebrew: Hebrew script. devanagari: Hindi, Marathi, Sanskrit. tamil: Tamil script. chinese_simplified/traditional: Chinese characters. hangul: Korean. cyrillic: Russian, Serbian, etc. thai: Thai script. mixed: multiple scripts in one document. other: any other writing system.",
+      "anyOf": [
+        {
+          "enum": [
+            "latin",
+            "kanji",
+            "hiragana",
+            "katakana",
+            "arabic",
+            "hebrew",
+            "devanagari",
+            "tamil",
+            "chinese_simplified",
+            "chinese_traditional",
+            "hangul",
+            "cyrillic",
+            "thai",
+            "mixed",
+            "other"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+"
+        }
+      ]
+    },
+    "ocrEngine": {
+      "description": "OCR engine or extraction tool used to obtain this value",
+      "examples": [
+        "AWS Textract",
+        "Google Cloud Vision",
+        "Tesseract 5.3",
+        "WillScan v1.0"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "extractedAt": {
+      "description": "When this value was extracted from the source document",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "dataSource": {
+      "description": "The third-party source that provided this field value. Enables attribution credits and the data source kill switch",
+      "type": "object",
+      "properties": {
+        "source": {
+          "description": "Short identifier for the data source",
+          "type": "string",
+          "maxLength": 100
+        },
+        "sourceUrl": {
+          "description": "URL to the source's website or the specific page this data came from",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9+.-]*://",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "retrievedAt": {
+          "description": "When this data was retrieved from the source",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

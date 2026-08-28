@@ -1,0 +1,908 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/property.json",
+  "title": "Property",
+  "description": "Real estate. Supports individual ownership, communal/family property (Nigeria), HUF coparcenary (India), government-vested land (Land Use Act), US community property, and informal/unregistered holdings",
+  "type": "object",
+  "required": [ "id", "name" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this property within the INHERIT document",
+      "examples": [ "d4e5f6a7-b8c9-0123-def0-123456789abc" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "name": {
+      "description": "Display name for this property — a familiar label or street address. Should be recognisable to all parties involved in the estate",
+      "examples": [
+        "Family Home",
+        "42 Acacia Avenue",
+        "Lagos Investment Property",
+        "Hokkaido Farmland",
+        "Mumbai Flat",
+        "Dubai Marina Apartment"
+      ],
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "propertyType": {
+      "description": "Territory-neutral property type. Use reference-data/local-term-mappings.json to display jurisdiction-appropriate labels in UIs",
+      "$comment": "detached: standalone dwelling (UK detached house, US single-family home, JP 一戸建て). attached: dwelling sharing walls with neighbours (UK terraced/semi-detached, US townhouse/duplex). apartment: unit within a larger building (UK flat, US condo/co-op, SG HDB flat, JP マンション). land: undeveloped plot or agricultural land. commercial: office, shop, warehouse, industrial. mixed_use: combination of residential and commercial. rural: farmhouse, smallholding, rural dwelling. mobile: mobile home, park home, transportable dwelling. watercraft: houseboat, floating dwelling. other: any type not listed. For jurisdiction-specific subtypes (maisonette, bungalow, cottage, barn conversion), use the localPropertyType field in the relevant extension.",
+      "examples": [ "detached", "apartment", "land", "commercial" ],
+      "enum": [
+        "detached",
+        "attached",
+        "apartment",
+        "land",
+        "commercial",
+        "mixed_use",
+        "rural",
+        "mobile",
+        "watercraft",
+        "other"
+      ]
+    },
+    "address": {
+      "description": "Physical address of the property",
+      "$ref": "common/address.json"
+    },
+    "estimatedValue": {
+      "description": "Owner's estimate of the property's current market value, in minor currency units",
+      "$ref": "common/money.json"
+    },
+    "professionalValuation": {
+      "description": "Professional surveyor or valuer's assessment of the property value, in minor currency units",
+      "$ref": "common/money.json"
+    },
+    "valuationDate": {
+      "description": "Date the most recent valuation (estimated or professional) was performed",
+      "examples": [ "2024-09-15", "2025-01-20" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "valuationConfidence": {
+      "description": "Level of confidence in the stated valuation",
+      "$comment": "estimated: owner's own estimate, no professional input. professional: assessed by a qualified surveyor or valuer. official: valuation agreed with tax authority for probate, inheritance tax, or equivalent official purpose — territory-neutral term replacing 'probate'. unknown: no information on how the value was derived.",
+      "examples": [ "estimated", "professional" ],
+      "enum": [ "estimated", "professional", "official", "unknown" ]
+    },
+    "isPrimaryResidence": {
+      "description": "Whether this is the testator's primary residence. Relevant for residence nil rate band (UK), homestead exemption (US), and similar tax reliefs",
+      "$comment": "Annotation only — JSON Schema 'default' does not insert values. Consuming apps must implement defaulting.",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "ownershipType": {
+      "description": "How ownership of this property is legally structured",
+      "$comment": "sole: one person owns the entire property. joint_tenants: co-owners with right of survivorship — on death, the deceased's share passes automatically to the survivor(s). tenants_in_common: co-owners without survivorship — the deceased's share passes under the will or intestacy rules. trust: held by trustees for beneficiaries. tenancy_by_entirety: US spousal joint tenancy (PA, FL, MA, IL, OH, etc.) — survives creditors of the deceased spouse.",
+      "examples": [ "sole", "joint_tenants", "tenants_in_common" ],
+      "enum": [
+        "sole",
+        "joint_tenants",
+        "tenants_in_common",
+        "trust",
+        "tenancy_by_entirety"
+      ]
+    },
+    "ownershipPercentage": {
+      "description": "The testator's ownership share as a percentage. For joint tenants, typically 50% for two co-owners. For tenants in common, may be any split",
+      "$comment": "Capped at 2 decimal places. For legal disputes requiring higher precision, use notes.",
+      "type": "number",
+      "maximum": 100,
+      "minimum": 0,
+      "multipleOf": 0.01
+    },
+    "ownershipModel": {
+      "description": "The cultural or legal model of ownership. Goes beyond the simple legal title to capture communal and customary ownership forms",
+      "$comment": "individual: single person owns outright. joint: two or more co-owners. communal_family: Nigerian family land or clan property — not individually owned. huf_coparcenary: Hindu Undivided Family joint property (India) — devolves by survivorship among coparceners. tribal: indigenous/tribal communal land. government_vested: Nigerian Certificate of Occupancy — land vested in the state, occupier holds a right of occupancy. trust_held: property held by trustees.",
+      "examples": [ "individual", "joint", "communal_family" ],
+      "enum": [
+        "individual",
+        "joint",
+        "communal_family",
+        "huf_coparcenary",
+        "tribal",
+        "government_vested",
+        "trust_held"
+      ]
+    },
+    "acquisitionType": {
+      "description": "How the property was acquired. Determines which succession law applies in India and other jurisdictions",
+      "$comment": "self_acquired: purchased or earned by the current owner — devolves by will or intestacy. ancestral_joint: coparcenary property that has not been partitioned — devolves by survivorship. ancestral_severed: formerly joint property that has been partitioned — devolves by will or intestacy. inherited: received through inheritance. gifted: received as a gift inter vivos. stridhan: Hindu woman's absolute property (India). communal: communal or clan property. waqf_endowed: Islamic endowment — cannot be sold or inherited.",
+      "examples": [ "self_acquired", "inherited" ],
+      "enum": [
+        "self_acquired",
+        "ancestral_joint",
+        "ancestral_severed",
+        "inherited",
+        "gifted",
+        "stridhan",
+        "communal",
+        "waqf_endowed"
+      ]
+    },
+    "tenureType": {
+      "description": "Territory-neutral tenure type. Use reference-data/local-term-mappings.json to display jurisdiction-appropriate labels in UIs",
+      "$comment": "ownership: outright ownership in perpetuity (UK freehold, US fee simple, AU Torrens title, JP 所有権). lease: time-limited right to occupy (UK leasehold, SG 99-year lease, HDB lease). communal: communal or clan land held by a group. customary: held under customary or traditional law (Nigerian customary right of occupancy, traditional authority grants). informal: occupation without formal title — unregistered, disputed, or undocumented. government_allocated: land allocated by government (Nigerian Certificate of Occupancy, government-vested land). For jurisdiction-specific subtypes, use the localTenureType field in the relevant extension.",
+      "examples": [ "ownership", "lease", "communal" ],
+      "enum": [
+        "ownership",
+        "lease",
+        "communal",
+        "customary",
+        "informal",
+        "government_allocated"
+      ]
+    },
+    "registrationStatus": {
+      "description": "Whether this property is formally registered with a land authority",
+      "$comment": "formally_registered: registered with the national land registry or equivalent. informally_held: occupied but not formally registered. community_acknowledged: ownership recognised by the community but not the state. disputed: ownership is contested. undocumented: no documentation exists.",
+      "examples": [ "formally_registered", "informally_held" ],
+      "enum": [
+        "formally_registered",
+        "informally_held",
+        "community_acknowledged",
+        "disputed",
+        "undocumented"
+      ]
+    },
+    "ownershipEvidence": {
+      "description": "The type of evidence available to prove ownership. In many jurisdictions, informal evidence is the only kind available",
+      "$comment": "title_deed: formal land registry title. certificate_of_occupancy: Nigerian Certificate of Occupancy. family_recognition: the family acknowledges ownership but no formal document exists. community_testimony: community members can attest to ownership. receipts_only: purchase receipts exist but no formal title. none: no evidence of ownership.",
+      "examples": [ "title_deed", "family_recognition" ],
+      "enum": [
+        "title_deed",
+        "certificate_of_occupancy",
+        "family_recognition",
+        "community_testimony",
+        "receipts_only",
+        "none"
+      ]
+    },
+    "culturalDisposition": {
+      "description": "Cultural, religious, and regulatory constraints on disposal of this property",
+      "$ref": "common/cultural-disposition.json"
+    },
+    "communalAuthority": {
+      "description": "The communal or family authority whose approval is required to dispose of this property",
+      "type": "object",
+      "properties": {
+        "authorityType": {
+          "description": "Category of communal authority",
+          "enum": [
+            "family_council",
+            "clan_association",
+            "religious_body",
+            "tribal_council",
+            "government"
+          ]
+        },
+        "approvalRequired": {
+          "description": "Whether approval from this authority is legally required before disposal",
+          "type": "boolean"
+        },
+        "authorityName": {
+          "description": "Name of the specific authority or person",
+          "examples": [
+            "Karta of Sharma HUF",
+            "Okonkwo Family Council",
+            "MUIS"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "jurisdiction": {
+          "description": "Jurisdiction where this communal authority has legal standing",
+          "$ref": "common/jurisdiction.json"
+        }
+      },
+      "additionalProperties": false
+    },
+    "successionRegime": {
+      "description": "The succession regime governing this specific property. Overrides estate.defaultSuccessionRegime when present",
+      "type": "object",
+      "properties": {
+        "governingLaw": {
+          "description": "The law governing succession for this property",
+          "type": "object",
+          "properties": {
+            "jurisdiction": {
+              "description": "Jurisdiction whose succession law applies",
+              "$ref": "common/jurisdiction.json"
+            },
+            "legalTradition": {
+              "description": "Which legal tradition applies",
+              "enum": [
+                "common_law",
+                "civil_law",
+                "mixed",
+                "customary_law",
+                "islamic_law",
+                "hindu_law",
+                "jewish_law",
+                "canon_law"
+              ]
+            },
+            "statute": {
+              "description": "Name of the governing statute",
+              "examples": [
+                "Wills Act 1837",
+                "PRC Civil Code",
+                "Hindu Succession Act 1956"
+              ],
+              "type": "string",
+              "maxLength": 255
+            },
+            "section": {
+              "description": "Specific section of the statute",
+              "examples": [ "s.9", "Book VI Succession", "s.6 (coparcenary)" ],
+              "type": "string",
+              "maxLength": 255
+            }
+          },
+          "additionalProperties": false
+        },
+        "determinedBy": {
+          "description": "How the governing law was determined",
+          "enum": [
+            "domicile",
+            "situs",
+            "nationality",
+            "personal_status",
+            "choice_of_law",
+            "treaty"
+          ]
+        },
+        "binding": {
+          "description": "Whether this succession regime is legally binding",
+          "type": "boolean"
+        },
+        "extensions": {
+          "description": "INHERIT extension IDs that apply to this property's succession",
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "notes": {
+          "description": "Additional context about the succession regime",
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "custodianPersonId": {
+      "description": "Reference to the Person.id of the current custodian of communal or family property. The custodian manages but does not own the property",
+      "$comment": "For communal/family property: the current custodian (not owner). On death, custodianship passes by custom, not by will.",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "custodianPersonIdDisplay": {
+      "description": "Human-readable display name for the referenced custodian person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "governmentConsentRequired": {
+      "description": "Whether government or regulatory consent is required to transfer this property. Common in Nigeria (governor's consent) and for agricultural land in parts of India",
+      "$comment": "Nigerian Land Use Act: governor's consent required for all transfers of rights. Some Indian states require similar for agricultural land.",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "mobilityType": {
+      "description": "Whether this property is classified as immoveable, moveable, or mixed. Determines which conflict-of-laws rules apply",
+      "$comment": "immoveable: land and buildings. moveable: personal property (rarely applies to Property entities). mixed: property with both immoveable and moveable components. Relevant for Shia inheritance (immoveable property rules differ), French succession (lex rei sitae), and halachic bekhor rules.",
+      "examples": [ "immoveable" ],
+      "enum": [ "immoveable", "moveable", "mixed" ]
+    },
+    "mortgageOutstanding": {
+      "description": "Outstanding mortgage balance in minor currency units. If the property is mortgage-free, omit this field",
+      "$ref": "common/money.json"
+    },
+    "characterClassification": {
+      "description": "Marital property character classification for US community property states. Determines whether the testator may dispose of the entire property or only their half",
+      "$comment": "community: jointly owned marital property (50/50 in US community property states — CA, TX, AZ, WA, NV, NM, LA, ID, WI). separate: individually owned, not subject to marital property claims. quasi_community: CA-specific — property acquired in a non-community state but treated as community on divorce/death. mixed: partially community and partially separate. not_applicable: jurisdiction does not distinguish community and separate property.",
+      "examples": [ "separate", "community", "not_applicable" ],
+      "enum": [
+        "community",
+        "separate",
+        "quasi_community",
+        "mixed",
+        "not_applicable"
+      ]
+    },
+    "homesteadStatus": {
+      "description": "US homestead exemption status. Protects the primary residence from creditors and may restrict the testator's ability to devise the property",
+      "$comment": "Homestead exemption protects primary residence from creditors and may restrict devise. Florida: unlimited value. Texas: 200 acres rural / 10 acres urban.",
+      "type": "object",
+      "properties": {
+        "isHomestead": {
+          "description": "Whether this property qualifies as a homestead",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "exemptionAmount": {
+          "description": "Dollar value of the homestead exemption, if capped",
+          "$ref": "common/money.json"
+        },
+        "exemptionUnlimited": {
+          "description": "Whether the homestead exemption has no dollar cap. True in Florida, Texas (rural), and several other states",
+          "$comment": "Florida, Texas (rural), Iowa, Kansas, Oklahoma, South Dakota.",
+          "examples": [ true, false ],
+          "type": "boolean"
+        },
+        "deviseRestriction": {
+          "description": "Whether this homestead is subject to restrictions on devise — e.g. Florida prohibits devising homestead away from a surviving spouse or minor children",
+          "$comment": "Florida: cannot devise homestead away from spouse/minor children.",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "notes": {
+          "description": "Additional notes on homestead status",
+          "examples": [
+            "Florida unlimited homestead — devise restricted by Art. X s.4 Florida Constitution"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "passesOutsideEstate": {
+      "description": "Whether this property passes outside the probate estate — typically via joint tenancy with right of survivorship, a transfer-on-death deed, or a trust",
+      "$comment": "True if this property passes outside probate (JTWROS, TOD deed, trust-held). NOT distributed under the will.",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "statutoryLifeEstate": {
+      "description": "A life estate imposed by statute rather than by the will. The surviving spouse or other protected person has a right to occupy for life",
+      "$comment": "Statutory life estate imposed by law (Alberta Dower Act, Florida homestead devise restriction). Not the same as a testamentary life interest.",
+      "type": "object",
+      "properties": {
+        "beneficiaryPersonId": {
+          "description": "Reference to the Person.id of the life estate beneficiary",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "beneficiaryPersonIdDisplay": {
+          "description": "Human-readable display name for the referenced beneficiary person",
+          "type": "string",
+          "maxLength": 255
+        },
+        "basis": {
+          "description": "The statutory basis for this life estate",
+          "$comment": "Legal basis — e.g., 'Alberta Dower Act', 'Florida Constitution Art. X s.4'",
+          "examples": [ "Alberta Dower Act", "Florida Constitution Art. X s.4" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "conditions": {
+          "description": "Any conditions on the life estate",
+          "examples": [
+            "Terminates on remarriage",
+            "Must maintain the property in habitable condition"
+          ],
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "notes": {
+      "description": "Free-text notes about this property. Use for unusual tenure arrangements, ongoing disputes, or planning considerations",
+      "examples": [
+        "Grade II listed building — consent required for any alterations",
+        "Boundary dispute with neighbour ongoing since 2022"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "externalLinks": {
+      "description": "Links to this property in external databases, portals, and registries — Land Registry, Rightmove, Zoopla, Zillow, council tax records, EPC certificates, etc",
+      "$comment": "Same structure as asset.externalLinks. Common systems for properties: landregistry (UK HM Land Registry title), rightmove (UK property portal), zoopla (UK property portal), zillow (US property portal), epc (Energy Performance Certificate), counciltax (local authority council tax band).",
+      "examples": [
+        [
+          {
+            "system": "landregistry",
+            "id": "DN123456",
+            "url": "https://search.landregistry.data.gov.uk/data/ppi/transaction/DN123456"
+          },
+          {
+            "system": "rightmove",
+            "id": "98765432",
+            "url": "https://www.rightmove.co.uk/properties/98765432"
+          }
+        ]
+      ],
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [ "system", "id" ],
+        "properties": {
+          "system": {
+            "description": "The external system or platform name",
+            "type": "string",
+            "pattern": "^[a-z][a-zA-Z0-9]*$",
+            "maxLength": 100
+          },
+          "id": {
+            "description": "The platform-specific identifier for this property",
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          },
+          "url": {
+            "description": "Direct URL to the property's page on the external platform",
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9+.-]*://",
+            "format": "uri",
+            "maxLength": 2048
+          },
+          "label": {
+            "description": "Human-readable label for display",
+            "type": "string",
+            "maxLength": 255
+          },
+          "retrievedAt": {
+            "description": "Timestamp when this link was last verified",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "images": {
+      "description": "Photographs and videos of this property — exterior, interior, key rooms, any damage or features relevant to valuation",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "common/media.json"
+      }
+    },
+    "visibility": {
+      "description": "Controls who can see this property record",
+      "$ref": "common/visibility.json"
+    },
+    "fieldProvenance": {
+      "description": "Per-field provenance records — how each field's value was obtained",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "common/field-provenance.json"
+      }
+    },
+    "comments": {
+      "description": "Discussion comments on this entity",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "id", "content", "createdAt" ],
+        "properties": {
+          "id": {
+            "description": "Unique identifier for this comment",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "authorPersonId": {
+            "description": "Person.id of the comment author",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "authorPersonIdDisplay": {
+            "description": "Human-readable display name for the referenced author person",
+            "type": "string",
+            "maxLength": 255
+          },
+          "content": {
+            "description": "Comment text",
+            "type": "string",
+            "maxLength": 5000,
+            "minLength": 1
+          },
+          "createdAt": {
+            "description": "When the comment was created",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "format": "date-time"
+          },
+          "visibility": {
+            "$ref": "common/visibility.json"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "rentalIncome": {
+      "description": "Rental income details if the property is let — important for estate income tax and beneficiary entitlements",
+      "type": "object",
+      "properties": {
+        "monthlyAmount": {
+          "description": "Monthly rental income",
+          "$ref": "common/money.json"
+        },
+        "tenantName": {
+          "description": "Name of the current tenant",
+          "examples": [ "Mr & Mrs Patel" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "leaseEndDate": {
+          "description": "Date the current lease expires",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "managingAgentOrganisationId": {
+          "description": "Organisation.id of the managing agent",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "managingAgentOrganisationIdDisplay": {
+          "description": "Human-readable display name for the referenced managing agent organisation",
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "epc": {
+      "description": "Energy Performance Certificate data. UK properties require an EPC for sale or letting. Rating A (most efficient) to G (least efficient). Legally significant — EPC below E cannot be let without exemption",
+      "type": "object",
+      "required": [ "retrievedAt" ],
+      "properties": {
+        "retrievedAt": {
+          "description": "When this EPC data was retrieved from the register",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "rating": {
+          "description": "Overall EPC rating band",
+          "enum": [ "A", "B", "C", "D", "E", "F", "G" ]
+        },
+        "energyEfficiencyScore": {
+          "description": "Numeric energy efficiency score (1–100, higher is better)",
+          "type": "integer",
+          "maximum": 100,
+          "minimum": 1
+        },
+        "environmentalImpactScore": {
+          "description": "Numeric environmental impact score (1–100, higher is better)",
+          "type": "integer",
+          "maximum": 100,
+          "minimum": 1
+        },
+        "expiryDate": {
+          "description": "When the EPC expires (valid for 10 years from issue)",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "certificateNumber": {
+          "description": "EPC certificate reference number",
+          "type": "string",
+          "maxLength": 100
+        },
+        "certificateUrl": {
+          "description": "URL to the certificate on the EPC register",
+          "type": "string",
+          "pattern": "^https?://",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "floorArea": {
+          "description": "Total floor area in square metres",
+          "type": "number",
+          "minimum": 0
+        },
+        "heatingType": {
+          "description": "Primary heating system description",
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "landRegistry": {
+      "description": "HM Land Registry data — title information, last sale price, and registered charges. Confirms ownership and surfaces encumbrances relevant to estate administration",
+      "type": "object",
+      "required": [ "retrievedAt" ],
+      "properties": {
+        "retrievedAt": {
+          "description": "When this data was retrieved from Land Registry",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "titleNumber": {
+          "description": "Land Registry title number",
+          "examples": [ "DN123456", "SGL123456" ],
+          "type": "string",
+          "maxLength": 50
+        },
+        "titleClass": {
+          "description": "Class of title registered at Land Registry",
+          "$comment": "absolute: highest class, guaranteed by the state. qualified: subject to a specified qualification. possessory: based on possession, not documentary evidence. good_leasehold: leasehold equivalent of absolute but without guarantee of the freehold title",
+          "anyOf": [
+            {
+              "enum": [
+                "absolute",
+                "qualified",
+                "possessory",
+                "good_leasehold"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "lastSalePrice": {
+          "description": "Last recorded sale price in minor units (pennies)",
+          "type": "integer",
+          "minimum": 0
+        },
+        "lastSaleDate": {
+          "description": "Date of last recorded sale",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "tenure": {
+          "description": "Tenure as recorded by Land Registry",
+          "anyOf": [
+            {
+              "enum": [ "freehold", "leasehold" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "registeredOwners": {
+          "description": "Owner names as they appear on the register",
+          "type": "array",
+          "maxItems": 10,
+          "items": {
+            "type": "string",
+            "maxLength": 255
+          }
+        },
+        "chargesCount": {
+          "description": "Number of registered charges (mortgages, restrictions, notices)",
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "floodRisk": {
+      "description": "Flood risk data from the Environment Agency (England) or equivalent national agency. Affects insurability, value, and estate planning decisions",
+      "type": "object",
+      "required": [ "retrievedAt" ],
+      "properties": {
+        "retrievedAt": {
+          "description": "When this flood risk data was retrieved",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "riverAndSeaRisk": {
+          "description": "Risk of flooding from rivers and the sea",
+          "anyOf": [
+            {
+              "enum": [ "high", "medium", "low", "very_low" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "surfaceWaterRisk": {
+          "description": "Risk of flooding from surface water",
+          "anyOf": [
+            {
+              "enum": [ "high", "medium", "low", "very_low" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "floodZone": {
+          "description": "Environment Agency flood zone designation",
+          "$comment": "1: low probability (less than 1 in 1000 annual chance). 2: medium probability (1 in 100 to 1 in 1000). 3a: high probability (1 in 100 or greater). 3b: functional floodplain (1 in 20 or greater)",
+          "anyOf": [
+            {
+              "enum": [ "1", "2", "3a", "3b" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "nearestWatercourse": {
+          "description": "Name of the nearest river, stream, or watercourse",
+          "type": "string",
+          "maxLength": 255
+        },
+        "historicalFlooding": {
+          "description": "Whether the area has been affected by flooding in the past",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "leasehold": {
+      "description": "Leasehold-specific data — lease term, ground rent, service charge, freeholder. Relevant when tenureType is 'lease'. No conditional enforcement — allowed on any property for flexibility",
+      "type": "object",
+      "required": [ "retrievedAt" ],
+      "properties": {
+        "retrievedAt": {
+          "description": "When this leasehold data was retrieved or last verified",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "leaseStartDate": {
+          "description": "Date the lease commenced",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "leaseTerm": {
+          "description": "Original lease term in years",
+          "type": "integer",
+          "maximum": 999,
+          "minimum": 1
+        },
+        "yearsRemaining": {
+          "description": "Approximate years remaining at retrievedAt. Below 80 years triggers mortgage difficulties; below 70 significantly impacts value",
+          "type": "integer",
+          "maximum": 999,
+          "minimum": 0
+        },
+        "groundRent": {
+          "description": "Annual ground rent in minor units (pennies). Zero for peppercorn rents",
+          "type": "integer",
+          "minimum": 0
+        },
+        "groundRentReviewDate": {
+          "description": "Next ground rent review date",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "serviceCharge": {
+          "description": "Annual service charge in minor units (pennies)",
+          "type": "integer",
+          "minimum": 0
+        },
+        "freeholderName": {
+          "description": "Name of the freeholder or landlord",
+          "type": "string",
+          "maxLength": 255
+        },
+        "managementCompany": {
+          "description": "Name of the managing agent or management company",
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    },
+    "applicableLaw": {
+      "description": "The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile",
+      "$ref": "common/jurisdiction.json"
+    },
+    "taxTreatment": {
+      "description": "Per-property tax treatment — how this property is classified for tax purposes",
+      "type": "object",
+      "properties": {
+        "jurisdiction": {
+          "$ref": "common/jurisdiction.json"
+        },
+        "assetType": {
+          "enum": [ "immoveable", "moveable", "mixed", "exempt" ]
+        },
+        "exemptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "reliefClaimed": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "taxReliefEligibility": {
+      "description": "Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)",
+      "type": "object",
+      "properties": {
+        "reliefType": {
+          "description": "The type of tax relief claimed",
+          "enum": [
+            "agricultural_property",
+            "business_property",
+            "woodland",
+            "heritage",
+            "charitable"
+          ]
+        },
+        "eligible": {
+          "type": "boolean"
+        },
+        "percentage": {
+          "description": "Relief percentage (e.g. 100 for full APR, 50 for partial BPR)",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "conditions": {
+          "description": "Conditions for maintaining eligibility",
+          "examples": [ "Beneficiary must actively farm for minimum 2 years" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "jurisdiction": {
+          "$ref": "common/jurisdiction.json"
+        },
+        "statute": {
+          "examples": [ "IHTA 1984 s.115-124C" ],
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

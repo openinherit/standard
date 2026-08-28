@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/liability.json",
+  "title": "Liability",
+  "description": "A debt or financial obligation. Includes mortgages, loans, credit cards, and cultural obligations (mahr, ketubah debt, lobola) that are priority debts in certain jurisdictions",
+  "type": "object",
+  "required": [ "id", "liabilityType", "amount" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this liability within the INHERIT document",
+      "examples": [ "f6a7b8c9-d0e1-2345-f012-3456789abcde" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "liabilityType": {
+      "description": "The category of liability. Cultural and religious obligations are included because they are priority debts in their respective legal systems",
+      "$comment": "mortgage: secured loan against property. personal_loan: unsecured personal borrowing. credit_card: credit card balance. overdraft: bank overdraft. student_loan: education loan (may be forgiven on death in some jurisdictions). car_finance: vehicle finance agreement. hire_purchase: hire purchase agreement. mahr: Islamic deferred bridal gift — a legally recognised financial obligation that is a priority debt under Shariah law, enforceable in Shariah courts and in secular courts that recognise Islamic marriage contracts (e.g. UAE, Malaysia, Pakistan, and increasingly in UK/US family courts). ketubah_debt: Jewish marriage contract obligation — a legally recognised financial obligation under halachic law, enforceable in batei din and in secular courts where the ketubah is recognised as a binding contract (e.g. Israel; treated as a prenuptial in US/UK courts). lobola: African customary bride price — a legally recognised financial obligation under customary law, with statutory recognition under the Recognition of Customary Marriages Act 1998 (South Africa), and customary law statutes in Nigeria, Kenya, Zimbabwe, and other jurisdictions. May be partially refundable on certain events. tax_liability: income tax, capital gains tax, or other tax owed. funeral_costs: funeral and burial expenses — typically first priority debt. care_fees: care home or nursing fees owed. mezonot: Jewish widow's maintenance obligation — a legally recognised financial obligation under halachic law, paid from the estate before distribution, enforceable in Israeli rabbinical courts and in batei din worldwide. other: any liability not covered above.",
+      "examples": [ "mortgage", "credit_card", "mahr", "funeral_costs" ],
+      "enum": [
+        "mortgage",
+        "personal_loan",
+        "credit_card",
+        "overdraft",
+        "student_loan",
+        "car_finance",
+        "hire_purchase",
+        "mahr",
+        "ketubah_debt",
+        "lobola",
+        "tax_liability",
+        "funeral_costs",
+        "care_fees",
+        "mezonot",
+        "other"
+      ]
+    },
+    "creditor": {
+      "description": "Name of the creditor, institution, or person to whom the debt is owed",
+      "examples": [
+        "Barclays Bank",
+        "HMRC",
+        "Manchester City Council",
+        "Fatimah bint Hassan",
+        "Sumitomo Mitsui Banking Corporation",
+        "Priya Sharma",
+        "Chioma Okonkwo"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "amount": {
+      "description": "Outstanding balance of this liability in minor currency units",
+      "$ref": "common/money.json"
+    },
+    "securedAgainst": {
+      "description": "Reference to a Property.id or Asset.id that this liability is secured against. Unsecured debts should omit this field",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "monthlyPayment": {
+      "description": "Regular monthly payment amount in minor currency units, if applicable",
+      "$ref": "common/money.json"
+    },
+    "interestRate": {
+      "description": "Annual interest rate as a percentage (e.g. 4.5 means 4.5% per annum). Zero for interest-free debts",
+      "examples": [ 4.5, 19.9, 0, 6.1 ],
+      "type": "number",
+      "minimum": 0
+    },
+    "startDate": {
+      "description": "Date the liability was incurred or the agreement began",
+      "examples": [ "2020-06-01", "2018-11-15" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "endDate": {
+      "description": "Date the liability is expected to be repaid in full, if known",
+      "examples": [ "2045-06-01", "2028-11-15" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "accountReference": {
+      "description": "Account number, reference number, or policy number for this liability",
+      "examples": [
+        "MORT-2020-123456",
+        "4532-XXXX-XXXX-7890",
+        "SL/2018/001234"
+      ],
+      "type": "string",
+      "maxLength": 500
+    },
+    "notes": {
+      "description": "Free-text notes about this liability. Use for payment protection insurance, disputes, or special arrangements",
+      "examples": [
+        "PPI may apply — check with Barclays",
+        "Student loan written off on death under UK rules",
+        "Deferred mahr — becomes payable on death or divorce"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "visibility": {
+      "$ref": "common/visibility.json"
+    },
+    "studentLoanInfo": {
+      "description": "Student loan plan details. All UK student loans (Plans 1, 2, 4, 5, and Postgraduate) are written off on death — the estate does not need to repay. Confirming this prevents executors from incorrectly paying the balance",
+      "type": "object",
+      "required": [ "retrievedAt" ],
+      "properties": {
+        "retrievedAt": {
+          "description": "When this information was confirmed with the Student Loans Company or equivalent",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "planType": {
+          "description": "The student loan plan type",
+          "$comment": "plan_1: pre-2012 England/Wales, all Scotland/NI. plan_2: post-2012 England/Wales. plan_4: Scotland post-1998. plan_5: England post-2023. postgraduate: postgraduate master's or doctoral loan",
+          "anyOf": [
+            {
+              "enum": [ "plan_1", "plan_2", "plan_4", "plan_5", "postgraduate" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "writtenOffOnDeath": {
+          "description": "Whether this loan is written off on death. All UK student loans: true",
+          "type": "boolean"
+        },
+        "outstandingBalance": {
+          "description": "Outstanding balance in minor units (pennies) at retrievedAt",
+          "type": "integer",
+          "minimum": 0
+        },
+        "repaymentThreshold": {
+          "description": "Annual income threshold for repayments in minor units (pennies). Below this income, no repayments are due",
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

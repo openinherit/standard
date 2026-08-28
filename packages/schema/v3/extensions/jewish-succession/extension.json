@@ -1,0 +1,46 @@
+{
+  "name": "Jewish Succession",
+  "id": "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "tradition",
+  "applicableJurisdictions": [
+    "IL",
+    "GB",
+    "US",
+    "CA",
+    "AU",
+    "FR"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "uk-england-wales",
+    "us-estate",
+    "canada",
+    "australia-nz",
+    "eu-succession"
+  ],
+  "legalSystems": [
+    "jewish_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-03-26",
+  "dataProvenance": "Talmudic law (Bava Batra), Shulchan Aruch (Choshen Mishpat), Israeli Succession Law 5765-1965",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Halachic inheritance: heir classification, bekhor double-share, mezonot maintenance, kinyan acquisition, bequest classification.",
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "outline",
+  "keyFeatures": "Bechor (firstborn) share, matanah (gift) structures, halachic will mechanisms, beit din jurisdiction, expanded halachicClass (12 values including av_av, ach_av, ben_ach, ben_ach_av), full Numbers 27 + Bava Batra inheritance order, bekhor patrilineal restriction, mezonot distinction",
+  "legalTradition": "Jewish (Halakha)",
+  "seeking": "Beth Din / halachic law reviewer",
+  "tier": "core"
+}

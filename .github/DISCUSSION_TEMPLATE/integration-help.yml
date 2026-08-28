@@ -1,0 +1,26 @@
+title: "Integration help"
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Get help integrating INHERIT into your application, platform, or workflow.
+  - type: dropdown
+    attributes:
+      label: Integration type
+      options:
+        - SDK / TypeScript
+        - Python validation
+        - Go validation
+        - REST API
+        - AI / LLM extraction
+        - Legal practice management system
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe your integration
+      description: What are you building and where are you stuck?
+    validations:
+      required: true

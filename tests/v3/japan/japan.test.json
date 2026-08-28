@@ -1,0 +1,435 @@
+{
+  "target": "../../../v3/extensions/japan/japan.json",
+  "tests": [
+    {
+      "description": "valid — minimal koseki record (only required personId)",
+      "data": {
+        "kosekiRecords": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009001"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated koseki with honseki and head",
+      "data": {
+        "kosekiRecords": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009002",
+            "honseki": "東京都千代田区",
+            "kosekiHead": "田中太郎",
+            "kosekiReference": "戸籍謄本 令和六年第1234号",
+            "registrationType": "出生届"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — iryubun claim with reserved fraction and outcome",
+      "data": {
+        "iryubunClaims": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009003",
+            "relationship": "配偶者",
+            "reservedFraction": "1/2",
+            "targetAssetIds": [
+              "b2c3d4e5-0000-4000-a000-000000009010"
+            ],
+            "claimFiled": true,
+            "claimOutcome": "upheld"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — yoshi adoption (tokubetsu_yoshi, adoptive_only)",
+      "data": {
+        "yoshiAdoptions": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009004",
+            "adoptionType": "tokubetsu_yoshi",
+            "adoptionDate": "2015-04-01",
+            "inheritanceScope": "adoptive_only"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — yoshi adoption (futsu_yoshi, both_families)",
+      "data": {
+        "yoshiAdoptions": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009005",
+            "adoptionType": "futsu_yoshi",
+            "inheritanceScope": "both_families"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — spouse residence right (long_term with actuarial value in JPY)",
+      "data": {
+        "spousesResidenceRight": {
+          "propertyId": "c3d4e5f6-0000-4000-a000-000000009020",
+          "spousePersonId": "a1b2c3d4-0000-4000-a000-000000009006",
+          "rightType": "long_term",
+          "duration": "終身（生涯）",
+          "actuarialValue": {
+            "amount": 15000000,
+            "currency": "JPY",
+            "exponent": 0
+          },
+          "registeredAtLegalAffairsBureau": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — spouse residence right (short_term, minimal)",
+      "data": {
+        "spousesResidenceRight": {
+          "propertyId": "c3d4e5f6-0000-4000-a000-000000009021",
+          "spousePersonId": "a1b2c3d4-0000-4000-a000-000000009007",
+          "rightType": "short_term"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — isan bunkatsu (voluntary estate division, all heirs consented)",
+      "data": {
+        "isanBunkatsu": {
+          "type": "voluntary",
+          "agreed": true,
+          "agreementDate": "2025-08-15",
+          "allHeirsConsented": true,
+          "participants": [
+            "a1b2c3d4-0000-4000-a000-000000009008",
+            "a1b2c3d4-0000-4000-a000-000000009009"
+          ],
+          "registeredAt": "東京法務局",
+          "registrationDate": "2025-09-01",
+          "documentRef": "d4e5f6a7-0000-4000-a000-000000009030"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — isan bunkatsu (court_mediated with court reference)",
+      "data": {
+        "isanBunkatsu": {
+          "type": "court_mediated",
+          "agreed": false,
+          "courtReference": "東京家庭裁判所 令和七年（家イ）第5678号"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — saishi successor, will formality (kosei_shosho), inkan verified",
+      "data": {
+        "saishiSuccessor": "a1b2c3d4-0000-4000-a000-000000009010",
+        "localWillFormality": "kosei_shosho",
+        "inkanVerified": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — jihi_shosho (holographic will) formality",
+      "data": {
+        "localWillFormality": "jihi_shosho",
+        "inkanVerified": false
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — legislative changes with enacted status",
+      "data": {
+        "legislativeChanges": [
+          {
+            "description": "配偶者居住権の新設（2019年民法改正）",
+            "status": "enacted",
+            "effectiveDate": "2020-04-01",
+            "notes": "令和2年4月1日施行"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated with all sections",
+      "data": {
+        "kosekiRecords": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009011",
+            "honseki": "大阪府大阪市北区",
+            "kosekiHead": "佐藤一郎"
+          }
+        ],
+        "iryubunClaims": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009012",
+            "relationship": "子",
+            "reservedFraction": "1/4",
+            "claimFiled": false,
+            "claimOutcome": "pending"
+          }
+        ],
+        "yoshiAdoptions": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009013",
+            "adoptionType": "futsu_yoshi",
+            "adoptionDate": "2010-03-15",
+            "inheritanceScope": "both_families"
+          }
+        ],
+        "spousesResidenceRight": {
+          "propertyId": "c3d4e5f6-0000-4000-a000-000000009022",
+          "spousePersonId": "a1b2c3d4-0000-4000-a000-000000009014",
+          "rightType": "long_term",
+          "duration": "10年間",
+          "registeredAtLegalAffairsBureau": false
+        },
+        "saishiSuccessor": "a1b2c3d4-0000-4000-a000-000000009015",
+        "localWillFormality": "himitsusho",
+        "inkanVerified": true,
+        "isanBunkatsu": {
+          "type": "court_adjudicated",
+          "agreed": true,
+          "allHeirsConsented": true,
+          "courtReference": "大阪家庭裁判所 令和六年（家イ）第9012号"
+        },
+        "legislativeChanges": [
+          {
+            "description": "相続法改正（自筆証書遺言の方式緩和）",
+            "status": "enacted",
+            "effectiveDate": "2019-01-13"
+          }
+        ],
+        "notes": "被相続人は大阪在住、全相続人の合意により遺産分割完了。"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — extensibility property (x-inherit-japan-buddhist)",
+      "data": {
+        "localWillFormality": "jihi_shosho",
+        "x-inherit-japan-buddhist": {
+          "temple": "浄土宗 西念寺",
+          "kaimyo": "釋浄光信士"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — notes field only",
+      "data": {
+        "notes": "相続手続き進行中。戸籍謄本の取得待ち。"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — empty object (minProperties: 1)",
+      "data": {},
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property (unevaluatedProperties: false)",
+      "data": {
+        "kosekiRecords": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009001"
+          }
+        ],
+        "inheritanceTaxRate": 10
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — iryubun reservedFraction wrong format (not a fraction)",
+      "data": {
+        "iryubunClaims": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009003",
+            "reservedFraction": "50%"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — iryubun claimOutcome bad enum value",
+      "data": {
+        "iryubunClaims": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009003",
+            "claimOutcome": "rejected"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — yoshi adoptionType bad enum value",
+      "data": {
+        "yoshiAdoptions": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009004",
+            "adoptionType": "informal"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — yoshi missing required adoptionType",
+      "data": {
+        "yoshiAdoptions": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009004"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — spouse residence right missing required fields (no rightType)",
+      "data": {
+        "spousesResidenceRight": {
+          "propertyId": "c3d4e5f6-0000-4000-a000-000000009020",
+          "spousePersonId": "a1b2c3d4-0000-4000-a000-000000009006"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — spouse residence right bad enum for rightType",
+      "data": {
+        "spousesResidenceRight": {
+          "propertyId": "c3d4e5f6-0000-4000-a000-000000009020",
+          "spousePersonId": "a1b2c3d4-0000-4000-a000-000000009006",
+          "rightType": "permanent"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — localWillFormality bad enum value",
+      "data": {
+        "localWillFormality": "notarised"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — isanBunkatsu type bad enum value",
+      "data": {
+        "isanBunkatsu": {
+          "type": "arbitration"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — koseki record with additional property",
+      "data": {
+        "kosekiRecords": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009001",
+            "phoneNumber": "03-1234-5678"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — legislativeChanges missing required description",
+      "data": {
+        "legislativeChanges": [
+          {
+            "status": "enacted",
+            "effectiveDate": "2020-04-01"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — legislativeChanges missing required status",
+      "data": {
+        "legislativeChanges": [
+          {
+            "description": "配偶者居住権の新設"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — extensibility property with wrong name pattern",
+      "data": {
+        "localWillFormality": "jihi_shosho",
+        "x-custom-field": {
+          "key": "value"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — iryubun claim missing required personId",
+      "data": {
+        "iryubunClaims": [
+          {
+            "relationship": "配偶者",
+            "reservedFraction": "1/2"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — iryubun claim with relationshipCategory child",
+      "data": {
+        "iryubunClaims": [
+          {
+            "personId": "ff000006-0000-4000-f000-000000000001",
+            "relationshipCategory": "child",
+            "relationship": "eldest daughter",
+            "reservedFraction": "1/4"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — iryubun claim with sibling (no reserved share but valid to record)",
+      "data": {
+        "iryubunClaims": [
+          {
+            "personId": "ff000006-0000-4000-f000-000000000002",
+            "relationshipCategory": "sibling",
+            "relationship": "younger brother"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — relationshipCategory 'nephew' not in iryubun enum",
+      "data": {
+        "iryubunClaims": [
+          {
+            "personId": "ff000006-0000-4000-f000-000000000003",
+            "relationshipCategory": "nephew"
+          }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

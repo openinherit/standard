@@ -1,0 +1,258 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/canada/canada.json",
+  "title": "Canada Extension",
+  "description": "Provincial succession rules for Canada: Quebec patrimony, Ontario equalization, BC WESA variation, Alberta dower rights, and Indigenous land succession details.",
+  "$comment": "Canadian provinces generally do NOT distinguish whole blood from half blood. Half-siblings inherit equally with full siblings in all provinces.",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "CA"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "common_law",
+    "civil_law"
+  ],
+  "dataProvenance": "Civil Code of Québec, Ontario Succession Law Reform Act, BC WESA, Alberta Wills and Succession Act",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": [
+    "islamic-succession",
+    "jewish-succession",
+    "hindu-succession"
+  ],
+  "type": "object",
+  "$defs": {
+    "QuebecPatrimony": {
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "patrimonyValue": {
+          "$ref": "../../common/money.json"
+        },
+        "equalisation": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "OntarioEqualization": {
+      "type": "object",
+      "properties": {
+        "netFamilyProperty": {
+          "$ref": "../../common/money.json"
+        },
+        "equalizationPayment": {
+          "$ref": "../../common/money.json"
+        },
+        "canBeNegative": {
+          "type": "boolean",
+          "$comment": "Ontario equalization can result in negative NFP"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "BCWESAVariation": {
+      "type": "object",
+      "properties": {
+        "variationApplied": {
+          "type": "boolean"
+        },
+        "courtReference": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "AlbertaDower": {
+      "type": "object",
+      "properties": {
+        "dowerRight": {
+          "type": "boolean"
+        },
+        "spousePersonId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "propertyId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "consentGiven": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "dowerRight"
+      ],
+      "additionalProperties": false
+    },
+    "IndigenousLandDetails": {
+      "type": "object",
+      "properties": {
+        "propertyId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "reserveName": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "treatyNumber": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "landType": {
+          "type": "string",
+          "enum": [
+            "reserve",
+            "treaty",
+            "fee_simple_on_reserve",
+            "certificate_of_possession"
+          ]
+        },
+        "successionRestrictions": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "propertyId",
+        "landType"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "province": {
+      "description": "Canadian province or territory whose succession law applies. Critical — every province has different intestacy rules, preferential shares, and property regimes",
+      "type": "string",
+      "pattern": "^CA-[A-Z]{2}$",
+      "$comment": "ISO 3166-2:CA subdivision codes. All 13 provinces and territories enumerated.",
+      "enum": [
+        "CA-AB", "CA-BC", "CA-MB", "CA-NB", "CA-NL", "CA-NS", "CA-NT",
+        "CA-NU", "CA-ON", "CA-PE", "CA-QC", "CA-SK", "CA-YT"
+      ]
+    },
+    "quebecPatrimony": {
+      "$ref": "#/$defs/QuebecPatrimony"
+    },
+    "ontarioEqualization": {
+      "$ref": "#/$defs/OntarioEqualization"
+    },
+    "bcWesaVariation": {
+      "$ref": "#/$defs/BCWESAVariation"
+    },
+    "albertaDower": {
+      "$ref": "#/$defs/AlbertaDower"
+    },
+    "indigenousLandDetails": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/IndigenousLandDetails"
+      },
+      "maxItems": 50
+    },
+    "intestacyRules": {
+      "description": "Provincial intestacy distribution rules",
+      "type": "object",
+      "properties": {
+        "distributionOrder": {
+          "description": "Hierarchy of intestate heirs under the applicable provincial succession act",
+          "enum": [
+            "spouse_only",
+            "spouse_and_children",
+            "children_only",
+            "parents",
+            "siblings",
+            "nephews_nieces",
+            "grandparents",
+            "uncles_aunts",
+            "crown"
+          ]
+        },
+        "preferentialShare": {
+          "description": "Amount the surviving spouse receives before sharing with children. Varies by province (e.g. ON $350,000, BC $300,000, AB $150,000)",
+          "$ref": "../../common/money.json"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      }
+    },
+    "quebecCivilLaw": {
+      "description": "Quebec-specific civil law provisions. Quebec is the only Canadian province using a civil law system, with forced heirship via family patrimony",
+      "type": "object",
+      "properties": {
+        "forcedHeirship": {
+          "description": "Whether Quebec forced heirship (family patrimony) applies",
+          "type": "boolean"
+        },
+        "familyPatrimonyApplies": {
+          "description": "Whether the family patrimony regime applies to divide family assets equally between spouses",
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "province"
+  ],
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

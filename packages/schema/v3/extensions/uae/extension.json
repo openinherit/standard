@@ -1,0 +1,49 @@
+{
+  "name": "UAE",
+  "id": "https://openinherit.org/v3/extensions/uae/extension.json",
+  "version": "1.1.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "AE"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "islamic-succession"
+  ],
+  "legalSystems": [
+    "mixed",
+    "islamic_law",
+    "common_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-04-14",
+  "dataProvenance": "UAE Personal Status Law (Federal Law No. 28/2005), DIFC Wills and Probate Registry, Federal Decree-Law No. 41/2022",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "UAE dual-track succession — Sharia default vs DIFC common law for non-Muslims. DWSC registered wills, expatriate estate handling.",
+  "conformanceRules": [
+    {
+      "id": "ae-001",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "Succession track (sharia or difc) must be specified",
+      "check": "exists",
+      "path": "x-inherit-uae.successionTrack",
+      "severity": "error"
+    }
+  ],
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "partial",
+  "taxCoverage": "outline",
+  "keyFeatures": "Sharia default rules, DIFC Wills Service Centre, free zone asset treatment, non-Muslim will registration, homeCountryLawElection (Decree Law 41/2022), home country code + DIFC registration tracking, marriageRevocation (no general rule for DIFC/ADGM non-Muslim wills)",
+  "legalTradition": "Islamic / common (DIFC)",
+  "seeking": "DIFC and Sharia court practitioners",
+  "tier": "core"
+}

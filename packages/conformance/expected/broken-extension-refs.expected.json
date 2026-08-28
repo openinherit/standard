@@ -1,0 +1,1 @@
+{ "valid": false, "schemaMode": "estate", "minErrors": 1, "note": "Level 1 valid, Level 2 invalid — executor personId references non-existent person" }

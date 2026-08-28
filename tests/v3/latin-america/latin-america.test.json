@@ -1,0 +1,177 @@
+{
+  "target": "../../../v3/extensions/latin-america/latin-america.json",
+  "tests": [
+    {
+      "description": "valid — minimal with required country",
+      "data": {
+        "country": "BR"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Brazilian succession",
+      "data": {
+        "country": "BR",
+        "notes": "Brazilian succession applies"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required country",
+      "data": {
+        "brazilianSuccession": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "country": "BR",
+        "europeanRule": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — Brazilian succession with necessary heirs",
+      "data": {
+        "country": "BR",
+        "brazilianSuccession": {
+          "legitimaFraction": "1/2",
+          "necessaryHeirs": [
+            {
+              "personId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+              "category": "descendant"
+            },
+            {
+              "personId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+              "category": "spouse"
+            }
+          ],
+          "meacaoHerancaSplit": true,
+          "stableUnionRights": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Colombian succession with forced heirs",
+      "data": {
+        "country": "CO",
+        "colombianSuccession": {
+          "system": "fourths",
+          "legitimaRigurosa": "1/4",
+          "cuartaDeMejoras": "1/4",
+          "cuartaDeLibreDisposicion": "1/4",
+          "forcedHeirs": [
+            {
+              "personId": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+              "relationship": "child"
+            },
+            {
+              "personId": "d4e5f6a7-b8c9-0123-defa-234567890123",
+              "relationship": "child"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Argentine succession fully populated",
+      "data": {
+        "country": "AR",
+        "argentineSuccession": {
+          "legitimaDescendants": "2/3",
+          "legitimaAscendants": "1/2",
+          "porcionDisponible": "1/3",
+          "collation": true,
+          "notes": "Argentine Civil and Commercial Code applies"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Venezuelan succession with legitimaFraction",
+      "data": {
+        "country": "VE",
+        "venezuelanSuccession": {
+          "legitimaFraction": "1/2",
+          "applicableLaw": "Venezuelan Civil Code Art. 883",
+          "notes": "Forced heirship applies to descendants and ascendants"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — country enum violation",
+      "data": {
+        "country": "BRAZIL"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — necessaryHeir missing required category",
+      "data": {
+        "country": "BR",
+        "brazilianSuccession": {
+          "necessaryHeirs": [
+            {
+              "personId": "e5f6a7b8-c9d0-1234-efab-345678901234"
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — necessaryHeir category enum violation",
+      "data": {
+        "country": "BR",
+        "brazilianSuccession": {
+          "necessaryHeirs": [
+            {
+              "personId": "f6a7b8c9-d0e1-2345-fabc-456789012345",
+              "category": "sibling"
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — legitimaFraction pattern violation",
+      "data": {
+        "country": "BR",
+        "brazilianSuccession": {
+          "legitimaFraction": "half"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — forcedHeir missing required personId",
+      "data": {
+        "country": "CO",
+        "colombianSuccession": {
+          "forcedHeirs": [
+            {
+              "relationship": "child"
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalProperties in BrazilianSuccession nested object",
+      "data": {
+        "country": "BR",
+        "brazilianSuccession": {
+          "legitimaFraction": "1/2",
+          "foreignField": "not allowed"
+        }
+      },
+      "valid": false
+    }
+  ]
+}

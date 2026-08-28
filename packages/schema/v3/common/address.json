@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/address.json",
+  "title": "PostalAddress",
+  "description": "A physical address. Culturally neutral — supports any global addressing convention",
+  "$comment": "All fields optional. Supports Western, Japanese (reversed), Indian (landmark-based), African (informal) addressing. An empty object is valid — some jurisdictions have no formal address system. See https://schema.org/PostalAddress",
+  "type": "object",
+  "properties": {
+    "formattedAddress": {
+      "description": "The full address as a single formatted string, suitable for display. Preserves the original representation from the source document. Must not be the sole address representation — always populate structured fields where possible",
+      "examples": [
+        "13 Park Avenue, Flint, Flintshire CH6 5DW",
+        "123 Main Street, Apt 4B, New York, NY 10001",
+        "〒100-0001 東京都千代田区千代田1-1"
+      ],
+      "type": "string",
+      "maxLength": 5000
+    },
+    "streetAddress": {
+      "description": "Street number and name. For Japanese addresses, use the block and building number (chōme-ban-gō)",
+      "examples": [
+        "13 Park Avenue",
+        "123 Main Street, Apt 4B",
+        "千代田1-1",
+        "42 Rue de Rivoli"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "addressLine2": {
+      "description": "Secondary address line — flat, suite, building, or floor. Use when the primary street address is insufficient",
+      "examples": [ "Flat 3B", "Suite 400", "2nd Floor, Tower A" ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "addressLocality": {
+      "description": "City, town, village, or ward. For Japanese addresses, this is the city or special ward (ku)",
+      "examples": [ "Manchester", "千代田区", "Mumbai", "Dubai", "Toronto" ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "addressRegion": {
+      "description": "State, prefecture, province, or county. The administrative division below national level",
+      "examples": [
+        "Greater Manchester",
+        "東京都",
+        "Maharashtra",
+        "California",
+        "Ontario"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "postalCode": {
+      "description": "Postal or ZIP code. Format varies by country — UK postcodes, US ZIP codes, Japanese 〒 codes, etc",
+      "examples": [ "M1 1AA", "10001", "100-0001", "400001", "M5V 2T6" ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "addressCountry": {
+      "description": "ISO 3166-1 alpha-2 country code. Always uppercase",
+      "examples": [ "GB", "US", "JP", "IN", "AE", "NG" ],
+      "type": "string",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "latitude": {
+      "description": "Geographic latitude in decimal degrees. Useful for properties in jurisdictions without formal addressing systems",
+      "examples": [ 51.5074, 35.6762, -33.8688 ],
+      "type": "number",
+      "maximum": 90,
+      "minimum": -90
+    },
+    "longitude": {
+      "description": "Geographic longitude in decimal degrees. Pair with latitude for precise property location",
+      "examples": [ -0.1278, 139.6503, 151.2093 ],
+      "type": "number",
+      "maximum": 180,
+      "minimum": -180
+    },
+    "landmark": {
+      "description": "A nearby landmark used to locate the address. Essential in jurisdictions without formal street addressing — India, Nigeria, and rural areas worldwide",
+      "$comment": "Common in India, Nigeria, rural areas. 'Near Meenakshi Temple' or 'Behind Shoprite, Lekki Phase 1'.",
+      "examples": [
+        "Near Meenakshi Temple",
+        "Behind Shoprite, Lekki Phase 1",
+        "Opposite the District Court"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "directionNotes": {
+      "description": "Free-form directions to reach the address when no formal address system exists. Common in rural communities across Africa, South Asia, and the Pacific Islands",
+      "$comment": "Free-form directions when no formal address exists. Common in rural Africa, parts of India.",
+      "examples": [
+        "Take the second left after the market, third compound on the right",
+        "500m past the village well, red gate"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "addressOrder": {
+      "description": "The addressing convention that governs the display order of this address. Defaults to 'western' if omitted",
+      "$comment": "western: street → city → region → country (most of the world). japanese: country → prefecture → city → ward → block → building (reversed from Western). indian: building → street → landmark → locality → city → state. arabic: building → street → district → city → country. custom: any other ordering convention. Determines display order.",
+      "examples": [ "western", "japanese" ],
+      "enum": [ "western", "japanese", "indian", "arabic", "custom" ]
+    }
+  },
+  "additionalProperties": false
+}

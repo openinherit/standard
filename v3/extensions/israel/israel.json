@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/israel/israel.json",
+  "title": "Israel Extension",
+  "description": "Israeli succession rules: parallel court systems (civil family court, rabbinical, sharia, druze), Inheritance Law 1965 process types, religious authority orders, kibbutz/moshav communal property, and Holocaust restitution assets.",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": ["IL"],
+  "inheritVersion": ">=3.0.0 <4.0.0",
+  "legalSystems": ["civil_law", "religious_law"],
+  "dataProvenance": "Inheritance Law 1965 (Chok HaYerusha), Succession Ordinance, Family Court Law 1995, Rabbinical Courts Jurisdiction (Marriage and Divorce) Law 1953",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": ["jewish-succession", "islamic-succession"],
+  "type": "object",
+  "properties": {
+    "parallelCourtSystems": {
+      "description": "The adjudicating court system handling this succession matter. Israel operates parallel civil and religious court systems, each with jurisdiction over different communities and matter types.",
+      "type": "object",
+      "properties": {
+        "adjudicatingCourt": {
+          "description": "The court system with jurisdiction over this succession matter. civil_family_court: Family Court under Family Court Law 1995 (default for most succession matters). rabbinical_court: Rabbinical Court with jurisdiction over Jewish personal status and succession where all parties consent. sharia_court: Sharia Court with jurisdiction over Muslim personal status matters. druze_court: Druze Religious Court with jurisdiction over Druze personal status. registrar_of_inheritance: Registrar of Inheritance (Rasham HaYerushot) for uncontested applications.",
+          "enum": [
+            "civil_family_court",
+            "rabbinical_court",
+            "sharia_court",
+            "druze_court",
+            "registrar_of_inheritance"
+          ]
+        },
+        "courtOrderReference": {
+          "description": "Reference number of the court order or application",
+          "type": "string",
+          "maxLength": 100
+        },
+        "courtOrderDate": {
+          "description": "Date of the court order",
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "allPartiesConsented": {
+          "description": "Whether all parties have consented to this court's jurisdiction (relevant where jurisdiction is consent-based, e.g. rabbinical court for Jewish parties)",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "inheritanceLaw1965": {
+      "description": "Details of the succession process under the Inheritance Law 1965 (Chok HaYerusha). The law provides two tracks: tzevu kiyum (probate order for wills) and tzevu yerusha (succession order for intestate estates).",
+      "type": "object",
+      "properties": {
+        "successionOrderType": {
+          "description": "Type of succession order sought or obtained. tzevu_kiyum: probate order (tzav kiyum tzava'a) confirming the validity of a will. tzevu_yerusha: succession order (tzav yerusha) determining heirs on intestacy. combined: both orders sought together, e.g. where a partial will exists.",
+          "enum": [
+            "tzevu_kiyum",
+            "tzevu_yerusha",
+            "combined"
+          ]
+        },
+        "objectionPeriodExpired": {
+          "description": "Whether the statutory objection period (14 days from publication of the application notice) has expired without objection",
+          "type": "boolean"
+        },
+        "objectionsReceived": {
+          "description": "Whether any objections were received during the objection period",
+          "type": "boolean"
+        },
+        "spouseEntitlement": {
+          "description": "Surviving spouse entitlement under Inheritance Law 1965. On intestacy, the spouse's share depends on the class of heirs surviving alongside them.",
+          "type": "object",
+          "properties": {
+            "moveableFraction": {
+              "description": "Spouse's share of moveable property as a fraction, e.g. 1/2",
+              "type": "string",
+              "pattern": "^[0-9]+/[0-9]+$",
+              "maxLength": 20
+            },
+            "immoveableFraction": {
+              "description": "Spouse's share of immoveable property as a fraction, e.g. 1/2",
+              "type": "string",
+              "pattern": "^[0-9]+/[0-9]+$",
+              "maxLength": 20
+            },
+            "dwellingRightGranted": {
+              "description": "Whether the spouse has been granted a dwelling right (zchut dirah) in the matrimonial home under section 11(a) of the Inheritance Law",
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "religiousAuthorityOrder": {
+      "description": "An order or ruling issued by a religious court with jurisdiction over this succession matter. Applicable where a religious court has issued a binding ruling recognised under Israeli law.",
+      "type": "object",
+      "properties": {
+        "authority": {
+          "description": "The religious authority issuing the order. bet_din: Rabbinical court (Jewish law). sharia_court: Sharia court (Islamic law). druze_court: Druze religious court.",
+          "enum": [
+            "bet_din",
+            "sharia_court",
+            "druze_court"
+          ]
+        },
+        "orderType": {
+          "description": "Type of religious authority order. succession_ruling: ruling on intestate distribution. halachic_will_validation: validation of a will under halachic principles. waqf_ruling: ruling concerning waqf (Islamic religious endowment) assets. consent_order: order by consent of all parties.",
+          "enum": [
+            "succession_ruling",
+            "halachic_will_validation",
+            "waqf_ruling",
+            "consent_order"
+          ]
+        },
+        "orderReference": {
+          "description": "Reference number of the religious authority order",
+          "type": "string",
+          "maxLength": 100
+        },
+        "orderDate": {
+          "description": "Date of the religious authority order",
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "binding": {
+          "description": "Whether the religious authority order is binding on all parties and recognised by civil courts",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "kibbutzProperty": {
+      "description": "Communal or cooperative property held through a kibbutz or moshav. These structures create special succession rules as membership rights, housing allocations, and production quotas may not be freely transferable.",
+      "type": "object",
+      "properties": {
+        "communalOwnershipType": {
+          "description": "Type of communal or cooperative structure. kibbutz_communal: traditional collective kibbutz where all property is collectively owned. kibbutz_renewed: renewed (mתחדש) kibbutz operating on differential pay and partial private ownership. moshav: cooperative smallholder settlement where land is state-leased and individually farmed. moshav_shitufi: collective moshav combining kibbutz production with moshav family life.",
+          "enum": [
+            "kibbutz_communal",
+            "kibbutz_renewed",
+            "moshav",
+            "moshav_shitufi"
+          ]
+        },
+        "membershipRightsTransferable": {
+          "description": "Whether membership rights in the communal organisation are transferable to heirs",
+          "type": "boolean"
+        },
+        "communityName": {
+          "description": "Name of the kibbutz or moshav",
+          "type": "string",
+          "maxLength": 255
+        },
+        "personalPropertyValue": {
+          "description": "Estimated value of the deceased's personal property held outside communal ownership, in minor currency units",
+          "$ref": "../../common/money.json"
+        }
+      },
+      "additionalProperties": false
+    },
+    "holocaustRestitution": {
+      "description": "Holocaust restitution assets — property or claims arising from Nazi persecution and subsequent restitution programmes. Israel has a significant number of estates involving Holocaust-era assets due to its founding population.",
+      "type": "object",
+      "properties": {
+        "restitutionAssetsExist": {
+          "description": "Whether the estate includes known or suspected Holocaust restitution assets or claims",
+          "type": "boolean"
+        },
+        "restitutionSource": {
+          "description": "Source programme or authority from which restitution is or was sought. claims_conference: Conference on Jewish Material Claims Against Germany. german_government: German federal or state government restitution. austrian_government: Austrian government restitution. swiss_banks_settlement: Swiss Banks Settlement (Volcker process). art_restitution: looted art restitution. property_restitution: real property restitution. other: other restitution programme.",
+          "enum": [
+            "claims_conference",
+            "german_government",
+            "austrian_government",
+            "swiss_banks_settlement",
+            "art_restitution",
+            "property_restitution",
+            "other"
+          ]
+        },
+        "originalOwnerKnown": {
+          "description": "Whether the identity of the original pre-war owner is known and documented",
+          "type": "boolean"
+        },
+        "ongoingClaims": {
+          "description": "Whether there are ongoing restitution claims or applications that have not yet been resolved",
+          "type": "boolean"
+        },
+        "estimatedValue": {
+          "description": "Estimated value of known restitution assets or settled claims in minor currency units",
+          "$ref": "../../common/money.json"
+        }
+      },
+      "additionalProperties": false
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

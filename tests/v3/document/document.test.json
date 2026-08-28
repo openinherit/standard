@@ -1,0 +1,990 @@
+{
+  "target": "../../../v3/document.json",
+  "tests": [
+    {
+      "description": "valid \u2014 minimal document with required fields only",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "will",
+        "title": "Last Will and Testament of James Davies"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 fully populated PDF will with storage reference",
+      "data": {
+        "id": "868f2f78-647c-4754-b330-94c8e5a4a9ee",
+        "type": "will",
+        "title": "Last Will and Testament of Priya Sharma",
+        "fileFormat": "pdf",
+        "storageRef": "s3://estate-docs/wills/sharma-priya-2025.pdf",
+        "fileSizeBytes": 245760,
+        "mimeType": "application/pdf",
+        "createdAt": "2025-01-20T09:00:00Z",
+        "notes": "Original held by Irwin Mitchell LLP, Manchester. Certified copy on file.",
+        "entityType": "estate",
+        "entityId": "bf5bece3-3df1-4769-b928-2eb0b32131a3"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 Japanese will with Unicode title",
+      "data": {
+        "id": "c629a8db-bef2-43f1-91ac-036514c360e3",
+        "type": "will",
+        "title": "\u9063\u8a00\u66f8 \u2014 \u7530\u4e2d\u88d5\u5b50",
+        "fileFormat": "pdf",
+        "storageRef": "/vault/wills/tanaka-2025.pdf",
+        "fileSizeBytes": 189440,
+        "mimeType": "application/pdf",
+        "createdAt": "2025-03-10T09:00:00Z",
+        "notes": "Holographic will \u2014 handwritten by Hiroshi Tanaka, witnessed by two neighbours.",
+        "entityType": "estate",
+        "entityId": "8aac9018-8461-4874-a57f-02e64ffdacba"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 Islamic nikah nama document",
+      "data": {
+        "id": "1e2df850-d0e3-41d2-a5ba-e5764072d405",
+        "type": "x-inherit-nikah-nama",
+        "title": "Nikah Nama \u2014 Ahmed Al-Rashid and Fatimah Khalid",
+        "fileFormat": "pdf",
+        "createdAt": "2018-09-14T09:00:00Z",
+        "notes": "Certified copy of the original nikah nama issued by the Islamic Sharia Council, London.",
+        "entityType": "estate",
+        "entityId": "116e46f0-f66b-40e0-9745-a10435fa5e3f"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 codicil document linked to an asset",
+      "data": {
+        "id": "5b38b2d8-d759-4747-b1a5-bd4825327a4d",
+        "type": "codicil",
+        "title": "First Codicil dated 15 June 2024 \u2014 Amara Okonkwo",
+        "fileFormat": "pdf",
+        "storageRef": "DMS/2024/EST/001234",
+        "fileSizeBytes": 98304,
+        "mimeType": "application/pdf",
+        "createdAt": "2024-06-15T09:00:00Z",
+        "notes": "Amends clause 4 of the original will to add the Lagos apartment to the specific bequests.",
+        "entityType": "asset",
+        "entityId": "c49bd621-8ece-4a23-b47e-9b6584644139"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing required id",
+      "data": {
+        "type": "will",
+        "title": "Last Will and Testament"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required type",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "title": "Last Will and Testament"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required title",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "will"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 type not in enum",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "last_will_and_testament",
+        "title": "Last Will and Testament"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 fileSizeBytes is negative",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "will",
+        "title": "Last Will and Testament",
+        "fileSizeBytes": -1024
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 document with clauses (will with provenance)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440050",
+        "type": "will",
+        "title": "Last Will and Testament of Wei Chen",
+        "clauses": [
+          {
+            "id": "550e8400-e29b-41d4-a716-446655440051",
+            "clauseNumber": 1,
+            "title": "Revocation",
+            "content": "I revoke all former wills and testamentary dispositions.",
+            "provenance": {
+              "source": "template",
+              "generatedBy": "MyFamilyInherits v2.0"
+            }
+          },
+          {
+            "id": "550e8400-e29b-41d4-a716-446655440052",
+            "clauseNumber": 3,
+            "title": "Bequest of Shenzhen property",
+            "content": "I give my apartment at Futian District, Shenzhen to my wife Wei Lin absolutely.",
+            "relatedEntityIds": [
+              "550e8400-e29b-41d4-a716-446655440053"
+            ],
+            "successionRegime": {
+              "governingLaw": {
+                "jurisdiction": {
+                  "country": "CN"
+                },
+                "legalTradition": "civil_law",
+                "statute": "PRC Civil Code",
+                "section": "Book VI Succession"
+              },
+              "determinedBy": "situs",
+              "binding": true,
+              "extensions": []
+            },
+            "provenance": {
+              "source": "ai_generated",
+              "generatedBy": "MyFamilyInherits v2.1.0",
+              "reviewedBy": "Catherine Ashford (solicitor)",
+              "reviewedDate": "2026-07-01"
+            },
+            "validatingAuthority": {
+              "name": "Shenzhen Notary Office",
+              "type": "notary",
+              "jurisdiction": {
+                "country": "CN"
+              }
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 document with empty clauses array",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440054",
+        "type": "will",
+        "title": "Last Will and Testament of John Smith",
+        "clauses": []
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 clause missing required id",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440055",
+        "type": "will",
+        "title": "Last Will and Testament of Jane Doe",
+        "clauses": [
+          {
+            "clauseNumber": 1,
+            "title": "Revocation"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 clause provenance source not in enum",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440056",
+        "type": "will",
+        "title": "Last Will and Testament of Bob Brown",
+        "clauses": [
+          {
+            "id": "550e8400-e29b-41d4-a716-446655440057",
+            "clauseNumber": 1,
+            "provenance": {
+              "source": "psychic_vision"
+            }
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 entityId present without entityType (dependentRequired)",
+      "data": {
+        "id": "fa67f57c-bf08-4d6b-99e4-1d9b5399be73",
+        "type": "will",
+        "title": "Last Will and Testament of Test Person",
+        "entityId": "bf5bece3-3df1-4769-b928-2eb0b32131a3"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 entityType present without entityId (dependentRequired)",
+      "data": {
+        "id": "a673803f-1163-450d-b8a5-016fa4161395",
+        "type": "will",
+        "title": "Last Will and Testament of Test Person",
+        "entityType": "estate"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 document with embedded base64 content (hybrid approach)",
+      "data": {
+        "id": "93cbcc5e-6ddf-462f-8b30-8febf048407d",
+        "type": "will",
+        "title": "Last Will and Testament of Margaret Davies",
+        "mimeType": "application/pdf",
+        "content": "JVBERi0xLjQKMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwo+PgplbmRvYmoK",
+        "fileSizeBytes": 45,
+        "notes": "Self-contained document \u2014 content embedded for archival portability"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 document with both storageRef and embedded content",
+      "data": {
+        "id": "aad1316b-1845-49e3-9fec-7a69cb222dfe",
+        "type": "death_certificate",
+        "title": "Death Certificate \u2014 James Davies",
+        "storageRef": "s3://estate-docs/certificates/death-cert-davies.pdf",
+        "mimeType": "application/pdf",
+        "content": "JVBERi0xLjQKMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwo+PgplbmRvYmoK",
+        "notes": "Both reference and embedded content provided for redundancy"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid: document with x-inherit- extension type",
+      "data": {
+        "id": "b4c5d6e7-f8a9-0123-b456-789abcdef012",
+        "type": "x-inherit-nikah-nama",
+        "title": "Nikah Nama"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid: document with non-prefixed unknown type",
+      "data": {
+        "id": "b4c5d6e7-f8a9-0123-b456-789abcdef012",
+        "type": "nikah_nama",
+        "title": "Nikah Nama"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid: document with bare x-inherit- (no value after prefix)",
+      "data": {
+        "id": "b4c5d6e7-f8a9-0123-b456-789abcdef012",
+        "type": "x-inherit-",
+        "title": "Test"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 v2.6.0 will with registrations array (NWR + RoS)",
+      "data": {
+        "id": "f08667c0-51f9-44ad-b1c9-d84ea355dfd3",
+        "type": "will",
+        "title": "Last Will and Testament of William Frith",
+        "createdAt": "2025-06-15T09:00:00Z",
+        "notes": "Original held by solicitor. Certified copy in home safe.",
+        "registrations": [
+          {
+            "registry": "National Will Register",
+            "reference": "NWR-2025-445821",
+            "registeredAt": "2025-06-20",
+            "jurisdiction": {
+              "country": "GB",
+              "subdivision": "GB-ENG"
+            },
+            "registryUrl": "https://www.nationalwillregister.co.uk/",
+            "verifiedAt": "2026-03-01T10:00:00Z"
+          },
+          {
+            "registry": "Register of Deeds (Scotland)",
+            "reference": "RD/2025/007891",
+            "registeredAt": "2025-07-01",
+            "jurisdiction": {
+              "country": "GB",
+              "subdivision": "GB-SCT"
+            },
+            "registryUrl": "https://www.ros.gov.uk/our-registers/register-of-deeds",
+            "verifiedAt": "2026-03-01T10:05:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 v2.6.0 invoice document type",
+      "data": {
+        "id": "bc6e836d-8dc4-49a4-8a92-e5db1af4ee95",
+        "type": "invoice",
+        "title": "Harrison & Webb \u2014 Will Preparation Invoice",
+        "createdAt": "2025-06-15T09:00:00Z",
+        "notes": "Invoice for preparation of will and two codicils. Ref: HW/2025/BF/001. Amount: GBP 850.00 + VAT."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 v2.6.0 receipt document type",
+      "data": {
+        "id": "f725bfb3-5ff0-4410-a8c5-e4afcee9cda0",
+        "type": "receipt",
+        "title": "Receipt for Will Registration Fee",
+        "createdAt": "2025-06-20T14:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 v2.6.0 registration missing required registeredAt",
+      "data": {
+        "id": "17efeb8e-c771-4b9b-91fa-ea9a775a2427",
+        "type": "will",
+        "title": "Test Will",
+        "registrations": [
+          {
+            "registry": "National Will Register"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 informal will admitted by court",
+      "data": {
+        "id": "431dd127-c4a8-4f1b-9b48-f5a08b64a922",
+        "type": "will",
+        "title": "Informal Will of Thomas Nguyen",
+        "formalityStatus": "informal_admitted",
+        "formalityAdmittedBy": "Supreme Court of Queensland",
+        "formalityJurisdiction": {
+          "country": "AU",
+          "subdivision": "AU-QLD"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 document with registry reference",
+      "data": {
+        "id": "8c4c80c5-3853-479a-915f-9041e27b5675",
+        "type": "will",
+        "title": "Will of Hiroshi Tanaka",
+        "registryReference": {
+          "registryName": "Legal Affairs Bureau",
+          "registryType": "will_registry",
+          "referenceNumber": "LAB-2026-001234",
+          "registryJurisdiction": {
+            "country": "JP"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 holographic will",
+      "data": {
+        "id": "35f1f4fa-aedd-4aa5-b456-84c75fab8d22",
+        "type": "will",
+        "title": "Holographic Will of Marie Dupont",
+        "formalityStatus": "holographic",
+        "formalityNotes": "Handwritten by testator, no witnesses"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 registryReference missing registryName",
+      "data": {
+        "id": "a4a020aa-bb08-4e80-9cba-833efe180738",
+        "type": "will",
+        "title": "Test Will",
+        "registryReference": {
+          "registryType": "will_registry"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 v2.6.0 registration with additional property",
+      "data": {
+        "id": "611c3ad9-49de-441b-b9a8-c89222337d34",
+        "type": "will",
+        "title": "Test Will",
+        "registrations": [
+          {
+            "registry": "National Will Register",
+            "registeredAt": "2025-06-20",
+            "unknownField": "should fail"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 fileSizeBytes as string (must be integer)",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "will",
+        "title": "Last Will and Testament",
+        "fileSizeBytes": "1024"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 title as number (must be string)",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "will",
+        "title": 12345
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 type as number (must be string)",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": 42,
+        "title": "Last Will and Testament"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 id is not a valid UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "type": "will",
+        "title": "Last Will and Testament"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 createdAt is not a valid datetime format",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "will",
+        "title": "Last Will and Testament",
+        "createdAt": "15th June 2024"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 title is empty string (minLength 1)",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "will",
+        "title": ""
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 notes exceeds maxLength (2001 characters)",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "will",
+        "title": "Last Will and Testament",
+        "notes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 unknown property at root level (unevaluatedProperties false)",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "will",
+        "title": "Last Will and Testament",
+        "unknownField": "should fail"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 fileSizeBytes at minimum boundary (0)",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "will",
+        "title": "Last Will and Testament",
+        "fileSizeBytes": 0
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 fileSizeBytes as float (must be integer)",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "will",
+        "title": "Last Will and Testament",
+        "fileSizeBytes": 1024.5
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 createdAt date-only (missing time component)",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "type": "will",
+        "title": "Last Will and Testament",
+        "createdAt": "2025-01-20"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 trust_deed document type",
+      "data": {
+        "id": "d0000001-0000-4000-d000-000000009001",
+        "type": "trust_deed",
+        "title": "Davies Family Discretionary Trust Deed 2020",
+        "createdAt": "2020-03-15T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 power_of_attorney document type",
+      "data": {
+        "id": "d0000002-0000-4000-d000-000000009002",
+        "type": "power_of_attorney",
+        "title": "Lasting Power of Attorney (Property and Finance) — James Davies",
+        "notes": "Registered with the Office of the Public Guardian. Ref: 123456789."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 grant_of_probate document type with registryReference",
+      "data": {
+        "id": "d0000003-0000-4000-d000-000000009003",
+        "type": "grant_of_probate",
+        "title": "Grant of Probate — Estate of James Davies",
+        "registryReference": {
+          "registryName": "HMCTS Probate Registry",
+          "registryType": "probate_court",
+          "referenceNumber": "PRO-2026-001234"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 marriage_certificate document type",
+      "data": {
+        "id": "d0000004-0000-4000-d000-000000009004",
+        "type": "marriage_certificate",
+        "title": "Marriage Certificate — James and Margaret Davies",
+        "createdAt": "1985-06-15T09:00:00Z",
+        "fileFormat": "jpg"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 deed_of_variation document type",
+      "data": {
+        "id": "d0000005-0000-4000-d000-000000009005",
+        "type": "deed_of_variation",
+        "title": "Deed of Variation — Estate of Margaret Davies",
+        "notes": "Sarah Davies redirects her specific bequest of the jewellery to her daughter"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 tax_return document type",
+      "data": {
+        "id": "d0000006-0000-4000-d000-000000009006",
+        "type": "tax_return",
+        "title": "IHT400 — Inheritance Tax Return, Estate of James Davies",
+        "createdAt": "2026-11-01T10:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 prenuptial_agreement document type",
+      "data": {
+        "id": "d0000007-0000-4000-d000-000000009007",
+        "type": "prenuptial_agreement",
+        "title": "Pre-Nuptial Agreement — Ahmed Al-Rashid and Fatimah Khalid"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 formalityStatus nuncupative (verbal will)",
+      "data": {
+        "id": "d0000008-0000-4000-d000-000000009008",
+        "type": "will",
+        "title": "Nuncupative Will of David Morgan",
+        "formalityStatus": "nuncupative",
+        "formalityNotes": "Verbal will made in extremis — witnessed by two nurses"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 formalityStatus unknown",
+      "data": {
+        "id": "d0000009-0000-4000-d000-000000009009",
+        "type": "will",
+        "title": "Will found in attic — status unknown",
+        "formalityStatus": "unknown"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 document with images array",
+      "data": {
+        "id": "d0000010-0000-4000-d000-000000009010",
+        "type": "will",
+        "title": "Handwritten will of Thomas Ngozi",
+        "images": [
+          {
+            "url": "https://estate-docs.example.com/will-page1.jpg",
+            "caption": "Will page 1"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 formalityStatus not in enum",
+      "data": {
+        "id": "d0000011-0000-4000-d000-000000009011",
+        "type": "will",
+        "title": "Test Will",
+        "formalityStatus": "certified"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 registryReference registryType not in enum",
+      "data": {
+        "id": "d0000012-0000-4000-d000-000000009012",
+        "type": "will",
+        "title": "Test Will",
+        "registryReference": {
+          "registryName": "Test Registry",
+          "registryType": "land_registry"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 letters_of_administration document type",
+      "data": {
+        "id": "d1000001-0000-4000-d000-000000001001",
+        "type": "letters_of_administration",
+        "title": "Letters of Administration \u2014 Estate of Thomas Nguyen"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 divorce_decree document type",
+      "data": {
+        "id": "d1000002-0000-4000-d000-000000001002",
+        "type": "divorce_decree",
+        "title": "Decree Absolute \u2014 Davies v Davies",
+        "createdAt": "2010-06-15T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 property_deed document type",
+      "data": {
+        "id": "d1000003-0000-4000-d000-000000001003",
+        "type": "property_deed",
+        "title": "Title Deed \u2014 42 Acacia Avenue, Manchester"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 valuation_report document type",
+      "data": {
+        "id": "d1000004-0000-4000-d000-000000001004",
+        "type": "valuation_report",
+        "title": "RICS Valuation Report \u2014 Oakfield Road Property",
+        "createdAt": "2026-02-28T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 insurance_policy document type",
+      "data": {
+        "id": "d1000005-0000-4000-d000-000000001005",
+        "type": "insurance_policy",
+        "title": "Legal & General Life Insurance Policy LG-LIFE-2020-789"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 family_settlement document type",
+      "data": {
+        "id": "d1000006-0000-4000-d000-000000001006",
+        "type": "family_settlement",
+        "title": "Family Settlement Agreement \u2014 Davies Estate"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 formalityStatus informal_contested",
+      "data": {
+        "id": "d1000007-0000-4000-d000-000000001007",
+        "type": "will",
+        "title": "Contested Informal Will of Elizabeth Morgan",
+        "formalityStatus": "informal_contested",
+        "formalityNotes": "Admissibility contested by second child"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 registryType notarial_registry",
+      "data": {
+        "id": "d1000008-0000-4000-d000-000000001008",
+        "type": "will",
+        "title": "Testamento \u2014 Priya Sharma",
+        "registryReference": {
+          "registryName": "Chambre des Notaires",
+          "registryType": "notarial_registry",
+          "referenceNumber": "NOT-2026-001234"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 registryType death_registry",
+      "data": {
+        "id": "d1000009-0000-4000-d000-000000001009",
+        "type": "death_certificate",
+        "title": "Death Certificate \u2014 Filed with Death Registry",
+        "registryReference": {
+          "registryName": "General Register Office",
+          "registryType": "death_registry"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 registryType lpa_registry",
+      "data": {
+        "id": "d1000010-0000-4000-d000-000000001010",
+        "type": "power_of_attorney",
+        "title": "LPA \u2014 Registered with Office of the Public Guardian",
+        "registryReference": {
+          "registryName": "Office of the Public Guardian",
+          "registryType": "lpa_registry",
+          "referenceNumber": "700-123456-7"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 registryType seal_registry",
+      "data": {
+        "id": "d1000011-0000-4000-d000-000000001011",
+        "type": "will",
+        "title": "\u516c\u6b63\u8b4c\u66f8\u907a\u8a00 \u2014 \u7530\u4e2d\u96c5\u96c4",
+        "registryReference": {
+          "registryName": "Shinjuku Ward Office",
+          "registryType": "seal_registry"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 registryType other",
+      "data": {
+        "id": "d1000012-0000-4000-d000-000000001012",
+        "type": "will",
+        "title": "Will of Amara Okonkwo \u2014 Registered with High Court",
+        "registryReference": {
+          "registryName": "Lagos High Court Registry",
+          "registryType": "other"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 clause provenance source solicitor_drafted",
+      "data": {
+        "id": "d1000013-0000-4000-d000-000000001013",
+        "type": "will",
+        "title": "Will of Robert Brown",
+        "clauses": [
+          {
+            "id": "d1000013-0000-4000-d000-000000002001",
+            "clauseNumber": 1,
+            "title": "Executor Appointment",
+            "provenance": {
+              "source": "solicitor_drafted",
+              "generatedBy": "Irwin Mitchell LLP",
+              "reviewedBy": "James Davies",
+              "reviewedDate": "2026-03-01"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 clause provenance source imported and scanned",
+      "data": {
+        "id": "d1000014-0000-4000-d000-000000001014",
+        "type": "will",
+        "title": "Imported Will of Old Format",
+        "clauses": [
+          {
+            "id": "d1000014-0000-4000-d000-000000002001",
+            "clauseNumber": 1,
+            "provenance": {
+              "source": "imported"
+            }
+          },
+          {
+            "id": "d1000014-0000-4000-d000-000000002002",
+            "clauseNumber": 2,
+            "provenance": {
+              "source": "scanned"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 clause legalTradition common_law and determinedBy domicile",
+      "data": {
+        "id": "d1000015-0000-4000-d000-000000001015",
+        "type": "will",
+        "title": "Will of James Davies \u2014 Common Law",
+        "clauses": [
+          {
+            "id": "d1000015-0000-4000-d000-000000002001",
+            "clauseNumber": 1,
+            "successionRegime": {
+              "governingLaw": {
+                "jurisdiction": { "country": "GB" },
+                "legalTradition": "common_law"
+              },
+              "determinedBy": "domicile",
+              "binding": true
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 clause legalTradition mixed, customary_law, islamic_law, hindu_law, jewish_law, canon_law and determinedBy situs, nationality, personal_status, choice_of_law, treaty",
+      "data": {
+        "id": "d1000016-0000-4000-d000-000000001016",
+        "type": "will",
+        "title": "Multi-jurisdiction Will",
+        "clauses": [
+          {
+            "id": "d1000016-0000-4000-d000-000000002001",
+            "clauseNumber": 1,
+            "successionRegime": {
+              "governingLaw": {
+                "jurisdiction": { "country": "ZA" },
+                "legalTradition": "mixed"
+              },
+              "determinedBy": "situs"
+            }
+          },
+          {
+            "id": "d1000016-0000-4000-d000-000000002002",
+            "clauseNumber": 2,
+            "successionRegime": {
+              "governingLaw": {
+                "jurisdiction": { "country": "NG" },
+                "legalTradition": "customary_law"
+              },
+              "determinedBy": "nationality"
+            }
+          },
+          {
+            "id": "d1000016-0000-4000-d000-000000002003",
+            "clauseNumber": 3,
+            "successionRegime": {
+              "governingLaw": {
+                "jurisdiction": { "country": "AE" },
+                "legalTradition": "islamic_law"
+              },
+              "determinedBy": "personal_status"
+            }
+          },
+          {
+            "id": "d1000016-0000-4000-d000-000000002004",
+            "clauseNumber": 4,
+            "successionRegime": {
+              "governingLaw": {
+                "jurisdiction": { "country": "IN" },
+                "legalTradition": "hindu_law"
+              },
+              "determinedBy": "choice_of_law"
+            }
+          },
+          {
+            "id": "d1000016-0000-4000-d000-000000002005",
+            "clauseNumber": 5,
+            "successionRegime": {
+              "governingLaw": {
+                "jurisdiction": { "country": "IL" },
+                "legalTradition": "jewish_law"
+              },
+              "determinedBy": "treaty"
+            }
+          },
+          {
+            "id": "d1000016-0000-4000-d000-000000002006",
+            "clauseNumber": 6,
+            "successionRegime": {
+              "governingLaw": {
+                "jurisdiction": { "country": "VA" },
+                "legalTradition": "canon_law"
+              }
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 clause validatingAuthority types court, religious_body, registrar",
+      "data": {
+        "id": "d1000017-0000-4000-d000-000000001017",
+        "type": "will",
+        "title": "Will with Multiple Validating Authorities",
+        "clauses": [
+          {
+            "id": "d1000017-0000-4000-d000-000000002001",
+            "clauseNumber": 1,
+            "validatingAuthority": {
+              "name": "Manchester Probate Court",
+              "type": "court",
+              "jurisdiction": { "country": "GB" }
+            }
+          },
+          {
+            "id": "d1000017-0000-4000-d000-000000002002",
+            "clauseNumber": 2,
+            "validatingAuthority": {
+              "name": "Shariah Court Singapore",
+              "type": "religious_body"
+            }
+          },
+          {
+            "id": "d1000017-0000-4000-d000-000000002003",
+            "clauseNumber": 3,
+            "validatingAuthority": {
+              "name": "General Register Office",
+              "type": "registrar"
+            }
+          }
+        ]
+      },
+      "valid": true
+    }
+  ]
+}

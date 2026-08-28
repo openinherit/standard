@@ -1,0 +1,106 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "1.9.0",
+  "exportedAt": "2026-03-27T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "a67ccdff-858c-445d-80cc-d7ea59472b50",
+    "testatorPersonId": "b2420279-5c36-4e71-908f-6bb8484b28f8",
+    "status": "planning",
+    "createdAt": "2026-03-27T00:00:00Z",
+    "lastModifiedAt": "2026-03-27T00:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    }
+  },
+  "people": [
+    {
+      "id": "b2420279-5c36-4e71-908f-6bb8484b28f8",
+      "givenName": "William",
+      "familyName": "Hartley",
+      "roles": [
+        "testator"
+      ]
+    }
+  ],
+  "organisations": [],
+  "kinships": [],
+  "relationships": [],
+  "properties": [],
+  "assets": [],
+  "spaces": [
+    {
+      "id": "a1b2c3d4-1111-4000-a000-000000000001",
+      "spaceType": "bedroom",
+      "name": "Study",
+      "propertyId": "00000000-0000-4000-a000-999999999993"
+    }
+  ],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "7d8ec3a5-3842-4d2b-a8e4-17725fadba4e",
+      "bequestType": "pecuniary",
+      "beneficiaryId": "00000000-0000-4000-a000-999999999999",
+      "amount": {
+        "amount": 500000,
+        "currency": "GBP"
+      },
+      "description": "I give £5,000 to a person who does not exist in the people array."
+    },
+    {
+      "id": "9c6bc02b-488e-49e2-ac70-92f9d121f099",
+      "bequestType": "specific",
+      "beneficiaryId": "b2420279-5c36-4e71-908f-6bb8484b28f8",
+      "assetCollectionId": "00000000-0000-4000-a000-999999999994",
+      "description": "I give a collection to a valid beneficiary, but the collection does not exist."
+    }
+  ],
+  "trusts": [],
+  "executors": [],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-03-28T12:00:00Z",
+    "validatedBy": "INHERIT Examples",
+    "schemaVersion": "1.2.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 0,
+      "maxScore": 100,
+      "checklist": [],
+      "jurisdiction": "GB-ENG",
+      "estateStatus": "planning"
+    },
+    "taxPosition": {
+      "jurisdiction": "GB-ENG",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 0,
+        "currency": "GBP"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    },
+    "recommendedActions": []
+  }
+}

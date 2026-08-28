@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/temporal-rule.json",
+  "title": "TemporalRule",
+  "description": "A jurisdiction rule value with effective dates, legislative status, and change history",
+  "$comment": "Wraps any jurisdiction rule value with temporal legislation tracking. Use this for tax thresholds, exemption amounts, forced heirship fractions, and any value that changes when legislation changes. Enables historical lookback (what was the threshold when this gift was made?) and forward planning (what will the threshold be after the announced reform?).",
+  "type": "object",
+  "required": [ "value", "effectiveFrom", "status" ],
+  "properties": {
+    "value": {
+      "description": "The actual rule value — a number (tax rate, threshold in minor units), boolean (rule applies or not), string (enum value, fraction), or object (complex rule). The consumer must interpret this in context",
+      "$comment": "JSON Schema 'number' includes integers. Do not add 'integer' separately — oneOf would fail because a value like 50 matches both.",
+      "examples": [ 32500000, true, "0.75", "per_child_sliding" ],
+      "type": [ "number", "boolean", "string", "object" ]
+    },
+    "effectiveFrom": {
+      "description": "The date from which this rule value takes effect. For enacted legislation, this is the commencement date, not the date of royal assent",
+      "$comment": "https://www.iso.org/iso-8601-date-and-time-format.html",
+      "examples": [ "2023-01-01", "2024-04-06", "2027-01-01" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "effectiveUntil": {
+      "description": "The date this rule value was or will be superseded. Null means it is currently in effect with no known end date",
+      "$comment": "null = no known end date (current rule). A date = superseded on that date — https://www.iso.org/iso-8601-date-and-time-format.html",
+      "examples": [ "2024-04-05", null ],
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "description": "The legislative status of this rule. Only 'enacted' rules are legally binding — all others are prospective",
+      "$comment": "enacted: in force and legally binding. royal_assent: passed by legislature but not yet commenced. bill_stage: currently progressing through parliament or congress. consultation: proposed rule under public consultation. announced: government has stated intent but no formal legislation exists.",
+      "examples": [ "enacted", "bill_stage" ],
+      "enum": [
+        "enacted",
+        "royal_assent",
+        "bill_stage",
+        "consultation",
+        "announced"
+      ]
+    },
+    "predecessorValue": {
+      "description": "The previous value of this rule, for computing deltas and understanding the direction of change. Null if this is the first known value",
+      "$comment": "Same type flexibility as 'value', plus null for the first known value.",
+      "examples": [ 25000000, null ],
+      "type": [ "number", "boolean", "string", "object", "null" ]
+    },
+    "legislativeReference": {
+      "description": "Citation for the legislation that establishes this rule value. Include act name, section, and year",
+      "$comment": "e.g. 'Finance Act 2027 s.12', 'Swiss Civil Code Art. 471 (2023 revision)', 'Inheritance Tax Act 1984 s.7'",
+      "examples": [
+        "Inheritance Tax Act 1984 s.7",
+        "Swiss Civil Code Art. 471 (2023 revision)",
+        "Finance Act 2027 s.12"
+      ],
+      "type": "string",
+      "maxLength": 500
+    },
+    "notes": {
+      "description": "Free-text commentary on this rule value — transitional provisions, known ambiguities, or political context",
+      "examples": [
+        "Frozen at this level since 2009 — widely expected to increase in next Budget"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "jurisdiction": {
+      "description": "The jurisdiction this temporal rule applies to. Enables different thresholds for different jurisdictions (e.g. UK IHT vs Scottish IHT)",
+      "$ref": "jurisdiction.json"
+    }
+  },
+  "additionalProperties": false
+}

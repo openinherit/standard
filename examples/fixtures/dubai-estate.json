@@ -1,0 +1,240 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-03-27T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "863a3721-468b-40b5-b0b6-95ea06171dbc",
+    "testatorPersonId": "a9824373-532c-48dd-9216-cb3d0956aa09",
+    "status": "confirmed",
+    "willType": "dual",
+    "parallelDistributions": [
+      {
+        "system": "DIFC Common Law",
+        "jurisdiction": {
+          "country": "AE",
+          "name": "DIFC"
+        },
+        "description": "DIFC-registered will governs assets within DIFC jurisdiction under common law principles.",
+        "notes": "The DIFC Wills and Probate Registry was established in 2015. A DIFC will can cover DIFC assets, Dubai assets (with Full Will option), and assets in other emirates."
+      },
+      {
+        "system": "Shariah (Hanafi)",
+        "jurisdiction": {
+          "country": "AE"
+        },
+        "description": "Assets outside DIFC jurisdiction distributed according to Shariah inheritance rules (faraid).",
+        "notes": "Under Shariah, the wife receives one-eighth of the estate (if there are children). Sons receive twice the share of daughters. Up to one-third may be bequeathed to non-heirs (wasiyya)."
+      }
+    ],
+    "registrations": [
+      {
+        "registry": "DIFC Wills Service Centre",
+        "registrationNumber": "DIFC-W-2026-00142",
+        "jurisdictionScope": "Dubai and DIFC assets",
+        "registrationDate": "2026-01-20"
+      }
+    ],
+    "defaultSuccessionRegime": {
+      "governingLaw": {
+        "jurisdiction": {
+          "country": "AE"
+        },
+        "legalTradition": "islamic_law",
+        "statute": "UAE Personal Status Law (Federal Law No. 28 of 2005)"
+      },
+      "determinedBy": "personal_status",
+      "binding": true,
+      "notes": "Default Shariah succession applies to assets outside DIFC jurisdiction. DIFC-registered will overrides for assets within its scope."
+    },
+    "religiousConsideration": {
+      "tradition": "islamic_law",
+      "binding": true,
+      "notes": "Shariah (Hanafi school) governs inheritance for Muslim nationals. Faraid rules allocate fixed shares: wife receives one-eighth (with children). Up to one-third may be bequeathed to non-heirs (wasiyya). Deferred mahr is a priority debt."
+    },
+    "notes": "Mohammed holds both a DIFC will (for Dubai assets under common law) and is subject to Shariah inheritance rules for assets not covered by the DIFC will. The deferred mahr is a priority debt that must be settled before estate distribution under both systems.",
+    "createdAt": "2026-01-20T00:00:00Z",
+    "lastModifiedAt": "2026-03-27T00:00:00Z",
+    "domicile": {
+      "country": "AE",
+      "legalSystems": [
+        "civil_law",
+        "islamic_law"
+      ],
+      "name": "United Arab Emirates"
+    }
+  },
+  "people": [
+    {
+      "id": "a9824373-532c-48dd-9216-cb3d0956aa09",
+      "givenName": "Mohammed",
+      "familyName": "Al-Rashid",
+      "dateOfBirth": "1972-06-12",
+      "roles": [
+        "testator"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "Villa 47, Al Sufouh Gardens",
+          "addressLocality": "Dubai Marina",
+          "addressRegion": "Dubai",
+          "addressCountry": "AE"
+        }
+      }
+    },
+    {
+      "id": "e5ece0cf-2fba-4aa1-9931-2fab7144cd67",
+      "givenName": "Fatima",
+      "familyName": "Al-Rashid",
+      "dateOfBirth": "1978-02-25",
+      "roles": [
+        "beneficiary"
+      ]
+    },
+    {
+      "id": "b2f5ba7d-c0e8-486c-9152-8219225cd6c4",
+      "givenName": "Ahmed",
+      "familyName": "Al-Rashid",
+      "dateOfBirth": "2002-09-30",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ]
+    }
+  ],
+  "kinships": [
+    {
+      "id": "26fdb799-bd58-4614-b566-013a096d1cd1",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "a9824373-532c-48dd-9216-cb3d0956aa09",
+      "toPersonId": "b2f5ba7d-c0e8-486c-9152-8219225cd6c4"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "a753b7f0-f16c-498e-9e09-5d78bfbb761c",
+      "type": "marriage_religious",
+      "religiousSubtype": "nikah",
+      "partners": [
+        {
+          "personId": "a9824373-532c-48dd-9216-cb3d0956aa09",
+          "ordinal": 1
+        },
+        {
+          "personId": "e5ece0cf-2fba-4aa1-9931-2fab7144cd67",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "AE"
+      },
+      "financialInstruments": [
+        {
+          "type": "mahr",
+          "value": {
+            "amount": 10000000,
+            "currency": "AED"
+          },
+          "status": "deferred",
+          "maharDetails": {
+            "maharType": "deferred",
+            "recipientPersonId": "e5ece0cf-2fba-4aa1-9931-2fab7144cd67",
+            "linkedLiabilityId": "11000008-0000-4000-a000-000000000001"
+          },
+          "inheritanceImpact": "Deferred mahr is a priority debt — settled before any estate distribution under both DIFC and Shariah.",
+          "instrumentDate": "2000-03-15"
+        }
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "id": "6be2920b-56ac-425a-9700-4af0b055d5af",
+      "name": "Villa 47, Al Sufouh Gardens, Dubai Marina",
+      "propertyType": "detached",
+      "tenureType": "ownership",
+      "isPrimaryResidence": true,
+      "ownershipType": "sole",
+      "estimatedValue": {
+        "amount": 450000000,
+        "currency": "AED"
+      },
+      "address": {
+        "streetAddress": "Villa 47, Al Sufouh Gardens",
+        "addressLocality": "Dubai Marina",
+        "addressRegion": "Dubai",
+        "addressCountry": "AE"
+      }
+    }
+  ],
+  "assets": [],
+  "liabilities": [
+    {
+      "id": "11000008-0000-4000-a000-000000000001",
+      "liabilityType": "mahr",
+      "amount": {
+        "amount": 10000000,
+        "currency": "AED"
+      },
+      "creditor": "Fatima Al-Rashid",
+      "notes": "Deferred mahr (mu'akhar) from the nikah contract dated 15 March 2000. AED 100,000 payable on divorce or death. Priority debt under Shariah — ranks ahead of bequests and inheritance shares."
+    }
+  ],
+  "bequests": [
+    {
+      "id": "99e58d51-7f5f-4009-baa4-8945a9cd6135",
+      "bequestType": "specific",
+      "beneficiaryId": "b2f5ba7d-c0e8-486c-9152-8219225cd6c4",
+      "description": "Under the DIFC will: I give my villa at Al Sufouh Gardens, Dubai Marina to my son Ahmed Al-Rashid."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "e84a690e-4ee3-46a3-becd-d3ed9b918f9a",
+      "personId": "b2f5ba7d-c0e8-486c-9152-8219225cd6c4",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-03-28T12:00:00Z",
+    "validatedBy": "INHERIT Examples",
+    "schemaVersion": "6.3.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 0,
+      "maxScore": 100,
+      "checklist": [],
+      "jurisdiction": "AE",
+      "estateStatus": "confirmed"
+    },
+    "taxPosition": {
+      "jurisdiction": "AE",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 0,
+        "currency": "AED"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    },
+    "recommendedActions": []
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "target": "../../../v3/common/provenance.json",
+  "tests": [
+    {
+      "description": "valid — empty provenance (all fields optional)",
+      "data": {},
+      "valid": true
+    },
+    {
+      "description": "valid — manual entry with high confidence",
+      "data": {
+        "source": "manual",
+        "confidence": 0.95
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — AI-generated with full review chain",
+      "data": {
+        "source": "ai_generated",
+        "confidence": 0.82,
+        "aiProvenance": {
+          "model": "claude",
+          "confidence": 92,
+          "generatedAt": "2026-03-30T14:00:00Z",
+          "humanReviewed": true,
+          "reviewedBy": "James Davies",
+          "reviewedAt": "2026-03-30T16:00:00Z"
+        },
+        "humanVerdict": "approved",
+        "verdictAt": "2026-03-30T16:00:00Z",
+        "agentTaskId": "task-extract-will-003"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — imported data with source reference",
+      "data": {
+        "source": "import",
+        "confidence": 0.70,
+        "importSourceId": "src-clio-001",
+        "humanVerdict": "modified",
+        "rejectionReason": "Address was outdated — updated to current residence",
+        "verdictAt": "2026-04-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — rejected AI data with reason",
+      "data": {
+        "source": "ai_generated",
+        "confidence": 0.30,
+        "humanVerdict": "rejected",
+        "rejectionReason": "AI incorrectly identified beneficiary relationship",
+        "verdictAt": "2026-04-01T10:00:00Z",
+        "agentTaskId": "task-enrich-001"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — pending review",
+      "data": {
+        "source": "ai_generated",
+        "confidence": 0.65,
+        "humanVerdict": "pending_review"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — confidence at boundary 0.0",
+      "data": {
+        "confidence": 0
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — confidence at boundary 1.0",
+      "data": {
+        "confidence": 1
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — source value not in enum",
+      "data": {
+        "source": "unknown_source"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — humanVerdict value not in enum",
+      "data": {
+        "humanVerdict": "accepted"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — confidence below 0",
+      "data": {
+        "confidence": -0.1
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — confidence above 1",
+      "data": {
+        "confidence": 1.1
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additional property not allowed",
+      "data": {
+        "source": "manual",
+        "unknownField": "not allowed"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — verdictAt is not a date-time",
+      "data": {
+        "verdictAt": "not-a-date"
+      },
+      "valid": false
+    }
+  ]
+}

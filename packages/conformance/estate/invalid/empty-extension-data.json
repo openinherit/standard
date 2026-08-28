@@ -1,0 +1,99 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "1.9.0",
+  "exportedAt": "2026-03-27T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Conformance Kit",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+    "testatorPersonId": "1d3265a6-d16e-4b24-896d-e330866369d3",
+    "status": "planning",
+    "createdAt": "2026-03-27T00:00:00Z",
+    "lastModifiedAt": "2026-03-27T00:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    }
+  },
+  "people": [
+    {
+      "id": "1d3265a6-d16e-4b24-896d-e330866369d3",
+      "givenName": "James",
+      "familyName": "Ashford",
+      "roles": [
+        "testator"
+      ]
+    }
+  ],
+  "kinships": [],
+  "relationships": [],
+  "properties": [],
+  "assets": [],
+  "liabilities": [],
+  "bequests": [],
+  "trusts": [],
+  "executors": [],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [
+    {
+      "id": "islamic-succession",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/islamic-succession.json"
+    }
+  ],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-03-28T12:00:00Z",
+    "validatedBy": "INHERIT Conformance Kit",
+    "schemaVersion": "1.2.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 12,
+      "maxScore": 100,
+      "jurisdiction": "GB-ENG",
+      "estateStatus": "planning",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "checklist": [
+        {
+          "category": "personal_details",
+          "item": "Testator full name recorded",
+          "weight": 10,
+          "status": "complete"
+        },
+        {
+          "category": "personal_details",
+          "item": "Testator jurisdiction",
+          "weight": 5,
+          "status": "complete"
+        }
+      ]
+    },
+    "recommendedActions": [],
+    "taxPosition": {
+      "jurisdiction": "GB-ENG",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 0,
+        "currency": "GBP"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    }
+  }
+}

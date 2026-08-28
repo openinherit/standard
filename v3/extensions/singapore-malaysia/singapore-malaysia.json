@@ -1,0 +1,345 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json",
+  "title": "Singapore / Malaysia Extension",
+  "description": "Singapore and Malaysia succession law — ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction.",
+  "maturity": "draft",
+  "extensionType": "hybrid",
+  "applicableJurisdictions": [
+    "SG",
+    "MY"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "common_law",
+    "islamic_law"
+  ],
+  "dataProvenance": "Intestate Succession Act (SG), Administration of Muslim Law Act (SG), Distribution Act 1958 (MY)",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": [
+    "islamic-succession"
+  ],
+  "type": "object",
+  "$defs": {
+    "SingaporeISADistribution": {
+      "$comment": "ISA Schedule 2 distribution: Rule 1 — spouse only: spouse gets all. Rule 2 — spouse + children: spouse 1/2, children 1/2. Rule 3 — children only: equally. Rule 4 — spouse + parents: spouse 3/4, parents 1/4. Rule 5 — parents only: equally. Rule 6 — spouse + siblings: spouse 1/2, siblings 1/2. Rule 7 — siblings only: equally. Rule 8 — grandparents, then uncles/aunts. Rule 9 — government",
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "shareSchedule": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "relationshipCategory": {
+                "description": "Kinship category for this share allocation, aligned with the ISA distribution rules",
+                "type": "string",
+                "$comment": "Maps to core kinshipType values. spouse: surviving spouse (relationship.json). children: children of the deceased (parent_child_*). parents: parents (parent_child_*). siblings: brothers and sisters (sibling, half_sibling). grandparents: grandparents (grandparent_grandchild). uncles_aunts: uncles and aunts (uncle_aunt)",
+                "enum": [
+                  "spouse",
+                  "children",
+                  "parents",
+                  "siblings",
+                  "grandparents",
+                  "uncles_aunts"
+                ]
+              },
+              "relationship": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "share": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 2000
+              }
+            },
+            "additionalProperties": false
+          },
+          "maxItems": 50
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "SingaporeAMLADistribution": {
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "school": {
+          "type": "string",
+          "enum": [
+            "shafii",
+            "hanafi"
+          ]
+        },
+        "faraidRef": {
+          "type": "string",
+          "maxLength": 500,
+          "$comment": "links to Islamic extension"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "CPFNomination": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "nominatedPersonIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "maxItems": 50,
+          "uniqueItems": true
+        },
+        "binding": {
+          "type": "boolean"
+        },
+        "nominationDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "subAccountAllocations": {
+          "description": "Per-CPF-account beneficiary allocations",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "accountType": {
+                "enum": ["ordinary", "special", "medisave", "retirement"]
+              },
+              "beneficiaryPersonId": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                "format": "uuid"
+              },
+              "percentage": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "nominationFormVersion": {
+          "description": "CPF nomination form version — pre-2010 and post-2010 have different witness requirements",
+          "enum": ["pre_2010", "post_2010"]
+        },
+        "revokedByMarriage": {
+          "description": "Whether this nomination has been automatically revoked by marriage",
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "accountId"
+      ],
+      "additionalProperties": false
+    },
+    "MalaysianDistributionAct": {
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "shareSchedule": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "relationshipCategory": {
+                "description": "Kinship category for this share allocation, aligned with the Malaysian Distribution Act 1958 rules",
+                "type": "string",
+                "$comment": "Maps to core kinshipType values. spouse: surviving spouse (relationship.json). children: children of the deceased (parent_child_*). parents: parents (parent_child_*). siblings: brothers and sisters (sibling, half_sibling). grandparents: grandparents (grandparent_grandchild). uncles_aunts: uncles and aunts (uncle_aunt)",
+                "enum": [
+                  "spouse",
+                  "children",
+                  "parents",
+                  "siblings",
+                  "grandparents",
+                  "uncles_aunts"
+                ]
+              },
+              "relationship": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "share": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 2000
+              }
+            },
+            "additionalProperties": false
+          },
+          "maxItems": 50
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "MalaysianShariah": {
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "shariaCourtReference": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "EPFNomination": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "nominatedPersonIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "maxItems": 50,
+          "uniqueItems": true
+        },
+        "binding": {
+          "type": "boolean"
+        },
+        "nominationDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "accountId"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "country": {
+      "description": "ISO 3166-1 alpha-2 country code — SG for Singapore, MY for Malaysia. Determines which succession framework applies",
+      "type": "string",
+      "enum": [
+        "SG",
+        "MY"
+      ]
+    },
+    "singaporeISA": {
+      "$ref": "#/$defs/SingaporeISADistribution"
+    },
+    "singaporeAMLA": {
+      "$ref": "#/$defs/SingaporeAMLADistribution"
+    },
+    "cpfNominations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CPFNomination"
+      },
+      "maxItems": 50
+    },
+    "malaysianDistributionAct": {
+      "$ref": "#/$defs/MalaysianDistributionAct"
+    },
+    "malaysianShariah": {
+      "$ref": "#/$defs/MalaysianShariah"
+    },
+    "epfNominations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/EPFNomination"
+      },
+      "maxItems": 50
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "marriageRevocation": {
+      "type": "object",
+      "description": "Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia.",
+      "properties": {
+        "revokesPriorWill": { "type": "boolean" },
+        "statute": { "type": "string", "maxLength": 255 },
+        "statuteUrl": { "type": "string", "format": "uri", "maxLength": 500 },
+        "contemplationException": { "type": "boolean" },
+        "contemplationRule": { "type": "string", "maxLength": 2000 },
+        "notes": { "type": "string", "maxLength": 2000 }
+      },
+      "required": ["revokesPriorWill", "statute"],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "country"
+  ],
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

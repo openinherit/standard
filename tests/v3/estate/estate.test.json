@@ -1,0 +1,3546 @@
+{
+  "target": "../../../v3/estate.json",
+  "tests": [
+    {
+      "description": "valid minimal estate",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid estate with optional fields",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000002",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-06-01T14:00:00Z",
+        "willType": "secular",
+        "primaryInstrument": "will",
+        "defaultPropertyRegime": "separate_property",
+        "totalEstimatedValue": {
+          "amount": 250000000,
+          "currency": "GBP"
+        },
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing testatorPersonId",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown status value",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "deleted",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing jurisdiction",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — estate with defaultSuccessionRegime",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440070",
+        "testatorPersonId": "550e8400-e29b-41d4-a716-446655440071",
+        "status": "planning",
+        "createdAt": "2026-03-29T10:00:00Z",
+        "lastModifiedAt": "2026-03-29T10:00:00Z",
+        "defaultSuccessionRegime": {
+          "governingLaw": {
+            "jurisdiction": {
+              "country": "GB",
+              "subdivision": "GB-ENG"
+            },
+            "legalTradition": "common_law",
+            "statute": "Wills Act 1837"
+          },
+          "determinedBy": "domicile",
+          "binding": true,
+          "extensions": []
+        },
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with religiousConsideration (non-binding faraid in England)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440072",
+        "testatorPersonId": "550e8400-e29b-41d4-a716-446655440073",
+        "status": "planning",
+        "createdAt": "2026-03-29T10:00:00Z",
+        "lastModifiedAt": "2026-03-29T10:00:00Z",
+        "religiousConsideration": {
+          "tradition": "islamic_law",
+          "binding": false,
+          "notes": "Testator wishes to distribute according to faraid. Not legally required in England but morally obligatory."
+        },
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with binding religiousConsideration (Singapore AMLA)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440074",
+        "testatorPersonId": "550e8400-e29b-41d4-a716-446655440075",
+        "status": "planning",
+        "createdAt": "2026-03-29T10:00:00Z",
+        "lastModifiedAt": "2026-03-29T10:00:00Z",
+        "religiousConsideration": {
+          "tradition": "islamic_law",
+          "binding": true,
+          "notes": "AMLA governs Muslim estates in Singapore — distribution per faraid validated by Shariah Court"
+        },
+        "domicile": {
+          "country": "SG",
+          "legalSystems": [
+            "common_law",
+            "islamic_law"
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — religiousConsideration tradition not in enum",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440076",
+        "testatorPersonId": "550e8400-e29b-41d4-a716-446655440077",
+        "status": "planning",
+        "createdAt": "2026-03-29T10:00:00Z",
+        "lastModifiedAt": "2026-03-29T10:00:00Z",
+        "religiousConsideration": {
+          "tradition": "buddhism",
+          "binding": false
+        },
+        "domicile": {
+          "country": "GB"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — companionEstateId present without companionLinkStatus (dependentRequired)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440078",
+        "testatorPersonId": "550e8400-e29b-41d4-a716-446655440079",
+        "status": "planning",
+        "createdAt": "2026-03-29T10:00:00Z",
+        "lastModifiedAt": "2026-03-29T10:00:00Z",
+        "companionEstateId": "550e8400-e29b-41d4-a716-446655440080",
+        "domicile": {
+          "country": "GB"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid: estate with x-inherit- extension will type",
+      "data": {
+        "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "testatorPersonId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "status": "planning",
+        "createdAt": "2026-03-30T10:00:00Z",
+        "lastModifiedAt": "2026-03-30T10:00:00Z",
+        "willType": "x-inherit-wasiyya-shariyya",
+        "domicile": {
+          "country": "GB"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid: estate with old extensionWillType field",
+      "data": {
+        "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "testatorPersonId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "status": "planning",
+        "createdAt": "2026-03-30T10:00:00Z",
+        "lastModifiedAt": "2026-03-30T10:00:00Z",
+        "willType": "secular",
+        "extensionWillType": "wasiyya_shariyya",
+        "domicile": {
+          "country": "GB"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid: estate with unprefixed custom will type",
+      "data": {
+        "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "testatorPersonId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "status": "planning",
+        "createdAt": "2026-03-30T10:00:00Z",
+        "lastModifiedAt": "2026-03-30T10:00:00Z",
+        "willType": "custom_will",
+        "domicile": {
+          "country": "GB"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — companionEstateId with companionLinkStatus (dependentRequired satisfied)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440081",
+        "testatorPersonId": "550e8400-e29b-41d4-a716-446655440082",
+        "status": "planning",
+        "createdAt": "2026-03-29T10:00:00Z",
+        "lastModifiedAt": "2026-03-29T10:00:00Z",
+        "companionEstateId": "550e8400-e29b-41d4-a716-446655440083",
+        "companionLinkStatus": "active",
+        "domicile": {
+          "country": "GB"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with mirrorWillId",
+      "data": {
+        "id": "a0666399-ed39-49a4-bcd7-f6b940682011",
+        "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "status": "planning",
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "companionEstateId": "77ce0913-f718-41ce-9716-e52fecb4a54d",
+        "companionLinkStatus": "active",
+        "linkedAt": "2026-01-01T09:00:00Z",
+        "mirrorWillId": "77ce0913-f718-41ce-9716-e52fecb4a54d",
+        "domicile": {
+          "country": "GB"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — mirrorWillId wrong format",
+      "data": {
+        "id": "8ab2a943-17ec-4748-a63f-31c05eb53569",
+        "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "status": "planning",
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "mirrorWillId": "not-a-uuid",
+        "domicile": {
+          "country": "GB"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — estate with jurisdictionRules (scission doctrine)",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000200",
+        "testatorPersonId": "b2c3d4e5-0000-4000-a000-000000000200",
+        "status": "planning",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "jurisdictionRules": {
+          "doctrine": "scission",
+          "immoveableRule": "lex_situs",
+          "moveableRule": "lex_domicilii"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with contestability (Banks v Goodfellow)",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000201",
+        "testatorPersonId": "b2c3d4e5-0000-4000-a000-000000000201",
+        "status": "confirmed",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "contestability": {
+          "status": "grounds_identified",
+          "grounds": [
+            {
+              "ground": "lack_of_testamentary_capacity",
+              "jurisdiction": {
+                "country": "GB",
+                "subdivision": "GB-ENG"
+              },
+              "legalTest": "banks_v_goodfellow",
+              "limbs": [
+                {
+                  "name": "understanding_nature_of_will",
+                  "satisfied": true
+                },
+                {
+                  "name": "understanding_extent_of_estate",
+                  "satisfied": true
+                },
+                {
+                  "name": "understanding_claims",
+                  "satisfied": false
+                },
+                {
+                  "name": "no_disorder_of_mind",
+                  "satisfied": null
+                }
+              ],
+              "assessedBy": "Dr Amara Singh",
+              "assessedDate": "2025-03-15"
+            }
+          ],
+          "influenceFactors": [
+            {
+              "influencerPersonId": "c3d4e5f6-0000-4000-a000-000000000201",
+              "subjectPersonId": "b2c3d4e5-0000-4000-a000-000000000201",
+              "relationshipType": "carer",
+              "cohabiting": true,
+              "financialDependency": "subject_on_influencer"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with taxTreaties (UK-UAE)",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000202",
+        "testatorPersonId": "b2c3d4e5-0000-4000-a000-000000000202",
+        "status": "planning",
+        "domicile": {
+          "country": "GB"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "taxTreaties": [
+          {
+            "between": [
+              "GB",
+              "AE"
+            ],
+            "treatyType": "estate_and_inheritance",
+            "primaryTaxingRight": {
+              "immoveable": "situs",
+              "moveable": "domicile"
+            },
+            "reliefMethod": "credit",
+            "treatyReference": "UK-UAE DTC 2016"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with deathVerification (UK death certificate)",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000203",
+        "testatorPersonId": "b2c3d4e5-0000-4000-a000-000000000203",
+        "status": "pre_probate",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "deathVerification": {
+          "method": "death_certificate",
+          "issuingAuthority": "General Register Office",
+          "jurisdiction": {
+            "country": "GB",
+            "subdivision": "GB-ENG"
+          },
+          "referenceNumber": "DC-2026-001234",
+          "dateOfDeath": "2026-03-15",
+          "registrationDate": "2026-03-20",
+          "verifiedAt": "2026-03-22T10:00:00Z",
+          "verifiedBy": "Harrison & Co Solicitors"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with testamentaryScenarios (mirror wills)",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000204",
+        "testatorPersonId": "b2c3d4e5-0000-4000-a000-000000000204",
+        "status": "confirmed",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "testamentaryScenarios": [
+          {
+            "id": "james-dies-first",
+            "description": "James dies, Catherine survives",
+            "conditions": [
+              {
+                "personId": "b2c3d4e5-0000-4000-a000-000000000204",
+                "event": "death",
+                "order": 1
+              },
+              {
+                "personId": "c3d4e5f6-0000-4000-a000-000000000204",
+                "event": "survives"
+              }
+            ],
+            "activeBequests": [
+              "d4e5f6a7-0000-4000-a000-000000000204"
+            ],
+            "activeExecutors": [
+              "e5f6a7b8-0000-4000-a000-000000000204"
+            ]
+          },
+          {
+            "id": "simultaneous-death",
+            "description": "Both die in common accident",
+            "conditions": [
+              {
+                "personId": "b2c3d4e5-0000-4000-a000-000000000204",
+                "event": "death"
+              },
+              {
+                "personId": "c3d4e5f6-0000-4000-a000-000000000204",
+                "event": "death"
+              },
+              {
+                "personId": "b2c3d4e5-0000-4000-a000-000000000204",
+                "event": "commorientes",
+                "jurisdiction": {
+                  "country": "GB",
+                  "subdivision": "GB-ENG"
+                },
+                "presumption": "elder_dies_first"
+              }
+            ]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — contestability missing required status field",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000205",
+        "testatorPersonId": "b2c3d4e5-0000-4000-a000-000000000205",
+        "status": "planning",
+        "domicile": {
+          "country": "GB"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "contestability": {
+          "grounds": []
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — estate with executors at maxItems boundary (20)",
+      "data": {
+        "id": "a1000004-0000-4000-a000-000000001003",
+        "testatorPersonId": "b1000004-0000-4000-a000-000000001003",
+        "status": "planning",
+        "domicile": {
+          "country": "GB"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — status is number (must be string enum)",
+      "data": {
+        "id": "a1000012-0000-4000-a000-000000001012",
+        "testatorPersonId": "b1000012-0000-4000-a000-000000001012",
+        "status": 1,
+        "domicile": {
+          "country": "GB"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — domicile is string (must be object)",
+      "data": {
+        "id": "a1000013-0000-4000-a000-000000001013",
+        "testatorPersonId": "b1000013-0000-4000-a000-000000001013",
+        "status": "planning",
+        "domicile": "GB",
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — contestability status is boolean (must be string enum)",
+      "data": {
+        "id": "a1000014-0000-4000-a000-000000001014",
+        "testatorPersonId": "b1000014-0000-4000-a000-000000001014",
+        "status": "planning",
+        "domicile": {
+          "country": "GB"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "contestability": {
+          "status": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing testatorPersonId",
+      "data": {
+        "id": "a1000020-0000-4000-a000-000000001020",
+        "status": "planning",
+        "domicile": {
+          "country": "GB"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing status",
+      "data": {
+        "id": "a1000021-0000-4000-a000-000000001021",
+        "testatorPersonId": "b1000021-0000-4000-a000-000000001021",
+        "domicile": {
+          "country": "GB"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing domicile",
+      "data": {
+        "id": "a1000022-0000-4000-a000-000000001022",
+        "testatorPersonId": "b1000022-0000-4000-a000-000000001022",
+        "status": "planning",
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing createdAt",
+      "data": {
+        "id": "a1000023-0000-4000-a000-000000001023",
+        "testatorPersonId": "b1000023-0000-4000-a000-000000001023",
+        "status": "planning",
+        "domicile": {
+          "country": "GB"
+        },
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — createdAt is not ISO date-time",
+      "data": {
+        "id": "a1000030-0000-4000-a000-000000001030",
+        "testatorPersonId": "b1000030-0000-4000-a000-000000001030",
+        "status": "planning",
+        "domicile": {
+          "country": "GB"
+        },
+        "createdAt": "01/01/2026",
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — domicile country code is lowercase",
+      "data": {
+        "id": "a1000031-0000-4000-a000-000000001031",
+        "testatorPersonId": "b1000031-0000-4000-a000-000000001031",
+        "status": "planning",
+        "domicile": {
+          "country": "gb"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — status enum value not recognised",
+      "data": {
+        "id": "a1000040-0000-4000-a000-000000001040",
+        "testatorPersonId": "b1000040-0000-4000-a000-000000001040",
+        "status": "archived",
+        "domicile": {
+          "country": "GB"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown property at root level",
+      "data": {
+        "id": "a1000041-0000-4000-a000-000000001041",
+        "testatorPersonId": "b1000041-0000-4000-a000-000000001041",
+        "status": "planning",
+        "domicile": {
+          "country": "GB"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "totallyMadeUpField": "should be rejected"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — jurisdictionRules doctrine not in enum",
+      "data": {
+        "id": "a1000042-0000-4000-a000-000000001042",
+        "testatorPersonId": "b1000042-0000-4000-a000-000000001042",
+        "status": "planning",
+        "domicile": {
+          "country": "GB"
+        },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "jurisdictionRules": {
+          "doctrine": "invalid_doctrine"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — estate with deathVerification trustLevel",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000300",
+        "testatorPersonId": "b2c3d4e5-0000-4000-a000-000000000300",
+        "status": "pre_probate",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2026-04-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "deathVerification": {
+          "method": "death_certificate",
+          "issuingAuthority": "General Register Office",
+          "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+          "dateOfDeath": "2026-03-15",
+          "trustLevel": "government_certified"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — deathVerification trustLevel not in enum",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000301",
+        "testatorPersonId": "b2c3d4e5-0000-4000-a000-000000000301",
+        "status": "pre_probate",
+        "domicile": { "country": "GB" },
+        "createdAt": "2026-04-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "deathVerification": {
+          "method": "death_certificate",
+          "trustLevel": "blockchain_verified"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — estate with escheatment",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000302",
+        "testatorPersonId": "b2c3d4e5-0000-4000-a000-000000000302",
+        "status": "in_administration",
+        "domicile": { "country": "US", "subdivision": "US-TX" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "escheatment": {
+          "jurisdiction": { "country": "US", "subdivision": "US-TX" },
+          "dormancyPeriodYears": 3,
+          "claimingAuthority": "Texas Comptroller of Public Accounts",
+          "status": "dormancy_running"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with fhirPatientRef in deathVerification and display field",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000303",
+        "testatorPersonId": "b2c3d4e5-0000-4000-a000-000000000303",
+        "testatorPersonIdDisplay": "James Arthur Davies",
+        "status": "pre_probate",
+        "domicile": { "country": "GB" },
+        "createdAt": "2026-04-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "deathVerification": {
+          "method": "medical_certificate",
+          "trustLevel": "medical_certified",
+          "fhirPatientRef": "https://fhir.nhs.uk/Patient/9000000009"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing id",
+      "data": {
+        "testatorPersonId": "b1000060-0000-4000-a000-000000001060",
+        "status": "planning",
+        "domicile": { "country": "GB" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing lastModifiedAt",
+      "data": {
+        "id": "a1000061-0000-4000-a000-000000001061",
+        "testatorPersonId": "b1000061-0000-4000-a000-000000001061",
+        "status": "planning",
+        "domicile": { "country": "GB" },
+        "createdAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — createdAt as number (must be string date-time)",
+      "data": {
+        "id": "a1000062-0000-4000-a000-000000001062",
+        "testatorPersonId": "b1000062-0000-4000-a000-000000001062",
+        "status": "planning",
+        "domicile": { "country": "GB" },
+        "createdAt": 1672531200,
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — testatorPersonId as boolean (must be string UUID)",
+      "data": {
+        "id": "a1000063-0000-4000-a000-000000001063",
+        "testatorPersonId": false,
+        "status": "planning",
+        "domicile": { "country": "GB" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — status: in_administration",
+      "data": {
+        "id": "a2000001-0000-4000-a000-000000002001",
+        "testatorPersonId": "b2000001-0000-4000-a000-000000002001",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-06-01T09:00:00Z",
+        "lastModifiedAt": "2026-03-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — status: distributed",
+      "data": {
+        "id": "a2000002-0000-4000-a000-000000002002",
+        "testatorPersonId": "b2000002-0000-4000-a000-000000002002",
+        "status": "distributed",
+        "domicile": { "country": "AU" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — status: closed",
+      "data": {
+        "id": "a2000003-0000-4000-a000-000000002003",
+        "testatorPersonId": "b2000003-0000-4000-a000-000000002003",
+        "status": "closed",
+        "domicile": { "country": "NZ" },
+        "createdAt": "2023-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-12-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — status: pre_probate",
+      "data": {
+        "id": "a2000004-0000-4000-a000-000000002004",
+        "testatorPersonId": "b2000004-0000-4000-a000-000000002004",
+        "status": "pre_probate",
+        "domicile": { "country": "GB", "subdivision": "GB-SCT" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-02-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — willType: holographic",
+      "data": {
+        "id": "a2000005-0000-4000-a000-000000002005",
+        "testatorPersonId": "b2000005-0000-4000-a000-000000002005",
+        "status": "confirmed",
+        "willType": "holographic",
+        "domicile": { "country": "FR" },
+        "createdAt": "2025-03-01T09:00:00Z",
+        "lastModifiedAt": "2025-03-15T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — willType: notarised",
+      "data": {
+        "id": "a2000006-0000-4000-a000-000000002006",
+        "testatorPersonId": "b2000006-0000-4000-a000-000000002006",
+        "status": "confirmed",
+        "willType": "notarised",
+        "domicile": { "country": "DE" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — willType: religious",
+      "data": {
+        "id": "a2000007-0000-4000-a000-000000002007",
+        "testatorPersonId": "b2000007-0000-4000-a000-000000002007",
+        "status": "confirmed",
+        "willType": "religious",
+        "domicile": { "country": "EG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — willType: oral_witnessed",
+      "data": {
+        "id": "a2000008-0000-4000-a000-000000002008",
+        "testatorPersonId": "b2000008-0000-4000-a000-000000002008",
+        "status": "confirmed",
+        "willType": "oral_witnessed",
+        "domicile": { "country": "NG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — willType: privileged_will (military testator)",
+      "data": {
+        "id": "a2000009-0000-4000-a000-000000002009",
+        "testatorPersonId": "b2000009-0000-4000-a000-000000002009",
+        "status": "confirmed",
+        "willType": "privileged_will",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2024-09-01T09:00:00Z",
+        "lastModifiedAt": "2024-09-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — willType: composite (secular + religious provisions)",
+      "data": {
+        "id": "a2000010-0000-4000-a000-000000002010",
+        "testatorPersonId": "b2000010-0000-4000-a000-000000002010",
+        "status": "confirmed",
+        "willType": "composite",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-04-01T09:00:00Z",
+        "lastModifiedAt": "2025-04-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — willType: dual (separate secular and religious components)",
+      "data": {
+        "id": "a2000011-0000-4000-a000-000000002011",
+        "testatorPersonId": "b2000011-0000-4000-a000-000000002011",
+        "status": "confirmed",
+        "willType": "dual",
+        "domicile": { "country": "IL" },
+        "createdAt": "2025-05-01T09:00:00Z",
+        "lastModifiedAt": "2025-05-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — primaryInstrument: revocable_trust",
+      "data": {
+        "id": "a2000012-0000-4000-a000-000000002012",
+        "testatorPersonId": "b2000012-0000-4000-a000-000000002012",
+        "status": "confirmed",
+        "primaryInstrument": "revocable_trust",
+        "domicile": { "country": "US", "subdivision": "US-CA" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — primaryInstrument: both (will and trust)",
+      "data": {
+        "id": "a2000013-0000-4000-a000-000000002013",
+        "testatorPersonId": "b2000013-0000-4000-a000-000000002013",
+        "status": "confirmed",
+        "primaryInstrument": "both",
+        "domicile": { "country": "US", "subdivision": "US-FL" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — primaryInstrument: intestacy",
+      "data": {
+        "id": "a2000014-0000-4000-a000-000000002014",
+        "testatorPersonId": "b2000014-0000-4000-a000-000000002014",
+        "status": "pre_probate",
+        "primaryInstrument": "intestacy",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-02-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultPropertyRegime: community_property",
+      "data": {
+        "id": "a2000015-0000-4000-a000-000000002015",
+        "testatorPersonId": "b2000015-0000-4000-a000-000000002015",
+        "status": "planning",
+        "defaultPropertyRegime": "community_property",
+        "domicile": { "country": "US", "subdivision": "US-TX" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultPropertyRegime: equitable_distribution",
+      "data": {
+        "id": "a2000016-0000-4000-a000-000000002016",
+        "testatorPersonId": "b2000016-0000-4000-a000-000000002016",
+        "status": "planning",
+        "defaultPropertyRegime": "equitable_distribution",
+        "domicile": { "country": "US", "subdivision": "US-NY" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultPropertyRegime: deferred_community (Scandinavia)",
+      "data": {
+        "id": "a2000017-0000-4000-a000-000000002017",
+        "testatorPersonId": "b2000017-0000-4000-a000-000000002017",
+        "status": "planning",
+        "defaultPropertyRegime": "deferred_community",
+        "domicile": { "country": "SE" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultPropertyRegime: universal_community",
+      "data": {
+        "id": "a2000018-0000-4000-a000-000000002018",
+        "testatorPersonId": "b2000018-0000-4000-a000-000000002018",
+        "status": "planning",
+        "defaultPropertyRegime": "universal_community",
+        "domicile": { "country": "NL" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultPropertyRegime: participation_in_acquisitions (Switzerland)",
+      "data": {
+        "id": "a2000019-0000-4000-a000-000000002019",
+        "testatorPersonId": "b2000019-0000-4000-a000-000000002019",
+        "status": "planning",
+        "defaultPropertyRegime": "participation_in_acquisitions",
+        "domicile": { "country": "CH" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultPropertyRegime: islamic_dower",
+      "data": {
+        "id": "a2000020-0000-4000-a000-000000002020",
+        "testatorPersonId": "b2000020-0000-4000-a000-000000002020",
+        "status": "planning",
+        "defaultPropertyRegime": "islamic_dower",
+        "domicile": { "country": "PK" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — administration subtree: dateOfDeath, dateOfGrant, court, grantType",
+      "data": {
+        "id": "a2000021-0000-4000-a000-000000002021",
+        "testatorPersonId": "b2000021-0000-4000-a000-000000002021",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2026-01-10",
+          "dateOfGrant": "2026-03-15",
+          "grantType": "grant_of_probate",
+          "grantReference": "PRO-2026-112233",
+          "court": "Leeds District Probate Registry",
+          "grossEstateValue": { "amount": 85000000, "currency": "GBP" },
+          "netEstateValue": { "amount": 72000000, "currency": "GBP" },
+          "taxLiability": { "amount": 5400000, "currency": "GBP" },
+          "taxPaid": { "amount": 2700000, "currency": "GBP" },
+          "estateAccountsFiled": false,
+          "notes": "Awaiting sale of Harrogate property"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — administration grantType: letters_of_administration",
+      "data": {
+        "id": "a2000022-0000-4000-a000-000000002022",
+        "testatorPersonId": "b2000022-0000-4000-a000-000000002022",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-06-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2025-12-01",
+          "grantType": "letters_of_administration",
+          "court": "Principal Registry of the Family Division"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — administration grantType: succession_certificate (India)",
+      "data": {
+        "id": "a2000023-0000-4000-a000-000000002023",
+        "testatorPersonId": "b2000023-0000-4000-a000-000000002023",
+        "status": "in_administration",
+        "domicile": { "country": "IN" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2025-06-01",
+          "grantType": "succession_certificate"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — administration grantType: european_certificate_of_succession",
+      "data": {
+        "id": "a2000024-0000-4000-a000-000000002024",
+        "testatorPersonId": "b2000024-0000-4000-a000-000000002024",
+        "status": "in_administration",
+        "domicile": { "country": "FR" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2025-09-01",
+          "grantType": "european_certificate_of_succession"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — administration with taxClearance and distributions",
+      "data": {
+        "id": "a2000025-0000-4000-a000-000000002025",
+        "testatorPersonId": "b2000025-0000-4000-a000-000000002025",
+        "status": "distributed",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-03-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2024-03-15",
+          "dateOfGrant": "2024-06-01",
+          "grantType": "grant_of_probate",
+          "taxClearance": {
+            "status": "received",
+            "clearanceDate": "2025-06-01",
+            "reference": "HMRC-IHT-CLR-2025-456"
+          },
+          "distributions": [
+            {
+              "beneficiaryPersonId": "c2000025-0000-4000-a000-000000002025",
+              "distributionDate": "2025-09-01",
+              "cashAmount": { "amount": 15000000, "currency": "GBP" },
+              "receipt": true,
+              "notes": "Final distribution — estate accounts approved"
+            }
+          ],
+          "estateAccountsFiled": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — administration taxClearance status: not_required",
+      "data": {
+        "id": "a2000026-0000-4000-a000-000000002026",
+        "testatorPersonId": "b2000026-0000-4000-a000-000000002026",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2026-01-20",
+          "taxClearance": {
+            "status": "not_required"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — adjudicatingBodies array (beth_din + secular_court)",
+      "data": {
+        "id": "a2000027-0000-4000-a000-000000002027",
+        "testatorPersonId": "b2000027-0000-4000-a000-000000002027",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "adjudicatingBodies": [
+          {
+            "type": "beth_din",
+            "name": "Beth Din of Manchester",
+            "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+            "caseReference": "BD-MCR-2025-0042",
+            "authoritative": false
+          },
+          {
+            "type": "secular_court",
+            "name": "Manchester District Probate Registry",
+            "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+            "caseReference": "PR-2025-MCR-001456",
+            "authoritative": true
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — adjudicatingBodies: shariah_court",
+      "data": {
+        "id": "a2000028-0000-4000-a000-000000002028",
+        "testatorPersonId": "b2000028-0000-4000-a000-000000002028",
+        "status": "in_administration",
+        "domicile": { "country": "MY" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-06-01T09:00:00Z",
+        "adjudicatingBodies": [
+          {
+            "type": "shariah_court",
+            "name": "Syariah Court of Selangor",
+            "jurisdiction": { "country": "MY" },
+            "authoritative": true
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — adjudicatingBodies: maori_land_court",
+      "data": {
+        "id": "a2000029-0000-4000-a000-000000002029",
+        "testatorPersonId": "b2000029-0000-4000-a000-000000002029",
+        "status": "in_administration",
+        "domicile": { "country": "NZ" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-06-01T09:00:00Z",
+        "adjudicatingBodies": [
+          {
+            "type": "maori_land_court",
+            "name": "Maori Land Court — Tairāwhiti",
+            "jurisdiction": { "country": "NZ" },
+            "authoritative": true
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — parallelDistributions (customary law alongside statutory)",
+      "data": {
+        "id": "a2000030-0000-4000-a000-000000002030",
+        "testatorPersonId": "b2000030-0000-4000-a000-000000002030",
+        "status": "in_administration",
+        "domicile": { "country": "NG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "parallelDistributions": [
+          {
+            "system": "Igbo customary law",
+            "jurisdiction": { "country": "NG" },
+            "description": "Family compound passes to eldest son as custodian under Igbo customary law",
+            "notes": "Customary distribution of family land conflicts with testamentary gift to daughter — legal advice required"
+          },
+          {
+            "system": "Nigerian Wills Act 1970",
+            "jurisdiction": { "country": "NG" },
+            "description": "Statutory succession distributes personal estate per the will"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — probateGrant with issuingCourt and grantDate",
+      "data": {
+        "id": "a2000031-0000-4000-a000-000000002031",
+        "testatorPersonId": "b2000031-0000-4000-a000-000000002031",
+        "status": "in_administration",
+        "domicile": { "country": "AU" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "probateGrant": {
+          "grantType": "Grant of Probate",
+          "grantDate": "2025-09-15",
+          "grantReference": "NSWSC-PRO-2025-44321",
+          "issuingCourt": "Supreme Court of New South Wales",
+          "jurisdiction": { "country": "AU" },
+          "notes": "Resealing required for UK assets"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — deathRecord with placeOfDeath, deathCertificateRef, domicileAtDeath",
+      "data": {
+        "id": "a2000032-0000-4000-a000-000000002032",
+        "testatorPersonId": "b2000032-0000-4000-a000-000000002032",
+        "status": "pre_probate",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-03-01T09:00:00Z",
+        "deathRecord": {
+          "dateOfDeath": "2026-02-14",
+          "placeOfDeath": "Manchester Royal Infirmary",
+          "deathCertificateRef": "DC-2026-MCR-78901",
+          "domicileAtDeath": { "country": "GB", "subdivision": "GB-ENG" },
+          "notes": "Inpatient death — clinical governance records held by hospital"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — forcedHeirship (French estate, two children)",
+      "data": {
+        "id": "a2000033-0000-4000-a000-000000002033",
+        "testatorPersonId": "b2000033-0000-4000-a000-000000002033",
+        "status": "planning",
+        "domicile": { "country": "FR" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "forcedHeirship": {
+          "applies": true,
+          "reservedPortion": 66.67,
+          "disposableQuota": 33.33,
+          "jurisdiction": { "country": "FR" },
+          "claimNature": "property_share",
+          "calculationBasis": "per_child_sliding",
+          "applicableTo": "children_only",
+          "deferralRule": "Surviving spouse receives usufruct; children receive bare ownership",
+          "effectiveDate": "2006-07-01",
+          "reformVersion": "French loi 2006-728",
+          "notes": "Two children — reserved portion is 2/3 of estate"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — forcedHeirship claimNature: cash_claim (Switzerland)",
+      "data": {
+        "id": "a2000034-0000-4000-a000-000000002034",
+        "testatorPersonId": "b2000034-0000-4000-a000-000000002034",
+        "status": "planning",
+        "domicile": { "country": "CH" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "forcedHeirship": {
+          "applies": true,
+          "reservedPortion": 50,
+          "disposableQuota": 50,
+          "jurisdiction": { "country": "CH" },
+          "claimNature": "cash_claim",
+          "calculationBasis": "fixed",
+          "applicableTo": "children_only",
+          "effectiveDate": "2023-01-01",
+          "reformVersion": "Swiss Code 2023 revision"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — forcedHeirship claimNature: court_discretion (England and Wales)",
+      "data": {
+        "id": "a2000035-0000-4000-a000-000000002035",
+        "testatorPersonId": "b2000035-0000-4000-a000-000000002035",
+        "status": "planning",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "forcedHeirship": {
+          "applies": true,
+          "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+          "claimNature": "court_discretion",
+          "calculationBasis": "court_discretion",
+          "applicableTo": "all_descendants"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — testamentaryCapacity record",
+      "data": {
+        "id": "a2000036-0000-4000-a000-000000002036",
+        "testatorPersonId": "b2000036-0000-4000-a000-000000002036",
+        "status": "confirmed",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-06-01T09:00:00Z",
+        "lastModifiedAt": "2025-06-10T09:00:00Z",
+        "testamentaryCapacity": {
+          "assessed": true,
+          "assessmentDate": "2025-06-01",
+          "assessorName": "Dr Sarah Patel",
+          "assessorRole": "General Practitioner",
+          "capacityConfirmed": true,
+          "goldenRuleComplied": true,
+          "notes": "Testator (87) — Banks v Goodfellow test applied. Showed clear understanding of estate, family circumstances, and nature of will."
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — codicils array",
+      "data": {
+        "id": "a2000037-0000-4000-a000-000000002037",
+        "testatorPersonId": "b2000037-0000-4000-a000-000000002037",
+        "status": "confirmed",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2020-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-09-01T09:00:00Z",
+        "codicils": [
+          {
+            "id": "c2000037-0000-4000-a000-000000002037",
+            "codicilDate": "2022-03-15",
+            "description": "Adds £5,000 gift to Macmillan Cancer Support",
+            "documentId": "d2000037-0000-4000-a000-000000002037"
+          },
+          {
+            "id": "c2000037-0000-4000-a000-000000002038",
+            "codicilDate": "2025-08-20",
+            "description": "Replaces executor appointment — substitutes daughter for brother-in-law following his ill health"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — noContestClause present",
+      "data": {
+        "id": "a2000038-0000-4000-a000-000000002038",
+        "testatorPersonId": "b2000038-0000-4000-a000-000000002038",
+        "status": "confirmed",
+        "domicile": { "country": "US", "subdivision": "US-FL" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "noContestClause": {
+          "present": true,
+          "enforceability": "Enforceable in Florida",
+          "notes": "Clause includes safe harbour for challenges brought in good faith with probable cause"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — choiceOfLaw (Brussels IV nationality choice)",
+      "data": {
+        "id": "a2000039-0000-4000-a000-000000002039",
+        "testatorPersonId": "b2000039-0000-4000-a000-000000002039",
+        "status": "confirmed",
+        "domicile": { "country": "ES" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2024-06-01T09:00:00Z",
+        "choiceOfLaw": {
+          "chosenLaw": { "country": "GB", "subdivision": "GB-ENG" },
+          "basis": "Brussels IV Regulation Art. 22 — nationality at time of choice",
+          "documentRef": "DOC-2024-COL-001"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — electiveShareRight (US spousal election)",
+      "data": {
+        "id": "a2000040-0000-4000-a000-000000002040",
+        "testatorPersonId": "b2000040-0000-4000-a000-000000002040",
+        "status": "in_administration",
+        "domicile": { "country": "US", "subdivision": "US-NY" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "electiveShareRight": {
+          "available": true,
+          "electedAmount": { "amount": 15000000, "currency": "USD" },
+          "statute": "New York EPTL §5-1.1-A",
+          "notes": "Augmented estate calculation includes revocable trust assets"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — priorMatrimonialClaim (former spouse lump sum order)",
+      "data": {
+        "id": "a2000041-0000-4000-a000-000000002041",
+        "testatorPersonId": "b2000041-0000-4000-a000-000000002041",
+        "status": "planning",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "priorMatrimonialClaim": {
+          "exists": true,
+          "description": "Former wife has lump sum order of £50,000 outstanding from 2018 divorce",
+          "claimantPersonId": "c2000041-0000-4000-a000-000000002041",
+          "claimantPersonIdDisplay": "Margaret Davies",
+          "notes": "Clean break order not obtained — claim survives"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — pretermittedHeirClaims array",
+      "data": {
+        "id": "a2000042-0000-4000-a000-000000002042",
+        "testatorPersonId": "b2000042-0000-4000-a000-000000002042",
+        "status": "in_administration",
+        "domicile": { "country": "US", "subdivision": "US-CA" },
+        "createdAt": "2020-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "pretermittedHeirClaims": [
+          {
+            "claimantPersonId": "c2000042-0000-4000-a000-000000002042",
+            "claimantPersonIdDisplay": "Emily Johnson",
+            "status": "pending",
+            "notes": "Child born 2023, will executed 2019 — no mention in will or codicil. Pretermitted heir statute may apply"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ancillaryProbate (French and Spanish assets)",
+      "data": {
+        "id": "a2000043-0000-4000-a000-000000002043",
+        "testatorPersonId": "b2000043-0000-4000-a000-000000002043",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "ancillaryProbate": [
+          {
+            "jurisdiction": { "country": "FR" },
+            "status": "applied",
+            "localCounsel": "Maître Dupont, Paris",
+            "notes": "French notaire requires apostilled UK grant"
+          },
+          {
+            "jurisdiction": { "country": "ES" },
+            "status": "not_started",
+            "localCounsel": "García & Asociados, Barcelona",
+            "notes": "Holiday apartment in Costa Brava — local counsel engaged"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ancillaryProbate status: resealing (Commonwealth)",
+      "data": {
+        "id": "a2000044-0000-4000-a000-000000002044",
+        "testatorPersonId": "b2000044-0000-4000-a000-000000002044",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2025-09-01",
+          "grantType": "resealing"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — registrations (UK National Will Register)",
+      "data": {
+        "id": "a2000045-0000-4000-a000-000000002045",
+        "testatorPersonId": "b2000045-0000-4000-a000-000000002045",
+        "status": "confirmed",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2024-06-01T09:00:00Z",
+        "registrations": [
+          {
+            "registry": "Certainty National Will Register",
+            "registrationNumber": "CNWR-2024-987654",
+            "jurisdictionScope": "England and Wales only",
+            "registrationDate": "2024-05-15"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — reportingCurrency and conversionRates",
+      "data": {
+        "id": "a2000046-0000-4000-a000-000000002046",
+        "testatorPersonId": "b2000046-0000-4000-a000-000000002046",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "reportingCurrency": "GBP",
+        "conversionRates": [
+          {
+            "fromCurrency": "EUR",
+            "toCurrency": "GBP",
+            "rate": 0.856,
+            "rateDate": "2025-09-30",
+            "source": "Bank of England daily rate"
+          },
+          {
+            "fromCurrency": "USD",
+            "toCurrency": "GBP",
+            "rate": 0.782,
+            "rateDate": "2025-09-30",
+            "source": "HMRC monthly rate"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — taxTreatyPositions",
+      "data": {
+        "id": "a2000047-0000-4000-a000-000000002047",
+        "testatorPersonId": "b2000047-0000-4000-a000-000000002047",
+        "status": "in_administration",
+        "domicile": { "country": "GB" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "taxTreatyPositions": [
+          {
+            "treaty": "UK-US Estate Tax Treaty 1979",
+            "primaryTaxingJurisdiction": { "country": "GB" },
+            "claimedCredits": "Credit for UK IHT against US federal estate tax",
+            "relevantArticle": "Art. 5(1)",
+            "notes": "US citizen domiciled in UK — treaty prevents double taxation"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — jurisdictionRules with choiceOfLaw block",
+      "data": {
+        "id": "a2000048-0000-4000-a000-000000002048",
+        "testatorPersonId": "b2000048-0000-4000-a000-000000002048",
+        "status": "planning",
+        "domicile": { "country": "FR" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2024-06-01T09:00:00Z",
+        "jurisdictionRules": {
+          "doctrine": "unity",
+          "immoveableRule": "lex_domicilii",
+          "moveableRule": "chosen_law",
+          "choiceOfLaw": {
+            "chosenJurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+            "basis": "nationality",
+            "instrument": "brussels_iv",
+            "validIn": ["EU"]
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultSuccessionRegime: civil_law tradition",
+      "data": {
+        "id": "a2000049-0000-4000-a000-000000002049",
+        "testatorPersonId": "b2000049-0000-4000-a000-000000002049",
+        "status": "planning",
+        "domicile": { "country": "DE" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "defaultSuccessionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "DE" },
+            "legalTradition": "civil_law",
+            "statute": "Bürgerliches Gesetzbuch §1922"
+          },
+          "determinedBy": "domicile",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultSuccessionRegime determinedBy: nationality",
+      "data": {
+        "id": "a2000050-0000-4000-a000-000000002050",
+        "testatorPersonId": "b2000050-0000-4000-a000-000000002050",
+        "status": "planning",
+        "domicile": { "country": "IT" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "defaultSuccessionRegime": {
+          "determinedBy": "nationality",
+          "governingLaw": {
+            "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+            "legalTradition": "common_law"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — companionLinkStatus: decoupled with decoupledAt timestamp",
+      "data": {
+        "id": "a2000051-0000-4000-a000-000000002051",
+        "testatorPersonId": "b2000051-0000-4000-a000-000000002051",
+        "status": "confirmed",
+        "domicile": { "country": "GB" },
+        "createdAt": "2023-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "companionEstateId": "c2000051-0000-4000-a000-000000002051",
+        "companionLinkStatus": "decoupled",
+        "linkedAt": "2023-06-01T10:00:00Z",
+        "decoupledAt": "2025-11-01T10:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — companionLinkStatus: invited",
+      "data": {
+        "id": "a2000052-0000-4000-a000-000000002052",
+        "testatorPersonId": "b2000052-0000-4000-a000-000000002052",
+        "status": "planning",
+        "domicile": { "country": "GB" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "companionEstateId": "c2000052-0000-4000-a000-000000002052",
+        "companionLinkStatus": "invited"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — deathVerification trustLevel: platform_detected",
+      "data": {
+        "id": "a2000053-0000-4000-a000-000000002053",
+        "testatorPersonId": "b2000053-0000-4000-a000-000000002053",
+        "status": "pre_probate",
+        "domicile": { "country": "EE" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-03-01T09:00:00Z",
+        "deathVerification": {
+          "method": "civil_registry",
+          "issuingAuthority": "Rahvastikuregister",
+          "trustLevel": "platform_detected",
+          "dateOfDeath": "2026-02-28"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — deathVerification trustLevel: community_declared",
+      "data": {
+        "id": "a2000054-0000-4000-a000-000000002054",
+        "testatorPersonId": "b2000054-0000-4000-a000-000000002054",
+        "status": "pre_probate",
+        "domicile": { "country": "GH" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "deathVerification": {
+          "method": "community_declaration",
+          "trustLevel": "community_declared",
+          "dateOfDeath": "2025-12-01"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — deathVerification method: presumption_of_death",
+      "data": {
+        "id": "a2000055-0000-4000-a000-000000002055",
+        "testatorPersonId": "b2000055-0000-4000-a000-000000002055",
+        "status": "pre_probate",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2010-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "deathVerification": {
+          "method": "presumption_of_death",
+          "issuingAuthority": "Royal Courts of Justice",
+          "trustLevel": "government_certified",
+          "referenceNumber": "POD-2025-001234"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — escheatment status: escheated",
+      "data": {
+        "id": "a2000056-0000-4000-a000-000000002056",
+        "testatorPersonId": "b2000056-0000-4000-a000-000000002056",
+        "status": "closed",
+        "domicile": { "country": "US", "subdivision": "US-CA" },
+        "createdAt": "2020-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "escheatment": {
+          "jurisdiction": { "country": "US", "subdivision": "US-CA" },
+          "dormancyPeriodYears": 5,
+          "escheatDate": "2025-06-01",
+          "claimingAuthority": "California State Controller's Office",
+          "status": "escheated",
+          "notes": "No valid heirs found — property reverted to state after 5-year dormancy period"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — testamentaryScenarios with incapacity and remarriage events",
+      "data": {
+        "id": "a2000057-0000-4000-a000-000000002057",
+        "testatorPersonId": "b2000057-0000-4000-a000-000000002057",
+        "status": "confirmed",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "testamentaryScenarios": [
+          {
+            "id": "spouse-remarries",
+            "description": "Beneficiary spouse remarries — substitution clause triggers",
+            "conditions": [
+              {
+                "personId": "c2000057-0000-4000-a000-000000002057",
+                "event": "remarriage"
+              }
+            ]
+          },
+          {
+            "id": "testator-incapacitated",
+            "description": "Testator loses mental capacity — LPA triggers",
+            "conditions": [
+              {
+                "personId": "b2000057-0000-4000-a000-000000002057",
+                "event": "incapacity"
+              }
+            ]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — contestability with undue_influence and fraud grounds",
+      "data": {
+        "id": "a2000058-0000-4000-a000-000000002058",
+        "testatorPersonId": "b2000058-0000-4000-a000-000000002058",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2020-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "contestability": {
+          "status": "grounds_identified",
+          "grounds": [
+            {
+              "ground": "undue_influence",
+              "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+              "assessedBy": "Harrison & Co Solicitors",
+              "assessedDate": "2026-03-01"
+            },
+            {
+              "ground": "fraud",
+              "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — contestability status: assessed_no_grounds",
+      "data": {
+        "id": "a2000059-0000-4000-a000-000000002059",
+        "testatorPersonId": "b2000059-0000-4000-a000-000000002059",
+        "status": "confirmed",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-06-01T09:00:00Z",
+        "contestability": {
+          "status": "assessed_no_grounds"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — taxTreaties with gift_tax treaty type",
+      "data": {
+        "id": "a2000060-0000-4000-a000-000000002060",
+        "testatorPersonId": "b2000060-0000-4000-a000-000000002060",
+        "status": "planning",
+        "domicile": { "country": "JP" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "taxTreaties": [
+          {
+            "between": ["JP", "US"],
+            "treatyType": "gift_tax",
+            "primaryTaxingRight": {
+              "moveable": "domicile"
+            },
+            "reliefMethod": "exemption",
+            "treatyReference": "Japan-US Gift Tax Treaty 1955"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — deathCertificateDate and administrationDeadline fields",
+      "data": {
+        "id": "a2000061-0000-4000-a000-000000002061",
+        "testatorPersonId": "b2000061-0000-4000-a000-000000002061",
+        "status": "pre_probate",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-02-01T09:00:00Z",
+        "deathCertificateDate": "2026-01-20",
+        "deathCertificateReference": "DC-2026-56789",
+        "administrationDeadline": "2027-04-01",
+        "administrationDeadlineSource": "12 months from grant of probate per UK practice direction"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — revocationClause and revokesDocumentIds",
+      "data": {
+        "id": "a2000062-0000-4000-a000-000000002062",
+        "testatorPersonId": "b2000062-0000-4000-a000-000000002062",
+        "status": "confirmed",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "revocationClause": true,
+        "revokesDocumentIds": [
+          "c3d4e5f6-a7b8-9012-cdef-123456789012"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — commorientesRule with commorientes applicable",
+      "data": {
+        "id": "a2000063-0000-4000-a000-000000002063",
+        "testatorPersonId": "b2000063-0000-4000-a000-000000002063",
+        "status": "pre_probate",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "commorientesRule": {
+          "applicable": true,
+          "rule": "s.184 Law of Property Act 1925 — deaths presumed in order of seniority",
+          "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+          "notes": "Husband (72) and wife (68) died in same road traffic accident"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — testamentaryPromises (NZ Law Reform Act claim)",
+      "data": {
+        "id": "a2000064-0000-4000-a000-000000002064",
+        "testatorPersonId": "b2000064-0000-4000-a000-000000002064",
+        "status": "in_administration",
+        "domicile": { "country": "NZ" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "testamentaryPromises": [
+          {
+            "claimantPersonId": "c2000064-0000-4000-a000-000000002064",
+            "claimantPersonIdDisplay": "Hemi Walker",
+            "promiseDescription": "Promised to leave the farm to nephew in return for 10 years of farm management",
+            "status": "claim filed",
+            "notes": "Multiple witnesses to the promise — strong claim"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — judicialVariationPower (Inheritance Act 1975)",
+      "data": {
+        "id": "a2000065-0000-4000-a000-000000002065",
+        "testatorPersonId": "b2000065-0000-4000-a000-000000002065",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "judicialVariationPower": {
+          "available": true,
+          "statute": "Inheritance (Provision for Family and Dependants) Act 1975",
+          "notes": "Claim must be brought within 6 months of grant of representation"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionConflicts array",
+      "data": {
+        "id": "a2000066-0000-4000-a000-000000002066",
+        "testatorPersonId": "b2000066-0000-4000-a000-000000002066",
+        "status": "planning",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "successionConflicts": [
+          {
+            "description": "French immoveable property subject to French forced heirship despite English domicile and Brussels IV choice",
+            "systems": ["English common law", "French civil law"],
+            "resolutionStatus": "pending_court",
+            "notes": "French property ring-fenced; reserved portion calculated separately under notaire advice"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — administration grantType not in enum",
+      "data": {
+        "id": "a2000070-0000-4000-a000-000000002070",
+        "testatorPersonId": "b2000070-0000-4000-a000-000000002070",
+        "status": "in_administration",
+        "domicile": { "country": "GB" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2026-01-01",
+          "grantType": "simple_probate"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — administration dateOfDeath wrong format (datetime instead of date)",
+      "data": {
+        "id": "a2000071-0000-4000-a000-000000002071",
+        "testatorPersonId": "b2000071-0000-4000-a000-000000002071",
+        "status": "pre_probate",
+        "domicile": { "country": "GB" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2026-01-15T09:00:00Z"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — adjudicatingBodies item missing required type",
+      "data": {
+        "id": "a2000072-0000-4000-a000-000000002072",
+        "testatorPersonId": "b2000072-0000-4000-a000-000000002072",
+        "status": "in_administration",
+        "domicile": { "country": "GB" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "adjudicatingBodies": [
+          {
+            "name": "Some Court"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — adjudicatingBodies type not in enum",
+      "data": {
+        "id": "a2000073-0000-4000-a000-000000002073",
+        "testatorPersonId": "b2000073-0000-4000-a000-000000002073",
+        "status": "in_administration",
+        "domicile": { "country": "GB" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "adjudicatingBodies": [
+          {
+            "type": "arbitration_panel"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — forcedHeirship claimNature not in enum",
+      "data": {
+        "id": "a2000074-0000-4000-a000-000000002074",
+        "testatorPersonId": "b2000074-0000-4000-a000-000000002074",
+        "status": "planning",
+        "domicile": { "country": "FR" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "forcedHeirship": {
+          "applies": true,
+          "claimNature": "in_kind"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — contestability ground not in enum",
+      "data": {
+        "id": "a2000075-0000-4000-a000-000000002075",
+        "testatorPersonId": "b2000075-0000-4000-a000-000000002075",
+        "status": "in_administration",
+        "domicile": { "country": "GB" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "contestability": {
+          "status": "grounds_identified",
+          "grounds": [
+            {
+              "ground": "mental_incapacity",
+              "jurisdiction": { "country": "GB" }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — codicil missing required codicilDate",
+      "data": {
+        "id": "a2000076-0000-4000-a000-000000002076",
+        "testatorPersonId": "b2000076-0000-4000-a000-000000002076",
+        "status": "confirmed",
+        "domicile": { "country": "GB" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "codicils": [
+          {
+            "id": "c2000076-0000-4000-a000-000000002076",
+            "description": "Adds charitable bequest"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — defaultPropertyRegime not in enum",
+      "data": {
+        "id": "a2000077-0000-4000-a000-000000002077",
+        "testatorPersonId": "b2000077-0000-4000-a000-000000002077",
+        "status": "planning",
+        "domicile": { "country": "GB" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "defaultPropertyRegime": "joint_tenancy"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — taxTreaties between must have exactly 2 items",
+      "data": {
+        "id": "a2000078-0000-4000-a000-000000002078",
+        "testatorPersonId": "b2000078-0000-4000-a000-000000002078",
+        "status": "planning",
+        "domicile": { "country": "GB" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "taxTreaties": [
+          {
+            "between": ["GB"],
+            "treatyType": "estate_and_inheritance"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — distribution missing required beneficiaryPersonId",
+      "data": {
+        "id": "a2000079-0000-4000-a000-000000002079",
+        "testatorPersonId": "b2000079-0000-4000-a000-000000002079",
+        "status": "in_administration",
+        "domicile": { "country": "GB" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "administration": {
+          "distributions": [
+            {
+              "distributionDate": "2025-09-01",
+              "cashAmount": { "amount": 5000000, "currency": "GBP" }
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — reportingCurrency wrong format (lowercase)",
+      "data": {
+        "id": "a2000080-0000-4000-a000-000000002080",
+        "testatorPersonId": "b2000080-0000-4000-a000-000000002080",
+        "status": "in_administration",
+        "domicile": { "country": "GB" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "reportingCurrency": "gbp"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — willType: oral_customary",
+      "data": {
+        "id": "d3000001-0000-4000-d000-000000003001",
+        "testatorPersonId": "e3000001-0000-4000-d000-000000003001",
+        "status": "pre_probate",
+        "willType": "oral_customary",
+        "domicile": { "country": "NG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — companionLinkStatus: decoupling",
+      "data": {
+        "id": "d3000002-0000-4000-d000-000000003002",
+        "testatorPersonId": "e3000002-0000-4000-d000-000000003002",
+        "status": "confirmed",
+        "domicile": { "country": "GB" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-03-01T09:00:00Z",
+        "companionEstateId": "f3000002-0000-4000-d000-000000003002",
+        "companionLinkStatus": "decoupling"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultSuccessionRegime legalTradition: customary_law with determinedBy: personal_status",
+      "data": {
+        "id": "d3000003-0000-4000-d000-000000003003",
+        "testatorPersonId": "e3000003-0000-4000-d000-000000003003",
+        "status": "planning",
+        "domicile": { "country": "ZA" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "defaultSuccessionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "ZA" },
+            "legalTradition": "customary_law",
+            "statute": "Recognition of Customary Marriages Act 1998"
+          },
+          "determinedBy": "personal_status",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultSuccessionRegime legalTradition: hindu_law with determinedBy: choice_of_law",
+      "data": {
+        "id": "d3000004-0000-4000-d000-000000003004",
+        "testatorPersonId": "e3000004-0000-4000-d000-000000003004",
+        "status": "planning",
+        "domicile": { "country": "IN" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "defaultSuccessionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "IN" },
+            "legalTradition": "hindu_law",
+            "statute": "Hindu Succession Act 1956"
+          },
+          "determinedBy": "choice_of_law",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultSuccessionRegime legalTradition: jewish_law with determinedBy: treaty",
+      "data": {
+        "id": "d3000005-0000-4000-d000-000000003005",
+        "testatorPersonId": "e3000005-0000-4000-d000-000000003005",
+        "status": "planning",
+        "domicile": { "country": "IL" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "defaultSuccessionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "IL" },
+            "legalTradition": "jewish_law",
+            "statute": "Succession Law 5725-1965"
+          },
+          "determinedBy": "treaty",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultSuccessionRegime legalTradition: canon_law",
+      "data": {
+        "id": "d3000006-0000-4000-d000-000000003006",
+        "testatorPersonId": "e3000006-0000-4000-d000-000000003006",
+        "status": "planning",
+        "domicile": { "country": "VA" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "defaultSuccessionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "VA" },
+            "legalTradition": "canon_law",
+            "statute": "Code of Canon Law 1983"
+          },
+          "determinedBy": "situs",
+          "binding": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — defaultSuccessionRegime legalTradition: mixed",
+      "data": {
+        "id": "d3000007-0000-4000-d000-000000003007",
+        "testatorPersonId": "e3000007-0000-4000-d000-000000003007",
+        "status": "planning",
+        "domicile": { "country": "SG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "defaultSuccessionRegime": {
+          "governingLaw": {
+            "jurisdiction": { "country": "SG" },
+            "legalTradition": "mixed"
+          },
+          "determinedBy": "domicile",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — jurisdictionRules doctrine: hybrid with lex_patriae for immoveable and moveable",
+      "data": {
+        "id": "d3000008-0000-4000-d000-000000003008",
+        "testatorPersonId": "e3000008-0000-4000-d000-000000003008",
+        "status": "planning",
+        "domicile": { "country": "EG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "jurisdictionRules": {
+          "doctrine": "hybrid",
+          "immoveableRule": "lex_patriae",
+          "moveableRule": "lex_patriae"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — jurisdictionRules with chosen_law for immoveable and moveableRule: lex_domicilii with instrument: hague_convention",
+      "data": {
+        "id": "d3000009-0000-4000-d000-000000003009",
+        "testatorPersonId": "e3000009-0000-4000-d000-000000003009",
+        "status": "planning",
+        "domicile": { "country": "CH" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2024-06-01T09:00:00Z",
+        "jurisdictionRules": {
+          "doctrine": "scission",
+          "immoveableRule": "chosen_law",
+          "moveableRule": "lex_domicilii",
+          "choiceOfLaw": {
+            "chosenJurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+            "basis": "habitual_residence",
+            "instrument": "hague_convention",
+            "validIn": ["CH", "GB"]
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — jurisdictionRules instrument: bilateral_treaty and basis: domicile",
+      "data": {
+        "id": "d3000010-0000-4000-d000-000000003010",
+        "testatorPersonId": "e3000010-0000-4000-d000-000000003010",
+        "status": "planning",
+        "domicile": { "country": "US", "subdivision": "US-NY" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "jurisdictionRules": {
+          "doctrine": "unity",
+          "moveableRule": "chosen_law",
+          "choiceOfLaw": {
+            "chosenJurisdiction": { "country": "GB" },
+            "basis": "domicile",
+            "instrument": "bilateral_treaty"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — jurisdictionRules instrument: domestic_law",
+      "data": {
+        "id": "d3000011-0000-4000-d000-000000003011",
+        "testatorPersonId": "e3000011-0000-4000-d000-000000003011",
+        "status": "planning",
+        "domicile": { "country": "AU" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "jurisdictionRules": {
+          "doctrine": "scission",
+          "immoveableRule": "lex_situs",
+          "moveableRule": "chosen_law",
+          "choiceOfLaw": {
+            "chosenJurisdiction": { "country": "AU" },
+            "basis": "nationality",
+            "instrument": "domestic_law"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — contestability grounds: forgery and lack_of_knowledge_and_approval",
+      "data": {
+        "id": "d3000012-0000-4000-d000-000000003012",
+        "testatorPersonId": "e3000012-0000-4000-d000-000000003012",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2020-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "contestability": {
+          "status": "grounds_identified",
+          "grounds": [
+            {
+              "ground": "forgery",
+              "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+              "assessedBy": "Harrison & Co Solicitors",
+              "assessedDate": "2026-03-01"
+            },
+            {
+              "ground": "lack_of_knowledge_and_approval",
+              "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" }
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — contestability ground: want_of_due_execution",
+      "data": {
+        "id": "d3000013-0000-4000-d000-000000003013",
+        "testatorPersonId": "e3000013-0000-4000-d000-000000003013",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2019-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "contestability": {
+          "status": "grounds_identified",
+          "grounds": [
+            {
+              "ground": "want_of_due_execution",
+              "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+              "assessedBy": "Probate Registry",
+              "assessedDate": "2026-02-15"
+            }
+          ],
+          "influenceFactors": [
+            {
+              "influencerPersonId": "f3000013-0000-4000-d000-000000003013",
+              "subjectPersonId": "e3000013-0000-4000-d000-000000003013",
+              "financialDependency": "none"
+            },
+            {
+              "influencerPersonId": "f3000013-0000-4000-d000-000000003014",
+              "subjectPersonId": "e3000013-0000-4000-d000-000000003013",
+              "financialDependency": "influencer_on_subject"
+            },
+            {
+              "influencerPersonId": "f3000013-0000-4000-d000-000000003015",
+              "subjectPersonId": "e3000013-0000-4000-d000-000000003013",
+              "financialDependency": "mutual"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — deathVerification method: coroner_report with trustLevel: self_reported",
+      "data": {
+        "id": "d3000014-0000-4000-d000-000000003014",
+        "testatorPersonId": "e3000014-0000-4000-d000-000000003014",
+        "status": "pre_probate",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "deathVerification": {
+          "method": "coroner_report",
+          "issuingAuthority": "HM Coroner for Greater Manchester",
+          "trustLevel": "self_reported",
+          "referenceNumber": "COR-2026-MCR-00456"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — deathVerification method: court_order",
+      "data": {
+        "id": "d3000015-0000-4000-d000-000000003015",
+        "testatorPersonId": "e3000015-0000-4000-d000-000000003015",
+        "status": "pre_probate",
+        "domicile": { "country": "US", "subdivision": "US-CA" },
+        "createdAt": "2020-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "deathVerification": {
+          "method": "court_order",
+          "issuingAuthority": "Los Angeles Superior Court",
+          "trustLevel": "government_certified",
+          "referenceNumber": "LASC-POD-2025-001234"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — escheatment status: at_risk",
+      "data": {
+        "id": "d3000016-0000-4000-d000-000000003016",
+        "testatorPersonId": "e3000016-0000-4000-d000-000000003016",
+        "status": "in_administration",
+        "domicile": { "country": "US", "subdivision": "US-NY" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "escheatment": {
+          "jurisdiction": { "country": "US", "subdivision": "US-NY" },
+          "dormancyPeriodYears": 3,
+          "status": "at_risk",
+          "notes": "Bank account unclaimed for 2 years — approaching dormancy threshold"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — escheatment status: reclaimed",
+      "data": {
+        "id": "d3000017-0000-4000-d000-000000003017",
+        "testatorPersonId": "e3000017-0000-4000-d000-000000003017",
+        "status": "closed",
+        "domicile": { "country": "US", "subdivision": "US-TX" },
+        "createdAt": "2015-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "escheatment": {
+          "jurisdiction": { "country": "US", "subdivision": "US-TX" },
+          "dormancyPeriodYears": 3,
+          "claimingAuthority": "Texas Comptroller of Public Accounts",
+          "status": "reclaimed",
+          "notes": "Heir filed successful claim — property returned after 18 months"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — taxTreaties treatyType: income_tax with reliefMethod: deduction",
+      "data": {
+        "id": "d3000018-0000-4000-d000-000000003018",
+        "testatorPersonId": "e3000018-0000-4000-d000-000000003018",
+        "status": "in_administration",
+        "domicile": { "country": "GB" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "taxTreaties": [
+          {
+            "between": ["GB", "DE"],
+            "treatyType": "income_tax",
+            "primaryTaxingRight": {
+              "immoveable": "situs",
+              "moveable": "nationality"
+            },
+            "reliefMethod": "deduction",
+            "treatyReference": "UK-Germany DTC 2010"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — taxTreaties treatyType: comprehensive",
+      "data": {
+        "id": "d3000019-0000-4000-d000-000000003019",
+        "testatorPersonId": "e3000019-0000-4000-d000-000000003019",
+        "status": "planning",
+        "domicile": { "country": "SG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "taxTreaties": [
+          {
+            "between": ["SG", "GB"],
+            "treatyType": "comprehensive",
+            "primaryTaxingRight": {
+              "moveable": "situs"
+            },
+            "reliefMethod": "credit",
+            "treatyReference": "Singapore-UK DTC 1997"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — administration taxClearance status: not_applied",
+      "data": {
+        "id": "d3000020-0000-4000-d000-000000003020",
+        "testatorPersonId": "e3000020-0000-4000-d000-000000003020",
+        "status": "pre_probate",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2026-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2026-03-20",
+          "taxClearance": {
+            "status": "not_applied"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — administration taxClearance status: applied",
+      "data": {
+        "id": "d3000021-0000-4000-d000-000000003021",
+        "testatorPersonId": "e3000021-0000-4000-d000-000000003021",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2025-09-01",
+          "taxClearance": {
+            "status": "applied",
+            "reference": "HMRC-IHT-APP-2025-12345"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — administration grantType: letters_of_administration_with_will_annexed",
+      "data": {
+        "id": "d3000022-0000-4000-d000-000000003022",
+        "testatorPersonId": "e3000022-0000-4000-d000-000000003022",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2025-06-01",
+          "grantType": "letters_of_administration_with_will_annexed",
+          "court": "Principal Registry of the Family Division",
+          "notes": "Named executor predeceased testator — administrator appointed"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — administration grantType: certificate_of_inheritance (Germany)",
+      "data": {
+        "id": "d3000023-0000-4000-d000-000000003023",
+        "testatorPersonId": "e3000023-0000-4000-d000-000000003023",
+        "status": "in_administration",
+        "domicile": { "country": "DE" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2025-08-15",
+          "grantType": "certificate_of_inheritance"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — administration grantType: court_appointment",
+      "data": {
+        "id": "d3000024-0000-4000-d000-000000003024",
+        "testatorPersonId": "e3000024-0000-4000-d000-000000003024",
+        "status": "in_administration",
+        "domicile": { "country": "KE" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2025-05-01",
+          "grantType": "court_appointment"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — administration grantType: other",
+      "data": {
+        "id": "d3000025-0000-4000-d000-000000003025",
+        "testatorPersonId": "e3000025-0000-4000-d000-000000003025",
+        "status": "in_administration",
+        "domicile": { "country": "CN" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "administration": {
+          "dateOfDeath": "2025-07-01",
+          "grantType": "other"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionConflicts resolutionStatus: unresolved",
+      "data": {
+        "id": "d3000026-0000-4000-d000-000000003026",
+        "testatorPersonId": "e3000026-0000-4000-d000-000000003026",
+        "status": "in_administration",
+        "domicile": { "country": "NG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "successionConflicts": [
+          {
+            "description": "Statutory will gives daughter the house; Igbo customary law gives eldest son custodianship",
+            "systems": ["Igbo customary law", "Nigerian Wills Act 1970"],
+            "resolutionStatus": "unresolved"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionConflicts resolutionStatus: resolved",
+      "data": {
+        "id": "d3000027-0000-4000-d000-000000003027",
+        "testatorPersonId": "e3000027-0000-4000-d000-000000003027",
+        "status": "closed",
+        "domicile": { "country": "FR" },
+        "createdAt": "2023-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-12-01T09:00:00Z",
+        "successionConflicts": [
+          {
+            "description": "French forced heirship resolved — testator's English will upheld for UK assets, French notaire administered French property separately",
+            "systems": ["English common law", "French civil law"],
+            "resolutionStatus": "resolved",
+            "notes": "Brussels IV choice of English law upheld by French court for UK moveable assets"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionConflicts resolutionStatus: pending_arbitration",
+      "data": {
+        "id": "d3000028-0000-4000-d000-000000003028",
+        "testatorPersonId": "e3000028-0000-4000-d000-000000003028",
+        "status": "in_administration",
+        "domicile": { "country": "MY" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "successionConflicts": [
+          {
+            "description": "Islamic faraid distribution conflicts with civil will provisions — referred to mediation",
+            "systems": ["Malaysian civil law", "Islamic faraid"],
+            "resolutionStatus": "pending_arbitration"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — adjudicatingBodies: religious_court and tribal_court",
+      "data": {
+        "id": "d3000029-0000-4000-d000-000000003029",
+        "testatorPersonId": "e3000029-0000-4000-d000-000000003029",
+        "status": "in_administration",
+        "domicile": { "country": "NG" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "adjudicatingBodies": [
+          {
+            "type": "religious_court",
+            "name": "Upper Sharia Court of Kano",
+            "jurisdiction": { "country": "NG" },
+            "authoritative": true
+          },
+          {
+            "type": "tribal_court",
+            "name": "Igbo Customary Court",
+            "jurisdiction": { "country": "NG" },
+            "authoritative": false
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — adjudicatingBodies: family_court and family_council",
+      "data": {
+        "id": "d3000030-0000-4000-d000-000000003030",
+        "testatorPersonId": "e3000030-0000-4000-d000-000000003030",
+        "status": "in_administration",
+        "domicile": { "country": "JP" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "adjudicatingBodies": [
+          {
+            "type": "family_court",
+            "name": "Tokyo Family Court",
+            "jurisdiction": { "country": "JP" },
+            "authoritative": true
+          },
+          {
+            "type": "family_council",
+            "name": "Tanaka Family Council",
+            "jurisdiction": { "country": "JP" },
+            "authoritative": false
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — adjudicatingBodies: community_elders, partition_meeting, karta_decision",
+      "data": {
+        "id": "d3000031-0000-4000-d000-000000003031",
+        "testatorPersonId": "e3000031-0000-4000-d000-000000003031",
+        "status": "in_administration",
+        "domicile": { "country": "IN" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-01-01T09:00:00Z",
+        "adjudicatingBodies": [
+          {
+            "type": "community_elders",
+            "name": "Sharma village elders — Rajasthan",
+            "jurisdiction": { "country": "IN" },
+            "authoritative": false
+          },
+          {
+            "type": "partition_meeting",
+            "name": "Sharma HUF partition proceedings",
+            "jurisdiction": { "country": "IN" },
+            "authoritative": true
+          },
+          {
+            "type": "karta_decision",
+            "name": "Karta of Sharma HUF",
+            "jurisdiction": { "country": "IN" },
+            "authoritative": true
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — adjudicatingBodies: high_court",
+      "data": {
+        "id": "d3000032-0000-4000-d000-000000003032",
+        "testatorPersonId": "e3000032-0000-4000-d000-000000003032",
+        "status": "in_administration",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2024-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "adjudicatingBodies": [
+          {
+            "type": "high_court",
+            "name": "High Court of Justice, Chancery Division",
+            "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+            "caseReference": "HC-2025-001234",
+            "authoritative": true
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — forcedHeirship claimNature: usufruct with calculationBasis: conditional",
+      "data": {
+        "id": "d3000033-0000-4000-d000-000000003033",
+        "testatorPersonId": "e3000033-0000-4000-d000-000000003033",
+        "status": "planning",
+        "domicile": { "country": "ES" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "forcedHeirship": {
+          "applies": true,
+          "reservedPortion": 33.33,
+          "disposableQuota": 66.67,
+          "jurisdiction": { "country": "ES" },
+          "claimNature": "usufruct",
+          "calculationBasis": "conditional",
+          "applicableTo": "children_and_spouse",
+          "deferralRule": "Surviving spouse receives usufruct over one third; children receive bare ownership on spouse's death"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — forcedHeirship applicableTo: all_heirs",
+      "data": {
+        "id": "d3000034-0000-4000-d000-000000003034",
+        "testatorPersonId": "e3000034-0000-4000-d000-000000003034",
+        "status": "planning",
+        "domicile": { "country": "PK" },
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "forcedHeirship": {
+          "applies": true,
+          "jurisdiction": { "country": "PK" },
+          "claimNature": "property_share",
+          "calculationBasis": "fixed",
+          "applicableTo": "all_heirs"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ancillaryProbate statuses: granted, completed, waived",
+      "data": {
+        "id": "d3000035-0000-4000-d000-000000003035",
+        "testatorPersonId": "e3000035-0000-4000-d000-000000003035",
+        "status": "distributed",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "createdAt": "2023-01-01T09:00:00Z",
+        "lastModifiedAt": "2026-04-01T09:00:00Z",
+        "ancillaryProbate": [
+          {
+            "jurisdiction": { "country": "FR" },
+            "status": "granted",
+            "grantReference": "TRIB-PAR-2024-98765",
+            "localCounsel": "Maître Dupont, Paris"
+          },
+          {
+            "jurisdiction": { "country": "DE" },
+            "status": "completed",
+            "localCounsel": "Müller & Partner, Munich"
+          },
+          {
+            "jurisdiction": { "country": "IE" },
+            "status": "waived",
+            "notes": "Irish assets below exemption threshold — ancillary probate not required"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with integrity field (SHA-256 digest)",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": {
+          "algorithm": "sha-256",
+          "digest": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate without integrity field (optional)",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — integrity with SHA-384 digest",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": {
+          "algorithm": "sha-384",
+          "digest": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — integrity with SHA-512 digest",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": {
+          "algorithm": "sha-512",
+          "digest": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — integrity with unsupported algorithm (md5)",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": {
+          "algorithm": "md5",
+          "digest": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — integrity with uppercase hex digest",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": {
+          "algorithm": "sha-256",
+          "digest": "A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — integrity missing algorithm field",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": {
+          "digest": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — integrity missing digest field",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": {
+          "algorithm": "sha-256"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — integrity with extra field",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": {
+          "algorithm": "sha-256",
+          "digest": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+          "timestamp": "2025-01-15T09:00:00Z"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — integrity digest too short (63 chars)",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": {
+          "algorithm": "sha-256",
+          "digest": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — integrity digest too long (129 chars)",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": {
+          "algorithm": "sha-512",
+          "digest": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4a"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — integrity digest at minimum length (64 chars)",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": {
+          "algorithm": "sha-256",
+          "digest": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — integrity as string instead of object",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": "sha-256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — integrity as empty object",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — integrity as null",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "integrity": null
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — MVE Level 0: testator only, no assets (onboarding)",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000001",
+        "testatorPersonId": "b2c3d4e5-0000-4000-8000-000000000001",
+        "status": "planning",
+        "createdAt": "2026-04-07T12:00:00Z",
+        "lastModifiedAt": "2026-04-07T12:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with disinheritedPersons",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000010",
+        "testatorPersonId": "b2c3d4e5-0000-4000-8000-000000000010",
+        "status": "planning",
+        "createdAt": "2026-04-12T10:00:00Z",
+        "lastModifiedAt": "2026-04-12T10:00:00Z",
+        "domicile": {
+          "country": "GB"
+        },
+        "disinheritedPersons": [
+          {
+            "personId": "c3d4e5f6-0000-4000-8000-000000000010",
+            "statement": "I deliberately exclude my son James from any benefit under this will.",
+            "clauseReference": "clause 5",
+            "reason": "Testator and son estranged since 2018; testator confirmed exclusion at review on 3 March 2026"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — disinheritedPerson with only required personId",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000011",
+        "testatorPersonId": "b2c3d4e5-0000-4000-8000-000000000011",
+        "status": "planning",
+        "createdAt": "2026-04-12T10:00:00Z",
+        "lastModifiedAt": "2026-04-12T10:00:00Z",
+        "domicile": {
+          "country": "GB"
+        },
+        "disinheritedPersons": [
+          {
+            "personId": "c3d4e5f6-0000-4000-8000-000000000011"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — codicil with amendsClauseIds and priorDocumentId",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000012",
+        "testatorPersonId": "b2c3d4e5-0000-4000-8000-000000000012",
+        "status": "planning",
+        "createdAt": "2026-04-12T10:00:00Z",
+        "lastModifiedAt": "2026-04-12T10:00:00Z",
+        "domicile": {
+          "country": "GB"
+        },
+        "codicils": [
+          {
+            "id": "c3d4e5f6-0000-4000-8000-000000000012",
+            "codicilDate": "2026-03-15",
+            "description": "Replaces residuary estate clause and revokes specific gift to nephew",
+            "amendsClauseIds": [
+              "d4e5f6a7-0000-4000-8000-000000000012"
+            ],
+            "revokesClauseIds": [
+              "e5f6a7b8-0000-4000-8000-000000000012"
+            ],
+            "priorDocumentId": "f6a7b8c9-0000-4000-8000-000000000012",
+            "effectiveDate": "2026-04-01"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with governingJurisdictions (default + specific_assets)",
+      "data": {
+        "id": "e0000001-0000-4000-a000-000000000010",
+        "testatorPersonId": "a0000001-0000-4000-a000-000000000001",
+        "status": "planning",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "lastModifiedAt": "2026-01-01T00:00:00Z",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "governingJurisdictions": [
+          { "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" }, "scope": "default", "statute": "Wills Act 1837" },
+          { "jurisdiction": { "country": "FR" }, "scope": "specific_assets", "propertyIds": ["d0000001-0000-4000-a000-000000000001"], "statute": "Code Civil, Articles 720-892", "notes": "French immovable property governed by lex situs" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with mutualWillAgreement",
+      "data": {
+        "id": "e0000001-0000-4000-a000-000000000011",
+        "testatorPersonId": "a0000001-0000-4000-a000-000000000001",
+        "status": "planning",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "lastModifiedAt": "2026-01-01T00:00:00Z",
+        "domicile": { "country": "GB" },
+        "mutualWillAgreement": {
+          "exists": true,
+          "counterpartyPersonId": "a0000001-0000-4000-a000-000000000002",
+          "binding": true,
+          "agreementDocumentId": "d0000001-0000-4000-a000-000000000001",
+          "terms": "Neither party may revoke without written notice to the other",
+          "revocable": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with parallelSuccessionConflicts",
+      "data": {
+        "id": "e0000001-0000-4000-a000-000000000012",
+        "testatorPersonId": "a0000001-0000-4000-a000-000000000001",
+        "status": "planning",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "lastModifiedAt": "2026-01-01T00:00:00Z",
+        "domicile": { "country": "ZA" },
+        "parallelSuccessionConflicts": [
+          {
+            "legalSystem": "zulu_customary",
+            "affectedPersonId": "a0000001-0000-4000-a000-000000000002",
+            "natureOfRight": "Eldest son has custodial rights to family homestead under Zulu customary law",
+            "overridableByWill": false,
+            "statutoryBasis": "Recognition of Customary Marriages Act 1998",
+            "resolution": "pending"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with extended commorientesRule",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000030",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "lastModifiedAt": "2026-01-01T00:00:00Z",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "commorientesRule": {
+          "applicable": true,
+          "rule": "s.184 Law of Property Act 1925 — deaths presumed in order of seniority",
+          "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+          "affectedPersonIds": [
+            "a0000001-0000-4000-a000-000000000001",
+            "a0000001-0000-4000-a000-000000000002"
+          ],
+          "statute": "Law of Property Act 1925 s.184",
+          "notes": "Husband (72) and wife (68) died in same road traffic accident on M1"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with careProvisions",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000031",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "lastModifiedAt": "2026-01-01T00:00:00Z",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "careProvisions": [
+          {
+            "dependantPersonId": "a0000001-0000-4000-a000-000000000003",
+            "trustId": "b0000001-0000-4000-a000-000000000001",
+            "annualEstimatedCost": { "amount": 4800000, "currency": "GBP" },
+            "careNeeds": "Full-time residential care with specialist learning disability support. Requires 1:1 assistance for personal care and mobility."
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with familyProvisionClaims",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000032",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "lastModifiedAt": "2026-01-01T00:00:00Z",
+        "domicile": { "country": "GB", "subdivision": "GB-ENG" },
+        "familyProvisionClaims": [
+          {
+            "claimantPersonId": "a0000001-0000-4000-a000-000000000004",
+            "claimType": "cohabitant",
+            "jurisdiction": { "country": "GB", "subdivision": "GB-ENG" },
+            "statute": "Inheritance (Provision for Family and Dependants) Act 1975",
+            "status": "potential",
+            "notes": "Partner of 12 years, not married. Lived together at the family home since 2014."
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with connections",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "connections": [
+          {
+            "fromPersonId": "a0000001-0000-0000-0000-000000000001",
+            "toPersonId": "a0000001-0000-0000-0000-000000000002",
+            "connectionType": "solicitor"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with constructionClauses",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "constructionClauses": [
+          {
+            "clauseType": "gender_neutrality",
+            "content": "References to any gender include all genders."
+          },
+          {
+            "clauseType": "severability",
+            "content": "If any provision of this will is held invalid, the remaining provisions shall remain in full force and effect."
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with validityStatus",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "validityStatus": [
+          {
+            "conditionType": "unmarried",
+            "status": "satisfied",
+            "statute": "Wills Act (Cap 352) s.13"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with administrationPhases",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "administrationPhases": [
+          { "priority": 1, "category": "funeral_expenses" },
+          { "priority": 2, "category": "testamentary_expenses" },
+          { "priority": 3, "category": "unsecured_debts" },
+          { "priority": 4, "category": "distribution" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with executorPowers",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000090",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "executorPowers": [
+          {
+            "powerType": "statutory_default",
+            "statute": "Trustee Act 2000",
+            "clauseReference": "7.1"
+          },
+          {
+            "powerType": "sale_and_conversion",
+            "statute": "Administration of Estates Act 1925 s.41",
+            "clauseReference": "7.2"
+          },
+          {
+            "powerType": "appropriation",
+            "statute": "Administration of Estates Act 1925 s.41",
+            "clauseReference": "7.3"
+          },
+          {
+            "powerType": "insurance",
+            "statute": "Trustee Act 1925 s.19",
+            "clauseReference": "7.4"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate with statutoryExclusions",
+      "data": {
+        "id": "e1000001-0000-0000-0000-000000000091",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "planning",
+        "createdAt": "2025-01-15T09:00:00Z",
+        "lastModifiedAt": "2025-01-15T09:00:00Z",
+        "domicile": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "statutoryExclusions": [
+          {
+            "statute": "Apportionment Act 1870",
+            "sections": "ss.2-4",
+            "jurisdiction": {
+              "country": "GB",
+              "subdivision": "GB-ENG"
+            },
+            "clauseReference": "8"
+          }
+        ]
+      },
+      "valid": true
+    }
+  ]
+}

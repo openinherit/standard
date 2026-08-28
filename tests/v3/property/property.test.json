@@ -1,0 +1,1085 @@
+{
+  "target": "../../../v3/property.json",
+  "tests": [
+    {
+      "description": "valid minimal property (id + name only)",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-def0-123456789abc",
+        "name": "Family Home"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid fully populated property — UK detached house",
+      "data": {
+        "id": "e5f6a7b8-c9d0-1234-ef01-23456789abcd",
+        "name": "42 Acacia Avenue",
+        "propertyType": "detached",
+        "address": {
+          "streetAddress": "42 Acacia Avenue",
+          "addressLocality": "Guildford",
+          "addressRegion": "Surrey",
+          "postalCode": "GU1 3AA",
+          "addressCountry": "GB"
+        },
+        "estimatedValue": {
+          "amount": 75000000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2024-09-15",
+        "valuationConfidence": "estimated",
+        "isPrimaryResidence": true,
+        "ownershipType": "sole",
+        "ownershipPercentage": 100,
+        "ownershipModel": "individual",
+        "acquisitionType": "self_acquired",
+        "tenureType": "ownership",
+        "registrationStatus": "formally_registered",
+        "ownershipEvidence": "title_deed",
+        "mobilityType": "immoveable",
+        "passesOutsideEstate": false,
+        "notes": "Grade II listed building — consent required for any alterations."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid property — Nigerian family land",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-f012-3456789abcde",
+        "name": "Lagos Investment Property",
+        "propertyType": "land",
+        "ownershipModel": "communal_family",
+        "acquisitionType": "ancestral_joint",
+        "tenureType": "customary",
+        "registrationStatus": "informally_held",
+        "ownershipEvidence": "family_recognition",
+        "successionRegime": {
+          "governingLaw": {
+            "legalTradition": "customary_law"
+          },
+          "notes": "Communal family land — not individually bequeathable under Yoruba customary law."
+        },
+        "governmentConsentRequired": true,
+        "notes": "Family compound — held under Yoruba customary law. Custodianship to pass to eldest male in family council."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing name",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-def0-123456789abc",
+        "propertyType": "detached"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — name is empty string (minLength: 1)",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-def0-123456789abc",
+        "name": ""
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — propertyType not in enum",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-def0-123456789abc",
+        "name": "River Cottage",
+        "propertyType": "houseboat"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — property with culturalDisposition (waqf)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440080",
+        "name": "Waqf property, Geylang",
+        "culturalDisposition": {
+          "sacredStatus": "inalienable_endowment",
+          "culturalSignificance": "community",
+          "bequeathable": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — property with communalAuthority (Nigerian family land)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440081",
+        "name": "Okonkwo family compound, Lagos",
+        "communalAuthority": {
+          "authorityType": "family_council",
+          "approvalRequired": true,
+          "authorityName": "Okonkwo Family Council",
+          "jurisdiction": {
+            "country": "NG",
+            "subdivision": "NG-LA"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — property with successionRegime (Shenzhen flat under PRC law)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440082",
+        "name": "Apartment 12B, Futian District, Shenzhen",
+        "successionRegime": {
+          "governingLaw": {
+            "jurisdiction": {
+              "country": "CN"
+            },
+            "legalTradition": "civil_law",
+            "statute": "PRC Civil Code",
+            "section": "Book VI Succession"
+          },
+          "determinedBy": "situs",
+          "binding": true,
+          "extensions": []
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — property with full EPC data",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440090",
+        "name": "42 Acacia Avenue, Didcot",
+        "epc": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "rating": "B",
+          "energyEfficiencyScore": 81,
+          "environmentalImpactScore": 75,
+          "expiryDate": "2034-06-15",
+          "certificateNumber": "0123-4567-8901-2345-6789",
+          "certificateUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0123-4567-8901-2345-6789",
+          "floorArea": 95.5,
+          "heatingType": "Mains gas — combi boiler"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — property with full Land Registry data",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440091",
+        "name": "42 Acacia Avenue, Didcot",
+        "landRegistry": {
+          "retrievedAt": "2026-03-31T10:05:00Z",
+          "titleNumber": "ON123456",
+          "titleClass": "absolute",
+          "lastSalePrice": 32500000,
+          "lastSaleDate": "2015-09-28",
+          "tenure": "freehold",
+          "registeredOwners": [
+            "William James Frith",
+            "Margaret Anne Frith"
+          ],
+          "chargesCount": 1
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — property with full flood risk data",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440092",
+        "name": "Riverside Cottage, Abingdon",
+        "floodRisk": {
+          "retrievedAt": "2026-03-31T10:10:00Z",
+          "riverAndSeaRisk": "medium",
+          "surfaceWaterRisk": "low",
+          "floodZone": "2",
+          "nearestWatercourse": "River Thames",
+          "historicalFlooding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — property with full leasehold data",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440093",
+        "name": "Flat 14, Victoria Court, Oxford",
+        "leasehold": {
+          "retrievedAt": "2026-03-31T10:15:00Z",
+          "leaseStartDate": "1985-03-25",
+          "leaseTerm": 99,
+          "yearsRemaining": 58,
+          "groundRent": 25000,
+          "groundRentReviewDate": "2030-03-25",
+          "serviceCharge": 180000,
+          "freeholderName": "Victoria Court Management Ltd",
+          "managementCompany": "FirstPort Property Services"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — property with all four enrichments together",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440094",
+        "name": "Flat 14, Victoria Court, Oxford",
+        "epc": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "rating": "D",
+          "energyEfficiencyScore": 58
+        },
+        "landRegistry": {
+          "retrievedAt": "2026-03-31T10:05:00Z",
+          "titleNumber": "ON789012",
+          "titleClass": "good_leasehold",
+          "tenure": "leasehold"
+        },
+        "floodRisk": {
+          "retrievedAt": "2026-03-31T10:10:00Z",
+          "riverAndSeaRisk": "very_low",
+          "surfaceWaterRisk": "low"
+        },
+        "leasehold": {
+          "retrievedAt": "2026-03-31T10:15:00Z",
+          "yearsRemaining": 58,
+          "groundRent": 25000
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — minimal EPC with only retrievedAt",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440095",
+        "name": "Test Property",
+        "epc": {
+          "retrievedAt": "2026-03-31T09:00:00Z"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — EPC missing required retrievedAt",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440096",
+        "name": "Test Property",
+        "epc": {
+          "rating": "C",
+          "energyEfficiencyScore": 70
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — Land Registry with unknown property",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440097",
+        "name": "Test Property",
+        "landRegistry": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "titleNumber": "DN123456",
+          "unknownField": "should fail"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — flood risk with invalid riverAndSeaRisk enum",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440098",
+        "name": "Test Property",
+        "floodRisk": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "riverAndSeaRisk": "extreme"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — property without any enrichments (all optional)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440099",
+        "name": "Plain Property"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — property with applicableLaw (French holiday home in English estate)",
+      "data": {
+        "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "name": "Holiday home, Nice",
+        "propertyType": "detached",
+        "applicableLaw": {
+          "country": "FR"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "name": "Family Home"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a valid UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "name": "Family Home"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — name is a number (type: string required)",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-def0-123456789abc",
+        "name": 42
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — estimatedValue is a string (object required)",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-def0-123456789abc",
+        "name": "Family Home",
+        "estimatedValue": "750000"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — valuationDate is not ISO 8601 date format",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-def0-123456789abc",
+        "name": "Family Home",
+        "valuationDate": "15/09/2024"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — name at maxLength boundary (255 characters)",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-def0-123456789abc",
+        "name": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — name exceeds maxLength (256 characters)",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-def0-123456789abc",
+        "name": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — ownershipPercentage exceeds 100",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-def0-123456789abc",
+        "name": "Family Home",
+        "ownershipPercentage": 101
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — ownershipPercentage below 0",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-def0-123456789abc",
+        "name": "Family Home",
+        "ownershipPercentage": -1
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — propertyType: attached (UK terraced house)",
+      "data": {
+        "id": "aa000001-0000-4000-a000-000000000001",
+        "name": "14 Coronation Street",
+        "propertyType": "attached",
+        "tenureType": "ownership"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyType: apartment (Singapore HDB flat)",
+      "data": {
+        "id": "aa000002-0000-4000-a000-000000000002",
+        "name": "Blk 123 Tampines Ave 1 #05-88",
+        "propertyType": "apartment",
+        "tenureType": "lease"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyType: commercial (office building)",
+      "data": {
+        "id": "aa000003-0000-4000-a000-000000000003",
+        "name": "Unit 7, Meridian Business Park",
+        "propertyType": "commercial",
+        "ownershipType": "sole"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyType: mixed_use",
+      "data": {
+        "id": "aa000004-0000-4000-a000-000000000004",
+        "name": "High Street Shop with Flat Above",
+        "propertyType": "mixed_use",
+        "tenureType": "ownership"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyType: rural (Welsh farmhouse)",
+      "data": {
+        "id": "aa000005-0000-4000-a000-000000000005",
+        "name": "Ty Mawr Farm, Ceredigion",
+        "propertyType": "rural",
+        "ownershipModel": "individual"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyType: mobile (park home)",
+      "data": {
+        "id": "aa000006-0000-4000-a000-000000000006",
+        "name": "Plot 12, Seagull Bay Residential Park",
+        "propertyType": "mobile"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyType: watercraft (houseboat)",
+      "data": {
+        "id": "aa000007-0000-4000-a000-000000000007",
+        "name": "Narrowboat 'Endeavour', Oxford Canal",
+        "propertyType": "watercraft"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — propertyType: other",
+      "data": {
+        "id": "aa000008-0000-4000-a000-000000000008",
+        "name": "Underground storage facility",
+        "propertyType": "other"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — tenureType: communal (tribal land)",
+      "data": {
+        "id": "aa000009-0000-4000-a000-000000000009",
+        "name": "Masai community grazing land, Kajiado",
+        "tenureType": "communal",
+        "ownershipModel": "tribal"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — tenureType: informal (unregistered occupation)",
+      "data": {
+        "id": "aa000010-0000-4000-a000-000000000010",
+        "name": "Informal settlement plot, Nairobi",
+        "tenureType": "informal",
+        "registrationStatus": "undocumented",
+        "ownershipEvidence": "none"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — tenureType: government_allocated (Nigerian Certificate of Occupancy)",
+      "data": {
+        "id": "aa000011-0000-4000-a000-000000000011",
+        "name": "Plot 54, GRA Phase 2, Port Harcourt",
+        "tenureType": "government_allocated",
+        "ownershipEvidence": "certificate_of_occupancy",
+        "governmentConsentRequired": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownershipType: joint_tenants (right of survivorship)",
+      "data": {
+        "id": "aa000012-0000-4000-a000-000000000012",
+        "name": "The Old Rectory, Suffolk",
+        "ownershipType": "joint_tenants",
+        "ownershipPercentage": 50,
+        "passesOutsideEstate": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownershipType: tenants_in_common (unequal shares)",
+      "data": {
+        "id": "aa000013-0000-4000-a000-000000000013",
+        "name": "Investment Property, Bristol",
+        "ownershipType": "tenants_in_common",
+        "ownershipPercentage": 66.67
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownershipType: trust",
+      "data": {
+        "id": "aa000014-0000-4000-a000-000000000014",
+        "name": "Berkshire Estate House",
+        "ownershipType": "trust",
+        "ownershipModel": "trust_held"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownershipType: tenancy_by_entirety (US spousal)",
+      "data": {
+        "id": "aa000015-0000-4000-a000-000000000015",
+        "name": "Family Home, Tampa, Florida",
+        "ownershipType": "tenancy_by_entirety",
+        "characterClassification": "community"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acquisitionType: ancestral_severed",
+      "data": {
+        "id": "aa000016-0000-4000-a000-000000000016",
+        "name": "Partitioned ancestral land, Punjab",
+        "acquisitionType": "ancestral_severed",
+        "ownershipModel": "individual"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acquisitionType: gifted",
+      "data": {
+        "id": "aa000017-0000-4000-a000-000000000017",
+        "name": "Cottage gifted by parents",
+        "acquisitionType": "gifted"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acquisitionType: stridhan (Hindu woman's absolute property)",
+      "data": {
+        "id": "aa000018-0000-4000-a000-000000000018",
+        "name": "Flat in Mumbai — stridhan",
+        "acquisitionType": "stridhan",
+        "ownershipModel": "individual"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acquisitionType: waqf_endowed (Islamic endowment)",
+      "data": {
+        "id": "aa000019-0000-4000-a000-000000000019",
+        "name": "Waqf building, Geylang, Singapore",
+        "acquisitionType": "waqf_endowed",
+        "tenureType": "communal"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — registrationStatus: community_acknowledged",
+      "data": {
+        "id": "aa000020-0000-4000-a000-000000000020",
+        "name": "Village compound, rural Ghana",
+        "registrationStatus": "community_acknowledged",
+        "ownershipEvidence": "community_testimony"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — registrationStatus: disputed with receipts evidence",
+      "data": {
+        "id": "aa000021-0000-4000-a000-000000000021",
+        "name": "Plot 8, contested land, Abuja",
+        "registrationStatus": "disputed",
+        "ownershipEvidence": "receipts_only",
+        "notes": "Boundary dispute ongoing since 2019."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — characterClassification: separate (US community property state)",
+      "data": {
+        "id": "aa000022-0000-4000-a000-000000000022",
+        "name": "Pre-marital condo, Los Angeles",
+        "characterClassification": "separate",
+        "ownershipType": "sole"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — characterClassification: quasi_community (California-specific)",
+      "data": {
+        "id": "aa000023-0000-4000-a000-000000000023",
+        "name": "Investment property acquired in Oregon",
+        "characterClassification": "quasi_community"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — characterClassification: mixed (partly community, partly separate)",
+      "data": {
+        "id": "aa000024-0000-4000-a000-000000000024",
+        "name": "Family home partly remortgaged with separate funds",
+        "characterClassification": "mixed"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — characterClassification: not_applicable (English property)",
+      "data": {
+        "id": "aa000025-0000-4000-a000-000000000025",
+        "name": "42 Acacia Avenue, Guildford",
+        "characterClassification": "not_applicable"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — valuationConfidence: professional",
+      "data": {
+        "id": "aa000026-0000-4000-a000-000000000026",
+        "name": "Surveyed property, Edinburgh",
+        "valuationConfidence": "professional",
+        "professionalValuation": {
+          "amount": 42000000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-03-10"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — valuationConfidence: official (agreed with HMRC for IHT purposes)",
+      "data": {
+        "id": "aa000027-0000-4000-a000-000000000027",
+        "name": "Probate property, Devon",
+        "valuationConfidence": "official",
+        "valuationDate": "2024-11-01"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — valuationConfidence: unknown",
+      "data": {
+        "id": "aa000028-0000-4000-a000-000000000028",
+        "name": "Inherited property, no valuation on record",
+        "valuationConfidence": "unknown"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — mobilityType: moveable",
+      "data": {
+        "id": "aa000029-0000-4000-a000-000000000029",
+        "name": "Demountable holiday chalet",
+        "mobilityType": "moveable"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — mobilityType: mixed",
+      "data": {
+        "id": "aa000030-0000-4000-a000-000000000030",
+        "name": "Farm with fixed buildings and moveable equipment",
+        "mobilityType": "mixed"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — homesteadStatus object (Florida unlimited exemption)",
+      "data": {
+        "id": "aa000031-0000-4000-a000-000000000031",
+        "name": "Primary Residence, Miami, Florida",
+        "homesteadStatus": {
+          "isHomestead": true,
+          "exemptionUnlimited": true,
+          "deviseRestriction": true,
+          "notes": "Florida unlimited homestead — devise restricted by Art. X s.4 Florida Constitution"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — homesteadStatus with capped exemptionAmount",
+      "data": {
+        "id": "aa000032-0000-4000-a000-000000000032",
+        "name": "Primary Residence, Georgia",
+        "homesteadStatus": {
+          "isHomestead": true,
+          "exemptionAmount": {
+            "amount": 2000000,
+            "currency": "USD"
+          },
+          "exemptionUnlimited": false,
+          "deviseRestriction": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — statutoryLifeEstate (Alberta Dower Act)",
+      "data": {
+        "id": "aa000033-0000-4000-a000-000000000033",
+        "name": "Family home, Calgary, Alberta",
+        "statutoryLifeEstate": {
+          "beneficiaryPersonId": "bb000033-0000-4000-a000-000000000033",
+          "beneficiaryPersonIdDisplay": "Margaret Davies",
+          "basis": "Alberta Dower Act",
+          "conditions": "Terminates on remarriage"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionRegime with determinedBy: domicile",
+      "data": {
+        "id": "aa000034-0000-4000-a000-000000000034",
+        "name": "Flat, Madrid",
+        "successionRegime": {
+          "governingLaw": {
+            "legalTradition": "civil_law",
+            "statute": "Spanish Civil Code",
+            "section": "Book III"
+          },
+          "determinedBy": "domicile",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — successionRegime with legalTradition: islamic_law",
+      "data": {
+        "id": "aa000035-0000-4000-a000-000000000035",
+        "name": "Dubai Marina Apartment",
+        "successionRegime": {
+          "governingLaw": {
+            "legalTradition": "islamic_law",
+            "statute": "UAE Federal Law No. 28 of 2005"
+          },
+          "determinedBy": "situs",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — rentalIncome (buy-to-let property)",
+      "data": {
+        "id": "aa000036-0000-4000-a000-000000000036",
+        "name": "Investment flat, Leeds",
+        "rentalIncome": {
+          "monthlyAmount": {
+            "amount": 95000,
+            "currency": "GBP"
+          },
+          "tenantName": "Mr A. Patel",
+          "leaseEndDate": "2026-06-30"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — externalLinks (Land Registry + Rightmove)",
+      "data": {
+        "id": "aa000037-0000-4000-a000-000000000037",
+        "name": "The Coach House, Hampshire",
+        "externalLinks": [
+          {
+            "system": "landregistry",
+            "id": "HP456789",
+            "url": "https://search.landregistry.data.gov.uk/data/ppi/transaction/HP456789",
+            "label": "Land Registry Title"
+          },
+          {
+            "system": "rightmove",
+            "id": "12345678",
+            "url": "https://www.rightmove.co.uk/properties/12345678"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — communalAuthority: clan_association",
+      "data": {
+        "id": "aa000038-0000-4000-a000-000000000038",
+        "name": "Clan compound, Kumasi",
+        "communalAuthority": {
+          "authorityType": "clan_association",
+          "approvalRequired": true,
+          "authorityName": "Asante Clan Association"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — communalAuthority: religious_body",
+      "data": {
+        "id": "aa000039-0000-4000-a000-000000000039",
+        "name": "Church property, Limerick",
+        "communalAuthority": {
+          "authorityType": "religious_body",
+          "approvalRequired": true,
+          "authorityName": "Roman Catholic Diocese of Limerick"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — communalAuthority: tribal_council",
+      "data": {
+        "id": "aa000040-0000-4000-a000-000000000040",
+        "name": "Reservation land, Arizona",
+        "communalAuthority": {
+          "authorityType": "tribal_council",
+          "approvalRequired": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownershipModel: huf_coparcenary (Hindu Undivided Family)",
+      "data": {
+        "id": "aa000041-0000-4000-a000-000000000041",
+        "name": "Sharma family ancestral home, Delhi",
+        "ownershipModel": "huf_coparcenary",
+        "acquisitionType": "ancestral_joint"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ownershipModel: government_vested (Nigerian Land Use Act)",
+      "data": {
+        "id": "aa000042-0000-4000-a000-000000000042",
+        "name": "Plot with Certificate of Occupancy, Lagos",
+        "ownershipModel": "government_vested",
+        "tenureType": "government_allocated",
+        "governmentConsentRequired": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — taxTreatment with reliefs claimed",
+      "data": {
+        "id": "aa000043-0000-4000-a000-000000000043",
+        "name": "Agricultural estate, Shropshire",
+        "taxTreatment": {
+          "jurisdiction": {
+            "country": "GB"
+          },
+          "assetType": "immoveable",
+          "exemptions": [],
+          "reliefClaimed": ["agricultural_property_relief", "business_property_relief"]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — landRegistry with titleClass: qualified",
+      "data": {
+        "id": "aa000044-0000-4000-a000-000000000044",
+        "name": "Old vicarage, Worcestershire",
+        "landRegistry": {
+          "retrievedAt": "2026-01-15T09:00:00Z",
+          "titleNumber": "WR987654",
+          "titleClass": "qualified",
+          "tenure": "freehold"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — landRegistry with titleClass: possessory",
+      "data": {
+        "id": "aa000045-0000-4000-a000-000000000045",
+        "name": "Squatter's title property, Wales",
+        "landRegistry": {
+          "retrievedAt": "2026-02-10T11:30:00Z",
+          "titleNumber": "WA123456",
+          "titleClass": "possessory"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — floodRisk with high river and sea risk, flood zone 3b",
+      "data": {
+        "id": "aa000046-0000-4000-a000-000000000046",
+        "name": "Riverside bungalow, Somerset Levels",
+        "floodRisk": {
+          "retrievedAt": "2026-01-10T08:00:00Z",
+          "riverAndSeaRisk": "high",
+          "surfaceWaterRisk": "high",
+          "floodZone": "3b",
+          "historicalFlooding": true,
+          "nearestWatercourse": "River Parrett"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — floodRisk flood zone 3a",
+      "data": {
+        "id": "aa000047-0000-4000-a000-000000000047",
+        "name": "Riverside terrace, York",
+        "floodRisk": {
+          "retrievedAt": "2026-02-01T10:00:00Z",
+          "riverAndSeaRisk": "high",
+          "floodZone": "3a"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — floodRisk flood zone 1 (very_low risk)",
+      "data": {
+        "id": "aa000048-0000-4000-a000-000000000048",
+        "name": "Hilltop cottage, Peak District",
+        "floodRisk": {
+          "retrievedAt": "2026-03-01T09:00:00Z",
+          "riverAndSeaRisk": "very_low",
+          "surfaceWaterRisk": "very_low",
+          "floodZone": "1"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — tenureType not in enum",
+      "data": {
+        "id": "aa000049-0000-4000-a000-000000000049",
+        "name": "Test property",
+        "tenureType": "freehold"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — ownershipType not in enum",
+      "data": {
+        "id": "aa000050-0000-4000-a000-000000000050",
+        "name": "Test property",
+        "ownershipType": "shared_ownership"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — registrationStatus not in enum",
+      "data": {
+        "id": "aa000051-0000-4000-a000-000000000051",
+        "name": "Test property",
+        "registrationStatus": "pending"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — valuationConfidence not in enum",
+      "data": {
+        "id": "aa000052-0000-4000-a000-000000000052",
+        "name": "Test property",
+        "valuationConfidence": "rough_guess"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — characterClassification not in enum",
+      "data": {
+        "id": "aa000053-0000-4000-a000-000000000053",
+        "name": "Test property",
+        "characterClassification": "joint"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — mobilityType not in enum",
+      "data": {
+        "id": "aa000054-0000-4000-a000-000000000054",
+        "name": "Test property",
+        "mobilityType": "fixed"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — communalAuthority authorityType not in enum",
+      "data": {
+        "id": "aa000055-0000-4000-a000-000000000055",
+        "name": "Test property",
+        "communalAuthority": {
+          "authorityType": "neighbourhood_committee",
+          "approvalRequired": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — successionRegime legalTradition not in enum",
+      "data": {
+        "id": "aa000056-0000-4000-a000-000000000056",
+        "name": "Test property",
+        "successionRegime": {
+          "governingLaw": {
+            "legalTradition": "constitutional_law"
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — ownershipPercentage with more than 2 decimal places (multipleOf: 0.01)",
+      "data": {
+        "id": "aa000057-0000-4000-a000-000000000057",
+        "name": "Test property",
+        "ownershipPercentage": 33.333
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — property with mortgageOutstanding",
+      "data": {
+        "id": "aa000058-0000-4000-a000-000000000058",
+        "name": "Mortgaged property, Manchester",
+        "ownershipType": "sole",
+        "mortgageOutstanding": {
+          "amount": 15000000,
+          "currency": "GBP"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — custodianPersonId for communal property",
+      "data": {
+        "id": "aa000059-0000-4000-a000-000000000059",
+        "name": "Communal family land, Enugu",
+        "ownershipModel": "communal_family",
+        "custodianPersonId": "cc000059-0000-4000-a000-000000000059",
+        "custodianPersonIdDisplay": "Chief Emeka Okonkwo"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acquisitionType: communal",
+      "data": {
+        "id": "aa000060-0000-4000-a000-000000000060",
+        "name": "Communally acquired land, Zimbabwe",
+        "acquisitionType": "communal",
+        "ownershipModel": "communal_family"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — property with agricultural property relief",
+      "data": {
+        "id": "aa000061-0000-4000-a000-000000000061",
+        "name": "Oakfield Farm, Somerset",
+        "taxReliefEligibility": {
+          "reliefType": "agricultural_property",
+          "eligible": true,
+          "percentage": 100,
+          "statute": "IHTA 1984 s.115-124C"
+        }
+      },
+      "valid": true
+    }
+  ]
+}

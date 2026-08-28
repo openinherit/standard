@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/dialect.json",
+  "$vocabulary": {
+    "https://json-schema.org/draft/2020-12/vocab/core": true,
+    "https://json-schema.org/draft/2020-12/vocab/applicator": true,
+    "https://json-schema.org/draft/2020-12/vocab/unevaluated": true,
+    "https://json-schema.org/draft/2020-12/vocab/validation": true,
+    "https://json-schema.org/draft/2020-12/vocab/meta-data": true,
+    "https://json-schema.org/draft/2020-12/vocab/content": true,
+    "https://json-schema.org/draft/2020-12/vocab/format-annotation": true,
+    "https://openinherit.org/v3/vocab/estate": false
+  },
+  "$dynamicAnchor": "meta",
+  "title": "INHERIT v3 Dialect",
+  "description": "Custom metaschema for INHERIT v3. Extends JSON Schema 2020-12 with the INHERIT estate vocabulary. Format keywords (uuid, email, date-time, uri) are intended to be validated",
+  "$comment": "The estate vocabulary provides schema-level metadata keywords: jurisdiction, successionRegime, maturity, extensionType, applicableJurisdictions, inheritVersion, legalSystems, dataProvenance, maintainers, compatibleWith.",
+  "allOf": [
+    {
+      "$ref": "https://json-schema.org/draft/2020-12/schema"
+    },
+    {
+      "$ref": "https://openinherit.org/v3/vocab/estate/meta.json"
+    }
+  ]
+}

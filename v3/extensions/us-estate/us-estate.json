@@ -1,0 +1,629 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/us-estate/us-estate.json",
+  "title": "US Estate Extension",
+  "description": "US-specific estate planning: federal and state estate tax, community/separate property regimes, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes, RUFADAA, Louisiana forced heirship, probate variation, trust features, SECURE Act retirement rules, ancillary probate, advance directives.",
+  "maturity": "candidate",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "US"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "common_law"
+  ],
+  "dataProvenance": "Internal Revenue Code (Title 26), Tax Cuts and Jobs Act 2017, SECURE Act 2019, SECURE 2.0 Act 2022, Uniform Probate Code, Uniform Trust Code, Uniform Health Care Decisions Act, Uniform Power of Attorney Act, RUFADAA, state community property statutes",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": [
+    "islamic-succession",
+    "jewish-succession",
+    "hindu-succession"
+  ],
+  "type": "object",
+  "properties": {
+    "state": {
+      "description": "US state in ISO 3166-2 format (e.g. US-CA, US-NY) — determines which state succession, property regime, and tax laws apply",
+      "type": "string",
+      "maxLength": 255,
+      "pattern": "^US-[A-Z]{2}$",
+      "$comment": "ISO 3166-2 US-XX"
+    },
+    "propertyRegime": {
+      "type": "string",
+      "enum": [
+        "community_property",
+        "community_property_with_survivorship",
+        "separate_property",
+        "quasi_community"
+      ]
+    },
+    "electiveShareDetails": {
+      "type": "object",
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+        "electedPercentage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "augmentedEstateIncludes": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "statute": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "homesteadExemptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "exemptionAmount": {
+            "$ref": "../../common/money.json"
+          },
+          "constitutional": {
+            "type": "boolean"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "propertyId"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 50
+    },
+    "perStirpesVariant": {
+      "type": "string",
+      "enum": [
+        "strict_per_stirpes",
+        "modern_per_stirpes",
+        "per_capita_at_each_generation"
+      ]
+    },
+    "noContestEnforceable": {
+      "type": "boolean"
+    },
+    "pretermittedHeirStatute": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "rufadaaAdopted": {
+      "type": "boolean",
+      "$comment": "Revised Uniform Fiduciary Access to Digital Assets Act"
+    },
+    "louisianaForcedHeirship": {
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "eligibleChildren": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "personId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "ageOrCondition": {
+                "type": "string",
+                "maxLength": 255
+              }
+            },
+            "additionalProperties": false
+          },
+          "maxItems": 50
+        },
+        "reservedPortion": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "basis": {
+          "type": "string",
+          "enum": [
+            "fixed",
+            "conditional"
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "federalEstateTax": {
+      "description": "Federal estate tax under IRC Title 26 — exemption, portability, GSTT",
+      "type": "object",
+      "properties": {
+        "basicExclusionAmount": {
+          "$ref": "../../common/temporal-rule.json",
+          "description": "Unified credit equivalent, currently $13.61M (2024), TCJA sunset 2026"
+        },
+        "topMarginalRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Currently 40%"
+        },
+        "portabilityElected": {
+          "type": "boolean",
+          "description": "Whether deceased spouse's unused exclusion (DSUE) is being elected"
+        },
+        "dsueAmount": {
+          "$ref": "../../common/money.json"
+        },
+        "gsttExemption": {
+          "$ref": "../../common/temporal-rule.json"
+        },
+        "gsttRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "form706Required": {
+          "type": "boolean"
+        },
+        "form706Filed": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "stateEstateTax": {
+      "description": "State-level estate and inheritance tax — 12 states + DC have estate tax, 6 states have inheritance tax",
+      "type": "object",
+      "properties": {
+        "hasEstateTax": {
+          "type": "boolean"
+        },
+        "hasInheritanceTax": {
+          "type": "boolean"
+        },
+        "estateExemption": {
+          "$ref": "../../common/temporal-rule.json"
+        },
+        "topEstateRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "coupledToFederalExemption": {
+          "type": "boolean"
+        },
+        "inheritanceTaxClasses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "className": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "relationships": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "exemption": {
+                "$ref": "../../common/money.json"
+              },
+              "topRate": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "additionalProperties": false
+          },
+          "maxItems": 10
+        },
+        "statute": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "probateVariation": {
+      "description": "State probate process variation — UPC adoption, thresholds, administration types",
+      "type": "object",
+      "properties": {
+        "upcAdopted": {
+          "type": "boolean"
+        },
+        "upcEdition": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "smallEstateAffidavitThreshold": {
+          "$ref": "../../common/temporal-rule.json"
+        },
+        "simplifiedProbateThreshold": {
+          "$ref": "../../common/temporal-rule.json"
+        },
+        "administrationType": {
+          "type": "string",
+          "enum": [
+            "supervised",
+            "unsupervised",
+            "independent",
+            "informal"
+          ]
+        },
+        "bondRequired": {
+          "type": "boolean"
+        },
+        "statute": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "trustFeatures": {
+      "description": "US-specific trust qualifiers — does not duplicate core trust.json, captures state-level features",
+      "type": "object",
+      "properties": {
+        "pourOverWill": {
+          "type": "boolean"
+        },
+        "abTrustPlanning": {
+          "type": "boolean"
+        },
+        "qtipElectionAvailable": {
+          "type": "boolean"
+        },
+        "qtipElectionMade": {
+          "type": "boolean"
+        },
+        "dynastyTrustState": {
+          "type": "boolean"
+        },
+        "maximumTrustDuration": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "decantingPermitted": {
+          "type": "boolean"
+        },
+        "decantingStatute": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "directedTrustPermitted": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "retirementAccountRules": {
+      "description": "SECURE Act retirement account distribution rules — 10-year rule, eligible designated beneficiaries",
+      "type": "object",
+      "properties": {
+        "secureActApplies": {
+          "type": "boolean"
+        },
+        "rmdAge": {
+          "$ref": "../../common/temporal-rule.json",
+          "description": "Required minimum distribution age (73 from 2023, 75 from 2033)"
+        },
+        "eligibleDesignatedBeneficiaries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "personId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "edbCategory": {
+                "type": "string",
+                "enum": [
+                  "surviving_spouse",
+                  "minor_child",
+                  "disabled",
+                  "chronically_ill",
+                  "not_more_than_10_years_younger"
+                ]
+              }
+            },
+            "required": [
+              "personId",
+              "edbCategory"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 50
+        },
+        "todDeedAvailable": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "intestacyRules": {
+      "description": "State-specific intestacy variation — surviving spouse share, property rules",
+      "type": "object",
+      "properties": {
+        "survivingSpouseShare": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "survivingSpouseShareStatute": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "separatePropertyRule": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "communityPropertyRule": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "adoptedChildrenEqual": {
+          "type": "boolean"
+        },
+        "halfBloodRule": {
+          "type": "string",
+          "$comment": "Most states apply the same half-blood rule at all kinship levels. Some states (e.g. Florida) treat half-blood differently at uncle/aunt level. Implementers should apply the rule to uncle_aunt kinship records using the core bloodDegree property",
+          "enum": [
+            "equal_to_whole_blood",
+            "half_share",
+            "excluded"
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "ancillaryProbate": {
+      "description": "Ancillary probate proceedings when the decedent owns property in multiple states",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "pattern": "^US-[A-Z]{2}$",
+            "maxLength": 5
+          },
+          "propertyIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+            },
+            "maxItems": 50
+          },
+          "acceptsDomiciliaryLetters": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_filed",
+              "filed",
+              "granted",
+              "completed",
+              "waived"
+            ]
+          },
+          "caseNumber": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "state"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 50
+    },
+    "advanceDirectives": {
+      "description": "US-specific advance directive and POA features — UHCDA, UPOAA, HIPAA",
+      "type": "object",
+      "properties": {
+        "uhcdaAdopted": {
+          "type": "boolean"
+        },
+        "upoaaAdopted": {
+          "type": "boolean"
+        },
+        "hipaaAuthorisationOnFile": {
+          "type": "boolean"
+        },
+        "healthcareDirectiveType": {
+          "type": "string",
+          "enum": [
+            "living_will",
+            "healthcare_proxy",
+            "combined_directive",
+            "polst",
+            "none"
+          ]
+        },
+        "stateMandatoryForm": {
+          "type": "boolean"
+        },
+        "financialPoaType": {
+          "type": "string",
+          "enum": [
+            "durable",
+            "springing",
+            "limited",
+            "none"
+          ]
+        },
+        "statute": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "communityPropertyDetails": {
+      "description": "Elaborates the propertyRegime enum — specifics for community property states",
+      "type": "object",
+      "properties": {
+        "communityPropertyState": {
+          "type": "string",
+          "enum": [
+            "US-AZ",
+            "US-CA",
+            "US-ID",
+            "US-LA",
+            "US-NV",
+            "US-NM",
+            "US-TX",
+            "US-WA",
+            "US-WI",
+            "US-AK",
+            "US-TN",
+            "US-SD"
+          ]
+        },
+        "optInCommunityProperty": {
+          "type": "boolean",
+          "description": "Alaska, Tennessee, South Dakota allow opting in"
+        },
+        "transmutationPermitted": {
+          "type": "boolean"
+        },
+        "prenuptialAgreement": {
+          "type": "boolean"
+        },
+        "postnuptialAgreement": {
+          "type": "boolean"
+        },
+        "fullBasisStepUp": {
+          "type": "boolean",
+          "description": "CPWROS gets full step-up in basis for both halves under IRC s.1014(b)(6)"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "intestacyDepth": {
+      "description": "How deeply the state's intestacy rules extend into the kinship tree",
+      "type": "object",
+      "properties": {
+        "upcCompliant": {
+          "description": "Whether the state follows the Uniform Probate Code's 2nd parentelic limit",
+          "type": "boolean"
+        },
+        "maxParentele": {
+          "description": "How many parentelic orders the state recognises. UPC states: 2. States like California: 3+",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "laughingHeirCutoff": {
+          "description": "Whether the state limits inheritance to prevent distant relatives from inheriting",
+          "type": "boolean"
+        }
+      }
+    },
+    "collateralHeirRules": {
+      "description": "Rules governing collateral heirs (uncles/aunts, cousins) in this state's intestacy scheme",
+      "type": "object",
+      "properties": {
+        "cousinInheritance": {
+          "description": "Whether first cousins can inherit on intestacy in this state",
+          "type": "boolean"
+        },
+        "representationAtCollateralLevel": {
+          "description": "Whether per stirpes representation applies to uncles/aunts and cousins",
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "required": [
+    "state"
+  ],
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

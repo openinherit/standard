@@ -1,0 +1,265 @@
+{
+  "version": "1.0.0",
+  "description": "Standard notification templates for estate administration — banks, insurers, pension funds, registries, and tax authorities",
+  "templates": [
+    {
+      "id": "bank-death-notification",
+      "institutionType": "bank",
+      "purpose": "Notify bank of account holder's death and request account freeze pending grant of representation",
+      "requiredFields": [
+        "people[testator].givenName",
+        "people[testator].familyName",
+        "estate.deathRecord.dateOfDeath",
+        "estate.deathRecord.deathCertificateNumber",
+        "executors[primary].personId",
+        "people[executor].givenName",
+        "people[executor].familyName",
+        "people[executor].address"
+      ],
+      "templateText": "Dear Sir/Madam,\n\nRe: Death of {testatorName} — Account Holder\n\nI am writing to notify you of the death of {testatorName}, who passed away on {dateOfDeath} (death certificate number: {deathCertificateNumber}).\n\nI am the {executorRole} of the estate and enclose a certified copy of the death certificate. Please freeze all accounts held solely or jointly in the name of the deceased pending production of the grant of {grantType}.\n\nI should be grateful if you would confirm in writing:\n\n1. The account number(s) and sort code(s) of all accounts held by the deceased;\n2. The balance of each account as at the date of death;\n3. Any outstanding loans, overdrafts, or other liabilities as at the date of death;\n4. Whether any direct debits or standing orders are in place that should be cancelled.\n\nPlease direct all further correspondence to the address below.\n\nYours faithfully,\n\n{executorName}\n{executorAddress}",
+      "jurisdictionVariants": {
+        "GB": {
+          "additionalRequirements": "Enclose an original or certified copy of the death certificate. Most UK banks require a sealed copy of the grant of probate or letters of administration before releasing funds over £50,000. Some banks participate in the Death Notification Service (deathnotificationservice.co.uk) which allows a single notification to reach multiple institutions.",
+          "notes": "Most UK banks operate dedicated bereavement teams — consult the bank's website for their specific process and required documents. The Bereavement Register (thebereavementregister.org.uk) can also be used to suppress direct mail."
+        },
+        "IE": {
+          "additionalRequirements": "Enclose a certified copy of the death certificate. Irish banks typically require a grant of probate or letters of administration from the High Court Probate Office before releasing funds. Some banks accept a Statutory Declaration for small estates.",
+          "notes": "The Credit Union movement in Ireland handles bereavement separately — contact the relevant credit union directly."
+        },
+        "AU": {
+          "additionalRequirements": "Enclose a certified copy of the death certificate. Australian banks may release funds up to certain thresholds (varies by institution) without a grant of probate. For larger estates, a grant of probate or letters of administration from the relevant State Supreme Court is required.",
+          "notes": "If the deceased held a superannuation account with the bank's subsidiary, that is handled separately — see pension-death-notification template."
+        },
+        "SG": {
+          "additionalRequirements": "Enclose the death certificate from the Immigration and Checkpoints Authority (ICA) plus a grant of probate or letters of administration from the Family Justice Courts. For intestate estates, the grant of letters of administration is required.",
+          "notes": "CPF monies are not part of the estate and are handled separately — see pension-death-notification template."
+        },
+        "US": {
+          "additionalRequirements": "Enclose a certified copy of the death certificate. Requirements vary by state. Most banks require Letters Testamentary or Letters of Administration issued by the probate court. Some institutions may accept a Small Estates Affidavit for low-value accounts.",
+          "notes": "Joint accounts with right of survivorship pass outside probate. Federal law requires institutions to honour executor authority once valid letters are presented."
+        }
+      }
+    },
+    {
+      "id": "insurance-death-claim",
+      "institutionType": "insurance",
+      "purpose": "Initiate a life insurance death benefit claim on behalf of the estate or named beneficiaries",
+      "requiredFields": [
+        "people[testator].givenName",
+        "people[testator].familyName",
+        "people[testator].dateOfBirth",
+        "estate.deathRecord.dateOfDeath",
+        "estate.deathRecord.causeOfDeath",
+        "estate.deathRecord.deathCertificateNumber",
+        "assets[lifePolicy].policyNumber",
+        "assets[lifePolicy].insurer",
+        "executors[primary].personId",
+        "people[executor].givenName",
+        "people[executor].familyName",
+        "people[executor].address",
+        "people[beneficiary].givenName",
+        "people[beneficiary].familyName"
+      ],
+      "templateText": "Dear Sir/Madam,\n\nRe: Life Insurance Policy No. {policyNumber} — Claim on Death of {testatorName}\n\nI am writing to make a claim under the above policy following the death of the life assured, {testatorName}, who passed away on {dateOfDeath}.\n\nDetails of the deceased:\n- Full name: {testatorName}\n- Date of birth: {testatorDateOfBirth}\n- Date of death: {dateOfDeath}\n- Death certificate number: {deathCertificateNumber}\n\nI enclose the following documents in support of this claim:\n\n1. Original or certified copy of the death certificate;\n2. The original policy document (or a declaration of loss if unavailable);\n3. Completed claim form (if required by your institution);\n4. Proof of identity of the claimant.\n\nThe benefit is claimed by {beneficiaryName} as {beneficiaryRelationship} to the deceased. Please confirm receipt of this claim and advise of any further documentation required.\n\nPlease contact me at the address below with any queries.\n\nYours faithfully,\n\n{claimantName}\n{claimantAddress}",
+      "jurisdictionVariants": {
+        "GB": {
+          "additionalRequirements": "Where a policy is written in trust, the trustees — not the executors — are the claimants and the benefit falls outside the estate. The insurer will typically require the trust deed and trustee identification. Where no trust is in place, a grant of probate may be required before the insurer pays out for larger sums.",
+          "notes": "The Financial Ombudsman Service can adjudicate disputes. The Association of British Insurers publishes guidance on bereavement claims at abi.org.uk."
+        },
+        "IE": {
+          "additionalRequirements": "Enclose a certified death certificate. Irish insurers generally require sight of the grant of probate or letters of administration for larger claims. Policies written in trust follow separate trust law procedures.",
+          "notes": "The Broker Ireland body provides guidance on claiming for advised-policy holders."
+        },
+        "AU": {
+          "additionalRequirements": "Life insurance in Australia is regulated by APRA and ASIC. Enclose a certified death certificate. Where a policy is held inside superannuation, the claim proceeds through the super fund trustee — see pension-death-notification template.",
+          "notes": "The Australian Financial Complaints Authority (AFCA) resolves disputes between claimants and insurers."
+        },
+        "SG": {
+          "additionalRequirements": "Enclose the ICA death certificate. The Monetary Authority of Singapore (MAS) regulates life insurers. Where a policy is assigned or written in trust, the assignee or trustee is the proper claimant.",
+          "notes": "The Life Insurance Association Singapore (LIA) publishes a guide for beneficiaries at lia.org.sg."
+        },
+        "US": {
+          "additionalRequirements": "State law governs insurance claims. Enclose a certified death certificate. Group policies may require employer confirmation of coverage. If the estate is the named beneficiary, Letters Testamentary may be required.",
+          "notes": "State insurance commissioners handle complaints. Federal interpleader procedures apply where multiple claimants dispute the benefit."
+        }
+      }
+    },
+    {
+      "id": "pension-death-notification",
+      "institutionType": "pension_fund",
+      "purpose": "Notify pension provider of member's death and initiate the nomination payout or dependant's pension process",
+      "requiredFields": [
+        "people[testator].givenName",
+        "people[testator].familyName",
+        "people[testator].dateOfBirth",
+        "people[testator].nationalInsuranceNumber",
+        "estate.deathRecord.dateOfDeath",
+        "estate.deathRecord.deathCertificateNumber",
+        "assets[pension].schemeName",
+        "assets[pension].membershipNumber",
+        "executors[primary].personId",
+        "people[executor].givenName",
+        "people[executor].familyName",
+        "people[executor].address"
+      ],
+      "templateText": "Dear Sir/Madam,\n\nRe: Pension Scheme: {schemeName} — Membership No. {membershipNumber} — Death of Member {testatorName}\n\nI am writing to notify you of the death of {testatorName} (date of birth: {testatorDateOfBirth}; scheme membership number: {membershipNumber}), who passed away on {dateOfDeath} (death certificate number: {deathCertificateNumber}).\n\nI am the {executorRole} of the estate and am writing to request the following information:\n\n1. The current value of the pension pot or any lump sum death benefit payable;\n2. Whether a valid expression of wishes / nomination of beneficiaries is on file;\n3. The trustee's process for determining the distribution of any death benefit;\n4. Whether any dependant's pension is payable and, if so, to whom;\n5. Whether any annuity is in payment and whether it contains a guarantee period with amounts outstanding.\n\nI enclose a certified copy of the death certificate and shall provide a copy of the grant of {grantType} once it has been issued.\n\nPlease contact me at the address below with any queries.\n\nYours faithfully,\n\n{executorName}\n{executorAddress}",
+      "jurisdictionVariants": {
+        "GB": {
+          "additionalRequirements": "Defined contribution pots are held in trust and fall outside the estate — the scheme trustees have discretion to pay the death benefit in accordance with the expression of wishes. Defined benefit schemes may pay a lump sum and/or a dependant's pension. The Pension Tracing Service (gov.uk/find-pension-contact-details) can help locate lost pensions.",
+          "notes": "From April 2027, unused pension funds and death benefits will be brought within the scope of inheritance tax. Ensure the testator's expression of wishes is up to date. The Pensions Ombudsman handles unresolved disputes."
+        },
+        "IE": {
+          "additionalRequirements": "Occupational pension schemes are regulated by the Pensions Authority. Death-in-service benefits are typically written in trust and fall outside the estate. State pension arrears are claimed from the Department of Social Protection.",
+          "notes": "The Financial Services and Pensions Ombudsman (FSPO) handles complaints relating to personal pensions."
+        },
+        "AU": {
+          "additionalRequirements": "Superannuation death benefits are paid to dependants or the estate as determined by the fund trustee. A binding death benefit nomination (BDBN), if valid, directs payment to nominated individuals. Enclose a certified death certificate. Tax treatment of super death benefits depends on whether the recipient is a tax dependant.",
+          "notes": "The Australian Financial Complaints Authority (AFCA) handles super-related disputes. The ATO provides guidance on super death benefit tax at ato.gov.au."
+        },
+        "SG": {
+          "additionalRequirements": "CPF (Central Provident Fund) monies are paid according to the CPF nomination, not the will. If no nomination is on file, funds are distributed by the Public Trustee's Office. Log in to my.cpf.gov.sg or visit a CPF Service Centre to submit a withdrawal claim.",
+          "notes": "CPF LIFE annuity payments cease on death. Any unused retirement savings above the Basic Retirement Sum are paid as a death benefit. Medisave and Special Account balances are also distributable."
+        },
+        "US": {
+          "additionalRequirements": "401(k) and IRA accounts pass by beneficiary designation, not the will. Enclose a certified death certificate and a copy of the beneficiary designation form. For employer plans, contact the plan administrator. Inherited IRAs are subject to Required Minimum Distribution rules under SECURE Act 2.0.",
+          "notes": "If no beneficiary designation is on file, account may pass through probate. State laws vary on treatment of ex-spouse designations."
+        }
+      }
+    },
+    {
+      "id": "land-registry-transfer",
+      "institutionType": "land_registry",
+      "purpose": "Apply to transfer registered property ownership from the deceased's estate to the beneficiary or purchaser",
+      "requiredFields": [
+        "people[testator].givenName",
+        "people[testator].familyName",
+        "estate.deathRecord.dateOfDeath",
+        "estate.deathRecord.deathCertificateNumber",
+        "assets[property].address",
+        "assets[property].titleNumber",
+        "assets[property].tenure",
+        "bequests[property].beneficiaryId",
+        "people[beneficiary].givenName",
+        "people[beneficiary].familyName",
+        "people[beneficiary].address",
+        "executors[primary].personId",
+        "people[executor].givenName",
+        "people[executor].familyName",
+        "estate.grantReference"
+      ],
+      "templateText": "Dear Sir/Madam,\n\nRe: Application to Transfer Title — {propertyAddress} (Title Number: {titleNumber})\n\nI am writing to apply for the transfer of registered title in respect of the above property following the death of the registered proprietor, {testatorName}, on {dateOfDeath}.\n\nI am the {executorRole} of the estate, acting under a grant of {grantType} issued by {grantingCourt} on {grantDate} (grant reference: {grantReference}).\n\nThe property is to be transferred to {beneficiaryName} of {beneficiaryAddress} in accordance with the terms of the {dispositionType}.\n\nI enclose the following documents:\n\n1. Completed application form (AP1 or equivalent);\n2. Original or office copy of the grant of representation;\n3. Certified copy of the death certificate;\n4. Completed transfer deed (TR1 or equivalent) signed by the executor(s);\n5. Evidence of payment of any applicable stamp duty or land transaction tax;\n6. Identity verification documents for the transferee.\n\nPlease acknowledge receipt and confirm the expected registration timescale.\n\nYours faithfully,\n\n{executorName}\n{executorAddress}",
+      "jurisdictionVariants": {
+        "GB": {
+          "additionalRequirements": "In England and Wales, submit form AP1 to HM Land Registry together with form AS1 (assent) or TR1 (transfer). Where property passes by assent to a beneficiary without sale, use form AS1. SDLT (or LBTT in Scotland / LTT in Wales) is generally not chargeable on a transmission on death. Check for any Form A or Form B restrictions on the title that may require additional evidence.",
+          "notes": "HM Land Registry online portal (portal.hmlr.gov.uk) accepts electronic lodgement of most applications. Scottish titles are managed by Registers of Scotland (ros.gov.uk). Northern Ireland uses Land & Property Services (lpsni.gov.uk)."
+        },
+        "IE": {
+          "additionalRequirements": "Applications are submitted to the Property Registration Authority (PRA). Use Form AS1 (assent). Stamp duty is generally not payable on an assent to a beneficiary. The PRA will require the grant of representation and a certified copy of the death certificate.",
+          "notes": "The Land Registry (now part of PRA) publishes e-filing guidance at prai.ie."
+        },
+        "AU": {
+          "additionalRequirements": "Each state and territory has its own land titles office. In New South Wales, lodge a Notice of Death or a Transmission Application with NSW Land Registry Services. Provide the probate or letters of administration. Transfer duty (stamp duty) may be applicable depending on the state and the relationship of the beneficiary.",
+          "notes": "Electronic lodgement via PEXA is available in most states. Seek a solicitor's assistance for complex titles with caveats or encumbrances."
+        },
+        "SG": {
+          "additionalRequirements": "Applications are submitted to the Singapore Land Authority (SLA) via the Integrated Land Information Service (INLIS). Provide the grant of probate or letters of administration from the Family Justice Courts. Buyer's Stamp Duty and Additional Buyer's Stamp Duty rules apply on transfer to non-spouses.",
+          "notes": "HDB flats have special transfer procedures administered by HDB directly — contact HDB Estates Administration directly."
+        },
+        "US": {
+          "additionalRequirements": "Real property transfer procedures vary by state. Typically, the executor executes an executor's deed conveying title to the beneficiary. The deed must be recorded in the county recorder's office. Some states require an affidavit of heirship for small estates. State and local transfer taxes may apply.",
+          "notes": "Some states (e.g. California) allow transfer on death deeds (TODDs) that avoid probate entirely. Joint tenancy property passes by right of survivorship without probate."
+        }
+      }
+    },
+    {
+      "id": "vehicle-registry-transfer",
+      "institutionType": "vehicle_registry",
+      "purpose": "Apply to transfer vehicle registration from the deceased's estate to the beneficiary or purchaser",
+      "requiredFields": [
+        "people[testator].givenName",
+        "people[testator].familyName",
+        "estate.deathRecord.dateOfDeath",
+        "estate.deathRecord.deathCertificateNumber",
+        "assets[vehicle].registrationNumber",
+        "assets[vehicle].make",
+        "assets[vehicle].model",
+        "assets[vehicle].year",
+        "assets[vehicle].vin",
+        "bequests[vehicle].beneficiaryId",
+        "people[beneficiary].givenName",
+        "people[beneficiary].familyName",
+        "people[beneficiary].address",
+        "executors[primary].personId",
+        "people[executor].givenName",
+        "people[executor].familyName"
+      ],
+      "templateText": "Dear Sir/Madam,\n\nRe: Transfer of Vehicle Registration — {vehicleRegistrationNumber} ({vehicleYear} {vehicleMake} {vehicleModel})\n\nI am writing to apply for the transfer of the above vehicle's registration following the death of the registered keeper, {testatorName}, on {dateOfDeath} (death certificate number: {deathCertificateNumber}).\n\nI am the {executorRole} of the estate. The vehicle is to be transferred to {beneficiaryName} of {beneficiaryAddress}.\n\nI enclose the following documents:\n\n1. Certified copy of the death certificate;\n2. The vehicle registration document (logbook / certificate of title) or a declaration of loss if unavailable;\n3. Completed transfer application form;\n4. Evidence of my authority as {executorRole} (copy of grant of {grantType} or letters of administration);\n5. Identity documentation for the new keeper.\n\nPlease advise whether any further steps are required to update the insurance records or to cancel any road tax / registration label.\n\nYours faithfully,\n\n{executorName}\n{executorAddress}",
+      "jurisdictionVariants": {
+        "GB": {
+          "additionalRequirements": "In England, Scotland, and Wales, complete section 6 of the V5C (logbook) to notify DVLA of the change of keeper. Send the V5C to DVLA, Swansea SA99 1BA. If the V5C has been lost, complete form V62. Any road tax in credit will be automatically refunded to the estate — cancel the direct debit if applicable. Update insurance immediately as cover may cease on death.",
+          "notes": "DVLA does not currently require sight of a grant of probate for vehicle transfers on death, but the executor should retain evidence of authority. Northern Ireland vehicles use DVA (nidirect.gov.uk/dvani)."
+        },
+        "IE": {
+          "additionalRequirements": "Notify the National Vehicle and Driver File (NVDF) through your local Motor Tax Office. Produce the Vehicle Registration Certificate (VRC), death certificate, and evidence of executor authority. Transfer of ownership must be completed before the new keeper can insure or tax the vehicle.",
+          "notes": "Motor tax offices are operated by local authorities. The NVDF is maintained by the Department of Transport."
+        },
+        "AU": {
+          "additionalRequirements": "Each state and territory has its own road authority. In New South Wales, apply to Transport for NSW and produce the death certificate, the Certificate of Registration, and evidence of executor authority. Registration and CTP insurance must be updated promptly.",
+          "notes": "Online transfer portals are available in most states. A small transfer fee is typically payable. Check whether Compulsory Third Party (CTP) insurance policy needs to be transferred separately."
+        },
+        "SG": {
+          "additionalRequirements": "Apply to the Land Transport Authority (LTA) via OneMotoring (onemotoring.lta.gov.sg). Produce the death certificate and grant of probate or letters of administration. The transfer must be completed within a specified period to avoid late fees. Road tax and insurance must be updated after transfer.",
+          "notes": "Vehicles in Singapore are subject to the Certificate of Entitlement (COE) scheme. On death, the COE and vehicle together may be transferred or the vehicle may be deregistered. Advise the beneficiary on COE expiry dates."
+        },
+        "US": {
+          "additionalRequirements": "Procedures vary by state DMV. In most states, the executor completes the assignment section on the back of the title certificate and signs as executor. Some states require a separate Executor's Affidavit. A new title is issued to the beneficiary upon application. Small estate affidavits may avoid the need for full probate in some states.",
+          "notes": "Sales tax or transfer fees may apply on vehicles transferred to non-spouse beneficiaries, depending on state law. Check local DMV requirements for emissions testing obligations post-transfer."
+        }
+      }
+    },
+    {
+      "id": "tax-authority-notification",
+      "institutionType": "tax_authority",
+      "purpose": "Notify the tax authority of the taxpayer's death and initiate the process for filing a final personal tax return and any inheritance or estate tax obligations",
+      "requiredFields": [
+        "people[testator].givenName",
+        "people[testator].familyName",
+        "people[testator].dateOfBirth",
+        "people[testator].nationalInsuranceNumber",
+        "people[testator].taxIdentificationNumber",
+        "estate.deathRecord.dateOfDeath",
+        "estate.deathRecord.deathCertificateNumber",
+        "estate.grossValue",
+        "estate.netValue",
+        "executors[primary].personId",
+        "people[executor].givenName",
+        "people[executor].familyName",
+        "people[executor].address",
+        "estate.grantReference"
+      ],
+      "templateText": "Dear Sir/Madam,\n\nRe: Death of Taxpayer — {testatorName} — Tax Reference: {taxReference}\n\nI am writing to notify you of the death of {testatorName} (date of birth: {testatorDateOfBirth}; tax reference: {taxReference}), who passed away on {dateOfDeath} (death certificate number: {deathCertificateNumber}).\n\nI am the {executorRole} of the estate, appointed under a grant of {grantType} issued on {grantDate} (grant reference: {grantReference}).\n\nI am writing to:\n\n1. Register the death with your authority and close the deceased's personal tax account;\n2. Obtain details of any outstanding tax liabilities or refunds owed for the period up to and including the date of death;\n3. Enquire as to any {incomeType} returns required for the final tax year;\n4. Obtain guidance on any estate or inheritance tax obligations arising from the death.\n\nPlease confirm receipt of this notification and advise of any forms required. I enclose a certified copy of the death certificate and a copy of the grant of representation.\n\nYours faithfully,\n\n{executorName}\n{executorAddress}",
+      "jurisdictionVariants": {
+        "GB": {
+          "additionalRequirements": "Notify HMRC of the death by calling the Bereavement Helpline (0300 200 3300) or writing to HMRC PAYE & Self Assessment. HMRC will send a letter confirming any outstanding PAYE or Self Assessment obligations. Inheritance Tax (IHT) is reported on form IHT400 (or IHT205 for excepted estates). IHT must be at least partly paid before probate can be granted — consider IHT Direct Payment Scheme. Corporation tax and VAT obligations of any business the deceased ran also need attention.",
+          "notes": "The Tell Us Once service (gov.uk/tell-us-once) notifies multiple government departments simultaneously, including HMRC, DWP, local councils, and the Passport Office. This is the recommended first step for all UK deaths."
+        },
+        "IE": {
+          "additionalRequirements": "Notify Revenue of the death by registering through MyAccount or by writing to the local Revenue office. A final Form 12 or Form 11 income tax return may be required for the year of death. Capital Acquisitions Tax (CAT) returns are filed by beneficiaries, not the estate. An Inland Revenue Affidavit (Form CA24) listing estate assets must be submitted to Revenue before probate is granted.",
+          "notes": "Revenue's My Account service allows digital notifications. The CA24 affidavit is submitted to the Probate Office but a copy must also be sent to Revenue. Group A, B, and C thresholds determine the CAT payable by each beneficiary."
+        },
+        "AU": {
+          "additionalRequirements": "Notify the ATO of the death by calling 13 28 61 or through ATO Online. A final individual income tax return (date of death return) must be filed for the period 1 July to the date of death. Australia does not have a federal inheritance tax or estate duty; however, capital gains tax may apply on disposal of inherited assets. Each state abolished its own death duties in the late 20th century.",
+          "notes": "The ATO publishes a Deceased Estates guide at ato.gov.au. If the deceased operated a business, ABN cancellation and final BAS lodgement are also required."
+        },
+        "SG": {
+          "additionalRequirements": "Notify the Inland Revenue Authority of Singapore (IRAS) at myTax Portal (mytax.iras.gov.sg). A final income tax return must be filed for the year of death. Singapore abolished estate duty in 2008, so no estate or inheritance tax is payable. GST registration (if any) must be cancelled.",
+          "notes": "IRAS allows electronic notification and filing through myTax Portal. CPF nominations are handled separately and are not subject to income or estate tax."
+        },
+        "US": {
+          "additionalRequirements": "Notify the IRS by filing a final Form 1040 for the year of death (marked 'Deceased'). If the estate generates income above the threshold, a Form 1041 (Estate Income Tax Return) may be required. If the gross estate exceeds the federal exemption ($13.61 million in 2024), file Form 706 (Estate Tax Return) within nine months of death. Many states impose separate estate or inheritance taxes at lower thresholds — check state-specific requirements.",
+          "notes": "The IRS Publication 559 (Survivors, Executors, and Administrators) provides comprehensive guidance. A surviving spouse filing jointly for the year of death may receive a refund. Apply for an Employer Identification Number (EIN) for the estate as soon as possible."
+        }
+      }
+    }
+  ]
+}

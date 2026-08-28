@@ -1,0 +1,340 @@
+{
+  "target": "../../../v3/extensions/jewish-succession/jewish-succession.json",
+  "tests": [
+    {
+      "description": "valid — minimal with required denomination",
+      "data": {
+        "denomination": "orthodox"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with bekhor rules",
+      "data": {
+        "denomination": "orthodox",
+        "bekhorRules": {
+          "applies": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required denomination",
+      "data": {
+        "halachicHeirs": []
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — denomination not in enum (if enum exists)",
+      "data": {
+        "denomination": "secular_humanist"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — denomination conservative (non-orthodox value)",
+      "data": {
+        "denomination": "conservative"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Orthodox with halachic heirs",
+      "data": {
+        "denomination": "orthodox",
+        "halachicHeirs": [
+          {
+            "personId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "relationship": "son",
+            "halachicClass": "ben",
+            "heirOrder": "bechor"
+          },
+          {
+            "personId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+            "relationship": "daughter",
+            "halachicClass": "bat"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Reform with simplified fields",
+      "data": {
+        "denomination": "reform",
+        "mezonotDetails": {
+          "eligible": false
+        },
+        "notes": "Reform congregation; simplified distribution applied"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated",
+      "data": {
+        "denomination": "orthodox",
+        "halachicHeirs": [
+          {
+            "personId": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+            "relationship": "son",
+            "halachicClass": "ben",
+            "heirOrder": "bechor"
+          }
+        ],
+        "mezonotDetails": {
+          "eligible": true,
+          "amount": { "amount": 10000, "currency": "ILS" },
+          "duration": "12 months",
+          "notes": "Widow entitled to mezonot from estate"
+        },
+        "halachicMechanism": "matnat_bari",
+        "bekhorRules": {
+          "applies": true,
+          "bekhorPersonId": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+          "doubleShareApplicable": true,
+          "notes": "Firstborn receives double portion per halacha"
+        },
+        "hebrewNames": [
+          {
+            "personId": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+            "hebrewGivenName": "Yosef",
+            "hebrewFamilyName": "Cohen",
+            "benOrBat": "ben"
+          }
+        ],
+        "halachicWitnessValidity": [
+          {
+            "personId": "d4e5f6a7-b8c9-0123-defa-234567890123",
+            "halachicallyValid": true
+          }
+        ],
+        "kinyanDetails": {
+          "type": "kinyan_sudar",
+          "performed": true,
+          "witnessPersonIds": [
+            "d4e5f6a7-b8c9-0123-defa-234567890123",
+            "e5f6a7b8-c9d0-1234-efab-345678901234"
+          ],
+          "notes": "Kinyan sudar performed at signing"
+        },
+        "bequestClassifications": [
+          {
+            "type": "matanah",
+            "bequestId": "f6a7b8c9-d0e1-2345-fabc-456789012345",
+            "notes": "Gift to charity during lifetime"
+          }
+        ],
+        "notes": "Full orthodox estate plan with all fields populated"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — HalachicHeir missing required halachicClass",
+      "data": {
+        "denomination": "orthodox",
+        "halachicHeirs": [
+          {
+            "personId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "relationship": "son"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — halachicClass enum violation",
+      "data": {
+        "denomination": "orthodox",
+        "halachicHeirs": [
+          {
+            "personId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "relationship": "nephew",
+            "halachicClass": "nephew"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — HebrewName missing required benOrBat",
+      "data": {
+        "denomination": "orthodox",
+        "hebrewNames": [
+          {
+            "personId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "hebrewGivenName": "Miriam"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — benOrBat enum violation",
+      "data": {
+        "denomination": "orthodox",
+        "hebrewNames": [
+          {
+            "personId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "hebrewGivenName": "Miriam",
+            "benOrBat": "daughter"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — KinyanDetails missing required performed",
+      "data": {
+        "denomination": "orthodox",
+        "kinyanDetails": {
+          "type": "kinyan_sudar"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — kinyanType enum violation",
+      "data": {
+        "denomination": "orthodox",
+        "kinyanDetails": {
+          "type": "kinyan_握手",
+          "performed": false
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — BequestClassification missing required bequestId",
+      "data": {
+        "denomination": "orthodox",
+        "bequestClassifications": [
+          {
+            "type": "matanah"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalProperties in HalachicHeir nested object",
+      "data": {
+        "denomination": "orthodox",
+        "halachicHeirs": [
+          {
+            "personId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "relationship": "son",
+            "halachicClass": "ben",
+            "extraField": "not allowed"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalProperties at top level",
+      "data": {
+        "denomination": "orthodox",
+        "unknownField": "not allowed"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — reconstructionist denomination with halachicMechanism",
+      "data": {
+        "denomination": "reconstructionist",
+        "halachicMechanism": "shtar_chov"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — unaffiliated denomination with mezonot not eligible",
+      "data": {
+        "denomination": "unaffiliated",
+        "mezonotDetails": {
+          "eligible": false,
+          "notes": "Applicant not recognised as halachically entitled"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — halachicMechanism enum violation",
+      "data": {
+        "denomination": "orthodox",
+        "halachicMechanism": "verbal_agreement"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — halachicHeir with av_av (paternal grandfather)",
+      "data": {
+        "denomination": "orthodox",
+        "halachicHeirs": [
+          {
+            "personId": "ff000003-0000-4000-f000-000000000001",
+            "relationship": "paternal grandfather",
+            "halachicClass": "av_av"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — halachicHeir with ach_av (father's brother/paternal uncle)",
+      "data": {
+        "denomination": "orthodox",
+        "halachicHeirs": [
+          {
+            "personId": "ff000003-0000-4000-f000-000000000004",
+            "relationship": "paternal uncle",
+            "halachicClass": "ach_av"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — halachicHeir with ben_ach (brother's son/nephew)",
+      "data": {
+        "denomination": "orthodox",
+        "halachicHeirs": [
+          {
+            "personId": "ff000003-0000-4000-f000-000000000005",
+            "relationship": "brother's son",
+            "halachicClass": "ben_ach"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — halachicHeir with ben_ach_av (father's brother's son)",
+      "data": {
+        "denomination": "orthodox",
+        "halachicHeirs": [
+          {
+            "personId": "ff000003-0000-4000-f000-000000000002",
+            "relationship": "father's brother's son",
+            "halachicClass": "ben_ach_av"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — halachicClass value 'uncle' not in enum",
+      "data": {
+        "denomination": "orthodox",
+        "halachicHeirs": [
+          {
+            "personId": "ff000003-0000-4000-f000-000000000003",
+            "relationship": "uncle",
+            "halachicClass": "uncle"
+          }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

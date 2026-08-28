@@ -1,0 +1,40 @@
+name: Validate Examples
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'v3/**'
+      - 'examples/fixtures/**'
+      - 'examples/wills/**'
+  pull_request:
+    paths:
+      - 'v3/**'
+      - 'examples/fixtures/**'
+      - 'examples/wills/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Sourcemeta CLI
+        run: |
+          curl -sSL https://github.com/sourcemeta/jsonschema/releases/latest/download/jsonschema-linux-x86_64 -o /usr/local/bin/jsonschema
+          chmod +x /usr/local/bin/jsonschema
+
+      - name: Validate example fixtures
+        run: pnpm run validate:examples

@@ -1,0 +1,402 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "1.9.0",
+  "exportedAt": "2026-03-27T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "15a4259d-d87b-409a-8217-3a2def3e666d",
+    "testatorPersonId": "cd7e4e1e-1ee4-4f60-94b3-33945adee429",
+    "status": "confirmed",
+    "revocationClause": true,
+    "notes": "England & Wales has full testamentary freedom — no forced heirship. However, the Inheritance (Provision for Family and Dependants) Act 1975 allows dependants to claim reasonable financial provision from the estate.",
+    "createdAt": "2026-03-01T00:00:00Z",
+    "lastModifiedAt": "2026-03-27T00:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    }
+  },
+  "people": [
+    {
+      "id": "cd7e4e1e-1ee4-4f60-94b3-33945adee429",
+      "givenName": "James",
+      "familyName": "Ashford",
+      "dateOfBirth": "1968-05-14",
+      "roles": [
+        "testator"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "42 Acacia Avenue",
+          "addressLocality": "Bristol",
+          "addressRegion": "Bristol",
+          "postalCode": "BS8 1AB",
+          "addressCountry": "GB"
+        }
+      }
+    },
+    {
+      "id": "19eb3102-e696-4438-a5c8-389ef5b46a7d",
+      "givenName": "Catherine",
+      "familyName": "Ashford",
+      "dateOfBirth": "1970-09-22",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ]
+    },
+    {
+      "id": "532d2e31-5923-4e02-b683-abaf71d0be37",
+      "givenName": "Oliver",
+      "familyName": "Ashford",
+      "dateOfBirth": "1995-03-11",
+      "roles": [
+        "beneficiary"
+      ]
+    },
+    {
+      "id": "304dd293-8b47-4354-8a66-2f9b7900f2f7",
+      "givenName": "Emily",
+      "familyName": "Ashford",
+      "dateOfBirth": "2015-07-03",
+      "roles": [
+        "beneficiary"
+      ]
+    },
+    {
+      "id": "69b7a894-0be2-4ea9-855d-fafae4a2afa2",
+      "givenName": "Sarah",
+      "familyName": "Mitchell",
+      "roles": [
+        "guardian"
+      ]
+    }
+  ],
+  "kinships": [
+    {
+      "id": "0accc94e-28cc-4c7c-ba08-a2e3c0e5cd9a",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "cd7e4e1e-1ee4-4f60-94b3-33945adee429",
+      "toPersonId": "532d2e31-5923-4e02-b683-abaf71d0be37"
+    },
+    {
+      "id": "b94ceedc-1b3f-4e71-b895-b39b86623d5b",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "cd7e4e1e-1ee4-4f60-94b3-33945adee429",
+      "toPersonId": "304dd293-8b47-4354-8a66-2f9b7900f2f7"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "bfc5641d-4f02-49e9-bdeb-23f57efbd048",
+      "type": "marriage_civil",
+      "partners": [
+        {
+          "personId": "cd7e4e1e-1ee4-4f60-94b3-33945adee429",
+          "ordinal": 1
+        },
+        {
+          "personId": "19eb3102-e696-4438-a5c8-389ef5b46a7d",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "b00822a5-bffd-4b67-b63a-4f29f0816e6b",
+      "name": "42 Acacia Avenue, Bristol",
+      "propertyType": "detached",
+      "tenureType": "ownership",
+      "isPrimaryResidence": true,
+      "ownershipType": "sole",
+      "estimatedValue": {
+        "amount": 45000000,
+        "currency": "GBP"
+      },
+      "address": {
+        "streetAddress": "42 Acacia Avenue",
+        "addressLocality": "Bristol",
+        "addressRegion": "Bristol",
+        "postalCode": "BS8 1AB",
+        "addressCountry": "GB"
+      }
+    }
+  ],
+  "assets": [
+    {
+      "id": "51000002-0000-4000-a000-000000000001",
+      "name": "Barclays Savings Account",
+      "category": "financial",
+      "estimatedValue": {
+        "amount": 8500000,
+        "currency": "GBP"
+      },
+      "subcategory": "savings_account",
+      "searchTerms": [
+        "Barclays savings account",
+        "easy access savings",
+        "instant access account",
+        "Barclays Blue Rewards"
+      ],
+      "comparableSearchProfile": {
+        "platforms": [
+          "barclays",
+          "moneysavingexpert",
+          "which"
+        ],
+        "searchQuery": "Barclays easy access savings account current rate",
+        "filters": {},
+        "searchFrequency": "on_demand"
+      }
+    }
+  ],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "5b22ae22-53a2-46db-bc11-4c4211175372",
+      "bequestType": "specific",
+      "beneficiaryId": "19eb3102-e696-4438-a5c8-389ef5b46a7d",
+      "description": "I give my property at 42 Acacia Avenue, Bristol to my wife Catherine Ashford absolutely."
+    },
+    {
+      "id": "009ea60d-1193-458f-bf65-05667c0a2460",
+      "bequestType": "pecuniary",
+      "beneficiaryId": "532d2e31-5923-4e02-b683-abaf71d0be37",
+      "amount": {
+        "amount": 1000000,
+        "currency": "GBP"
+      },
+      "description": "I give the sum of ten thousand pounds (£10,000) to my son Oliver Ashford."
+    },
+    {
+      "id": "27826e3d-e279-421b-9027-d871535dfb66",
+      "bequestType": "residuary",
+      "beneficiaryId": "19eb3102-e696-4438-a5c8-389ef5b46a7d",
+      "description": "I give the residue of my estate to my wife Catherine Ashford."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "7583f664-b2f2-4b02-91ab-0b91a92d0b0c",
+      "personId": "19eb3102-e696-4438-a5c8-389ef5b46a7d",
+      "role": "primary"
+    }
+  ],
+  "guardians": [
+    {
+      "id": "91000002-0000-4000-a000-000000000001",
+      "personId": "69b7a894-0be2-4ea9-855d-fafae4a2afa2",
+      "childPersonId": "304dd293-8b47-4354-8a66-2f9b7900f2f7",
+      "role": "primary",
+      "appointmentType": "testamentary"
+    }
+  ],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_2",
+    "validatedAt": "2026-03-28T12:00:00Z",
+    "validatedBy": "INHERIT Web Validator",
+    "schemaVersion": "1.2.0",
+    "completenessScore": 72,
+    "entityCounts": {
+      "people": 5,
+      "properties": 1,
+      "assets": 4,
+      "bequests": 3,
+      "executors": 2,
+      "guardians": 1
+    },
+    "provenanceSummary": {
+      "manual_entry": 16
+    },
+    "warnings": [
+      "2 assets have estimated but no professional valuation"
+    ]
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 72,
+      "maxScore": 100,
+      "jurisdiction": "GB-ENG",
+      "estateStatus": "confirmed",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "checklist": [
+        {
+          "category": "personal_details",
+          "item": "Testator full name recorded",
+          "weight": 10,
+          "status": "complete"
+        },
+        {
+          "category": "personal_details",
+          "item": "Testator date of birth",
+          "weight": 5,
+          "status": "complete"
+        },
+        {
+          "category": "personal_details",
+          "item": "Testator address",
+          "weight": 5,
+          "status": "complete"
+        },
+        {
+          "category": "assets_and_valuations",
+          "item": "At least one asset recorded",
+          "weight": 10,
+          "status": "complete"
+        },
+        {
+          "category": "assets_and_valuations",
+          "item": "Professional valuations for assets over £50,000",
+          "weight": 8,
+          "status": "incomplete",
+          "details": "Barclays shares portfolio lacks professional valuation"
+        },
+        {
+          "category": "executors",
+          "item": "At least one executor appointed",
+          "weight": 10,
+          "status": "complete"
+        },
+        {
+          "category": "tax_information",
+          "item": "Tax position calculated",
+          "weight": 8,
+          "status": "complete"
+        },
+        {
+          "category": "lifetime_transfers",
+          "item": "Lifetime gifts in 7-year lookback documented",
+          "weight": 7,
+          "status": "incomplete",
+          "details": "No lifetime transfers recorded — confirm none were made"
+        },
+        {
+          "category": "pension_and_insurance",
+          "item": "Pension nominations current",
+          "weight": 6,
+          "status": "unknown",
+          "details": "Pension exists but nomination status not recorded"
+        },
+        {
+          "category": "legal_documents",
+          "item": "Will execution date recorded",
+          "weight": 5,
+          "status": "incomplete"
+        }
+      ]
+    },
+    "taxPosition": {
+      "jurisdiction": "GB-ENG",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 95000000,
+        "currency": "GBP"
+      },
+      "netEstateValue": {
+        "amount": 72000000,
+        "currency": "GBP"
+      },
+      "lifetimeTransfersInLookback": {
+        "amount": 0,
+        "currency": "GBP"
+      },
+      "lookbackPeriod": "7 years",
+      "availableExemptions": [
+        {
+          "name": "Nil Rate Band",
+          "amount": {
+            "amount": 32500000,
+            "currency": "GBP"
+          },
+          "applied": true
+        },
+        {
+          "name": "Residence Nil Rate Band",
+          "amount": {
+            "amount": 17500000,
+            "currency": "GBP"
+          },
+          "applied": true,
+          "notes": "Primary residence passes to direct descendant"
+        }
+      ],
+      "taxableEstate": {
+        "amount": 22000000,
+        "currency": "GBP"
+      },
+      "estimatedLiability": {
+        "amount": 8800000,
+        "currency": "GBP"
+      },
+      "effectiveRate": 12.22,
+      "warnings": [
+        "No lifetime transfer history — verify none were made in the last 7 years",
+        "Pension death benefits not included in estate value calculation"
+      ],
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    },
+    "recommendedActions": [
+      {
+        "id": "act-001",
+        "category": "valuation",
+        "priority": "high",
+        "title": "Get professional valuation for share portfolio",
+        "description": "The Barclays shares are estimated at over £50,000 but have no professional valuation. HMRC may challenge the estate value.",
+        "status": "pending",
+        "triggeredBy": "Asset 'Barclays shares' estimated > £50,000 without professional valuation"
+      },
+      {
+        "id": "act-002",
+        "category": "transfer_history",
+        "priority": "high",
+        "title": "Document lifetime gifts in 7-year lookback",
+        "description": "No lifetime transfers are recorded. Confirm whether any gifts were made in the last 7 years — these affect IHT calculations.",
+        "status": "pending",
+        "triggeredBy": "Zero lifetime transfers recorded for estate in 'confirmed' status"
+      },
+      {
+        "id": "act-003",
+        "category": "beneficiary_review",
+        "priority": "medium",
+        "title": "Update pension nomination",
+        "description": "The pension scheme has no recorded beneficiary nomination. Pension trustees have discretion but will consider nominations.",
+        "status": "pending",
+        "triggeredBy": "Pension asset exists without nominated beneficiaries"
+      },
+      {
+        "id": "act-004",
+        "category": "document_update",
+        "priority": "medium",
+        "title": "Record will execution date",
+        "description": "The will execution date is not recorded. This is needed for lookback period calculations.",
+        "status": "pending",
+        "triggeredBy": "Estate in 'confirmed' status but no executionDate on estate"
+      }
+    ]
+  }
+}

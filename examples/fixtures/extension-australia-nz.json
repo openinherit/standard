@@ -1,0 +1,140 @@
+{
+  "$comment": "Test fixture exercising all fields of the australia-nz extension, covering both AU and NZ features",
+  "jurisdiction": "AU-NSW",
+  "superannuationNominations": [
+    {
+      "assetId": "a1b2c3d4-1111-4a7b-8c9d-0e1f2a3b4c5d",
+      "fundType": "smsf",
+      "nominationType": "bdbn_non_lapsing",
+      "binding": true,
+      "expiryDate": "2028-06-30",
+      "expiryRule": "Three years from date of signing unless renewed",
+      "trusteeDiscretion": false,
+      "nominatedPersonIds": [
+        "b2c3d4e5-2222-4b8c-9d0e-1f2a3b4c5d6e",
+        "c3d4e5f6-3333-4c9d-0e1f-2a3b4c5d6e7f"
+      ],
+      "taxableComponent": {
+        "amount": 45000000,
+        "currency": "AUD"
+      },
+      "taxFreeComponent": {
+        "amount": 12000000,
+        "currency": "AUD"
+      },
+      "notes": "Self-managed super fund with non-lapsing binding death benefit nomination in favour of spouse and eldest child. Tax-free component reflects pre-July 1983 service."
+    },
+    {
+      "assetId": "d4e5f6a7-4444-4d0e-1f2a-3b4c5d6e7f8a",
+      "fundType": "industry",
+      "nominationType": "non_binding",
+      "binding": false,
+      "expiryDate": "2027-03-15",
+      "expiryRule": "Lapses after three years under fund trust deed",
+      "trusteeDiscretion": true,
+      "nominatedPersonIds": [
+        "b2c3d4e5-2222-4b8c-9d0e-1f2a3b4c5d6e"
+      ],
+      "taxableComponent": {
+        "amount": 18500000,
+        "currency": "AUD"
+      },
+      "taxFreeComponent": {
+        "amount": 3200000,
+        "currency": "AUD"
+      },
+      "notes": "AustralianSuper industry fund with non-binding nomination. Trustee retains discretion over distribution."
+    }
+  ],
+  "familyProvisionClaims": [
+    {
+      "claimantPersonId": "e5f6a7b8-5555-4e1f-2a3b-4c5d6e7f8a9b",
+      "relationship": "Adult child of the deceased",
+      "statute": "Succession Act 2006 (NSW) Chapter 3",
+      "eligibleUnderStatute": true,
+      "limitationPeriod": "12 months from date of death",
+      "notionalEstateEngaged": true,
+      "claimFiled": true,
+      "filedDate": "2026-02-14",
+      "outcome": "pending",
+      "notes": "Adult son excluded from the will. Notional estate order sought over property transferred to family trust three years before death."
+    },
+    {
+      "claimantPersonId": "f6a7b8c9-6666-4f2a-3b4c-5d6e7f8a9b0c",
+      "relationship": "Former de facto partner",
+      "statute": "Succession Act 2006 (NSW) Chapter 3",
+      "eligibleUnderStatute": true,
+      "limitationPeriod": "12 months from date of death",
+      "notionalEstateEngaged": false,
+      "claimFiled": false,
+      "filedDate": "2026-08-01",
+      "outcome": "settled",
+      "notes": "Former de facto partner of five years. Claim settled by mediation before filing — lump sum of $85,000 from residuary estate."
+    }
+  ],
+  "aboriginalLandDetails": [
+    {
+      "propertyId": "a7b8c9d0-7777-4a3b-4c5d-6e7f8a9b0c1d",
+      "landType": "native_title",
+      "nativeTitleDetermination": "Mabo v Queensland (No 2) [1992] HCA 23",
+      "landCouncil": "Northern Land Council",
+      "successionRestrictions": "Native title rights and interests are communal; individual succession not applicable",
+      "notes": "Native title land in the Northern Territory. Succession governed by traditional Aboriginal law and custom."
+    },
+    {
+      "propertyId": "b8c9d0e1-8888-4b4c-5d6e-7f8a9b0c1d2e",
+      "landType": "aboriginal_freehold",
+      "nativeTitleDetermination": "Granted under Aboriginal Land Rights Act 1976 (Cth)",
+      "landCouncil": "Central Land Council",
+      "successionRestrictions": "Inalienable freehold held by land trust; cannot be sold, transferred, or mortgaged",
+      "notes": "Inalienable freehold under ALRA 1976. The land is held in trust for traditional owners."
+    }
+  ],
+  "nzPRA": {
+    "applicable": true,
+    "relationshipProperty": {
+      "amount": 92000000,
+      "currency": "NZD"
+    },
+    "separateProperty": {
+      "amount": 15000000,
+      "currency": "NZD"
+    },
+    "optingOutAgreement": false,
+    "notes": "Property (Relationships) Act 1976 option B elected by surviving spouse — chose to take relationship property entitlement rather than provision under the will."
+  },
+  "testamentaryPromises": [
+    {
+      "claimantPersonId": "c9d0e1f2-9999-4c5d-6e7f-8a9b0c1d2e3f",
+      "promiseDescription": "Deceased promised the family bach (holiday home) in Coromandel to the claimant in return for 15 years of unpaid farm work.",
+      "statute": "Law Reform (Testamentary Promises) Act 1949 (NZ)",
+      "status": "Claim filed with High Court",
+      "notes": "Claimant is a nephew who worked on the deceased's dairy farm from 2010 to 2025 without formal employment. Multiple witnesses to the oral promise."
+    },
+    {
+      "claimantPersonId": "d0e1f2a3-aaaa-4d6e-7f8a-9b0c1d2e3f4a",
+      "promiseDescription": "Deceased promised their classic car collection to the claimant in exchange for ongoing vehicle maintenance services.",
+      "statute": "Law Reform (Testamentary Promises) Act 1949 (NZ)",
+      "status": "Under mediation",
+      "notes": "Claimant is a family friend and mechanic. Written correspondence supports the promise but no formal contract exists."
+    }
+  ],
+  "maoriLandDetails": [
+    {
+      "propertyId": "e1f2a3b4-bbbb-4e7f-8a9b-0c1d2e3f4a5b",
+      "landBlockIdentifier": "Rotorua 14B2A",
+      "maoriLandCourtReference": "Waiariki MB 2024/0347",
+      "successionUnderTeTureWhenua": true
+    },
+    {
+      "propertyId": "f2a3b4c5-cccc-4f8a-9b0c-1d2e3f4a5b6c",
+      "landBlockIdentifier": "Tauranga Moana 7C1",
+      "maoriLandCourtReference": "Waiariki MB 2025/0112",
+      "successionUnderTeTureWhenua": true
+    }
+  ],
+  "notes": "Composite fixture demonstrating all features of the Australia & New Zealand extension. In practice, an estate would engage either AU or NZ provisions, not both simultaneously.",
+  "x-inherit-practitionerRef": {
+    "value": "Wellington Law Partners, matter ref WLP-2026-NZ-0298"
+  }
+}

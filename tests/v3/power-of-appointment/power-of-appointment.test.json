@@ -1,0 +1,87 @@
+{
+  "target": "../../../v3/power-of-appointment.json",
+  "tests": [
+    {
+      "description": "valid — special power of appointment with class of beneficiaries",
+      "data": {
+        "id": "aa000001-0000-4000-a000-000000000001",
+        "appointorPersonId": "a0000001-0000-4000-a000-000000000001",
+        "appointeePersonId": "a0000001-0000-4000-a000-000000000002",
+        "powerType": "special",
+        "classOfBeneficiaries": "My grandchildren and their descendants"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — general power of appointment",
+      "data": {
+        "id": "aa000001-0000-4000-a000-000000000002",
+        "appointorPersonId": "a0000001-0000-4000-a000-000000000001",
+        "appointeePersonId": "a0000001-0000-4000-a000-000000000002",
+        "powerType": "general"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — hybrid power with scope and exercise conditions",
+      "data": {
+        "id": "aa000001-0000-4000-a000-000000000003",
+        "appointorPersonId": "a0000001-0000-4000-a000-000000000001",
+        "appointeePersonId": "a0000001-0000-4000-a000-000000000002",
+        "powerType": "hybrid",
+        "classOfBeneficiaries": "My spouse and children",
+        "scope": {
+          "trustIds": ["b0000001-0000-4000-a000-000000000001"]
+        },
+        "exerciseConditions": "Exercisable only by will"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — exercised power with document reference",
+      "data": {
+        "id": "aa000001-0000-4000-a000-000000000004",
+        "appointorPersonId": "a0000001-0000-4000-a000-000000000001",
+        "appointeePersonId": "a0000001-0000-4000-a000-000000000002",
+        "powerType": "special",
+        "classOfBeneficiaries": "My children in equal shares",
+        "exercisedDate": "2026-01-15",
+        "exercisedDocumentId": "d0000001-0000-4000-a000-000000000001"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required powerType",
+      "data": {
+        "id": "aa000001-0000-4000-a000-000000000005",
+        "appointorPersonId": "a0000001-0000-4000-a000-000000000001",
+        "appointeePersonId": "a0000001-0000-4000-a000-000000000002"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — powerType not in enum",
+      "data": {
+        "id": "aa000001-0000-4000-a000-000000000006",
+        "appointorPersonId": "a0000001-0000-4000-a000-000000000001",
+        "appointeePersonId": "a0000001-0000-4000-a000-000000000002",
+        "powerType": "unlimited"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — scope with additional property",
+      "data": {
+        "id": "aa000001-0000-4000-a000-000000000007",
+        "appointorPersonId": "a0000001-0000-4000-a000-000000000001",
+        "appointeePersonId": "a0000001-0000-4000-a000-000000000002",
+        "powerType": "general",
+        "scope": {
+          "assetIds": ["e0000001-0000-4000-a000-000000000001"],
+          "extraField": "not allowed"
+        }
+      },
+      "valid": false
+    }
+  ]
+}

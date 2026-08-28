@@ -1,0 +1,263 @@
+{
+  "target": "../../../v3/common/field-provenance.json",
+  "tests": [
+    {
+      "description": "valid — minimal required fields (field, method, extractedAt)",
+      "data": {
+        "field": "givenName",
+        "method": "manual_entry",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — full OCR extraction with all fields populated",
+      "data": {
+        "field": "dateOfBirth",
+        "method": "ocr_scanned",
+        "confidence": 52,
+        "verifiedAt": "2026-04-01T14:00:00Z",
+        "verifiedBy": "James Davies",
+        "sourceDocumentId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "sourcePageNumber": 1,
+        "sourceRegion": "paragraph 1",
+        "originalText": "born on the 15th day of March nineteen forty eight",
+        "originalScript": "latin",
+        "ocrEngine": "AWS Textract",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — AI extraction with non-Latin script",
+      "data": {
+        "field": "familyName",
+        "method": "ai_extracted",
+        "confidence": 85,
+        "originalText": "田中",
+        "originalScript": "kanji",
+        "ocrEngine": "Google Cloud Vision",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — custom extension method",
+      "data": {
+        "field": "estimatedValue",
+        "method": "x-inherit-willscan-v2",
+        "confidence": 95,
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — imported method with arabic originalScript",
+      "data": {
+        "field": "familyName",
+        "method": "imported",
+        "originalScript": "arabic",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — computed method with hebrew originalScript",
+      "data": {
+        "field": "estimatedValue",
+        "method": "computed",
+        "originalScript": "hebrew",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — hiragana and katakana originalScript values",
+      "data": {
+        "field": "givenName",
+        "method": "ocr_scanned",
+        "originalScript": "hiragana",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — katakana originalScript",
+      "data": {
+        "field": "givenName",
+        "method": "ocr_scanned",
+        "originalScript": "katakana",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — devanagari originalScript",
+      "data": {
+        "field": "familyName",
+        "method": "ocr_scanned",
+        "originalScript": "devanagari",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — tamil originalScript",
+      "data": {
+        "field": "familyName",
+        "method": "ocr_scanned",
+        "originalScript": "tamil",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — chinese_simplified originalScript",
+      "data": {
+        "field": "familyName",
+        "method": "ocr_scanned",
+        "originalScript": "chinese_simplified",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — chinese_traditional originalScript",
+      "data": {
+        "field": "familyName",
+        "method": "ocr_scanned",
+        "originalScript": "chinese_traditional",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — hangul originalScript",
+      "data": {
+        "field": "familyName",
+        "method": "ocr_scanned",
+        "originalScript": "hangul",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — cyrillic originalScript",
+      "data": {
+        "field": "familyName",
+        "method": "ocr_scanned",
+        "originalScript": "cyrillic",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — thai originalScript",
+      "data": {
+        "field": "familyName",
+        "method": "ocr_scanned",
+        "originalScript": "thai",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — mixed originalScript",
+      "data": {
+        "field": "familyName",
+        "method": "ocr_scanned",
+        "originalScript": "mixed",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — other originalScript",
+      "data": {
+        "field": "familyName",
+        "method": "ocr_scanned",
+        "originalScript": "other",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing extractedAt (required)",
+      "data": {
+        "field": "givenName",
+        "method": "manual_entry"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing field (required)",
+      "data": {
+        "method": "ai_extracted",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing method (required)",
+      "data": {
+        "field": "givenName",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — confidence out of range (over 100)",
+      "data": {
+        "field": "givenName",
+        "method": "ai_extracted",
+        "confidence": 101,
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — confidence negative",
+      "data": {
+        "field": "givenName",
+        "method": "ai_extracted",
+        "confidence": -1,
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown method not matching extension pattern",
+      "data": {
+        "field": "givenName",
+        "method": "magic",
+        "extractedAt": "2026-04-01T10:30:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additional property not allowed",
+      "data": {
+        "field": "givenName",
+        "method": "manual_entry",
+        "extractedAt": "2026-04-01T10:30:00Z",
+        "notAField": true
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — field-provenance with dataSource",
+      "data": {
+        "field": "estimatedValue",
+        "method": "ai_extracted",
+        "confidence": 78,
+        "extractedAt": "2026-04-01T10:30:00Z",
+        "dataSource": {
+          "source": "ebay_sold_listings",
+          "sourceUrl": "https://www.ebay.co.uk/sch/i.html?_nkw=hornby+r3456",
+          "retrievedAt": "2026-04-01T10:29:00Z"
+        }
+      },
+      "valid": true
+    }
+  ]
+}

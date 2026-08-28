@@ -1,0 +1,132 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "schemaVersion": "1.9.0",
+  "exportedAt": "2026-04-07T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Conformance Kit",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+    "testatorPersonId": "d0000001-0000-4000-a000-000000000001",
+    "status": "planning",
+    "createdAt": "2026-04-07T00:00:00Z",
+    "lastModifiedAt": "2026-04-07T00:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England"
+    }
+  },
+  "people": [
+    {
+      "id": "d0000001-0000-4000-a000-000000000001",
+      "givenName": "Guðrún",
+      "familyName": "Sigurðardóttir",
+      "additionalName": "Þórdís",
+      "roles": [
+        "testator"
+      ],
+      "language": "is-IS"
+    },
+    {
+      "id": "d0000002-0000-4000-a000-000000000002",
+      "givenName": "فاطمة",
+      "familyName": "الرشيد",
+      "preferredName": "Fatima",
+      "roles": [
+        "beneficiary"
+      ],
+      "language": "ar"
+    },
+    {
+      "id": "d0000003-0000-4000-a000-000000000003",
+      "givenName": "裕子",
+      "familyName": "田中",
+      "phoneticReading": {
+        "givenName": "ゆうこ",
+        "familyName": "たなか",
+        "fullName": "たなか ゆうこ"
+      },
+      "roles": [
+        "executor"
+      ],
+      "language": "ja-JP"
+    },
+    {
+      "id": "d0000004-0000-4000-a000-000000000004",
+      "givenName": "שרה",
+      "familyName": "כהן",
+      "roles": [
+        "beneficiary"
+      ],
+      "language": "he-IL"
+    },
+    {
+      "id": "d0000005-0000-4000-a000-000000000005",
+      "givenName": "Priya",
+      "roles": [
+        "beneficiary"
+      ],
+      "language": "ta-IN"
+    }
+  ],
+  "assets": [
+    {
+      "id": "d1000001-0000-4000-a000-000000000001",
+      "name": "Barclays current account",
+      "category": "financial",
+      "estimatedValue": {
+        "amount": 2500000,
+        "currency": "GBP"
+      }
+    }
+  ],
+  "valuations": [
+    {
+      "id": "d2000001-0000-4000-a000-000000000001",
+      "entityType": "asset",
+      "entityId": "d1000001-0000-4000-a000-000000000001",
+      "valuedAmount": {
+        "amount": 2500000,
+        "currency": "GBP"
+      },
+      "valuationDate": "2026-04-01"
+    }
+  ],
+  "bequests": [
+    {
+      "id": "d3000001-0000-4000-a000-000000000001",
+      "bequestType": "pecuniary",
+      "beneficiaryId": "d0000002-0000-4000-a000-000000000002",
+      "amount": {
+        "amount": 500000,
+        "currency": "GBP"
+      },
+      "description": "Five thousand pounds to Fatima"
+    }
+  ],
+  "executors": [
+    {
+      "id": "d4000001-0000-4000-a000-000000000001",
+      "personId": "d0000003-0000-4000-a000-000000000003",
+      "role": "primary"
+    }
+  ],
+  "kinships": [],
+  "relationships": [],
+  "properties": [],
+  "liabilities": [],
+  "trusts": [],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "lifetimeTransfers": []
+}

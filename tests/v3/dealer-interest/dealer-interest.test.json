@@ -1,0 +1,472 @@
+{
+  "target": "../../../v3/dealer-interest.json",
+  "tests": [
+    {
+      "description": "valid minimal dealer interest (required fields only)",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Christie's",
+          "type": "auction_house"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "proxy_visible"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid fully populated dealer interest — written offer from art dealer",
+      "data": {
+        "id": "f8a9b0c1-d2e3-4567-f890-bcdef0123456",
+        "interestedParty": {
+          "name": "Bonhams",
+          "type": "auction_house",
+          "contactDetails": "privateestates@bonhams.com"
+        },
+        "assets": [
+          {
+            "assetId": "a1b2c3d4-0000-0000-0000-000000000001",
+            "interestLevel": "strong"
+          }
+        ],
+        "offerStatus": "written_offer",
+        "offerDetails": {
+          "amount": {
+            "amount": 12000000,
+            "currency": "GBP"
+          },
+          "conditions": [
+            "Subject to independent valuation",
+            "Catalogue inclusion for autumn sale"
+          ],
+          "validUntil": "2025-12-31",
+          "offerDate": "2025-06-15",
+          "documentRef": "DOC-2025-BONHAMS-001"
+        },
+        "testatorDisposition": "willing_to_sell",
+        "privacyLevel": "executor_visible",
+        "communicationInitiatedBy": "buyer",
+        "notes": "Christie's approached via family friend — informal valuation suggests £120,000-£150,000 for the Victorian watercolour collection."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing interestedParty",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "offerStatus": "standing_interest",
+        "privacyLevel": "proxy_visible"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — offerStatus not in enum",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Sotheby's",
+          "type": "auction_house"
+        },
+        "offerStatus": "pending_review",
+        "privacyLevel": "proxy_visible"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — privacyLevel not in enum",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Savills",
+          "type": "estate_agent"
+        },
+        "offerStatus": "verbal_offer",
+        "privacyLevel": "family_only"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing id (required field)",
+      "data": {
+        "interestedParty": {
+          "name": "Christie's",
+          "type": "auction_house"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "proxy_visible"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing offerStatus (required field)",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Christie's",
+          "type": "auction_house"
+        },
+        "privacyLevel": "proxy_visible"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing privacyLevel (required field)",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Christie's",
+          "type": "auction_house"
+        },
+        "offerStatus": "standing_interest"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — offerStatus as number instead of string",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Christie's",
+          "type": "auction_house"
+        },
+        "offerStatus": 1,
+        "privacyLevel": "proxy_visible"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — privacyLevel as boolean instead of string",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Christie's",
+          "type": "auction_house"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a valid UUID format",
+      "data": {
+        "id": "not-a-uuid",
+        "interestedParty": {
+          "name": "Christie's",
+          "type": "auction_house"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "proxy_visible"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — interestedParty.type not in enum",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Some Firm",
+          "type": "pawnbroker"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "proxy_visible"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — assets item has invalid interestLevel enum",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Christie's",
+          "type": "auction_house"
+        },
+        "assets": [
+          {
+            "assetId": "a1b2c3d4-0000-0000-0000-000000000001",
+            "interestLevel": "very_interested"
+          }
+        ],
+        "offerStatus": "standing_interest",
+        "privacyLevel": "proxy_visible"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — interestedParty missing required name field",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "type": "auction_house"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "proxy_visible"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown property at root level",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Christie's",
+          "type": "auction_house"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "proxy_visible",
+        "unknownField": "should not be here"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — dealer-interest with verification result",
+      "data": {
+        "id": "d6000001-0000-4000-d000-000000006001",
+        "interestedParty": {
+          "name": "Rails of Sheffield",
+          "type": "antique_dealer"
+        },
+        "offerStatus": "written_offer",
+        "privacyLevel": "executor_visible",
+        "verificationResult": {
+          "verified": true,
+          "verifiedAt": "2026-03-20T10:00:00Z",
+          "conditionConfirmed": false,
+          "adjustedAmount": {
+            "amount": 14500,
+            "currency": "GBP"
+          },
+          "discrepancyNotes": "Minor paint chips on chassis not noted in original listing. Price adjusted accordingly.",
+          "verifiedByOrganisationId": "e7000001-0000-4000-e000-000000007001"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — dealer interest with all offerStatus values (verbal_offer, formal_valuation, conditional_offer, accepted, declined, expired, withdrawn)",
+      "data": {
+        "id": "dc000001-0000-4000-d000-000000000001",
+        "interestedParty": {
+          "name": "Sotheby's",
+          "type": "auction_house"
+        },
+        "offerStatus": "verbal_offer",
+        "privacyLevel": "testator_only"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — formal_valuation offerStatus with all_parties privacy",
+      "data": {
+        "id": "dc000002-0000-4000-d000-000000000002",
+        "interestedParty": {
+          "name": "Savills",
+          "type": "estate_agent"
+        },
+        "offerStatus": "formal_valuation",
+        "privacyLevel": "all_parties"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — conditional_offer with testator communicationInitiatedBy",
+      "data": {
+        "id": "dc000003-0000-4000-d000-000000000003",
+        "interestedParty": {
+          "name": "Galerie Tanaka",
+          "type": "gallery"
+        },
+        "offerStatus": "conditional_offer",
+        "privacyLevel": "proxy_visible",
+        "communicationInitiatedBy": "testator"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — accepted offerStatus with executor communicationInitiatedBy and all interestedParty types batch 1",
+      "data": {
+        "id": "dc000004-0000-4000-d000-000000000004",
+        "interestedParty": {
+          "name": "National Gallery",
+          "type": "museum"
+        },
+        "offerStatus": "accepted",
+        "privacyLevel": "executor_visible",
+        "communicationInitiatedBy": "executor"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — declined offerStatus with interestedParty type art_dealer and prefer_not_to_sell disposition",
+      "data": {
+        "id": "dc000005-0000-4000-d000-000000000005",
+        "interestedParty": {
+          "name": "Marlborough Fine Art",
+          "type": "art_dealer"
+        },
+        "offerStatus": "declined",
+        "privacyLevel": "proxy_visible",
+        "testatorDisposition": "prefer_not_to_sell"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — expired offerStatus with private_collector type and deferred_to_family disposition",
+      "data": {
+        "id": "dc000006-0000-4000-d000-000000000006",
+        "interestedParty": {
+          "name": "Dr Heinrich Müller",
+          "type": "private_collector"
+        },
+        "offerStatus": "expired",
+        "privacyLevel": "executor_visible",
+        "testatorDisposition": "deferred_to_family"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — withdrawn offerStatus with institution type and promised_to_institution disposition",
+      "data": {
+        "id": "dc000007-0000-4000-d000-000000000007",
+        "interestedParty": {
+          "name": "Cambridge University Library",
+          "type": "institution"
+        },
+        "offerStatus": "withdrawn",
+        "privacyLevel": "proxy_visible",
+        "testatorDisposition": "promised_to_institution"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — interestedParty types charity, developer, fund_manager, family_office, legal_practice, other with undecided disposition",
+      "data": {
+        "id": "dc000008-0000-4000-d000-000000000008",
+        "interestedParty": {
+          "name": "Oxfam Trading Ltd",
+          "type": "charity"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "all_parties",
+        "testatorDisposition": "undecided"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — interestedParty type developer",
+      "data": {
+        "id": "dc000009-0000-4000-d000-000000000009",
+        "interestedParty": {
+          "name": "Berkeley Group PLC",
+          "type": "developer"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "executor_visible"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — interestedParty type fund_manager and proxy communicationInitiatedBy",
+      "data": {
+        "id": "dc000010-0000-4000-d000-000000000010",
+        "interestedParty": {
+          "name": "Ruffer LLP",
+          "type": "fund_manager"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "executor_visible",
+        "communicationInitiatedBy": "proxy"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — interestedParty type family_office and hold_for_executor disposition",
+      "data": {
+        "id": "dc000011-0000-4000-d000-000000000011",
+        "interestedParty": {
+          "name": "Rothschild Family Office",
+          "type": "family_office"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "testator_only",
+        "testatorDisposition": "hold_for_executor"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — interestedParty type legal_practice with committed interestLevel",
+      "data": {
+        "id": "dc000012-0000-4000-d000-000000000012",
+        "interestedParty": {
+          "name": "Farrer & Co LLP",
+          "type": "legal_practice"
+        },
+        "offerStatus": "written_offer",
+        "privacyLevel": "executor_visible",
+        "assets": [
+          {
+            "assetId": "ee000001-0000-4000-e000-000000000001",
+            "interestLevel": "committed"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — interestedParty type other with moderate interestLevel",
+      "data": {
+        "id": "dc000013-0000-4000-d000-000000000013",
+        "interestedParty": {
+          "name": "Northern Railwayana Auctions",
+          "type": "other"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "proxy_visible",
+        "assets": [
+          {
+            "assetId": "ee000002-0000-4000-e000-000000000002",
+            "interestLevel": "moderate"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — interestedParty type property_investor with exploratory interestLevel",
+      "data": {
+        "id": "dc000014-0000-4000-d000-000000000014",
+        "interestedParty": {
+          "name": "Grosvenor Estates",
+          "type": "property_investor"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "testator_only",
+        "assets": [
+          {
+            "propertyId": "ff000001-0000-4000-f000-000000000001",
+            "interestLevel": "exploratory"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "Invalid dealer-interest — verificationResult with bad UUID",
+      "data": {
+        "id": "d6000002-0000-4000-d000-000000006002",
+        "interestedParty": {
+          "name": "Rails of Sheffield",
+          "type": "antique_dealer"
+        },
+        "offerStatus": "written_offer",
+        "privacyLevel": "executor_visible",
+        "verificationResult": {
+          "verified": true,
+          "verifiedAt": "2026-03-20T10:00:00Z",
+          "verifiedByOrganisationId": "not-a-valid-uuid"
+        }
+      },
+      "valid": false
+    }
+  ]
+}

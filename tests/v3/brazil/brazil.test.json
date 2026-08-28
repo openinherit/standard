@@ -1,0 +1,98 @@
+{
+  "target": "../../../v3/extensions/brazil/brazil.json",
+  "tests": [
+    {
+      "description": "valid — minimal Brazil extension (inventário type only)",
+      "data": {
+        "inventarioType": "extrajudicial"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with meação and community property regime",
+      "data": {
+        "meacao": {
+          "applicable": true,
+          "propertyRegime": "comunhao_parcial_de_bens",
+          "spousePersonId": "a0000001-0000-4000-a000-000000000001",
+          "communityPropertyValue": {
+            "amount": 50000000,
+            "currency": "BRL"
+          }
+        },
+        "inventarioType": "extrajudicial"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with forced heirship (legítima) and compulsory heirs",
+      "data": {
+        "legitima": {
+          "compulsoryHeirs": [
+            {
+              "personId": "b0000001-0000-4000-a000-000000000001",
+              "heirClass": "descendant",
+              "shareFraction": "1/3"
+            },
+            {
+              "personId": "b0000002-0000-4000-a000-000000000002",
+              "heirClass": "descendant",
+              "shareFraction": "1/3"
+            },
+            {
+              "personId": "b0000003-0000-4000-a000-000000000003",
+              "heirClass": "surviving_spouse",
+              "shareFraction": "1/3"
+            }
+          ],
+          "legitimaPortion": 50
+        },
+        "disponivel": {
+          "portion": 50,
+          "estimatedValue": {
+            "amount": 25000000,
+            "currency": "BRL"
+          }
+        },
+        "inventarioType": "judicial"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with stable union and cartório attestation",
+      "data": {
+        "uniaoEstavel": {
+          "recognised": true,
+          "partnerPersonId": "c0000001-0000-4000-a000-000000000001",
+          "startDate": "2015-06-01",
+          "judicialDeclaration": false,
+          "contractRegistered": true
+        },
+        "cartorioAttestation": {
+          "cartorioName": "1º Tabelionato de Notas de São Paulo",
+          "tabeliao": "Maria da Silva",
+          "livroNumber": "450",
+          "folhaNumber": "123",
+          "attestationDate": "2026-03-20"
+        },
+        "inventarioType": "extrajudicial"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — inventarioType not in enum",
+      "data": {
+        "inventarioType": "administrative"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown property at root level",
+      "data": {
+        "inventarioType": "judicial",
+        "unknownBrazilField": "should be rejected"
+      },
+      "valid": false
+    }
+  ]
+}

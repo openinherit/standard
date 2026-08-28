@@ -1,0 +1,40 @@
+{
+  "name": "Canada",
+  "id": "https://openinherit.org/v3/extensions/canada.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "CA"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "islamic-succession",
+    "jewish-succession",
+    "hindu-succession"
+  ],
+  "legalSystems": [
+    "common_law",
+    "civil_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-03-26",
+  "dataProvenance": "Civil Code of Québec, Ontario Succession Law Reform Act, BC WESA, Alberta Wills and Succession Act",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Provincial succession rules: Quebec patrimony, Ontario equalisation, BC WESA variation, Alberta dower rights, Indigenous land succession.",
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "partial",
+  "taxCoverage": "outline",
+  "keyFeatures": "Provincial probate fees, deemed disposition on death, Quebec civil code forced heirship, 13 province/territory ISO 3166-2 codes, intestacyRules with distributionOrder and preferentialShare, quebecCivilLaw (family patrimony)",
+  "legalTradition": "Common / civil (QC)",
+  "seeking": "Quebec notarial and Indigenous law expertise",
+  "tier": "core"
+}

@@ -1,0 +1,90 @@
+{
+  "$comment": "Test fixture exercising all fields of the jewish-succession extension",
+  "denomination": "orthodox",
+  "halachicHeirs": [
+    {
+      "personId": "aabbccdd-1122-4334-5566-778899aabbcc",
+      "relationship": "Eldest son of the deceased",
+      "heirOrder": "bechor",
+      "halachicClass": "ben"
+    },
+    {
+      "personId": "bbccddee-2233-4445-6677-8899aabbccdd",
+      "relationship": "Second son of the deceased",
+      "heirOrder": "regular",
+      "halachicClass": "ben"
+    }
+  ],
+  "mezonotDetails": {
+    "eligible": true,
+    "amount": {
+      "amount": 250000,
+      "currency": "GBP"
+    },
+    "duration": "Until the youngest daughter reaches the age of majority or marries",
+    "notes": "Mezonot maintenance obligation for unmarried daughters from the estate, per Shulchan Aruch Choshen Mishpat"
+  },
+  "halachicMechanism": "shtar_chov",
+  "bekhorRules": {
+    "applies": true,
+    "bekhorPersonId": "aabbccdd-1122-4334-5566-778899aabbcc",
+    "doubleShareApplicable": true,
+    "notes": "Firstborn son entitled to pi shnayim (double share) of estate assets held at time of death, per Bava Batra 122b"
+  },
+  "hebrewNames": [
+    {
+      "personId": "aabbccdd-1122-4334-5566-778899aabbcc",
+      "hebrewGivenName": "Yosef",
+      "hebrewFamilyName": "Goldstein",
+      "benOrBat": "ben"
+    },
+    {
+      "personId": "ccddee11-3344-4556-7788-99aabbccddee",
+      "hebrewGivenName": "Miriam",
+      "hebrewFamilyName": "Goldstein",
+      "benOrBat": "bat"
+    }
+  ],
+  "halachicWitnessValidity": [
+    {
+      "personId": "ddee1122-4455-4667-8899-aabbccddeeff",
+      "halachicallyValid": true,
+      "disqualificationReason": "",
+      "notes": "Shomer Shabbat male witness, unrelated to any party; confirmed valid by the Beth Din"
+    },
+    {
+      "personId": "eeff2233-5566-4778-99aa-bbccddeeff00",
+      "halachicallyValid": false,
+      "disqualificationReason": "Relative of the testator within prohibited degrees",
+      "notes": "Brother-in-law of the deceased; disqualified under halachic witness rules per Choshen Mishpat 33:1"
+    }
+  ],
+  "kinyanDetails": {
+    "type": "kinyan_sudar",
+    "performed": true,
+    "witnessPersonIds": [
+      "ddee1122-4455-4667-8899-aabbccddeeff",
+      "ff001122-6677-4889-aabb-ccddeeff0011"
+    ],
+    "notes": "Kinyan sudar performed using a handkerchief in the presence of two kosher witnesses at the Beth Din of London"
+  },
+  "bequestClassifications": [
+    {
+      "type": "matanah",
+      "bequestId": "11aabb22-ccdd-4eef-0011-223344556677",
+      "notes": "Gift inter vivos (matanah) of the Golders Green property to eldest son, executed with kinyan"
+    },
+    {
+      "type": "yerusha",
+      "bequestId": "22bbcc33-ddee-4ff0-1122-334455667788",
+      "notes": "Halachic inheritance (yerusha) of remaining estate assets per Torah law succession order"
+    }
+  ],
+  "notes": "Estate of an Orthodox Jewish man domiciled in London. Halachic will (tzavaah) executed alongside a civil will to ensure both halachic and English law compliance. Beth Din of London supervised the process.",
+  "x-inherit-ketubah": {
+    "value": "Ketubah registered at the London Beth Din, dated 1998-06-14, stipulating obligations to surviving wife"
+  },
+  "x-inherit-halachic-yerusha": {
+    "value": "Torah-mandated succession applied; bekhor receives double share of assets in existence at death"
+  }
+}

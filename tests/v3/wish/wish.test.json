@@ -1,0 +1,956 @@
+{
+  "target": "../../../v3/wish.json",
+  "tests": [
+    {
+      "description": "valid — minimal wish with required fields only",
+      "data": {
+        "id": "57bf5494-d95c-497c-8c8b-d515571decaa",
+        "wishType": "funeral",
+        "title": "Funeral wishes"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated funeral wish with Islamic rites",
+      "data": {
+        "id": "c3c4f2a2-ea85-4213-9521-b33980706c02",
+        "wishType": "funeral",
+        "title": "Funeral wishes — burial according to Islamic rites",
+        "content": "I wish to be buried in accordance with Islamic rites. Burial must take place within 24 hours of death if at all possible. Please contact Imam Hassan at the East London Mosque (+44 20 7247 2702) immediately. I do not wish to be cremated. Simple white kafan shroud — no coffin unless legally required. Qibla direction in the grave.",
+        "bindingNature": "religiously_obligatory",
+        "addresseePersonId": "523c9021-bc01-49af-9b93-219f4d78a706",
+        "notes": "Written in consultation with Imam Hassan — follows Hanafi funeral practice. Updated February 2026."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — letter of wishes to executors",
+      "data": {
+        "id": "1203e4a8-3149-4958-a948-9ac5ef2dfcc0",
+        "wishType": "letter",
+        "title": "Letter to my executors",
+        "content": "Dear James and Priya, I trust your judgement completely. Please ensure my mother is well cared for. The house at Sunningdale Road holds many memories — do not sell it too quickly. Give the family time to collect what they want from it before clearing. My sister Akiko knows where the important documents are kept.",
+        "bindingNature": "non_binding",
+        "addresseePersonId": "fddceff2-255f-4e7f-9379-bdcb35d7f377",
+        "notes": "Written alongside the formal will. Executors have been given a copy."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — pet care wish with asset reference",
+      "data": {
+        "id": "0b34605b-811a-466f-ac77-97a45a5faf97",
+        "wishType": "pets",
+        "title": "Care of my dog Biscuit and cat Mochi",
+        "content": "Please ensure my dog Biscuit (golden retriever, aged 4) and cat Mochi (tabby, aged 7) are rehomed together if possible. My sister Akiko in Leeds has agreed to take them. Biscuit's vet is Oadby Vets, 12 Station Road — tel 0116 271 5555. Mochi is fully vaccinated, microchipped, and spayed.",
+        "bindingNature": "non_binding",
+        "relatedAssetId": "35cec1b0-b9c0-40ea-80f8-74c93247209c",
+        "notes": "Updated after acquiring Mochi in December 2024. Akiko confirmed she is willing to take both animals."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital estate wish",
+      "data": {
+        "id": "3f12c9df-131b-4c7d-b365-44938c958bb2",
+        "wishType": "digital",
+        "title": "Digital accounts and online presence instructions",
+        "content": "My passwords are in the 1Password vault. The master password is with my solicitor in a sealed envelope. Please delete my Facebook and Instagram accounts. My Google account contains important family photos — please download the Google Photos library before closing the account. My work email at Testate Technologies should be handled by my co-founder.",
+        "bindingNature": "non_binding",
+        "addresseePersonId": "fddceff2-255f-4e7f-9379-bdcb35d7f377"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "wishType": "funeral",
+        "title": "Funeral wishes"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required wishType",
+      "data": {
+        "id": "57bf5494-d95c-497c-8c8b-d515571decaa",
+        "title": "Funeral wishes"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required title",
+      "data": {
+        "id": "57bf5494-d95c-497c-8c8b-d515571decaa",
+        "wishType": "funeral"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — wishType is not a valid enum value",
+      "data": {
+        "id": "57bf5494-d95c-497c-8c8b-d515571decaa",
+        "wishType": "revenge",
+        "title": "My revenge plan"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — bindingNature is not a valid enum value",
+      "data": {
+        "id": "57bf5494-d95c-497c-8c8b-d515571decaa",
+        "wishType": "funeral",
+        "title": "Funeral wishes",
+        "bindingNature": "morally_binding"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — digital likeness wish prohibiting all",
+      "data": {
+        "id": "f473bad7-8f16-4d60-8215-5d5aa8d99a80",
+        "wishType": "digital_likeness",
+        "title": "No posthumous AI recreation",
+        "likenessConsent": "prohibited",
+        "syntheticMediaPolicy": "prohibit_all"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — restricted likeness with scope and time limit",
+      "data": {
+        "id": "1b1e4f40-5cee-4721-93fa-439ac9d8c887",
+        "wishType": "digital_likeness",
+        "title": "Restricted digital likeness consent",
+        "likenessConsent": "restricted",
+        "likenessScope": [
+          "voice",
+          "visual_appearance"
+        ],
+        "likenessPermittedUses": [
+          "memorial",
+          "family_private"
+        ],
+        "likenessProhibitedUses": [
+          "commercial"
+        ],
+        "likenessTimeLimit": "P25Y",
+        "likenessControllerPersonId": "b225d6bb-2e47-40bf-aefb-64932e0f3861"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — wish with existing digital models",
+      "data": {
+        "id": "6d926b9f-c6c9-4e95-a9a9-985432a20cac",
+        "wishType": "digital_likeness",
+        "title": "Existing AI model instructions",
+        "existingDigitalModels": [
+          {
+            "provider": "HereAfter",
+            "modelType": "chatbot",
+            "action": "delete"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — likenessConsent invalid value",
+      "data": {
+        "id": "a26bb335-15cb-450d-8e86-4e0f171c8845",
+        "wishType": "digital_likeness",
+        "title": "Digital likeness wish",
+        "likenessConsent": "maybe"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — wish with likeness enforcement",
+      "data": {
+        "id": "282323cb-9dc4-4f68-9ed2-9212c49d318b",
+        "wishType": "digital_likeness",
+        "title": "Takedown request for HereAfter model",
+        "likenessEnforcement": [
+          {
+            "platform": "HereAfter",
+            "requestType": "takedown",
+            "requestDate": "2026-04-01",
+            "requestedBy": "Executor Jones",
+            "status": "pending",
+            "legalBasis": "Estate executor authority under Wills Act"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — multiple enforcement actions",
+      "data": {
+        "id": "c395e2a8-680b-42d7-9319-3e092de9f5cc",
+        "wishType": "digital_likeness",
+        "title": "Multiple platform enforcement actions",
+        "likenessEnforcement": [
+          {
+            "platform": "StoryFile",
+            "requestType": "takedown",
+            "requestDate": "2026-03-15",
+            "requestedBy": "Executor Jones",
+            "status": "complied",
+            "responseDate": "2026-03-20",
+            "referenceNumber": "SF-2026-TDWN-0042"
+          },
+          {
+            "platform": "OpenAI",
+            "requestType": "cease_training",
+            "requestDate": "2026-03-15",
+            "requestedBy": "Executor Jones",
+            "status": "pending",
+            "legalBasis": "EU AI Act Article 10 — prohibition on processing sensitive personal data for AI training without consent"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — enforcement entry missing required platform",
+      "data": {
+        "id": "c9dc1ec1-daf1-4c28-b079-6e67d2e53071",
+        "wishType": "digital_likeness",
+        "title": "Enforcement wish with missing platform",
+        "likenessEnforcement": [
+          {
+            "requestType": "takedown"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — title as number (wrong type)",
+      "data": {
+        "id": "57bf5494-d95c-497c-8c8b-d515571decaa",
+        "wishType": "funeral",
+        "title": 12345
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — wishType as boolean (wrong type)",
+      "data": {
+        "id": "57bf5494-d95c-497c-8c8b-d515571decaa",
+        "wishType": true,
+        "title": "Funeral wishes"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a valid UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "wishType": "funeral",
+        "title": "Funeral wishes"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — addresseePersonId is not a valid UUID",
+      "data": {
+        "id": "57bf5494-d95c-497c-8c8b-d515571decaa",
+        "wishType": "letter",
+        "title": "Letter to my executors",
+        "addresseePersonId": "xyz-not-valid"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — title is empty string (minLength 1)",
+      "data": {
+        "id": "57bf5494-d95c-497c-8c8b-d515571decaa",
+        "wishType": "funeral",
+        "title": ""
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — content exceeds maxLength of 5000",
+      "data": {
+        "id": "57bf5494-d95c-497c-8c8b-d515571decaa",
+        "wishType": "general",
+        "title": "Overly long wish",
+        "content": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — relatedAssetId is not a valid UUID",
+      "data": {
+        "id": "57bf5494-d95c-497c-8c8b-d515571decaa",
+        "wishType": "pets",
+        "title": "Care of my dog",
+        "relatedAssetId": "12345"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — wishType: care",
+      "data": {
+        "id": "c3000001-0000-4000-a000-000000004001",
+        "wishType": "care",
+        "title": "Care instructions for my mother Doris",
+        "content": "My mother Doris (84) requires daily assistance. She is registered with Wrexham Care Services (ref: WCS-12345). She prefers to remain in her home at 14 Oak Street. Her GP is Dr Patel at Rhosddu Medical Centre.",
+        "bindingNature": "non_binding",
+        "addresseePersonId": "a3000001-0000-4000-a000-000000004001",
+        "addresseePersonIdDisplay": "James Davies (executor)"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — wishType: distribution",
+      "data": {
+        "id": "c3000002-0000-4000-a000-000000004002",
+        "wishType": "distribution",
+        "title": "Personal item distribution preferences",
+        "content": "My gold signet ring should go to my grandson Thomas. My collection of first-edition Dickens novels should go to the Wrexham Library. The Welsh dresser was my grandmother’s — please offer it to my sister first.",
+        "bindingNature": "non_binding",
+        "notes": "These are preferences only — the executor has full discretion"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — wishType: general",
+      "data": {
+        "id": "c3000003-0000-4000-a000-000000004003",
+        "wishType": "general",
+        "title": "General wishes for my family",
+        "content": "I hope my family will remain close after I am gone. My house holds many memories — please take time before clearing it.",
+        "bindingNature": "non_binding"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bindingNature: culturally_obligatory",
+      "data": {
+        "id": "c3000004-0000-4000-a000-000000004004",
+        "wishType": "funeral",
+        "title": "Burial according to Yoruba tradition",
+        "content": "I wish to be buried in my family compound in Ibadan according to Yoruba custom. The eldest son must lead the burial rites.",
+        "bindingNature": "culturally_obligatory"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bindingNature: legally_binding",
+      "data": {
+        "id": "c3000005-0000-4000-a000-000000004005",
+        "wishType": "care",
+        "title": "Legally binding care directive",
+        "content": "This directive is made pursuant to the Mental Capacity Act 2005. I direct that no life-sustaining treatment shall be given if I am in a persistent vegetative state.",
+        "bindingNature": "legally_binding"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with funeralArrangementType: burial",
+      "data": {
+        "id": "c3000006-0000-4000-a000-000000004006",
+        "wishType": "funeral",
+        "title": "Traditional burial preferences",
+        "funeralArrangementType": "burial",
+        "funeralCeremonyType": "religious",
+        "funeralCeremonyReligion": "Church of England",
+        "funeralLocationPreference": "St Giles’ Church, Wrexham"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with funeralArrangementType: green_burial",
+      "data": {
+        "id": "c3000007-0000-4000-a000-000000004007",
+        "wishType": "funeral",
+        "title": "Green burial preference",
+        "funeralArrangementType": "green_burial",
+        "funeralCeremonyType": "secular",
+        "funeralLocationPreference": "Woodland Trust burial ground, Llangollen"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with funeralArrangementType: sea_burial",
+      "data": {
+        "id": "c3000008-0000-4000-a000-000000004008",
+        "wishType": "funeral",
+        "title": "Sea burial preference",
+        "funeralArrangementType": "sea_burial",
+        "funeralCeremonyType": "none",
+        "notes": "Retired Royal Navy officer — consult MCA for sea burial licence"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with funeralArrangementType: sky_burial",
+      "data": {
+        "id": "c3000009-0000-4000-a000-000000004009",
+        "wishType": "funeral",
+        "title": "Sky burial — Vajrayana Buddhist rite",
+        "funeralArrangementType": "sky_burial",
+        "bindingNature": "religiously_obligatory",
+        "notes": "Contact Kagyu Samye Ling monastery for assistance"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with funeralArrangementType: donation_to_science",
+      "data": {
+        "id": "c3000010-0000-4000-a000-000000004010",
+        "wishType": "funeral",
+        "title": "Body donation to medical science",
+        "funeralArrangementType": "donation_to_science",
+        "medicalResearchDonation": {
+          "consentGiven": true,
+          "institutionOrganisationId": "b3000010-0000-4000-a000-000000004010",
+          "institutionOrganisationIdDisplay": "Cardiff University Medical School",
+          "restrictions": "Neurological research only"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with funeralArrangementType: other",
+      "data": {
+        "id": "c3000011-0000-4000-a000-000000004011",
+        "wishType": "funeral",
+        "title": "Custom funeral arrangement",
+        "funeralArrangementType": "other",
+        "content": "I wish to be cryopreserved with Cryonics UK"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with funeralCeremonyType: hybrid",
+      "data": {
+        "id": "c3000012-0000-4000-a000-000000004012",
+        "wishType": "funeral",
+        "title": "Hybrid ceremony wishes",
+        "funeralArrangementType": "cremation",
+        "funeralCeremonyType": "hybrid",
+        "funeralCeremonyReligion": "Reform Judaism",
+        "funeralMusicWishes": "Shir Hamaalot, Jerusalem",
+        "funeralReadingWishes": "Psalm 23, a secular poem of the family’s choosing"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with funeralCeremonyType: none",
+      "data": {
+        "id": "c3000013-0000-4000-a000-000000004013",
+        "wishType": "funeral",
+        "title": "No ceremony requested",
+        "funeralArrangementType": "cremation",
+        "funeralCeremonyType": "none",
+        "content": "No funeral service or ceremony. Ashes to be scattered quietly at Coniston Water by immediate family only."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with pre-paid plan",
+      "data": {
+        "id": "c3000014-0000-4000-a000-000000004014",
+        "wishType": "funeral",
+        "title": "Pre-paid funeral plan details",
+        "funeralArrangementType": "burial",
+        "funeralPrePaid": true,
+        "funeralPrePaidPolicyNumber": "FP-2024-123456",
+        "funeralBudgetSource": "pre_paid",
+        "funeralBudgetNotes": "Golden Charter plan — contact provider on 0800 833 800"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with budget from estate",
+      "data": {
+        "id": "c3000015-0000-4000-a000-000000004015",
+        "wishType": "funeral",
+        "title": "Funeral budget guidance",
+        "funeralArrangementType": "cremation",
+        "funeralBudgetSource": "estate",
+        "funeralBudgetMaximum": {
+          "amount": 800000,
+          "currency": "GBP"
+        },
+        "funeralBudgetNotes": "Please keep costs modest — no more than £8,000"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with budget from insurance",
+      "data": {
+        "id": "c3000016-0000-4000-a000-000000004016",
+        "wishType": "funeral",
+        "title": "Funeral insurance details",
+        "funeralArrangementType": "burial",
+        "funeralBudgetSource": "insurance",
+        "funeralPrePaid": false
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with budget from family",
+      "data": {
+        "id": "c3000017-0000-4000-a000-000000004017",
+        "wishType": "funeral",
+        "title": "Family-funded funeral arrangements",
+        "funeralArrangementType": "burial",
+        "funeralBudgetSource": "family"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with organ donation consent",
+      "data": {
+        "id": "c3000018-0000-4000-a000-000000004018",
+        "wishType": "funeral",
+        "title": "Organ donation consent",
+        "organDonation": {
+          "consentGiven": true,
+          "organs": [
+            "kidneys",
+            "liver",
+            "corneas"
+          ],
+          "coordinatingOrganisationId": "b3000018-0000-4000-a000-000000004018",
+          "coordinatingOrganisationIdDisplay": "NHS Blood and Transplant"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with organ donation declined",
+      "data": {
+        "id": "c3000019-0000-4000-a000-000000004019",
+        "wishType": "funeral",
+        "title": "No organ donation",
+        "organDonation": {
+          "consentGiven": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with autopsyPreference: declined",
+      "data": {
+        "id": "c3000020-0000-4000-a000-000000004020",
+        "wishType": "funeral",
+        "title": "No autopsy preference",
+        "autopsyPreference": "declined"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with autopsyPreference: requested",
+      "data": {
+        "id": "c3000021-0000-4000-a000-000000004021",
+        "wishType": "funeral",
+        "title": "Autopsy for medical purposes",
+        "autopsyPreference": "requested",
+        "notes": "Family history of undiagnosed cardiac conditions — autopsy may benefit descendants"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with autopsyPreference: no_preference",
+      "data": {
+        "id": "c3000022-0000-4000-a000-000000004022",
+        "wishType": "funeral",
+        "title": "Funeral wishes — no autopsy preference",
+        "autopsyPreference": "no_preference"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital_likeness with likenessConsent: not_stated",
+      "data": {
+        "id": "c3000023-0000-4000-a000-000000004023",
+        "wishType": "digital_likeness",
+        "title": "Likeness not stated",
+        "likenessConsent": "not_stated"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital_likeness with syntheticMediaPolicy: allow_with_attribution",
+      "data": {
+        "id": "c3000024-0000-4000-a000-000000004024",
+        "wishType": "digital_likeness",
+        "title": "Synthetic media allowed with attribution",
+        "likenessConsent": "permitted",
+        "syntheticMediaPolicy": "allow_with_attribution"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital_likeness with syntheticMediaPolicy: allow_without_attribution",
+      "data": {
+        "id": "c3000025-0000-4000-a000-000000004025",
+        "wishType": "digital_likeness",
+        "title": "Synthetic media allowed without attribution",
+        "likenessConsent": "permitted",
+        "syntheticMediaPolicy": "allow_without_attribution"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital_likeness with syntheticMediaPolicy: family_decision",
+      "data": {
+        "id": "c3000026-0000-4000-a000-000000004026",
+        "wishType": "digital_likeness",
+        "title": "Family to decide on synthetic media",
+        "likenessConsent": "restricted",
+        "syntheticMediaPolicy": "family_decision",
+        "likenessControllerPersonId": "a3000026-0000-4000-a000-000000004026",
+        "likenessControllerPersonIdDisplay": "Eleanor Davies (eldest daughter)"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital_likeness with full likenessScope",
+      "data": {
+        "id": "c3000027-0000-4000-a000-000000004027",
+        "wishType": "digital_likeness",
+        "title": "Restricted likeness — voice and visual only",
+        "likenessConsent": "restricted",
+        "likenessScope": [
+          "voice",
+          "visual_appearance",
+          "writing_style",
+          "personality_model",
+          "full_avatar"
+        ],
+        "likenessPermittedUses": [
+          "memorial",
+          "family_private",
+          "educational"
+        ],
+        "likenessProhibitedUses": [
+          "commercial",
+          "legal_proceedings",
+          "artistic"
+        ],
+        "likenessTimeLimit": "P10Y",
+        "likenessRevocationConditions": "Consent is revoked if used outside the agreed memorial platform"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital_likeness with existingDigitalModels: voice_clone",
+      "data": {
+        "id": "c3000028-0000-4000-a000-000000004028",
+        "wishType": "digital_likeness",
+        "title": "Voice clone deletion instruction",
+        "existingDigitalModels": [
+          {
+            "provider": "ElevenLabs",
+            "modelType": "voice_clone",
+            "action": "delete"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital_likeness with existingDigitalModels: visual_avatar",
+      "data": {
+        "id": "c3000029-0000-4000-a000-000000004029",
+        "wishType": "digital_likeness",
+        "title": "Visual avatar transfer instruction",
+        "existingDigitalModels": [
+          {
+            "provider": "StoryFile",
+            "modelType": "visual_avatar",
+            "action": "transfer",
+            "controllerPersonId": "a3000029-0000-4000-a000-000000004029",
+            "controllerPersonIdDisplay": "Michael Davies (son)"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital_likeness with existingDigitalModels: full_replica, preserve",
+      "data": {
+        "id": "c3000030-0000-4000-a000-000000004030",
+        "wishType": "digital_likeness",
+        "title": "Preserve full replica for family archive",
+        "existingDigitalModels": [
+          {
+            "provider": "HereAfter AI",
+            "modelType": "full_replica",
+            "action": "preserve"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital_likeness with existingDigitalModels: other, restrict",
+      "data": {
+        "id": "c3000031-0000-4000-a000-000000004031",
+        "wishType": "digital_likeness",
+        "title": "Restrict custom AI model",
+        "existingDigitalModels": [
+          {
+            "provider": "Custom private system",
+            "modelType": "other",
+            "action": "restrict"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — enforcement with all requestType values",
+      "data": {
+        "id": "c3000032-0000-4000-a000-000000004032",
+        "wishType": "digital_likeness",
+        "title": "Comprehensive enforcement instructions",
+        "likenessEnforcement": [
+          {
+            "platform": "Facebook",
+            "requestType": "restrict",
+            "requestDate": "2026-04-01",
+            "status": "acknowledged"
+          },
+          {
+            "platform": "Google",
+            "requestType": "transfer_control",
+            "requestDate": "2026-04-01",
+            "status": "pending"
+          },
+          {
+            "platform": "OpenAI",
+            "requestType": "verify_consent",
+            "requestDate": "2026-04-01",
+            "status": "unknown"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — enforcement with status: refused",
+      "data": {
+        "id": "c3000033-0000-4000-a000-000000004033",
+        "wishType": "digital_likeness",
+        "title": "Refused takedown request",
+        "likenessEnforcement": [
+          {
+            "platform": "YouTube",
+            "requestType": "takedown",
+            "requestDate": "2026-03-01",
+            "status": "refused",
+            "responseDate": "2026-03-15",
+            "referenceNumber": "YT-TKD-2026-00123",
+            "notes": "Platform refused — escalate to legal team"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — enforcement with status: escalated",
+      "data": {
+        "id": "c3000034-0000-4000-a000-000000004034",
+        "wishType": "digital_likeness",
+        "title": "Escalated enforcement action",
+        "likenessEnforcement": [
+          {
+            "platform": "Instagram",
+            "requestType": "takedown",
+            "requestDate": "2026-02-15",
+            "status": "escalated",
+            "legalBasis": "EU AI Act Article 10 — consent required for AI training data"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — funeral with extension type",
+      "data": {
+        "id": "c3000035-0000-4000-a000-000000004035",
+        "wishType": "funeral",
+        "title": "Zoroastrian funeral wishes",
+        "funeralArrangementType": "x-inherit-dokhmenashini",
+        "bindingNature": "religiously_obligatory"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — wish with visibility field",
+      "data": {
+        "id": "c3000036-0000-4000-a000-000000004036",
+        "wishType": "letter",
+        "title": "Private letter to my children",
+        "content": "This letter is for my children only and is not to be shared more widely.",
+        "visibility": "testator_only"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — funeralArrangementType with invalid core enum value",
+      "data": {
+        "id": "c3000037-0000-4000-a000-000000004037",
+        "wishType": "funeral",
+        "title": "Invalid arrangement type",
+        "funeralArrangementType": "volcano"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — funeralCeremonyType with invalid enum value",
+      "data": {
+        "id": "c3000038-0000-4000-a000-000000004038",
+        "wishType": "funeral",
+        "title": "Invalid ceremony type",
+        "funeralCeremonyType": "pagan"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — autopsyPreference with invalid enum value",
+      "data": {
+        "id": "c3000039-0000-4000-a000-000000004039",
+        "wishType": "funeral",
+        "title": "Invalid autopsy preference",
+        "autopsyPreference": "maybe"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — syntheticMediaPolicy with invalid enum value",
+      "data": {
+        "id": "c3000040-0000-4000-a000-000000004040",
+        "wishType": "digital_likeness",
+        "title": "Invalid synthetic media policy",
+        "syntheticMediaPolicy": "ask_family_maybe"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — funeralBudgetSource with invalid enum value",
+      "data": {
+        "id": "c3000041-0000-4000-a000-000000004041",
+        "wishType": "funeral",
+        "title": "Invalid budget source",
+        "funeralBudgetSource": "crowdfunding"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — existingDigitalModels modelType with invalid enum value",
+      "data": {
+        "id": "c3000042-0000-4000-a000-000000004042",
+        "wishType": "digital_likeness",
+        "title": "Invalid model type",
+        "existingDigitalModels": [
+          {
+            "modelType": "hologram"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — existingDigitalModels action with invalid enum value",
+      "data": {
+        "id": "c3000043-0000-4000-a000-000000004043",
+        "wishType": "digital_likeness",
+        "title": "Invalid model action",
+        "existingDigitalModels": [
+          {
+            "modelType": "chatbot",
+            "action": "archive"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — enforcement requestType with invalid enum value",
+      "data": {
+        "id": "c3000044-0000-4000-a000-000000004044",
+        "wishType": "digital_likeness",
+        "title": "Invalid enforcement request",
+        "likenessEnforcement": [
+          {
+            "platform": "Facebook",
+            "requestType": "sue"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — enforcement status with invalid enum value",
+      "data": {
+        "id": "c3000045-0000-4000-a000-000000004045",
+        "wishType": "digital_likeness",
+        "title": "Invalid enforcement status",
+        "likenessEnforcement": [
+          {
+            "platform": "Facebook",
+            "requestType": "takedown",
+            "status": "in_progress"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — enforcement entry missing required requestType",
+      "data": {
+        "id": "c3000046-0000-4000-a000-000000004046",
+        "wishType": "digital_likeness",
+        "title": "Enforcement missing requestType",
+        "likenessEnforcement": [
+          {
+            "platform": "TikTok"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property rejected",
+      "data": {
+        "id": "c3000047-0000-4000-a000-000000004047",
+        "wishType": "general",
+        "title": "Wish with unknown property",
+        "unknownProp": "should fail"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — emoji in notes field",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440200",
+        "wishType": "distribution",
+        "title": "Special items for grandchildren",
+        "notes": "Give the teddy bear 🧸 to Sophie. The vintage train set 🚂 goes to Oliver."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — wish with relatedTrustIds",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440201",
+        "wishType": "letter",
+        "title": "Letter of wishes for family trust",
+        "relatedTrustIds": [
+          "d0000001-0000-4000-d000-000000020001",
+          "d0000002-0000-4000-d000-000000020002"
+        ]
+      },
+      "valid": true
+    }
+  ]
+}

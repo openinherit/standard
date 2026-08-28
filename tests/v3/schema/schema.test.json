@@ -1,0 +1,3272 @@
+{
+  "target": "../../../v3/schema.json",
+  "tests": [
+    {
+      "description": "valid — truly minimal document (no optional entity arrays)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — document with all entity arrays (backwards compatible)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "8aac9018-8461-4874-a57f-02e64ffdacba",
+          "testatorPersonId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+            "givenName": "Bob",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "kinships": [],
+        "relationships": [],
+        "properties": [],
+        "assets": [],
+        "liabilities": [],
+        "bequests": [],
+        "trusts": [],
+        "executors": [],
+        "guardians": [],
+        "wishes": [],
+        "documents": [],
+        "nonprobateTransfers": [],
+        "proxyAuthorisations": [],
+        "applicationState": {
+          "dealerInterests": []
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — document with @context and legacyContacts (v1.3.0 fields)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "7cea7445-b421-4550-84a7-b398fe3c2ebb",
+          "testatorPersonId": "6101470a-a634-4fc2-9faa-06bddcc08e5d",
+          "status": "confirmed",
+          "createdAt": "2025-06-15T09:00:00Z",
+          "lastModifiedAt": "2025-12-01T09:00:00Z",
+          "domicile": {
+            "country": "GB",
+            "subdivision": "GB-ENG",
+            "legalSystems": [
+              "common_law"
+            ]
+          }
+        },
+        "people": [
+          {
+            "id": "6101470a-a634-4fc2-9faa-06bddcc08e5d",
+            "givenName": "Richard",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "kinships": [],
+        "relationships": [],
+        "properties": [],
+        "assets": [],
+        "liabilities": [],
+        "bequests": [],
+        "trusts": [],
+        "executors": [],
+        "guardians": [],
+        "wishes": [],
+        "documents": [],
+        "nonprobateTransfers": [],
+        "proxyAuthorisations": [],
+        "applicationState": {
+          "dealerInterests": [],
+          "legacyContacts": [
+            {
+              "id": "d74a20d3-e422-4db5-a2db-b2716a33354c",
+              "name": "Sarah Davies",
+              "accessLevel": "read_only",
+              "relationship": "daughter",
+              "notificationMethod": "email"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — wrong $schema value (not the required const)",
+      "data": {
+        "estate": {
+          "id": "573fa747-080b-4e99-92c5-7716bb99f6cb",
+          "testatorPersonId": "5e3de571-86a5-4b86-ac69-33d9dee9aafe",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "5e3de571-86a5-4b86-ac69-33d9dee9aafe",
+            "givenName": "Bob",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "kinships": [],
+        "relationships": [],
+        "properties": [],
+        "assets": [],
+        "liabilities": [],
+        "bequests": [],
+        "trusts": [],
+        "executors": [],
+        "guardians": [],
+        "wishes": [],
+        "documents": [],
+        "nonprobateTransfers": [],
+        "proxyAuthorisations": [],
+        "applicationState": {
+          "dealerInterests": []
+        },
+        "$schema": "https://wrong-url.example.com/schema.json"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — $schema points to v2 instead of v3",
+      "data": {
+        "estate": {
+          "id": "661a767e-8962-4a23-9c58-fe05092f4485",
+          "testatorPersonId": "a571357f-778f-4e24-a1bf-45558643c64c",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "a571357f-778f-4e24-a1bf-45558643c64c",
+            "givenName": "Carol",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "kinships": [],
+        "relationships": [],
+        "properties": [],
+        "assets": [],
+        "liabilities": [],
+        "bequests": [],
+        "trusts": [],
+        "executors": [],
+        "guardians": [],
+        "wishes": [],
+        "documents": [],
+        "nonprobateTransfers": [],
+        "proxyAuthorisations": [],
+        "applicationState": {
+          "dealerInterests": []
+        },
+        "$schema": "https://openinherit.org/v3/schema.json"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required estate field",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "people": [
+          {
+            "id": "9bacbc85-d9b0-49a5-9ad3-fa81a61e815a",
+            "givenName": "Dave",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "kinships": [],
+        "relationships": [],
+        "properties": [],
+        "assets": [],
+        "liabilities": [],
+        "bequests": [],
+        "trusts": [],
+        "executors": [],
+        "guardians": [],
+        "wishes": [],
+        "documents": [],
+        "nonprobateTransfers": [],
+        "proxyAuthorisations": [],
+        "applicationState": {
+          "dealerInterests": []
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — legacyContacts item missing required accessLevel",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "estate": {
+          "id": "be21ed63-f3df-4506-8583-7f4eca9bc9d5",
+          "testatorPersonId": "5cfc128c-82eb-44a9-976b-5e23393aa81f",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "5cfc128c-82eb-44a9-976b-5e23393aa81f",
+            "givenName": "Eve",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "kinships": [],
+        "relationships": [],
+        "properties": [],
+        "assets": [],
+        "liabilities": [],
+        "bequests": [],
+        "trusts": [],
+        "executors": [],
+        "guardians": [],
+        "wishes": [],
+        "documents": [],
+        "nonprobateTransfers": [],
+        "proxyAuthorisations": [],
+        "applicationState": {
+          "dealerInterests": [],
+          "legacyContacts": [
+            {
+              "id": "debed86c-da37-4dcd-ad67-d9cbe955de0c",
+              "name": "Frank Wilson"
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — document with dataSharing consent",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "550e8400-e29b-41d4-a716-446655440040",
+          "testatorPersonId": "550e8400-e29b-41d4-a716-446655440041",
+          "status": "planning",
+          "createdAt": "2026-03-29T10:00:00Z",
+          "lastModifiedAt": "2026-03-29T10:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "550e8400-e29b-41d4-a716-446655440041",
+            "givenName": "Test",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "kinships": [],
+        "relationships": [],
+        "properties": [],
+        "assets": [],
+        "liabilities": [],
+        "bequests": [],
+        "trusts": [],
+        "executors": [],
+        "guardians": [],
+        "wishes": [],
+        "documents": [],
+        "nonprobateTransfers": [],
+        "proxyAuthorisations": [],
+        "applicationState": {
+          "dealerInterests": [],
+          "dataSharing": {
+            "anonymisedAggregates": true,
+            "academicResearch": false,
+            "partnerInsights": true,
+            "consentRecordedAt": "2026-03-29T10:00:00Z",
+            "consentMethod": "in_app"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — document with organisations and spaces arrays",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "2.1.0",
+        "estate": {
+          "id": "8a37791e-3636-4f49-9808-5aa5bf2a81dd",
+          "testatorPersonId": "5a3137d4-8fff-4103-bd42-6e52dfc827a3",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "5a3137d4-8fff-4103-bd42-6e52dfc827a3",
+            "givenName": "Margaret",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "organisations": [
+          {
+            "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+            "name": "IDR Law",
+            "organisationType": "legal_firm"
+          }
+        ],
+        "spaces": [
+          {
+            "id": "7bc58028-1216-4931-a40c-9d81935087aa",
+            "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+            "spaceType": "living_room"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required schemaVersion",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "estate": {
+          "id": "215226bc-1536-4bf6-b931-4cc889d65a22",
+          "testatorPersonId": "ba953424-cfb0-4a39-a0fc-6d427282b7fa",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "ba953424-cfb0-4a39-a0fc-6d427282b7fa",
+            "givenName": "Test",
+            "roles": [
+              "testator"
+            ]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — document with integrity object",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "2.9.0",
+        "estate": {
+          "id": "dbb290b4-0eed-4bbe-949d-1c881c8b32cf",
+          "testatorPersonId": "731ae95d-f869-4e91-a74e-46bec26d7cc8",
+          "status": "planning",
+          "createdAt": "2026-04-02T09:00:00Z",
+          "lastModifiedAt": "2026-04-02T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "731ae95d-f869-4e91-a74e-46bec26d7cc8",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "integrity": {
+          "algorithm": "ES256",
+          "hash": "abc123def456",
+          "signedAt": "2026-04-02T12:00:00Z",
+          "verificationMethod": "Testate Technologies Ltd"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — document with transmissions array",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "2.9.0",
+        "estate": {
+          "id": "881d30d0-5e54-4dd7-85c7-5bd5197ebbfa",
+          "testatorPersonId": "be575e03-80d5-42fa-9f71-a14db32a7ba0",
+          "status": "planning",
+          "createdAt": "2026-04-02T09:00:00Z",
+          "lastModifiedAt": "2026-04-02T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "be575e03-80d5-42fa-9f71-a14db32a7ba0",
+            "givenName": "Bob",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "applicationState": {
+          "transmissions": [
+            {
+              "sentAt": "2026-04-01T10:00:00Z",
+              "sender": "IDR Law",
+              "method": "encrypted_email",
+              "recipient": "Executor",
+              "receivedAt": "2026-04-01T10:05:00Z",
+              "verified": true
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — document with death notifications array",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "2.9.0",
+        "estate": {
+          "id": "f3984f48-e9b7-4905-96ae-4bcd3fd85cce",
+          "testatorPersonId": "bba7ae3d-af15-4535-a2d6-240bcc8f62b0",
+          "status": "planning",
+          "createdAt": "2026-04-02T09:00:00Z",
+          "lastModifiedAt": "2026-04-02T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "bba7ae3d-af15-4535-a2d6-240bcc8f62b0",
+            "givenName": "Carol",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "applicationState": {
+          "deathNotifications": [
+            {
+              "institution": "Barclays",
+              "institutionType": "bank",
+              "status": "acknowledged",
+              "method": "tell_us_once"
+            },
+            {
+              "institution": "HMRC",
+              "institutionType": "tax_authority",
+              "status": "pending"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — document with JSON-LD @context and @type",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "@context": "https://openinherit.org/v3/context/inherit-v3.jsonld",
+        "@type": "InheritDocument",
+        "schemaVersion": "2.9.0",
+        "estate": {
+          "id": "7ceaa95d-6f69-40be-87e3-d0f742b59ae0",
+          "testatorPersonId": "a5ea144e-445b-4232-91e0-a584857ece65",
+          "status": "planning",
+          "createdAt": "2026-04-02T09:00:00Z",
+          "lastModifiedAt": "2026-04-02T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "a5ea144e-445b-4232-91e0-a584857ece65",
+            "givenName": "Diana",
+            "roles": [
+              "testator"
+            ]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — integrity missing required algorithm",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "2.9.0",
+        "estate": {
+          "id": "43b3eeb7-5027-4ce8-8bbc-33d5070b9604",
+          "testatorPersonId": "d014bbf1-a79a-4052-b968-3c40ac4b7e45",
+          "status": "planning",
+          "createdAt": "2026-04-02T09:00:00Z",
+          "lastModifiedAt": "2026-04-02T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "d014bbf1-a79a-4052-b968-3c40ac4b7e45",
+            "givenName": "Edward",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "integrity": {
+          "hash": "abc"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — transmission missing required sentAt",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "2.9.0",
+        "estate": {
+          "id": "521c9aa1-e002-4ba3-abe5-c8f183db4fc7",
+          "testatorPersonId": "0b0a203c-dcfe-4200-83cb-fb09afb64304",
+          "status": "planning",
+          "createdAt": "2026-04-02T09:00:00Z",
+          "lastModifiedAt": "2026-04-02T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "0b0a203c-dcfe-4200-83cb-fb09afb64304",
+            "givenName": "Fiona",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "applicationState": {
+          "transmissions": [
+            {
+              "sender": "someone"
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — document with applicationState containing notifications",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "a1b2c3d4-e5f6-4789-abcd-ef0123456789",
+          "testatorPersonId": "b2c3d4e5-f6a7-4890-bcde-f12345678901",
+          "status": "planning",
+          "domicile": {
+            "country": "GB"
+          },
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z"
+        },
+        "people": [
+          {
+            "id": "b2c3d4e5-f6a7-4890-bcde-f12345678901",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "applicationState": {
+          "notifications": [],
+          "completeness": {
+            "score": 45,
+            "maxScore": 100,
+            "checklist": []
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — document with applicationState containing custom implementation fields",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "a1b2c3d4-e5f6-4789-abcd-ef0123456790",
+          "testatorPersonId": "b2c3d4e5-f6a7-4890-bcde-f12345678902",
+          "status": "planning",
+          "domicile": {
+            "country": "GB"
+          },
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z"
+        },
+        "people": [
+          {
+            "id": "b2c3d4e5-f6a7-4890-bcde-f12345678902",
+            "givenName": "Bob",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "applicationState": {
+          "myCustomAppField": "this is allowed because additionalProperties is true",
+          "internalTrackingId": 12345
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — notifications at root level (must be in applicationState)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "a1b2c3d4-e5f6-4789-abcd-ef0123456791",
+          "testatorPersonId": "b2c3d4e5-f6a7-4890-bcde-f12345678903",
+          "status": "planning",
+          "domicile": {
+            "country": "GB"
+          },
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z"
+        },
+        "people": [
+          {
+            "id": "b2c3d4e5-f6a7-4890-bcde-f12345678903",
+            "givenName": "Eve",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "notifications": []
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — document with structured extension declaration",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "a1b2c3d4-0000-4000-a000-000000000100",
+          "testatorPersonId": "b2c3d4e5-0000-4000-a000-000000000100",
+          "status": "planning",
+          "domicile": {
+            "country": "GB",
+            "subdivision": "GB-ENG"
+          },
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z"
+        },
+        "people": [
+          {
+            "id": "b2c3d4e5-0000-4000-a000-000000000100",
+            "givenName": "Test",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "extensions": [
+          {
+            "id": "uk-england-wales",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json",
+            "scope": [
+              "estate",
+              "people"
+            ],
+            "dataBlock": "x-inherit-uk-england-wales"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — document with referentialIntegrity constraints array",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "a1b2c3d4-0000-4000-a000-000000000400",
+          "testatorPersonId": "b2c3d4e5-0000-4000-a000-000000000400",
+          "status": "planning",
+          "domicile": {
+            "country": "GB"
+          },
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z"
+        },
+        "people": [
+          {
+            "id": "b2c3d4e5-0000-4000-a000-000000000400",
+            "givenName": "Test",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "referentialIntegrity": [
+          {
+            "field": "bequests[].beneficiaryId",
+            "references": "people[].id",
+            "required": true,
+            "code": "INHERIT_REF_BROKEN",
+            "errorMessage": "Bequest beneficiary references a person who does not exist"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — schema with partialDocument flag",
+      "data": {
+        "schemaVersion": "4.0.0",
+        "partialDocument": true,
+        "estate": {
+          "id": "e1000001-0000-0000-0000-000000000001",
+          "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+          "status": "planning",
+          "createdAt": "2026-04-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-01T09:00:00Z",
+          "domicile": { "country": "US" }
+        },
+        "people": [
+          {
+            "id": "a0000001-0000-0000-0000-000000000001",
+            "givenName": "John",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — schema with bundleType collection",
+      "data": {
+        "schemaVersion": "4.0.0",
+        "bundleType": "collection",
+        "estate": {
+          "id": "e1000001-0000-4000-a000-000000000001",
+          "testatorPersonId": "a0000001-0000-4000-a000-000000000001",
+          "status": "planning",
+          "createdAt": "2026-04-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "a0000001-0000-4000-a000-000000000001",
+            "givenName": "John",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — bundleType not in enum",
+      "data": {
+        "schemaVersion": "4.0.0",
+        "bundleType": "batch",
+        "estate": {
+          "id": "e1000001-0000-4000-a000-000000000001",
+          "testatorPersonId": "a0000001-0000-4000-a000-000000000001",
+          "status": "planning",
+          "createdAt": "2026-04-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "a0000001-0000-4000-a000-000000000001",
+            "givenName": "John",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — extension composition: UK England & Wales + Islamic Succession (British Muslim estate)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "5.0.0",
+        "estate": {
+          "id": "c0e10001-0000-4000-a000-000000000001",
+          "testatorPersonId": "c0e10001-0000-4000-a000-000000000101",
+          "status": "confirmed",
+          "createdAt": "2026-03-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-01T14:00:00Z",
+          "domicile": {
+            "country": "GB",
+            "subdivision": "GB-ENG",
+            "legalSystems": ["common_law"]
+          },
+          "x-inherit-uk-england-wales": {
+            "nilRateBand": {
+              "value": 32500000,
+              "effectiveFrom": "2009-04-06"
+            },
+            "residenceNilRateBand": {
+              "value": 17500000,
+              "effectiveFrom": "2017-04-06"
+            },
+            "transferableNilRateBand": true,
+            "transferableNilRateBandPercentage": 100
+          },
+          "x-inherit-islamic-succession": {
+            "school": "hanafi",
+            "faraidApplies": true,
+            "wasiyyaRules": {
+              "maxPortion": 33.33,
+              "toNonHeirsOnly": true,
+              "requiresHeirConsent": true
+            }
+          }
+        },
+        "people": [
+          {
+            "id": "c0e10001-0000-4000-a000-000000000101",
+            "givenName": "Ahmed",
+            "familyName": "Khan",
+            "roles": ["testator"],
+            "x-inherit-islamic-succession": {
+              "school": "hanafi",
+              "hijriDates": {
+                "deathDateHijri": "1447-09-15"
+              }
+            }
+          },
+          {
+            "id": "c0e10001-0000-4000-a000-000000000102",
+            "givenName": "Fatima",
+            "familyName": "Khan",
+            "roles": ["beneficiary"],
+            "x-inherit-islamic-succession": {
+              "heirClassifications": [
+                {
+                  "personId": "c0e10001-0000-4000-a000-000000000102",
+                  "heirClass": "wife",
+                  "fixedShareFraction": "1/8"
+                }
+              ]
+            }
+          }
+        ],
+        "extensions": [
+          {
+            "id": "uk-england-wales",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json",
+            "scope": ["estate"],
+            "dataBlock": "x-inherit-uk-england-wales"
+          },
+          {
+            "id": "islamic-succession",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json",
+            "scope": ["estate", "people"],
+            "dataBlock": "x-inherit-islamic-succession"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — extension composition: Singapore-Malaysia + Islamic Succession (Malay Muslim estate)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "5.0.0",
+        "estate": {
+          "id": "c0e20001-0000-4000-a000-000000000001",
+          "testatorPersonId": "c0e20001-0000-4000-a000-000000000101",
+          "status": "planning",
+          "createdAt": "2026-02-15T10:00:00Z",
+          "lastModifiedAt": "2026-04-01T11:00:00Z",
+          "domicile": {
+            "country": "SG"
+          },
+          "x-inherit-singapore-malaysia": {
+            "country": "SG",
+            "singaporeAMLA": {
+              "applicable": true,
+              "school": "shafii",
+              "faraidRef": "See x-inherit-islamic-succession on this estate"
+            },
+            "cpfNominations": [
+              {
+                "accountId": "c0e20001-0000-4000-a000-000000000201",
+                "nominatedPersonIds": [
+                  "c0e20001-0000-4000-a000-000000000102",
+                  "c0e20001-0000-4000-a000-000000000103"
+                ],
+                "binding": true,
+                "nominationDate": "2024-06-01"
+              }
+            ]
+          },
+          "x-inherit-islamic-succession": {
+            "school": "shafii",
+            "faraidApplies": true,
+            "heirClassifications": [
+              {
+                "personId": "c0e20001-0000-4000-a000-000000000102",
+                "heirClass": "wife",
+                "fixedShareFraction": "1/8"
+              },
+              {
+                "personId": "c0e20001-0000-4000-a000-000000000103",
+                "heirClass": "son",
+                "residuaryClass": "asaba_by_self"
+              }
+            ],
+            "wasiyyaRules": {
+              "maxPortion": 33.33,
+              "toNonHeirsOnly": true
+            }
+          }
+        },
+        "people": [
+          {
+            "id": "c0e20001-0000-4000-a000-000000000101",
+            "givenName": "Ismail",
+            "familyName": "bin Abdullah",
+            "roles": ["testator"]
+          },
+          {
+            "id": "c0e20001-0000-4000-a000-000000000102",
+            "givenName": "Siti",
+            "familyName": "binti Yusof",
+            "roles": ["beneficiary"]
+          },
+          {
+            "id": "c0e20001-0000-4000-a000-000000000103",
+            "givenName": "Ahmad",
+            "familyName": "bin Ismail",
+            "roles": ["beneficiary"]
+          }
+        ],
+        "extensions": [
+          {
+            "id": "singapore-malaysia",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json",
+            "scope": ["estate"],
+            "dataBlock": "x-inherit-singapore-malaysia"
+          },
+          {
+            "id": "islamic-succession",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json",
+            "scope": ["estate"],
+            "dataBlock": "x-inherit-islamic-succession"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — extension composition: Israel + Jewish Succession (Israeli Orthodox estate)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "5.0.0",
+        "estate": {
+          "id": "c0e30001-0000-4000-a000-000000000001",
+          "testatorPersonId": "c0e30001-0000-4000-a000-000000000101",
+          "status": "confirmed",
+          "createdAt": "2026-01-10T08:00:00Z",
+          "lastModifiedAt": "2026-03-20T16:00:00Z",
+          "domicile": {
+            "country": "IL"
+          },
+          "x-inherit-israel": {
+            "parallelCourtSystems": {
+              "adjudicatingCourt": "rabbinical_court",
+              "allPartiesConsented": true,
+              "courtOrderReference": "RBC-2026-04521"
+            },
+            "inheritanceLaw1965": {
+              "successionOrderType": "tzevu_kiyum",
+              "objectionPeriodExpired": true,
+              "objectionsReceived": false
+            },
+            "religiousAuthorityOrder": {
+              "authority": "bet_din",
+              "orderType": "halachic_will_validation",
+              "orderReference": "BD-JLM-2026-1183",
+              "orderDate": "2026-03-15",
+              "binding": true
+            }
+          },
+          "x-inherit-jewish-succession": {
+            "denomination": "orthodox",
+            "halachicHeirs": [
+              {
+                "personId": "c0e30001-0000-4000-a000-000000000102",
+                "relationship": "eldest son",
+                "halachicClass": "ben",
+                "heirOrder": "bechor"
+              },
+              {
+                "personId": "c0e30001-0000-4000-a000-000000000103",
+                "relationship": "second son",
+                "halachicClass": "ben",
+                "heirOrder": "regular"
+              }
+            ],
+            "bekhorRules": {
+              "applies": true,
+              "bekhorPersonId": "c0e30001-0000-4000-a000-000000000102",
+              "doubleShareApplicable": true
+            },
+            "kinyanDetails": {
+              "type": "kinyan_sudar",
+              "performed": true,
+              "witnessPersonIds": [
+                "c0e30001-0000-4000-a000-000000000104",
+                "c0e30001-0000-4000-a000-000000000105"
+              ]
+            }
+          }
+        },
+        "people": [
+          {
+            "id": "c0e30001-0000-4000-a000-000000000101",
+            "givenName": "Moshe",
+            "familyName": "Levi",
+            "roles": ["testator"],
+            "x-inherit-jewish-succession": {
+              "hebrewNames": [
+                {
+                  "personId": "c0e30001-0000-4000-a000-000000000101",
+                  "hebrewGivenName": "Moshe",
+                  "hebrewFamilyName": "HaLevi",
+                  "benOrBat": "ben"
+                }
+              ]
+            }
+          },
+          {
+            "id": "c0e30001-0000-4000-a000-000000000102",
+            "givenName": "David",
+            "familyName": "Levi",
+            "roles": ["beneficiary"]
+          },
+          {
+            "id": "c0e30001-0000-4000-a000-000000000103",
+            "givenName": "Yosef",
+            "familyName": "Levi",
+            "roles": ["beneficiary"]
+          },
+          {
+            "id": "c0e30001-0000-4000-a000-000000000104",
+            "givenName": "Avraham",
+            "familyName": "Cohen",
+            "roles": ["witness"]
+          },
+          {
+            "id": "c0e30001-0000-4000-a000-000000000105",
+            "givenName": "Yaakov",
+            "familyName": "Friedman",
+            "roles": ["witness"]
+          }
+        ],
+        "extensions": [
+          {
+            "id": "israel",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/israel/israel.json",
+            "scope": ["estate"],
+            "dataBlock": "x-inherit-israel"
+          },
+          {
+            "id": "jewish-succession",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json",
+            "scope": ["estate", "people"],
+            "dataBlock": "x-inherit-jewish-succession"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — extension composition: Hong Kong + PRC China (cross-border HK/PRC estate)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "5.0.0",
+        "estate": {
+          "id": "c0e40001-0000-4000-a000-000000000001",
+          "testatorPersonId": "c0e40001-0000-4000-a000-000000000101",
+          "status": "planning",
+          "createdAt": "2026-03-10T09:00:00Z",
+          "lastModifiedAt": "2026-04-02T10:00:00Z",
+          "domicile": {
+            "country": "HK"
+          },
+          "x-inherit-hong-kong": {
+            "localGrantTypes": [
+              {
+                "executorId": "c0e40001-0000-4000-a000-000000000103",
+                "localType": "probate_grant",
+                "grantDate": "2026-03-25"
+              }
+            ],
+            "crossBorderPrcAssets": {
+              "prcAssetsExist": true,
+              "prcNotarisedWill": true,
+              "prcSuccessionLawApplies": true,
+              "prcContactOrganisationId": "c0e40001-0000-4000-a000-000000000201"
+            },
+            "intestacyDistribution": {
+              "survivingSpouseEntitlement": {
+                "personalChattels": true,
+                "statutoryLegacy": {
+                  "amount": 50000000,
+                  "currency": "HKD"
+                },
+                "residueShare": "1/2"
+              },
+              "issueDistribution": "per_stirpes"
+            }
+          },
+          "x-inherit-prc-china": {
+            "applicableLaw": "prc_civil_code_2021",
+            "forcedHeirship": {
+              "firstOrderHeirs": [
+                {
+                  "personId": "c0e40001-0000-4000-a000-000000000102",
+                  "relationship": "spouse"
+                },
+                {
+                  "personId": "c0e40001-0000-4000-a000-000000000104",
+                  "relationship": "daughter"
+                }
+              ]
+            },
+            "notarisationRequired": true,
+            "notarisationDetails": "Shenzhen Notary Office — succession certificate pending",
+            "crossBorderHandling": {
+              "hkAssets": "Probate Registry Hong Kong — Grant of Probate obtained",
+              "prcAssets": "Shenzhen residential property and bank accounts",
+              "notes": "Dual administration required: HK common law for HK assets, PRC Civil Code for mainland assets"
+            }
+          }
+        },
+        "people": [
+          {
+            "id": "c0e40001-0000-4000-a000-000000000101",
+            "givenName": "Wing-Cheung",
+            "familyName": "Chan",
+            "roles": ["testator"]
+          },
+          {
+            "id": "c0e40001-0000-4000-a000-000000000102",
+            "givenName": "Mei-Ling",
+            "familyName": "Chan",
+            "roles": ["beneficiary"],
+            "x-inherit-prc-china": {
+              "hukouReferences": [
+                {
+                  "personId": "c0e40001-0000-4000-a000-000000000102",
+                  "hukouLocation": "Shenzhen, Guangdong",
+                  "hukouType": "non_agricultural"
+                }
+              ]
+            }
+          },
+          {
+            "id": "c0e40001-0000-4000-a000-000000000103",
+            "givenName": "Kai-Ming",
+            "familyName": "Wong",
+            "roles": ["executor"]
+          },
+          {
+            "id": "c0e40001-0000-4000-a000-000000000104",
+            "givenName": "Sze-Wan",
+            "familyName": "Chan",
+            "roles": ["beneficiary"]
+          }
+        ],
+        "organisations": [
+          {
+            "id": "c0e40001-0000-4000-a000-000000000201",
+            "name": "Shenzhen Zhongrui Law Firm",
+            "organisationType": "legal_firm"
+          }
+        ],
+        "extensions": [
+          {
+            "id": "hong-kong",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/hong-kong/hong-kong.json",
+            "scope": ["estate"],
+            "dataBlock": "x-inherit-hong-kong"
+          },
+          {
+            "id": "prc-china",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/prc-china/prc-china.json",
+            "scope": ["estate", "people"],
+            "dataBlock": "x-inherit-prc-china"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — extension composition: Switzerland + EU Succession (Swiss resident with EU assets)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "5.0.0",
+        "estate": {
+          "id": "c0e50001-0000-4000-a000-000000000001",
+          "testatorPersonId": "c0e50001-0000-4000-a000-000000000101",
+          "status": "confirmed",
+          "createdAt": "2025-11-01T08:00:00Z",
+          "lastModifiedAt": "2026-03-28T15:00:00Z",
+          "domicile": {
+            "country": "CH"
+          },
+          "x-inherit-switzerland": {
+            "pflichtteil": {
+              "reformApplies": true,
+              "protectedHeirs": [
+                {
+                  "personId": "c0e50001-0000-4000-a000-000000000102",
+                  "heirClass": "surviving_spouse",
+                  "statutoryShareFraction": "1/2",
+                  "pflichtteilFraction": "1/4"
+                },
+                {
+                  "personId": "c0e50001-0000-4000-a000-000000000103",
+                  "heirClass": "descendant",
+                  "statutoryShareFraction": "1/4",
+                  "pflichtteilFraction": "1/8"
+                }
+              ],
+              "availableQuota": {
+                "fraction": "5/8"
+              }
+            },
+            "cantonalVariation": {
+              "canton": "ZH",
+              "cantonalTaxApplies": true,
+              "cantonalTaxRate": 6,
+              "linealHeirsExempt": true
+            },
+            "matrimonialPropertyRegime": "participation_in_acquisitions",
+            "erbschein": {
+              "issued": true,
+              "issuingAuthority": "Bezirksgericht Zürich",
+              "issueDate": "2026-03-20",
+              "referenceNumber": "ERB-ZH-2026-00847"
+            },
+            "notarialWillForm": "public_will"
+          },
+          "x-inherit-eu-succession": {
+            "memberState": "DE",
+            "brusselsIV": {
+              "habitualResidence": {
+                "country": "CH"
+              },
+              "nationalityElection": false
+            },
+            "forcedHeirshipVariant": {
+              "model": "german_pflichtteil",
+              "claimNature": "monetary claim against heirs",
+              "reservedFraction": "1/2"
+            },
+            "postBrexitHandling": {
+              "ukAssetsSubjectToEURule": false,
+              "ukAssetsHandledUnder": "Not applicable — no UK assets",
+              "notes": "German immovable property subject to German succession law under lex rei sitae"
+            }
+          }
+        },
+        "people": [
+          {
+            "id": "c0e50001-0000-4000-a000-000000000101",
+            "givenName": "Hans",
+            "familyName": "Müller",
+            "roles": ["testator"]
+          },
+          {
+            "id": "c0e50001-0000-4000-a000-000000000102",
+            "givenName": "Anna",
+            "familyName": "Müller",
+            "roles": ["beneficiary"]
+          },
+          {
+            "id": "c0e50001-0000-4000-a000-000000000103",
+            "givenName": "Lukas",
+            "familyName": "Müller",
+            "roles": ["beneficiary"]
+          }
+        ],
+        "extensions": [
+          {
+            "id": "switzerland",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/switzerland/switzerland.json",
+            "scope": ["estate"],
+            "dataBlock": "x-inherit-switzerland"
+          },
+          {
+            "id": "eu-succession",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/eu-succession/eu-succession.json",
+            "scope": ["estate"],
+            "dataBlock": "x-inherit-eu-succession"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — extension composition: Brazil + Islamic Succession (Brazilian Muslim estate)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "5.0.0",
+        "estate": {
+          "id": "c0e60001-0000-4000-a000-000000000001",
+          "testatorPersonId": "c0e60001-0000-4000-a000-000000000101",
+          "status": "planning",
+          "createdAt": "2026-02-01T12:00:00Z",
+          "lastModifiedAt": "2026-04-03T09:00:00Z",
+          "domicile": {
+            "country": "BR"
+          },
+          "x-inherit-brazil": {
+            "meacao": {
+              "applicable": true,
+              "propertyRegime": "comunhao_parcial_de_bens",
+              "spousePersonId": "c0e60001-0000-4000-a000-000000000102",
+              "communityPropertyValue": {
+                "amount": 150000000,
+                "currency": "BRL"
+              }
+            },
+            "legitima": {
+              "compulsoryHeirs": [
+                {
+                  "personId": "c0e60001-0000-4000-a000-000000000102",
+                  "heirClass": "surviving_spouse",
+                  "shareFraction": "1/3"
+                },
+                {
+                  "personId": "c0e60001-0000-4000-a000-000000000103",
+                  "heirClass": "descendant",
+                  "shareFraction": "1/3"
+                },
+                {
+                  "personId": "c0e60001-0000-4000-a000-000000000104",
+                  "heirClass": "descendant",
+                  "shareFraction": "1/3"
+                }
+              ],
+              "legitimaPortion": 50
+            },
+            "disponivel": {
+              "portion": 50,
+              "estimatedValue": {
+                "amount": 37500000,
+                "currency": "BRL"
+              }
+            },
+            "inventarioType": "extrajudicial",
+            "itcmdRate": {
+              "state": "SP",
+              "ratePercentage": 4,
+              "progressive": false
+            }
+          },
+          "x-inherit-islamic-succession": {
+            "school": "hanafi",
+            "faraidApplies": false,
+            "wasiyyaRules": {
+              "maxPortion": 33.33,
+              "toNonHeirsOnly": true,
+              "notes": "Brazilian civil law governs distribution; wasiyya used as guidance for the disponivel portion only"
+            },
+            "islamicFormalities": {
+              "certifiedByScholar": true,
+              "scholarName": "Sheikh Ibrahim Peres",
+              "notes": "Fatwa obtained confirming compatibility of Brazilian forced heirship with Islamic succession principles"
+            },
+            "mahr": {
+              "amount": {
+                "amount": 5000000,
+                "currency": "BRL"
+              },
+              "agreed": true,
+              "paidInFull": false,
+              "outstandingAmount": {
+                "amount": 3000000,
+                "currency": "BRL"
+              },
+              "creditorPersonId": "c0e60001-0000-4000-a000-000000000102"
+            }
+          }
+        },
+        "people": [
+          {
+            "id": "c0e60001-0000-4000-a000-000000000101",
+            "givenName": "Omar",
+            "familyName": "da Silva",
+            "roles": ["testator"]
+          },
+          {
+            "id": "c0e60001-0000-4000-a000-000000000102",
+            "givenName": "Aisha",
+            "familyName": "da Silva",
+            "roles": ["beneficiary"]
+          },
+          {
+            "id": "c0e60001-0000-4000-a000-000000000103",
+            "givenName": "Yusuf",
+            "familyName": "da Silva",
+            "roles": ["beneficiary"]
+          },
+          {
+            "id": "c0e60001-0000-4000-a000-000000000104",
+            "givenName": "Mariam",
+            "familyName": "da Silva",
+            "roles": ["beneficiary"]
+          }
+        ],
+        "extensions": [
+          {
+            "id": "brazil",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/brazil/brazil.json",
+            "scope": ["estate"],
+            "dataBlock": "x-inherit-brazil"
+          },
+          {
+            "id": "islamic-succession",
+            "version": "1.0.0",
+            "schema": "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json",
+            "scope": ["estate"],
+            "dataBlock": "x-inherit-islamic-succession"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — wealth management platform export with trusts, valuations, and diverse assets",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "exportedAt": "2026-04-01T14:30:00Z",
+        "generator": { "name": "WealthCom Platform", "version": "4.2.1" },
+        "estate": {
+          "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+          "testatorPersonId": "10000001-0000-4000-a000-000000000001",
+          "status": "confirmed",
+          "createdAt": "2024-06-15T09:00:00Z",
+          "lastModifiedAt": "2026-04-01T14:30:00Z",
+          "domicile": { "country": "GB", "subdivision": "GB-ENG", "legalSystems": ["common_law"] }
+        },
+        "people": [
+          { "id": "10000001-0000-4000-a000-000000000001", "givenName": "Edward", "familyName": "Hargreaves", "roles": ["testator"] },
+          { "id": "10000001-0000-4000-a000-000000000002", "givenName": "Victoria", "familyName": "Hargreaves", "roles": ["beneficiary", "executor"] },
+          { "id": "10000001-0000-4000-a000-000000000003", "givenName": "James", "familyName": "Hargreaves", "roles": ["beneficiary"] },
+          { "id": "10000001-0000-4000-a000-000000000004", "givenName": "Sophie", "familyName": "Hargreaves", "roles": ["beneficiary"] }
+        ],
+        "assets": [
+          { "id": "10000001-0000-4000-e000-000000000001", "name": "Hargreaves Lansdown ISA", "category": "financial" },
+          { "id": "10000001-0000-4000-e000-000000000002", "name": "Aviva Pension Fund", "category": "financial" },
+          { "id": "10000001-0000-4000-e000-000000000003", "name": "Barclays Current Account", "category": "financial" },
+          { "id": "10000001-0000-4000-e000-000000000004", "name": "Victorian Watercolour Collection", "category": "art" },
+          { "id": "10000001-0000-4000-e000-000000000005", "name": "1967 Jaguar E-Type Series 1", "category": "vehicle" }
+        ],
+        "trusts": [
+          {
+            "id": "10000001-0000-4000-f000-000000000001",
+            "name": "Hargreaves NRB Discretionary Trust",
+            "trustType": "nil_rate_band",
+            "trustees": [{ "personId": "10000001-0000-4000-a000-000000000002", "role": "trustee" }],
+            "beneficiaries": [
+              { "personId": "10000001-0000-4000-a000-000000000003", "interestType": "discretionary" },
+              { "personId": "10000001-0000-4000-a000-000000000004", "interestType": "discretionary" }
+            ]
+          },
+          {
+            "id": "10000001-0000-4000-f000-000000000002",
+            "name": "Hargreaves Life Interest Trust",
+            "trustType": "life_interest",
+            "trustees": [{ "personId": "10000001-0000-4000-a000-000000000002", "role": "trustee" }],
+            "beneficiaries": [
+              { "personId": "10000001-0000-4000-a000-000000000002", "interestType": "income" },
+              { "personId": "10000001-0000-4000-a000-000000000003", "interestType": "capital" }
+            ]
+          }
+        ],
+        "valuations": [
+          {
+            "id": "10000001-0000-4000-8000-000000000001",
+            "entityType": "asset",
+            "entityId": "10000001-0000-4000-e000-000000000004",
+            "valuedAmount": { "amount": 3800000, "currency": "GBP" },
+            "valuationDate": "2025-09-15",
+            "provider": "Bonhams",
+            "providerType": "auction_house",
+            "confidence": "high"
+          }
+        ],
+        "documents": [
+          { "id": "10000001-0000-4000-9000-000000000001", "type": "will", "title": "Last Will and Testament of Edward Hargreaves" },
+          { "id": "10000001-0000-4000-9000-000000000002", "type": "trust_deed", "title": "Hargreaves NRB Discretionary Trust Deed" }
+        ],
+        "executors": [
+          { "id": "10000001-0000-4000-7000-000000000001", "personId": "10000001-0000-4000-a000-000000000002", "role": "primary" }
+        ],
+        "organisations": [
+          { "id": "10000001-0000-4000-6000-000000000001", "name": "WealthCom Ltd", "organisationType": "financial_institution" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — probate matter with executors, grant details, bequests, and death certificate",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "exportedAt": "2026-03-28T10:15:00Z",
+        "generator": { "name": "Clio Manage", "version": "6.8.0" },
+        "estate": {
+          "id": "20000001-0000-4000-a000-000000000001",
+          "testatorPersonId": "20000001-0000-4000-a000-000000000010",
+          "status": "pre_probate",
+          "createdAt": "2026-02-20T09:00:00Z",
+          "lastModifiedAt": "2026-03-28T10:15:00Z",
+          "domicile": { "country": "GB", "subdivision": "GB-ENG", "legalSystems": ["common_law"] }
+        },
+        "people": [
+          { "id": "20000001-0000-4000-a000-000000000010", "givenName": "Margaret", "familyName": "Thornton", "dateOfDeath": "2026-02-15", "roles": ["testator"] },
+          { "id": "20000001-0000-4000-a000-000000000011", "givenName": "Robert", "familyName": "Thornton", "roles": ["beneficiary", "executor"] },
+          { "id": "20000001-0000-4000-a000-000000000012", "givenName": "Claire", "familyName": "Thornton", "roles": ["beneficiary"] },
+          { "id": "20000001-0000-4000-a000-000000000013", "givenName": "Thomas", "familyName": "Thornton", "roles": ["beneficiary"] }
+        ],
+        "executors": [
+          {
+            "id": "20000001-0000-4000-7000-000000000001",
+            "personId": "20000001-0000-4000-a000-000000000011",
+            "role": "primary",
+            "grantType": "grant_of_probate",
+            "grantReference": "2026-PROB-WIN-00412",
+            "grantDate": "2026-03-25",
+            "issuingCourt": "Winchester Combined Court Centre"
+          }
+        ],
+        "documents": [
+          { "id": "20000001-0000-4000-9000-000000000001", "type": "death_certificate", "title": "Death Certificate — Margaret Thornton" },
+          { "id": "20000001-0000-4000-9000-000000000002", "type": "will", "title": "Last Will and Testament of Margaret Thornton" },
+          { "id": "20000001-0000-4000-9000-000000000003", "type": "grant_of_probate", "title": "Grant of Probate Application" }
+        ],
+        "bequests": [
+          { "id": "20000001-0000-4000-f000-000000000001", "bequestType": "pecuniary", "beneficiaryId": "20000001-0000-4000-a000-000000000013", "amount": { "amount": 1000000, "currency": "GBP" } },
+          { "id": "20000001-0000-4000-f000-000000000002", "bequestType": "specific", "beneficiaryId": "20000001-0000-4000-a000-000000000012", "description": "The Royal Worcester porcelain collection" },
+          { "id": "20000001-0000-4000-f000-000000000003", "bequestType": "residuary", "beneficiaryId": "20000001-0000-4000-a000-000000000011", "sharePercentage": 50 },
+          { "id": "20000001-0000-4000-f000-000000000004", "bequestType": "residuary", "beneficiaryId": "20000001-0000-4000-a000-000000000012", "sharePercentage": 50 }
+        ],
+        "assets": [
+          { "id": "20000001-0000-4000-e000-000000000001", "name": "NatWest Savings Account", "category": "financial" },
+          { "id": "20000001-0000-4000-e000-000000000002", "name": "NS&I Premium Bonds", "category": "financial" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — high-net-worth estate with diverse portfolio, trusts, and multiple valuations",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "exportedAt": "2026-04-02T09:45:00Z",
+        "generator": { "name": "Addepar Wealth Platform", "version": "3.1.0" },
+        "estate": {
+          "id": "30000001-0000-4000-a000-000000000001",
+          "testatorPersonId": "30000001-0000-4000-a000-000000000010",
+          "status": "confirmed",
+          "createdAt": "2023-09-01T08:00:00Z",
+          "lastModifiedAt": "2026-04-02T09:45:00Z",
+          "domicile": { "country": "GB", "subdivision": "GB-ENG", "legalSystems": ["common_law"] }
+        },
+        "people": [
+          { "id": "30000001-0000-4000-a000-000000000010", "givenName": "Alexander", "familyName": "Cavendish", "roles": ["testator"] },
+          { "id": "30000001-0000-4000-a000-000000000011", "givenName": "Helena", "familyName": "Cavendish", "roles": ["beneficiary", "executor"] },
+          { "id": "30000001-0000-4000-a000-000000000012", "givenName": "Frederick", "familyName": "Cavendish", "roles": ["beneficiary"] },
+          { "id": "30000001-0000-4000-a000-000000000013", "givenName": "Arabella", "familyName": "Cavendish", "roles": ["beneficiary"] },
+          { "id": "30000001-0000-4000-a000-000000000014", "givenName": "Charlotte", "familyName": "Cavendish", "roles": ["beneficiary"] }
+        ],
+        "assets": [
+          { "id": "30000001-0000-4000-e000-000000000001", "name": "Rathbones Discretionary Portfolio", "category": "financial" },
+          { "id": "30000001-0000-4000-e000-000000000002", "name": "Vanguard UK Government Bond Index Fund", "category": "financial" },
+          { "id": "30000001-0000-4000-e000-000000000003", "name": "COIF Charities Property Fund", "category": "financial" },
+          { "id": "30000001-0000-4000-e000-000000000004", "name": "Coutts Cash Deposit Account", "category": "financial" }
+        ],
+        "trusts": [
+          {
+            "id": "30000001-0000-4000-f000-000000000001",
+            "name": "Cavendish Family Discretionary Trust",
+            "trustType": "discretionary",
+            "trustees": [{ "personId": "30000001-0000-4000-a000-000000000011", "role": "trustee" }],
+            "beneficiaries": [
+              { "personId": "30000001-0000-4000-a000-000000000012", "interestType": "discretionary" },
+              { "personId": "30000001-0000-4000-a000-000000000013", "interestType": "discretionary" },
+              { "classDefinition": "All grandchildren of Alexander Cavendish", "interestType": "discretionary" }
+            ]
+          },
+          {
+            "id": "30000001-0000-4000-f000-000000000002",
+            "name": "Charlotte Cavendish A&M Trust",
+            "trustType": "accumulation_and_maintenance",
+            "vestingAge": 25,
+            "trustees": [
+              { "personId": "30000001-0000-4000-a000-000000000011", "role": "trustee" },
+              { "personId": "30000001-0000-4000-a000-000000000012", "role": "trustee" }
+            ],
+            "beneficiaries": [
+              { "personId": "30000001-0000-4000-a000-000000000014", "interestType": "both" }
+            ]
+          }
+        ],
+        "valuations": [
+          {
+            "id": "30000001-0000-4000-8000-000000000001",
+            "entityType": "asset",
+            "entityId": "30000001-0000-4000-e000-000000000001",
+            "valuedAmount": { "amount": 320000000, "currency": "GBP" },
+            "valuationDate": "2026-03-31",
+            "confidence": "high"
+          },
+          {
+            "id": "30000001-0000-4000-8000-000000000002",
+            "entityType": "asset",
+            "entityId": "30000001-0000-4000-e000-000000000003",
+            "valuedAmount": { "amount": 48500000, "currency": "GBP" },
+            "valuationDate": "2026-03-31",
+            "confidence": "medium"
+          },
+          {
+            "id": "30000001-0000-4000-8000-000000000004",
+            "entityType": "asset",
+            "entityId": "30000001-0000-4000-e000-000000000004",
+            "valuedAmount": { "amount": 25000000, "currency": "GBP" },
+            "valuationDate": "2026-03-31",
+            "confidence": "high"
+          }
+        ],
+        "executors": [
+          { "id": "30000001-0000-4000-7000-000000000001", "personId": "30000001-0000-4000-a000-000000000011", "role": "primary" },
+          { "id": "30000001-0000-4000-7000-000000000002", "organisationId": "30000001-0000-4000-6000-000000000002", "role": "secondary", "isProfessional": true, "firmName": "Withers LLP" }
+        ],
+        "organisations": [
+          { "id": "30000001-0000-4000-6000-000000000001", "name": "Addepar Inc", "organisationType": "financial_institution" },
+          { "id": "30000001-0000-4000-6000-000000000002", "name": "Withers LLP", "organisationType": "legal_firm" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate planning workflow with mirror wills, guardians, insurance, and bequests",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "exportedAt": "2026-03-30T16:00:00Z",
+        "generator": { "name": "Actionstep", "version": "5.4.2" },
+        "estate": {
+          "id": "40000001-0000-4000-a000-000000000001",
+          "testatorPersonId": "40000001-0000-4000-a000-000000000010",
+          "status": "planning",
+          "createdAt": "2026-03-15T09:00:00Z",
+          "lastModifiedAt": "2026-03-30T16:00:00Z",
+          "domicile": { "country": "GB", "subdivision": "GB-ENG", "legalSystems": ["common_law"] },
+          "companionEstateId": "40000001-0000-4000-a000-000000000002",
+          "companionLinkStatus": "active"
+        },
+        "people": [
+          { "id": "40000001-0000-4000-a000-000000000010", "givenName": "David", "familyName": "Pritchard", "roles": ["testator"] },
+          { "id": "40000001-0000-4000-a000-000000000011", "givenName": "Sarah", "familyName": "Pritchard", "roles": ["beneficiary", "executor"] },
+          { "id": "40000001-0000-4000-a000-000000000012", "givenName": "William", "familyName": "Pritchard", "roles": ["beneficiary"] },
+          { "id": "40000001-0000-4000-a000-000000000013", "givenName": "Hannah", "familyName": "Pritchard", "roles": ["beneficiary"] },
+          { "id": "40000001-0000-4000-a000-000000000014", "givenName": "Oscar", "familyName": "Pritchard", "dateOfBirth": "2020-06-10", "roles": ["beneficiary"] },
+          { "id": "40000001-0000-4000-a000-000000000015", "givenName": "Isla", "familyName": "Pritchard", "dateOfBirth": "2022-12-03", "roles": ["beneficiary"] },
+          { "id": "40000001-0000-4000-a000-000000000016", "givenName": "Michael", "familyName": "Hendry", "roles": ["guardian"] }
+        ],
+        "guardians": [
+          { "id": "40000001-0000-4000-4000-000000000001", "childPersonId": "40000001-0000-4000-a000-000000000014", "personId": "40000001-0000-4000-a000-000000000016", "role": "primary", "appointmentType": "testamentary" },
+          { "id": "40000001-0000-4000-4000-000000000002", "childPersonId": "40000001-0000-4000-a000-000000000015", "personId": "40000001-0000-4000-a000-000000000016", "role": "primary", "appointmentType": "testamentary" }
+        ],
+        "bequests": [
+          { "id": "40000001-0000-4000-f000-000000000001", "bequestType": "specific", "beneficiaryId": "40000001-0000-4000-a000-000000000012", "description": "The holiday home at Polzeath to my son William Pritchard" },
+          { "id": "40000001-0000-4000-f000-000000000002", "bequestType": "pecuniary", "beneficiaryId": "40000001-0000-4000-a000-000000000014", "amount": { "amount": 2000000, "currency": "GBP" } },
+          { "id": "40000001-0000-4000-f000-000000000003", "bequestType": "pecuniary", "beneficiaryId": "40000001-0000-4000-a000-000000000015", "amount": { "amount": 2000000, "currency": "GBP" } },
+          { "id": "40000001-0000-4000-f000-000000000004", "bequestType": "residuary", "beneficiaryId": "40000001-0000-4000-a000-000000000011", "sharePercentage": 100 }
+        ],
+        "properties": [
+          { "id": "40000001-0000-4000-d000-000000000001", "name": "Rosemount, 8 The Crescent, Bath" },
+          { "id": "40000001-0000-4000-d000-000000000002", "name": "Coastal Retreat, Polzeath" }
+        ],
+        "insurancePolicies": [
+          {
+            "id": "40000001-0000-4000-5000-000000000001",
+            "policyType": "life",
+            "providerOrganisationId": "40000001-0000-4000-6000-000000000002",
+            "coverAmount": { "amount": 50000000, "currency": "GBP" }
+          }
+        ],
+        "executors": [
+          { "id": "40000001-0000-4000-7000-000000000001", "personId": "40000001-0000-4000-a000-000000000011", "role": "primary" },
+          { "id": "40000001-0000-4000-7000-000000000002", "personId": "40000001-0000-4000-a000-000000000012", "role": "substitute" }
+        ],
+        "documents": [
+          { "id": "40000001-0000-4000-9000-000000000001", "type": "will", "title": "Draft Will of David Pritchard" }
+        ],
+        "organisations": [
+          { "id": "40000001-0000-4000-6000-000000000002", "name": "Aviva Life & Pensions UK Ltd", "organisationType": "insurance_provider" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — schema document with document versioning fields",
+      "data": {
+        "schemaVersion": "1.9.0",
+        "documentVersion": 2,
+        "versionedAt": "2026-04-06T10:00:00Z",
+        "previousVersionId": "a1b2c3d4-e5f6-4789-abcd-ef1234567890",
+        "changeDescription": "Updated estate domicile to reflect change of residence",
+        "estate": {
+          "id": "d1e2f3a4-b5c6-4789-abcd-ef0123456789",
+          "testatorPersonId": "e2f3a4b5-c6d7-4890-bcde-f01234567890",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-06T10:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "e2f3a4b5-c6d7-4890-bcde-f01234567890",
+            "givenName": "Catherine",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — schema document with audit log",
+      "data": {
+        "schemaVersion": "1.9.0",
+        "auditLog": [
+          {
+            "action": "modified",
+            "performedAt": "2026-04-06T10:00:00Z",
+            "agentPersonId": "f3a4b5c6-d7e8-4901-cdef-012345678901",
+            "detail": "Updated domicile country from AU to GB"
+          }
+        ],
+        "estate": {
+          "id": "c3d4e5f6-a7b8-4012-defa-123456789012",
+          "testatorPersonId": "d4e5f6a7-b8c9-4123-efab-234567890123",
+          "status": "confirmed",
+          "createdAt": "2026-02-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-06T10:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "d4e5f6a7-b8c9-4123-efab-234567890123",
+            "givenName": "Thomas",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — schema document with full versioning and audit trail",
+      "data": {
+        "schemaVersion": "1.9.0",
+        "documentVersion": 3,
+        "versionedAt": "2026-04-06T11:00:00Z",
+        "previousVersionId": "e5f6a7b8-c9d0-4234-fabc-345678901234",
+        "changeDescription": "Added executor and updated asset valuations",
+        "auditLog": [
+          {
+            "action": "version_created",
+            "performedAt": "2026-04-06T11:00:00Z",
+            "agentPersonId": "f6a7b8c9-d0e1-4345-abcd-456789012345",
+            "detail": "Version 3 created: added executor and updated asset valuations",
+            "entityType": "schema",
+            "entityId": "a7b8c9d0-e1f2-4456-bcde-567890123456"
+          },
+          {
+            "action": "modified",
+            "performedAt": "2026-04-05T14:30:00Z",
+            "agentDescription": "LegacyLists v2.1.0",
+            "detail": "Asset valuation updated for property at 14 Elm Street"
+          }
+        ],
+        "estate": {
+          "id": "a7b8c9d0-e1f2-4456-bcde-567890123456",
+          "testatorPersonId": "b8c9d0e1-f2a3-4567-cdef-678901234567",
+          "status": "confirmed",
+          "createdAt": "2026-01-15T09:00:00Z",
+          "lastModifiedAt": "2026-04-06T11:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "b8c9d0e1-f2a3-4567-cdef-678901234567",
+            "givenName": "Eleanor",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — documentVersion not an integer",
+      "data": {
+        "schemaVersion": "1.9.0",
+        "documentVersion": "one",
+        "estate": {
+          "id": "c9d0e1f2-a3b4-4678-defa-789012345678",
+          "testatorPersonId": "d0e1f2a3-b4c5-4789-efab-890123456789",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "d0e1f2a3-b4c5-4789-efab-890123456789",
+            "givenName": "Harold",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — versionedAt bad date format",
+      "data": {
+        "schemaVersion": "1.9.0",
+        "versionedAt": "not-a-date",
+        "estate": {
+          "id": "e1f2a3b4-c5d6-4890-fabc-901234567890",
+          "testatorPersonId": "f2a3b4c5-d6e7-4901-abcd-012345678901",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "f2a3b4c5-d6e7-4901-abcd-012345678901",
+            "givenName": "Miriam",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — previousVersionId bad UUID",
+      "data": {
+        "schemaVersion": "1.9.0",
+        "previousVersionId": "not-a-uuid",
+        "estate": {
+          "id": "a3b4c5d6-e7f8-4012-bcde-123456789012",
+          "testatorPersonId": "b4c5d6e7-f8a9-4123-cdef-234567890123",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "b4c5d6e7-f8a9-4123-cdef-234567890123",
+            "givenName": "Patrick",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — auditLog not an array",
+      "data": {
+        "schemaVersion": "1.9.0",
+        "auditLog": "should be an array",
+        "estate": {
+          "id": "c5d6e7f8-a9b0-4234-defa-345678901234",
+          "testatorPersonId": "d6e7f8a9-b0c1-4345-efab-456789012345",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "d6e7f8a9-b0c1-4345-efab-456789012345",
+            "givenName": "Sophia",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — auditLog entry missing required fields",
+      "data": {
+        "schemaVersion": "1.9.0",
+        "auditLog": [{}],
+        "estate": {
+          "id": "e7f8a9b0-c1d2-4456-fabc-567890123456",
+          "testatorPersonId": "f8a9b0c1-d2e3-4567-abcd-678901234567",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "f8a9b0c1-d2e3-4567-abcd-678901234567",
+            "givenName": "Oliver",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — generator metadata with all optional fields",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "generator": {
+          "name": "LegacyLists WillWriter Pro",
+          "version": "2.1.0",
+          "url": "https://www.legacylists.com"
+        },
+        "estate": {
+          "id": "51000001-0000-4000-a000-000000001001",
+          "testatorPersonId": "51000001-0000-4000-a000-000000001101",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000001-0000-4000-a000-000000001101",
+            "givenName": "Alice",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — exportedBy with all fields",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "exportedAt": "2026-04-01T14:00:00Z",
+        "exportedBy": {
+          "name": "Priya Sharma",
+          "email": "priya.sharma@irwinmitchell.com",
+          "organisationName": "Irwin Mitchell LLP"
+        },
+        "estate": {
+          "id": "51000002-0000-4000-a000-000000001002",
+          "testatorPersonId": "51000002-0000-4000-a000-000000001102",
+          "status": "confirmed",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-01T09:00:00Z",
+          "domicile": { "country": "GB", "subdivision": "GB-ENG" }
+        },
+        "people": [
+          {
+            "id": "51000002-0000-4000-a000-000000001102",
+            "givenName": "Robert",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — dataProvenance: ai_extracted",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "dataProvenance": "ai_extracted",
+        "estate": {
+          "id": "51000003-0000-4000-a000-000000001003",
+          "testatorPersonId": "51000003-0000-4000-a000-000000001103",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000003-0000-4000-a000-000000001103",
+            "givenName": "Claude",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — dataProvenance: ocr_scanned",
+      "data": {
+        "schemaVersion": "3.0.0",
+        "dataProvenance": "ocr_scanned",
+        "estate": {
+          "id": "51000004-0000-4000-a000-000000001004",
+          "testatorPersonId": "51000004-0000-4000-a000-000000001104",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000004-0000-4000-a000-000000001104",
+            "givenName": "Dorothy",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — dataProvenance: system_generated",
+      "data": {
+        "schemaVersion": "3.0.0",
+        "dataProvenance": "system_generated",
+        "estate": {
+          "id": "51000005-0000-4000-a000-000000001005",
+          "testatorPersonId": "51000005-0000-4000-a000-000000001105",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "US" }
+        },
+        "people": [
+          {
+            "id": "51000005-0000-4000-a000-000000001105",
+            "givenName": "George",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — dataProvenance: migrated",
+      "data": {
+        "schemaVersion": "3.0.0",
+        "dataProvenance": "migrated",
+        "estate": {
+          "id": "51000006-0000-4000-a000-000000001006",
+          "testatorPersonId": "51000006-0000-4000-a000-000000001106",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000006-0000-4000-a000-000000001106",
+            "givenName": "Henry",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bundleType: transaction (import batch)",
+      "data": {
+        "schemaVersion": "4.0.0",
+        "bundleType": "transaction",
+        "estate": {
+          "id": "51000007-0000-4000-a000-000000001007",
+          "testatorPersonId": "51000007-0000-4000-a000-000000001107",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000007-0000-4000-a000-000000001107",
+            "givenName": "Isabella",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bundleType: document (complete estate)",
+      "data": {
+        "schemaVersion": "4.0.0",
+        "bundleType": "document",
+        "estate": {
+          "id": "51000008-0000-4000-a000-000000001008",
+          "testatorPersonId": "51000008-0000-4000-a000-000000001108",
+          "status": "confirmed",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000008-0000-4000-a000-000000001108",
+            "givenName": "Julia",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — conformance certificate at level_1",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "conformance": {
+          "level": "level_1",
+          "validatedAt": "2026-04-06T09:00:00Z",
+          "validatedBy": "INHERIT Web Validator",
+          "schemaVersion": "3.0.0",
+          "completenessScore": 65
+        },
+        "estate": {
+          "id": "51000009-0000-4000-a000-000000001009",
+          "testatorPersonId": "51000009-0000-4000-a000-000000001109",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-06T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000009-0000-4000-a000-000000001109",
+            "givenName": "Kevin",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — conformance certificate at level_2 with entity counts",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "conformance": {
+          "level": "level_2",
+          "validatedAt": "2026-04-06T10:00:00Z",
+          "validatedBy": "openinherit-cli",
+          "schemaVersion": "3.0.0",
+          "completenessScore": 82,
+          "entityCounts": {
+            "people": 4,
+            "assets": 7,
+            "bequests": 3,
+            "executors": 2
+          },
+          "provenanceSummary": {
+            "manual_entry": 12,
+            "ai_extracted": 4
+          },
+          "warnings": [
+            "2 assets have estimated but no professional valuation"
+          ],
+          "validationEndpoint": "https://validate.openinherit.org/v3"
+        },
+        "estate": {
+          "id": "51000010-0000-4000-a000-000000001010",
+          "testatorPersonId": "51000010-0000-4000-a000-000000001110",
+          "status": "confirmed",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-06T10:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000010-0000-4000-a000-000000001110",
+            "givenName": "Laura",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — conformance certificate at level_3",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "conformance": {
+          "level": "level_3",
+          "validatedAt": "2026-04-06T11:00:00Z",
+          "validatedBy": "MyFamilyInherits v2.1",
+          "schemaVersion": "3.0.0",
+          "completenessScore": 94
+        },
+        "estate": {
+          "id": "51000011-0000-4000-a000-000000001011",
+          "testatorPersonId": "51000011-0000-4000-a000-000000001111",
+          "status": "confirmed",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-06T11:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000011-0000-4000-a000-000000001111",
+            "givenName": "Marcus",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — importSources array with two sources",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "importSources": [
+          {
+            "id": "src-clio-001",
+            "systemName": "Clio Manage",
+            "importDate": "2026-03-15",
+            "importMethod": "api",
+            "notes": "Migrated from Clio matter #12345 — assets and liabilities only"
+          },
+          {
+            "id": "src-paper-file",
+            "systemName": "Paper file",
+            "importDate": "2026-03-20",
+            "importMethod": "manual_copy",
+            "notes": "Original 2019 will scanned and transcribed manually"
+          }
+        ],
+        "estate": {
+          "id": "51000012-0000-4000-a000-000000001012",
+          "testatorPersonId": "51000012-0000-4000-a000-000000001112",
+          "status": "confirmed",
+          "createdAt": "2026-03-15T09:00:00Z",
+          "lastModifiedAt": "2026-03-20T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000012-0000-4000-a000-000000001112",
+            "givenName": "Natalie",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — importSources importMethod: file_upload",
+      "data": {
+        "schemaVersion": "3.0.0",
+        "importSources": [
+          {
+            "id": "src-csv-001",
+            "systemName": "LEAP Legal Software",
+            "importDate": "2026-02-01",
+            "importMethod": "file_upload"
+          }
+        ],
+        "estate": {
+          "id": "51000013-0000-4000-a000-000000001013",
+          "testatorPersonId": "51000013-0000-4000-a000-000000001113",
+          "status": "planning",
+          "createdAt": "2026-02-01T09:00:00Z",
+          "lastModifiedAt": "2026-02-01T09:00:00Z",
+          "domicile": { "country": "AU" }
+        },
+        "people": [
+          {
+            "id": "51000013-0000-4000-a000-000000001113",
+            "givenName": "Owen",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — importSources importMethod: migration_script",
+      "data": {
+        "schemaVersion": "3.0.0",
+        "importSources": [
+          {
+            "id": "src-legacy-001",
+            "systemName": "Previous solicitor's firm",
+            "importDate": "2026-01-10",
+            "importMethod": "migration_script",
+            "notes": "Automated migration from legacy XML format"
+          }
+        ],
+        "estate": {
+          "id": "51000014-0000-4000-a000-000000001014",
+          "testatorPersonId": "51000014-0000-4000-a000-000000001114",
+          "status": "planning",
+          "createdAt": "2026-01-10T09:00:00Z",
+          "lastModifiedAt": "2026-01-10T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000014-0000-4000-a000-000000001114",
+            "givenName": "Patricia",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — applicationState with recommendedActions",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "51000015-0000-4000-a000-000000001015",
+          "testatorPersonId": "51000015-0000-4000-a000-000000001115",
+          "status": "confirmed",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000015-0000-4000-a000-000000001115",
+            "givenName": "Quentin",
+            "roles": ["testator"]
+          }
+        ],
+        "applicationState": {
+          "recommendedActions": [
+            {
+              "id": "act-001",
+              "category": "valuation",
+              "priority": "high",
+              "title": "Get professional valuation for share portfolio",
+              "description": "The Hargreaves Lansdown ISA has an estimated value over £50,000 but no professional valuation has been recorded.",
+              "status": "pending",
+              "triggeredBy": "Asset has estimatedValue > £50,000 but no professional valuation",
+              "relatedEntityType": "asset",
+              "relatedEntityId": "51000015-0000-4000-e000-000000001015"
+            },
+            {
+              "id": "act-002",
+              "category": "tax_planning",
+              "priority": "critical",
+              "title": "Review nil-rate band usage",
+              "status": "in_progress"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — applicationState with deathNotifications using all institutionType values",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "51000016-0000-4000-a000-000000001016",
+          "testatorPersonId": "51000016-0000-4000-a000-000000001116",
+          "status": "pre_probate",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000016-0000-4000-a000-000000001116",
+            "givenName": "Rachel",
+            "roles": ["testator"]
+          }
+        ],
+        "applicationState": {
+          "deathNotifications": [
+            {
+              "institution": "HSBC",
+              "institutionType": "bank",
+              "status": "actioned",
+              "method": "settld",
+              "referenceNumber": "HSBC-DEA-2026-001",
+              "responseDate": "2026-03-01"
+            },
+            {
+              "institution": "Teachers' Pension Scheme",
+              "institutionType": "pension_provider",
+              "status": "sent",
+              "method": "direct_email"
+            },
+            {
+              "institution": "Aviva",
+              "institutionType": "insurance",
+              "status": "pending",
+              "method": "direct_letter"
+            },
+            {
+              "institution": "HMRC",
+              "institutionType": "tax_authority",
+              "status": "acknowledged",
+              "method": "tell_us_once"
+            },
+            {
+              "institution": "British Gas",
+              "institutionType": "utility",
+              "status": "actioned",
+              "method": "direct_phone"
+            },
+            {
+              "institution": "LinkedIn",
+              "institutionType": "social_media",
+              "status": "pending",
+              "method": "platform_form"
+            },
+            {
+              "institution": "Gmail",
+              "institutionType": "email_provider",
+              "status": "unknown",
+              "method": "other"
+            },
+            {
+              "institution": "DWP",
+              "institutionType": "government",
+              "status": "sent",
+              "method": "api"
+            },
+            {
+              "institution": "Birkbeck University",
+              "institutionType": "employer",
+              "status": "actioned",
+              "method": "solicitor"
+            },
+            {
+              "institution": "RAC",
+              "institutionType": "other",
+              "status": "rejected"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — applicationState with legacyContacts using all accessLevel values",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "51000017-0000-4000-a000-000000001017",
+          "testatorPersonId": "51000017-0000-4000-a000-000000001117",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000017-0000-4000-a000-000000001117",
+            "givenName": "Samuel",
+            "roles": ["testator"]
+          }
+        ],
+        "applicationState": {
+          "legacyContacts": [
+            {
+              "id": "51000017-0000-4000-b000-000000001001",
+              "name": "Sarah Davies",
+              "accessLevel": "full",
+              "relationship": "daughter",
+              "email": "sarah.davies@example.com",
+              "notificationMethod": "email",
+              "letterGenerated": true,
+              "letterGeneratedAt": "2026-03-01T10:00:00Z",
+              "letterDeliveryMethod": "digital"
+            },
+            {
+              "id": "51000017-0000-4000-b000-000000001002",
+              "name": "Paul Frith",
+              "accessLevel": "read_only",
+              "relationship": "solicitor",
+              "notificationMethod": "phone"
+            },
+            {
+              "id": "51000017-0000-4000-b000-000000001003",
+              "name": "Emma Wilson",
+              "accessLevel": "collection_only",
+              "relationship": "friend",
+              "notificationMethod": "post"
+            },
+            {
+              "id": "51000017-0000-4000-b000-000000001004",
+              "name": "James Davies",
+              "accessLevel": "financial_only",
+              "relationship": "son",
+              "notificationMethod": "in_person"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — applicationState with transmissions using all method values",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "51000018-0000-4000-a000-000000001018",
+          "testatorPersonId": "51000018-0000-4000-a000-000000001118",
+          "status": "confirmed",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-04-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000018-0000-4000-a000-000000001118",
+            "givenName": "Teresa",
+            "roles": ["testator"]
+          }
+        ],
+        "applicationState": {
+          "transmissions": [
+            {
+              "sentAt": "2026-03-01T10:00:00Z",
+              "sender": "Harrison & Co Solicitors",
+              "method": "secure_portal",
+              "recipient": "Robert Thornton (Executor)",
+              "receivedAt": "2026-03-01T10:30:00Z",
+              "verified": true,
+              "verifiedAt": "2026-03-01T11:00:00Z"
+            },
+            {
+              "sentAt": "2026-03-15T14:00:00Z",
+              "sender": "Harrison & Co Solicitors",
+              "method": "registered_post",
+              "recipient": "HMRC Inheritance Tax"
+            },
+            {
+              "sentAt": "2026-03-20T09:00:00Z",
+              "sender": "Harrison & Co Solicitors",
+              "method": "physical_media",
+              "encryptionMethod": "AES-256-GCM",
+              "notes": "USB drive delivered by hand"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — referentialIntegrity with multiple constraints",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "51000019-0000-4000-a000-000000001019",
+          "testatorPersonId": "51000019-0000-4000-a000-000000001119",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000019-0000-4000-a000-000000001119",
+            "givenName": "Uma",
+            "roles": ["testator"]
+          }
+        ],
+        "referentialIntegrity": [
+          {
+            "field": "bequests[].beneficiaryId",
+            "references": "people[].id",
+            "required": true,
+            "code": "INHERIT_REF_BROKEN",
+            "errorMessage": "Bequest beneficiary references a person who does not exist"
+          },
+          {
+            "field": "bequests[].sourceAssetId",
+            "references": "assets[].id",
+            "required": false,
+            "code": "INHERIT_REF_BROKEN",
+            "errorMessage": "Bequest source references an asset that does not exist"
+          },
+          {
+            "field": "kinships[].fromPersonId",
+            "references": "people[].id",
+            "required": true,
+            "code": "INHERIT_REF_BROKEN",
+            "errorMessage": "Kinship fromPersonId references a person who does not exist"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — integrity with all optional fields",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "integrity": {
+          "algorithm": "RS256",
+          "canonicalisationMethod": "JCS (RFC 8785 JSON Canonicalization Scheme)",
+          "hash": "sha256-abc123def456",
+          "signature": "eyJhbGciOiJSUzI1NiJ9.example",
+          "signedAt": "2026-04-06T09:00:00Z",
+          "verificationMethod": "Testate Technologies Ltd",
+          "verificationMethodUrl": "https://keys.openinherit.org/v3/public-key.pem",
+          "proofPurpose": "assertionMethod"
+        },
+        "estate": {
+          "id": "51000020-0000-4000-a000-000000001020",
+          "testatorPersonId": "51000020-0000-4000-a000-000000001120",
+          "status": "confirmed",
+          "createdAt": "2026-04-06T09:00:00Z",
+          "lastModifiedAt": "2026-04-06T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000020-0000-4000-a000-000000001120",
+            "givenName": "Victor",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — previousVersionId is null (first version)",
+      "data": {
+        "schemaVersion": "3.0.0",
+        "documentVersion": 1,
+        "previousVersionId": null,
+        "estate": {
+          "id": "51000021-0000-4000-a000-000000001021",
+          "testatorPersonId": "51000021-0000-4000-a000-000000001121",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000021-0000-4000-a000-000000001121",
+            "givenName": "Wendy",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — dataSharing: consentMethod verbal",
+      "data": {
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "51000022-0000-4000-a000-000000001022",
+          "testatorPersonId": "51000022-0000-4000-a000-000000001122",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000022-0000-4000-a000-000000001122",
+            "givenName": "Xavier",
+            "roles": ["testator"]
+          }
+        ],
+        "applicationState": {
+          "dataSharing": {
+            "anonymisedAggregates": false,
+            "academicResearch": true,
+            "partnerInsights": false,
+            "consentRecordedAt": "2026-03-01T10:00:00Z",
+            "consentMethod": "verbal"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — dataSharing: consentMethod written",
+      "data": {
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "51000023-0000-4000-a000-000000001023",
+          "testatorPersonId": "51000023-0000-4000-a000-000000001123",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000023-0000-4000-a000-000000001123",
+            "givenName": "Yvette",
+            "roles": ["testator"]
+          }
+        ],
+        "applicationState": {
+          "dataSharing": {
+            "anonymisedAggregates": true,
+            "consentMethod": "written"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — generator missing required name",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "generator": {
+          "version": "1.0.0"
+        },
+        "estate": {
+          "id": "51000030-0000-4000-a000-000000001030",
+          "testatorPersonId": "51000030-0000-4000-a000-000000001130",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000030-0000-4000-a000-000000001130",
+            "givenName": "Zachary",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — schemaVersion bad format (not semver)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "v3",
+        "estate": {
+          "id": "51000031-0000-4000-a000-000000001031",
+          "testatorPersonId": "51000031-0000-4000-a000-000000001131",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000031-0000-4000-a000-000000001131",
+            "givenName": "Amelia",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required people array",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "51000032-0000-4000-a000-000000001032",
+          "testatorPersonId": "51000032-0000-4000-a000-000000001132",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — people is empty array (minItems 1)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "51000033-0000-4000-a000-000000001033",
+          "testatorPersonId": "51000033-0000-4000-a000-000000001133",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": []
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — referentialIntegrity constraint missing required code",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "51000034-0000-4000-a000-000000001034",
+          "testatorPersonId": "51000034-0000-4000-a000-000000001134",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000034-0000-4000-a000-000000001134",
+            "givenName": "Benedict",
+            "roles": ["testator"]
+          }
+        ],
+        "referentialIntegrity": [
+          {
+            "field": "bequests[].beneficiaryId",
+            "references": "people[].id",
+            "errorMessage": "Missing code field"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — conformance missing required level",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "conformance": {
+          "validatedAt": "2026-04-06T09:00:00Z",
+          "validatedBy": "INHERIT Validator",
+          "schemaVersion": "3.0.0"
+        },
+        "estate": {
+          "id": "51000035-0000-4000-a000-000000001035",
+          "testatorPersonId": "51000035-0000-4000-a000-000000001135",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000035-0000-4000-a000-000000001135",
+            "givenName": "Cordelia",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — conformance level not in enum",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "conformance": {
+          "level": "level_4",
+          "validatedAt": "2026-04-06T09:00:00Z",
+          "validatedBy": "INHERIT Validator",
+          "schemaVersion": "3.0.0"
+        },
+        "estate": {
+          "id": "51000036-0000-4000-a000-000000001036",
+          "testatorPersonId": "51000036-0000-4000-a000-000000001136",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000036-0000-4000-a000-000000001136",
+            "givenName": "Dominic",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — importSources importMethod not in enum",
+      "data": {
+        "schemaVersion": "3.0.0",
+        "importSources": [
+          {
+            "id": "src-bad-001",
+            "systemName": "BadSystem",
+            "importMethod": "web_scrape"
+          }
+        ],
+        "estate": {
+          "id": "51000037-0000-4000-a000-000000001037",
+          "testatorPersonId": "51000037-0000-4000-a000-000000001137",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000037-0000-4000-a000-000000001137",
+            "givenName": "Eleanor",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — dataProvenance not in enum",
+      "data": {
+        "schemaVersion": "3.0.0",
+        "dataProvenance": "user_typed",
+        "estate": {
+          "id": "51000038-0000-4000-a000-000000001038",
+          "testatorPersonId": "51000038-0000-4000-a000-000000001138",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000038-0000-4000-a000-000000001138",
+            "givenName": "Freddie",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — extension missing required schema URI",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "extensions": [
+          {
+            "id": "uk-england-wales",
+            "version": "1.0.0"
+          }
+        ],
+        "estate": {
+          "id": "51000039-0000-4000-a000-000000001039",
+          "testatorPersonId": "51000039-0000-4000-a000-000000001139",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000039-0000-4000-a000-000000001139",
+            "givenName": "Georgina",
+            "roles": ["testator"]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — deathNotification institutionType not in enum",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "51000040-0000-4000-a000-000000001040",
+          "testatorPersonId": "51000040-0000-4000-a000-000000001140",
+          "status": "pre_probate",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000040-0000-4000-a000-000000001140",
+            "givenName": "Harrison",
+            "roles": ["testator"]
+          }
+        ],
+        "applicationState": {
+          "deathNotifications": [
+            {
+              "institution": "Netflix",
+              "institutionType": "streaming_service"
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — recommendedAction missing required status",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "51000041-0000-4000-a000-000000001041",
+          "testatorPersonId": "51000041-0000-4000-a000-000000001141",
+          "status": "planning",
+          "createdAt": "2026-01-01T09:00:00Z",
+          "lastModifiedAt": "2026-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          {
+            "id": "51000041-0000-4000-a000-000000001141",
+            "givenName": "Iris",
+            "roles": ["testator"]
+          }
+        ],
+        "applicationState": {
+          "recommendedActions": [
+            {
+              "id": "act-bad",
+              "category": "valuation",
+              "priority": "medium",
+              "title": "Get valuation"
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — estate with 19 executors (within maxItems=20 limit)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "3df68b7a-d650-4b5a-93ff-9ed23a93d157",
+          "testatorPersonId": "3f4f4c3a-6fb4-4f10-a259-0d02300d6283",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          { "id": "3f4f4c3a-6fb4-4f10-a259-0d02300d6283", "givenName": "Testator", "roles": ["testator"] },
+          { "id": "fab87271-84d6-474a-9aa9-fdfab95686f2", "givenName": "Executor1", "roles": ["executor"] },
+          { "id": "1813a2eb-32fc-4e71-a0d9-9674e06a3587", "givenName": "Executor2", "roles": ["executor"] },
+          { "id": "73f33d69-2af3-483d-b4cd-971d7d522171", "givenName": "Executor3", "roles": ["executor"] },
+          { "id": "eae10249-5060-4dfd-bc84-5923468ed33c", "givenName": "Executor4", "roles": ["executor"] },
+          { "id": "54d86cbe-ad3d-4158-96b2-0d250a54ef0c", "givenName": "Executor5", "roles": ["executor"] },
+          { "id": "e4e33a1a-8b33-452b-8a74-fae2e0389b86", "givenName": "Executor6", "roles": ["executor"] },
+          { "id": "abb4af75-d405-4815-a261-2b6fa533e8e6", "givenName": "Executor7", "roles": ["executor"] },
+          { "id": "e3158f9a-30b3-47c3-9083-6a4b24b31c9d", "givenName": "Executor8", "roles": ["executor"] },
+          { "id": "4c96b830-439a-46dc-b31d-9b7c93f32817", "givenName": "Executor9", "roles": ["executor"] },
+          { "id": "ac954347-6576-48fc-9b2b-876e7a5e78f5", "givenName": "Executor10", "roles": ["executor"] },
+          { "id": "e6c28203-1796-4a8d-b692-29876de23ad5", "givenName": "Executor11", "roles": ["executor"] },
+          { "id": "1c2c2271-0ca0-4e06-809f-da2efccf5afc", "givenName": "Executor12", "roles": ["executor"] },
+          { "id": "3a290b1f-ef6c-4df8-984e-6bdb293e4d67", "givenName": "Executor13", "roles": ["executor"] },
+          { "id": "b0683e24-b307-4be9-b7bb-a56f784699ee", "givenName": "Executor14", "roles": ["executor"] },
+          { "id": "2281e130-e5f4-479e-a9af-52099f1c0d17", "givenName": "Executor15", "roles": ["executor"] },
+          { "id": "f3c0fca8-6e0c-4868-bf19-0ada5088f219", "givenName": "Executor16", "roles": ["executor"] },
+          { "id": "cc1a3da9-47b3-4643-92ce-6ff94bb746eb", "givenName": "Executor17", "roles": ["executor"] },
+          { "id": "d95cb284-fcd9-4bef-90ca-9068b1c97bf1", "givenName": "Executor18", "roles": ["executor"] },
+          { "id": "62074f1e-2eb8-4c14-98d9-d467f6851027", "givenName": "Executor19", "roles": ["executor"] }
+        ],
+        "executors": [
+          { "id": "7365cf73-e574-424d-80bc-f9d4b6a15f21", "personId": "fab87271-84d6-474a-9aa9-fdfab95686f2", "role": "primary" },
+          { "id": "69bf2500-e536-4e8d-a8c6-a1a999829302", "personId": "1813a2eb-32fc-4e71-a0d9-9674e06a3587", "role": "secondary" },
+          { "id": "489f5680-71ae-4882-a38c-b6c43a7d7693", "personId": "73f33d69-2af3-483d-b4cd-971d7d522171", "role": "secondary" },
+          { "id": "a0d1f61c-6772-4bd4-8a69-5b336855a9fd", "personId": "eae10249-5060-4dfd-bc84-5923468ed33c", "role": "secondary" },
+          { "id": "a4d597a9-ac87-4e97-8858-4a36c4cd2fc4", "personId": "54d86cbe-ad3d-4158-96b2-0d250a54ef0c", "role": "secondary" },
+          { "id": "88bfc080-fc28-4880-9312-73fe1c0513e2", "personId": "e4e33a1a-8b33-452b-8a74-fae2e0389b86", "role": "secondary" },
+          { "id": "913df6d7-a958-446a-8027-af7e309a2b4c", "personId": "abb4af75-d405-4815-a261-2b6fa533e8e6", "role": "secondary" },
+          { "id": "d0f69975-edde-4b2c-852f-66d9323042d3", "personId": "e3158f9a-30b3-47c3-9083-6a4b24b31c9d", "role": "substitute" },
+          { "id": "2145b069-3a82-465e-8b90-1cbc37588a78", "personId": "4c96b830-439a-46dc-b31d-9b7c93f32817", "role": "substitute" },
+          { "id": "c51bed0e-b325-4514-b2fb-e388a01ee260", "personId": "ac954347-6576-48fc-9b2b-876e7a5e78f5", "role": "substitute" },
+          { "id": "63c53f47-e98f-441f-afab-494cd20b57ba", "personId": "e6c28203-1796-4a8d-b692-29876de23ad5", "role": "substitute" },
+          { "id": "d3de8ad6-f374-4621-be99-abd678161d76", "personId": "1c2c2271-0ca0-4e06-809f-da2efccf5afc", "role": "substitute" },
+          { "id": "5b3dccb1-b997-4e73-8cfb-f81287a11a16", "personId": "3a290b1f-ef6c-4df8-984e-6bdb293e4d67", "role": "substitute" },
+          { "id": "1e16bd73-8d6d-4f31-8b38-1f90d907ce59", "personId": "b0683e24-b307-4be9-b7bb-a56f784699ee", "role": "substitute" },
+          { "id": "a8bee024-c00c-4ab9-86d2-3b6e3bf20e3c", "personId": "2281e130-e5f4-479e-a9af-52099f1c0d17", "role": "substitute" },
+          { "id": "bf55ea0b-39a8-49e1-9e8a-2ee21f9beffb", "personId": "f3c0fca8-6e0c-4868-bf19-0ada5088f219", "role": "substitute" },
+          { "id": "ecf2654e-f2c0-4d34-adcd-096423654525", "personId": "cc1a3da9-47b3-4643-92ce-6ff94bb746eb", "role": "substitute" },
+          { "id": "ff297e68-c37f-4d4d-a742-93d41a2e83c2", "personId": "d95cb284-fcd9-4bef-90ca-9068b1c97bf1", "role": "substitute" },
+          { "id": "6606551c-b7ac-43b5-a32a-bce996e16da3", "personId": "62074f1e-2eb8-4c14-98d9-d467f6851027", "role": "substitute" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — estate with 21 executors exceeds maxItems=20",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "3df68b7a-d650-4b5a-93ff-9ed23a93d158",
+          "testatorPersonId": "3f4f4c3a-6fb4-4f10-a259-0d02300d6284",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          { "id": "3f4f4c3a-6fb4-4f10-a259-0d02300d6284", "givenName": "Testator", "roles": ["testator"] },
+          { "id": "fab87271-84d6-474a-9aa9-fdfab95686f3", "givenName": "Executor1", "roles": ["executor"] },
+          { "id": "1813a2eb-32fc-4e71-a0d9-9674e06a3588", "givenName": "Executor2", "roles": ["executor"] },
+          { "id": "73f33d69-2af3-483d-b4cd-971d7d522172", "givenName": "Executor3", "roles": ["executor"] },
+          { "id": "eae10249-5060-4dfd-bc84-5923468ed33d", "givenName": "Executor4", "roles": ["executor"] },
+          { "id": "54d86cbe-ad3d-4158-96b2-0d250a54ef0d", "givenName": "Executor5", "roles": ["executor"] },
+          { "id": "e4e33a1a-8b33-452b-8a74-fae2e0389b87", "givenName": "Executor6", "roles": ["executor"] },
+          { "id": "abb4af75-d405-4815-a261-2b6fa533e8e7", "givenName": "Executor7", "roles": ["executor"] },
+          { "id": "e3158f9a-30b3-47c3-9083-6a4b24b31c9e", "givenName": "Executor8", "roles": ["executor"] },
+          { "id": "4c96b830-439a-46dc-b31d-9b7c93f32818", "givenName": "Executor9", "roles": ["executor"] },
+          { "id": "ac954347-6576-48fc-9b2b-876e7a5e78f6", "givenName": "Executor10", "roles": ["executor"] },
+          { "id": "e6c28203-1796-4a8d-b692-29876de23ad6", "givenName": "Executor11", "roles": ["executor"] },
+          { "id": "1c2c2271-0ca0-4e06-809f-da2efccf5afd", "givenName": "Executor12", "roles": ["executor"] },
+          { "id": "3a290b1f-ef6c-4df8-984e-6bdb293e4d68", "givenName": "Executor13", "roles": ["executor"] },
+          { "id": "b0683e24-b307-4be9-b7bb-a56f784699ef", "givenName": "Executor14", "roles": ["executor"] },
+          { "id": "2281e130-e5f4-479e-a9af-52099f1c0d18", "givenName": "Executor15", "roles": ["executor"] },
+          { "id": "f3c0fca8-6e0c-4868-bf19-0ada5088f220", "givenName": "Executor16", "roles": ["executor"] },
+          { "id": "cc1a3da9-47b3-4643-92ce-6ff94bb746ec", "givenName": "Executor17", "roles": ["executor"] },
+          { "id": "d95cb284-fcd9-4bef-90ca-9068b1c97bf2", "givenName": "Executor18", "roles": ["executor"] },
+          { "id": "62074f1e-2eb8-4c14-98d9-d467f6851028", "givenName": "Executor19", "roles": ["executor"] },
+          { "id": "424f2658-3857-4450-ae1b-18f70977dbf7", "givenName": "Executor20", "roles": ["executor"] },
+          { "id": "2eb3fda7-5432-4892-a4dc-bd26d279bc21", "givenName": "Executor21", "roles": ["executor"] }
+        ],
+        "executors": [
+          { "id": "7365cf73-e574-424d-80bc-f9d4b6a15f22", "personId": "fab87271-84d6-474a-9aa9-fdfab95686f3", "role": "primary" },
+          { "id": "69bf2500-e536-4e8d-a8c6-a1a999829303", "personId": "1813a2eb-32fc-4e71-a0d9-9674e06a3588", "role": "secondary" },
+          { "id": "489f5680-71ae-4882-a38c-b6c43a7d7694", "personId": "73f33d69-2af3-483d-b4cd-971d7d522172", "role": "secondary" },
+          { "id": "a0d1f61c-6772-4bd4-8a69-5b336855a9fe", "personId": "eae10249-5060-4dfd-bc84-5923468ed33d", "role": "secondary" },
+          { "id": "a4d597a9-ac87-4e97-8858-4a36c4cd2fc5", "personId": "54d86cbe-ad3d-4158-96b2-0d250a54ef0d", "role": "secondary" },
+          { "id": "88bfc080-fc28-4880-9312-73fe1c0513e3", "personId": "e4e33a1a-8b33-452b-8a74-fae2e0389b87", "role": "secondary" },
+          { "id": "913df6d7-a958-446a-8027-af7e309a2b4d", "personId": "abb4af75-d405-4815-a261-2b6fa533e8e7", "role": "secondary" },
+          { "id": "d0f69975-edde-4b2c-852f-66d9323042d4", "personId": "e3158f9a-30b3-47c3-9083-6a4b24b31c9e", "role": "substitute" },
+          { "id": "2145b069-3a82-465e-8b90-1cbc37588a79", "personId": "4c96b830-439a-46dc-b31d-9b7c93f32818", "role": "substitute" },
+          { "id": "c51bed0e-b325-4514-b2fb-e388a01ee261", "personId": "ac954347-6576-48fc-9b2b-876e7a5e78f6", "role": "substitute" },
+          { "id": "63c53f47-e98f-441f-afab-494cd20b57bb", "personId": "e6c28203-1796-4a8d-b692-29876de23ad6", "role": "substitute" },
+          { "id": "d3de8ad6-f374-4621-be99-abd678161d77", "personId": "1c2c2271-0ca0-4e06-809f-da2efccf5afd", "role": "substitute" },
+          { "id": "5b3dccb1-b997-4e73-8cfb-f81287a11a17", "personId": "3a290b1f-ef6c-4df8-984e-6bdb293e4d68", "role": "substitute" },
+          { "id": "1e16bd73-8d6d-4f31-8b38-1f90d907ce60", "personId": "b0683e24-b307-4be9-b7bb-a56f784699ef", "role": "substitute" },
+          { "id": "a8bee024-c00c-4ab9-86d2-3b6e3bf20e3d", "personId": "2281e130-e5f4-479e-a9af-52099f1c0d18", "role": "substitute" },
+          { "id": "bf55ea0b-39a8-49e1-9e8a-2ee21f9beff0", "personId": "f3c0fca8-6e0c-4868-bf19-0ada5088f220", "role": "substitute" },
+          { "id": "ecf2654e-f2c0-4d34-adcd-096423654526", "personId": "cc1a3da9-47b3-4643-92ce-6ff94bb746ec", "role": "substitute" },
+          { "id": "ff297e68-c37f-4d4d-a742-93d41a2e83c3", "personId": "d95cb284-fcd9-4bef-90ca-9068b1c97bf2", "role": "substitute" },
+          { "id": "6606551c-b7ac-43b5-a32a-bce996e16da4", "personId": "62074f1e-2eb8-4c14-98d9-d467f6851028", "role": "substitute" },
+          { "id": "b3b8db2a-4eef-4ccc-9869-859e50a0a3f0", "personId": "424f2658-3857-4450-ae1b-18f70977dbf7", "role": "substitute" },
+          { "id": "133f33ba-6b8d-4b9e-9e23-e3c35aa1ee5e", "personId": "2eb3fda7-5432-4892-a4dc-bd26d279bc21", "role": "substitute" }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

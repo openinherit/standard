@@ -1,0 +1,91 @@
+{
+  "name": "@openinherit/sdk",
+  "version": "6.6.0",
+  "description": "INHERIT estate planning SDK — TypeScript types, API client stubs, and validation for the open estate data interchange standard. Generated from OpenAPI 3.1 via hey-api. Supports estate, bequest, kinship, trust, executor, and 21 jurisdiction extension types.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Testate Technologies Ltd",
+    "url": "https://www.openinherit.org"
+  },
+  "contributors": [
+    {
+      "name": "Rich Davies",
+      "url": "https://github.com/davieshq"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openinherit/standard.git",
+    "directory": "packages/sdk"
+  },
+  "homepage": "https://dev.openinherit.org",
+  "bugs": {
+    "url": "https://github.com/openinherit/standard/issues"
+  },
+  "funding": {
+    "type": "opencollective",
+    "url": "https://www.openinherit.org/support"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/estate/index.d.ts",
+      "import": "./dist/estate/index.js"
+    },
+    "./v2": {
+      "types": "./dist/estate-v2/index.d.ts",
+      "import": "./dist/estate-v2/index.js"
+    },
+    "./reference": {
+      "types": "./dist/reference/index.d.ts",
+      "import": "./dist/reference/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@hey-api/client-fetch": ">=0.1.0"
+  },
+  "devDependencies": {
+    "@hey-api/client-fetch": "latest",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "inherit",
+    "estate-planning",
+    "typescript",
+    "typescript-sdk",
+    "api-client",
+    "openapi",
+    "openapi-3.1",
+    "probate",
+    "wills",
+    "trusts",
+    "succession",
+    "inheritance",
+    "open-data",
+    "open-standard",
+    "legal-tech",
+    "legaltech",
+    "estate",
+    "bequest",
+    "kinship",
+    "hey-api",
+    "code-generation",
+    "data-interchange",
+    "esm"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

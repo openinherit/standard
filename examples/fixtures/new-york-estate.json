@@ -1,0 +1,355 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-03-27T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "09dc9f33-c2d3-4b56-b6d7-682854809bdc",
+    "testatorPersonId": "64828deb-dbf1-45bb-927d-dccdacdb6b52",
+    "status": "confirmed",
+    "primaryInstrument": "revocable_trust",
+    "electiveShareRight": {
+      "available": true,
+      "statute": "EPTL §5-1.1-A",
+      "notes": "New York's elective share reaches into revocable trusts and other testamentary substitutes. Lisa is aware of her right but has not elected."
+    },
+    "notes": "In New York, a revocable living trust is commonly used as the primary estate planning instrument to avoid probate. The pour-over will directs any probate assets into the trust.",
+    "createdAt": "2026-01-15T00:00:00Z",
+    "lastModifiedAt": "2026-03-27T00:00:00Z",
+    "domicile": {
+      "country": "US",
+      "subdivision": "US-NY",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "New York"
+    }
+  },
+  "people": [
+    {
+      "id": "64828deb-dbf1-45bb-927d-dccdacdb6b52",
+      "givenName": "Robert",
+      "familyName": "Chen",
+      "dateOfBirth": "1975-02-28",
+      "roles": [
+        "testator"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "450 Park Avenue",
+          "addressLine2": "Apt 12B",
+          "addressLocality": "New York",
+          "addressRegion": "New York",
+          "postalCode": "10022",
+          "addressCountry": "US"
+        }
+      }
+    },
+    {
+      "id": "4062e58b-b3e2-4f6d-81ea-43f96178ee74",
+      "givenName": "Lisa",
+      "familyName": "Chen",
+      "dateOfBirth": "1978-06-15",
+      "roles": [
+        "beneficiary",
+        "trustee"
+      ]
+    },
+    {
+      "id": "30b6f434-49d3-470b-b6cc-c3488f99fa33",
+      "givenName": "David",
+      "familyName": "Chen",
+      "dateOfBirth": "2005-10-01",
+      "roles": [
+        "beneficiary"
+      ]
+    }
+  ],
+  "kinships": [
+    {
+      "id": "bc3f09f7-623e-4047-8bc9-48c432da2637",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "64828deb-dbf1-45bb-927d-dccdacdb6b52",
+      "toPersonId": "30b6f434-49d3-470b-b6cc-c3488f99fa33"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "635b17df-df32-42c3-bf22-0e297e33e2b1",
+      "type": "marriage_civil",
+      "partners": [
+        {
+          "personId": "64828deb-dbf1-45bb-927d-dccdacdb6b52",
+          "ordinal": 1
+        },
+        {
+          "personId": "4062e58b-b3e2-4f6d-81ea-43f96178ee74",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "US",
+        "subdivision": "US-NY"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "d0c990e2-0309-451c-a79b-0e886ee8396b",
+      "name": "450 Park Avenue, Apt 12B, Manhattan",
+      "propertyType": "apartment",
+      "tenureType": "ownership",
+      "isPrimaryResidence": true,
+      "ownershipType": "sole",
+      "estimatedValue": {
+        "amount": 185000000,
+        "currency": "USD"
+      },
+      "address": {
+        "streetAddress": "450 Park Avenue",
+        "addressLine2": "Apt 12B",
+        "addressLocality": "New York",
+        "addressRegion": "New York",
+        "postalCode": "10022",
+        "addressCountry": "US"
+      }
+    }
+  ],
+  "assets": [
+    {
+      "id": "51000004-0000-4000-a000-000000000001",
+      "name": "Fidelity 401(k) Retirement Account",
+      "category": "financial",
+      "estimatedValue": {
+        "amount": 42000000,
+        "currency": "USD"
+      },
+      "passesOutsideEstate": true,
+      "beneficiaryDesignation": {
+        "primaryBeneficiaryPersonIds": [
+          "4062e58b-b3e2-4f6d-81ea-43f96178ee74"
+        ],
+        "contingentBeneficiaryPersonIds": [
+          "30b6f434-49d3-470b-b6cc-c3488f99fa33"
+        ],
+        "designationType": "retirement_account"
+      },
+      "subcategory": "pension"
+    }
+  ],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "8f8d36ef-e3bd-498f-b390-1332fc14d06c",
+      "bequestType": "residuary",
+      "beneficiaryId": "4062e58b-b3e2-4f6d-81ea-43f96178ee74",
+      "description": "I give the residue of my probate estate to the trustee of the Chen Family Revocable Trust."
+    }
+  ],
+  "trusts": [
+    {
+      "id": "71000004-0000-4000-a000-000000000001",
+      "name": "Chen Family Revocable Trust",
+      "trustType": "discretionary",
+      "creationType": "inter_vivos_revocable",
+      "revocability": "revocable",
+      "settlor": "64828deb-dbf1-45bb-927d-dccdacdb6b52",
+      "trustees": [
+        {
+          "personId": "4062e58b-b3e2-4f6d-81ea-43f96178ee74",
+          "role": "trustee"
+        }
+      ],
+      "beneficiaries": [
+        {
+          "personId": "4062e58b-b3e2-4f6d-81ea-43f96178ee74",
+          "interestType": "income"
+        },
+        {
+          "personId": "30b6f434-49d3-470b-b6cc-c3488f99fa33",
+          "interestType": "capital"
+        }
+      ],
+      "vestingAge": 25,
+      "governingLaw": {
+        "country": "US",
+        "subdivision": "US-NY"
+      },
+      "notes": "On Robert's death, the trust becomes irrevocable. Lisa receives income for life; David receives capital when he attains age 25."
+    }
+  ],
+  "executors": [],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [
+    {
+      "id": "72e739f2-dbe5-4898-be87-d2473f0b81a3",
+      "transferType": "revocable_trust",
+      "passesOutsideEstate": true,
+      "trustId": "71000004-0000-4000-a000-000000000001",
+      "description": "Assets held in the Chen Family Revocable Trust pass outside probate.",
+      "jurisdiction": {
+        "country": "US",
+        "subdivision": "US-NY"
+      }
+    },
+    {
+      "id": "835dc0b5-e3b6-41f9-884b-695026751cff",
+      "transferType": "beneficiary_designation",
+      "passesOutsideEstate": true,
+      "assetIds": [
+        "51000004-0000-4000-a000-000000000001"
+      ],
+      "beneficiaryPersonIds": [
+        "4062e58b-b3e2-4f6d-81ea-43f96178ee74"
+      ],
+      "contingentBeneficiaryPersonIds": [
+        "30b6f434-49d3-470b-b6cc-c3488f99fa33"
+      ],
+      "description": "Fidelity 401(k) passes to Lisa as primary beneficiary, David as contingent.",
+      "jurisdiction": {
+        "country": "US",
+        "subdivision": "US-NY"
+      }
+    }
+  ],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_2",
+    "validatedAt": "2026-03-28T12:00:00Z",
+    "validatedBy": "INHERIT Web Validator",
+    "schemaVersion": "6.3.0",
+    "completenessScore": 68,
+    "entityCounts": {
+      "people": 4,
+      "properties": 1,
+      "assets": 3,
+      "bequests": 2,
+      "executors": 1
+    },
+    "provenanceSummary": {
+      "manual_entry": 11
+    }
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 68,
+      "maxScore": 100,
+      "jurisdiction": "US-NY",
+      "estateStatus": "confirmed",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "checklist": [
+        {
+          "category": "personal_details",
+          "item": "Testator full name recorded",
+          "weight": 10,
+          "status": "complete"
+        },
+        {
+          "category": "assets_and_valuations",
+          "item": "At least one asset recorded",
+          "weight": 10,
+          "status": "complete"
+        },
+        {
+          "category": "executors",
+          "item": "At least one executor appointed",
+          "weight": 10,
+          "status": "complete"
+        },
+        {
+          "category": "tax_information",
+          "item": "Tax position calculated",
+          "weight": 8,
+          "status": "complete"
+        },
+        {
+          "category": "lifetime_transfers",
+          "item": "Lifetime gifts documented",
+          "weight": 7,
+          "status": "incomplete",
+          "details": "No lifetime transfers recorded"
+        },
+        {
+          "category": "legal_documents",
+          "item": "Will execution date recorded",
+          "weight": 5,
+          "status": "incomplete"
+        }
+      ]
+    },
+    "taxPosition": {
+      "jurisdiction": "US-NY",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 250000000,
+        "currency": "USD"
+      },
+      "netEstateValue": {
+        "amount": 215000000,
+        "currency": "USD"
+      },
+      "lifetimeTransfersInLookback": {
+        "amount": 0,
+        "currency": "USD"
+      },
+      "lookbackPeriod": "unlimited (unified credit)",
+      "availableExemptions": [
+        {
+          "name": "Federal Estate Tax Exemption",
+          "amount": {
+            "amount": 1361000000,
+            "currency": "USD"
+          },
+          "applied": true,
+          "notes": "2024 exemption amount — estate is well below threshold"
+        }
+      ],
+      "taxableEstate": {
+        "amount": 0,
+        "currency": "USD"
+      },
+      "estimatedLiability": {
+        "amount": 0,
+        "currency": "USD"
+      },
+      "effectiveRate": 0,
+      "warnings": [
+        "NY state estate tax has lower threshold ($6.94M) — estate is below both thresholds"
+      ],
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    },
+    "recommendedActions": [
+      {
+        "id": "act-001",
+        "category": "transfer_history",
+        "priority": "medium",
+        "title": "Document lifetime gifts",
+        "description": "No lifetime transfers recorded. Even though the estate is below the federal exemption, gift history should be documented for the unified credit calculation.",
+        "status": "pending",
+        "triggeredBy": "Zero lifetime transfers recorded"
+      },
+      {
+        "id": "act-002",
+        "category": "document_update",
+        "priority": "medium",
+        "title": "Record will execution date",
+        "description": "The will execution date is not recorded.",
+        "status": "pending",
+        "triggeredBy": "No executionDate on estate"
+      }
+    ]
+  }
+}

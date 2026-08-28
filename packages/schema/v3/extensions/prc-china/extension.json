@@ -1,0 +1,35 @@
+{
+  "name": "PRC China",
+  "id": "https://openinherit.org/v3/extensions/prc-china.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "CN"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [],
+  "legalSystems": [
+    "civil_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-03-26",
+  "dataProvenance": "PRC Civil Code Book Six (Succession), Regulations on Household Registration (hukou)",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling.",
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "outline",
+  "keyFeatures": "Civil Code Book 6, statutory succession order, notarised wills, rural land use rights, relationshipCategory on first/second order forced heirship heirs, contributingInLaws (Article 1129 widowed in-laws), Article 1128 per stirpes representation documentation",
+  "legalTradition": "Civil law (socialist)",
+  "seeking": "PRC succession law practitioner",
+  "tier": "core"
+}

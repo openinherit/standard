@@ -1,0 +1,352 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json",
+  "title": "UK England & Wales Extension",
+  "description": "IHT thresholds, intestacy rules, IFPA 1975 eligibility, and legislative changes for England & Wales estates. Temporal-rule wrapping on key values.",
+  "$comment": "English intestacy (AEA 1925 s.46) is the primary use case for the core bloodDegree property. Implementers building English intestacy calculators should populate bloodDegree on all uncle_aunt and cousin kinship records. Whole blood takes absolute priority over half blood at sibling and uncle/aunt levels — they are separate tiers, not weighted shares.",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "GB"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "common_law"
+  ],
+  "dataProvenance": "Inheritance Tax Act 1984, Administration of Estates Act 1925, Inheritance (Provision for Family and Dependants) Act 1975",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": [
+    "islamic-succession",
+    "jewish-succession",
+    "hindu-succession"
+  ],
+  "type": "object",
+  "properties": {
+    "intestacyStatutoryLegacy": {
+      "$ref": "../../common/temporal-rule.json",
+      "$comment": "Statutory legacy amount under Administration of Estates Act 1925. As of 2023: £322,000."
+    },
+    "nilRateBand": {
+      "$ref": "../../common/temporal-rule.json",
+      "$comment": "IHT nil-rate band. Frozen at £325,000 since 2009."
+    },
+    "residenceNilRateBand": {
+      "$ref": "../../common/temporal-rule.json",
+      "$comment": "RNRB (main residence). Currently £175,000."
+    },
+    "transferableNilRateBand": {
+      "type": "boolean",
+      "$comment": "Whether the unused NRB of a predeceased spouse is available for transfer."
+    },
+    "transferableNilRateBandPercentage": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "$comment": "Percentage of the predeceased spouse's NRB available for transfer."
+    },
+    "inheritanceTaxRate": {
+      "$ref": "../../common/temporal-rule.json",
+      "$comment": "Main IHT rate. Currently 40%."
+    },
+    "cohabitantRights": {
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "statute": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "ifpa1975Eligible": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "personId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "spouse",
+              "former_spouse",
+              "child",
+              "child_of_family",
+              "maintained_person",
+              "cohabitant"
+            ]
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "personId",
+          "category"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 50,
+      "$comment": "Persons eligible to claim under Inheritance (Provision for Family and Dependants) Act 1975."
+    },
+    "localPropertyTypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "localType": {
+            "type": "string",
+            "enum": [
+              "detached_house",
+              "semi_detached_house",
+              "terraced_house",
+              "flat",
+              "maisonette",
+              "bungalow",
+              "cottage",
+              "farmhouse",
+              "barn_conversion",
+              "houseboat",
+              "park_home",
+              "other"
+            ]
+          }
+        },
+        "required": [
+          "propertyId",
+          "localType"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 50,
+      "$comment": "Maps each property to its local E&W property type. The core propertyType holds the universal value; this provides the familiar local term."
+    },
+    "localTenureTypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "localType": {
+            "type": "string",
+            "enum": [
+              "freehold",
+              "leasehold",
+              "commonhold",
+              "share_of_freehold"
+            ]
+          }
+        },
+        "required": [
+          "propertyId",
+          "localType"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 50,
+      "$comment": "Maps each property to its local E&W tenure type. commonhold: an alternative to leasehold introduced by the Commonhold and Leasehold Reform Act 2002. share_of_freehold: leaseholders collectively own the freehold."
+    },
+    "localGrantTypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "executorId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "localType": {
+            "type": "string",
+            "enum": [
+              "grant_of_probate",
+              "letters_of_administration",
+              "letters_of_administration_with_will_annexed",
+              "limited_grant",
+              "de_bonis_non"
+            ]
+          }
+        },
+        "required": [
+          "executorId",
+          "localType"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 50,
+      "$comment": "Maps each executor to the local E&W grant type. limited_grant: grant limited in scope (e.g. foreign property excluded). de_bonis_non: grant for unadministered estate when original executor dies."
+    },
+    "legislativeChanges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "enacted",
+              "royal_assent",
+              "bill_stage",
+              "consultation",
+              "announced"
+            ]
+          },
+          "effectiveDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "description",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 50
+    },
+    "intestacyHierarchy": {
+      "description": "Intestacy distribution hierarchy under the Administration of Estates Act 1925 s.46. Each tier takes priority over all lower tiers. Whole blood takes absolute priority over half blood at sibling and uncle/aunt levels",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tier", "relationshipCategory"],
+        "properties": {
+          "tier": {
+            "description": "Priority rank (1 = highest)",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9
+          },
+          "relationshipCategory": {
+            "description": "Kinship category for this tier",
+            "enum": [
+              "spouse",
+              "children_and_issue",
+              "parents",
+              "siblings_whole",
+              "siblings_half",
+              "grandparents",
+              "uncles_aunts_whole",
+              "uncles_aunts_half",
+              "crown"
+            ]
+          },
+          "bloodRequirement": {
+            "description": "Whether this tier requires whole or half blood",
+            "$comment": "Maps to core bloodDegree property. whole: only whole-blood relatives at this level. half: only half-blood relatives at this level. not_applicable: blood degree is irrelevant (e.g. spouse, parents, crown)",
+            "enum": ["whole", "half", "not_applicable"]
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "statutoryLegacy": {
+      "description": "The statutory legacy amount the surviving spouse receives before the kinship-based residuary distribution. Currently £322,000 (from 26 July 2023, SI 2023/877)",
+      "$comment": "This amount is periodically updated by statutory instrument. The value determines how much the spouse receives before children share in the residue",
+      "type": "object",
+      "properties": {
+        "amount": {
+          "$ref": "../../common/money.json"
+        },
+        "effectiveFrom": {
+          "type": "string",
+          "format": "date"
+        },
+        "statutoryInstrument": {
+          "type": "string",
+          "maxLength": 100
+        }
+      }
+    },
+    "marriageRevocation": {
+      "type": "object",
+      "description": "Whether and how marriage revokes a prior will. For England & Wales, see s.18 Wills Act 1837 and the contemplation-of-marriage exception in s.18(3)–(4).",
+      "properties": {
+        "revokesPriorWill": {
+          "type": "boolean",
+          "description": "Whether a marriage (after execution of the will) automatically revokes the will."
+        },
+        "statute": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "Citation of the primary statute governing revocation-by-marriage."
+        },
+        "statuteUrl": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 500
+        },
+        "contemplationException": {
+          "type": "boolean",
+          "description": "Whether a will made in contemplation of a specific marriage survives that marriage."
+        },
+        "contemplationRule": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Plain-English description of the contemplation-of-marriage rule."
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": ["revokesPriorWill", "statute"],
+      "additionalProperties": false
+    }
+  },
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

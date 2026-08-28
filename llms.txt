@@ -1,0 +1,24 @@
+# INHERIT — Open Estate Data Interchange Standard
+
+> JSON Schema Draft 2020-12 standard for structured estate planning data. 33 entity schemas, 21 jurisdiction extensions, SDKs in 5 languages, Go CLI. Apache 2.0 licence.
+
+## Quick start
+- AI Integration Guide: docs/implement/ai-guide.md
+- Examples: examples/ (TypeScript, Python, Go code + 34 JSON fixtures)
+- Schemas: v3/ (all JSON Schema 2020-12 files with rich descriptions)
+- OpenAPI: openapi/openapi-bundled.yaml (fully dereferenced)
+- Reference data: reference-data/ (enum descriptions, agent task definitions)
+
+## Rules for AI agents
+1. All monetary amounts are integer minor units (pennies/cents)
+2. All IDs are v4 UUIDs
+3. All dates are ISO 8601 (YYYY-MM-DD)
+4. unevaluatedProperties: false — no undeclared fields
+5. British English throughout
+6. Do NOT modify schemas in v3/ without a formal proposal
+7. Always validate output with AJV or the CLI — never self-validate
+
+## Website
+- Developer docs: https://dev.openinherit.org
+- Main site: https://www.openinherit.org
+- Full LLM reference: https://dev.openinherit.org/llms-full.txt

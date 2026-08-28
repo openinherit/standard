@@ -1,0 +1,245 @@
+{
+  "target": "../../../v3/extensions/australia-nz/australia-nz.json",
+  "tests": [
+    {
+      "description": "valid — minimal with required jurisdiction",
+      "data": {
+        "jurisdiction": "AU-NSW"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with superannuation",
+      "data": {
+        "jurisdiction": "AU-VIC",
+        "superannuationNominations": [
+          {
+            "assetId": "a1b2c3d4-0000-4000-a000-000000009001",
+            "nominationType": "bdbn_non_lapsing"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required jurisdiction",
+      "data": {
+        "superannuationNominations": []
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "jurisdiction": "AU-NSW",
+        "ihtThreshold": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — jurisdiction only, AU-QLD",
+      "data": {
+        "jurisdiction": "AU-QLD"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — NZ jurisdiction with testamentary promise",
+      "data": {
+        "jurisdiction": "NZ",
+        "testamentaryPromises": [
+          {
+            "claimantPersonId": "b2c3d4e5-1111-4111-b111-111111110001",
+            "promiseDescription": "Deceased promised to leave the farm to claimant in exchange for 20 years of unpaid labour.",
+            "statute": "Law Reform (Testamentary Promises) Act 1949 (NZ)",
+            "status": "pending"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — NZ jurisdiction with Maori land details",
+      "data": {
+        "jurisdiction": "NZ",
+        "maoriLandDetails": [
+          {
+            "propertyId": "c3d4e5f6-2222-4222-c222-222222220001",
+            "landBlockIdentifier": "Waikato MB 47/123",
+            "maoriLandCourtReference": "2023-MNZLC-00456",
+            "successionUnderTeTureWhenua": true
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — full superannuation nomination with money components and nominated persons",
+      "data": {
+        "jurisdiction": "AU-SA",
+        "superannuationNominations": [
+          {
+            "assetId": "d4e5f6a7-3333-4333-d333-333333330001",
+            "nominationType": "bdbn_lapsing",
+            "fundType": "smsf",
+            "binding": true,
+            "expiryDate": "2026-09-01",
+            "expiryRule": "Lapses after three years unless renewed",
+            "trusteeDiscretion": false,
+            "nominatedPersonIds": [
+              "e5f6a7b8-4444-4444-e444-444444440001",
+              "f6a7b8c9-5555-4555-f555-555555550001"
+            ],
+            "taxableComponent": { "amount": 50000, "currency": "AUD" },
+            "taxFreeComponent": { "amount": 25000, "currency": "AUD" },
+            "notes": "Binding nomination renewed annually. Spouse is primary nominee."
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — jurisdiction enum violation (country name instead of code)",
+      "data": {
+        "jurisdiction": "AUSTRALIA"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — SuperannuationNomination missing required assetId",
+      "data": {
+        "jurisdiction": "AU-WA",
+        "superannuationNominations": [
+          {
+            "nominationType": "non_binding",
+            "fundType": "industry"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — SuperannuationNomination missing required nominationType",
+      "data": {
+        "jurisdiction": "AU-TAS",
+        "superannuationNominations": [
+          {
+            "assetId": "a7b8c9d0-6666-4666-a666-666666660001",
+            "fundType": "retail"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — AboriginalLandDetails missing required landType",
+      "data": {
+        "jurisdiction": "AU-NT",
+        "aboriginalLandDetails": [
+          {
+            "propertyId": "b8c9d0e1-7777-4777-b777-777777770001",
+            "landCouncil": "Northern Land Council",
+            "successionRestrictions": "Subject to ALRA restrictions"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — landType enum violation in AboriginalLandDetails",
+      "data": {
+        "jurisdiction": "AU-NSW",
+        "aboriginalLandDetails": [
+          {
+            "propertyId": "c9d0e1f2-8888-4888-c888-888888880001",
+            "landType": "crown_land"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalProperties in SuperannuationNomination",
+      "data": {
+        "jurisdiction": "AU-ACT",
+        "superannuationNominations": [
+          {
+            "assetId": "d0e1f2a3-9999-4999-d999-999999990001",
+            "nominationType": "reversionary_pension",
+            "taxYear": "2024-25"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — wrong type for nominationType (integer instead of string)",
+      "data": {
+        "jurisdiction": "AU-VIC",
+        "superannuationNominations": [
+          {
+            "assetId": "e1f2a3b4-aaaa-4aaa-eaaa-aaaaaaaaa001",
+            "nominationType": 1
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — family provision claim with relationshipCategory",
+      "data": {
+        "jurisdiction": "AU-NSW",
+        "familyProvisionClaims": [
+          {
+            "claimantPersonId": "ff000005-0000-4000-f000-000000000001",
+            "relationshipCategory": "grandchild",
+            "relationship": "granddaughter of the deceased"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Maori land with whangai recognition",
+      "data": {
+        "jurisdiction": "NZ",
+        "maoriLandDetails": [
+          {
+            "propertyId": "ff000005-0000-4000-f000-000000000002",
+            "successionUnderTeTureWhenua": true,
+            "whangaiRecognised": true,
+            "whangaiPersonId": "ff000005-0000-4000-f000-000000000003"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Aboriginal land with customary adoption",
+      "data": {
+        "jurisdiction": "AU-QLD",
+        "aboriginalLandDetails": [
+          {
+            "propertyId": "ff000005-0000-4000-f000-000000000004",
+            "landType": "torres_strait",
+            "customaryAdoptionRecognised": true
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — relationshipCategory 'friend' not in enum",
+      "data": {
+        "jurisdiction": "AU-VIC",
+        "familyProvisionClaims": [
+          {
+            "claimantPersonId": "ff000005-0000-4000-f000-000000000005",
+            "relationshipCategory": "friend"
+          }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

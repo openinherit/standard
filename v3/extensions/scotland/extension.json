@@ -1,0 +1,49 @@
+{
+  "name": "Scotland",
+  "id": "https://openinherit.org/v3/extensions/scotland/extension.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "GB-SCT"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "islamic-succession",
+    "jewish-succession",
+    "hindu-succession"
+  ],
+  "legalSystems": [
+    "mixed"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-04-04",
+  "dataProvenance": "Succession (Scotland) Act 1964, Trusts and Succession (Scotland) Act 2024, Family Law (Scotland) Act 2006, Crofters (Scotland) Act 1993, Requirements of Writing (Scotland) Act 1995, Land and Buildings Transaction Tax (Scotland) Act 2013, Confirmation of Executors (Scotland) Act 1858",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Prior rights, legal rights (jus relictae/relicti, legitim), confirmation, Sheriff Court jurisdiction, Scottish intestacy, cohabitation rights.",
+  "conformanceRules": [
+    {
+      "id": "sct-001",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "Prior rights must be specified for Scottish estates",
+      "check": "exists",
+      "path": "x-inherit-scotland.priorRights",
+      "severity": "warning"
+    }
+  ],
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "partial",
+  "keyFeatures": "Legal rights (jus relictae/relicti), confirmation, intestacy (2024 Act), heritable/moveable classification, executry, survivorship destinations, crofting succession, LBTT, cohabitation claims",
+  "legalTradition": "Mixed civil / common",
+  "seeking": "",
+  "tier": "core"
+}

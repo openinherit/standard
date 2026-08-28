@@ -1,0 +1,255 @@
+{
+  "target": "../../../v3/nonprobate-transfer.json",
+  "tests": [
+    {
+      "description": "valid minimal nonprobate transfer (required fields only)",
+      "data": {
+        "id": "c5d6e7f8-a9b0-1234-c567-89abcdef0123",
+        "transferType": "jtwros",
+        "passesOutsideEstate": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid fully populated nonprobate transfer — Australian superannuation binding nomination",
+      "data": {
+        "id": "d6e7f8a9-b0c1-2345-d678-9abcdef01234",
+        "transferType": "superannuation_nomination",
+        "designationType": "Binding death benefit nomination",
+        "description": "AustralianSuper account — daughter named as sole binding beneficiary",
+        "assetIds": [
+          "a1b2c3d4-0000-0000-0000-000000000001"
+        ],
+        "beneficiaryPersonIds": [
+          "22222222-0000-0000-0000-000000000002"
+        ],
+        "contingentBeneficiaryPersonIds": [
+          "33333333-0000-0000-0000-000000000003"
+        ],
+        "passesOutsideEstate": true,
+        "bindingNomination": true,
+        "nominationExpiryDate": "2027-03-15",
+        "notes": "Binding nomination renewed March 2024 — expires March 2027. Must be renewed every 3 years."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid nonprobate transfer — Singapore CPF nomination",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "transferType": "cpf_nomination",
+        "description": "CPF ordinary, special, and medisave accounts — joint nomination to spouse and children",
+        "beneficiaryPersonIds": [
+          "44444444-0000-0000-0000-000000000004",
+          "55555555-0000-0000-0000-000000000005"
+        ],
+        "passesOutsideEstate": true,
+        "bindingNomination": true
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing transferType",
+      "data": {
+        "id": "c5d6e7f8-a9b0-1234-c567-89abcdef0123",
+        "passesOutsideEstate": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — passesOutsideEstate wrong type (string instead of boolean)",
+      "data": {
+        "id": "c5d6e7f8-a9b0-1234-c567-89abcdef0123",
+        "transferType": "pod_account",
+        "passesOutsideEstate": "yes"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — transferType not in enum",
+      "data": {
+        "id": "c5d6e7f8-a9b0-1234-c567-89abcdef0123",
+        "transferType": "pension_nomination",
+        "passesOutsideEstate": true
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — JTWROS property (passes outside probate)",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000800",
+        "transferType": "jtwros",
+        "notes": "Property passes by right of survivorship",
+        "passesOutsideEstate": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — pension beneficiary designation",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000801",
+        "transferType": "beneficiary_designation",
+        "notes": "Pension nomination to spouse",
+        "passesOutsideEstate": true
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing id (required field)",
+      "data": {
+        "transferType": "jtwros",
+        "passesOutsideEstate": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing passesOutsideEstate (required field absent)",
+      "data": {
+        "id": "c5d6e7f8-a9b0-1234-c567-89abcdef0123",
+        "transferType": "jtwros"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — transferType as number instead of string",
+      "data": {
+        "id": "c5d6e7f8-a9b0-1234-c567-89abcdef0123",
+        "transferType": 42,
+        "passesOutsideEstate": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a valid UUID format",
+      "data": {
+        "id": "not-a-uuid",
+        "transferType": "jtwros",
+        "passesOutsideEstate": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — nominationExpiryDate is not a valid date format",
+      "data": {
+        "id": "c5d6e7f8-a9b0-1234-c567-89abcdef0123",
+        "transferType": "superannuation_nomination",
+        "passesOutsideEstate": true,
+        "nominationExpiryDate": "15-03-2027"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown property at root level",
+      "data": {
+        "id": "c5d6e7f8-a9b0-1234-c567-89abcdef0123",
+        "transferType": "jtwros",
+        "passesOutsideEstate": true,
+        "unknownField": "should not be here"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — TOD deed with recording reference",
+      "data": {
+        "id": "e0000001-0000-4000-e000-000000010001",
+        "transferType": "tod_deed",
+        "description": "Transfer-on-death deed — house passes directly to daughter",
+        "passesOutsideEstate": true,
+        "recordingReference": "RECORDER-2024-TOD-001234",
+        "jurisdiction": {
+          "country": "US",
+          "subdivision": "US-CA"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — revocable trust transfer",
+      "data": {
+        "id": "e0000002-0000-4000-e000-000000010002",
+        "transferType": "revocable_trust",
+        "description": "Davies Family Revocable Living Trust — all assets in trust pass to beneficiaries",
+        "passesOutsideEstate": true,
+        "trustId": "f1e2d3c4-b5a6-7890-f1e2-d3c4b5a67890"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Malaysian EPF nomination",
+      "data": {
+        "id": "e0000003-0000-4000-e000-000000010003",
+        "transferType": "epf_nomination",
+        "description": "Employees Provident Fund Account 1 — spouse and children nominated",
+        "beneficiaryPersonIds": [
+          "11111111-0000-4000-a000-000000000001",
+          "22222222-0000-4000-a000-000000000002"
+        ],
+        "passesOutsideEstate": true,
+        "bindingNomination": true,
+        "jurisdiction": {
+          "country": "MY"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — tenancy by entirety",
+      "data": {
+        "id": "e0000004-0000-4000-e000-000000010004",
+        "transferType": "tenancy_by_entirety",
+        "description": "Joint marital property — passes automatically to surviving spouse",
+        "passesOutsideEstate": true,
+        "survivingOwnerPersonIds": [
+          "33333333-0000-4000-a000-000000000003"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — mandatory savings nomination",
+      "data": {
+        "id": "e0000005-0000-4000-e000-000000010005",
+        "transferType": "mandatory_savings_nomination",
+        "description": "National provident fund nomination",
+        "passesOutsideEstate": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — passesOutsideEstate: false (edge case for data modelling)",
+      "data": {
+        "id": "e0000006-0000-4000-e000-000000010006",
+        "transferType": "pod_account",
+        "passesOutsideEstate": false
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — nonprobate transfer with designationConflict",
+      "data": {
+        "id": "e0000007-0000-4000-e000-000000010007",
+        "transferType": "beneficiary_designation",
+        "passesOutsideEstate": true,
+        "designationConflict": {
+          "exists": true,
+          "conflictsWith": "bequest",
+          "resolution": "unresolved"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — nonprobate transfer with revocationDetails",
+      "data": {
+        "id": "e0000008-0000-4000-e000-000000010008",
+        "transferType": "life_insurance_nomination",
+        "passesOutsideEstate": true,
+        "revocationDetails": {
+          "revokedDate": "2025-06-15",
+          "revokedBy": "testator"
+        }
+      },
+      "valid": true
+    }
+  ]
+}

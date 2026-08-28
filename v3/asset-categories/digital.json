@@ -1,0 +1,756 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/asset-categories/digital.json",
+  "title": "Digital Asset Properties",
+  "description": "Category-specific properties for digital assets: domains, social media, subscriptions, crypto wallets, cloud storage, NFTs, gaming accounts",
+  "$comment": "This schema is composed with asset.json via allOf+if/then. Do NOT use additionalProperties:false here — it would reject core asset fields.",
+  "type": "object",
+  "properties": {
+    "digitalAccess": {
+      "description": "Structured access information for digital assets — login credentials, 2FA, recovery methods, and platform death policies. Critical for executors managing the digital estate",
+      "$comment": "For digital category assets. Does NOT store passwords — stores references to where credentials are held.",
+      "type": "object",
+      "properties": {
+        "username": {
+          "description": "Username or login identifier for this account",
+          "examples": [ "john.davies@example.com", "@johndavies" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "passwordStorageLocation": {
+          "description": "Where the password is stored — a password manager, physical location, or person who holds it",
+          "examples": [
+            "LastPass vault",
+            "Safe deposit box at Barclays Wrexham",
+            "Written in sealed envelope with solicitor"
+          ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "passwordManager": {
+          "description": "Name of the password manager holding credentials for this account",
+          "examples": [ "LastPass", "1Password", "Bitwarden", "Apple Keychain" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "twoFactorEnabled": {
+          "description": "Whether two-factor authentication is enabled on this account",
+          "examples": [ true, false ],
+          "type": "boolean"
+        },
+        "recoveryMethods": {
+          "description": "Methods available to recover access to this account if the primary credentials are unavailable",
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "description": "Type of recovery method",
+                "$comment": "backup_codes: pre-generated one-time codes. email: recovery via email address. phone: recovery via phone number. security_key: physical security key (YubiKey, etc.).",
+                "enum": [ "backup_codes", "email", "phone", "security_key" ]
+              },
+              "location": {
+                "description": "Where this recovery method or device is stored",
+                "examples": [
+                  "Backup codes in LastPass secure notes",
+                  "Recovery phone: +44 7700 900123"
+                ],
+                "type": "string",
+                "maxLength": 500
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "platformDeathPolicy": {
+          "description": "The platform's policy for handling accounts after the holder's death",
+          "$comment": "memorialise: account is converted to a memorial page (Facebook). delete: account is deleted on request. transfer: account ownership can be transferred. archive: account is archived and data can be downloaded. unknown: policy not known or not investigated.",
+          "examples": [ "memorialise", "delete" ],
+          "anyOf": [
+            {
+              "enum": [
+                "memorialise",
+                "delete",
+                "transfer",
+                "archive",
+                "unknown"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "legacyContactConfigured": {
+          "description": "Whether a legacy contact has been configured on the platform (e.g. Google Inactive Account Manager, Facebook Legacy Contact)",
+          "examples": [ true, false ],
+          "type": "boolean"
+        },
+        "legacyContactPersonId": {
+          "description": "Reference to the Person.id configured as the platform's legacy contact",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    },
+    "socialMedia": {
+      "description": "Social media account details for digital assets",
+      "type": "object",
+      "properties": {
+        "platform": {
+          "description": "The social media platform",
+          "anyOf": [
+            {
+              "enum": [
+                "facebook",
+                "instagram",
+                "tiktok",
+                "twitter_x",
+                "linkedin",
+                "threads",
+                "youtube",
+                "pinterest",
+                "other"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "username": {
+          "description": "Username or handle",
+          "examples": [ "@johndavies" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "url": {
+          "description": "Direct URL to the profile",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9+.-]*://",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "followerCount": {
+          "description": "Number of followers",
+          "type": "integer",
+          "minimum": 0
+        },
+        "monetised": {
+          "description": "Whether the account generates revenue",
+          "type": "boolean"
+        },
+        "postDeathAction": {
+          "description": "Preferred action after death",
+          "anyOf": [
+            {
+              "enum": [
+                "memorialise",
+                "delete",
+                "transfer",
+                "archive",
+                "unknown"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "transferToPersonId": {
+          "description": "Person.id to transfer the account to",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    },
+    "cryptoAccess": {
+      "description": "Cryptocurrency wallet and key access information",
+      "type": "object",
+      "properties": {
+        "blockchain": {
+          "description": "The blockchain network",
+          "anyOf": [
+            {
+              "enum": [ "bitcoin", "ethereum", "solana", "cardano", "other" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "walletType": {
+          "description": "Type of wallet",
+          "enum": [ "hardware", "software", "exchange", "custodian", "paper" ]
+        },
+        "walletAddress": {
+          "description": "Public wallet address",
+          "type": "string",
+          "maxLength": 255
+        },
+        "privateKeyLocation": {
+          "description": "Where the private key is stored — DO NOT store the key itself",
+          "type": "string",
+          "maxLength": 500
+        },
+        "seedPhraseLocation": {
+          "description": "Where the seed phrase is stored — DO NOT store it",
+          "type": "string",
+          "maxLength": 500
+        },
+        "exchangeOrganisationId": {
+          "description": "Organisation.id of the exchange",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "costBasis": {
+          "description": "Original cost basis for CGT",
+          "$ref": "../common/money.json"
+        }
+      },
+      "additionalProperties": false
+    },
+    "cloudStorage": {
+      "description": "Cloud storage account details for digital assets — provider, usage, important folders, family photo access",
+      "type": "object",
+      "properties": {
+        "provider": {
+          "description": "Cloud storage provider",
+          "anyOf": [
+            {
+              "enum": [
+                "google_drive",
+                "onedrive",
+                "icloud",
+                "dropbox",
+                "aws_s3",
+                "other"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "storageUsed": {
+          "description": "Amount of storage used",
+          "examples": [ "45 GB of 100 GB", "2.1 TB" ],
+          "type": "string",
+          "maxLength": 50
+        },
+        "importantFolders": {
+          "description": "Important folders that need attention during estate administration",
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Folder name",
+                "examples": [ "Family Photos", "Financial Documents" ],
+                "type": "string",
+                "maxLength": 255
+              },
+              "contents": {
+                "description": "Description of folder contents",
+                "type": "string",
+                "maxLength": 500
+              },
+              "action": {
+                "description": "What should happen to this folder",
+                "enum": [ "archive", "delete", "transfer" ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "familyPhotoAccess": {
+          "description": "Whether the account contains family photos that should be preserved and shared",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "domainNameAccess": {
+      "description": "Domain name registration details — registrar, expiry, transfer locks. Critical for executors managing digital estates with web properties",
+      "$comment": "RDAP (Registration Data Access Protocol, RFC 9082/9083) replaced WHOIS. Domain transfers require an auth code — never store the code itself, only its location.",
+      "type": "object",
+      "properties": {
+        "domainName": {
+          "description": "The registered domain name",
+          "examples": [ "example.com", "family-trust.co.uk" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "registrar": {
+          "description": "Domain registrar name",
+          "examples": [ "GoDaddy", "Namecheap", "Cloudflare Registrar" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "registrantOrganisationId": {
+          "description": "Organisation.id of the registrant, if the domain is held by an organisation",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "expiryDate": {
+          "description": "Domain registration expiry date",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "autoRenew": {
+          "description": "Whether automatic renewal is enabled",
+          "type": "boolean"
+        },
+        "transferLocked": {
+          "description": "Whether the domain has a transfer lock (registrar lock / clientTransferProhibited)",
+          "type": "boolean"
+        },
+        "authCodeLocation": {
+          "description": "Where the transfer auth code is stored — reference only, never the code itself",
+          "type": "string",
+          "maxLength": 500
+        },
+        "nameservers": {
+          "description": "Nameservers currently assigned to the domain",
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "nftAccess": {
+      "description": "Non-fungible token (NFT) details — blockchain, contract, token identifier, and marketplace information",
+      "$comment": "ERC-721 (https://eips.ethereum.org/EIPS/eip-721) and ERC-1155 (https://eips.ethereum.org/EIPS/eip-1155) are the dominant NFT standards. tokenId is a string because ERC-1155 token IDs can exceed JavaScript's Number.MAX_SAFE_INTEGER.",
+      "type": "object",
+      "properties": {
+        "blockchain": {
+          "description": "The blockchain network hosting the NFT",
+          "anyOf": [
+            {
+              "enum": [
+                "bitcoin",
+                "ethereum",
+                "solana",
+                "cardano",
+                "polygon",
+                "other"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "contractAddress": {
+          "description": "Smart contract address for the NFT collection",
+          "examples": [ "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "tokenId": {
+          "description": "Token identifier — string because can be very large integers",
+          "examples": [ "42", "115792089237316195423570985008687907853269" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "tokenStandard": {
+          "description": "The token standard used by the NFT contract",
+          "anyOf": [
+            {
+              "enum": [ "erc_721", "erc_1155", "other" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "marketplace": {
+          "description": "Primary marketplace where this NFT is listed or was purchased",
+          "examples": [ "OpenSea", "Rarible", "Magic Eden" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "marketplaceUrl": {
+          "description": "Direct URL to the NFT listing on the marketplace",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9+.-]*://",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "metadataUri": {
+          "description": "Points to off-chain metadata JSON (tokenURI)",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9+.-]*://",
+          "format": "uri",
+          "maxLength": 2048
+        }
+      },
+      "additionalProperties": false
+    },
+    "monetisedContentAccess": {
+      "description": "Monetised online content — YouTube channels, Substack newsletters, Patreon pages, and similar revenue-generating content platforms",
+      "$comment": "Revenue and subscriber data helps executors understand the ongoing financial value of digital content assets.",
+      "type": "object",
+      "properties": {
+        "platform": {
+          "description": "Content platform",
+          "anyOf": [
+            {
+              "enum": [
+                "youtube",
+                "substack",
+                "etsy",
+                "patreon",
+                "twitch",
+                "spotify",
+                "medium",
+                "other"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "channelUrl": {
+          "description": "Direct URL to the channel or storefront",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9+.-]*://",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "channelName": {
+          "description": "Display name of the channel or storefront",
+          "type": "string",
+          "maxLength": 255
+        },
+        "subscriberCount": {
+          "description": "Number of subscribers or followers on the platform",
+          "type": "integer",
+          "minimum": 0
+        },
+        "monthlyRevenue": {
+          "description": "Approximate monthly revenue from the platform, in minor currency units",
+          "$ref": "../common/money.json"
+        },
+        "monetisationStatus": {
+          "description": "Current monetisation status of the content",
+          "$comment": "active: currently earning revenue. suspended: temporarily suspended by the platform. demonetised: monetisation removed by the platform. pending: applied for monetisation, awaiting approval. none: not monetised.",
+          "anyOf": [
+            {
+              "enum": [
+                "active",
+                "suspended",
+                "demonetised",
+                "pending",
+                "none"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "contentType": {
+          "description": "Primary type of content produced",
+          "anyOf": [
+            {
+              "enum": [ "video", "audio", "written", "mixed", "other" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "revenueModel": {
+          "description": "How the content generates revenue",
+          "anyOf": [
+            {
+              "enum": [
+                "advertising",
+                "subscription",
+                "tips",
+                "affiliate",
+                "merchandise",
+                "mixed"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "loyaltyAccess": {
+      "description": "Loyalty programme points and rewards — airline miles, hotel points, retailer schemes. Some programmes permit post-death transfer; others forfeit on death",
+      "$comment": "Transferability varies by programme. Avios, for example, can be transferred to a named beneficiary. Many hotel and retail programmes forfeit points on death — check terms.",
+      "type": "object",
+      "properties": {
+        "programme": {
+          "description": "Name of the loyalty programme",
+          "examples": [ "Avios", "Nectar", "Tesco Clubcard" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "programmeProvider": {
+          "description": "Organisation that operates the programme",
+          "examples": [ "British Airways", "Sainsbury's", "Tesco" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "pointsBalance": {
+          "description": "Current points balance",
+          "type": "integer",
+          "minimum": 0
+        },
+        "cashEquivalent": {
+          "description": "Approximate cash equivalent of the points balance, in minor currency units",
+          "$ref": "../common/money.json"
+        },
+        "expiryDate": {
+          "description": "Date when the points expire if not used",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "transferable": {
+          "description": "Whether the programme permits transfer of points after death",
+          "type": "boolean"
+        },
+        "transferUrl": {
+          "description": "URL to the programme's transfer or bereavement page",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9+.-]*://",
+          "format": "uri",
+          "maxLength": 2048
+        }
+      },
+      "additionalProperties": false
+    },
+    "gamingAccess": {
+      "description": "Gaming platform account details — Steam, Xbox, PlayStation, and similar platforms with virtual currencies and digital game libraries",
+      "$comment": "Most gaming platforms do not permit account transfer after death — the account and its library are typically non-transferable per terms of service. Virtual currency balances may have real-world value.",
+      "type": "object",
+      "properties": {
+        "platform": {
+          "description": "Gaming platform",
+          "anyOf": [
+            {
+              "enum": [
+                "steam",
+                "xbox",
+                "playstation",
+                "nintendo",
+                "epic",
+                "roblox",
+                "other"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "accountName": {
+          "description": "Account name or gamertag on the platform",
+          "examples": [ "testator_gamer", "GamerTag#1234" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "virtualCurrencyBalance": {
+          "description": "Balance of virtual currency on the platform",
+          "type": "integer",
+          "minimum": 0
+        },
+        "virtualCurrencyName": {
+          "description": "Name of the virtual currency",
+          "examples": [ "Steam Wallet Funds", "V-Bucks", "Robux" ],
+          "type": "string",
+          "maxLength": 100
+        },
+        "transferable": {
+          "description": "Whether the platform permits account or library transfer after death",
+          "type": "boolean"
+        },
+        "estimatedRealValue": {
+          "description": "Estimated real-world value of the account's digital assets, in minor currency units",
+          "$ref": "../common/money.json"
+        }
+      },
+      "additionalProperties": false
+    },
+    "platformDelegation": {
+      "description": "Instructions for what should happen to a digital asset or account after death — memorialise, delete, transfer, archive, or preserve",
+      "$comment": "Complements digitalAccess.platformDeathPolicy (what the platform offers) with the testator's actual wishes. delayDuration uses ISO 8601 duration format.",
+      "type": "object",
+      "required": [ "action" ],
+      "properties": {
+        "action": {
+          "description": "Desired post-death action for this digital asset",
+          "$comment": "memorialise: convert to a memorial page. delete: permanently delete the account and its content. transfer: transfer ownership to another person. archive: download and archive all data, then close. deactivate: disable the account without deleting data. preserve: keep the account active and unchanged indefinitely.",
+          "anyOf": [
+            {
+              "enum": [
+                "memorialise",
+                "delete",
+                "transfer",
+                "archive",
+                "deactivate",
+                "preserve"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "delayDuration": {
+          "description": "How long to wait before executing the action, as an ISO 8601 duration",
+          "examples": [ "P6M", "P1Y", "P5Y" ],
+          "type": "string",
+          "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$"
+        },
+        "transferToPersonId": {
+          "description": "Person.id to transfer the asset to (when action is 'transfer')",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "specificInstructions": {
+          "description": "Free-text instructions for the executor regarding this digital asset",
+          "type": "string",
+          "maxLength": 500
+        },
+        "platformToolConfigured": {
+          "description": "Whether the platform's native death/inactivity tool has been set up",
+          "type": "boolean"
+        },
+        "platformToolType": {
+          "description": "Which platform tool has been configured, if any",
+          "$comment": "inactive_account_manager: Google Inactive Account Manager. legacy_contact: Facebook/Apple Legacy Contact. digital_legacy: Apple Digital Legacy. memorialisation_request: Facebook memorialisation. none: no tool configured. other: a platform-specific tool not listed.",
+          "anyOf": [
+            {
+              "enum": [
+                "inactive_account_manager",
+                "legacy_contact",
+                "digital_legacy",
+                "memorialisation_request",
+                "none",
+                "other"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "configuredDate": {
+          "description": "Date when the platform tool was configured",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "fiduciaryAccess": {
+      "description": "How a fiduciary (executor, personal representative) can gain lawful access to this digital asset after death",
+      "$comment": "RUFADAA (Revised Uniform Fiduciary Access to Digital Assets Act) is the US model law governing fiduciary access to digital assets. It distinguishes between 'catalogue' access (metadata: sender, recipient, date) and 'content' access (message bodies, files). Many US states have enacted RUFADAA or similar legislation. See https://www.uniformlaws.org/committees/community-home?CommunityKey=f7237fc4-74c2-4728-81c6-b39a91ecdf22",
+      "type": "object",
+      "required": [ "accessMethod" ],
+      "properties": {
+        "accessMethod": {
+          "description": "The method by which a fiduciary can access this digital asset",
+          "$comment": "designated_recipient: named in an online tool (Google IAM, Apple Digital Legacy). legacy_contact: platform-specific legacy contact. inactive_account_manager: Google-specific inactivity tool. court_order: requires a court order. rufadaa_request: request under RUFADAA or equivalent statute. platform_form: submit a bereavement form to the platform. credential_sharing: credentials shared directly (least preferred). none: no access method available or configured.",
+          "anyOf": [
+            {
+              "enum": [
+                "designated_recipient",
+                "legacy_contact",
+                "inactive_account_manager",
+                "court_order",
+                "rufadaa_request",
+                "platform_form",
+                "credential_sharing",
+                "none"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "accessConfigured": {
+          "description": "Whether the chosen access method has been set up with the platform",
+          "type": "boolean"
+        },
+        "designatedRecipientPersonId": {
+          "description": "Person.id of the designated recipient for this digital asset",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "accessScope": {
+          "description": "RUFADAA catalogue vs content distinction",
+          "$comment": "catalogue_only: metadata only (sender, recipient, date, subject). full_content: complete access to message bodies and files. restricted: platform-specific restrictions apply. unknown: scope not determined.",
+          "anyOf": [
+            {
+              "enum": [
+                "catalogue_only",
+                "full_content",
+                "restricted",
+                "unknown"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "termsOfServiceUrl": {
+          "description": "URL to the platform's terms of service or bereavement policy",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9+.-]*://",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "termsOfServiceConstraints": {
+          "description": "Summary of key constraints from the platform's terms of service that affect fiduciary access",
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

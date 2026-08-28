@@ -1,0 +1,289 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/catalogue.json",
+  "title": "INHERIT v2 Catalogue Schema",
+  "description": "Lightweight root schema for catalogue-only documents — living collectors cataloguing items without the full estate envelope. Assets, collections, valuations, and legacy contacts. Upgrade path: wrap in a full estate document (schema.json) when needed",
+  "type": "object",
+  "required": [ "assets" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|@context|\\$schema|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "$schema": {
+      "description": "Schema identifier — declares this as an INHERIT v3 catalogue document",
+      "const": "https://openinherit.org/v3/catalogue.json"
+    },
+    "@context": {
+      "description": "JSON-LD context URI",
+      "examples": [ "https://openinherit.org/v3/context/inherit-v3.jsonld" ],
+      "x-lint-exclude": [ "simple_properties_identifiers" ],
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9+.-]*://",
+      "format": "uri",
+      "maxLength": 2048
+    },
+    "schemaVersion": {
+      "examples": [ "1.3.0" ],
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "maxLength": 255
+    },
+    "exportedAt": {
+      "readOnly": true,
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "exportedBy": {
+      "readOnly": true,
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "email": {
+          "type": "string",
+          "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+          "format": "email"
+        }
+      },
+      "additionalProperties": false
+    },
+    "generator": {
+      "readOnly": true,
+      "type": "object",
+      "required": [ "name" ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "url": {
+          "type": "string",
+          "maxLength": 2048
+        }
+      },
+      "additionalProperties": false
+    },
+    "documentVersion": {
+      "description": "Sequential version number for this document. Incremented each time the document is substantively modified. Version 1 is the first version",
+      "type": "integer",
+      "minimum": 1
+    },
+    "versionedAt": {
+      "description": "When this version of the document was created. Courts and regulators care about when changes were made, not just which version number",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "previousVersionId": {
+      "description": "Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version",
+      "type": [ "string", "null" ],
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "changeDescription": {
+      "description": "Human-readable summary of what changed in this version. Like a commit message for the document",
+      "type": "string",
+      "maxLength": 2000
+    },
+    "assets": {
+      "description": "The catalogued items",
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "asset.json"
+      }
+    },
+    "assetCollections": {
+      "description": "Named groupings of assets",
+      "type": "array",
+      "maxItems": 500,
+      "items": {
+        "$ref": "asset-collection.json"
+      }
+    },
+    "organisations": {
+      "description": "Organisations associated with catalogued assets — dealers, retailers, valuers, auction houses",
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "organisation.json"
+      }
+    },
+    "spaces": {
+      "description": "Physical storage locations for items in this catalogue. Each asset can reference a space via spaceId. Critical for collectors with items across multiple properties or countries — affects probate jurisdiction and dealer collection logistics",
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "space.json"
+      }
+    },
+    "valuations": {
+      "description": "Valuations of items and collections",
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "valuation.json"
+      }
+    },
+    "legacyContacts": {
+      "description": "People to notify and grant access when the owner dies. The 'Please open when I have passed away' letter recipients",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "schema.json#/properties/applicationState/properties/legacyContacts/items"
+      }
+    },
+    "assetInterests": {
+      "description": "Expressions of interest about assets, collections, or products. Includes the catalogue owner's own wishlist (things they want to acquire), interest from other people, and allocation intentions. Complements assets[] — assets are things you own; assetInterests are things you want, things others want, and decisions about who gets what",
+      "type": "array",
+      "maxItems": 5000,
+      "items": {
+        "$ref": "asset-interest.json"
+      }
+    },
+    "wishes": {
+      "description": "Personal messages, letters, care instructions, and non-binding wishes. Complements legacyContacts — legacyContacts tracks who receives the letter; wishes stores what it says. Types: letter (personal messages to specific people), care (maintenance and care instructions for items or collections), distribution (non-binding preferences about what should happen to items), general (anything else)",
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "wish.json"
+      }
+    },
+    "dataProvenance": {
+      "description": "Default data provenance for entities in this catalogue",
+      "enum": [
+        "manual_entry",
+        "ai_extracted",
+        "ocr_scanned",
+        "imported",
+        "migrated",
+        "system_generated"
+      ]
+    },
+    "importSources": {
+      "description": "Systems data was imported from",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "schema.json#/properties/importSources/items"
+      }
+    },
+    "completeness": {
+      "$ref": "common/completeness.json"
+    },
+    "recommendedActions": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "schema.json#/properties/applicationState/properties/recommendedActions/items"
+      }
+    },
+    "conformance": {
+      "$ref": "schema.json#/properties/conformance"
+    },
+    "insurancePolicies": {
+      "description": "Insurance policies associated with catalogued assets",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "insurance-policy.json"
+      }
+    },
+    "dealerInterests": {
+      "description": "Provisional offers and expressions of interest from dealers. Allows the catalogue owner to receive and track dealer offers on items they are considering selling, or standing offers to be included in the LegacyLetter",
+      "type": "array",
+      "maxItems": 2000,
+      "items": {
+        "$ref": "dealer-interest.json"
+      }
+    },
+    "giftListSettings": {
+      "description": "Settings for the shareable gift wishlist. When enabled, the owner can share a public link to their wishlist for family and friends to buy from",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Whether the gift list is currently shareable",
+          "type": "boolean"
+        },
+        "personalMessage": {
+          "description": "The owner's personal message shown at the top of the gift list",
+          "type": "string",
+          "maxLength": 2000
+        },
+        "visibility": {
+          "description": "Who can see the gift list",
+          "enum": [ "public", "link_only", "private" ]
+        },
+        "fulfilledItems": {
+          "description": "Asset interest IDs that someone has marked as bought. These are hidden from the public gift list to prevent duplicate gifts",
+          "type": "array",
+          "maxItems": 5000,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "legacyLetter": {
+      "description": "Metadata about the LegacyLetter — the printed or digital document addressed to the owner's legacy contacts, summarising the catalogue, allocations, dealer offers, and personal messages. Tracks generation status to flag when the letter is stale",
+      "type": "object",
+      "properties": {
+        "lastGenerated": {
+          "description": "When the letter was last generated",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "version": {
+          "description": "Incremental version number of the letter",
+          "type": "integer",
+          "minimum": 1
+        },
+        "delivered": {
+          "description": "Whether the letter has been delivered to the legacy contacts",
+          "type": "boolean"
+        },
+        "deliveryMethod": {
+          "description": "How the letter was delivered",
+          "enum": [ "printed", "digital", "both" ]
+        },
+        "itemCountAtGeneration": {
+          "description": "Number of items in the catalogue when the letter was last generated. Used to detect staleness — if the current item count differs significantly, the letter should be regenerated",
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "auditLog": {
+      "description": "Formal audit trail of actions taken on this document. Records who changed what, when, and why. Uses person ID references for GDPR data minimisation. Entries may be redacted under Article 17(3)(e) without breaking the log structure. Retention aligns with the estate document lifecycle",
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "common/audit-event.json"
+      }
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 200,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

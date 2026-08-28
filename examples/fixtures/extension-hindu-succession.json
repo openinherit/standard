@@ -1,0 +1,80 @@
+{
+  "$comment": "Test fixture exercising all fields of the hindu-succession extension",
+  "applicableLaw": "hindu_succession_act_1956",
+  "school": "mitakshara",
+  "hufDetails": {
+    "kartaPersonId": "a1a1a1a1-b2b2-4c3c-d4d4-e5e5e5e5e5e5",
+    "coparceners": [
+      {
+        "personId": "b2b2b2b2-c3c3-4d4d-e5e5-f6f6f6f6f6f6",
+        "relationship": "Son of the karta",
+        "coparcenaryShareFraction": "1/4"
+      },
+      {
+        "personId": "c3c3c3c3-d4d4-4e5e-f6f6-a7a7a7a7a7a7",
+        "relationship": "Daughter of the karta (post-2005 amendment)",
+        "coparcenaryShareFraction": "1/4"
+      }
+    ],
+    "panNumber": "ABCDE1234F"
+  },
+  "heirClassifications": [
+    {
+      "personId": "b2b2b2b2-c3c3-4d4d-e5e5-f6f6f6f6f6f6",
+      "heirClass": "class_I",
+      "scheduleParagraph": "Schedule, Class I, entry (ii) — son",
+      "disputed": false,
+      "disputeDetails": ""
+    },
+    {
+      "personId": "d4d4d4d4-e5e5-4f6f-a7a7-b8b8b8b8b8b8",
+      "heirClass": "class_II",
+      "scheduleParagraph": "Schedule, Class II, Category I — father",
+      "disputed": true,
+      "disputeDetails": "Claim disputed on grounds that the deceased was separated from the joint family prior to death"
+    }
+  ],
+  "stridhanAssets": [
+    {
+      "assetId": "e5e5e5e5-f6f6-4a7a-b8b8-c9c9c9c9c9c9",
+      "description": "Gold jewellery received by the deceased's wife at the time of marriage (streedhan)",
+      "notes": "Includes mangalsutra and bangles gifted by maternal family; valued by certified jeweller"
+    },
+    {
+      "assetId": "f6f6f6f6-a7a7-4b8b-c9c9-d0d0d0d0d0d0",
+      "description": "Fixed deposit in wife's name opened with gifts received during Diwali celebrations",
+      "notes": "SBI fixed deposit account number XXXXXXXXX2847; maturity date 2027-04-01"
+    }
+  ],
+  "agriculturalLand": [
+    {
+      "propertyId": "11111111-2222-4333-4444-555555555555",
+      "state": "IN-MH",
+      "stateSuccessionLaw": "Maharashtra Hindu Succession (Amendment) Act",
+      "ceilingApplies": true
+    },
+    {
+      "propertyId": "22222222-3333-4444-5555-666666666666",
+      "state": "IN-KA",
+      "stateSuccessionLaw": "Karnataka Land Reforms Act 1961",
+      "ceilingApplies": false
+    }
+  ],
+  "nriComplications": {
+    "applicable": true,
+    "foreignJurisdiction": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England"
+    },
+    "taxImplications": "Double taxation relief under India-UK DTAA; capital gains on Indian immovable property taxable in India",
+    "notes": "Deceased held NRI status with domicile in England. FEMA regulations apply to repatriation of inherited assets. RBI approval may be required for agricultural land transfer."
+  },
+  "notes": "Estate of a Hindu male who was karta of a Mitakshara HUF, domiciled in Mumbai but holding NRI status in England. The 2005 amendment to the Hindu Succession Act applies, granting daughters equal coparcenary rights. Agricultural land in Maharashtra subject to state ceiling laws.",
+  "x-inherit-huf-partition": {
+    "value": "Partial partition of ancestral property effected by registered deed dated 2019-08-22"
+  }
+}

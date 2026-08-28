@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/uae/uae.json",
+  "title": "UAE Extension",
+  "description": "UAE succession law — dual-track (Sharia default vs DIFC common law), DWSC registered wills, expatriate handling under Federal Decree-Law No. 41/2022; includes ADGM wills service, non-Muslim court registration, UAE real property treatment, and dual-track dispute resolution (Sharia vs common law)",
+  "type": "object",
+  "required": [
+    "successionTrack"
+  ],
+  "properties": {
+    "successionTrack": {
+      "description": "Which succession track applies — Sharia (default for Muslims) or DIFC (opted-in for non-Muslims)",
+      "enum": [
+        "sharia",
+        "difc",
+        "decree_law_41_home_country"
+      ]
+    },
+    "difcWill": {
+      "description": "DIFC Wills and Probate Registry details",
+      "type": "object",
+      "properties": {
+        "registered": {
+          "type": "boolean"
+        },
+        "registrationNumber": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "registrationDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "willType": {
+          "enum": [
+            "full",
+            "property",
+            "guardianship",
+            "financial_assets",
+            "business_owners"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "emirate": {
+      "description": "Which emirate the estate is primarily administered in — different emirates have different courts",
+      "enum": [
+        "abu_dhabi",
+        "dubai",
+        "sharjah",
+        "ajman",
+        "umm_al_quwain",
+        "ras_al_khaimah",
+        "fujairah"
+      ]
+    },
+    "expatriateHandling": {
+      "description": "Under Federal Decree-Law No. 41/2022, non-Muslim expatriates may elect home country law",
+      "type": "object",
+      "properties": {
+        "homeCountryLawElected": {
+          "type": "boolean"
+        },
+        "homeCountry": {
+          "$ref": "../../common/jurisdiction.json"
+        },
+        "decreeApplicable": {
+          "type": "boolean",
+          "description": "Whether Decree-Law 41/2022 applies"
+        }
+      },
+      "additionalProperties": false
+    },
+    "freeZoneAssets": {
+      "description": "Assets held in UAE free zones may have different treatment",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "freeZone": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "assetType": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "estimatedValue": {
+            "$ref": "../../common/money.json"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "shariaFixedShares": {
+      "description": "Sharia fixed-share (fara'id) application under UAE Personal Status Law (Federal Law No. 28/2005)",
+      "$comment": "For full faraid (Islamic inheritance) modelling, use the islamic-succession extension which provides comprehensive heir classification, fixed share fractions, residuary (asaba) hierarchy, and awl/radd adjustments. This section records whether faraid was applied and any court reference, but the detailed heir classification belongs in the Islamic extension.",
+      "type": "object",
+      "properties": {
+        "appliedByDefault": {
+          "type": "boolean"
+        },
+        "courtReference": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "qadiFatwaSought": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "adgmWill": {
+      "description": "Abu Dhabi Global Market (ADGM) Wills Service — alternative to DIFC for Abu Dhabi residents",
+      "type": "object",
+      "properties": {
+        "registered": {
+          "type": "boolean"
+        },
+        "registrationNumber": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "registrationDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "willType": {
+          "enum": [
+            "full",
+            "property",
+            "guardianship",
+            "business_owners"
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "nonMuslimWillRegistration": {
+      "description": "Non-Muslim will registration with local courts (Dubai Courts, Abu Dhabi Judicial Department)",
+      "type": "object",
+      "properties": {
+        "registered": {
+          "type": "boolean"
+        },
+        "registrationCourt": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "registrationEmirateCode": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "registrationDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "recognisedByLocalCourt": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "propertyTreatment": {
+      "description": "UAE real property treatment — freehold only available to foreigners in designated areas",
+      "type": "object",
+      "properties": {
+        "tenureType": {
+          "enum": [
+            "freehold",
+            "leasehold",
+            "usufruct",
+            "musataha"
+          ]
+        },
+        "designatedArea": {
+          "type": "boolean",
+          "description": "Whether property is in a foreigners-permitted freehold zone"
+        },
+        "propertyRegistrationAuthority": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "disputeResolution": {
+      "description": "Inheritance dispute resolution forum — dual-track system (Sharia vs common law)",
+      "type": "object",
+      "properties": {
+        "forum": {
+          "enum": [
+            "sharia_court",
+            "civil_court",
+            "difc_court",
+            "adgm_court",
+            "mediation"
+          ]
+        },
+        "caseReference": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "resolved",
+            "appealed"
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "homeCountryLawElection": {
+      "description": "Election to apply home-country succession law under Federal Decree Law No. 41 of 2022. Available to non-Muslims — allows election of home-country law instead of Sharia",
+      "type": "object",
+      "properties": {
+        "electedCountry": {
+          "description": "ISO 3166-1 alpha-2 country code of the elected succession law",
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "electionRegistered": {
+          "description": "Whether the election has been formally registered",
+          "type": "boolean"
+        },
+        "registrationReference": {
+          "description": "Registration reference number",
+          "type": "string",
+          "maxLength": 200
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "marriageRevocation": {
+      "type": "object",
+      "description": "Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs.",
+      "properties": {
+        "revokesPriorWill": { "type": "boolean" },
+        "statute": { "type": "string", "maxLength": 255 },
+        "statuteUrl": { "type": "string", "format": "uri", "maxLength": 500 },
+        "contemplationException": { "type": "boolean" },
+        "contemplationRule": { "type": "string", "maxLength": 2000 },
+        "notes": { "type": "string", "maxLength": 2000 }
+      },
+      "required": ["revokesPriorWill", "statute"],
+      "additionalProperties": false
+    }
+  },
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

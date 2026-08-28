@@ -1,0 +1,1592 @@
+{
+  "target": "../../../v3/bequest.json",
+  "tests": [
+    {
+      "description": "valid specific bequest with beneficiaryId",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000001",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "description": "My Rolex Submariner watch"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid specific bequest with beneficiaryOrganisation",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000002",
+        "bequestType": "specific",
+        "beneficiaryOrganisation": {
+          "name": "British Heart Foundation",
+          "type": "charity",
+          "registrationNumber": "225971"
+        },
+        "description": "My art collection"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid pecuniary bequest",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000003",
+        "bequestType": "pecuniary",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000002",
+        "amount": {
+          "amount": 1000000,
+          "currency": "GBP"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing required id",
+      "data": {
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "description": "My watch"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required type",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000001",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "description": "My watch"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 unknown type value",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000001",
+        "bequestType": "magic",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid: bequest with x-inherit- extension type",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-a789-0123456789ab",
+        "bequestType": "x-inherit-wasiyya"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid: bequest with old extensionType field",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-a789-0123456789ab",
+        "bequestType": "specific",
+        "extensionType": "wasiyya",
+        "beneficiaryId": "b8c9d0e1-f2a3-4567-8901-23456789abcd"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid: bequest with x-inherit- distribution method",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-a789-0123456789ab",
+        "bequestType": "residuary",
+        "beneficiaryId": "b8c9d0e1-f2a3-4567-8901-23456789abcd",
+        "distributionMethod": "x-inherit-halachic-yerusha"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid: old halachic_yerusha value (now removed from core)",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-a789-0123456789ab",
+        "bequestType": "residuary",
+        "beneficiaryId": "b8c9d0e1-f2a3-4567-8901-23456789abcd",
+        "distributionMethod": "halachic_yerusha"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 specific bequest referencing a collection",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000020",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "assetCollectionId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "description": "My model railway collection"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 bequest with both assetIds AND assetCollectionId (exclusivity violation)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000021",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "assetIds": [
+          "d73880dc-c616-4724-ad29-79364bad1719"
+        ],
+        "assetCollectionId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 assetCollectionId wrong format",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000022",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "assetCollectionId": "not-a-uuid"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 pecuniary bequest with amount",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000500",
+        "bequestType": "pecuniary",
+        "beneficiaryId": "b2c3d4e5-0000-4000-a000-000000000500",
+        "amount": {
+          "amount": 500000,
+          "currency": "GBP"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 residuary bequest with percentage",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000501",
+        "bequestType": "residuary",
+        "beneficiaryId": "b2c3d4e5-0000-4000-a000-000000000501",
+        "sharePercentage": 50
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 bequest with applicableLaw (cross-border)",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000502",
+        "bequestType": "specific",
+        "beneficiaryId": "b2c3d4e5-0000-4000-a000-000000000502",
+        "applicableLaw": {
+          "country": "FR"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 bequest with substitution",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000503",
+        "bequestType": "pecuniary",
+        "beneficiaryId": "b2c3d4e5-0000-4000-a000-000000000503",
+        "amount": {
+          "amount": 1000000,
+          "currency": "GBP"
+        },
+        "substitutions": [
+          {
+            "beneficiaryId": "c3d4e5f6-0000-4000-a000-000000000503",
+            "condition": "If the primary beneficiary disclaims the gift"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 amount is string (must be money object)",
+      "data": {
+        "id": "a1000015-0000-4000-a000-000000001015",
+        "bequestType": "pecuniary",
+        "beneficiaryId": "b1000015-0000-4000-a000-000000001015",
+        "amount": "5000"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing bequestType",
+      "data": {
+        "id": "a1000025-0000-4000-a000-000000001025",
+        "beneficiaryId": "b1000025-0000-4000-a000-000000001025"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 bequestType not in enum",
+      "data": {
+        "id": "a1000046-0000-4000-a000-000000001046",
+        "bequestType": "mega_gift"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 sharePercentage at minimum boundary (0)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000030",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000030",
+        "sharePercentage": 0
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 sharePercentage at maximum boundary (100)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000031",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000031",
+        "sharePercentage": 100
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 sharePercentage exceeds maximum (101)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000032",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000032",
+        "sharePercentage": 101
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 sharePercentage below minimum (-1)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000033",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000033",
+        "sharePercentage": -1
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 conditions item description exceeds maxLength (501 characters)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000034",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000034",
+        "conditions": [
+          { "conditionType": "custom", "description": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 id is not a valid UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 beneficiaryId is not a valid UUID",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000035",
+        "bequestType": "specific",
+        "beneficiaryId": "not-a-uuid"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 sharePercentage as string (must be number)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000036",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000036",
+        "sharePercentage": "50"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 bequestType as number (must be string)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000037",
+        "bequestType": 42
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 class bequest missing classDefinition",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000038",
+        "bequestType": "class"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 class bequest with classDefinition",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000039",
+        "bequestType": "class",
+        "classDefinition": "All my grandchildren living at my death"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 life_interest bequest missing lifeInterest",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000040",
+        "bequestType": "life_interest",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000040"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 life_interest bequest with lifeInterest",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000041",
+        "bequestType": "life_interest",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000041",
+        "lifeInterest": {
+          "tenantForLifeId": "a0000001-0000-0000-0000-000000000042",
+          "interestType": "right_of_residence"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 unknown property at root level (unevaluatedProperties false)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000043",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000043",
+        "unknownField": "should fail"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 charity bequest with charityGiftAidEligible true",
+      "data": {
+        "id": "c1000001-0000-4000-a000-000000002001",
+        "bequestType": "pecuniary",
+        "beneficiaryOrganisation": {
+          "name": "Cancer Research UK",
+          "type": "charity",
+          "registrationNumber": "1089464"
+        },
+        "amount": {
+          "amount": 500000,
+          "currency": "GBP"
+        },
+        "charityGiftAidEligible": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 charity bequest with charityGiftAidEligible false",
+      "data": {
+        "id": "c1000002-0000-4000-a000-000000002002",
+        "bequestType": "pecuniary",
+        "beneficiaryOrganisation": {
+          "name": "Oxfam",
+          "type": "charity",
+          "registrationNumber": "202918"
+        },
+        "amount": {
+          "amount": 200000,
+          "currency": "GBP"
+        },
+        "charityGiftAidEligible": false
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 charity bequest with charityNonMergingClause true",
+      "data": {
+        "id": "c1000003-0000-4000-a000-000000002003",
+        "bequestType": "specific",
+        "beneficiaryOrganisation": {
+          "name": "Macmillan Cancer Support",
+          "type": "charity",
+          "registrationNumber": "261017"
+        },
+        "description": "My entire art collection",
+        "charityNonMergingClause": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 charity bequest with charityPurposeRestriction",
+      "data": {
+        "id": "c1000004-0000-4000-a000-000000002004",
+        "bequestType": "pecuniary",
+        "beneficiaryOrganisation": {
+          "name": "Royal British Legion",
+          "type": "charity",
+          "registrationNumber": "219279"
+        },
+        "amount": {
+          "amount": 1000000,
+          "currency": "GBP"
+        },
+        "charityPurposeRestriction": "Must be used for veterans\u2019 welfare services only, not administrative costs"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 charity bequest with charityRegistrationVerifiedAt",
+      "data": {
+        "id": "c1000005-0000-4000-a000-000000002005",
+        "bequestType": "pecuniary",
+        "beneficiaryOrganisation": {
+          "name": "Save the Children",
+          "type": "charity",
+          "registrationNumber": "213890"
+        },
+        "amount": {
+          "amount": 750000,
+          "currency": "GBP"
+        },
+        "charityRegistrationVerifiedAt": "2026-03-15T10:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 charity bequest with all charity fields populated",
+      "data": {
+        "id": "c1000006-0000-4000-a000-000000002006",
+        "bequestType": "pecuniary",
+        "beneficiaryOrganisation": {
+          "name": "Alzheimer\u2019s Society",
+          "type": "charity",
+          "registrationNumber": "296645"
+        },
+        "amount": {
+          "amount": 300000,
+          "currency": "GBP"
+        },
+        "charityGiftAidEligible": true,
+        "charityNonMergingClause": true,
+        "charityPurposeRestriction": "Must be used for dementia research only",
+        "charityRegistrationVerifiedAt": "2026-01-10T09:30:00Z",
+        "charityReportingRequired": true,
+        "giftAidRegistrationNumber": "XR29664",
+        "giftAidVerificationUrl": "https://www.gov.uk/find-charity-information",
+        "giftAidVerifiedAt": "2026-01-10T09:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 bequest with comments array",
+      "data": {
+        "id": "c1000007-0000-4000-a000-000000002007",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000007-0000-4000-a000-000000002007",
+        "sharePercentage": 25,
+        "comments": [
+          {
+            "id": "d1000007-0000-4000-a000-000000002007",
+            "content": "Confirmed with client on Tuesday 8 April 2026 \u2014 she wants this reduced to 25% to allow a larger charitable share.",
+            "createdAt": "2026-04-08T14:30:00Z",
+            "authorPersonId": "e1000007-0000-4000-a000-000000002007",
+            "authorPersonIdDisplay": "Sarah Chen (Solicitor)"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 bequest with beneficiaryIdDisplay",
+      "data": {
+        "id": "c1000008-0000-4000-a000-000000002008",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000008-0000-4000-a000-000000002008",
+        "beneficiaryIdDisplay": "Sophie Davies (granddaughter)",
+        "description": "My diamond engagement ring"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 predeceaseRule: accrual",
+      "data": {
+        "id": "c1000009-0000-4000-a000-000000002009",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000009-0000-4000-a000-000000002009",
+        "sharePercentage": 33.33,
+        "predeceaseRule": "accrual"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 predeceaseRule: lapse",
+      "data": {
+        "id": "c1000010-0000-4000-a000-000000002010",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000010-0000-4000-a000-000000002010",
+        "description": "My vintage motorcycle",
+        "predeceaseRule": "lapse"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 predeceaseRule: substitution",
+      "data": {
+        "id": "c1000011-0000-4000-a000-000000002011",
+        "bequestType": "pecuniary",
+        "beneficiaryId": "a0000011-0000-4000-a000-000000002011",
+        "amount": {
+          "amount": 250000,
+          "currency": "GBP"
+        },
+        "predeceaseRule": "substitution",
+        "substitutions": [
+          {
+            "beneficiaryId": "b0000011-0000-4000-a000-000000002011",
+            "beneficiaryIdDisplay": "Thomas Davies (son of primary beneficiary)",
+            "condition": "If the primary beneficiary predeceases me",
+            "perStirpes": true
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 predeceaseRule: statutory_default",
+      "data": {
+        "id": "c1000012-0000-4000-a000-000000002012",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000012-0000-4000-a000-000000002012",
+        "description": "My first edition book collection",
+        "predeceaseRule": "statutory_default"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 constrainedBy: forced_heirship",
+      "data": {
+        "id": "c1000013-0000-4000-a000-000000002013",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000013-0000-4000-a000-000000002013",
+        "sharePercentage": 25,
+        "constrainedBy": "forced_heirship"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 constrainedBy: religious_rule",
+      "data": {
+        "id": "c1000014-0000-4000-a000-000000002014",
+        "bequestType": "x-inherit-wasiyya",
+        "beneficiaryId": "a0000014-0000-4000-a000-000000002014",
+        "sharePercentage": 33.33,
+        "constrainedBy": "religious_rule"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 constrainedBy: customary_rule",
+      "data": {
+        "id": "c1000015-0000-4000-a000-000000002015",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000015-0000-4000-a000-000000002015",
+        "description": "The family compound in Anambra State",
+        "constrainedBy": "customary_rule",
+        "customaryOverride": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 constrainedBy: coparcenary_survivorship",
+      "data": {
+        "id": "c1000016-0000-4000-a000-000000002016",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000016-0000-4000-a000-000000002016",
+        "description": "HUF ancestral property in Rajasthan",
+        "constrainedBy": "coparcenary_survivorship"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 postDeathActions: disclaimer",
+      "data": {
+        "id": "c1000017-0000-4000-a000-000000002017",
+        "bequestType": "pecuniary",
+        "beneficiaryId": "a0000017-0000-4000-a000-000000002017",
+        "amount": {
+          "amount": 100000,
+          "currency": "GBP"
+        },
+        "postDeathActions": [
+          {
+            "type": "disclaimer",
+            "actionDate": "2026-02-14",
+            "description": "Beneficiary disclaimed the gift in favour of her children"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 postDeathActions: deed_of_variation",
+      "data": {
+        "id": "c1000018-0000-4000-a000-000000002018",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000018-0000-4000-a000-000000002018",
+        "sharePercentage": 50,
+        "postDeathActions": [
+          {
+            "type": "deed_of_variation",
+            "actionDate": "2025-12-01",
+            "description": "Deed of variation redirecting \u00a350,000 to grandchildren\u2019s discretionary trust",
+            "documentId": "f0000018-0000-4000-a000-000000002018"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 postDeathActions: appropriation",
+      "data": {
+        "id": "c1000019-0000-4000-a000-000000002019",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000019-0000-4000-a000-000000002019",
+        "description": "My property at 14 Sunningdale Road",
+        "postDeathActions": [
+          {
+            "type": "appropriation",
+            "actionDate": "2026-03-20",
+            "description": "Executor transferred property to beneficiary in satisfaction of the pecuniary legacy"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 postDeathActions: assent",
+      "data": {
+        "id": "c1000020-0000-4000-a000-000000002020",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000020-0000-4000-a000-000000002020",
+        "description": "Share portfolio at Hargreaves Lansdown",
+        "postDeathActions": [
+          {
+            "type": "assent",
+            "actionDate": "2026-04-01",
+            "description": "Executor formally vested shares in beneficiary by Assent dated 1 April 2026"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 inheritanceResponse: accepted",
+      "data": {
+        "id": "c1000021-0000-4000-a000-000000002021",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000021-0000-4000-a000-000000002021",
+        "sharePercentage": 50,
+        "inheritanceResponse": {
+          "response": "accepted",
+          "responseDate": "2026-01-15",
+          "responsePersonId": "a0000021-0000-4000-a000-000000002021",
+          "responsePersonIdDisplay": "James Nakamura"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 inheritanceResponse: renounced",
+      "data": {
+        "id": "c1000022-0000-4000-a000-000000002022",
+        "bequestType": "pecuniary",
+        "beneficiaryId": "a0000022-0000-4000-a000-000000002022",
+        "amount": {
+          "amount": 50000,
+          "currency": "EUR"
+        },
+        "inheritanceResponse": {
+          "response": "renounced",
+          "responseDate": "2026-02-28",
+          "courtFiled": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 inheritanceResponse: qualified_acceptance (Japan-style)",
+      "data": {
+        "id": "c1000023-0000-4000-a000-000000002023",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000023-0000-4000-a000-000000002023",
+        "sharePercentage": 100,
+        "inheritanceResponse": {
+          "response": "qualified_acceptance",
+          "responseDate": "2026-02-01",
+          "deadlineDate": "2026-03-30",
+          "courtFiled": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 inheritanceResponse: pending with deadline",
+      "data": {
+        "id": "c1000024-0000-4000-a000-000000002024",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000024-0000-4000-a000-000000002024",
+        "sharePercentage": 25,
+        "inheritanceResponse": {
+          "response": "pending",
+          "deadlineDate": "2026-07-15"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 demonstrative bequest with sourceAssetId",
+      "data": {
+        "id": "c1000025-0000-4000-a000-000000002025",
+        "bequestType": "demonstrative",
+        "beneficiaryId": "a0000025-0000-4000-a000-000000002025",
+        "amount": {
+          "amount": 200000,
+          "currency": "GBP"
+        },
+        "sourceAssetId": "f0000025-0000-4000-a000-000000002025",
+        "description": "\u00a32,000 from the HSBC savings account"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 general bequest",
+      "data": {
+        "id": "c1000026-0000-4000-a000-000000002026",
+        "bequestType": "general",
+        "beneficiaryId": "a0000026-0000-4000-a000-000000002026",
+        "description": "A gold watch of equivalent value to \u00a31,500"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 distributionMethod: per_capita",
+      "data": {
+        "id": "c1000027-0000-4000-a000-000000002027",
+        "bequestType": "class",
+        "classDefinition": "All my children in equal shares",
+        "distributionMethod": "per_capita"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 distributionMethod: per_stirpes",
+      "data": {
+        "id": "c1000028-0000-4000-a000-000000002028",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000028-0000-4000-a000-000000002028",
+        "sharePercentage": 50,
+        "distributionMethod": "per_stirpes"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 distributionMethod: modified_per_stirpes",
+      "data": {
+        "id": "c1000029-0000-4000-a000-000000002029",
+        "bequestType": "class",
+        "classDefinition": "All my descendants",
+        "distributionMethod": "modified_per_stirpes"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 distributionMethod: per_capita_at_each_generation",
+      "data": {
+        "id": "c1000030-0000-4000-a000-000000002030",
+        "bequestType": "class",
+        "classDefinition": "My grandchildren living at my death",
+        "distributionMethod": "per_capita_at_each_generation"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 life_interest with income_only type",
+      "data": {
+        "id": "c1000031-0000-4000-a000-000000002031",
+        "bequestType": "life_interest",
+        "beneficiaryId": "a0000031-0000-4000-a000-000000002031",
+        "lifeInterest": {
+          "tenantForLifeId": "a0000031-0000-4000-a000-000000002031",
+          "tenantForLifeIdDisplay": "Margaret Davies (spouse)",
+          "remaindermanId": "b0000031-0000-4000-a000-000000002031",
+          "remaindermanIdDisplay": "William Davies (son)",
+          "interestType": "income_only"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 life_interest with use_only type and remaindermanClassDefinition",
+      "data": {
+        "id": "c1000032-0000-4000-a000-000000002032",
+        "bequestType": "life_interest",
+        "lifeInterest": {
+          "tenantForLifeId": "a0000032-0000-4000-a000-000000002032",
+          "interestType": "use_only",
+          "remaindermanClassDefinition": "All my grandchildren living at the death of the life tenant, in equal shares"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 life_interest with protective type",
+      "data": {
+        "id": "c1000033-0000-4000-a000-000000002033",
+        "bequestType": "life_interest",
+        "lifeInterest": {
+          "tenantForLifeId": "a0000033-0000-4000-a000-000000002033",
+          "interestType": "protective"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 life_interest with use_and_income type",
+      "data": {
+        "id": "c1000034-0000-4000-a000-000000002034",
+        "bequestType": "life_interest",
+        "lifeInterest": {
+          "tenantForLifeId": "a0000034-0000-4000-a000-000000002034",
+          "interestType": "use_and_income"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 bequest with legacyPledge (confirmed)",
+      "data": {
+        "id": "c1000035-0000-4000-a000-000000002035",
+        "bequestType": "pecuniary",
+        "beneficiaryOrganisation": {
+          "name": "RNIB",
+          "type": "charity",
+          "registrationNumber": "226227"
+        },
+        "amount": {
+          "amount": 1000000,
+          "currency": "GBP"
+        },
+        "legacyPledge": {
+          "pledgedDate": "2025-06-15",
+          "pledgeAmount": {
+            "amount": 1000000,
+            "currency": "GBP"
+          },
+          "pledgeStatus": "confirmed"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 bequest with legacyPledge (pending)",
+      "data": {
+        "id": "c1000036-0000-4000-a000-000000002036",
+        "bequestType": "residuary",
+        "beneficiaryOrganisation": {
+          "name": "British Red Cross",
+          "type": "charity",
+          "registrationNumber": "220949"
+        },
+        "sharePercentage": 10,
+        "legacyPledge": {
+          "pledgedDate": "2024-09-20",
+          "pledgeStatus": "pending"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 bequest with legacyPledge (in_probate)",
+      "data": {
+        "id": "c1000037-0000-4000-a000-000000002037",
+        "bequestType": "pecuniary",
+        "beneficiaryOrganisation": {
+          "name": "Age UK",
+          "type": "charity",
+          "registrationNumber": "1128267"
+        },
+        "amount": {
+          "amount": 500000,
+          "currency": "GBP"
+        },
+        "legacyPledge": {
+          "pledgedDate": "2023-03-01",
+          "pledgeStatus": "in_probate",
+          "pledgeDocumentId": "f0000037-0000-4000-a000-000000002037"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 organisation bequest with type: company",
+      "data": {
+        "id": "c1000038-0000-4000-a000-000000002038",
+        "bequestType": "specific",
+        "beneficiaryOrganisation": {
+          "name": "Acme Ltd",
+          "type": "company",
+          "registrationNumber": "12345678",
+          "jurisdiction": {
+            "country": "GB"
+          }
+        },
+        "description": "All my shares in Acme Ltd"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 organisation bequest with type: trust",
+      "data": {
+        "id": "c1000039-0000-4000-a000-000000002039",
+        "bequestType": "residuary",
+        "beneficiaryOrganisation": {
+          "name": "The Davies Family Discretionary Trust",
+          "type": "trust"
+        },
+        "sharePercentage": 100
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 organisation bequest with type: unincorporated_association",
+      "data": {
+        "id": "c1000040-0000-4000-a000-000000002040",
+        "bequestType": "specific",
+        "beneficiaryOrganisation": {
+          "name": "Wrexham Model Railway Club",
+          "type": "unincorporated_association"
+        },
+        "description": "My entire model railway collection"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 bequest with hotchpot true and hotchpotTransferIds",
+      "data": {
+        "id": "c1000041-0000-4000-a000-000000002041",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000041-0000-4000-a000-000000002041",
+        "sharePercentage": 50,
+        "hotchpot": true,
+        "hotchpotTransferIds": [
+          "f1234567-89ab-4cde-8012-3456789abcde",
+          "a9876543-21bc-4def-8012-3456789abcde"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 bequest with conditions array",
+      "data": {
+        "id": "c1000042-0000-4000-a000-000000002042",
+        "bequestType": "pecuniary",
+        "beneficiaryId": "a0000042-0000-4000-a000-000000002042",
+        "amount": {
+          "amount": 5000000,
+          "currency": "GBP"
+        },
+        "conditions": [
+          { "conditionType": "age_attainment", "description": "Beneficiary must have attained the age of 25", "attainmentAge": 25 },
+          { "conditionType": "survival_period", "description": "Beneficiary must be living at the date of my death", "survivalDays": 1 }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 bequest with substitution to an organisation",
+      "data": {
+        "id": "c1000043-0000-4000-a000-000000002043",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000043-0000-4000-a000-000000002043",
+        "description": "My vintage wine cellar",
+        "substitutions": [
+          {
+            "beneficiaryOrganisation": {
+              "name": "Macmillan Cancer Support",
+              "type": "charity",
+              "registrationNumber": "261017"
+            },
+            "condition": "If the primary beneficiary predeceases me or disclaims the gift"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 bequest with substitution using classDefinition",
+      "data": {
+        "id": "c1000044-0000-4000-a000-000000002044",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000044-0000-4000-a000-000000002044",
+        "sharePercentage": 33.33,
+        "substitutions": [
+          {
+            "classDefinition": "The children of the deceased beneficiary, in equal shares",
+            "perStirpes": true
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 charityRegistrationVerifiedAt is not a valid date-time",
+      "data": {
+        "id": "c1000045-0000-4000-a000-000000002045",
+        "bequestType": "pecuniary",
+        "beneficiaryOrganisation": {
+          "name": "RNIB",
+          "type": "charity"
+        },
+        "amount": {
+          "amount": 100000,
+          "currency": "GBP"
+        },
+        "charityRegistrationVerifiedAt": "not-a-date"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 predeceaseRule with invalid enum value",
+      "data": {
+        "id": "c1000046-0000-4000-a000-000000002046",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000046-0000-4000-a000-000000002046",
+        "description": "My watch",
+        "predeceaseRule": "pass_to_children"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 constrainedBy with invalid enum value",
+      "data": {
+        "id": "c1000047-0000-4000-a000-000000002047",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000047-0000-4000-a000-000000002047",
+        "description": "My car",
+        "constrainedBy": "magic_rule"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 postDeathActions type with invalid enum value",
+      "data": {
+        "id": "c1000048-0000-4000-a000-000000002048",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000048-0000-4000-a000-000000002048",
+        "description": "My stamp collection",
+        "postDeathActions": [
+          {
+            "type": "redistribution"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 inheritanceResponse with invalid response value",
+      "data": {
+        "id": "c1000049-0000-4000-a000-000000002049",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000049-0000-4000-a000-000000002049",
+        "sharePercentage": 50,
+        "inheritanceResponse": {
+          "response": "declined"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 distributionMethod with invalid enum value",
+      "data": {
+        "id": "c1000050-0000-4000-a000-000000002050",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000050-0000-4000-a000-000000002050",
+        "sharePercentage": 100,
+        "distributionMethod": "random"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 lifeInterest missing required tenantForLifeId",
+      "data": {
+        "id": "c1000051-0000-4000-a000-000000002051",
+        "bequestType": "life_interest",
+        "lifeInterest": {
+          "interestType": "right_of_residence"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 lifeInterest missing required interestType",
+      "data": {
+        "id": "c1000052-0000-4000-a000-000000002052",
+        "bequestType": "life_interest",
+        "lifeInterest": {
+          "tenantForLifeId": "a0000052-0000-4000-a000-000000002052"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 lifeInterest interestType with invalid enum value",
+      "data": {
+        "id": "c1000053-0000-4000-a000-000000002053",
+        "bequestType": "life_interest",
+        "lifeInterest": {
+          "tenantForLifeId": "a0000053-0000-4000-a000-000000002053",
+          "interestType": "shared"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 beneficiaryOrganisation missing required name",
+      "data": {
+        "id": "c1000054-0000-4000-a000-000000002054",
+        "bequestType": "specific",
+        "beneficiaryOrganisation": {
+          "type": "charity",
+          "registrationNumber": "261017"
+        },
+        "description": "My art collection"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 beneficiaryOrganisation missing required type",
+      "data": {
+        "id": "c1000055-0000-4000-a000-000000002055",
+        "bequestType": "specific",
+        "beneficiaryOrganisation": {
+          "name": "Macmillan Cancer Support",
+          "registrationNumber": "261017"
+        },
+        "description": "My art collection"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 beneficiaryOrganisation type with invalid enum value",
+      "data": {
+        "id": "c1000056-0000-4000-a000-000000002056",
+        "bequestType": "specific",
+        "beneficiaryOrganisation": {
+          "name": "Some Club",
+          "type": "cooperative"
+        },
+        "description": "My car"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 legacyPledge pledgeStatus with invalid enum value",
+      "data": {
+        "id": "c1000057-0000-4000-a000-000000002057",
+        "bequestType": "pecuniary",
+        "beneficiaryOrganisation": {
+          "name": "RNIB",
+          "type": "charity"
+        },
+        "amount": {
+          "amount": 100000,
+          "currency": "GBP"
+        },
+        "legacyPledge": {
+          "pledgedDate": "2025-06-15",
+          "pledgeStatus": "executed"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 comments entry missing required content",
+      "data": {
+        "id": "c1000058-0000-4000-a000-000000002058",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000058-0000-4000-a000-000000002058",
+        "description": "My watch",
+        "comments": [
+          {
+            "id": "d0000058-0000-4000-a000-000000002058",
+            "createdAt": "2026-04-01T09:00:00Z"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 comments entry missing required createdAt",
+      "data": {
+        "id": "c1000059-0000-4000-a000-000000002059",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000059-0000-4000-a000-000000002059",
+        "description": "My watch",
+        "comments": [
+          {
+            "id": "d0000059-0000-4000-a000-000000002059",
+            "content": "Some comment"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 specific bequest missing beneficiary (core type without beneficiary is invalid)",
+      "data": {
+        "id": "c1000060-0000-4000-a000-000000002060",
+        "bequestType": "specific",
+        "description": "My watch"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — specific bequest with propertyIds linking to devised property",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000101",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "description": "My house at Blk 247 Toa Payoh Lorong 1",
+        "propertyIds": ["d0000001-0000-0000-0000-000000000001"]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — specific bequest with assetIds and propertyIds together",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000102",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "description": "My house and its contents",
+        "propertyIds": ["d0000001-0000-0000-0000-000000000001"],
+        "assetIds": ["e0000001-0000-0000-0000-000000000001"]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bequest with liabilityIds for encumbered property",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000103",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "description": "My house, subject to the outstanding mortgage",
+        "propertyIds": ["d0000001-0000-0000-0000-000000000001"],
+        "liabilityIds": ["f0000001-0000-0000-0000-000000000001"]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bequest with insurancePolicyIds",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000104",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "description": "The proceeds of my life insurance policy",
+        "insurancePolicyIds": ["10000001-0000-0000-0000-000000000001"]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — propertyIds with non-UUID value",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000105",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "propertyIds": ["not-a-uuid"]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — liabilityIds with non-UUID value",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000106",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "liabilityIds": ["not-a-uuid"]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — bequest with survival_period condition (30 days)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000301",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "description": "My jade bangle to my niece Rachel",
+        "conditions": [{
+          "conditionType": "survival_period",
+          "description": "Beneficiary must survive me by 30 days",
+          "survivalDays": 30
+        }]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bequest with age_attainment condition",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000302",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "conditions": [{
+          "conditionType": "age_attainment",
+          "description": "Beneficiary must have attained the age of 25",
+          "attainmentAge": 25,
+          "personId": "a0000001-0000-0000-0000-000000000002"
+        }]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bequest with multiple conditions (survival + age)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000303",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "conditions": [
+          { "conditionType": "survival_period", "description": "Must survive me by 28 days", "survivalDays": 28 },
+          { "conditionType": "age_attainment", "description": "Must be at least 21", "attainmentAge": 21 }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bequest with custom condition (free text escape hatch)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000304",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "conditions": [{
+          "conditionType": "custom",
+          "description": "Beneficiary must complete a university degree before receiving this gift"
+        }]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bequest with marriage condition",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000305",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "conditions": [{
+          "conditionType": "marriage",
+          "description": "Beneficiary must be married at the date of my death"
+        }]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — condition missing required conditionType",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000306",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "conditions": [{ "description": "Must survive me by 30 days" }]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — condition missing required description",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000307",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "conditions": [{ "conditionType": "survival_period", "survivalDays": 30 }]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — conditionType not in enum",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000308",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "conditions": [{ "conditionType": "weather", "description": "Only if it is sunny" }]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — survivalDays below minimum (0)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000309",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "conditions": [{ "conditionType": "survival_period", "description": "Must survive me", "survivalDays": 0 }]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — condition with additional property not in schema",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000310",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "conditions": [{ "conditionType": "custom", "description": "Some condition", "extraField": "not allowed" }]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — debt_forgiveness bequest with liabilityIds",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000311",
+        "bequestType": "debt_forgiveness",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "description": "I forgive the loan of £25,000 I made to my son James in 2019",
+        "liabilityIds": ["c0000001-0000-0000-0000-000000000001"]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — debt_forgiveness without liabilityIds (description-only)",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000312",
+        "bequestType": "debt_forgiveness",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "description": "I forgive all debts owed to me by my daughter Sarah"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — debt_forgiveness without beneficiaryId or beneficiaryOrganisation",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000313",
+        "bequestType": "debt_forgiveness",
+        "description": "I forgive the loan I made to my nephew"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — bequest with postDeathAction deed of variation with variationDetails",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000314",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "description": "My antique writing desk",
+        "postDeathActions": [
+          {
+            "type": "deed_of_variation",
+            "actionDate": "2026-01-15",
+            "variationDetails": {
+              "fromBeneficiaryId": "a0000001-0000-0000-0000-000000000001",
+              "toBeneficiaryId": "a0000001-0000-0000-0000-000000000002",
+              "redirectedAmount": {
+                "amount": 5000000,
+                "currency": "GBP"
+              },
+              "reason": "tax_efficiency",
+              "allBeneficiariesConsented": true
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — class bequest with classSubstitution",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000315",
+        "bequestType": "class",
+        "classDefinition": "All my grandchildren living at my death",
+        "classSubstitution": {
+          "rule": "per_stirpes",
+          "substituteClass": "children of deceased class members",
+          "predeceaseHandling": "share_passes_to_descendants"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bequest with extended legacyPledge",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000316",
+        "bequestType": "pecuniary",
+        "beneficiaryOrganisation": {
+          "name": "Cancer Research UK",
+          "type": "charity",
+          "registrationNumber": "1089464"
+        },
+        "amount": {
+          "amount": 2500000,
+          "currency": "GBP"
+        },
+        "legacyPledge": {
+          "pledgedDate": "2025-03-10",
+          "pledgeAmount": {
+            "amount": 2500000,
+            "currency": "GBP"
+          },
+          "pledgeStatus": "confirmed",
+          "revocable": true,
+          "fundingMechanism": "fully_funded"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bequest with priority and clauseReference",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000317",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "priority": 1,
+        "clauseReference": "3.1"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — condition with failureConsequence",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000318",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "conditions": [{
+          "conditionType": "survival_period",
+          "description": "Beneficiary must survive me by 30 days",
+          "survivalDays": 30,
+          "failureConsequence": "lapse_to_residue",
+          "failureDescription": "gift shall lapse into residue"
+        }]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bequest with executorDirections",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000319",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "executorDirections": [{
+          "directive": "Receipt of authorised officer shall be sufficient discharge",
+          "binding": true
+        }]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — residuary bequest with mentionedAssetIds",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000320",
+        "bequestType": "residuary",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "mentionedAssetIds": ["d73880dc-c616-4724-ad29-79364bad1719"]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — specific bequest with precatoryWishes",
+      "data": {
+        "id": "b0000001-0000-0000-0000-000000000330",
+        "bequestType": "specific",
+        "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
+        "description": "My grandmother's emerald ring",
+        "precatoryWishes": [
+          {
+            "wish": "I express the wish that she keep it as a family heirloom",
+            "binding": false,
+            "clauseReference": "4.1"
+          }
+        ]
+      },
+      "valid": true
+    }
+  ]
+}

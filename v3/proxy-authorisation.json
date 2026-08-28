@@ -1,0 +1,536 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/proxy-authorisation.json",
+  "title": "Proxy Authorisation",
+  "description": "Authorises a proxy to act on behalf of a testator — information gathering, communication, negotiation, or full decision-making. Includes consent record with cultural consent methods",
+  "type": "object",
+  "allOf": [
+    {
+      "if": {
+        "required": [ "delegateType" ],
+        "properties": {
+          "delegateType": {
+            "const": "person"
+          }
+        }
+      },
+      "then": {
+        "required": [ "proxyPersonId" ]
+      }
+    },
+    {
+      "if": {
+        "required": [ "delegateType" ],
+        "properties": {
+          "delegateType": {
+            "const": "agent"
+          }
+        }
+      },
+      "then": {
+        "required": [ "agentId" ]
+      }
+    },
+    {
+      "if": {
+        "required": [ "delegateType" ],
+        "properties": {
+          "delegateType": {
+            "const": "organisation"
+          }
+        }
+      },
+      "then": {
+        "required": [ "proxyPersonId" ]
+      }
+    }
+  ],
+  "required": [
+    "id",
+    "delegateType",
+    "testatorPersonId",
+    "scope",
+    "consentRecord"
+  ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this proxy authorisation within the INHERIT document",
+      "examples": [ "d6e7f8a9-b0c1-2345-d678-9abcdef01234" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "delegateType": {
+      "description": "The type of entity being delegated authority. Determines which identity fields are required",
+      "$comment": "person: a human delegate (executor, solicitor, family member) — proxyPersonId is required. agent: an AI agent acting on behalf of the testator (Arthur, Operations AI) — agentId is required. organisation: a corporate entity acting as delegate (law firm, trust company) — proxyPersonId references the organisation's representative.",
+      "enum": [ "person", "agent", "organisation" ]
+    },
+    "agentId": {
+      "description": "Identifier for the AI agent delegate. Required when delegateType is agent. Format is intentionally flexible to accommodate different agent identity schemes as they emerge",
+      "type": "string",
+      "maxLength": 255
+    },
+    "agentIdDisplay": {
+      "description": "Human-readable display name for the agent",
+      "examples": [
+        "Arthur (LegacyLists cataloguing assistant)",
+        "Operations AI (LegacyLists)"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "agentCapabilities": {
+      "description": "What the agent is permitted to do under this authorisation. The schema records the authorised capabilities; the application enforces whether they are exercised",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "anyOf": [
+          {
+            "enum": [
+              "read_catalogue",
+              "send_notifications",
+              "execute_sales",
+              "manage_communications",
+              "generate_reports",
+              "process_corrections",
+              "manage_dealer_offers",
+              "generate_legacy_letter"
+            ]
+          },
+          {
+            "type": "string",
+            "pattern": "^x-inherit-.+",
+            "maxLength": 100
+          }
+        ]
+      }
+    },
+    "authenticationMethod": {
+      "description": "How the delegate proves its identity when exercising this authorisation",
+      "$comment": "api_key: authenticated via API key. oauth_token: authenticated via OAuth 2.0. verifiable_credential: W3C Verifiable Credential (VC Data Model 2.0). delegation_protocol: authenticated via a standards-body delegation protocol (OpenID Foundation or equivalent). mcp_session: authenticated via MCP session. human_verified: identity verified by a human (e.g. in-person identification).",
+      "enum": [
+        "api_key",
+        "oauth_token",
+        "verifiable_credential",
+        "delegation_protocol",
+        "mcp_session",
+        "human_verified"
+      ]
+    },
+    "proxyPersonId": {
+      "description": "Reference to the Person.id of the authorised proxy. Required when delegateType is person or organisation",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "proxyPersonIdDisplay": {
+      "description": "Human-readable display name for the referenced proxy person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "testatorPersonId": {
+      "description": "Reference to the Person.id of the testator granting the authorisation",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "testatorPersonIdDisplay": {
+      "description": "Human-readable display name for the referenced testator person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "scope": {
+      "description": "The scope of authority granted to the proxy",
+      "$comment": "full: proxy may act in all capacities. information_gathering: proxy may only gather information about the estate. communication: proxy may communicate with professionals and family on the testator's behalf. negotiation: proxy may negotiate with dealers, professionals, and other parties. decision_making: proxy may make binding decisions on the testator's behalf.",
+      "examples": [ "information_gathering", "full" ],
+      "enum": [
+        "full",
+        "information_gathering",
+        "communication",
+        "negotiation",
+        "decision_making"
+      ]
+    },
+    "consentRecord": {
+      "description": "Record of the testator's consent to this proxy authorisation",
+      "$ref": "#/$defs/ConsentRecord"
+    },
+    "dealerNegotiationPermitted": {
+      "description": "Whether the proxy is specifically authorised to negotiate with dealers and third parties interested in estate assets",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "startDate": {
+      "description": "Date from which the proxy authorisation is effective",
+      "examples": [ "2025-03-15" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "expiryDate": {
+      "description": "Date on which the proxy authorisation expires, if time-limited",
+      "examples": [ "2026-03-15" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "revocationDate": {
+      "description": "Date the proxy authorisation was revoked by the testator, if applicable",
+      "examples": [ "2025-09-01" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "revocation": {
+      "description": "Structured revocation record — models revocation as a mechanism, not just a date",
+      "$comment": "Cross-jurisdiction revocation requires knowing who revoked, under which jurisdiction's authority, and whether a challenge period applies",
+      "type": "object",
+      "properties": {
+        "revokedAt": {
+          "description": "When the delegation was revoked",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "revokedBy": {
+          "description": "Who revoked the delegation (schema.org agent)",
+          "type": "string",
+          "maxLength": 255
+        },
+        "revocationMethod": {
+          "description": "How the revocation was effected",
+          "enum": [
+            "written_notice",
+            "court_order",
+            "platform_action",
+            "automatic_expiry",
+            "death_of_delegate",
+            "mutual_agreement",
+            "other"
+          ]
+        },
+        "revocationJurisdiction": {
+          "description": "Which jurisdiction's authority governs this revocation",
+          "$ref": "common/jurisdiction.json"
+        },
+        "challengePeriodDays": {
+          "description": "Number of days during which the revocation can be challenged",
+          "type": "integer",
+          "minimum": 0
+        },
+        "challengeDeadline": {
+          "description": "Final date by which a challenge must be filed",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "enforcementStatus": {
+          "description": "Current status of the revocation",
+          "enum": [
+            "pending",
+            "enforced",
+            "challenged",
+            "overturned",
+            "expired"
+          ]
+        },
+        "evidenceUrl": {
+          "description": "Link to the revocation document or court order",
+          "type": "string",
+          "pattern": "^https?://",
+          "format": "uri"
+        }
+      },
+      "additionalProperties": false
+    },
+    "delegationType": {
+      "description": "The type of delegation — on-behalf-of preserves principal/agent distinction, impersonation collapses it",
+      "$comment": "OpenID Unfinished Digital Estate report; OAuth RFC 8693 act claim",
+      "enum": [ "on_behalf_of", "impersonation", "co_equal", "supervised" ]
+    },
+    "delegationConstraints": {
+      "description": "Constraints limiting how this delegation may be exercised",
+      "type": "object",
+      "properties": {
+        "maxTransactionValue": {
+          "description": "Financial limit per delegated action",
+          "$ref": "common/money.json"
+        },
+        "requiresCoApproval": {
+          "description": "Whether another person must approve actions",
+          "type": "boolean"
+        },
+        "coApproverPersonId": {
+          "description": "Who must co-approve",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "coApproverPersonIdDisplay": {
+          "description": "Human-readable display name for the referenced co approver person",
+          "type": "string",
+          "maxLength": 255
+        },
+        "excludedAssetIds": {
+          "description": "Assets this delegate cannot access",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "activationTrigger": {
+      "description": "The condition that activates this delegation",
+      "$comment": "Sovrin guardianship: conditional delegation; MOSIP death registration; Google Inactive Account Manager uses inactivity-based delegation",
+      "enum": [
+        "immediate",
+        "on_death",
+        "on_incapacity",
+        "on_court_order",
+        "on_date",
+        "on_inactivity",
+        "manual"
+      ]
+    },
+    "activationDate": {
+      "description": "For on_date trigger",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "activationVerificationMethod": {
+      "description": "Method used to verify that the activation condition has been met",
+      "$comment": "MOSIP integrates with civil registration for death verification",
+      "enum": [
+        "death_certificate",
+        "medical_certificate",
+        "court_order",
+        "community_declaration",
+        "platform_detection",
+        "none"
+      ]
+    },
+    "activationVerifiedBy": {
+      "description": "Who verified the activation condition was met",
+      "type": "string",
+      "maxLength": 255
+    },
+    "activationVerifiedAt": {
+      "description": "When the activation condition was verified",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "subDelegation": {
+      "description": "Whether the delegate can re-delegate authority. Supports delegation chains (executor → solicitor → paralegal)",
+      "$comment": "Delegation chains are a core requirement for digital estate access — executor → solicitor → paralegal",
+      "type": "object",
+      "properties": {
+        "permitted": {
+          "description": "Whether sub-delegation is permitted",
+          "type": "boolean"
+        },
+        "maxDepth": {
+          "description": "Maximum depth of the delegation chain (1 = delegate can appoint one sub-delegate)",
+          "type": "integer",
+          "maximum": 10,
+          "minimum": 0
+        },
+        "constraints": {
+          "description": "Free-text constraints on sub-delegation",
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "credentialRef": {
+      "description": "URI pointing to an external delegation credential (W3C Verifiable Credential 2.0, OpenID Foundation, or other delegation protocol). Protocol-agnostic",
+      "$comment": "When a delegation protocol standard is published, this field holds the credential URI",
+      "type": "string",
+      "pattern": "^https?://",
+      "format": "uri",
+      "maxLength": 2048
+    },
+    "externalConsentRef": {
+      "description": "URI pointing to an external consent record (FHIR Consent resource, or any external consent management system)",
+      "$comment": "FHIR R5 Consent resource reference. Generic — works with any consent system, not just FHIR.",
+      "type": "string",
+      "pattern": "^https?://",
+      "format": "uri",
+      "maxLength": 2048
+    },
+    "healthcareRecordAccess": {
+      "description": "Whether this delegation includes authority to access the deceased's medical records. Relevant for FHIR integration and healthcare interoperability",
+      "type": "boolean"
+    },
+    "auditTrailEnabled": {
+      "description": "Whether all actions taken by the proxy should be logged for audit purposes",
+      "examples": [ true ],
+      "type": "boolean"
+    },
+    "auditLog": {
+      "description": "Structured log of delegation actions — complements the auditTrailEnabled boolean",
+      "$comment": "FHIR AuditEvent pattern",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [ "action", "agent", "performedAt" ],
+        "properties": {
+          "action": {
+            "description": "What delegation action was taken",
+            "enum": [
+              "granted",
+              "exercised",
+              "revoked",
+              "challenged",
+              "modified",
+              "expired"
+            ]
+          },
+          "agent": {
+            "description": "Who performed this action (schema.org agent)",
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "performedAt": {
+            "description": "When the action occurred",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "format": "date-time"
+          },
+          "detail": {
+            "description": "What specifically was done",
+            "type": "string",
+            "maxLength": 500
+          },
+          "evidenceUrl": {
+            "description": "Link to supporting evidence",
+            "type": "string",
+            "pattern": "^https?://",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "notes": {
+      "description": "Free-text notes about this proxy authorisation",
+      "examples": [
+        "Proxy is testator's daughter — authorised to liaise with Bonhams regarding the art collection",
+        "Revoked after family disagreement — replaced by new proxy authorisation"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "ConsentRecord": {
+      "description": "Record of the testator's consent to proxy authorisation. Supports formal, informal, and culturally appropriate consent methods",
+      "type": "object",
+      "required": [ "consentGiven" ],
+      "properties": {
+        "consentGiven": {
+          "description": "Whether the testator has given consent for the proxy to act on their behalf",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "consentDate": {
+          "description": "Date consent was given",
+          "examples": [ "2025-03-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "consentMethod": {
+          "description": "The method by which consent was obtained",
+          "$comment": "in_person_verbal: verbal consent given face to face. in_person_written: written consent signed in person. video_recorded: consent recorded via video. witnessed_verbal: verbal consent in the presence of witnesses. phone_recorded: consent given and recorded over the telephone. assumed_cultural_norm: consent assumed under cultural norms where explicit consent is not customary (e.g. eldest son acts for the family). Use with caution — document the cultural basis.",
+          "examples": [ "in_person_written", "witnessed_verbal" ],
+          "enum": [
+            "in_person_verbal",
+            "in_person_written",
+            "video_recorded",
+            "witnessed_verbal",
+            "phone_recorded",
+            "assumed_cultural_norm"
+          ]
+        },
+        "witnesses": {
+          "description": "Witnesses to the consent, if any",
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "required": [ "personId" ],
+            "properties": {
+              "personId": {
+                "description": "Reference to the Person.id of the witness",
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                "format": "uuid"
+              },
+              "role": {
+                "description": "The role or capacity in which the person witnessed the consent",
+                "$comment": "Provenance — e.g. 'family_elder', 'solicitor', 'community_leader', 'imam', 'rabbi', 'priest', 'notary', 'court_officer'.",
+                "examples": [
+                  "solicitor",
+                  "family_elder",
+                  "community_leader",
+                  "imam"
+                ],
+                "type": "string",
+                "maxLength": 255
+              },
+              "witnessedDate": {
+                "description": "Date this person witnessed the consent",
+                "examples": [ "2025-03-15" ],
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "format": "date"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "documentRef": {
+          "description": "Reference to a document recording the consent",
+          "examples": [ "DOC-2025-CONSENT-001" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "notes": {
+          "description": "Additional notes about the consent",
+          "examples": [
+            "Consent given in the presence of solicitor and two family elders"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

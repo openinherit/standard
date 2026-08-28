@@ -1,0 +1,4028 @@
+{
+  "$id": "https://openinherit.org/reference-data/local-term-mappings.json",
+  "$comment": "Maps core INHERIT enum values to local terminology per jurisdiction. UIs should use this to display jurisdiction-appropriate labels.",
+  "title": "Local Term Mappings",
+  "description": "Bidirectional mappings between INHERIT core enum values and jurisdiction-specific terminology. Enables UIs to display familiar local terms while maintaining interoperable core values.",
+  "lastUpdated": "2026-03-28",
+  "mappings": {
+    "propertyType": {
+      "detached": {
+        "label": "Detached house",
+        "localTerms": {
+          "GB": {
+            "label": "Detached house"
+          },
+          "US": {
+            "label": "Single-family home"
+          },
+          "AU": {
+            "label": "Detached house"
+          },
+          "CA": {
+            "label": "Detached house"
+          },
+          "FR": {
+            "label": "Maison individuelle",
+            "romanised": "maison individuelle"
+          },
+          "DE": {
+            "label": "Einfamilienhaus",
+            "romanised": "einfamilienhaus"
+          },
+          "IN": {
+            "label": "Bungalow"
+          },
+          "JP": {
+            "label": "一戸建て",
+            "romanised": "ikkodate"
+          },
+          "SG": {
+            "label": "Detached house"
+          },
+          "NZ": {
+            "label": "Detached house"
+          },
+          "IE": {
+            "label": "Detached house"
+          },
+          "NG": {
+            "label": "Detached house"
+          },
+          "CN": {
+            "label": "独栋别墅",
+            "romanised": "dúdòng biéshù",
+            "aliases": [
+              "独立住宅"
+            ]
+          },
+          "MY": {
+            "label": "Rumah berkembar",
+            "aliases": [
+              "banglo"
+            ]
+          },
+          "ID": {
+            "label": "Rumah tapak",
+            "aliases": [
+              "rumah tunggal"
+            ]
+          },
+          "TH": {
+            "label": "บ้านเดี่ยว",
+            "romanised": "ban diao"
+          },
+          "KR": {
+            "label": "단독주택",
+            "romanised": "dandokjutaek"
+          },
+          "HK": {
+            "label": "獨立屋",
+            "romanised": "duk6 laap6 uk1"
+          },
+          "TW": {
+            "label": "獨棟別墅",
+            "romanised": "dúdòng biéshù",
+            "aliases": [
+              "透天厝"
+            ]
+          },
+          "VN": {
+            "label": "Nhà biệt thự",
+            "aliases": [
+              "nhà riêng"
+            ]
+          }
+        }
+      },
+      "attached": {
+        "label": "Attached house",
+        "localTerms": {
+          "GB": {
+            "label": "Terraced house",
+            "aliases": [
+              "semi-detached",
+              "end-of-terrace"
+            ]
+          },
+          "US": {
+            "label": "Townhouse",
+            "aliases": [
+              "row house",
+              "duplex"
+            ]
+          },
+          "AU": {
+            "label": "Townhouse",
+            "aliases": [
+              "terrace house"
+            ]
+          },
+          "CA": {
+            "label": "Townhouse",
+            "aliases": [
+              "row house"
+            ]
+          },
+          "FR": {
+            "label": "Maison mitoyenne",
+            "romanised": "maison mitoyenne"
+          },
+          "DE": {
+            "label": "Reihenhaus",
+            "romanised": "reihenhaus"
+          },
+          "IN": {
+            "label": "Row house"
+          },
+          "JP": {
+            "label": "テラスハウス",
+            "romanised": "terasu hausu"
+          },
+          "SG": {
+            "label": "Terrace house"
+          },
+          "NZ": {
+            "label": "Townhouse"
+          },
+          "IE": {
+            "label": "Terraced house"
+          },
+          "NG": {
+            "label": "Compound"
+          },
+          "CN": {
+            "label": "联排别墅",
+            "romanised": "liánpái biéshù",
+            "aliases": [
+              "排屋"
+            ]
+          },
+          "MY": {
+            "label": "Rumah teres",
+            "aliases": [
+              "rumah berkembar"
+            ]
+          },
+          "ID": {
+            "label": "Rumah deret",
+            "aliases": [
+              "rumah kopel"
+            ]
+          },
+          "TH": {
+            "label": "ทาวน์เฮาส์",
+            "romanised": "thao hao"
+          },
+          "KR": {
+            "label": "연립주택",
+            "romanised": "yeollipjutaek"
+          },
+          "HK": {
+            "label": "排屋",
+            "romanised": "paai4 uk1"
+          },
+          "TW": {
+            "label": "連棟住宅",
+            "romanised": "liándòng zhùzhái",
+            "aliases": [
+              "透天厝"
+            ]
+          },
+          "VN": {
+            "label": "Nhà liền kề",
+            "aliases": [
+              "nhà phố"
+            ]
+          }
+        }
+      },
+      "apartment": {
+        "label": "Apartment",
+        "localTerms": {
+          "GB": {
+            "label": "Flat"
+          },
+          "US": {
+            "label": "Condo",
+            "aliases": [
+              "condominium",
+              "apartment"
+            ]
+          },
+          "AU": {
+            "label": "Unit",
+            "aliases": [
+              "flat",
+              "apartment"
+            ]
+          },
+          "CA": {
+            "label": "Condominium",
+            "aliases": [
+              "condo",
+              "apartment"
+            ]
+          },
+          "FR": {
+            "label": "Appartement",
+            "romanised": "appartement"
+          },
+          "DE": {
+            "label": "Eigentumswohnung",
+            "romanised": "eigentumswohnung"
+          },
+          "IN": {
+            "label": "Flat"
+          },
+          "JP": {
+            "label": "マンション",
+            "romanised": "manshon"
+          },
+          "SG": {
+            "label": "HDB flat",
+            "aliases": [
+              "condo",
+              "condominium"
+            ]
+          },
+          "NZ": {
+            "label": "Flat",
+            "aliases": [
+              "unit",
+              "apartment"
+            ]
+          },
+          "IE": {
+            "label": "Flat",
+            "aliases": [
+              "apartment"
+            ]
+          },
+          "NG": {
+            "label": "Block of flats"
+          },
+          "CN": {
+            "label": "公寓",
+            "romanised": "gōngyù",
+            "aliases": [
+              "住宅单元",
+              "商品房"
+            ]
+          },
+          "MY": {
+            "label": "Pangsapuri",
+            "aliases": [
+              "apartmen",
+              "kondominium"
+            ]
+          },
+          "ID": {
+            "label": "Apartemen",
+            "aliases": [
+              "rumah susun"
+            ]
+          },
+          "TH": {
+            "label": "คอนโดมิเนียม",
+            "romanised": "khondo miniam",
+            "aliases": [
+              "อพาร์ทเมนท์"
+            ]
+          },
+          "KR": {
+            "label": "아파트",
+            "romanised": "apateu",
+            "aliases": [
+              "연립주택"
+            ]
+          },
+          "HK": {
+            "label": "住宅單位",
+            "romanised": "zyu6 zaak6 daan1 wai6"
+          },
+          "TW": {
+            "label": "公寓",
+            "romanised": "gōngyù",
+            "aliases": [
+              "大廈"
+            ]
+          },
+          "VN": {
+            "label": "Căn hộ chung cư",
+            "aliases": [
+              "chung cư"
+            ]
+          }
+        }
+      },
+      "land": {
+        "label": "Land",
+        "localTerms": {
+          "GB": {
+            "label": "Land"
+          },
+          "US": {
+            "label": "Lot",
+            "aliases": [
+              "parcel",
+              "land"
+            ]
+          },
+          "AU": {
+            "label": "Land",
+            "aliases": [
+              "block"
+            ]
+          },
+          "CA": {
+            "label": "Lot",
+            "aliases": [
+              "land"
+            ]
+          },
+          "FR": {
+            "label": "Terrain",
+            "romanised": "terrain"
+          },
+          "DE": {
+            "label": "Grundstück",
+            "romanised": "grundstueck"
+          },
+          "IN": {
+            "label": "Plot",
+            "aliases": [
+              "land"
+            ]
+          },
+          "JP": {
+            "label": "土地",
+            "romanised": "tochi"
+          },
+          "SG": {
+            "label": "Land"
+          },
+          "NZ": {
+            "label": "Section",
+            "aliases": [
+              "land"
+            ]
+          },
+          "IE": {
+            "label": "Site",
+            "aliases": [
+              "land"
+            ]
+          },
+          "NG": {
+            "label": "Plot",
+            "aliases": [
+              "land"
+            ]
+          },
+          "CN": {
+            "label": "土地",
+            "romanised": "tǔdì",
+            "aliases": [
+              "地块"
+            ]
+          },
+          "MY": {
+            "label": "Tanah",
+            "aliases": [
+              "lot tanah"
+            ]
+          },
+          "ID": {
+            "label": "Tanah",
+            "aliases": [
+              "kavling"
+            ]
+          },
+          "TH": {
+            "label": "ที่ดิน",
+            "romanised": "thi din"
+          },
+          "KR": {
+            "label": "토지",
+            "romanised": "toji",
+            "aliases": [
+              "대지"
+            ]
+          },
+          "HK": {
+            "label": "土地",
+            "romanised": "tou2 dei6"
+          },
+          "TW": {
+            "label": "土地",
+            "romanised": "tǔdì"
+          },
+          "VN": {
+            "label": "Đất",
+            "aliases": [
+              "đất nền"
+            ]
+          }
+        }
+      },
+      "commercial": {
+        "label": "Commercial property",
+        "localTerms": {
+          "GB": {
+            "label": "Commercial property"
+          },
+          "US": {
+            "label": "Commercial property",
+            "aliases": [
+              "commercial real estate"
+            ]
+          },
+          "AU": {
+            "label": "Commercial property"
+          },
+          "CA": {
+            "label": "Commercial property"
+          },
+          "FR": {
+            "label": "Local commercial",
+            "romanised": "local commercial"
+          },
+          "DE": {
+            "label": "Gewerbeimmobilie",
+            "romanised": "gewerbeimmobilie"
+          },
+          "IN": {
+            "label": "Commercial property"
+          },
+          "JP": {
+            "label": "商業用不動産",
+            "romanised": "shōgyōyō fudōsan"
+          },
+          "SG": {
+            "label": "Commercial property"
+          },
+          "NZ": {
+            "label": "Commercial property"
+          },
+          "IE": {
+            "label": "Commercial property"
+          },
+          "NG": {
+            "label": "Commercial property"
+          },
+          "CN": {
+            "label": "商业地产",
+            "romanised": "shāngyè dìchǎn",
+            "aliases": [
+              "商铺"
+            ]
+          },
+          "MY": {
+            "label": "Hartanah komersial",
+            "aliases": [
+              "premis perniagaan"
+            ]
+          },
+          "ID": {
+            "label": "Properti komersial",
+            "aliases": [
+              "ruko"
+            ]
+          },
+          "TH": {
+            "label": "อสังหาริมทรัพย์เชิงพาณิชย์",
+            "romanised": "asangharimmasap choeng phanit"
+          },
+          "KR": {
+            "label": "상업용 부동산",
+            "romanised": "sangeopyong budongsang"
+          },
+          "HK": {
+            "label": "商業物業",
+            "romanised": "soeng1 jip6 mat6 jip6"
+          },
+          "TW": {
+            "label": "商業不動產",
+            "romanised": "shāngyè bùdòngchǎn"
+          },
+          "VN": {
+            "label": "Bất động sản thương mại"
+          }
+        }
+      },
+      "mixed_use": {
+        "label": "Mixed-use property",
+        "localTerms": {
+          "GB": {
+            "label": "Mixed-use property"
+          },
+          "US": {
+            "label": "Mixed-use property"
+          },
+          "AU": {
+            "label": "Mixed-use property"
+          },
+          "CA": {
+            "label": "Mixed-use property"
+          },
+          "FR": {
+            "label": "Immeuble mixte",
+            "romanised": "immeuble mixte"
+          },
+          "DE": {
+            "label": "Mischobjekt",
+            "romanised": "mischobjekt"
+          },
+          "IN": {
+            "label": "Mixed-use property"
+          },
+          "JP": {
+            "label": "複合用途不動産",
+            "romanised": "fukugō yōto fudōsan"
+          },
+          "SG": {
+            "label": "Mixed-use property"
+          },
+          "NZ": {
+            "label": "Mixed-use property"
+          },
+          "IE": {
+            "label": "Mixed-use property"
+          },
+          "NG": {
+            "label": "Mixed-use property"
+          },
+          "CN": {
+            "label": "综合用途物业",
+            "romanised": "zōnghé yòngtú wùyè"
+          },
+          "MY": {
+            "label": "Hartanah kegunaan bercampur"
+          },
+          "ID": {
+            "label": "Properti campuran",
+            "aliases": [
+              "rukan"
+            ]
+          },
+          "TH": {
+            "label": "อสังหาริมทรัพย์ผสม",
+            "romanised": "asangharimmasap phasom"
+          },
+          "KR": {
+            "label": "복합용도 부동산",
+            "romanised": "bokhabyongdo budongsang"
+          },
+          "HK": {
+            "label": "綜合用途物業",
+            "romanised": "zung3 hap6 jung6 tou4 mat6 jip6"
+          },
+          "TW": {
+            "label": "綜合用途不動產",
+            "romanised": "zōnghé yòngtú bùdòngchǎn"
+          },
+          "VN": {
+            "label": "Bất động sản hỗn hợp"
+          }
+        }
+      },
+      "rural": {
+        "label": "Rural property",
+        "localTerms": {
+          "GB": {
+            "label": "Rural property",
+            "aliases": [
+              "farmhouse",
+              "smallholding"
+            ]
+          },
+          "US": {
+            "label": "Rural property",
+            "aliases": [
+              "ranch",
+              "farmstead"
+            ]
+          },
+          "AU": {
+            "label": "Rural property",
+            "aliases": [
+              "station",
+              "hobby farm"
+            ]
+          },
+          "CA": {
+            "label": "Rural property",
+            "aliases": [
+              "farm",
+              "acreage"
+            ]
+          },
+          "FR": {
+            "label": "Propriété rurale",
+            "romanised": "propriété rurale"
+          },
+          "DE": {
+            "label": "Ländliche Immobilie",
+            "romanised": "laendliche immobilie"
+          },
+          "IN": {
+            "label": "Agricultural land",
+            "aliases": [
+              "farmland"
+            ]
+          },
+          "JP": {
+            "label": "農地",
+            "romanised": "nōchi"
+          },
+          "SG": {
+            "label": "Rural property"
+          },
+          "NZ": {
+            "label": "Lifestyle block",
+            "aliases": [
+              "rural property",
+              "farm"
+            ]
+          },
+          "IE": {
+            "label": "Rural property",
+            "aliases": [
+              "farm",
+              "smallholding"
+            ]
+          },
+          "NG": {
+            "label": "Farmland",
+            "aliases": [
+              "rural property"
+            ]
+          },
+          "CN": {
+            "label": "农村宅基地",
+            "romanised": "nóngcūn zháijīdì",
+            "aliases": [
+              "农用地"
+            ]
+          },
+          "MY": {
+            "label": "Tanah pertanian",
+            "aliases": [
+              "tanah kampung"
+            ]
+          },
+          "ID": {
+            "label": "Tanah pertanian",
+            "aliases": [
+              "lahan perkebunan"
+            ]
+          },
+          "TH": {
+            "label": "ที่ดินเกษตร",
+            "romanised": "thi din kaset"
+          },
+          "KR": {
+            "label": "농지",
+            "romanised": "nongji",
+            "aliases": [
+              "농업용지"
+            ]
+          },
+          "HK": {
+            "label": "農地",
+            "romanised": "nung4 dei6"
+          },
+          "TW": {
+            "label": "農地",
+            "romanised": "nóngdì",
+            "aliases": [
+              "農業用地"
+            ]
+          },
+          "VN": {
+            "label": "Đất nông nghiệp",
+            "aliases": [
+              "đất ruộng"
+            ]
+          }
+        }
+      },
+      "mobile": {
+        "label": "Mobile home",
+        "localTerms": {
+          "GB": {
+            "label": "Park home",
+            "aliases": [
+              "mobile home",
+              "static caravan"
+            ]
+          },
+          "US": {
+            "label": "Mobile home",
+            "aliases": [
+              "manufactured home",
+              "trailer"
+            ]
+          },
+          "AU": {
+            "label": "Relocatable home",
+            "aliases": [
+              "mobile home"
+            ]
+          },
+          "CA": {
+            "label": "Mobile home",
+            "aliases": [
+              "manufactured home"
+            ]
+          },
+          "FR": {
+            "label": "Mobil-home",
+            "romanised": "mobil-home"
+          },
+          "DE": {
+            "label": "Mobilheim",
+            "romanised": "mobilheim"
+          },
+          "IN": {
+            "label": "Mobile home"
+          },
+          "JP": {
+            "label": "トレーラーハウス",
+            "romanised": "torērā hausu"
+          },
+          "SG": {
+            "label": "Mobile home"
+          },
+          "NZ": {
+            "label": "Relocatable home",
+            "aliases": [
+              "mobile home"
+            ]
+          },
+          "IE": {
+            "label": "Mobile home"
+          },
+          "NG": {
+            "label": "Mobile home"
+          },
+          "CN": {
+            "label": "活动房屋",
+            "romanised": "huódòng fángwū"
+          },
+          "MY": {
+            "label": "Rumah mudah alih"
+          },
+          "ID": {
+            "label": "Rumah mobil"
+          },
+          "TH": {
+            "label": "บ้านเคลื่อนที่",
+            "romanised": "ban khlueanthi"
+          },
+          "KR": {
+            "label": "이동식 주택",
+            "romanised": "idongsik jutaek"
+          },
+          "HK": {
+            "label": "活動房屋",
+            "romanised": "wut6 dung6 fong4 uk1"
+          },
+          "TW": {
+            "label": "活動房屋",
+            "romanised": "huódòng fángwū"
+          },
+          "VN": {
+            "label": "Nhà di động"
+          }
+        }
+      },
+      "watercraft": {
+        "label": "Watercraft",
+        "localTerms": {
+          "GB": {
+            "label": "Houseboat",
+            "aliases": [
+              "narrowboat",
+              "canal boat"
+            ]
+          },
+          "US": {
+            "label": "Houseboat",
+            "aliases": [
+              "floating home"
+            ]
+          },
+          "AU": {
+            "label": "Houseboat"
+          },
+          "CA": {
+            "label": "Houseboat",
+            "aliases": [
+              "float home"
+            ]
+          },
+          "FR": {
+            "label": "Péniche",
+            "romanised": "péniche"
+          },
+          "DE": {
+            "label": "Hausboot",
+            "romanised": "hausboot"
+          },
+          "IN": {
+            "label": "Houseboat"
+          },
+          "JP": {
+            "label": "ハウスボート",
+            "romanised": "hausubōto"
+          },
+          "SG": {
+            "label": "Houseboat"
+          },
+          "NZ": {
+            "label": "Houseboat"
+          },
+          "IE": {
+            "label": "Houseboat"
+          },
+          "NG": {
+            "label": "Houseboat"
+          },
+          "CN": {
+            "label": "水上住宅",
+            "romanised": "shuǐshàng zhùzhái",
+            "aliases": [
+              "船屋"
+            ]
+          },
+          "MY": {
+            "label": "Rumah bot",
+            "aliases": [
+              "rumah perahu"
+            ]
+          },
+          "ID": {
+            "label": "Rumah perahu"
+          },
+          "TH": {
+            "label": "เรือนแพ",
+            "romanised": "ruean phae"
+          },
+          "KR": {
+            "label": "수상가옥",
+            "romanised": "susanggaok"
+          },
+          "HK": {
+            "label": "船屋",
+            "romanised": "syun4 uk1"
+          },
+          "TW": {
+            "label": "船屋",
+            "romanised": "chuánwū"
+          },
+          "VN": {
+            "label": "Nhà thuyền"
+          }
+        }
+      },
+      "other": {
+        "label": "Other property",
+        "localTerms": {
+          "GB": {
+            "label": "Other property"
+          },
+          "US": {
+            "label": "Other property"
+          },
+          "AU": {
+            "label": "Other property"
+          },
+          "CA": {
+            "label": "Other property"
+          },
+          "FR": {
+            "label": "Autre bien immobilier",
+            "romanised": "autre bien immobilier"
+          },
+          "DE": {
+            "label": "Sonstige Immobilie",
+            "romanised": "sonstige immobilie"
+          },
+          "IN": {
+            "label": "Other property"
+          },
+          "JP": {
+            "label": "その他の不動産",
+            "romanised": "sonota no fudōsan"
+          },
+          "SG": {
+            "label": "Other property"
+          },
+          "NZ": {
+            "label": "Other property"
+          },
+          "IE": {
+            "label": "Other property"
+          },
+          "NG": {
+            "label": "Other property"
+          },
+          "CN": {
+            "label": "其他不动产",
+            "romanised": "qítā bùdòngchǎn"
+          },
+          "MY": {
+            "label": "Hartanah lain"
+          },
+          "ID": {
+            "label": "Properti lainnya"
+          },
+          "TH": {
+            "label": "อสังหาริมทรัพย์อื่น",
+            "romanised": "asangharimmasap uen"
+          },
+          "KR": {
+            "label": "기타 부동산",
+            "romanised": "gita budongsang"
+          },
+          "HK": {
+            "label": "其他物業",
+            "romanised": "kei4 taa1 mat6 jip6"
+          },
+          "TW": {
+            "label": "其他不動產",
+            "romanised": "qítā bùdòngchǎn"
+          },
+          "VN": {
+            "label": "Bất động sản khác"
+          }
+        }
+      }
+    },
+    "tenureType": {
+      "ownership": {
+        "label": "Ownership",
+        "localTerms": {
+          "GB": {
+            "label": "Freehold"
+          },
+          "US": {
+            "label": "Fee simple",
+            "aliases": [
+              "fee simple absolute"
+            ]
+          },
+          "AU": {
+            "label": "Torrens title",
+            "aliases": [
+              "freehold"
+            ]
+          },
+          "CA": {
+            "label": "Fee simple",
+            "aliases": [
+              "freehold"
+            ]
+          },
+          "FR": {
+            "label": "Pleine propriété",
+            "romanised": "pleine propriété"
+          },
+          "DE": {
+            "label": "Eigentum",
+            "romanised": "eigentum"
+          },
+          "IN": {
+            "label": "Freehold"
+          },
+          "JP": {
+            "label": "所有権",
+            "romanised": "shoyūken"
+          },
+          "SG": {
+            "label": "Freehold"
+          },
+          "NZ": {
+            "label": "Fee simple",
+            "aliases": [
+              "freehold"
+            ]
+          },
+          "IE": {
+            "label": "Freehold"
+          },
+          "NG": {
+            "label": "Certificate of Occupancy",
+            "aliases": [
+              "C of O"
+            ]
+          },
+          "CN": {
+            "label": "所有权",
+            "romanised": "suǒyǒuquán",
+            "aliases": [
+              "产权"
+            ]
+          },
+          "MY": {
+            "label": "Hak milik",
+            "aliases": [
+              "pegangan bebas"
+            ]
+          },
+          "ID": {
+            "label": "Hak milik",
+            "aliases": [
+              "SHM"
+            ]
+          },
+          "TH": {
+            "label": "กรรมสิทธิ์",
+            "romanised": "kammasit"
+          },
+          "KR": {
+            "label": "소유권",
+            "romanised": "soyugwon"
+          },
+          "HK": {
+            "label": "業權",
+            "romanised": "jip6 kyun4"
+          },
+          "TW": {
+            "label": "所有權",
+            "romanised": "suǒyǒuquán"
+          },
+          "VN": {
+            "label": "Quyền sở hữu",
+            "aliases": [
+              "sổ đỏ",
+              "sổ hồng"
+            ]
+          }
+        }
+      },
+      "lease": {
+        "label": "Lease",
+        "localTerms": {
+          "GB": {
+            "label": "Leasehold"
+          },
+          "US": {
+            "label": "Lease",
+            "aliases": [
+              "leasehold estate"
+            ]
+          },
+          "AU": {
+            "label": "Strata title",
+            "aliases": [
+              "leasehold"
+            ]
+          },
+          "CA": {
+            "label": "Leasehold"
+          },
+          "FR": {
+            "label": "Bail",
+            "romanised": "bail"
+          },
+          "DE": {
+            "label": "Erbbaurecht",
+            "romanised": "erbbaurecht"
+          },
+          "IN": {
+            "label": "Leasehold"
+          },
+          "JP": {
+            "label": "借地権",
+            "romanised": "shakuchiken"
+          },
+          "SG": {
+            "label": "99-year leasehold",
+            "aliases": [
+              "HDB lease",
+              "leasehold"
+            ]
+          },
+          "NZ": {
+            "label": "Leasehold"
+          },
+          "IE": {
+            "label": "Leasehold"
+          },
+          "NG": {
+            "label": "Leasehold",
+            "aliases": [
+              "right of occupancy"
+            ]
+          },
+          "CN": {
+            "label": "租赁权",
+            "romanised": "zūlìnquán",
+            "aliases": [
+              "使用权"
+            ]
+          },
+          "MY": {
+            "label": "Pajakan",
+            "aliases": [
+              "pegangan pajakan"
+            ]
+          },
+          "ID": {
+            "label": "Hak guna bangunan",
+            "aliases": [
+              "HGB",
+              "hak sewa"
+            ]
+          },
+          "TH": {
+            "label": "สิทธิการเช่า",
+            "romanised": "sitthi kan chao"
+          },
+          "KR": {
+            "label": "임차권",
+            "romanised": "imchagwon",
+            "aliases": [
+              "전세"
+            ]
+          },
+          "HK": {
+            "label": "租賃權",
+            "romanised": "zou1 lam6 kyun4"
+          },
+          "TW": {
+            "label": "租賃權",
+            "romanised": "zūlìnquán"
+          },
+          "VN": {
+            "label": "Quyền thuê",
+            "aliases": [
+              "hợp đồng thuê"
+            ]
+          }
+        }
+      },
+      "communal": {
+        "label": "Communal ownership",
+        "localTerms": {
+          "GB": {
+            "label": "Commonhold"
+          },
+          "US": {
+            "label": "Community property",
+            "aliases": [
+              "joint tenancy"
+            ]
+          },
+          "AU": {
+            "label": "Community title"
+          },
+          "CA": {
+            "label": "Communal ownership"
+          },
+          "FR": {
+            "label": "Copropriété",
+            "romanised": "copropriété"
+          },
+          "DE": {
+            "label": "Wohnungseigentum",
+            "romanised": "wohnungseigentum"
+          },
+          "IN": {
+            "label": "Co-operative housing society"
+          },
+          "JP": {
+            "label": "区分所有",
+            "romanised": "kubun shoyū"
+          },
+          "SG": {
+            "label": "Strata title"
+          },
+          "NZ": {
+            "label": "Unit title",
+            "aliases": [
+              "cross-lease"
+            ]
+          },
+          "IE": {
+            "label": "Commonhold"
+          },
+          "NG": {
+            "label": "Communal ownership"
+          },
+          "CN": {
+            "label": "集体所有",
+            "romanised": "jítǐ suǒyǒu",
+            "aliases": [
+              "共有产权"
+            ]
+          },
+          "MY": {
+            "label": "Hak milik bersama",
+            "aliases": [
+              "tanah rizab Melayu"
+            ]
+          },
+          "ID": {
+            "label": "Hak milik bersama",
+            "aliases": [
+              "hak komunal"
+            ]
+          },
+          "TH": {
+            "label": "กรรมสิทธิ์ร่วม",
+            "romanised": "kammasit ruam"
+          },
+          "KR": {
+            "label": "공동소유",
+            "romanised": "gongdongsoyou"
+          },
+          "HK": {
+            "label": "共有業權",
+            "romanised": "gung6 jau5 jip6 kyun4"
+          },
+          "TW": {
+            "label": "共有所有權",
+            "romanised": "gòngyǒu suǒyǒuquán"
+          },
+          "VN": {
+            "label": "Sở hữu chung"
+          }
+        }
+      },
+      "customary": {
+        "label": "Customary tenure",
+        "localTerms": {
+          "GB": {
+            "label": "Customary tenure"
+          },
+          "US": {
+            "label": "Tribal land",
+            "aliases": [
+              "reservation land"
+            ]
+          },
+          "AU": {
+            "label": "Native title"
+          },
+          "CA": {
+            "label": "Indigenous land",
+            "aliases": [
+              "reserve land"
+            ]
+          },
+          "FR": {
+            "label": "Droit coutumier",
+            "romanised": "droit coutumier"
+          },
+          "DE": {
+            "label": "Gewohnheitsrecht",
+            "romanised": "gewohnheitsrecht"
+          },
+          "IN": {
+            "label": "Ancestral property",
+            "aliases": [
+              "Hindu undivided family property"
+            ]
+          },
+          "JP": {
+            "label": "慣習的所有権",
+            "romanised": "kanshūteki shoyūken"
+          },
+          "SG": {
+            "label": "Customary tenure"
+          },
+          "NZ": {
+            "label": "Māori freehold land"
+          },
+          "IE": {
+            "label": "Customary tenure"
+          },
+          "NG": {
+            "label": "Customary right of occupancy"
+          },
+          "CN": {
+            "label": "习惯法土地权",
+            "romanised": "xíguànfǎ tǔdìquán"
+          },
+          "MY": {
+            "label": "Tanah adat",
+            "aliases": [
+              "hak adat"
+            ]
+          },
+          "ID": {
+            "label": "Hak ulayat",
+            "aliases": [
+              "tanah adat"
+            ]
+          },
+          "TH": {
+            "label": "สิทธิ์ตามจารีตประเพณี",
+            "romanised": "sit tam charit prapheni"
+          },
+          "KR": {
+            "label": "관습법상 소유권",
+            "romanised": "gwanseubbeopsang soyugwon"
+          },
+          "HK": {
+            "label": "慣習地權",
+            "romanised": "gwaan3 zaap6 dei6 kyun4"
+          },
+          "TW": {
+            "label": "習慣法地權",
+            "romanised": "xíguànfǎ dìquán"
+          },
+          "VN": {
+            "label": "Quyền sử dụng đất theo tập quán"
+          }
+        }
+      },
+      "informal": {
+        "label": "Informal tenure",
+        "localTerms": {
+          "GB": {
+            "label": "Informal tenure"
+          },
+          "US": {
+            "label": "Informal tenure",
+            "aliases": [
+              "squatter's rights"
+            ]
+          },
+          "AU": {
+            "label": "Informal tenure"
+          },
+          "CA": {
+            "label": "Informal tenure"
+          },
+          "FR": {
+            "label": "Occupation informelle",
+            "romanised": "occupation informelle"
+          },
+          "DE": {
+            "label": "Informeller Besitz",
+            "romanised": "informeller besitz"
+          },
+          "IN": {
+            "label": "Informal tenure",
+            "aliases": [
+              "unauthorised occupation"
+            ]
+          },
+          "JP": {
+            "label": "非公式占有",
+            "romanised": "hikōshiki senyū"
+          },
+          "SG": {
+            "label": "Informal tenure"
+          },
+          "NZ": {
+            "label": "Informal tenure"
+          },
+          "IE": {
+            "label": "Informal tenure"
+          },
+          "NG": {
+            "label": "Informal tenure",
+            "aliases": [
+              "undocumented ownership"
+            ]
+          },
+          "CN": {
+            "label": "小产权",
+            "romanised": "xiǎochǎnquán",
+            "aliases": [
+              "非正式产权"
+            ]
+          },
+          "MY": {
+            "label": "Pemilikan tidak rasmi"
+          },
+          "ID": {
+            "label": "Tanah girik",
+            "aliases": [
+              "Letter C"
+            ]
+          },
+          "TH": {
+            "label": "การครอบครองไม่เป็นทางการ",
+            "romanised": "kan khropkhrong mai pen thangkan"
+          },
+          "KR": {
+            "label": "비공식 소유",
+            "romanised": "bigongsik soyu"
+          },
+          "HK": {
+            "label": "非正式業權",
+            "romanised": "fei1 zing3 sik1 jip6 kyun4"
+          },
+          "TW": {
+            "label": "非正式產權",
+            "romanised": "fēizhèngshì chǎnquán"
+          },
+          "VN": {
+            "label": "Sở hữu không chính thức"
+          }
+        }
+      },
+      "government_allocated": {
+        "label": "Government-allocated tenure",
+        "localTerms": {
+          "GB": {
+            "label": "Council housing",
+            "aliases": [
+              "social housing"
+            ]
+          },
+          "US": {
+            "label": "Public housing",
+            "aliases": [
+              "Section 8"
+            ]
+          },
+          "AU": {
+            "label": "Public housing",
+            "aliases": [
+              "social housing"
+            ]
+          },
+          "CA": {
+            "label": "Social housing"
+          },
+          "FR": {
+            "label": "Logement social",
+            "romanised": "logement social",
+            "aliases": [
+              "HLM"
+            ]
+          },
+          "DE": {
+            "label": "Sozialwohnung",
+            "romanised": "sozialwohnung"
+          },
+          "IN": {
+            "label": "Government-allotted housing",
+            "aliases": [
+              "DDA flat",
+              "EWS housing"
+            ]
+          },
+          "JP": {
+            "label": "公営住宅",
+            "romanised": "kōei jūtaku"
+          },
+          "SG": {
+            "label": "HDB flat"
+          },
+          "NZ": {
+            "label": "State house",
+            "aliases": [
+              "Kāinga Ora housing"
+            ]
+          },
+          "IE": {
+            "label": "Local authority housing",
+            "aliases": [
+              "council housing"
+            ]
+          },
+          "NG": {
+            "label": "Government-allocated housing"
+          },
+          "CN": {
+            "label": "经济适用房",
+            "romanised": "jīngjì shìyòngfáng",
+            "aliases": [
+              "保障性住房",
+              "公租房"
+            ]
+          },
+          "MY": {
+            "label": "Rumah mampu milik",
+            "aliases": [
+              "PR1MA",
+              "PPR"
+            ]
+          },
+          "ID": {
+            "label": "Rumah susun sederhana",
+            "aliases": [
+              "rusunami"
+            ]
+          },
+          "TH": {
+            "label": "บ้านการเคหะ",
+            "romanised": "ban kan kheha",
+            "aliases": [
+              "การเคหะแห่งชาติ"
+            ]
+          },
+          "KR": {
+            "label": "공공임대주택",
+            "romanised": "gonggong imdae jutaek",
+            "aliases": [
+              "LH 임대아파트"
+            ]
+          },
+          "HK": {
+            "label": "公屋",
+            "romanised": "gung1 uk1",
+            "aliases": [
+              "居屋"
+            ]
+          },
+          "TW": {
+            "label": "社會住宅",
+            "romanised": "shèhuì zhùzhái"
+          },
+          "VN": {
+            "label": "Nhà ở xã hội",
+            "aliases": [
+              "nhà tái định cư"
+            ]
+          }
+        }
+      }
+    },
+    "grantType": {
+      "grant_of_probate": {
+        "label": "Grant of probate",
+        "localTerms": {
+          "GB": {
+            "label": "Grant of Probate"
+          },
+          "US": {
+            "label": "Letters Testamentary"
+          },
+          "AU": {
+            "label": "Grant of Probate"
+          },
+          "CA": {
+            "label": "Certificate of Appointment of Estate Trustee with a Will"
+          },
+          "FR": {
+            "label": "Acte de notoriété",
+            "romanised": "acte de notoriété"
+          },
+          "DE": {
+            "label": "Erbschein",
+            "romanised": "erbschein"
+          },
+          "IN": {
+            "label": "Probate"
+          },
+          "JP": {
+            "label": "遺言検認",
+            "romanised": "yuigon kennin"
+          },
+          "SG": {
+            "label": "Grant of Probate"
+          },
+          "NZ": {
+            "label": "Grant of Probate"
+          },
+          "IE": {
+            "label": "Grant of Probate"
+          },
+          "NG": {
+            "label": "Probate"
+          },
+          "CN": {
+            "label": "遗嘱认证书",
+            "romanised": "yízhǔ rènzhèngshū"
+          },
+          "MY": {
+            "label": "Geran probet",
+            "aliases": [
+              "Grant of Probate"
+            ]
+          },
+          "ID": {
+            "label": "Surat keterangan waris",
+            "aliases": [
+              "penetapan pengadilan"
+            ]
+          },
+          "TH": {
+            "label": "คำสั่งศาลตั้งผู้จัดการมรดก",
+            "romanised": "khamsung san tang phu chatkan moradok"
+          },
+          "KR": {
+            "label": "유언검인",
+            "romanised": "yueongeom-in"
+          },
+          "HK": {
+            "label": "遺囑認證",
+            "romanised": "wai4 zuk1 jing6 zing3"
+          },
+          "TW": {
+            "label": "遺囑認證",
+            "romanised": "yízhǔ rènzhèng"
+          },
+          "VN": {
+            "label": "Văn bản công chứng di chúc"
+          }
+        }
+      },
+      "letters_of_administration": {
+        "label": "Letters of administration",
+        "localTerms": {
+          "GB": {
+            "label": "Letters of Administration"
+          },
+          "US": {
+            "label": "Letters of Administration"
+          },
+          "AU": {
+            "label": "Letters of Administration"
+          },
+          "CA": {
+            "label": "Certificate of Appointment of Estate Trustee without a Will"
+          },
+          "FR": {
+            "label": "Certificat d'hérédité",
+            "romanised": "certificat d'hérédité"
+          },
+          "DE": {
+            "label": "Erbschein (ohne Testament)",
+            "romanised": "erbschein ohne testament"
+          },
+          "IN": {
+            "label": "Letters of Administration"
+          },
+          "JP": {
+            "label": "遺産管理許可",
+            "romanised": "isan kanri kyoka"
+          },
+          "SG": {
+            "label": "Letters of Administration"
+          },
+          "NZ": {
+            "label": "Letters of Administration"
+          },
+          "IE": {
+            "label": "Letters of Administration"
+          },
+          "NG": {
+            "label": "Letters of Administration"
+          },
+          "CN": {
+            "label": "遗产管理委托书",
+            "romanised": "yíchǎn guǎnlǐ wěituōshū"
+          },
+          "MY": {
+            "label": "Surat kuasa mentadbir",
+            "aliases": [
+              "Letters of Administration"
+            ]
+          },
+          "ID": {
+            "label": "Surat penetapan ahli waris"
+          },
+          "TH": {
+            "label": "คำสั่งศาลแต่งตั้งผู้จัดการมรดก",
+            "romanised": "khamsung san taengtang phu chatkan moradok"
+          },
+          "KR": {
+            "label": "상속재산관리인 선임",
+            "romanised": "sangsokjaesangwalliin seon-im"
+          },
+          "HK": {
+            "label": "遺產管理書",
+            "romanised": "wai4 chaan2 gun2 lei5 syu1"
+          },
+          "TW": {
+            "label": "遺產管理書",
+            "romanised": "yíchǎn guǎnlǐshū"
+          },
+          "VN": {
+            "label": "Văn bản quản lý di sản"
+          }
+        }
+      },
+      "succession_certificate": {
+        "label": "Succession certificate",
+        "localTerms": {
+          "GB": {
+            "label": "Succession certificate"
+          },
+          "US": {
+            "label": "Succession certificate"
+          },
+          "AU": {
+            "label": "Succession certificate"
+          },
+          "CA": {
+            "label": "Succession certificate"
+          },
+          "FR": {
+            "label": "Certificat de succession",
+            "romanised": "certificat de succession"
+          },
+          "DE": {
+            "label": "Erbschein",
+            "romanised": "erbschein"
+          },
+          "IN": {
+            "label": "Succession Certificate"
+          },
+          "JP": {
+            "label": "相続証明書",
+            "romanised": "sōzoku shōmeisho"
+          },
+          "SG": {
+            "label": "Succession certificate"
+          },
+          "NZ": {
+            "label": "Succession certificate"
+          },
+          "IE": {
+            "label": "Succession certificate"
+          },
+          "NG": {
+            "label": "Succession certificate"
+          },
+          "CN": {
+            "label": "继承权公证书",
+            "romanised": "jìchéngquán gōngzhèngshū"
+          },
+          "MY": {
+            "label": "Sijil pewarisan",
+            "aliases": [
+              "Distribution Order"
+            ]
+          },
+          "ID": {
+            "label": "Surat keterangan hak waris"
+          },
+          "TH": {
+            "label": "หนังสือรับรองการรับมรดก",
+            "romanised": "nangsue raprong kan rap moradok"
+          },
+          "KR": {
+            "label": "상속증명서",
+            "romanised": "sangsokjeungmyeongseo"
+          },
+          "HK": {
+            "label": "繼承證明書",
+            "romanised": "gai3 sing4 zing3 ming4 syu1"
+          },
+          "TW": {
+            "label": "繼承證明書",
+            "romanised": "jìchéng zhèngmíngshū"
+          },
+          "VN": {
+            "label": "Giấy chứng nhận quyền thừa kế"
+          }
+        }
+      },
+      "certificate_of_inheritance": {
+        "label": "Certificate of inheritance",
+        "localTerms": {
+          "GB": {
+            "label": "Certificate of inheritance"
+          },
+          "US": {
+            "label": "Certificate of inheritance"
+          },
+          "AU": {
+            "label": "Certificate of inheritance"
+          },
+          "CA": {
+            "label": "Certificate of inheritance"
+          },
+          "FR": {
+            "label": "Acte de notoriété",
+            "romanised": "acte de notoriété"
+          },
+          "DE": {
+            "label": "Erbschein",
+            "romanised": "erbschein"
+          },
+          "IN": {
+            "label": "Certificate of inheritance"
+          },
+          "JP": {
+            "label": "相続証明書",
+            "romanised": "sōzoku shōmeisho"
+          },
+          "SG": {
+            "label": "Certificate of inheritance"
+          },
+          "NZ": {
+            "label": "Certificate of inheritance"
+          },
+          "IE": {
+            "label": "Certificate of inheritance"
+          },
+          "NG": {
+            "label": "Certificate of inheritance"
+          },
+          "CN": {
+            "label": "继承公证书",
+            "romanised": "jìchéng gōngzhèngshū"
+          },
+          "MY": {
+            "label": "Perintah pembahagian",
+            "aliases": [
+              "Distribution Order"
+            ]
+          },
+          "ID": {
+            "label": "Akta keterangan waris"
+          },
+          "TH": {
+            "label": "ใบมรณบัตร",
+            "romanised": "bai moranabat"
+          },
+          "KR": {
+            "label": "상속확인서",
+            "romanised": "sangsokwag-inseo"
+          },
+          "HK": {
+            "label": "繼承公證書",
+            "romanised": "gai3 sing4 gung1 zing3 syu1"
+          },
+          "TW": {
+            "label": "繼承公證書",
+            "romanised": "jìchéng gōngzhèngshū"
+          },
+          "VN": {
+            "label": "Văn bản khai nhận di sản"
+          }
+        }
+      },
+      "court_appointment": {
+        "label": "Court appointment",
+        "localTerms": {
+          "GB": {
+            "label": "Court appointment"
+          },
+          "US": {
+            "label": "Court appointment",
+            "aliases": [
+              "letters of conservatorship"
+            ]
+          },
+          "AU": {
+            "label": "Court appointment"
+          },
+          "CA": {
+            "label": "Court appointment"
+          },
+          "FR": {
+            "label": "Désignation judiciaire",
+            "romanised": "désignation judiciaire"
+          },
+          "DE": {
+            "label": "Gerichtliche Bestellung",
+            "romanised": "gerichtliche bestellung"
+          },
+          "IN": {
+            "label": "Court appointment"
+          },
+          "JP": {
+            "label": "裁判所任命",
+            "romanised": "saibansho ninmei"
+          },
+          "SG": {
+            "label": "Court appointment"
+          },
+          "NZ": {
+            "label": "Court appointment"
+          },
+          "IE": {
+            "label": "Court appointment"
+          },
+          "NG": {
+            "label": "Court appointment"
+          },
+          "CN": {
+            "label": "法院指定",
+            "romanised": "fǎyuàn zhǐdìng"
+          },
+          "MY": {
+            "label": "Pelantikan mahkamah"
+          },
+          "ID": {
+            "label": "Penetapan pengadilan"
+          },
+          "TH": {
+            "label": "คำสั่งศาลแต่งตั้ง",
+            "romanised": "khamsung san taengtang"
+          },
+          "KR": {
+            "label": "법원 선임",
+            "romanised": "beobwon seon-im"
+          },
+          "HK": {
+            "label": "法院委任",
+            "romanised": "faat3 jyun2 wai2 jam6"
+          },
+          "TW": {
+            "label": "法院指定",
+            "romanised": "fǎyuàn zhǐdìng"
+          },
+          "VN": {
+            "label": "Quyết định của tòa án"
+          }
+        }
+      },
+      "small_estate_affidavit": {
+        "label": "Small estate affidavit",
+        "localTerms": {
+          "GB": {
+            "label": "Small estate affidavit"
+          },
+          "US": {
+            "label": "Small Estate Affidavit",
+            "aliases": [
+              "summary administration"
+            ]
+          },
+          "AU": {
+            "label": "Election to administer"
+          },
+          "CA": {
+            "label": "Small estate declaration"
+          },
+          "FR": {
+            "label": "Attestation de petite succession",
+            "romanised": "attestation de petite succession"
+          },
+          "DE": {
+            "label": "Eidesstattliche Versicherung (kleiner Nachlass)",
+            "romanised": "eidesstattliche versicherung kleiner nachlass"
+          },
+          "IN": {
+            "label": "Small estate affidavit"
+          },
+          "JP": {
+            "label": "少額遺産宣誓書",
+            "romanised": "shōgaku isan senseisho"
+          },
+          "SG": {
+            "label": "Public Trustee administration"
+          },
+          "NZ": {
+            "label": "Summary administration"
+          },
+          "IE": {
+            "label": "Small estate affidavit"
+          },
+          "NG": {
+            "label": "Small estate affidavit"
+          },
+          "CN": {
+            "label": "小额遗产声明",
+            "romanised": "xiǎo'é yíchǎn shēngmíng"
+          },
+          "MY": {
+            "label": "Akuan sumpah harta kecil",
+            "aliases": [
+              "small estate distribution"
+            ]
+          },
+          "ID": {
+            "label": "Pernyataan waris sederhana"
+          },
+          "TH": {
+            "label": "คำร้องมรดกขนาดเล็ก",
+            "romanised": "khamrong moradok khanat lek"
+          },
+          "KR": {
+            "label": "소액상속 선서진술서",
+            "romanised": "soaeksangsok seonseojinsulseo"
+          },
+          "HK": {
+            "label": "小額遺產宣誓書",
+            "romanised": "siu2 ngaak6 wai4 chaan2 syun1 sai6 syu1"
+          },
+          "TW": {
+            "label": "小額遺產聲明書",
+            "romanised": "xiǎo'é yíchǎn shēngmíngshū"
+          },
+          "VN": {
+            "label": "Khai nhận di sản giá trị nhỏ"
+          }
+        }
+      },
+      "resealing": {
+        "label": "Resealing of grant",
+        "localTerms": {
+          "GB": {
+            "label": "Resealing of grant"
+          },
+          "US": {
+            "label": "Ancillary probate"
+          },
+          "AU": {
+            "label": "Resealing of grant"
+          },
+          "CA": {
+            "label": "Resealing of grant"
+          },
+          "FR": {
+            "label": "Exequatur",
+            "romanised": "exequatur"
+          },
+          "DE": {
+            "label": "Anerkennung ausländischer Erbscheine",
+            "romanised": "anerkennung auslaendischer erbscheine"
+          },
+          "IN": {
+            "label": "Resealing of grant"
+          },
+          "JP": {
+            "label": "外国遺言検認の承認",
+            "romanised": "gaikoku yuigon kennin no shōnin"
+          },
+          "SG": {
+            "label": "Resealing of grant"
+          },
+          "NZ": {
+            "label": "Resealing of grant"
+          },
+          "IE": {
+            "label": "Resealing of grant"
+          },
+          "NG": {
+            "label": "Resealing of grant"
+          },
+          "CN": {
+            "label": "外国遗嘱认证的承认",
+            "romanised": "wàiguó yízhǔ rènzhèng de chéngrèn"
+          },
+          "MY": {
+            "label": "Pengesahan semula geran"
+          },
+          "ID": {
+            "label": "Pengakuan putusan asing"
+          },
+          "TH": {
+            "label": "การรับรองคำสั่งศาลต่างประเทศ",
+            "romanised": "kan raprong khamsung san tang prathet"
+          },
+          "KR": {
+            "label": "외국 검인의 승인",
+            "romanised": "oeguk geom-in-ui seung-in"
+          },
+          "HK": {
+            "label": "重新蓋章",
+            "romanised": "cung4 san1 goi3 zoeng1"
+          },
+          "TW": {
+            "label": "外國遺囑認證之承認",
+            "romanised": "wàiguó yízhǔ rènzhèng zhī chéngrèn"
+          },
+          "VN": {
+            "label": "Công nhận bản án nước ngoài"
+          }
+        }
+      }
+    },
+    "pensionType": {
+      "state_pension": {
+        "label": "State pension",
+        "localTerms": {
+          "GB": {
+            "label": "State Pension",
+            "aliases": [
+              "New State Pension",
+              "Basic State Pension"
+            ]
+          },
+          "US": {
+            "label": "Social Security",
+            "aliases": [
+              "OASDI"
+            ]
+          },
+          "AU": {
+            "label": "Age Pension"
+          },
+          "CA": {
+            "label": "Canada Pension Plan",
+            "aliases": [
+              "CPP",
+              "Old Age Security",
+              "OAS"
+            ]
+          },
+          "FR": {
+            "label": "Retraite de base",
+            "romanised": "retraite de base"
+          },
+          "DE": {
+            "label": "Gesetzliche Rente",
+            "romanised": "gesetzliche rente"
+          },
+          "IN": {
+            "label": "Employee Pension Scheme",
+            "aliases": [
+              "EPS"
+            ]
+          },
+          "JP": {
+            "label": "国民年金",
+            "romanised": "kokumin nenkin",
+            "aliases": [
+              "基礎年金"
+            ]
+          },
+          "SG": {
+            "label": "CPF LIFE",
+            "aliases": [
+              "Central Provident Fund"
+            ]
+          },
+          "NZ": {
+            "label": "NZ Super",
+            "aliases": [
+              "New Zealand Superannuation"
+            ]
+          },
+          "IE": {
+            "label": "State Pension (Contributory)",
+            "aliases": [
+              "State Pension (Non-Contributory)"
+            ]
+          },
+          "NG": {
+            "label": "National Pension",
+            "aliases": [
+              "Contributory Pension Scheme"
+            ]
+          },
+          "CN": {
+            "label": "基本养老保险",
+            "romanised": "jīběn yǎnglǎo bǎoxiǎn",
+            "aliases": [
+              "社保"
+            ]
+          },
+          "MY": {
+            "label": "KWSP",
+            "aliases": [
+              "Kumpulan Wang Simpanan Pekerja",
+              "EPF"
+            ]
+          },
+          "ID": {
+            "label": "BPJS Ketenagakerjaan",
+            "aliases": [
+              "Jaminan Hari Tua",
+              "JHT"
+            ]
+          },
+          "TH": {
+            "label": "กองทุนประกันสังคม",
+            "romanised": "kongthun prakan sangkhom"
+          },
+          "KR": {
+            "label": "국민연금",
+            "romanised": "gungmin yeongeum"
+          },
+          "HK": {
+            "label": "強積金",
+            "romanised": "koeng4 zik1 gam1",
+            "aliases": [
+              "MPF"
+            ]
+          },
+          "TW": {
+            "label": "勞工保險",
+            "romanised": "láogōng bǎoxiǎn",
+            "aliases": [
+              "勞保"
+            ]
+          },
+          "VN": {
+            "label": "Bảo hiểm xã hội",
+            "aliases": [
+              "BHXH"
+            ]
+          }
+        }
+      },
+      "occupational_pension": {
+        "label": "Occupational pension",
+        "localTerms": {
+          "GB": {
+            "label": "Workplace pension",
+            "aliases": [
+              "defined benefit",
+              "final salary scheme",
+              "defined contribution"
+            ]
+          },
+          "US": {
+            "label": "401(k)",
+            "aliases": [
+              "employer-sponsored plan",
+              "defined benefit plan",
+              "pension plan"
+            ]
+          },
+          "AU": {
+            "label": "Superannuation",
+            "aliases": [
+              "super",
+              "employer super"
+            ]
+          },
+          "CA": {
+            "label": "Registered Pension Plan",
+            "aliases": [
+              "RPP",
+              "employer pension"
+            ]
+          },
+          "FR": {
+            "label": "Retraite complémentaire",
+            "romanised": "retraite complémentaire",
+            "aliases": [
+              "AGIRC-ARRCO"
+            ]
+          },
+          "DE": {
+            "label": "Betriebsrente",
+            "romanised": "betriebsrente",
+            "aliases": [
+              "betriebliche Altersvorsorge"
+            ]
+          },
+          "IN": {
+            "label": "Employees' Provident Fund",
+            "aliases": [
+              "EPF",
+              "PF"
+            ]
+          },
+          "JP": {
+            "label": "厚生年金",
+            "romanised": "kōsei nenkin"
+          },
+          "SG": {
+            "label": "CPF Ordinary Account",
+            "aliases": [
+              "CPF OA"
+            ]
+          },
+          "NZ": {
+            "label": "KiwiSaver",
+            "aliases": [
+              "employer scheme"
+            ]
+          },
+          "IE": {
+            "label": "Occupational pension",
+            "aliases": [
+              "company pension"
+            ]
+          },
+          "NG": {
+            "label": "Pension Fund Administrator",
+            "aliases": [
+              "PFA",
+              "RSA"
+            ]
+          },
+          "CN": {
+            "label": "企业年金",
+            "romanised": "qǐyè niánjīn"
+          },
+          "MY": {
+            "label": "Pencen pekerjaan",
+            "aliases": [
+              "skim pencen"
+            ]
+          },
+          "ID": {
+            "label": "Dana pensiun pemberi kerja",
+            "aliases": [
+              "DPPK"
+            ]
+          },
+          "TH": {
+            "label": "กองทุนสำรองเลี้ยงชีพ",
+            "romanised": "kongthun samrong liang chip"
+          },
+          "KR": {
+            "label": "퇴직연금",
+            "romanised": "toejigyeongeum",
+            "aliases": [
+              "DB형",
+              "DC형"
+            ]
+          },
+          "HK": {
+            "label": "職業退休計劃",
+            "romanised": "zik1 jip6 teoi3 jau1 gai3 waak6",
+            "aliases": [
+              "ORSO"
+            ]
+          },
+          "TW": {
+            "label": "勞工退休金",
+            "romanised": "láogōng tuìxiūjīn",
+            "aliases": [
+              "勞退"
+            ]
+          },
+          "VN": {
+            "label": "Quỹ hưu trí bổ sung"
+          }
+        }
+      },
+      "personal_pension": {
+        "label": "Personal pension",
+        "localTerms": {
+          "GB": {
+            "label": "Personal pension",
+            "aliases": [
+              "SIPP",
+              "self-invested personal pension",
+              "stakeholder pension"
+            ]
+          },
+          "US": {
+            "label": "IRA",
+            "aliases": [
+              "Individual Retirement Account",
+              "Roth IRA",
+              "Traditional IRA"
+            ]
+          },
+          "AU": {
+            "label": "Self-managed super fund",
+            "aliases": [
+              "SMSF",
+              "personal super"
+            ]
+          },
+          "CA": {
+            "label": "RRSP",
+            "aliases": [
+              "Registered Retirement Savings Plan",
+              "TFSA"
+            ]
+          },
+          "FR": {
+            "label": "Plan d'épargne retraite",
+            "romanised": "plan d'épargne retraite",
+            "aliases": [
+              "PER"
+            ]
+          },
+          "DE": {
+            "label": "Riester-Rente",
+            "romanised": "riester-rente",
+            "aliases": [
+              "Rürup-Rente",
+              "private Altersvorsorge"
+            ]
+          },
+          "IN": {
+            "label": "National Pension System",
+            "aliases": [
+              "NPS"
+            ]
+          },
+          "JP": {
+            "label": "個人型確定拠出年金",
+            "romanised": "kojingata kakutei kyoshutsu nenkin",
+            "aliases": [
+              "iDeCo"
+            ]
+          },
+          "SG": {
+            "label": "Supplementary Retirement Scheme",
+            "aliases": [
+              "SRS"
+            ]
+          },
+          "NZ": {
+            "label": "KiwiSaver (voluntary)",
+            "aliases": [
+              "personal superannuation"
+            ]
+          },
+          "IE": {
+            "label": "Personal Retirement Savings Account",
+            "aliases": [
+              "PRSA",
+              "personal pension"
+            ]
+          },
+          "NG": {
+            "label": "Voluntary contribution",
+            "aliases": [
+              "additional voluntary contribution",
+              "AVC"
+            ]
+          },
+          "CN": {
+            "label": "个人养老金",
+            "romanised": "gèrén yǎnglǎojīn"
+          },
+          "MY": {
+            "label": "Skim Persaraan Swasta",
+            "aliases": [
+              "PRS"
+            ]
+          },
+          "ID": {
+            "label": "Dana Pensiun Lembaga Keuangan",
+            "aliases": [
+              "DPLK"
+            ]
+          },
+          "TH": {
+            "label": "กองทุนรวมเพื่อการเลี้ยงชีพ",
+            "romanised": "kongthun ruam phuea kan liang chip",
+            "aliases": [
+              "RMF"
+            ]
+          },
+          "KR": {
+            "label": "개인연금",
+            "romanised": "gaein yeongeum",
+            "aliases": [
+              "IRP"
+            ]
+          },
+          "HK": {
+            "label": "自願性供款",
+            "romanised": "zi6 jyun6 sing3 gung1 fun2",
+            "aliases": [
+              "TVC"
+            ]
+          },
+          "TW": {
+            "label": "個人退休帳戶",
+            "romanised": "gèrén tuìxiū zhànghù"
+          },
+          "VN": {
+            "label": "Bảo hiểm hưu trí tự nguyện"
+          }
+        }
+      },
+      "public_service_pension": {
+        "label": "Public-service pension",
+        "localTerms": {
+          "GB": {
+            "label": "Public-sector pension",
+            "aliases": [
+              "civil service pension",
+              "NHS pension",
+              "teachers' pension",
+              "local government pension"
+            ]
+          },
+          "US": {
+            "label": "Government pension",
+            "aliases": [
+              "FERS",
+              "CSRS",
+              "state pension plan"
+            ]
+          },
+          "AU": {
+            "label": "Commonwealth Superannuation",
+            "aliases": [
+              "CSS",
+              "PSS",
+              "PSSap"
+            ]
+          },
+          "CA": {
+            "label": "Public Service Pension Plan",
+            "aliases": [
+              "PSPP"
+            ]
+          },
+          "FR": {
+            "label": "Retraite de la fonction publique",
+            "romanised": "retraite de la fonction publique"
+          },
+          "DE": {
+            "label": "Beamtenversorgung",
+            "romanised": "beamtenversorgung"
+          },
+          "IN": {
+            "label": "Government pension",
+            "aliases": [
+              "civil service pension",
+              "central/state government pension"
+            ]
+          },
+          "JP": {
+            "label": "共済年金",
+            "romanised": "kyōsai nenkin"
+          },
+          "SG": {
+            "label": "Government pension"
+          },
+          "NZ": {
+            "label": "Government Superannuation Fund",
+            "aliases": [
+              "GSF"
+            ]
+          },
+          "IE": {
+            "label": "Public-service pension"
+          },
+          "NG": {
+            "label": "Government pension"
+          },
+          "CN": {
+            "label": "机关事业单位养老保险",
+            "romanised": "jīguān shìyè dānwèi yǎnglǎo bǎoxiǎn"
+          },
+          "MY": {
+            "label": "Pencen perkhidmatan awam",
+            "aliases": [
+              "pencen kerajaan"
+            ]
+          },
+          "ID": {
+            "label": "Taspen",
+            "aliases": [
+              "Dana Pensiun PNS"
+            ]
+          },
+          "TH": {
+            "label": "บำนาญข้าราชการ",
+            "romanised": "bamnan kharachakan"
+          },
+          "KR": {
+            "label": "공무원연금",
+            "romanised": "gongmuwon yeongeum"
+          },
+          "HK": {
+            "label": "公務員退休金",
+            "romanised": "gung1 mou6 jyun4 teoi3 jau1 gam1"
+          },
+          "TW": {
+            "label": "公務人員退休金",
+            "romanised": "gōngwù rényuán tuìxiūjīn"
+          },
+          "VN": {
+            "label": "Lương hưu công chức"
+          }
+        }
+      },
+      "military_pension": {
+        "label": "Military pension",
+        "localTerms": {
+          "GB": {
+            "label": "Armed Forces Pension Scheme",
+            "aliases": [
+              "AFPS",
+              "war pension"
+            ]
+          },
+          "US": {
+            "label": "Military retirement pay",
+            "aliases": [
+              "VA pension",
+              "veterans' pension"
+            ]
+          },
+          "AU": {
+            "label": "Military superannuation",
+            "aliases": [
+              "MSBS",
+              "ADF Super"
+            ]
+          },
+          "CA": {
+            "label": "Canadian Armed Forces pension",
+            "aliases": [
+              "CAF pension"
+            ]
+          },
+          "FR": {
+            "label": "Pension militaire",
+            "romanised": "pension militaire"
+          },
+          "DE": {
+            "label": "Soldatenversorgung",
+            "romanised": "soldatenversorgung"
+          },
+          "IN": {
+            "label": "Defence pension",
+            "aliases": [
+              "military pension"
+            ]
+          },
+          "JP": {
+            "label": "自衛隊年金",
+            "romanised": "jieitai nenkin"
+          },
+          "SG": {
+            "label": "SAF pension"
+          },
+          "NZ": {
+            "label": "Military pension"
+          },
+          "IE": {
+            "label": "Defence Forces pension"
+          },
+          "NG": {
+            "label": "Military pension"
+          },
+          "CN": {
+            "label": "军人退役金",
+            "romanised": "jūnrén tuìyìjīn"
+          },
+          "MY": {
+            "label": "Pencen tentera"
+          },
+          "ID": {
+            "label": "Pensiun TNI",
+            "aliases": [
+              "tunjangan veteran"
+            ]
+          },
+          "TH": {
+            "label": "บำนาญทหาร",
+            "romanised": "bamnan thahan"
+          },
+          "KR": {
+            "label": "군인연금",
+            "romanised": "gun-in yeongeum"
+          },
+          "HK": {
+            "label": "軍人退休金",
+            "romanised": "gwan1 jan4 teoi3 jau1 gam1"
+          },
+          "TW": {
+            "label": "軍人退休金",
+            "romanised": "jūnrén tuìxiūjīn"
+          },
+          "VN": {
+            "label": "Lương hưu quân nhân"
+          }
+        }
+      }
+    },
+    "insuranceType": {
+      "life_insurance": {
+        "label": "Life insurance",
+        "localTerms": {
+          "GB": {
+            "label": "Life assurance",
+            "aliases": [
+              "life insurance",
+              "whole of life",
+              "term assurance"
+            ]
+          },
+          "US": {
+            "label": "Life insurance",
+            "aliases": [
+              "whole life",
+              "term life",
+              "universal life"
+            ]
+          },
+          "AU": {
+            "label": "Life insurance",
+            "aliases": [
+              "life cover"
+            ]
+          },
+          "CA": {
+            "label": "Life insurance"
+          },
+          "FR": {
+            "label": "Assurance-vie",
+            "romanised": "assurance-vie"
+          },
+          "DE": {
+            "label": "Lebensversicherung",
+            "romanised": "lebensversicherung"
+          },
+          "IN": {
+            "label": "Life insurance",
+            "aliases": [
+              "LIC policy"
+            ]
+          },
+          "JP": {
+            "label": "生命保険",
+            "romanised": "seimei hoken"
+          },
+          "SG": {
+            "label": "Life insurance"
+          },
+          "NZ": {
+            "label": "Life insurance",
+            "aliases": [
+              "life cover"
+            ]
+          },
+          "IE": {
+            "label": "Life assurance",
+            "aliases": [
+              "life insurance"
+            ]
+          },
+          "NG": {
+            "label": "Life insurance"
+          },
+          "CN": {
+            "label": "人寿保险",
+            "romanised": "rénshòu bǎoxiǎn",
+            "aliases": [
+              "寿险"
+            ]
+          },
+          "MY": {
+            "label": "Insurans hayat",
+            "aliases": [
+              "takaful keluarga"
+            ]
+          },
+          "ID": {
+            "label": "Asuransi jiwa"
+          },
+          "TH": {
+            "label": "ประกันชีวิต",
+            "romanised": "prakan chiwit"
+          },
+          "KR": {
+            "label": "생명보험",
+            "romanised": "saengmyeongboheom"
+          },
+          "HK": {
+            "label": "人壽保險",
+            "romanised": "jan4 sau6 bou2 him2"
+          },
+          "TW": {
+            "label": "人壽保險",
+            "romanised": "rénshòu bǎoxiǎn"
+          },
+          "VN": {
+            "label": "Bảo hiểm nhân thọ"
+          }
+        }
+      },
+      "death_in_service": {
+        "label": "Death-in-service benefit",
+        "localTerms": {
+          "GB": {
+            "label": "Death-in-service benefit",
+            "aliases": [
+              "DIS",
+              "group life"
+            ]
+          },
+          "US": {
+            "label": "Group life insurance",
+            "aliases": [
+              "employer life insurance",
+              "AD&D"
+            ]
+          },
+          "AU": {
+            "label": "Death benefit (super)",
+            "aliases": [
+              "group life cover"
+            ]
+          },
+          "CA": {
+            "label": "Group life insurance",
+            "aliases": [
+              "employer life benefit"
+            ]
+          },
+          "FR": {
+            "label": "Capital décès",
+            "romanised": "capital décès"
+          },
+          "DE": {
+            "label": "Sterbegeld",
+            "romanised": "sterbegeld",
+            "aliases": [
+              "betriebliche Todesfallleistung"
+            ]
+          },
+          "IN": {
+            "label": "Group term life insurance",
+            "aliases": [
+              "GTLI",
+              "death benefit"
+            ]
+          },
+          "JP": {
+            "label": "死亡退職金",
+            "romanised": "shibō taishokukin"
+          },
+          "SG": {
+            "label": "Group term life insurance"
+          },
+          "NZ": {
+            "label": "Death benefit (group)",
+            "aliases": [
+              "group life cover"
+            ]
+          },
+          "IE": {
+            "label": "Death-in-service benefit"
+          },
+          "NG": {
+            "label": "Group life insurance"
+          },
+          "CN": {
+            "label": "在职死亡保险",
+            "romanised": "zàizhí sǐwáng bǎoxiǎn",
+            "aliases": [
+              "团体寿险"
+            ]
+          },
+          "MY": {
+            "label": "Manfaat kematian dalam perkhidmatan",
+            "aliases": [
+              "insurans kumpulan"
+            ]
+          },
+          "ID": {
+            "label": "Asuransi kematian karyawan",
+            "aliases": [
+              "santunan kematian"
+            ]
+          },
+          "TH": {
+            "label": "สวัสดิการกรณีเสียชีวิต",
+            "romanised": "sawatdikan karani sia chiwit"
+          },
+          "KR": {
+            "label": "재직 중 사망보험",
+            "romanised": "jaejik jung samangboheom"
+          },
+          "HK": {
+            "label": "在職死亡保險",
+            "romanised": "zoi6 zik1 sei2 mong4 bou2 him2"
+          },
+          "TW": {
+            "label": "在職死亡保險",
+            "romanised": "zàizhí sǐwáng bǎoxiǎn",
+            "aliases": [
+              "團體壽險"
+            ]
+          },
+          "VN": {
+            "label": "Bảo hiểm tử vong trong công việc"
+          }
+        }
+      },
+      "critical_illness": {
+        "label": "Critical illness cover",
+        "localTerms": {
+          "GB": {
+            "label": "Critical illness cover",
+            "aliases": [
+              "CIC"
+            ]
+          },
+          "US": {
+            "label": "Critical illness insurance"
+          },
+          "AU": {
+            "label": "Trauma insurance",
+            "aliases": [
+              "critical illness cover"
+            ]
+          },
+          "CA": {
+            "label": "Critical illness insurance"
+          },
+          "FR": {
+            "label": "Assurance maladie grave",
+            "romanised": "assurance maladie grave"
+          },
+          "DE": {
+            "label": "Dread-Disease-Versicherung",
+            "romanised": "dread-disease-versicherung",
+            "aliases": [
+              "Schwere-Krankheiten-Versicherung"
+            ]
+          },
+          "IN": {
+            "label": "Critical illness cover"
+          },
+          "JP": {
+            "label": "特定疾病保険",
+            "romanised": "tokutei shippei hoken"
+          },
+          "SG": {
+            "label": "Critical illness cover",
+            "aliases": [
+              "CI cover"
+            ]
+          },
+          "NZ": {
+            "label": "Trauma insurance",
+            "aliases": [
+              "critical illness cover"
+            ]
+          },
+          "IE": {
+            "label": "Serious illness cover"
+          },
+          "NG": {
+            "label": "Critical illness insurance"
+          },
+          "CN": {
+            "label": "重大疾病保险",
+            "romanised": "zhòngdà jíbìng bǎoxiǎn",
+            "aliases": [
+              "重疾险"
+            ]
+          },
+          "MY": {
+            "label": "Insurans penyakit kritikal",
+            "aliases": [
+              "CI cover"
+            ]
+          },
+          "ID": {
+            "label": "Asuransi penyakit kritis"
+          },
+          "TH": {
+            "label": "ประกันโรคร้ายแรง",
+            "romanised": "prakan rok rai raeng"
+          },
+          "KR": {
+            "label": "중대질병보험",
+            "romanised": "jungdaejilbyeongboheom",
+            "aliases": [
+              "CI보험"
+            ]
+          },
+          "HK": {
+            "label": "危疾保險",
+            "romanised": "ngai4 zat6 bou2 him2"
+          },
+          "TW": {
+            "label": "重大疾病保險",
+            "romanised": "zhòngdà jíbìng bǎoxiǎn"
+          },
+          "VN": {
+            "label": "Bảo hiểm bệnh hiểm nghèo"
+          }
+        }
+      },
+      "income_protection": {
+        "label": "Income protection",
+        "localTerms": {
+          "GB": {
+            "label": "Income protection insurance",
+            "aliases": [
+              "permanent health insurance",
+              "PHI"
+            ]
+          },
+          "US": {
+            "label": "Disability insurance",
+            "aliases": [
+              "long-term disability",
+              "LTD",
+              "short-term disability"
+            ]
+          },
+          "AU": {
+            "label": "Income protection insurance",
+            "aliases": [
+              "salary continuance"
+            ]
+          },
+          "CA": {
+            "label": "Disability insurance",
+            "aliases": [
+              "income replacement"
+            ]
+          },
+          "FR": {
+            "label": "Prévoyance incapacité",
+            "romanised": "prévoyance incapacité"
+          },
+          "DE": {
+            "label": "Berufsunfähigkeitsversicherung",
+            "romanised": "berufsunfaehigkeitsversicherung",
+            "aliases": [
+              "BU-Versicherung"
+            ]
+          },
+          "IN": {
+            "label": "Income protection"
+          },
+          "JP": {
+            "label": "所得補償保険",
+            "romanised": "shotoku hoshō hoken"
+          },
+          "SG": {
+            "label": "Income protection"
+          },
+          "NZ": {
+            "label": "Income protection insurance"
+          },
+          "IE": {
+            "label": "Income protection insurance"
+          },
+          "NG": {
+            "label": "Income protection insurance"
+          },
+          "CN": {
+            "label": "收入保障保险",
+            "romanised": "shōurù bǎozhàng bǎoxiǎn"
+          },
+          "MY": {
+            "label": "Insurans perlindungan pendapatan"
+          },
+          "ID": {
+            "label": "Asuransi perlindungan pendapatan"
+          },
+          "TH": {
+            "label": "ประกันคุ้มครองรายได้",
+            "romanised": "prakan khumkhrong raidai"
+          },
+          "KR": {
+            "label": "소득보장보험",
+            "romanised": "sodeukbojanboheom"
+          },
+          "HK": {
+            "label": "收入保障保險",
+            "romanised": "sau1 jap6 bou2 zoeng3 bou2 him2"
+          },
+          "TW": {
+            "label": "收入保障保險",
+            "romanised": "shōurù bǎozhàng bǎoxiǎn"
+          },
+          "VN": {
+            "label": "Bảo hiểm bảo vệ thu nhập"
+          }
+        }
+      },
+      "funeral_plan": {
+        "label": "Funeral plan",
+        "localTerms": {
+          "GB": {
+            "label": "Funeral plan",
+            "aliases": [
+              "pre-paid funeral plan"
+            ]
+          },
+          "US": {
+            "label": "Burial insurance",
+            "aliases": [
+              "final expense insurance",
+              "pre-need plan"
+            ]
+          },
+          "AU": {
+            "label": "Funeral insurance",
+            "aliases": [
+              "funeral bond",
+              "pre-paid funeral"
+            ]
+          },
+          "CA": {
+            "label": "Funeral insurance",
+            "aliases": [
+              "pre-arranged funeral plan"
+            ]
+          },
+          "FR": {
+            "label": "Assurance obsèques",
+            "romanised": "assurance obsèques"
+          },
+          "DE": {
+            "label": "Sterbegeldversicherung",
+            "romanised": "sterbegeldversicherung"
+          },
+          "IN": {
+            "label": "Funeral insurance"
+          },
+          "JP": {
+            "label": "葬儀保険",
+            "romanised": "sōgi hoken"
+          },
+          "SG": {
+            "label": "Funeral plan"
+          },
+          "NZ": {
+            "label": "Funeral insurance",
+            "aliases": [
+              "pre-paid funeral"
+            ]
+          },
+          "IE": {
+            "label": "Funeral plan"
+          },
+          "NG": {
+            "label": "Burial insurance",
+            "aliases": [
+              "funeral plan"
+            ]
+          },
+          "CN": {
+            "label": "丧葬保险",
+            "romanised": "sāngzàng bǎoxiǎn"
+          },
+          "MY": {
+            "label": "Pelan pengebumian",
+            "aliases": [
+              "khairat kematian"
+            ]
+          },
+          "ID": {
+            "label": "Asuransi pemakaman",
+            "aliases": [
+              "santunan pemakaman"
+            ]
+          },
+          "TH": {
+            "label": "ประกันค่าจัดงานศพ",
+            "romanised": "prakan kha chat ngan sop"
+          },
+          "KR": {
+            "label": "장례보험",
+            "romanised": "jangnyeboheom"
+          },
+          "HK": {
+            "label": "殯葬保險",
+            "romanised": "ban3 zong3 bou2 him2"
+          },
+          "TW": {
+            "label": "喪葬保險",
+            "romanised": "sāngzàng bǎoxiǎn"
+          },
+          "VN": {
+            "label": "Bảo hiểm mai táng"
+          }
+        }
+      },
+      "mortgage_protection": {
+        "label": "Mortgage protection",
+        "localTerms": {
+          "GB": {
+            "label": "Mortgage protection insurance",
+            "aliases": [
+              "decreasing term assurance"
+            ]
+          },
+          "US": {
+            "label": "Mortgage protection insurance",
+            "aliases": [
+              "MPI"
+            ]
+          },
+          "AU": {
+            "label": "Mortgage protection insurance"
+          },
+          "CA": {
+            "label": "Mortgage insurance",
+            "aliases": [
+              "creditor insurance"
+            ]
+          },
+          "FR": {
+            "label": "Assurance emprunteur",
+            "romanised": "assurance emprunteur"
+          },
+          "DE": {
+            "label": "Restschuldversicherung",
+            "romanised": "restschuldversicherung"
+          },
+          "IN": {
+            "label": "Home loan protection plan"
+          },
+          "JP": {
+            "label": "団体信用生命保険",
+            "romanised": "dantai shin'yō seimei hoken"
+          },
+          "SG": {
+            "label": "Home Protection Scheme",
+            "aliases": [
+              "HPS",
+              "mortgage insurance"
+            ]
+          },
+          "NZ": {
+            "label": "Mortgage protection insurance"
+          },
+          "IE": {
+            "label": "Mortgage protection insurance"
+          },
+          "NG": {
+            "label": "Mortgage protection insurance"
+          },
+          "CN": {
+            "label": "房贷保险",
+            "romanised": "fángdài bǎoxiǎn"
+          },
+          "MY": {
+            "label": "Insurans perlindungan gadai janji",
+            "aliases": [
+              "MRTA"
+            ]
+          },
+          "ID": {
+            "label": "Asuransi perlindungan KPR"
+          },
+          "TH": {
+            "label": "ประกันคุ้มครองสินเชื่อบ้าน",
+            "romanised": "prakan khumkhrong sinchuea ban"
+          },
+          "KR": {
+            "label": "주택담보대출보험",
+            "romanised": "jutaekdambo daechulboheom"
+          },
+          "HK": {
+            "label": "按揭保險",
+            "romanised": "on3 kit3 bou2 him2"
+          },
+          "TW": {
+            "label": "房貸保險",
+            "romanised": "fángdài bǎoxiǎn"
+          },
+          "VN": {
+            "label": "Bảo hiểm khoản vay thế chấp"
+          }
+        }
+      }
+    },
+    "categoryType": {
+      "financial": {
+        "label": "Financial Assets",
+        "localTerms": {
+          "GB": {
+            "label": "Financial Assets"
+          },
+          "US": {
+            "label": "Financial Assets"
+          },
+          "JP": {
+            "label": "金融資産",
+            "romanized": "kinyu shisan"
+          },
+          "IN": {
+            "label": "Financial Assets"
+          },
+          "CN": {
+            "label": "金融资产",
+            "romanised": "jīnróng zīchǎn"
+          },
+          "MY": {
+            "label": "Aset kewangan"
+          },
+          "ID": {
+            "label": "Aset keuangan"
+          },
+          "TH": {
+            "label": "สินทรัพย์ทางการเงิน",
+            "romanised": "sinsap thang kan ngoen"
+          },
+          "KR": {
+            "label": "금융자산",
+            "romanised": "geumyungjasan"
+          },
+          "HK": {
+            "label": "金融資產",
+            "romanised": "gam1 jung4 zi1 chaan2"
+          },
+          "TW": {
+            "label": "金融資產",
+            "romanised": "jīnróng zīchǎn"
+          },
+          "VN": {
+            "label": "Tài sản tài chính"
+          }
+        }
+      },
+      "property_contents": {
+        "label": "Property Contents",
+        "localTerms": {
+          "GB": {
+            "label": "Household Contents"
+          },
+          "US": {
+            "label": "Personal Property"
+          },
+          "JP": {
+            "label": "家財道具",
+            "romanized": "kazai dougu"
+          },
+          "IN": {
+            "label": "Household Goods"
+          },
+          "CN": {
+            "label": "家居物品",
+            "romanised": "jiājū wùpǐn"
+          },
+          "MY": {
+            "label": "Barangan isi rumah"
+          },
+          "ID": {
+            "label": "Isi rumah tangga"
+          },
+          "TH": {
+            "label": "ของใช้ในบ้าน",
+            "romanised": "khongchai nai ban"
+          },
+          "KR": {
+            "label": "가재도구",
+            "romanised": "gajaedogu"
+          },
+          "HK": {
+            "label": "家居物品",
+            "romanised": "gaa1 geoi1 mat6 ban2"
+          },
+          "TW": {
+            "label": "家居物品",
+            "romanised": "jiājū wùpǐn"
+          },
+          "VN": {
+            "label": "Đồ dùng gia đình"
+          }
+        }
+      },
+      "vehicle": {
+        "label": "Vehicles",
+        "localTerms": {
+          "GB": {
+            "label": "Vehicles"
+          },
+          "US": {
+            "label": "Vehicles & Watercraft"
+          },
+          "JP": {
+            "label": "車両",
+            "romanized": "sharyo"
+          },
+          "IN": {
+            "label": "Vehicles"
+          },
+          "CN": {
+            "label": "车辆",
+            "romanised": "chēliàng"
+          },
+          "MY": {
+            "label": "Kenderaan"
+          },
+          "ID": {
+            "label": "Kendaraan"
+          },
+          "TH": {
+            "label": "ยานพาหนะ",
+            "romanised": "yanphahana"
+          },
+          "KR": {
+            "label": "차량",
+            "romanised": "charyang"
+          },
+          "HK": {
+            "label": "車輛",
+            "romanised": "ce1 loeng6"
+          },
+          "TW": {
+            "label": "車輛",
+            "romanised": "chēliàng"
+          },
+          "VN": {
+            "label": "Phương tiện giao thông"
+          }
+        }
+      },
+      "jewellery_watches": {
+        "label": "Jewellery & Watches",
+        "localTerms": {
+          "GB": {
+            "label": "Jewellery & Watches"
+          },
+          "US": {
+            "label": "Jewelry & Watches"
+          },
+          "JP": {
+            "label": "宝飾品・時計",
+            "romanized": "hoshokuhin tokei"
+          },
+          "IN": {
+            "label": "Jewellery & Watches"
+          },
+          "CN": {
+            "label": "珠宝首饰与手表",
+            "romanised": "zhūbǎo shǒushì yǔ shǒubiǎo"
+          },
+          "MY": {
+            "label": "Barang kemas & jam tangan"
+          },
+          "ID": {
+            "label": "Perhiasan & jam tangan"
+          },
+          "TH": {
+            "label": "เครื่องเพชรพลอยและนาฬิกา",
+            "romanised": "khrueang phet phloi lae nalika"
+          },
+          "KR": {
+            "label": "보석 및 시계",
+            "romanised": "boseok mit sigye"
+          },
+          "HK": {
+            "label": "珠寶首飾與手錶",
+            "romanised": "zyu1 bou2 sau2 sik1 jyu5 sau2 biu1"
+          },
+          "TW": {
+            "label": "珠寶首飾與手錶",
+            "romanised": "zhūbǎo shǒushì yǔ shǒubiǎo"
+          },
+          "VN": {
+            "label": "Trang sức và đồng hồ"
+          }
+        }
+      },
+      "collectibles": {
+        "label": "Collectibles",
+        "localTerms": {
+          "GB": {
+            "label": "Collectibles"
+          },
+          "US": {
+            "label": "Collectibles"
+          },
+          "JP": {
+            "label": "コレクション品",
+            "romanized": "korekushon hin"
+          },
+          "IN": {
+            "label": "Collectibles"
+          },
+          "CN": {
+            "label": "收藏品",
+            "romanised": "shōucángpǐn"
+          },
+          "MY": {
+            "label": "Barangan koleksi"
+          },
+          "ID": {
+            "label": "Barang koleksi"
+          },
+          "TH": {
+            "label": "ของสะสม",
+            "romanised": "khong sasom"
+          },
+          "KR": {
+            "label": "수집품",
+            "romanised": "sujippum"
+          },
+          "HK": {
+            "label": "收藏品",
+            "romanised": "sau1 cong4 ban2"
+          },
+          "TW": {
+            "label": "收藏品",
+            "romanised": "shōucángpǐn"
+          },
+          "VN": {
+            "label": "Đồ sưu tầm"
+          }
+        }
+      },
+      "firearms_sporting": {
+        "label": "Firearms & Sporting",
+        "localTerms": {
+          "GB": {
+            "label": "Firearms & Sporting Equipment",
+            "aliases": [
+              "Shotguns & Rifles"
+            ]
+          },
+          "US": {
+            "label": "Firearms & Sporting Goods"
+          },
+          "JP": {
+            "label": "銃器・スポーツ用品",
+            "romanized": "juki supotsu youhin"
+          },
+          "IN": {
+            "label": "Sporting Equipment"
+          },
+          "CN": {
+            "label": "枪械与体育用品",
+            "romanised": "qiāngxiè yǔ tǐyù yòngpǐn"
+          },
+          "MY": {
+            "label": "Senjata api & peralatan sukan"
+          },
+          "ID": {
+            "label": "Senjata api & peralatan olahraga"
+          },
+          "TH": {
+            "label": "อาวุธปืนและอุปกรณ์กีฬา",
+            "romanised": "awut puen lae uppakorn kila"
+          },
+          "KR": {
+            "label": "총기 및 스포츠용품",
+            "romanised": "chonggi mit seupocheuyongpum"
+          },
+          "HK": {
+            "label": "槍械與體育用品",
+            "romanised": "coeng1 haai6 jyu5 tai2 juk6 jung6 ban2"
+          },
+          "TW": {
+            "label": "槍械與體育用品",
+            "romanised": "qiāngxiè yǔ tǐyù yòngpǐn"
+          },
+          "VN": {
+            "label": "Súng và đồ thể thao"
+          }
+        }
+      },
+      "digital": {
+        "label": "Digital Assets",
+        "localTerms": {
+          "GB": {
+            "label": "Digital Assets"
+          },
+          "US": {
+            "label": "Digital Assets"
+          },
+          "JP": {
+            "label": "デジタル資産",
+            "romanized": "dejitaru shisan"
+          },
+          "IN": {
+            "label": "Digital Assets"
+          },
+          "CN": {
+            "label": "数字资产",
+            "romanised": "shùzì zīchǎn"
+          },
+          "MY": {
+            "label": "Aset digital"
+          },
+          "ID": {
+            "label": "Aset digital"
+          },
+          "TH": {
+            "label": "สินทรัพย์ดิจิทัล",
+            "romanised": "sinsap dijithan"
+          },
+          "KR": {
+            "label": "디지털 자산",
+            "romanised": "dijiteol jasan"
+          },
+          "HK": {
+            "label": "數字資產",
+            "romanised": "sou3 zi6 zi1 chaan2"
+          },
+          "TW": {
+            "label": "數位資產",
+            "romanised": "shùwèi zīchǎn"
+          },
+          "VN": {
+            "label": "Tài sản số"
+          }
+        }
+      },
+      "islamic_financial": {
+        "label": "Islamic Financial",
+        "localTerms": {
+          "GB": {
+            "label": "Islamic Financial Instruments"
+          },
+          "US": {
+            "label": "Shariah-Compliant Financial Instruments"
+          },
+          "JP": {
+            "label": "イスラム金融商品",
+            "romanized": "isuramu kinyu shohin"
+          },
+          "IN": {
+            "label": "Islamic Financial Instruments"
+          },
+          "CN": {
+            "label": "伊斯兰金融产品",
+            "romanised": "yīsīlán jīnróng chǎnpǐn"
+          },
+          "MY": {
+            "label": "Instrumen kewangan Islam",
+            "aliases": [
+              "takaful",
+              "sukuk"
+            ]
+          },
+          "ID": {
+            "label": "Instrumen keuangan syariah",
+            "aliases": [
+              "sukuk",
+              "takaful"
+            ]
+          },
+          "TH": {
+            "label": "ผลิตภัณฑ์การเงินอิสลาม",
+            "romanised": "phalittaphan kan ngoen itsalam"
+          },
+          "KR": {
+            "label": "이슬람 금융상품",
+            "romanised": "iseullam geumyungsangpum"
+          },
+          "HK": {
+            "label": "伊斯蘭金融產品",
+            "romanised": "ji1 si1 laan4 gam1 jung4 chaan2 ban2"
+          },
+          "TW": {
+            "label": "伊斯蘭金融產品",
+            "romanised": "yīsīlán jīnróng chǎnpǐn"
+          },
+          "VN": {
+            "label": "Sản phẩm tài chính Hồi giáo"
+          }
+        }
+      },
+      "art": {
+        "label": "Art",
+        "localTerms": {
+          "GB": {
+            "label": "Art"
+          },
+          "US": {
+            "label": "Art"
+          },
+          "JP": {
+            "label": "美術品",
+            "romanized": "bijutsuhin"
+          },
+          "IN": {
+            "label": "Art"
+          },
+          "CN": {
+            "label": "艺术品",
+            "romanised": "yìshùpǐn"
+          },
+          "MY": {
+            "label": "Karya seni"
+          },
+          "ID": {
+            "label": "Karya seni"
+          },
+          "TH": {
+            "label": "งานศิลปะ",
+            "romanised": "ngan sinlapa"
+          },
+          "KR": {
+            "label": "미술품",
+            "romanised": "misulpum"
+          },
+          "HK": {
+            "label": "藝術品",
+            "romanised": "ngai6 seot6 ban2"
+          },
+          "TW": {
+            "label": "藝術品",
+            "romanised": "yìshùpǐn"
+          },
+          "VN": {
+            "label": "Tác phẩm nghệ thuật"
+          }
+        }
+      },
+      "antiques": {
+        "label": "Antiques",
+        "localTerms": {
+          "GB": {
+            "label": "Antiques"
+          },
+          "US": {
+            "label": "Antiques"
+          },
+          "JP": {
+            "label": "骨董品",
+            "romanized": "kottōhin"
+          },
+          "IN": {
+            "label": "Antiques"
+          },
+          "CN": {
+            "label": "古董",
+            "romanised": "gǔdǒng"
+          },
+          "MY": {
+            "label": "Barangan antik"
+          },
+          "ID": {
+            "label": "Barang antik"
+          },
+          "TH": {
+            "label": "ของเก่า",
+            "romanised": "khong kao"
+          },
+          "KR": {
+            "label": "골동품",
+            "romanised": "goldongpum"
+          },
+          "HK": {
+            "label": "古董",
+            "romanised": "gu2 dung2"
+          },
+          "TW": {
+            "label": "古董",
+            "romanised": "gǔdǒng"
+          },
+          "VN": {
+            "label": "Đồ cổ"
+          }
+        }
+      },
+      "musical_instruments": {
+        "label": "Musical Instruments",
+        "localTerms": {
+          "GB": {
+            "label": "Musical Instruments"
+          },
+          "US": {
+            "label": "Musical Instruments"
+          },
+          "JP": {
+            "label": "楽器",
+            "romanized": "gakki"
+          },
+          "IN": {
+            "label": "Musical Instruments"
+          },
+          "CN": {
+            "label": "乐器",
+            "romanised": "yuèqì"
+          },
+          "MY": {
+            "label": "Alat muzik"
+          },
+          "ID": {
+            "label": "Alat musik"
+          },
+          "TH": {
+            "label": "เครื่องดนตรี",
+            "romanised": "khrueang dontri"
+          },
+          "KR": {
+            "label": "악기",
+            "romanised": "akgi"
+          },
+          "HK": {
+            "label": "樂器",
+            "romanised": "ngok6 hei3"
+          },
+          "TW": {
+            "label": "樂器",
+            "romanised": "yuèqì"
+          },
+          "VN": {
+            "label": "Nhạc cụ"
+          }
+        }
+      },
+      "books_manuscripts": {
+        "label": "Books & Manuscripts",
+        "localTerms": {
+          "GB": {
+            "label": "Books & Manuscripts"
+          },
+          "US": {
+            "label": "Books & Manuscripts"
+          },
+          "JP": {
+            "label": "書籍・写本",
+            "romanized": "shoseki shahon"
+          },
+          "IN": {
+            "label": "Books & Manuscripts"
+          },
+          "CN": {
+            "label": "书籍与手稿",
+            "romanised": "shūjí yǔ shǒugǎo"
+          },
+          "MY": {
+            "label": "Buku & manuskrip"
+          },
+          "ID": {
+            "label": "Buku & manuskrip"
+          },
+          "TH": {
+            "label": "หนังสือและต้นฉบับ",
+            "romanised": "nangsue lae ton chabap"
+          },
+          "KR": {
+            "label": "서적 및 필사본",
+            "romanised": "seojeok mit pilsabon"
+          },
+          "HK": {
+            "label": "書籍與手稿",
+            "romanised": "syu1 zik6 jyu5 sau2 gou2"
+          },
+          "TW": {
+            "label": "書籍與手稿",
+            "romanised": "shūjí yǔ shǒugǎo"
+          },
+          "VN": {
+            "label": "Sách và bản thảo"
+          }
+        }
+      },
+      "wine_spirits": {
+        "label": "Wine & Spirits",
+        "localTerms": {
+          "GB": {
+            "label": "Wine & Spirits"
+          },
+          "US": {
+            "label": "Wine & Spirits"
+          },
+          "JP": {
+            "label": "ワイン・蒸留酒",
+            "romanized": "wain jōryūshu"
+          },
+          "IN": {
+            "label": "Wine & Spirits"
+          },
+          "CN": {
+            "label": "葡萄酒与烈酒",
+            "romanised": "pútáojiǔ yǔ lièjiǔ"
+          },
+          "MY": {
+            "label": "Wain & minuman keras"
+          },
+          "ID": {
+            "label": "Anggur & minuman keras"
+          },
+          "TH": {
+            "label": "ไวน์และสุรา",
+            "romanised": "wai lae sura"
+          },
+          "KR": {
+            "label": "와인 및 증류주",
+            "romanised": "wain mit jeungryuju"
+          },
+          "HK": {
+            "label": "葡萄酒與烈酒",
+            "romanised": "pou4 tou4 zau2 jyu5 lit6 zau2"
+          },
+          "TW": {
+            "label": "葡萄酒與烈酒",
+            "romanised": "pútáojiǔ yǔ lièjiǔ"
+          },
+          "VN": {
+            "label": "Rượu vang và rượu mạnh"
+          }
+        }
+      },
+      "clothing_textiles": {
+        "label": "Clothing & Textiles",
+        "localTerms": {
+          "GB": {
+            "label": "Clothing & Textiles"
+          },
+          "US": {
+            "label": "Clothing & Textiles"
+          },
+          "JP": {
+            "label": "衣類・織物",
+            "romanized": "irui orimono"
+          },
+          "IN": {
+            "label": "Clothing & Textiles"
+          },
+          "CN": {
+            "label": "服装与纺织品",
+            "romanised": "fúzhuāng yǔ fǎngzhīpǐn"
+          },
+          "MY": {
+            "label": "Pakaian & tekstil"
+          },
+          "ID": {
+            "label": "Pakaian & tekstil"
+          },
+          "TH": {
+            "label": "เสื้อผ้าและสิ่งทอ",
+            "romanised": "suea pha lae singthon"
+          },
+          "KR": {
+            "label": "의류 및 직물",
+            "romanised": "uiryu mit jingmul"
+          },
+          "HK": {
+            "label": "服裝與紡織品",
+            "romanised": "fuk6 zong1 jyu5 fong2 zik1 ban2"
+          },
+          "TW": {
+            "label": "服裝與紡織品",
+            "romanised": "fúzhuāng yǔ fǎngzhīpǐn"
+          },
+          "VN": {
+            "label": "Quần áo và vải vóc"
+          }
+        }
+      },
+      "business": {
+        "label": "Business Assets",
+        "localTerms": {
+          "GB": {
+            "label": "Business Assets"
+          },
+          "US": {
+            "label": "Business Assets"
+          },
+          "JP": {
+            "label": "事業資産",
+            "romanized": "jigyō shisan"
+          },
+          "IN": {
+            "label": "Business Assets"
+          },
+          "CN": {
+            "label": "企业资产",
+            "romanised": "qǐyè zīchǎn"
+          },
+          "MY": {
+            "label": "Aset perniagaan"
+          },
+          "ID": {
+            "label": "Aset bisnis"
+          },
+          "TH": {
+            "label": "สินทรัพย์ธุรกิจ",
+            "romanised": "sinsap thurakit"
+          },
+          "KR": {
+            "label": "사업자산",
+            "romanised": "saeopjasan"
+          },
+          "HK": {
+            "label": "企業資產",
+            "romanised": "kei5 jip6 zi1 chaan2"
+          },
+          "TW": {
+            "label": "企業資產",
+            "romanised": "qǐyè zīchǎn"
+          },
+          "VN": {
+            "label": "Tài sản kinh doanh"
+          }
+        }
+      },
+      "other": {
+        "label": "Other",
+        "localTerms": {
+          "GB": {
+            "label": "Other"
+          },
+          "US": {
+            "label": "Other"
+          },
+          "JP": {
+            "label": "その他",
+            "romanized": "sonota"
+          },
+          "IN": {
+            "label": "Other"
+          },
+          "CN": {
+            "label": "其他",
+            "romanised": "qítā"
+          },
+          "MY": {
+            "label": "Lain-lain"
+          },
+          "ID": {
+            "label": "Lainnya"
+          },
+          "TH": {
+            "label": "อื่น ๆ",
+            "romanised": "uen uen"
+          },
+          "KR": {
+            "label": "기타",
+            "romanised": "gita"
+          },
+          "HK": {
+            "label": "其他",
+            "romanised": "kei4 taa1"
+          },
+          "TW": {
+            "label": "其他",
+            "romanised": "qítā"
+          },
+          "VN": {
+            "label": "Khác"
+          }
+        }
+      }
+    }
+  }
+}

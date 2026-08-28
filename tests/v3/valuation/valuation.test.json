@@ -1,0 +1,502 @@
+{
+  "target": "../../../v3/valuation.json",
+  "tests": [
+    {
+      "description": "valid — minimal valuation with required fields only",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — professional RICS property valuation",
+      "data": {
+        "id": "17397546-7a58-4319-9968-daf93e9b90ac",
+        "entityType": "property",
+        "entityId": "020742d3-2f5a-4bab-8179-0de295201308",
+        "valuedAmount": {
+          "amount": 57500000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-10-01",
+        "provider": "RICS Surveyor — Jonathan Rao FRICS",
+        "providerType": "professional_valuer",
+        "method": "comparable_sales",
+        "valuationPurpose": "date_of_death",
+        "confidence": "high",
+        "notes": "RICS Red Book valuation — market value basis. Assumes vacant possession. Three comparable sales in the same postcode used."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — AI estimate with comparables",
+      "data": {
+        "id": "f221472b-afe7-4a01-bec9-1e456a85c1c3",
+        "entityType": "asset",
+        "entityId": "b16cd101-c771-4299-9e5f-6dd9cf1d7c92",
+        "valuedAmount": {
+          "amount": 18500,
+          "currency": "GBP"
+        },
+        "valuationDate": "2026-02-15",
+        "provider": "INHERIT AI",
+        "providerType": "ai_estimate",
+        "method": "ai_analysis",
+        "valuationPurpose": "current_estimate",
+        "confidence": "medium",
+        "comparables": [
+          {
+            "url": "https://www.ebay.co.uk/itm/123456789",
+            "screenshotUrl": "https://storage.openinherit.org/comparables/ebay-123456789.png",
+            "title": "Hornby R3456 Class 66 EWS DCC Fitted — mint, boxed",
+            "salePrice": {
+              "amount": 18999,
+              "currency": "GBP"
+            },
+            "saleDate": "2025-11-20",
+            "platform": "eBay",
+            "capturedAt": "2026-02-15T10:00:00Z",
+            "matchConfidence": "exact",
+            "matchFactors": [
+              "same manufacturer",
+              "same model number",
+              "same livery",
+              "DCC fitted",
+              "original box"
+            ],
+            "matchNotes": "Identical item — same model number, same condition description, original box.",
+            "humanVerdict": "accepted"
+          },
+          {
+            "url": "https://www.ebay.co.uk/itm/987654321",
+            "title": "Hornby Class 66 DB Cargo OO gauge",
+            "salePrice": {
+              "amount": 15500,
+              "currency": "GBP"
+            },
+            "saleDate": "2025-10-05",
+            "platform": "eBay",
+            "capturedAt": "2026-02-15T10:00:00Z",
+            "matchConfidence": "approximate",
+            "matchFactors": [
+              "same manufacturer",
+              "same class",
+              "similar era"
+            ],
+            "matchNotes": "Different livery (DB Cargo not EWS). EWS livery commands a premium.",
+            "humanVerdict": "rejected"
+          }
+        ],
+        "notes": "AI estimate based on 23 eBay sold listings over the past 90 days. EWS livery commands 15-20% premium over standard Class 66."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset collection valuation for probate",
+      "data": {
+        "id": "c5558ae2-e3fb-4418-9b18-12f191825205",
+        "entityType": "asset_collection",
+        "entityId": "1d57c13f-caae-41c8-95f0-ede18d36df09",
+        "valuedAmount": {
+          "amount": 1200000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-10-20",
+        "provider": "Soul Brother Records, Brixton",
+        "providerType": "dealer",
+        "method": "comparable_sales",
+        "valuationPurpose": "probate",
+        "confidence": "high",
+        "notes": "Specialist dealer valuation. The collection is worth significantly more as a set than individually — buyers for complete Northern Soul collections are scarce but premium."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required entityType",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — entityType is not a valid enum value",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": "liability",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — valuation missing required id",
+      "data": {
+        "entityType": "asset",
+        "entityId": "a1b2c3d4-e5f6-4789-abcd-ef0123456789",
+        "valuationType": "professional",
+        "amount": {
+          "amount": 500000,
+          "currency": "GBP"
+        },
+        "valuedAt": "2026-01-15"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — comparable rejectionReason present without humanVerdict (dependentRequired)",
+      "data": {
+        "id": "3c1404ae-8ee0-4b12-a6f2-a1ba802dc003",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 18500,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15",
+        "comparables": [
+          {
+            "title": "Wrong gauge model",
+            "provenance": {
+              "rejectionReason": "Wrong gauge — this is HO not OO"
+            }
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required entityId",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": "asset",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required valuedAmount",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuationDate": "2025-09-15"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required valuationDate",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — entityType as number (wrong type)",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": 99,
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — valuationDate as number (wrong type)",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": 20250915
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a valid UUID",
+      "data": {
+        "id": "not-a-uuid-at-all",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — valuationDate in non-ISO format (DD/MM/YYYY)",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "15/09/2025"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — valuationDate with time component (should be date only)",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15T10:30:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — confidence not in enum",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15",
+        "confidence": "very_high"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — providerType not in enum",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15",
+        "providerType": "friend"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — notes exceeds maxLength of 2000",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15",
+        "notes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — entityId is not a valid UUID",
+      "data": {
+        "id": "b2cfb124-0c78-4f28-85bd-ab6619cd12a1",
+        "entityType": "asset",
+        "entityId": "xyz-invalid",
+        "valuedAmount": {
+          "amount": 450000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2025-09-15"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — valuation with validUntil date",
+      "data": {
+        "id": "e6000001-0000-4000-e000-000000006001",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 200000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2026-01-15",
+        "providerType": "insurance_assessor",
+        "valuationPurpose": "insurance",
+        "validUntil": "2027-01-14"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — owner providerType with replacement_cost method and official valuationPurpose",
+      "data": {
+        "id": "aa000001-0000-4000-a000-000000000001",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": { "amount": 50000, "currency": "GBP" },
+        "valuationDate": "2025-06-01",
+        "providerType": "owner",
+        "method": "replacement_cost",
+        "valuationPurpose": "official",
+        "confidence": "low"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — auction_house providerType with income_approach method and tax_return purpose",
+      "data": {
+        "id": "aa000002-0000-4000-a000-000000000002",
+        "entityType": "property",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1720",
+        "valuedAmount": { "amount": 5000000, "currency": "GBP" },
+        "valuationDate": "2025-07-01",
+        "providerType": "auction_house",
+        "method": "income_approach",
+        "valuationPurpose": "tax_return",
+        "confidence": "unknown"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — tax_authority providerType with market_listing method and dealer_offer purpose",
+      "data": {
+        "id": "aa000003-0000-4000-a000-000000000003",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1721",
+        "valuedAmount": { "amount": 75000, "currency": "GBP" },
+        "valuationDate": "2025-08-01",
+        "providerType": "tax_authority",
+        "method": "market_listing",
+        "valuationPurpose": "dealer_offer"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — other providerType with insurance_schedule method and ai_estimate purpose",
+      "data": {
+        "id": "aa000004-0000-4000-a000-000000000004",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1722",
+        "valuedAmount": { "amount": 120000, "currency": "GBP" },
+        "valuationDate": "2025-09-01",
+        "providerType": "other",
+        "method": "insurance_schedule",
+        "valuationPurpose": "ai_estimate"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — expert_opinion method and pre_sale purpose",
+      "data": {
+        "id": "aa000005-0000-4000-a000-000000000005",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1723",
+        "valuedAmount": { "amount": 250000, "currency": "GBP" },
+        "valuationDate": "2025-10-01",
+        "method": "expert_opinion",
+        "valuationPurpose": "pre_sale"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — other method",
+      "data": {
+        "id": "aa000006-0000-4000-a000-000000000006",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1724",
+        "valuedAmount": { "amount": 300000, "currency": "GBP" },
+        "valuationDate": "2025-11-01",
+        "method": "other"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — comparables with close and weak matchConfidence plus adjusted and not_reviewed humanVerdict",
+      "data": {
+        "id": "aa000007-0000-4000-a000-000000000007",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1725",
+        "valuedAmount": { "amount": 18000, "currency": "GBP" },
+        "valuationDate": "2025-12-01",
+        "comparables": [
+          {
+            "title": "Similar item, close match",
+            "matchConfidence": "close",
+            "humanVerdict": "adjusted",
+            "matchNotes": "Slightly different specification — price adjusted down 5%"
+          },
+          {
+            "title": "Loosely related item",
+            "matchConfidence": "weak",
+            "humanVerdict": "not_reviewed"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — validUntil in non-ISO date format (DD/MM/YYYY)",
+      "data": {
+        "id": "e6000002-0000-4000-e000-000000006002",
+        "entityType": "asset",
+        "entityId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "valuedAmount": {
+          "amount": 200000,
+          "currency": "GBP"
+        },
+        "valuationDate": "2026-01-15",
+        "validUntil": "14/01/2027"
+      },
+      "valid": false
+    }
+  ]
+}

@@ -1,0 +1,414 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-03-27T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "8bfaca0e-c1ba-484a-9fc1-50478a5c3479",
+    "testatorPersonId": "5efda000-3c7a-4f8d-a3b4-4268b81bcef0",
+    "status": "confirmed",
+    "defaultSuccessionRegime": {
+      "governingLaw": {
+        "jurisdiction": {
+          "country": "SG"
+        },
+        "legalTradition": "common_law",
+        "statute": "Wills Act (Cap 352)",
+        "section": "s.6 (testamentary capacity)"
+      },
+      "determinedBy": "domicile",
+      "binding": true,
+      "notes": "Non-Muslim estates in Singapore are governed by the Wills Act and Intestate Succession Act. Muslim estates are governed by AMLA (Administration of Muslim Law Act) and faraid rules."
+    },
+    "religiousConsideration": {
+      "tradition": "islamic_law",
+      "binding": true,
+      "notes": "Under AMLA (Administration of Muslim Law Act, Cap 3), Muslim estates in Singapore are governed by Islamic inheritance law (faraid). The Syariah Court issues an Inheritance Certificate (Sijil Faraid) specifying each heir's share. AMLA s.111 limits testamentary freedom to one-third of the estate for Muslim testators."
+    },
+    "notes": "Singapore's CPF (Central Provident Fund) monies do NOT form part of the estate. CPF savings are distributed according to the CPF nomination or, if no nomination exists, under the intestacy rules of the Intestate Succession Act (for non-Muslims) or faraid (for Muslims). An HDB flat held under joint tenancy passes by survivorship.",
+    "createdAt": "2026-02-10T00:00:00Z",
+    "lastModifiedAt": "2026-03-27T00:00:00Z",
+    "domicile": {
+      "country": "SG",
+      "legalSystems": [
+        "common_law",
+        "islamic_law"
+      ],
+      "name": "Singapore"
+    }
+  },
+  "people": [
+    {
+      "id": "5efda000-3c7a-4f8d-a3b4-4268b81bcef0",
+      "givenName": "Wei Ming",
+      "familyName": "Tan",
+      "dateOfBirth": "1970-01-20",
+      "roles": [
+        "testator"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "Block 123 Lorong 1 Toa Payoh",
+          "addressLine2": "#08-456",
+          "addressLocality": "Toa Payoh",
+          "postalCode": "310123",
+          "addressCountry": "SG"
+        }
+      }
+    },
+    {
+      "id": "9153a7eb-ca00-415a-aa92-d23c10a874ec",
+      "givenName": "Shu Fen",
+      "familyName": "Lim",
+      "dateOfBirth": "1972-08-05",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ]
+    },
+    {
+      "id": "a972af89-9e87-49b9-bd31-c8cb0b7cfb8d",
+      "givenName": "Jia Hao",
+      "familyName": "Tan",
+      "dateOfBirth": "2000-12-15",
+      "roles": [
+        "beneficiary"
+      ]
+    }
+  ],
+  "kinships": [
+    {
+      "id": "f875755d-a8f5-4bdc-9ab1-011af12bedf2",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "5efda000-3c7a-4f8d-a3b4-4268b81bcef0",
+      "toPersonId": "a972af89-9e87-49b9-bd31-c8cb0b7cfb8d"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "d2630785-92be-4718-b135-745e3b4d589d",
+      "type": "marriage_civil",
+      "partners": [
+        {
+          "personId": "5efda000-3c7a-4f8d-a3b4-4268b81bcef0",
+          "ordinal": 1
+        },
+        {
+          "personId": "9153a7eb-ca00-415a-aa92-d23c10a874ec",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "SG"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "8e94255c-3813-4987-8d3a-2a61edff266c",
+      "name": "HDB Flat, Block 123 Toa Payoh",
+      "propertyType": "apartment",
+      "tenureType": "lease",
+      "ownershipType": "joint_tenants",
+      "isPrimaryResidence": true,
+      "estimatedValue": {
+        "amount": 55000000,
+        "currency": "SGD"
+      },
+      "passesOutsideEstate": true,
+      "address": {
+        "streetAddress": "Block 123 Lorong 1 Toa Payoh",
+        "addressLine2": "#08-456",
+        "addressLocality": "Toa Payoh",
+        "postalCode": "310123",
+        "addressCountry": "SG"
+      },
+      "notes": "HDB flat held as joint tenants with Shu Fen. Passes by survivorship — not part of the probate estate."
+    }
+  ],
+  "assets": [
+    {
+      "id": "51000005-0000-4000-a000-000000000001",
+      "name": "CPF Account (Ordinary, Special, Medisave)",
+      "category": "financial",
+      "estimatedValue": {
+        "amount": 32000000,
+        "currency": "SGD"
+      },
+      "passesOutsideEstate": true,
+      "notes": "CPF savings are NOT part of the estate. Distribution follows the CPF nomination made with the CPF Board.",
+      "subcategory": "pension"
+    },
+    {
+      "id": "51000005-0000-4000-a000-000000000002",
+      "name": "POSB Savings Account",
+      "category": "financial",
+      "estimatedValue": {
+        "amount": 8000000,
+        "currency": "SGD"
+      },
+      "subcategory": "savings_account"
+    }
+  ],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "a8b2ae8f-da84-4329-a267-c38962ffa62f",
+      "bequestType": "residuary",
+      "beneficiaryId": "9153a7eb-ca00-415a-aa92-d23c10a874ec",
+      "description": "I give the residue of my estate to my wife Lim Shu Fen."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "34ebc5ed-0276-4bf4-be83-fff31174b694",
+      "personId": "9153a7eb-ca00-415a-aa92-d23c10a874ec",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [
+    {
+      "id": "5d2c44fb-c5e3-4164-aa1c-2349904c349e",
+      "type": "will",
+      "title": "Last Will and Testament of Tan Wei Ming",
+      "fileFormat": "pdf",
+      "createdAt": "2025-06-15T00:00:00Z",
+      "notes": "Executed in the presence of two witnesses as required by the Wills Act (Cap 352). Original held by Drew & Napier LLC.",
+      "clauses": [
+        {
+          "id": "fb8dbbaa-1ba9-48ba-9ec7-0dc245cd01a2",
+          "clauseNumber": 1,
+          "title": "Revocation of prior wills",
+          "content": "I revoke all former wills and testamentary dispositions made by me.",
+          "provenance": {
+            "source": "solicitor_drafted",
+            "generatedBy": "Drew & Napier LLC",
+            "reviewedBy": "Tan Wei Ming",
+            "reviewedDate": "2025-06-15"
+          },
+          "validatingAuthority": {
+            "name": "Family Justice Courts of Singapore",
+            "type": "court",
+            "jurisdiction": {
+              "country": "SG"
+            }
+          }
+        },
+        {
+          "id": "2e024da9-9db0-4250-b97d-65a00c89ffe5",
+          "clauseNumber": 2,
+          "title": "Residuary bequest to wife",
+          "content": "I give the residue of my estate to my wife Lim Shu Fen absolutely.",
+          "relatedEntityIds": [
+            "a8b2ae8f-da84-4329-a267-c38962ffa62f",
+            "9153a7eb-ca00-415a-aa92-d23c10a874ec"
+          ],
+          "provenance": {
+            "source": "solicitor_drafted",
+            "generatedBy": "Drew & Napier LLC",
+            "reviewedBy": "Tan Wei Ming",
+            "reviewedDate": "2025-06-15"
+          },
+          "successionRegime": {
+            "governingLaw": {
+              "jurisdiction": {
+                "country": "SG"
+              },
+              "legalTradition": "common_law",
+              "statute": "Wills Act (Cap 352)"
+            },
+            "determinedBy": "domicile",
+            "binding": true
+          },
+          "validatingAuthority": {
+            "name": "Family Justice Courts of Singapore",
+            "type": "court",
+            "jurisdiction": {
+              "country": "SG"
+            }
+          }
+        },
+        {
+          "id": "d92f1332-4fbb-462e-bf48-86af423c95bd",
+          "clauseNumber": 3,
+          "title": "Islamic succession declaration",
+          "content": "In the event that I am classified as a Muslim at the time of my death, I acknowledge that my estate shall be distributed in accordance with the faraid rules under the Administration of Muslim Law Act (AMLA). This clause is subject to the Sijil Faraid issued by the Syariah Court.",
+          "provenance": {
+            "source": "solicitor_drafted",
+            "generatedBy": "Drew & Napier LLC",
+            "reviewedBy": "Ustaz Ahmad bin Ibrahim",
+            "reviewedDate": "2025-06-20"
+          },
+          "successionRegime": {
+            "governingLaw": {
+              "jurisdiction": {
+                "country": "SG"
+              },
+              "legalTradition": "islamic_law",
+              "statute": "Administration of Muslim Law Act (AMLA, Cap 3)",
+              "section": "s.111 (Muslim succession)"
+            },
+            "determinedBy": "personal_status",
+            "binding": true,
+            "notes": "Under AMLA, a Muslim testator may only bequeath up to one-third of the estate by wasiyyah. The remaining two-thirds are distributed according to faraid."
+          },
+          "validatingAuthority": {
+            "name": "Syariah Court of Singapore",
+            "type": "religious_body",
+            "jurisdiction": {
+              "country": "SG"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "nonprobateTransfers": [
+    {
+      "id": "1853a42e-860b-439e-a0d6-31542cfd0d50",
+      "transferType": "cpf_nomination",
+      "passesOutsideEstate": true,
+      "assetIds": [
+        "51000005-0000-4000-a000-000000000001"
+      ],
+      "beneficiaryPersonIds": [
+        "9153a7eb-ca00-415a-aa92-d23c10a874ec",
+        "a972af89-9e87-49b9-bd31-c8cb0b7cfb8d"
+      ],
+      "bindingNomination": true,
+      "description": "CPF nomination: 50% to Shu Fen, 50% to Jia Hao.",
+      "jurisdiction": {
+        "country": "SG"
+      }
+    }
+  ],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_2",
+    "validatedAt": "2026-03-28T12:00:00Z",
+    "validatedBy": "INHERIT Web Validator",
+    "schemaVersion": "6.3.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "events": [
+      {
+        "id": "95bac687-520b-4911-a1c1-751bd2224652",
+        "eventType": "death_registered",
+        "occurredAt": "2026-02-10T09:30:00+08:00",
+        "trigger": "institutional_action",
+        "description": "Death of Tan Wei Ming registered with the Immigration & Checkpoints Authority (ICA) of Singapore.",
+        "affectedEntityIds": [
+          "8bfaca0e-c1ba-484a-9fc1-50478a5c3479"
+        ],
+        "affectedEntityTypes": [
+          "estate"
+        ],
+        "actor": {
+          "name": "Immigration & Checkpoints Authority (ICA)",
+          "type": "court",
+          "jurisdiction": {
+            "country": "SG"
+          }
+        }
+      },
+      {
+        "id": "80e363ac-ed1c-4b8d-9171-c714c258e788",
+        "eventType": "x-inherit-shariah-validation",
+        "occurredAt": "2026-03-05T14:00:00+08:00",
+        "trigger": "institutional_action",
+        "description": "Syariah Court issued the Inheritance Certificate (Sijil Faraid) specifying the faraid shares for Tan Wei Ming's estate under AMLA.",
+        "affectedEntityIds": [
+          "8bfaca0e-c1ba-484a-9fc1-50478a5c3479"
+        ],
+        "affectedEntityTypes": [
+          "estate",
+          "bequest"
+        ],
+        "actor": {
+          "name": "Syariah Court of Singapore",
+          "type": "religious_body",
+          "jurisdiction": {
+            "country": "SG"
+          }
+        },
+        "metadata": {
+          "certificateReference": "SC/FARAID/2026/001234",
+          "instrument": "Sijil Faraid (Inheritance Certificate)"
+        }
+      },
+      {
+        "id": "7de3fdbe-a913-44a7-94ff-ad988a5090c5",
+        "eventType": "probate_granted",
+        "occurredAt": "2026-03-20T10:00:00+08:00",
+        "trigger": "court_action",
+        "description": "Letters of Administration issued by the Family Justice Courts, authorising Lim Shu Fen to administer the estate.",
+        "affectedEntityIds": [
+          "8bfaca0e-c1ba-484a-9fc1-50478a5c3479"
+        ],
+        "affectedEntityTypes": [
+          "estate"
+        ],
+        "actor": {
+          "name": "Family Justice Courts of Singapore",
+          "type": "court",
+          "jurisdiction": {
+            "country": "SG"
+          }
+        },
+        "metadata": {
+          "grantReference": "FJC/PA/2026/05678"
+        }
+      }
+    ],
+    "dataSharing": {
+      "anonymisedAggregates": true,
+      "academicResearch": true,
+      "partnerInsights": false,
+      "consentRecordedAt": "2026-02-10T10:00:00+08:00",
+      "consentMethod": "in_app"
+    },
+    "taxPosition": {
+      "jurisdiction": "SG",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 180000000,
+        "currency": "SGD"
+      },
+      "taxableEstate": {
+        "amount": 0,
+        "currency": "SGD"
+      },
+      "estimatedLiability": {
+        "amount": 0,
+        "currency": "SGD"
+      },
+      "effectiveRate": 0,
+      "warnings": [
+        "Singapore abolished estate duty in February 2008. No estate tax applies."
+      ],
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    },
+    "completeness": {
+      "score": 0,
+      "maxScore": 100,
+      "jurisdiction": "SG",
+      "estateStatus": "confirmed",
+      "checklist": []
+    },
+    "recommendedActions": []
+  }
+}

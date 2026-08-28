@@ -1,0 +1,231 @@
+{
+  "target": "../../../v3/common/completeness.json",
+  "tests": [
+    {
+      "description": "valid — minimal (score, maxScore, checklist with one item)",
+      "data": {
+        "score": 0,
+        "maxScore": 100,
+        "checklist": [
+          {
+            "category": "personal_details",
+            "item": "Testator date of birth",
+            "weight": 5,
+            "status": "incomplete"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated UK estate at grant application stage",
+      "data": {
+        "score": 72,
+        "maxScore": 100,
+        "jurisdiction": "GB",
+        "estateStatus": "grant_application",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "checklist": [
+          {
+            "category": "personal_details",
+            "item": "Testator full name and date of birth",
+            "weight": 10,
+            "status": "complete"
+          },
+          {
+            "category": "assets_and_valuations",
+            "item": "Property valuations within 12 months",
+            "weight": 10,
+            "status": "incomplete",
+            "details": "No valuation on file for 2 of 3 properties"
+          },
+          {
+            "category": "legal_documents",
+            "item": "Original will located",
+            "weight": 10,
+            "status": "complete"
+          },
+          {
+            "category": "executors",
+            "item": "Executor contact details confirmed",
+            "weight": 5,
+            "status": "complete"
+          },
+          {
+            "category": "guardians",
+            "item": "Guardians appointed for minor children",
+            "weight": 5,
+            "status": "not_applicable",
+            "details": "Guardians not required — no minor children"
+          },
+          {
+            "category": "tax_information",
+            "item": "IHT nil-rate band utilisation",
+            "weight": 10,
+            "status": "incomplete"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Japanese estate with subdivision jurisdiction and unknown status items",
+      "data": {
+        "score": 45,
+        "maxScore": 85,
+        "jurisdiction": "JP",
+        "estateStatus": "pre_death_planning",
+        "checklist": [
+          {
+            "category": "pension_and_insurance",
+            "item": "Life insurance policy details",
+            "weight": 3,
+            "status": "unknown"
+          },
+          {
+            "category": "lifetime_transfers",
+            "item": "Gifts within 7-year lookback period",
+            "weight": 5,
+            "status": "incomplete"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — score of 100 (fully complete estate)",
+      "data": {
+        "score": 100,
+        "maxScore": 100,
+        "checklist": [
+          {
+            "category": "beneficiaries",
+            "item": "All beneficiary shares documented",
+            "weight": 10,
+            "status": "complete"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required score",
+      "data": {
+        "maxScore": 100,
+        "checklist": [
+          {
+            "category": "personal_details",
+            "item": "Date of birth",
+            "weight": 5,
+            "status": "complete"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required maxScore",
+      "data": {
+        "score": 50,
+        "checklist": [
+          {
+            "category": "personal_details",
+            "item": "Date of birth",
+            "weight": 5,
+            "status": "complete"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required checklist",
+      "data": {
+        "score": 50,
+        "maxScore": 100
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — score above 100",
+      "data": {
+        "score": 101,
+        "maxScore": 100,
+        "checklist": []
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — score below 0",
+      "data": {
+        "score": -1,
+        "maxScore": 100,
+        "checklist": []
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — checklist item missing required category",
+      "data": {
+        "score": 50,
+        "maxScore": 100,
+        "checklist": [
+          {
+            "item": "Date of birth",
+            "weight": 5,
+            "status": "complete"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — checklist item category not in enum",
+      "data": {
+        "score": 50,
+        "maxScore": 100,
+        "checklist": [
+          {
+            "category": "unknown_category",
+            "item": "Some item",
+            "weight": 5,
+            "status": "complete"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — checklist item status not in enum",
+      "data": {
+        "score": 50,
+        "maxScore": 100,
+        "checklist": [
+          {
+            "category": "personal_details",
+            "item": "Date of birth",
+            "weight": 5,
+            "status": "pending"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — checklist item weight below minimum of 1",
+      "data": {
+        "score": 50,
+        "maxScore": 100,
+        "checklist": [
+          {
+            "category": "personal_details",
+            "item": "Date of birth",
+            "weight": 0,
+            "status": "complete"
+          }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

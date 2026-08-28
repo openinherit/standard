@@ -1,0 +1,34 @@
+name: Validate Schemas
+
+on:
+  push:
+    paths:
+      - 'v2/**'
+      - 'extensions-registry.json'
+  pull_request:
+    paths:
+      - 'v2/**'
+      - 'extensions-registry.json'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Check for duplicate JSON keys
+        run: node scripts/check-duplicate-keys.mjs
+
+      - name: Validate all schemas
+        run: pnpm run validate

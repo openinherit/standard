@@ -1,0 +1,83 @@
+{
+  "target": "../../../v3/extensions/switzerland/switzerland.json",
+  "tests": [
+    {
+      "description": "valid — minimal Switzerland extension (matrimonialPropertyRegime only)",
+      "data": {
+        "matrimonialPropertyRegime": "participation_in_acquisitions"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with Pflichtteil post-2023 reform and two protected heirs plus available quota",
+      "data": {
+        "pflichtteil": {
+          "reformApplies": true,
+          "protectedHeirs": [
+            {
+              "personId": "a0000001-0000-4000-a000-000000000001",
+              "heirClass": "descendant",
+              "statutoryShareFraction": "1/2",
+              "pflichtteilFraction": "1/4"
+            },
+            {
+              "personId": "a0000002-0000-4000-a000-000000000002",
+              "heirClass": "surviving_spouse",
+              "statutoryShareFraction": "1/4",
+              "pflichtteilFraction": "1/8"
+            }
+          ],
+          "availableQuota": {
+            "fraction": "5/8",
+            "estimatedValue": {
+              "amount": 62500000,
+              "currency": "CHF"
+            }
+          }
+        },
+        "matrimonialPropertyRegime": "participation_in_acquisitions"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with Erbschein and cantonal variation (canton ZH)",
+      "data": {
+        "erbschein": {
+          "issued": true,
+          "issuingAuthority": "Bezirksgericht Zürich",
+          "issueDate": "2026-02-14",
+          "referenceNumber": "EG-2026-00412"
+        },
+        "cantonalVariation": {
+          "canton": "ZH",
+          "cantonalTaxApplies": false,
+          "linealHeirsExempt": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with notarial will form and matrimonial property regime",
+      "data": {
+        "notarialWillForm": "public_will",
+        "matrimonialPropertyRegime": "separation_of_property"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — matrimonialPropertyRegime not in enum",
+      "data": {
+        "matrimonialPropertyRegime": "deferred_community"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown property at root level",
+      "data": {
+        "matrimonialPropertyRegime": "participation_in_acquisitions",
+        "unknownSwissField": "should be rejected"
+      },
+      "valid": false
+    }
+  ]
+}

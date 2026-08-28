@@ -1,0 +1,1471 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/schema.json",
+  "title": "INHERIT v3 Root Schema",
+  "description": "Root entry point for an INHERIT v3 estate data interchange document. Contains a single estate and arrays of all entity types",
+  "$comment": "$ref resolution convention: all $ref paths are resolved relative to the schema's $id URI, NOT filesystem paths. Core schemas use relative paths (e.g., 'common/money.json' resolves to 'https://openinherit.org/v3/common/money.json'). Extension schemas use '../common/money.json' (resolves relative to their $id in the extensions/ directory). All schemas MUST be registered with the validator before $ref resolution will work. Recommended maximum document size: 5MB. INHERIT NULL POLICY: (1) Missing = not provided, no inference should be drawn. (2) Null = explicitly cleared or not applicable, only allowed where the schema type includes null. (3) Empty array [] = assessed with zero results, distinct from missing (not assessed). (4) Fields that are never meaningful as null MUST NOT include null in their type union.",
+  "type": "object",
+  "required": [ "schemaVersion", "estate", "people" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|@context|@type|\\$schema|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "$schema": {
+      "description": "Schema identifier — declares this as an INHERIT v3 document. Standard JSON Schema keyword",
+      "const": "https://openinherit.org/v3/schema.json"
+    },
+    "@context": {
+      "description": "JSON-LD context URI. When present, makes this document self-describing linked data",
+      "examples": [ "https://openinherit.org/v3/context/inherit-v3.jsonld" ],
+      "x-lint-exclude": [ "simple_properties_identifiers" ],
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "@type": {
+      "description": "JSON-LD type, e.g. InheritDocument",
+      "x-lint-exclude": [ "simple_properties_identifiers" ],
+      "type": "string"
+    },
+    "schemaVersion": {
+      "description": "Semver version of the INHERIT schema this document was created against. Enables consumers to detect compatibility and handle graceful degradation",
+      "examples": [ "1.0.0", "1.1.0", "1.2.3" ],
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "maxLength": 255
+    },
+    "exportedAt": {
+      "description": "Timestamp when this document was exported from the producing system",
+      "examples": [ "2025-03-27T12:00:00Z" ],
+      "readOnly": true,
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "exportedBy": {
+      "description": "The person who exported or prepared this document",
+      "readOnly": true,
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the person who exported the document",
+          "examples": [
+            "James Davies",
+            "Priya Sharma",
+            "Yuki Tanaka",
+            "Fatima Al-Hassan",
+            "Kwame Mensah"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "email": {
+          "description": "Email address of the person who exported the document",
+          "examples": [ "james.davies@example.com" ],
+          "type": "string",
+          "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+          "format": "email"
+        },
+        "organisationName": {
+          "description": "Organisation the exporter works for",
+          "examples": [ "Irwin Mitchell LLP", "MyFamilyInherits.com" ],
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "generator": {
+      "description": "The software that generated this INHERIT document",
+      "readOnly": true,
+      "type": "object",
+      "required": [ "name" ],
+      "properties": {
+        "name": {
+          "description": "Name of the generating software",
+          "examples": [
+            "MyFamilyInherits",
+            "LegacyLists WillWriter Pro",
+            "INHERIT CLI"
+          ],
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "version": {
+          "description": "Version of the generating software",
+          "examples": [ "2.1.0", "1.0.0-beta.3" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "url": {
+          "description": "URL of the generating software or organisation",
+          "examples": [
+            "https://www.myfamilyinherits.com",
+            "https://www.legacylists.com"
+          ],
+          "type": "string",
+          "maxLength": 2048
+        }
+      },
+      "additionalProperties": false
+    },
+    "documentVersion": {
+      "description": "Sequential version number for this document. Incremented each time the document is substantively modified. Version 1 is the first version",
+      "type": "integer",
+      "minimum": 1
+    },
+    "versionedAt": {
+      "description": "When this version of the document was created. Courts and regulators care about when changes were made, not just which version number",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "previousVersionId": {
+      "description": "Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version",
+      "type": [ "string", "null" ],
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "changeDescription": {
+      "description": "Human-readable summary of what changed in this version. Like a commit message for the document",
+      "type": "string",
+      "maxLength": 2000
+    },
+    "estate": {
+      "description": "The single estate record for this document",
+      "$ref": "estate.json"
+    },
+    "people": {
+      "description": "All people involved in the estate — testator, beneficiaries, executors, witnesses, guardians, etc",
+      "type": "array",
+      "maxItems": 500,
+      "minItems": 1,
+      "items": {
+        "$ref": "person.json"
+      }
+    },
+    "kinships": {
+      "description": "Familial bonds between people in the estate. Essential for intestacy calculations",
+      "type": "array",
+      "maxItems": 1000,
+      "items": {
+        "$ref": "kinship.json"
+      }
+    },
+    "relationships": {
+      "description": "Spousal and partnership relationships. Determines marital property rights and surviving spouse claims",
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "relationship.json"
+      }
+    },
+    "properties": {
+      "description": "Real estate owned or partly owned by the testator",
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "property.json"
+      }
+    },
+    "assets": {
+      "description": "Non-property assets — financial accounts, personal property, vehicles, digital assets, etc",
+      "type": "array",
+      "maxItems": 2000,
+      "items": {
+        "$ref": "asset.json"
+      }
+    },
+    "assetCollections": {
+      "description": "Named groups of related assets — collections (model railways, art, wine, etc.) that have collective significance and value",
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "asset-collection.json"
+      }
+    },
+    "liabilities": {
+      "description": "Debts and financial obligations of the estate, including cultural obligations (mahr, ketubah debt)",
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "liability.json"
+      }
+    },
+    "bequests": {
+      "description": "Dispositions of property or money in the will",
+      "type": "array",
+      "maxItems": 500,
+      "items": {
+        "$ref": "bequest.json"
+      }
+    },
+    "trusts": {
+      "description": "Trusts — testamentary or inter vivos — associated with the estate",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "$ref": "trust.json"
+      }
+    },
+    "executors": {
+      "description": "Persons appointed to administer the estate",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "$ref": "executor.json"
+      }
+    },
+    "guardians": {
+      "description": "Guardian appointments for minor children",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "$ref": "guardian.json"
+      }
+    },
+    "wishes": {
+      "description": "Non-binding (or culturally binding) wishes — funeral, letters, pet care, digital estate",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "wish.json"
+      }
+    },
+    "documents": {
+      "description": "Documents associated with the estate — wills, codicils, trust deeds, certificates",
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "document.json"
+      }
+    },
+    "nonprobateTransfers": {
+      "description": "Assets that pass outside the probate estate — JTWROS, TOD deeds, beneficiary designations",
+      "type": "array",
+      "maxItems": 500,
+      "items": {
+        "$ref": "nonprobate-transfer.json"
+      }
+    },
+    "proxyAuthorisations": {
+      "description": "Authorisations for proxies to act on behalf of the testator",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "$ref": "proxy-authorisation.json"
+      }
+    },
+    "powersOfAppointment": {
+      "description": "Powers of appointment — testamentary authority granted to someone to decide distribution",
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "power-of-appointment.json"
+      }
+    },
+    "valuations": {
+      "description": "Valuations of assets, properties, and collections. Multiple valuations per entity are supported — owner estimates, professional valuations, AI estimates, dealer offers",
+      "type": "array",
+      "maxItems": 5000,
+      "items": {
+        "$ref": "valuation.json"
+      }
+    },
+    "lifetimeTransfers": {
+      "description": "Gifts and transfers made during the testator's lifetime. Critical for inheritance tax calculations — UK 7-year rule, US unified gift/estate tax, etc",
+      "type": "array",
+      "maxItems": 1000,
+      "items": {
+        "$ref": "lifetime-transfer.json"
+      }
+    },
+    "organisations": {
+      "description": "Organisations that interact with the estate — legal firms, financial institutions, charities, dealers, funeral providers, employers, government bodies, and others",
+      "type": "array",
+      "maxItems": 500,
+      "items": {
+        "$ref": "organisation.json"
+      }
+    },
+    "spaces": {
+      "description": "Spaces within properties — rooms, outbuildings, storage areas, and outdoor zones where assets are located",
+      "type": "array",
+      "maxItems": 500,
+      "items": {
+        "$ref": "space.json"
+      }
+    },
+    "dataProvenance": {
+      "description": "How this document was originally created. Indicates the primary method of data entry for the document as a whole — individual entities may have their own per-field provenance via confidenceScores",
+      "$comment": "Matches the dataProvenance field in catalogue.json. Implementations should set this at document creation time.",
+      "enum": [
+        "manual_entry",
+        "ai_extracted",
+        "ocr_scanned",
+        "imported",
+        "migrated",
+        "system_generated"
+      ]
+    },
+    "partialDocument": {
+      "description": "Signals that this is an intentionally incomplete document. Enables incremental onboarding — platforms can import partially completed estate plans without triggering validation errors for missing fields",
+      "$comment": "Trust & Will-requested: their onboarding flow collects data incrementally over multiple sessions",
+      "type": "boolean"
+    },
+    "bundleType": {
+      "description": "The type of INHERIT bundle — indicates whether this is a complete document, a subset, or a transactional batch",
+      "$comment": "FHIR Bundle type alignment: document (complete estate), collection (subset of entities), transaction (import batch for platform onboarding).",
+      "enum": [ "document", "collection", "transaction" ]
+    },
+    "importSources": {
+      "description": "Systems from which data was imported into this document. Enables audit trail and source tracking",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "$ref": "#/$defs/ImportSource"
+      }
+    },
+    "conformance": {
+      "description": "Machine-readable conformance certificate — records the validation level, schema version, completeness score, and provenance summary at time of validation",
+      "$ref": "#/$defs/Conformance"
+    },
+    "extensions": {
+      "description": "Extension schemas applied to this document. Each entry declares the extension's identity, version, scope, and data block name",
+      "$comment": "Extension semver policy: minor versions are backwards-compatible. Major versions are breaking. Consumers should accept any document whose extension major version matches their supported version.",
+      "type": "array",
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "required": [ "id", "version", "schema" ],
+        "properties": {
+          "id": {
+            "description": "Unique extension identifier, e.g. 'uk-england-wales', 'islamic-succession'",
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "version": {
+            "description": "Semver version of this extension",
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+            "maxLength": 20
+          },
+          "schema": {
+            "description": "URI of the extension's JSON Schema",
+            "type": "string",
+            "pattern": "^https?://",
+            "format": "uri",
+            "maxLength": 500
+          },
+          "scope": {
+            "description": "Root-level field names indicating which entities carry inline x-inherit-* blocks for this extension",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 50
+            }
+          },
+          "dataBlock": {
+            "description": "The x-inherit-* property name for this extension's data block",
+            "type": "string",
+            "pattern": "^x-inherit-[a-z][a-z0-9-]*$",
+            "maxLength": 100
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "insurancePolicies": {
+      "description": "Insurance policies associated with the estate — life, home, health, motor, travel, pet, and professional indemnity",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "$ref": "insurance-policy.json"
+      }
+    },
+    "pets": {
+      "description": "Pets requiring care arrangements",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "$ref": "pet.json"
+      }
+    },
+    "integrity": {
+      "description": "JWS-based tamper evidence for the INHERIT document",
+      "$comment": "W3C Verifiable Credentials Data Model 2.0 proof pattern. RFC 7515 (JWS), RFC 8785 (JCS canonicalisation)",
+      "type": "object",
+      "required": [ "algorithm" ],
+      "properties": {
+        "algorithm": {
+          "description": "JWS algorithm, e.g. RS256, ES256",
+          "type": "string",
+          "minLength": 1
+        },
+        "canonicalisationMethod": {
+          "description": "e.g. JCS (RFC 8785 JSON Canonicalization Scheme)",
+          "type": "string"
+        },
+        "hash": {
+          "description": "Computed hash value",
+          "type": "string"
+        },
+        "signature": {
+          "description": "JWS signature value",
+          "type": "string"
+        },
+        "signedAt": {
+          "description": "When the signature was created",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "verificationMethod": {
+          "description": "Who or what created the signature (W3C VC alignment)",
+          "type": "string"
+        },
+        "verificationMethodUrl": {
+          "description": "URL to the signing certificate",
+          "type": "string",
+          "pattern": "^https?://",
+          "format": "uri"
+        },
+        "proofPurpose": {
+          "description": "e.g. assertionMethod, authentication (W3C VC term)",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "auditLog": {
+      "description": "Formal audit trail of actions taken on this document. Records who changed what, when, and why. Uses person ID references for GDPR data minimisation. Entries may be redacted under Article 17(3)(e) without breaking the log structure. Retention aligns with the estate document lifecycle",
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "common/audit-event.json"
+      }
+    },
+    "applicationState": {
+      "description": "Application-specific state that is NOT part of the INHERIT interchange standard. Implementations may use these fields internally but should not expect other systems to populate or consume them. Implementations may add custom fields beyond those listed here",
+      "type": "object",
+      "properties": {
+        "notifications": {
+          "description": "Notification history",
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "$ref": "notification.json"
+          }
+        },
+        "deathNotifications": {
+          "description": "Tracking which institutions have been notified of the death",
+          "$comment": "Modelled on UK Tell Us Once service, Settld, and Estonia X-Road death-event propagation",
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "type": "object",
+            "required": [ "institution" ],
+            "properties": {
+              "institution": {
+                "description": "Name of institution notified",
+                "type": "string",
+                "maxLength": 255,
+                "minLength": 1
+              },
+              "institutionType": {
+                "enum": [
+                  "bank",
+                  "pension_provider",
+                  "insurance",
+                  "tax_authority",
+                  "utility",
+                  "social_media",
+                  "email_provider",
+                  "government",
+                  "employer",
+                  "other"
+                ]
+              },
+              "institutionOrganisationId": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                "format": "uuid"
+              },
+              "notifiedAt": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+                "format": "date-time"
+              },
+              "notifiedBy": {
+                "description": "Who sent the notification",
+                "type": "string",
+                "maxLength": 255
+              },
+              "method": {
+                "enum": [
+                  "tell_us_once",
+                  "settld",
+                  "direct_letter",
+                  "direct_email",
+                  "direct_phone",
+                  "platform_form",
+                  "api",
+                  "solicitor",
+                  "other"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "pending",
+                  "sent",
+                  "acknowledged",
+                  "actioned",
+                  "rejected",
+                  "unknown"
+                ]
+              },
+              "referenceNumber": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "responseDate": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "format": "date"
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 500
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "recommendedActions": {
+          "description": "Recommended next actions generated from data gaps, urgency flags, incomplete transfer history, missing valuations, and estate status. Actions adapt to the current lifecycle stage",
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "$ref": "#/$defs/RecommendedAction"
+          }
+        },
+        "completeness": {
+          "description": "Estate completeness score — jurisdiction-aware checklist tracking what data has been captured, what's missing, and how complete the estate plan is",
+          "$ref": "common/completeness.json"
+        },
+        "taxPosition": {
+          "description": "Estimated tax position summary computed from valuations, lifetime transfers, exemptions, and jurisdiction-specific thresholds. Always includes a disclaimer — this is informational, not tax advice",
+          "$ref": "common/tax-position.json"
+        },
+        "legacyContacts": {
+          "description": "People nominated to receive access to the estate data or catalogue when the account owner dies or becomes incapacitated. This is a digital inheritance concept, not a legal role — legacy contacts are notified and given access, not granted legal authority. The 'Please open when I have passed away' letter is generated by the application, not stored here",
+          "type": "array",
+          "maxItems": 500,
+          "items": {
+            "$ref": "#/$defs/LegacyContact"
+          }
+        },
+        "dataSharing": {
+          "description": "Consent flags for anonymised data sharing. Always withdrawable per GDPR Article 7(3)",
+          "$ref": "#/$defs/DataSharing"
+        },
+        "events": {
+          "description": "Audit trail of events that occurred during estate administration",
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "$ref": "event.json"
+          }
+        },
+        "transmissions": {
+          "description": "Audit trail of document exchanges",
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "type": "object",
+            "required": [ "sentAt", "sender" ],
+            "properties": {
+              "sentAt": {
+                "description": "When the document was sent",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+                "format": "date-time"
+              },
+              "sender": {
+                "description": "Who sent it (schema.org sender)",
+                "type": "string",
+                "maxLength": 255,
+                "minLength": 1
+              },
+              "receivedAt": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+                "format": "date-time"
+              },
+              "recipient": {
+                "description": "Who received it (schema.org recipient)",
+                "type": "string",
+                "maxLength": 255
+              },
+              "method": {
+                "enum": [
+                  "encrypted_email",
+                  "secure_portal",
+                  "api",
+                  "physical_media",
+                  "registered_post",
+                  "other"
+                ]
+              },
+              "encryptionMethod": {
+                "description": "e.g. AES-256-GCM, PGP, age",
+                "type": "string",
+                "maxLength": 100
+              },
+              "verified": {
+                "description": "Whether recipient verified document integrity",
+                "type": "boolean"
+              },
+              "verifiedAt": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+                "format": "date-time"
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 500
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "acknowledgements": {
+          "description": "Acknowledgements of roles and entitlements",
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "$ref": "acknowledgement.json"
+          }
+        },
+        "assetInterests": {
+          "description": "Informal beneficiary interest in specific assets or collections, captured before formal bequest allocation",
+          "type": "array",
+          "maxItems": 500,
+          "items": {
+            "$ref": "asset-interest.json"
+          }
+        },
+        "dealerInterests": {
+          "description": "Third-party interest in estate assets — dealers, investors, collectors",
+          "type": "array",
+          "maxItems": 500,
+          "items": {
+            "$ref": "dealer-interest.json"
+          }
+        },
+        "subscriptions": {
+          "description": "Recurring subscriptions to be managed after death",
+          "type": "array",
+          "maxItems": 500,
+          "items": {
+            "$ref": "subscription.json"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "referentialIntegrity": {
+      "description": "Machine-readable cross-reference integrity constraints. Defined in the schema, not in individual documents. Validators read these rules and check that every referenced ID exists in the target array",
+      "$comment": "These constraints define Level 2 (Referentially Intact) conformance. Multi-target semantics: when a field has multiple non-required constraints, the validator groups by field path — valid if ANY constraint in the group matches. applicationState fields are NOT covered.",
+      "default": [
+        {
+          "field": "estate.testatorPersonId",
+          "references": "people[].id",
+          "required": true,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Estate testator is not in the people array"
+        },
+        {
+          "field": "executors[].personId",
+          "references": "people[].id",
+          "required": true,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Executor references a person who does not exist"
+        },
+        {
+          "field": "guardians[].personId",
+          "references": "people[].id",
+          "required": true,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Guardian references a person who does not exist"
+        },
+        {
+          "field": "bequests[].beneficiaryId",
+          "references": "people[].id",
+          "required": true,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Bequest beneficiary references a person who does not exist"
+        },
+        {
+          "field": "bequests[].sourceAssetId",
+          "references": "assets[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Bequest source references an asset that does not exist"
+        },
+        {
+          "field": "bequests[].sourceAssetId",
+          "references": "properties[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Bequest source references a property that does not exist"
+        },
+        {
+          "field": "kinships[].fromPersonId",
+          "references": "people[].id",
+          "required": true,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Kinship fromPersonId references a person who does not exist"
+        },
+        {
+          "field": "kinships[].toPersonId",
+          "references": "people[].id",
+          "required": true,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Kinship toPersonId references a person who does not exist"
+        },
+        {
+          "field": "relationships[].person1Id",
+          "references": "people[].id",
+          "required": true,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Relationship person1Id references a person who does not exist"
+        },
+        {
+          "field": "relationships[].person2Id",
+          "references": "people[].id",
+          "required": true,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Relationship person2Id references a person who does not exist"
+        },
+        {
+          "field": "assets[].spaceId",
+          "references": "spaces[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Asset spaceId references a space that does not exist"
+        },
+        {
+          "field": "assets[].propertyId",
+          "references": "properties[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Asset propertyId references a property that does not exist"
+        },
+        {
+          "field": "assets[].assetCollectionId",
+          "references": "assetCollections[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Asset assetCollectionId references a collection that does not exist"
+        },
+        {
+          "field": "proxyAuthorisations[].agentPersonId",
+          "references": "people[].id",
+          "required": true,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Proxy authorisation agent references a person who does not exist"
+        },
+        {
+          "field": "estate.testamentaryScenarios[].conditions[].personId",
+          "references": "people[].id",
+          "required": true,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Scenario condition references a person who does not exist"
+        },
+        {
+          "field": "estate.testamentaryScenarios[].activeBequests[]",
+          "references": "bequests[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Scenario activeBequest references a bequest that does not exist"
+        },
+        {
+          "field": "estate.testamentaryScenarios[].activeExecutors[]",
+          "references": "executors[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Scenario activeExecutor references an executor that does not exist"
+        },
+        {
+          "field": "pets[].petCareArrangement.trustId",
+          "references": "trusts[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Pet care trust reference does not exist"
+        },
+        {
+          "field": "pets[].petCareArrangement.bequestId",
+          "references": "bequests[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Pet care bequest reference does not exist"
+        },
+        {
+          "field": "pets[].petCareArrangement.nominatedCarerPersonId",
+          "references": "people[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Pet care nominated carer does not exist"
+        },
+        {
+          "field": "trusts[].petId",
+          "references": "pets[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Trust petId references a pet that does not exist"
+        }
+      ],
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/IntegrityConstraint"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$comment": "Core extension validation: when a document contains an x-inherit-{name} property matching one of the 21 core extensions, the data block is validated against the extension schema via $ref. Community extensions (not listed here) fall through to the patternProperties generic object validation. This means core extensions get strict enum/required/type enforcement at Level 1, while community extensions only get property name and type validation."
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-uk-england-wales" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-uk-england-wales": {
+            "$ref": "extensions/uk-england-wales/uk-england-wales.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-scotland" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-scotland": {
+            "$ref": "extensions/scotland/scotland.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-ireland" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-ireland": {
+            "$ref": "extensions/ireland/ireland.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-us-estate" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-us-estate": {
+            "$ref": "extensions/us-estate/us-estate.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-canada" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-canada": {
+            "$ref": "extensions/canada/canada.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-australia-nz" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-australia-nz": {
+            "$ref": "extensions/australia-nz/australia-nz.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-eu-succession" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-eu-succession": {
+            "$ref": "extensions/eu-succession/eu-succession.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-japan" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-japan": {
+            "$ref": "extensions/japan/japan.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-prc-china" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-prc-china": {
+            "$ref": "extensions/prc-china/prc-china.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-singapore-malaysia" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-singapore-malaysia": {
+            "$ref": "extensions/singapore-malaysia/singapore-malaysia.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-latin-america" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-latin-america": {
+            "$ref": "extensions/latin-america/latin-america.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-islamic-succession" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-islamic-succession": {
+            "$ref": "extensions/islamic-succession/islamic-succession.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-jewish-succession" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-jewish-succession": {
+            "$ref": "extensions/jewish-succession/jewish-succession.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-hindu-succession" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-hindu-succession": {
+            "$ref": "extensions/hindu-succession/hindu-succession.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-africa-customary" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-africa-customary": {
+            "$ref": "extensions/africa-customary/africa-customary.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-brazil" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-brazil": {
+            "$ref": "extensions/brazil/brazil.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-hong-kong" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-hong-kong": {
+            "$ref": "extensions/hong-kong/hong-kong.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-switzerland" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-switzerland": {
+            "$ref": "extensions/switzerland/switzerland.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-israel" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-israel": {
+            "$ref": "extensions/israel/israel.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-india" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-india": {
+            "$ref": "extensions/india/india.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-uae" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-uae": {
+            "$ref": "extensions/uae/uae.json"
+          }
+        }
+      }
+    }
+  ],
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 200,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "ImportSource": {
+      "type": "object",
+      "required": [ "id", "systemName" ],
+      "properties": {
+        "id": {
+          "description": "Unique identifier for this import source, referenced by importSourceId on entities",
+          "examples": [ "src-clio-001", "src-paper-file" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "systemName": {
+          "description": "Name of the source system",
+          "examples": [
+            "Clio Manage",
+            "LEAP Legal Software",
+            "Paper file",
+            "Previous solicitor's firm",
+            "LegacyLists"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "importDate": {
+          "description": "Date the data was imported from this source",
+          "examples": [ "2026-03-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "importMethod": {
+          "description": "How the data was imported from this source",
+          "$comment": "api: imported via API integration. file_upload: imported from an uploaded file (CSV, JSON, etc.). manual_copy: manually copied from the source. ai_extraction: extracted by an AI model from documents or images. ocr: extracted via optical character recognition from scanned documents. migration_script: automated migration from a legacy system.",
+          "enum": [
+            "api",
+            "file_upload",
+            "manual_copy",
+            "ai_extraction",
+            "ocr",
+            "migration_script"
+          ]
+        },
+        "notes": {
+          "description": "Additional context about the import",
+          "examples": [
+            "Migrated from Clio matter #12345 — assets and liabilities only"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "RecommendedAction": {
+      "type": "object",
+      "required": [ "id", "category", "priority", "title", "status" ],
+      "properties": {
+        "id": {
+          "description": "Unique identifier for this action",
+          "examples": [ "act-001", "act-val-shares" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "category": {
+          "description": "Category of the recommended action",
+          "$comment": "completeness: filling data gaps. tax_planning: optimizing tax position. legal_requirement: meeting statutory obligations. valuation: getting or updating valuations. transfer_history: documenting lifetime gifts. beneficiary_review: reviewing nominations and designations. document_update: updating legal documents.",
+          "enum": [
+            "completeness",
+            "tax_planning",
+            "legal_requirement",
+            "valuation",
+            "transfer_history",
+            "beneficiary_review",
+            "document_update"
+          ]
+        },
+        "priority": {
+          "description": "Priority level for this action",
+          "$comment": "critical: must address immediately — legal deadline or compliance risk. high: should address soon — significant financial or legal impact. medium: address when convenient — improves estate plan quality. low: nice to have — marginal improvement.",
+          "enum": [ "critical", "high", "medium", "low" ]
+        },
+        "title": {
+          "description": "Short action title",
+          "examples": [
+            "Get professional valuation for share portfolio",
+            "Update pension nomination",
+            "Document lifetime gifts in lookback period"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "description": {
+          "description": "Detailed explanation of what to do and why",
+          "type": "string",
+          "maxLength": 2000
+        },
+        "status": {
+          "description": "Current status of this action",
+          "$comment": "pending: not yet started. in_progress: being worked on. completed: done. dismissed: user chose not to act on this.",
+          "enum": [ "pending", "in_progress", "completed", "dismissed" ]
+        },
+        "triggeredBy": {
+          "description": "What data gap or condition generated this action",
+          "examples": [
+            "Asset 'Barclays shares' has estimatedValue > £50,000 but no professional valuation",
+            "No executor appointed",
+            "Pension has no nominated beneficiary"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "relatedEntityType": {
+          "description": "Entity type this action relates to",
+          "examples": [ "asset", "person", "estate", "bequest" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "relatedEntityId": {
+          "description": "ID of the specific entity this action relates to",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Conformance": {
+      "type": "object",
+      "required": [ "level", "validatedAt", "validatedBy", "schemaVersion" ],
+      "properties": {
+        "level": {
+          "description": "Conformance level achieved",
+          "$comment": "level_1: structural validity — document parses and validates against JSON Schema. level_2: referential integrity — all cross-references resolve. level_3: jurisdiction complete — all required fields for the estate's jurisdiction are present.",
+          "enum": [ "level_1", "level_2", "level_3" ]
+        },
+        "validatedAt": {
+          "description": "When the validation was performed",
+          "examples": [ "2026-03-28T14:00:00Z" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "validatedBy": {
+          "description": "Name of the tool that performed the validation",
+          "examples": [
+            "INHERIT Web Validator",
+            "MyFamilyInherits v2.1",
+            "openinherit-cli"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "schemaVersion": {
+          "description": "INHERIT schema version this document was validated against",
+          "examples": [ "1.2.0" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "completenessScore": {
+          "description": "Completeness score at time of validation",
+          "type": "integer",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "entityCounts": {
+          "description": "Count of entities per type at time of validation",
+          "examples": [
+            {
+              "people": 5,
+              "properties": 2,
+              "assets": 12,
+              "bequests": 4,
+              "executors": 2
+            }
+          ],
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "provenanceSummary": {
+          "description": "Count of entities by data provenance source",
+          "examples": [
+            {
+              "manual_entry": 15,
+              "ai_extracted": 8,
+              "imported": 3
+            }
+          ],
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "warnings": {
+          "description": "Validation warnings — non-blocking issues that may need attention",
+          "examples": [
+            [
+              "2 assets have estimated but no professional valuation",
+              "Lifetime transfer history covers only 5 of 7 required lookback years"
+            ]
+          ],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "validationEndpoint": {
+          "description": "URL of the validation service that produced this conformance certificate",
+          "examples": [ "https://validate.openinherit.org/v3" ],
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "additionalProperties": false
+    },
+    "LegacyContact": {
+      "type": "object",
+      "required": [ "id", "name", "accessLevel" ],
+      "properties": {
+        "id": {
+          "description": "Unique identifier for this legacy contact",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "personId": {
+          "description": "Reference to a Person.id, if the legacy contact is also in the people array",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "personIdDisplay": {
+          "description": "Human-readable display name for the referenced person",
+          "type": "string",
+          "maxLength": 255
+        },
+        "name": {
+          "description": "Display name — required because catalogue-only documents may not have a people array",
+          "examples": [ "Paul Frith", "Sarah Davies" ],
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "relationship": {
+          "description": "Relationship to the catalogue/estate owner",
+          "examples": [ "son", "daughter", "partner", "friend", "solicitor" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "email": {
+          "description": "Email address for notification",
+          "type": "string",
+          "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+          "format": "email"
+        },
+        "phone": {
+          "description": "Phone number",
+          "type": "string",
+          "maxLength": 255
+        },
+        "notificationMethod": {
+          "description": "How to notify this person",
+          "$comment": "email: send notification by email. phone: call or text. post: physical letter. in_person: notify face to face.",
+          "enum": [ "email", "phone", "post", "in_person" ]
+        },
+        "accessLevel": {
+          "description": "What level of access this person should receive",
+          "$comment": "full: complete access to all data. read_only: can view but not modify. collection_only: can only see asset collections and items. financial_only: can only see financial information.",
+          "enum": [ "full", "read_only", "collection_only", "financial_only" ]
+        },
+        "letterGenerated": {
+          "description": "Whether the 'Please open when I have passed away' letter has been generated for this contact",
+          "type": "boolean"
+        },
+        "letterGeneratedAt": {
+          "description": "When the letter was last generated",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "letterDeliveryMethod": {
+          "description": "How the letter was or should be delivered",
+          "enum": [ "printed", "digital", "both" ]
+        },
+        "notes": {
+          "description": "Additional notes about this legacy contact",
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "DataSharing": {
+      "type": "object",
+      "properties": {
+        "anonymisedAggregates": {
+          "description": "Consent to include in anonymised aggregate data products",
+          "type": "boolean"
+        },
+        "academicResearch": {
+          "description": "Consent to include in academic research datasets",
+          "type": "boolean"
+        },
+        "partnerInsights": {
+          "description": "Consent to share aggregated insights with named partners",
+          "type": "boolean"
+        },
+        "consentRecordedAt": {
+          "description": "When consent was recorded (ISO 8601)",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "consentMethod": {
+          "description": "How consent was obtained",
+          "enum": [ "in_app", "written", "verbal" ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "IntegrityPath": {
+      "description": "A path expression for referential integrity constraints. Supports camelCase field paths and x-inherit-* extension block paths",
+      "type": "string",
+      "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)(\\[\\])?(\\.[a-z][a-zA-Z0-9]*(\\[\\])?)*$",
+      "maxLength": 200
+    },
+    "IntegrityConstraint": {
+      "type": "object",
+      "required": [ "field", "references", "code", "errorMessage" ],
+      "properties": {
+        "field": {
+          "description": "The field containing the reference (source)",
+          "$ref": "#/$defs/IntegrityPath"
+        },
+        "references": {
+          "description": "The target array + id field that must contain the referenced value",
+          "$ref": "#/$defs/IntegrityPath"
+        },
+        "required": {
+          "description": "If true, a broken reference is always an error. If false, the field may reference multiple target arrays (grouped by field path)",
+          "type": "boolean"
+        },
+        "code": {
+          "description": "Machine-readable error code from the INHERIT error vocabulary",
+          "type": "string",
+          "maxLength": 100
+        },
+        "errorMessage": {
+          "description": "Human-readable description of the constraint violation",
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

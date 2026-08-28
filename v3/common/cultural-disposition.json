@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/cultural-disposition.json",
+  "title": "Cultural Disposition",
+  "description": "Cultural, religious, and regulatory constraints on how an asset or property may be disposed of. Covers sacred status, disposal restrictions, export controls, and whether the item can be bequeathed",
+  "type": "object",
+  "properties": {
+    "sacredStatus": {
+      "description": "Whether this item has religious or spiritual significance that restricts disposal",
+      "$comment": "secular: no religious significance. consecrated: blessed or sanctified by a religious authority (e.g. Buddhist statue consecrated by a monk). ritually_significant: not formally consecrated but holds ritual importance (e.g. Hindu puja items, family altar). inalienable_endowment: permanently dedicated to charitable or religious purposes — cannot be sold or bequeathed (e.g. Islamic waqf property).",
+      "enum": [
+        "secular",
+        "consecrated",
+        "ritually_significant",
+        "inalienable_endowment"
+      ]
+    },
+    "culturalSignificance": {
+      "description": "The cultural weight of this item — determines who should be consulted about its disposition",
+      "$comment": "personal: significant to the owner only. family_heirloom: passed down through generations — family should be consulted. community: significant to a community or clan (e.g. ancestral jade, clan property). national_heritage: classified as national heritage — government restrictions likely apply.",
+      "enum": [
+        "personal",
+        "family_heirloom",
+        "community",
+        "national_heritage"
+      ]
+    },
+    "bequeathable": {
+      "description": "Whether this item can be willed to another person. False for waqf endowments, some ancestral property, and inalienable cultural artefacts",
+      "default": true,
+      "type": "boolean"
+    },
+    "disposalRestrictions": {
+      "description": "Specific restrictions on how this item may be disposed of, with the authority that imposes each restriction",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "requirement" ],
+        "properties": {
+          "authority": {
+            "description": "Name of the authority imposing this restriction",
+            "examples": [
+              "Wat Phra Kaew Temple",
+              "Okonkwo Family Council",
+              "MUIS"
+            ],
+            "type": "string",
+            "maxLength": 255
+          },
+          "authorityType": {
+            "description": "Category of the authority",
+            "enum": [
+              "religious_body",
+              "family_council",
+              "clan_association",
+              "tribal_council",
+              "government",
+              "heritage_authority"
+            ]
+          },
+          "requirement": {
+            "description": "What the restriction requires",
+            "examples": [
+              "Must be returned to temple",
+              "Requires ritual disposal ceremony",
+              "Community approval needed before sale"
+            ],
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "jurisdiction": {
+            "description": "Jurisdiction where this restriction applies",
+            "$ref": "jurisdiction.json"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "exportRestrictions": {
+      "description": "Legal restrictions on exporting this item from its current jurisdiction",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "jurisdiction", "restrictionType" ],
+        "properties": {
+          "jurisdiction": {
+            "description": "Jurisdiction imposing the export restriction",
+            "$ref": "jurisdiction.json"
+          },
+          "restrictionType": {
+            "description": "Category of export restriction",
+            "$comment": "cultural_property: classified cultural property requiring export licence. national_treasure: designated national treasure — export likely prohibited. antiquity: items over a threshold age requiring approval (e.g. China: 100 years). protected_species: items made from protected materials (ivory, certain woods). controlled_goods: items subject to general export controls.",
+            "enum": [
+              "cultural_property",
+              "national_treasure",
+              "antiquity",
+              "protected_species",
+              "controlled_goods"
+            ]
+          },
+          "authority": {
+            "description": "The government body or agency that controls export",
+            "examples": [
+              "Agency for Cultural Affairs (Japan)",
+              "State Administration of Cultural Heritage (China)"
+            ],
+            "type": "string",
+            "maxLength": 255
+          },
+          "licenceRequired": {
+            "description": "Whether a licence or permit is required for export",
+            "type": "boolean"
+          },
+          "notes": {
+            "description": "Additional details about the restriction",
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

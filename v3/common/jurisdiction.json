@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/jurisdiction.json",
+  "title": "Jurisdiction",
+  "description": "A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules",
+  "$comment": "https://www.iso.org/iso-3166-country-codes.html",
+  "type": "object",
+  "required": [ "country" ],
+  "properties": {
+    "country": {
+      "description": "ISO 3166-1 alpha-2 country code. Always uppercase, exactly two letters",
+      "$comment": "https://www.iso.org/iso-3166-country-codes.html",
+      "examples": [ "GB", "US", "JP", "IN", "NG", "AE", "SG", "AU" ],
+      "type": "string",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "subdivision": {
+      "description": "ISO 3166-2 subdivision code identifying a state, province, or territory with its own succession law",
+      "$comment": "ISO 3166-2. Most codes 2-3 chars; some historic codes longer — https://www.iso.org/standard/72483.html",
+      "examples": [
+        "GB-SCT",
+        "GB-ENG",
+        "US-CA",
+        "US-TX",
+        "AU-NSW",
+        "IN-MH",
+        "NG-LA"
+      ],
+      "type": "string",
+      "pattern": "^[A-Z]{2}-[A-Z0-9]{1,6}$",
+      "maxLength": 255
+    },
+    "legalSystems": {
+      "description": "The legal traditions governing succession in this jurisdiction. Multiple entries indicate a plural legal system (e.g. Singapore: common_law + islamic_law)",
+      "$comment": "common_law: judge-made precedent (England and Wales, most US states, Australia). civil_law: codified statute (France, Germany, Japan). mixed: hybrid of common and civil law (Scotland, South Africa). customary_law: indigenous or tribal customary law. islamic_law: Islamic Shariah succession rules — only where legally binding in the jurisdiction (Singapore AMLA, not a Muslim in Manchester). hindu_law: Hindu succession law where legally binding (India HSA 1956). jewish_law: Jewish halachic succession law where legally binding. canon_law: Canon law where legally binding.",
+      "examples": [
+        [ "common_law" ],
+        [ "common_law", "islamic_law" ]
+      ],
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "common_law",
+          "civil_law",
+          "mixed",
+          "customary_law",
+          "islamic_law",
+          "hindu_law",
+          "jewish_law",
+          "canon_law"
+        ]
+      }
+    },
+    "name": {
+      "description": "Human-readable jurisdiction name for display purposes. Not authoritative — the country and subdivision codes are the canonical identifiers",
+      "examples": [
+        "Scotland",
+        "California",
+        "New South Wales",
+        "Maharashtra",
+        "Lagos"
+      ],
+      "type": "string",
+      "maxLength": 255
+    }
+  },
+  "additionalProperties": false
+}

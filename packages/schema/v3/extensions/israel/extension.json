@@ -1,0 +1,39 @@
+{
+  "name": "Israel",
+  "id": "https://openinherit.org/v3/extensions/israel/israel.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "IL"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "jewish-succession",
+    "islamic-succession"
+  ],
+  "legalSystems": [
+    "civil_law",
+    "religious_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-04-04",
+  "dataProvenance": "Inheritance Law 1965 (Chok HaYerusha), Succession Ordinance, Family Court Law 1995, Rabbinical Courts Jurisdiction (Marriage and Divorce) Law 1953",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Israeli succession rules: parallel court systems (civil, rabbinical, sharia, druze), Inheritance Law 1965 process types, religious authority orders, kibbutz/moshav communal property, and Holocaust restitution assets.",
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "partial",
+  "keyFeatures": "Inheritance Law 1965, religious court jurisdiction, mutual wills, inheritance tax (abolished/reinstated)",
+  "legalTradition": "Mixed statutory",
+  "seeking": "",
+  "tier": "core"
+}

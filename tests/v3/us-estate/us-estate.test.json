@@ -1,0 +1,78 @@
+{
+  "target": "../../../v3/extensions/us-estate/us-estate.json",
+  "tests": [
+    {
+      "description": "valid — minimal with required state",
+      "data": {
+        "state": "US-CA"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — California community property",
+      "data": {
+        "state": "US-CA",
+        "propertyRegime": "community_property"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — New York with elective share",
+      "data": {
+        "state": "US-NY",
+        "notes": "New York estate"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required state",
+      "data": {
+        "propertyRegime": "community_property"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — state not matching pattern",
+      "data": {
+        "state": "California"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "state": "US-CA",
+        "ukIhtThreshold": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — intestacyDepth and collateralHeirRules for California",
+      "data": {
+        "state": "US-CA",
+        "intestacyDepth": {
+          "upcCompliant": false,
+          "maxParentele": 3,
+          "laughingHeirCutoff": false
+        },
+        "collateralHeirRules": {
+          "cousinInheritance": true,
+          "representationAtCollateralLevel": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — UPC-compliant state with 2nd parentelic limit",
+      "data": {
+        "state": "US-MT",
+        "intestacyDepth": {
+          "upcCompliant": true,
+          "maxParentele": 2,
+          "laughingHeirCutoff": true
+        }
+      },
+      "valid": true
+    }
+  ]
+}

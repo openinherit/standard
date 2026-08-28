@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/identifier.json",
+  "title": "Identifier",
+  "description": "A typed external identifier. Use 'system' to namespace identifiers and prevent collisions across jurisdictions and organisations",
+  "type": "object",
+  "required": [ "value" ],
+  "properties": {
+    "system": {
+      "description": "Namespace URI or name identifying the issuing authority or system. Use URN format where possible for unambiguous identification",
+      "examples": [
+        "urn:hmrc:nino",
+        "urn:ssa:ssn",
+        "urn:jpn:my-number",
+        "urn:aus:tfn",
+        "urn:charity-commission:number"
+      ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "value": {
+      "description": "The identifier value itself. Format depends on the system — may include hyphens, spaces, or check digits as appropriate",
+      "examples": [ "AB123456C", "123-45-6789", "1234 5678 9012", "SC012345" ],
+      "writeOnly": true,
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "type": {
+      "description": "Human-readable type label describing what kind of identifier this is",
+      "examples": [
+        "passport",
+        "national_insurance",
+        "social_security",
+        "charity_number",
+        "driving_licence",
+        "tax_file_number"
+      ],
+      "type": "string",
+      "maxLength": 100
+    }
+  },
+  "additionalProperties": false
+}

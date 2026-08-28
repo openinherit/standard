@@ -1,0 +1,18 @@
+title: "Schema guidance"
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ask questions about how to model specific estate scenarios using INHERIT schemas.
+        For schema *changes*, please use the [schema change request](https://github.com/openinherit/standard/issues/new?template=schema-change-request.yml) issue template instead.
+  - type: textarea
+    attributes:
+      label: What are you trying to model?
+      description: Describe the estate scenario or data structure you need to represent.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What have you tried?
+      description: Share any schema snippets or approaches you've already explored.

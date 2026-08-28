@@ -1,0 +1,73 @@
+{
+  "name": "@openinherit/schema",
+  "version": "6.6.0",
+  "description": "INHERIT open estate data standard — 31 JSON Schemas, 14 common types, 5 asset categories, 21 jurisdiction extensions, and reference data for structured estate planning interchange across 7 legal traditions",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Testate Technologies Ltd",
+    "url": "https://www.openinherit.org"
+  },
+  "contributors": [
+    {
+      "name": "Rich Davies",
+      "url": "https://github.com/davieshq"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openinherit/standard.git",
+    "directory": "packages/schema"
+  },
+  "homepage": "https://dev.openinherit.org",
+  "bugs": {
+    "url": "https://github.com/openinherit/standard/issues"
+  },
+  "funding": {
+    "type": "opencollective",
+    "url": "https://www.openinherit.org/support"
+  },
+  "exports": {
+    "./v3/*": "./v3/*",
+    "./extensions-registry.json": "./extensions-registry.json",
+    "./reference-data/*": "./reference-data/*"
+  },
+  "files": [
+    "v3",
+    "extensions-registry.json",
+    "reference-data"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "inherit",
+    "estate-planning",
+    "json-schema",
+    "json-schema-2020-12",
+    "probate",
+    "wills",
+    "trusts",
+    "succession",
+    "inheritance",
+    "open-data",
+    "open-standard",
+    "legal-tech",
+    "legaltech",
+    "estate",
+    "bequest",
+    "kinship",
+    "faraid",
+    "islamic-succession",
+    "hindu-succession",
+    "common-law",
+    "civil-law",
+    "forced-heirship",
+    "intestacy",
+    "data-interchange",
+    "schema-validation"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,481 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/wish.json",
+  "title": "Wish",
+  "description": "A non-binding (or culturally/religiously binding) wish — funeral, letter of wishes, care instructions, pet care, digital estate, distribution preferences",
+  "type": "object",
+  "required": [ "id", "wishType", "title" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this wish within the INHERIT document",
+      "examples": [ "e1f2a3b4-c5d6-7890-e123-456789abcdef" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "wishType": {
+      "description": "The category of wish. Wishes may be non-binding in law but culturally or religiously obligatory",
+      "$comment": "funeral: wishes about funeral arrangements — burial vs cremation, ceremony type, music, readings. letter: a letter of wishes to executors or family — guidance on how to exercise discretion. care: care instructions for a dependant (elderly parent, disabled family member). distribution: preferences about how specific items should be distributed informally. digital: instructions for digital accounts and online presence. pets: care arrangements for animals. general: any wish not covered by the other categories.",
+      "examples": [ "funeral", "letter", "pets" ],
+      "enum": [
+        "funeral",
+        "letter",
+        "care",
+        "distribution",
+        "digital",
+        "pets",
+        "general",
+        "digital_likeness"
+      ]
+    },
+    "title": {
+      "description": "A short descriptive title for this wish",
+      "examples": [
+        "Funeral wishes",
+        "Letter to my executors",
+        "Care of my dog Biscuit",
+        "Digital accounts instructions"
+      ],
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "content": {
+      "description": "The full text content of the wish. May be lengthy for letters of wishes",
+      "examples": [
+        "I wish to be cremated and my ashes scattered at Coniston Water",
+        "Please ensure my cat Mochi is rehomed with my sister Akiko",
+        "Burial in accordance with Islamic rites — contact Imam Hassan at the East London Mosque",
+        "Please ensure my dog is cared for by my nephew Tendai"
+      ],
+      "type": "string",
+      "maxLength": 5000
+    },
+    "bindingNature": {
+      "description": "The legal or moral force of this wish. Most wishes are non-binding but may carry significant cultural or religious weight",
+      "$comment": "non_binding: carries no legal force — guidance only. culturally_obligatory: expected to be followed under cultural norms (e.g. African burial customs). religiously_obligatory: required under religious law (e.g. Islamic burial within 24 hours, Jewish tahara). legally_binding: enforceable by law in the relevant jurisdiction (rare for wishes — most are advisory).",
+      "examples": [ "non_binding", "religiously_obligatory" ],
+      "enum": [
+        "non_binding",
+        "culturally_obligatory",
+        "religiously_obligatory",
+        "legally_binding"
+      ]
+    },
+    "addresseePersonId": {
+      "description": "Reference to the Person.id this wish is addressed to — typically an executor, guardian, or family member",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "addresseePersonIdDisplay": {
+      "description": "Human-readable display name for the referenced addressee person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "relatedAssetId": {
+      "description": "Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item)",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "notes": {
+      "description": "Additional notes about this wish",
+      "examples": [
+        "Written in consultation with Imam Hassan — follows Hanafi funeral practice",
+        "Updated after acquiring second dog in 2024"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "visibility": {
+      "$ref": "common/visibility.json"
+    },
+    "funeralArrangementType": {
+      "description": "Type of funeral arrangement preferred",
+      "$comment": "burial: traditional burial in a cemetery. cremation: cremation with ashes scattered or kept. green_burial: environmentally friendly burial (no embalming, biodegradable coffin). sea_burial: burial at sea. sky_burial: Tibetan/Zoroastrian practice of excarnation. donation_to_science: body donated to medical research. other: any other arrangement.",
+      "examples": [ "burial", "cremation", "green_burial" ],
+      "anyOf": [
+        {
+          "enum": [
+            "burial",
+            "cremation",
+            "green_burial",
+            "sea_burial",
+            "sky_burial",
+            "donation_to_science",
+            "other"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+"
+        }
+      ]
+    },
+    "funeralCeremonyType": {
+      "description": "Type of ceremony preferred",
+      "$comment": "religious: ceremony conducted by a religious officiant. secular: non-religious ceremony. hybrid: combination of religious and secular elements. none: no ceremony requested.",
+      "examples": [ "religious", "secular" ],
+      "enum": [ "religious", "secular", "hybrid", "none" ]
+    },
+    "funeralCeremonyReligion": {
+      "description": "Religion or faith tradition for the ceremony, if funeralCeremonyType is 'religious' or 'hybrid'",
+      "examples": [
+        "Church of England",
+        "Roman Catholic",
+        "Sunni Islam",
+        "Reform Judaism",
+        "Sikhism"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "funeralProviderOrganisationId": {
+      "description": "Reference to the Organisation.id of the preferred funeral provider",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "funeralProviderOrganisationIdDisplay": {
+      "description": "Human-readable display name for the referenced funeral provider organisation",
+      "type": "string",
+      "maxLength": 255
+    },
+    "funeralPrePaid": {
+      "description": "Whether a pre-paid funeral plan is in place",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "funeralPrePaidPolicyNumber": {
+      "description": "Policy number for the pre-paid funeral plan",
+      "examples": [ "FP-2024-123456" ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "funeralBudgetMaximum": {
+      "description": "Maximum budget for the funeral, in minor currency units",
+      "$ref": "common/money.json"
+    },
+    "funeralBudgetSource": {
+      "description": "How the funeral is to be funded",
+      "$comment": "estate: paid from the estate. pre_paid: covered by a pre-paid funeral plan. insurance: covered by a funeral insurance policy. family: funded by family members. other: other funding arrangement.",
+      "examples": [ "estate", "pre_paid" ],
+      "enum": [ "estate", "pre_paid", "insurance", "family", "other" ]
+    },
+    "funeralLocationPreference": {
+      "description": "Preferred location for the funeral service or burial",
+      "examples": [
+        "St Mary's Church, Wrexham",
+        "Coniston Water, Lake District"
+      ],
+      "type": "string",
+      "maxLength": 500
+    },
+    "funeralMusicWishes": {
+      "description": "Music requested for the funeral service",
+      "examples": [ "Jerusalem, Abide With Me, and Time to Say Goodbye" ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "funeralReadingWishes": {
+      "description": "Readings or poems requested for the funeral service",
+      "examples": [ "Psalm 23, Do Not Stand at My Grave and Weep" ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "organDonation": {
+      "description": "Organ donation preferences",
+      "type": "object",
+      "properties": {
+        "consentGiven": {
+          "description": "Whether consent given",
+          "type": "boolean"
+        },
+        "organs": {
+          "description": "Specific organs consented",
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "coordinatingOrganisationId": {
+          "description": "Organisation coordinating donation",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "coordinatingOrganisationIdDisplay": {
+          "description": "Human-readable display name for the referenced coordinating organisation",
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "medicalResearchDonation": {
+      "description": "Body donation to medical research",
+      "type": "object",
+      "properties": {
+        "consentGiven": {
+          "description": "Whether consent given",
+          "type": "boolean"
+        },
+        "institutionOrganisationId": {
+          "description": "Research institution Organisation.id",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "institutionOrganisationIdDisplay": {
+          "description": "Human-readable display name for the referenced institution organisation",
+          "type": "string",
+          "maxLength": 255
+        },
+        "restrictions": {
+          "description": "Any restrictions",
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "autopsyPreference": {
+      "description": "Preference regarding autopsy",
+      "enum": [ "requested", "declined", "no_preference" ]
+    },
+    "funeralBudgetNotes": {
+      "description": "Additional notes about funeral budget",
+      "type": "string",
+      "maxLength": 2000
+    },
+    "likenessConsent": {
+      "description": "Whether the person consents to posthumous AI/digital recreation",
+      "enum": [ "permitted", "prohibited", "restricted", "not_stated" ]
+    },
+    "likenessScope": {
+      "description": "What aspects of likeness are covered",
+      "type": "array",
+      "items": {
+        "enum": [
+          "voice",
+          "visual_appearance",
+          "writing_style",
+          "personality_model",
+          "full_avatar"
+        ]
+      }
+    },
+    "likenessPermittedUses": {
+      "description": "What purposes are allowed",
+      "type": "array",
+      "items": {
+        "enum": [
+          "memorial",
+          "family_private",
+          "educational",
+          "commercial",
+          "legal_proceedings",
+          "artistic"
+        ]
+      }
+    },
+    "likenessProhibitedUses": {
+      "description": "What purposes are explicitly forbidden",
+      "type": "array",
+      "items": {
+        "enum": [
+          "memorial",
+          "family_private",
+          "educational",
+          "commercial",
+          "legal_proceedings",
+          "artistic"
+        ]
+      }
+    },
+    "likenessControllerPersonId": {
+      "description": "Who has authority over likeness decisions after death",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "likenessControllerPersonIdDisplay": {
+      "description": "Human-readable display name for the referenced likeness controller person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "likenessTimeLimit": {
+      "description": "ISO 8601 duration — how long consent/prohibition lasts, e.g. P25Y = 25 years",
+      "type": "string",
+      "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$"
+    },
+    "likenessRevocationConditions": {
+      "description": "Conditions under which consent is revoked",
+      "type": "string",
+      "maxLength": 500
+    },
+    "syntheticMediaPolicy": {
+      "description": "Policy on AI-generated synthetic media using the person's likeness",
+      "enum": [
+        "allow_with_attribution",
+        "allow_without_attribution",
+        "prohibit_all",
+        "family_decision",
+        "not_stated"
+      ]
+    },
+    "likenessEnforcement": {
+      "description": "Tracking enforcement of likeness wishes — takedown requests and platform compliance",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [ "platform", "requestType" ],
+        "properties": {
+          "platform": {
+            "description": "Platform where enforcement action is directed",
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "requestType": {
+            "description": "What type of enforcement action was requested",
+            "enum": [
+              "takedown",
+              "restrict",
+              "transfer_control",
+              "verify_consent",
+              "cease_training",
+              "other"
+            ]
+          },
+          "requestDate": {
+            "description": "When the enforcement request was made",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "format": "date"
+          },
+          "requestedBy": {
+            "description": "Who made the request (executor, controller, legal representative)",
+            "type": "string",
+            "maxLength": 255
+          },
+          "requestedByPersonId": {
+            "description": "FK to person who made the request",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "requestedByPersonIdDisplay": {
+            "description": "Human-readable display name for the referenced requested by person",
+            "type": "string",
+            "maxLength": 255
+          },
+          "status": {
+            "description": "Current status of the enforcement request",
+            "enum": [
+              "pending",
+              "acknowledged",
+              "complied",
+              "refused",
+              "escalated",
+              "unknown"
+            ]
+          },
+          "responseDate": {
+            "description": "When the platform responded",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "format": "date"
+          },
+          "referenceNumber": {
+            "description": "Platform's reference number for the request",
+            "type": "string",
+            "maxLength": 255
+          },
+          "legalBasis": {
+            "description": "Legal basis for the request, e.g. EU AI Act, NO FAKES Act, estate executor authority",
+            "type": "string",
+            "maxLength": 500
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "existingDigitalModels": {
+      "description": "Inventory of existing AI/digital likeness models and instructions for each",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "description": "e.g. HereAfter, StoryFile (schema.org provider)",
+            "type": "string",
+            "maxLength": 255
+          },
+          "modelType": {
+            "description": "Type of digital model",
+            "enum": [
+              "chatbot",
+              "voice_clone",
+              "visual_avatar",
+              "full_replica",
+              "other"
+            ]
+          },
+          "action": {
+            "description": "Instruction for what to do with this model after death",
+            "enum": [ "preserve", "delete", "transfer", "restrict" ]
+          },
+          "controllerPersonId": {
+            "description": "Person.id who has authority over this specific model",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "controllerPersonIdDisplay": {
+            "description": "Human-readable display name for the referenced controller person",
+            "type": "string",
+            "maxLength": 255
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "relatedTrustIds": {
+      "description": "Trust IDs this wish or letter of wishes applies to",
+      "type": "array",
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+        "format": "uuid"
+      }
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

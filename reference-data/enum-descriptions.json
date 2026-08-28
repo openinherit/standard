@@ -1,0 +1,251 @@
+{
+  "_disclaimer": "This file is companion reference data for the INHERIT schema. It is not normative — the schema files in v1/ are the source of truth for enum values. This file adds human-readable and agent-readable context.",
+  "enums": {
+    "asset.category": {
+      "financial": {
+        "label": "Financial Assets",
+        "description": "Bank accounts, savings, investments, pensions, shares, bonds, cryptocurrency, insurance policies.",
+        "agentHint": "Search financial institution databases, not marketplaces. Value from statements, fund prices, or account balances — not comparable sales. Contact institutions directly for date-of-death balances.",
+        "searchable": false
+      },
+      "property_contents": {
+        "label": "Property Contents",
+        "description": "Household furniture, appliances, white goods, general home contents not classified as art, antiques, or collectibles.",
+        "agentHint": "Search general second-hand marketplaces (eBay, Facebook Marketplace, Gumtree). Most items have low individual value; consider bulk lot estimates for common furniture.",
+        "searchable": true
+      },
+      "vehicle": {
+        "label": "Vehicles",
+        "description": "Cars, motorcycles, boats, caravans, campervans, classic or vintage vehicles, and other motorised transport.",
+        "agentHint": "Search AutoTrader, Classic & Sports Car, eBay Motors, or specialist marque registrars. Use registration or VIN to identify exact model and trim. HPI check for outstanding finance.",
+        "searchable": true
+      },
+      "jewellery_watches": {
+        "label": "Jewellery & Watches",
+        "description": "Fine jewellery, engagement and wedding rings, luxury and vintage watches, precious metals, gemstones.",
+        "agentHint": "Search Chrono24, WatchFinder, and auction house databases (Sotheby's, Christie's, Bonhams) for watches. For jewellery, use weight and metal purity for precious metals; stone quality and certification for gemstones. Original box and papers significantly affect value.",
+        "searchable": true
+      },
+      "art": {
+        "label": "Art",
+        "description": "Paintings, drawings, prints, sculptures, photography, and other works of fine art.",
+        "agentHint": "Search Artprice, Invaluable, auction house archives. Attribution and provenance are critical — misattribution can mean a 10x difference in value. Check artist authentication bodies if available.",
+        "searchable": true
+      },
+      "antiques": {
+        "label": "Antiques",
+        "description": "Items typically over 100 years old with historical, cultural, or craft significance — furniture, ceramics, silver, clocks, maps.",
+        "agentHint": "Search auction house archives (Sotheby's, Christie's, Bonhams, Cheffins) and specialist dealers. Provenance, maker's marks, and condition heavily affect value. BADA and LAPADA directories useful for specialist input.",
+        "searchable": true
+      },
+      "collectibles": {
+        "label": "Collectibles",
+        "description": "Stamps, coins, model railways, die-cast toys, sports memorabilia, comic books, trading cards, and other collector items.",
+        "agentHint": "Search specialist platforms (Catawiki, Delcampe, Stanley Gibbons for stamps; Spink for coins; Rails of Sheffield, Hattons for model railways). Original packaging and provenance are critical to value in most categories.",
+        "searchable": true
+      },
+      "musical_instruments": {
+        "label": "Musical Instruments",
+        "description": "Pianos, string instruments, woodwind, brass, guitars, synthesisers, and amplifiers — acoustic and electronic.",
+        "agentHint": "Search Reverb.com, specialist auction houses (Brompton's, TreVanion), and luthier appraisers for valuable string instruments. Serial number often identifies exact manufacture year and model.",
+        "searchable": true
+      },
+      "books_manuscripts": {
+        "label": "Books & Manuscripts",
+        "description": "Rare books, first editions, manuscripts, letters, diaries, maps, and printed ephemera.",
+        "agentHint": "Search AbeBooks, Rare Books Network, Sotheby's Books & Manuscripts. Condition grading by rare book standards is essential. Look for edition, binding, inscriptions, and provenance.",
+        "searchable": true
+      },
+      "wine_spirits": {
+        "label": "Wine & Spirits",
+        "description": "Fine wine, vintage spirits, and whisky collections held for investment or consumption.",
+        "agentHint": "Search Wine Lister, Liv-ex, Wine Searcher for fine wine. For whisky, use Whisky Hammer, Scotch Whisky Auctions. Storage condition (provenance of cellar) is material to value. Contact custodian if in bonded storage.",
+        "searchable": true
+      },
+      "clothing_textiles": {
+        "label": "Clothing & Textiles",
+        "description": "Designer clothing, vintage fashion, couture, textiles, rugs, tapestries, and fabric-based items of value.",
+        "agentHint": "Search Vestiaire Collective, 1stDibs, specialist vintage dealers. Designer authentication and condition are paramount. Provenance and original labels significantly affect value.",
+        "searchable": true
+      },
+      "firearms_sporting": {
+        "label": "Firearms & Sporting Equipment",
+        "description": "Shotguns, rifles, pistols, and associated sporting equipment. Subject to strict legal controls on transfer.",
+        "agentHint": "URGENT: Firearms require legal attention immediately on death. In the UK, Section 1 and Section 2 firearms must be surrendered to a registered firearms dealer or police within 7 days. Do not value or list until legal status is confirmed. Search Holts, Gavin Gardiner, or BASC for specialist valuation.",
+        "searchable": true
+      },
+      "digital": {
+        "label": "Digital Assets",
+        "description": "Cryptocurrency, NFTs, digital wallets, online accounts with monetary value, domain names, and digital intellectual property.",
+        "agentHint": "Do not search marketplaces. Locate wallet addresses, private keys, or seed phrases through secure channels. Check RUFADAA consent before accessing accounts. Use blockchain explorers (Etherscan, blockchain.com) to verify balances. Domain names: check Whois and domain registrar.",
+        "searchable": false
+      },
+      "business": {
+        "label": "Business Interests",
+        "description": "Sole trader interests, partnerships, LLP interests, shares in private companies, and franchise agreements.",
+        "agentHint": "Do not search marketplaces. Business valuation requires specialist input — chartered business valuers or corporate finance advisers. Consider Business Property Relief (BPR) eligibility. Company accounts and shareholders agreements are essential source documents.",
+        "searchable": false
+      },
+      "islamic_financial": {
+        "label": "Islamic Financial Assets",
+        "description": "Shari'a-compliant financial products — sukuk, Islamic mortgages, halal investment funds, and related instruments.",
+        "agentHint": "Treat as financial assets but note that conventional interest-based comparables are not applicable. Consult with an Islamic finance specialist or Shari'a-compliant financial institution for valuation. AAOIFI standards may apply.",
+        "searchable": false
+      },
+      "other": {
+        "label": "Other",
+        "description": "Assets that do not fit any standard category. Use subcategory to provide more detail.",
+        "agentHint": "Category is too broad for automated search. Use the subcategory field and free-text description to determine which valuation approach applies. Flag for human review if subcategory is absent.",
+        "searchable": false
+      }
+    },
+    "asset.condition": {
+      "excellent": {
+        "label": "Excellent",
+        "description": "Like new or pristine — no visible wear, original finish intact, fully functional.",
+        "agentHint": "Apply a condition premium when searching comparables. Filter for 'mint', 'like new', or 'pristine' listings. Original packaging (if present) further increases value."
+      },
+      "good": {
+        "label": "Good",
+        "description": "Normal wear for age, fully functional — the typical condition for a well-maintained used item.",
+        "agentHint": "Use this as the baseline condition when selecting comparables. Most marketplace listings are implicitly in 'good' condition unless stated otherwise."
+      },
+      "fair": {
+        "label": "Fair",
+        "description": "Showing its age — may have visible wear, scratches, or minor faults. May need minor repair.",
+        "agentHint": "Apply a condition discount (typically 15–40% below 'good' depending on category). Filter comparables for 'fair', 'worn', or 'used — acceptable'. Note any specific faults in the asset description."
+      },
+      "poor": {
+        "label": "Poor",
+        "description": "Significant wear or damage — may need major repair or restoration before use or sale.",
+        "agentHint": "Apply a substantial condition discount. Consider whether restoration cost is viable relative to restored value. Flag for specialist assessment if the item may have residual collector value despite condition."
+      },
+      "unknown": {
+        "label": "Unknown",
+        "description": "Condition has not been assessed — typically because the asset has not been physically inspected.",
+        "agentHint": "Do not assume condition. Flag as requiring physical inspection before valuation. Use wide confidence intervals on any estimate. Prioritise inspection for high-value items."
+      },
+      "not_applicable": {
+        "label": "Not Applicable",
+        "description": "Condition is not relevant — e.g. bank accounts, pensions, and other financial assets have no physical condition.",
+        "agentHint": "Ignore condition in valuation for this asset. Condition-based adjustments and comparable searches by condition are not appropriate."
+      }
+    },
+    "estate.status": {
+      "planning": {
+        "label": "Planning",
+        "description": "Estate plan is being prepared and has not yet been finalised or signed.",
+        "agentHint": "This is a live planning document — values and wishes may change. Do not treat any data as final. Assist with completion gaps and flag missing mandatory fields."
+      },
+      "confirmed": {
+        "label": "Confirmed",
+        "description": "The will has been executed (signed and witnessed) and the estate plan is in effect.",
+        "agentHint": "The plan is legally effective. Flag any subsequent events (marriages, divorces, asset acquisitions) that may affect the will's validity or coverage. Prompt for review if significant time has elapsed since confirmation."
+      },
+      "pre_probate": {
+        "label": "Pre-Probate",
+        "description": "The testator has died and the estate is being gathered and organised before applying for a grant of probate or equivalent.",
+        "agentHint": "Death has occurred — shift from planning to administration mode. Asset values must be confirmed at date of death. Identify urgent assets (firearms, perishables, live animals) immediately. Begin gathering financial account balances."
+      },
+      "in_administration": {
+        "label": "In Administration",
+        "description": "A grant of probate or equivalent has been obtained and the estate is being actively administered — collecting assets, paying debts, and making distributions.",
+        "agentHint": "Administration is active. Focus on outstanding tasks: unpaid debts, unrealised assets, pending distributions. Tax clearance and IHT returns are likely in progress. Flag any items approaching statutory deadlines."
+      },
+      "distributed": {
+        "label": "Distributed",
+        "description": "All assets have been distributed to beneficiaries. Final accounts are pending or being prepared.",
+        "agentHint": "Distributions are complete but administration is not formally closed. Assist with preparing estate accounts and confirming all bequests have been fulfilled. Check for any unclaimed assets or outstanding correspondence."
+      },
+      "closed": {
+        "label": "Closed",
+        "description": "Estate administration is fully complete — all accounts filed, all distributions confirmed, estate record closed.",
+        "agentHint": "This estate is archived. Read-only reference only. No further actions are expected. If queried for updates, confirm the estate is closed and redirect to the relevant professional records."
+      }
+    },
+    "valuation.valuationPurpose": {
+      "current_estimate": {
+        "label": "Current Estimate",
+        "description": "A current market value estimate for general planning purposes — not tied to a specific event or date.",
+        "agentHint": "Suitable for portfolio overviews and planning discussions. Use recent comparables within the last 6–12 months. Clearly communicate that this is an estimate, not a professional valuation."
+      },
+      "date_of_death": {
+        "label": "Date of Death",
+        "description": "Valuation as at the date of death — required for inheritance tax, estate tax, and probate calculations.",
+        "agentHint": "This value is legally significant. Use comparables as close to the death date as possible. Document the valuation methodology carefully. Professional valuation strongly recommended for high-value or complex assets."
+      },
+      "insurance": {
+        "label": "Insurance",
+        "description": "Valuation for insurance cover — typically replacement cost (new-for-old), which may exceed current market value.",
+        "agentHint": "Use replacement cost, not market value. Distinguish between new-for-old and agreed-value policies. Underinsurance is common — check that the sum insured reflects current replacement cost, not purchase price."
+      },
+      "official": {
+        "label": "Official",
+        "description": "Valuation agreed with or imposed by an official body — tax authority, court, or regulatory agency.",
+        "agentHint": "This value is authoritative and typically non-negotiable without appeal. Use it as-is for official purposes. Record the issuing body and reference number."
+      },
+      "tax_return": {
+        "label": "Tax Return",
+        "description": "Valuation for inclusion on a tax return — IHT400, estate tax return, or equivalent.",
+        "agentHint": "Must meet the requirements of the relevant tax authority. In the UK, use HMRC-accepted valuation methods. Retain supporting evidence for potential HMRC enquiry. Chartered surveyor or RICS-qualified valuer recommended."
+      },
+      "dealer_offer": {
+        "label": "Dealer Offer",
+        "description": "A valuation implicit in a dealer's offer to purchase — typically below retail market value.",
+        "agentHint": "This reflects a trade price, not private sale or retail value. Useful as a floor price but not representative of open-market value. Consider as a lower bound when triangulating value."
+      },
+      "ai_estimate": {
+        "label": "AI Estimate",
+        "description": "An automated estimate generated by an AI agent using comparable data — for initial triage and planning only.",
+        "agentHint": "Treat as indicative only. Wide confidence intervals apply. Flag for human review before use in legal or tax contexts. Include confidence score and comparable sources in the valuation record."
+      },
+      "pre_sale": {
+        "label": "Pre-Sale",
+        "description": "Valuation obtained in anticipation of sale — auction estimate, private treaty guide price, or dealer assessment.",
+        "agentHint": "This is a sale-context valuation. Auction estimates are typically given as a range (low–high). Distinguish between estimate and reserve price. Useful for setting executor expectations on realisation."
+      },
+      "probate": {
+        "label": "Probate",
+        "description": "Valuation submitted for and accepted by the probate court — the officially recognised value for estate administration.",
+        "agentHint": "This is the definitive probate value. Record the court, grant reference, and acceptance date. Use this value for all subsequent administration calculations unless successfully appealed."
+      }
+    },
+    "bequest.bequestType": {
+      "specific": {
+        "label": "Specific Bequest",
+        "description": "A named item gifted to a named person — e.g. 'my engagement ring to my daughter'. Fails if the item no longer exists at death (ademption).",
+        "agentHint": "Link to the assetId for the named item. Check whether the asset still exists in the estate — if not, the bequest has adeemed and the beneficiary receives nothing. Flag missing asset links for review."
+      },
+      "pecuniary": {
+        "label": "Pecuniary Bequest",
+        "description": "A fixed cash sum gifted to a beneficiary — e.g. '£10,000 to my son'. Paid from the estate before residue is distributed.",
+        "agentHint": "Record the currency and amount. Check whether interest is payable if not paid within 12 months of death (as per executor's year rule in England and Wales). Paid ahead of residuary gifts — check estate liquidity."
+      },
+      "demonstrative": {
+        "label": "Demonstrative Bequest",
+        "description": "A cash sum payable from a specified fund — e.g. '£5,000 from my Barclays savings account'. If the fund is insufficient, the shortfall is paid from the general estate.",
+        "agentHint": "Link to the specific account or fund. Check the fund balance. If insufficient, the shortfall is paid from residue — flag this scenario to the executor. Treated as specific for the fund portion, pecuniary for any shortfall."
+      },
+      "general": {
+        "label": "General Bequest",
+        "description": "A bequest of a type of item from the general estate — not a specific identified item. Paid from general estate assets.",
+        "agentHint": "No asset link required — this is fulfilled from the general estate. Ensure the estate holds sufficient assets of the relevant type. Less prone to ademption than specific bequests."
+      },
+      "residuary": {
+        "label": "Residuary Bequest",
+        "description": "The remainder of the estate after all debts, taxes, expenses, and other gifts have been paid. Most estates have one residuary clause.",
+        "agentHint": "This is calculated last. All debts, IHT, administration costs, and other bequests must be satisfied before residue is determined. If multiple residuary beneficiaries, confirm the share proportions total 100%."
+      },
+      "life_interest": {
+        "label": "Life Interest",
+        "description": "The right to use or benefit from an asset during the beneficiary's lifetime, after which it passes to a remainderman.",
+        "agentHint": "A trust is typically created. Identify both the life tenant (income/use beneficiary) and the remainderman (capital beneficiary). Trust registration with HMRC may be required. Actuarial valuation of the life interest may be needed for IHT."
+      },
+      "class": {
+        "label": "Class Gift",
+        "description": "A bequest to a defined category of people — e.g. 'my grandchildren equally'. Membership of the class is determined at death.",
+        "agentHint": "Confirm the class definition and identify all members at date of death. Class membership may be unclear — flag for legal advice if any member's status is uncertain (e.g. adopted children, stepchildren, posthumous children)."
+      }
+    }
+  }
+}

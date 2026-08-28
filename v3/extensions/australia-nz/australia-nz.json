@@ -1,0 +1,377 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/australia-nz/australia-nz.json",
+  "title": "Australia & New Zealand Extension",
+  "description": "Succession rules for AU and NZ: superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ Property (Relationships) Act, testamentary promises, and Maori land under Te Ture Whenua.",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "AU",
+    "NZ"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "common_law"
+  ],
+  "dataProvenance": "Succession Act 2006 (NSW), Property (Relationships) Act 1976 (NZ), Te Ture Whenua Maori Act 1993",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": [
+    "islamic-succession",
+    "hindu-succession"
+  ],
+  "type": "object",
+  "$defs": {
+    "SuperannuationNomination": {
+      "type": "object",
+      "properties": {
+        "assetId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "fundType": {
+          "type": "string",
+          "enum": [
+            "smsf",
+            "industry",
+            "retail",
+            "public_sector",
+            "corporate"
+          ]
+        },
+        "nominationType": {
+          "type": "string",
+          "enum": [
+            "bdbn_lapsing",
+            "bdbn_non_lapsing",
+            "non_binding",
+            "reversionary_pension"
+          ]
+        },
+        "binding": {
+          "type": "boolean"
+        },
+        "expiryDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "expiryRule": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "trusteeDiscretion": {
+          "type": "boolean"
+        },
+        "nominatedPersonIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "maxItems": 50,
+          "uniqueItems": true
+        },
+        "taxableComponent": {
+          "$ref": "../../common/money.json"
+        },
+        "taxFreeComponent": {
+          "$ref": "../../common/money.json"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "assetId",
+        "nominationType"
+      ],
+      "additionalProperties": false
+    },
+    "FamilyProvisionClaim": {
+      "type": "object",
+      "properties": {
+        "claimantPersonId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "relationship": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "relationshipCategory": {
+          "description": "Statutory relationship category for family provision eligibility",
+          "type": "string",
+          "$comment": "Categories vary by state/territory. spouse: spouse or de facto partner. child: child including adopted. former_spouse: former spouse. dependant: person maintained by the deceased. grandchild: grandchild (some states e.g. Qld). step_child: step-child. member_of_household: person who was a member of the deceased's household",
+          "enum": [
+            "spouse",
+            "child",
+            "former_spouse",
+            "dependant",
+            "grandchild",
+            "step_child",
+            "member_of_household"
+          ]
+        },
+        "statute": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "eligibleUnderStatute": {
+          "type": "boolean"
+        },
+        "limitationPeriod": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notionalEstateEngaged": {
+          "type": "boolean",
+          "$comment": "NSW-specific"
+        },
+        "claimFiled": {
+          "type": "boolean"
+        },
+        "filedDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "upheld",
+            "dismissed",
+            "settled"
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "claimantPersonId"
+      ],
+      "additionalProperties": false
+    },
+    "AboriginalLandDetails": {
+      "type": "object",
+      "properties": {
+        "propertyId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "landType": {
+          "type": "string",
+          "enum": [
+            "native_title",
+            "alra",
+            "aboriginal_freehold",
+            "ilua",
+            "torres_strait"
+          ]
+        },
+        "nativeTitleDetermination": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "landCouncil": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "successionRestrictions": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "customaryAdoptionRecognised": {
+          "description": "Whether customary adoption (including Torres Strait Islander kupai omasker under the Meriba Omasker Kaziw Kazipa Act 2020 Qld) is recognised for succession to this land",
+          "$comment": "NSW Succession Act 2006 Part 4.4 allows Aboriginal customary law to override standard intestacy rules for close relatives according to the Indigenous deceased person's laws and customs. In the core schema, customary adoption is modelled as parent_child_adopted + legalBasis: customary_adoption",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "propertyId",
+        "landType"
+      ],
+      "additionalProperties": false
+    },
+    "NZPropertyRelationshipsAct": {
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "relationshipProperty": {
+          "$ref": "../../common/money.json"
+        },
+        "separateProperty": {
+          "$ref": "../../common/money.json"
+        },
+        "optingOutAgreement": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "TestamentaryPromise": {
+      "type": "object",
+      "properties": {
+        "claimantPersonId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "promiseDescription": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "statute": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "claimantPersonId"
+      ],
+      "additionalProperties": false
+    },
+    "MaoriLandDetails": {
+      "type": "object",
+      "properties": {
+        "propertyId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "landBlockIdentifier": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "maoriLandCourtReference": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "successionUnderTeTureWhenua": {
+          "type": "boolean"
+        },
+        "whangaiRecognised": {
+          "description": "Whether a whangai (Maori customary adoption) relationship is recognised by the Maori Land Court for succession to this land block. In the core schema, whangai is modelled as parent_child_adopted + legalBasis: customary_adoption",
+          "type": "boolean"
+        },
+        "whangaiPersonId": {
+          "description": "The person recognised as whangai for succession to this land block",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "propertyId"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "jurisdiction": {
+      "type": "string",
+      "enum": [
+        "AU-NSW",
+        "AU-VIC",
+        "AU-QLD",
+        "AU-WA",
+        "AU-SA",
+        "AU-TAS",
+        "AU-ACT",
+        "AU-NT",
+        "NZ"
+      ]
+    },
+    "superannuationNominations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/SuperannuationNomination"
+      },
+      "maxItems": 50
+    },
+    "familyProvisionClaims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/FamilyProvisionClaim"
+      },
+      "maxItems": 50
+    },
+    "aboriginalLandDetails": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AboriginalLandDetails"
+      },
+      "maxItems": 50
+    },
+    "nzPRA": {
+      "$ref": "#/$defs/NZPropertyRelationshipsAct"
+    },
+    "testamentaryPromises": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/TestamentaryPromise"
+      },
+      "maxItems": 50
+    },
+    "maoriLandDetails": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/MaoriLandDetails"
+      },
+      "maxItems": 50
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "jurisdiction"
+  ],
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "Singapore & Malaysia",
+  "id": "https://openinherit.org/v3/extensions/singapore-malaysia.json",
+  "version": "1.1.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "hybrid",
+  "applicableJurisdictions": [
+    "SG",
+    "MY"
+  ],
+  "providesOwnProcedure": true,
+  "compatibleWith": [
+    "islamic-succession"
+  ],
+  "legalSystems": [
+    "common_law",
+    "islamic_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-04-14",
+  "dataProvenance": "Intestate Succession Act (SG), Administration of Muslim Law Act (SG), Distribution Act 1958 (MY)",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction.",
+  "conformanceRules": [
+    {
+      "id": "sg-my-001",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "CPF nomination status must be specified for Singapore estates",
+      "check": "exists",
+      "path": "x-inherit-singapore-malaysia.cpfNominationStatus",
+      "severity": "warning"
+    }
+  ],
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "outline",
+  "keyFeatures": "Intestate Succession Act, Syariah court for Muslim estates, CPF nomination, distribution certificates, relationshipCategory enum on ISA and Malaysian Distribution Act share schedules, ISA Schedule 2 distribution rules, CPF sub-account allocations (ordinary/special/medisave/retirement), nomination form version (pre/post 2010), marriage-triggered revocation tracking",
+  "legalTradition": "Common law / Islamic",
+  "seeking": "CPF/EPF specialists, Syariah court practitioners",
+  "tier": "core"
+}

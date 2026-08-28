@@ -1,0 +1,507 @@
+{
+  "_disclaimer": "Guidance data for INHERIT tools and UIs. Not professional valuation or cataloguing advice.",
+  "_generatedFrom": "INHERIT Product Taxonomy, derived from the Standard Product Taxonomy (MIT licence)",
+  "lastUpdated": "2026-03-28",
+  "categories": {
+    "financial": {
+      "label": "Financial",
+      "description": "Bank accounts, savings, investments, pensions, shares, bonds, cryptocurrency, and insurance policies. Covers all monetary instruments and financial products held by the deceased.",
+      "subcategories": [
+        { "value": "bank_account", "label": "Bank Account" },
+        { "value": "savings_account", "label": "Savings Account" },
+        { "value": "investment", "label": "Investment" },
+        { "value": "pension", "label": "Pension" },
+        { "value": "shares", "label": "Shares" },
+        { "value": "bonds", "label": "Bonds" },
+        { "value": "cryptocurrency", "label": "Cryptocurrency" },
+        { "value": "insurance", "label": "Insurance" }
+      ],
+      "recommendedIdentifiers": ["account_number", "sort_code", "IBAN", "ISIN", "CUSIP"],
+      "recommendedViewTypes": ["certificate", "label"],
+      "recommendedBrands": [],
+      "defaultUrgency": "within_7_days",
+      "containerFlag": false,
+      "locationClass": "financial",
+      "disposalComplexity": "low",
+      "typicalValuationMethod": "statement"
+    },
+    "property_contents": {
+      "label": "Property Contents",
+      "description": "General household items including furniture, kitchenware, electronics, tools, and garden equipment. Covers the everyday contents of a home that do not fall into a specialized category.",
+      "subcategories": [
+        { "value": "furniture", "label": "Furniture" },
+        { "value": "kitchenware", "label": "Kitchenware" },
+        { "value": "electronics", "label": "Electronics" },
+        { "value": "tools", "label": "Tools" },
+        { "value": "garden_outdoor", "label": "Garden & Outdoor" },
+        { "value": "household_appliances", "label": "Household Appliances" },
+        { "value": "lighting", "label": "Lighting" },
+        { "value": "bedding_linen", "label": "Bedding & Linen" }
+      ],
+      "recommendedIdentifiers": ["serial_number", "model_number"],
+      "recommendedViewTypes": ["overview", "condition"],
+      "recommendedBrands": [],
+      "defaultUrgency": "none",
+      "containerFlag": false,
+      "locationClass": "physical",
+      "disposalComplexity": "low",
+      "typicalValuationMethod": "estimated"
+    },
+    "vehicle": {
+      "label": "Vehicle",
+      "description": "Motor vehicles, watercraft, and other registered transport. Includes cars, motorcycles, boats, caravans, bicycles, classic vehicles, and commercial vehicles.",
+      "subcategories": [
+        { "value": "car", "label": "Car" },
+        { "value": "motorcycle", "label": "Motorcycle" },
+        { "value": "boat", "label": "Boat" },
+        { "value": "caravan", "label": "Caravan" },
+        { "value": "bicycle", "label": "Bicycle" },
+        { "value": "classic_vehicle", "label": "Classic Vehicle" },
+        { "value": "commercial_vehicle", "label": "Commercial Vehicle" }
+      ],
+      "recommendedIdentifiers": ["VIN", "registration_number", "V5C_reference"],
+      "recommendedViewTypes": ["overview", "identification", "condition", "damage", "serial_number"],
+      "recommendedBrands": ["Toyota", "Ford", "BMW", "Mercedes-Benz", "Volkswagen", "Audi", "Honda", "Jaguar", "Land Rover", "Vauxhall"],
+      "defaultUrgency": "within_7_days",
+      "containerFlag": false,
+      "locationClass": "physical",
+      "disposalComplexity": "medium",
+      "typicalValuationMethod": "dealer"
+    },
+    "jewellery_watches": {
+      "label": "Jewellery & Watches",
+      "description": "Precious and costume jewellery, watches, gemstones, silver, and pearls. Items in this category often require specialist appraisal due to fluctuating market values.",
+      "subcategories": [
+        { "value": "jewellery", "label": "Jewellery" },
+        { "value": "watches", "label": "Watches" },
+        { "value": "precious_stones", "label": "Precious Stones" },
+        { "value": "costume_jewellery", "label": "Costume Jewellery" },
+        { "value": "silver", "label": "Silver" },
+        { "value": "pearls", "label": "Pearls" },
+        {
+          "subcategory": "gold_bullion_tael",
+          "label": "Gold bullion and tael bars",
+          "description": "Gold bullion held as investment or heirloom, including internationally traded bars, tael-weight bars common in East and Southeast Asian markets, and gold wafers. Assay certification and weight verification are essential.",
+          "recommendedIdentifiers": ["assay_certificate", "bar_serial_number", "weight_and_fineness"],
+          "recommendedViewTypes": ["overview", "stamp_detail", "serial_number", "weight_verification"],
+          "defaultUrgency": "within_7_days",
+          "disposalComplexity": "medium",
+          "typicalValuationMethod": "professional_appraisal",
+          "culturalNotes": "Gold bullion in tael weights is widely held across Chinese, Vietnamese, and Southeast Asian communities as both investment and cultural wealth store. Tael bars may be passed down through generations and carry family significance beyond their metal value.",
+          "recommendedBrands": [
+            { "name": "LBMA", "wikidataId": "Q1810584", "type": "certification_body" },
+            { "name": "Singapore Bullion Market Association", "type": "certification_body" },
+            { "name": "PAMP Suisse", "wikidataId": "Q2045753", "type": "refiner" }
+          ]
+        },
+        {
+          "subcategory": "jade_jewellery",
+          "label": "Jade jewellery",
+          "description": "Jewellery incorporating jadeite or nephrite, including bangles, pendants, rings, and earrings. Burmese imperial jadeite of fine translucency commands exceptional prices. Gemological certification distinguishes natural from treated stones.",
+          "recommendedIdentifiers": ["gemological_certificate", "treatment_disclosure", "provenance_documentation"],
+          "recommendedViewTypes": ["overview", "stone_detail", "translucency", "condition", "certificate"],
+          "defaultUrgency": "none",
+          "disposalComplexity": "high",
+          "typicalValuationMethod": "professional_appraisal",
+          "culturalNotes": "Jade jewellery, particularly bangles, holds profound cultural meaning across Chinese, Burmese, and Southeast Asian communities — often symbolising protection, health, and family bonds. A jade bangle may have been worn continuously for decades and carry deep personal significance."
+        }
+      ],
+      "recommendedIdentifiers": ["serial_number", "hallmark", "GIA_certificate"],
+      "recommendedViewTypes": ["overview", "identification", "maker_mark", "condition", "certificate", "scale_reference"],
+      "recommendedBrands": ["Rolex", "Cartier", "Omega", "Tiffany", "Patek Philippe", "Bulgari"],
+      "defaultUrgency": "none",
+      "containerFlag": false,
+      "locationClass": "physical",
+      "disposalComplexity": "high",
+      "typicalValuationMethod": "specialist_dealer"
+    },
+    "art": {
+      "label": "Art",
+      "description": "Fine art including paintings, sculptures, prints, photography, and mixed media works. High-value items typically require authentication and provenance documentation.",
+      "subcategories": [
+        { "value": "painting", "label": "Painting" },
+        { "value": "sculpture", "label": "Sculpture" },
+        { "value": "print", "label": "Print" },
+        { "value": "photograph", "label": "Photograph" },
+        { "value": "mixed_media", "label": "Mixed Media" },
+        { "value": "drawing", "label": "Drawing" },
+        { "value": "ceramic_art", "label": "Ceramic Art" },
+        {
+          "subcategory": "calligraphy_ink_painting",
+          "label": "Calligraphy and ink painting",
+          "description": "East Asian brush-based art forms including Chinese calligraphy (shūfǎ), Japanese calligraphy (shodō), and ink wash painting (shuǐmòhuà / suiboku-ga). Mounting style, seal marks, and colophons are integral to authentication.",
+          "recommendedIdentifiers": ["artist_seal", "colophon", "gallery_provenance"],
+          "recommendedViewTypes": ["full_work", "seal_detail", "mounting_detail", "condition", "inscription"],
+          "defaultUrgency": "within_30_days",
+          "disposalComplexity": "high",
+          "typicalValuationMethod": "specialist_auction",
+          "culturalNotes": "Calligraphy is considered the highest art form in several East Asian cultures. Works may carry personal, philosophical, or religious inscriptions of deep significance. Handle scrolls and mounted works with care — improper storage causes irreversible damage."
+        },
+        {
+          "subcategory": "buddhist_art",
+          "label": "Buddhist art",
+          "description": "Art created within Buddhist traditions across Asia, including thangka paintings, mandala works, sculpture, and temple art from Tibetan, Theravāda, Mahāyāna, and Zen lineages.",
+          "recommendedIdentifiers": ["provenance_documentation", "temple_record", "iconographic_reference"],
+          "recommendedViewTypes": ["overview", "iconographic_detail", "condition", "provenance", "inscription"],
+          "defaultUrgency": "within_30_days",
+          "disposalComplexity": "high",
+          "typicalValuationMethod": "specialist_auction",
+          "culturalNotes": "Buddhist art is frequently sacred to practising communities. Tibetan thangkas may be consecrated and contain relics. Consult monastic or cultural advisors before disposal. Export restrictions apply in many Asian jurisdictions. Always record sacredStatus."
+        },
+        {
+          "subcategory": "hindu_art",
+          "label": "Hindu art",
+          "description": "Art and iconography from Hindu traditions including bronze mūrtis, stone sculpture, miniature paintings, and temple art spanning Indian, Nepalese, and Southeast Asian traditions.",
+          "recommendedIdentifiers": ["provenance_documentation", "ASI_registration", "iconographic_reference"],
+          "recommendedViewTypes": ["overview", "iconographic_detail", "condition", "provenance", "inscription"],
+          "defaultUrgency": "within_30_days",
+          "disposalComplexity": "high",
+          "typicalValuationMethod": "specialist_auction",
+          "culturalNotes": "Hindu mūrtis may be considered living embodiments of deities by devotees. India's Antiquities and Art Treasures Act 1972 restricts export of items over 100 years old. Consult cultural and religious advisors before disposal. Always record sacredStatus."
+        }
+      ],
+      "recommendedIdentifiers": ["catalogue_raisonne_reference", "gallery_inventory"],
+      "recommendedViewTypes": ["overview", "identification", "condition", "provenance", "maker_mark", "damage", "label"],
+      "recommendedBrands": [],
+      "defaultUrgency": "none",
+      "containerFlag": false,
+      "locationClass": "physical",
+      "disposalComplexity": "high",
+      "typicalValuationMethod": "auction_house"
+    },
+    "antiques": {
+      "label": "Antiques",
+      "description": "Items of significant age and collectible value, including antique furniture, ceramics, silverware, clocks, glass, metalwork, and textiles. Provenance and period attribution are key to valuation.",
+      "subcategories": [
+        { "value": "antique_furniture", "label": "Antique Furniture" },
+        { "value": "ceramics", "label": "Ceramics" },
+        { "value": "silverware", "label": "Silverware" },
+        { "value": "clocks", "label": "Clocks" },
+        { "value": "glass", "label": "Glass" },
+        { "value": "metalwork", "label": "Metalwork" },
+        { "value": "textiles", "label": "Textiles" },
+        {
+          "subcategory": "japanese_sword",
+          "label": "Japanese sword (katana, wakizashi, tantō)",
+          "description": "Traditional Japanese bladed weapons — historical, ceremonial, and martial. Subject to export restrictions under Japan's Act on Protection of Cultural Properties",
+          "recommendedIdentifiers": ["NBTHK grading certificate", "swordsmith signature (mei)", "registration card (jūhō tōroku-shō)"],
+          "recommendedViewTypes": ["full_length", "blade_detail", "hamon_pattern", "tang_signature"],
+          "defaultUrgency": "within_30_days",
+          "disposalComplexity": "high",
+          "typicalValuationMethod": "specialist_auction",
+          "culturalNotes": "Check sacredStatus and exportRestrictions before listing. NBTHK-certified swords require Agency for Cultural Affairs export licence."
+        },
+        {
+          "subcategory": "chinese_ceramics",
+          "label": "Chinese ceramics (porcelain, stoneware, earthenware)",
+          "description": "Chinese ceramic wares spanning millennia of production, from Neolithic earthenware to Qing dynasty imperial porcelain. Dynastic attribution and kiln provenance are central to valuation.",
+          "recommendedIdentifiers": ["reign_mark", "kiln_attribution", "auction_provenance"],
+          "recommendedViewTypes": ["overview", "base_mark", "glaze_detail", "condition", "scale_reference"],
+          "defaultUrgency": "within_30_days",
+          "disposalComplexity": "high",
+          "typicalValuationMethod": "specialist_auction",
+          "culturalNotes": "Reign marks may be apocryphal — expert verification is essential. Chinese cultural property export laws restrict items predating 1911. Handle with respect for the cultural heritage they represent.",
+          "recommendedBrands": [
+            { "name": "Jingdezhen Kiln", "wikidataId": "Q1054081", "type": "historical_maker" },
+            { "name": "Longquan celadon", "wikidataId": "Q1636528", "type": "historical_tradition" },
+            { "name": "Dehua porcelain", "wikidataId": "Q1182792", "type": "historical_tradition" }
+          ]
+        },
+        {
+          "subcategory": "jade_nephrite",
+          "label": "Jade and nephrite carvings",
+          "description": "Carved jade (jadeite and nephrite) objects including figurines, pendants, bangles, and ritual vessels. Hetian nephrite and Burmese jadeite command the highest values.",
+          "recommendedIdentifiers": ["gemological_certificate", "provenance_documentation"],
+          "recommendedViewTypes": ["overview", "translucency_detail", "carving_detail", "condition", "scale_reference"],
+          "defaultUrgency": "within_30_days",
+          "disposalComplexity": "high",
+          "typicalValuationMethod": "specialist_auction",
+          "culturalNotes": "Jade holds deep cultural significance across East and Southeast Asia, symbolising virtue, protection, and status. Distinguish between nephrite (traditional Chinese jade) and jadeite (predominantly Burmese). Expert gemological testing is recommended.",
+          "recommendedBrands": [
+            { "name": "Hetian jade", "wikidataId": "Q868066", "type": "material_origin" }
+          ]
+        },
+        {
+          "subcategory": "asian_antiquities",
+          "label": "Asian antiquities (general)",
+          "description": "Antique objects from across Asia not covered by more specific subcategories, including lacquerware, bronzes, scroll paintings, and furniture from Chinese, Japanese, Korean, and Southeast Asian traditions.",
+          "recommendedIdentifiers": ["provenance_documentation", "export_permit", "auction_lot"],
+          "recommendedViewTypes": ["overview", "detail", "maker_mark", "condition", "provenance"],
+          "defaultUrgency": "within_30_days",
+          "disposalComplexity": "high",
+          "typicalValuationMethod": "specialist_auction",
+          "culturalNotes": "Many Asian nations enforce strict cultural property export controls. Verify provenance and legality before sale or transfer. Items may carry spiritual or ancestral significance to families and communities."
+        },
+        {
+          "subcategory": "religious_artifacts",
+          "label": "Religious artefacts and devotional objects",
+          "description": "Sacred and devotional objects from Buddhist, Hindu, Shinto, Taoist, and other traditions, including statuary, thangkas, ritual implements, and altar pieces. Cultural sensitivity and legal compliance are paramount.",
+          "recommendedIdentifiers": ["provenance_documentation", "export_permit", "temple_or_shrine_record"],
+          "recommendedViewTypes": ["overview", "iconographic_detail", "inscription", "condition", "provenance"],
+          "defaultUrgency": "within_30_days",
+          "disposalComplexity": "high",
+          "typicalValuationMethod": "specialist_auction",
+          "culturalNotes": "Religious artefacts may be sacred to living communities. Consult cultural advisors before disposal. Many countries prohibit export of religious antiquities. UNESCO 1970 Convention compliance is essential. Always record sacredStatus in the INHERIT document."
+        }
+      ],
+      "recommendedIdentifiers": ["maker_mark", "period_reference", "auction_lot"],
+      "recommendedViewTypes": ["overview", "identification", "condition", "maker_mark", "provenance", "damage"],
+      "recommendedBrands": [
+        { "name": "NBTHK", "wikidataId": "Q11649517", "type": "certification_body" }
+      ],
+      "defaultUrgency": "none",
+      "containerFlag": false,
+      "locationClass": "physical",
+      "disposalComplexity": "high",
+      "typicalValuationMethod": "specialist_dealer"
+    },
+    "collectibles": {
+      "label": "Collectibles",
+      "description": "Hobbyist and enthusiast collections such as stamps, coins, model railways, vinyl records, trading cards, memorabilia, die-cast models, and figurines. Collections may be stored in containers or display cases.",
+      "subcategories": [
+        { "value": "model_railways", "label": "Model Railways" },
+        { "value": "stamps", "label": "Stamps" },
+        { "value": "coins", "label": "Coins" },
+        { "value": "vinyl_records", "label": "Vinyl Records" },
+        { "value": "trading_cards", "label": "Trading Cards" },
+        { "value": "memorabilia", "label": "Memorabilia" },
+        { "value": "die_cast", "label": "Die-Cast" },
+        { "value": "figurines", "label": "Figurines" },
+        { "value": "other", "label": "Other" },
+        {
+          "subcategory": "koi_fish",
+          "label": "Koi fish (Nishikigoi)",
+          "description": "Living ornamental koi (Nishikigoi) bred for colour, pattern, and body conformation. Champion bloodlines from renowned Japanese breeders can command significant values. Requires specialist care continuity.",
+          "recommendedIdentifiers": ["breeder_certificate", "variety_classification", "bloodline_documentation"],
+          "recommendedViewTypes": ["overhead_pond", "individual_specimen", "skin_pattern_detail"],
+          "defaultUrgency": "immediate",
+          "disposalComplexity": "high",
+          "typicalValuationMethod": "specialist_dealer",
+          "culturalNotes": "Koi keeping is a respected tradition in Japan, symbolising perseverance and good fortune. Champion koi are living assets requiring immediate care arrangements upon the owner's death. Engage a specialist koi dealer or hobbyist network promptly."
+        },
+        {
+          "subcategory": "bonsai",
+          "label": "Bonsai trees",
+          "description": "Cultivated miniature trees shaped over years or decades through pruning, wiring, and training. Mature specimens from established lineages or notable growers hold significant value. Requires ongoing horticultural care.",
+          "recommendedIdentifiers": ["provenance_record", "species_identification", "exhibition_history"],
+          "recommendedViewTypes": ["overview", "trunk_detail", "nebari_root_spread", "pot_detail", "seasonal_foliage"],
+          "defaultUrgency": "immediate",
+          "disposalComplexity": "high",
+          "typicalValuationMethod": "specialist_dealer",
+          "culturalNotes": "Bonsai is a living art form with deep roots in Japanese and Chinese culture. Mature trees may be decades or centuries old and represent a lifetime of care. Ensure continued watering and maintenance immediately — neglect causes irreversible loss."
+        }
+      ],
+      "recommendedIdentifiers": ["catalogue_number", "manufacturer_reference"],
+      "recommendedViewTypes": ["overview", "identification", "maker_mark", "serial_number", "condition", "scale_reference"],
+      "recommendedBrands": ["Hornby", "Bachmann", "Heljan", "Dapol", "Royal Mail", "Royal Mint"],
+      "defaultUrgency": "none",
+      "containerFlag": true,
+      "locationClass": "physical",
+      "disposalComplexity": "high",
+      "typicalValuationMethod": "specialist_dealer"
+    },
+    "musical_instruments": {
+      "label": "Musical Instruments",
+      "description": "Acoustic and electric instruments, amplifiers, and accessories. Vintage and high-end instruments can appreciate significantly and may require specialist valuation.",
+      "subcategories": [
+        { "value": "piano", "label": "Piano" },
+        { "value": "guitar", "label": "Guitar" },
+        { "value": "orchestral", "label": "Orchestral" },
+        { "value": "brass", "label": "Brass" },
+        { "value": "woodwind", "label": "Woodwind" },
+        { "value": "percussion", "label": "Percussion" },
+        { "value": "vintage_instrument", "label": "Vintage Instrument" },
+        { "value": "amplifier", "label": "Amplifier" }
+      ],
+      "recommendedIdentifiers": ["serial_number", "manufacturer_reference"],
+      "recommendedViewTypes": ["overview", "identification", "condition", "maker_mark", "serial_number", "label"],
+      "recommendedBrands": ["Steinway", "Gibson", "Fender", "Yamaha", "Stradivarius", "C.F. Martin"],
+      "defaultUrgency": "none",
+      "containerFlag": false,
+      "locationClass": "physical",
+      "disposalComplexity": "medium",
+      "typicalValuationMethod": "specialist_dealer"
+    },
+    "books_manuscripts": {
+      "label": "Books & Manuscripts",
+      "description": "Rare books, first editions, manuscripts, maps, ephemera, and signed copies. Condition and provenance are critical factors in determining value.",
+      "subcategories": [
+        { "value": "rare_book", "label": "Rare Book" },
+        { "value": "first_edition", "label": "First Edition" },
+        { "value": "manuscript", "label": "Manuscript" },
+        { "value": "map", "label": "Map" },
+        { "value": "ephemera", "label": "Ephemera" },
+        { "value": "signed_copy", "label": "Signed Copy" }
+      ],
+      "recommendedIdentifiers": ["ISBN", "OCLC", "catalogue_reference"],
+      "recommendedViewTypes": ["overview", "identification", "condition", "label", "provenance"],
+      "recommendedBrands": [],
+      "defaultUrgency": "none",
+      "containerFlag": false,
+      "locationClass": "physical",
+      "disposalComplexity": "medium",
+      "typicalValuationMethod": "auction_house"
+    },
+    "wine_spirits": {
+      "label": "Wine & Spirits",
+      "description": "Wine collections, whisky, spirits, champagne, port, and cellar contents. Temperature-controlled storage should be maintained until disposal to preserve value.",
+      "subcategories": [
+        { "value": "wine", "label": "Wine" },
+        { "value": "whisky", "label": "Whisky" },
+        { "value": "spirits", "label": "Spirits" },
+        { "value": "champagne", "label": "Champagne" },
+        { "value": "port", "label": "Port" },
+        { "value": "cellar_collection", "label": "Cellar Collection" }
+      ],
+      "recommendedIdentifiers": ["Liv_ex_LWIN", "vintage", "chateau_name"],
+      "recommendedViewTypes": ["overview", "label", "condition", "certificate", "environment"],
+      "recommendedBrands": [],
+      "defaultUrgency": "within_30_days",
+      "containerFlag": false,
+      "locationClass": "physical",
+      "disposalComplexity": "high",
+      "typicalValuationMethod": "specialist_dealer"
+    },
+    "clothing_textiles": {
+      "label": "Clothing & Textiles",
+      "description": "Designer clothing, vintage fashion, textiles, rugs, tapestries, handbags, and shoes. Authentication is important for high-value designer items.",
+      "subcategories": [
+        { "value": "designer_clothing", "label": "Designer Clothing" },
+        { "value": "vintage_fashion", "label": "Vintage Fashion" },
+        { "value": "textile", "label": "Textile" },
+        { "value": "rug", "label": "Rug" },
+        { "value": "tapestry", "label": "Tapestry" },
+        { "value": "handbag", "label": "Handbag" },
+        { "value": "shoes", "label": "Shoes" },
+        {
+          "subcategory": "kimono_ceremonial",
+          "label": "Kimono and ceremonial dress",
+          "description": "Traditional Japanese kimono, obi sashes, and ceremonial garments including furisode, tomesode, and uchikake. Silk quality, dyeing technique (yūzen, shibori), and provenance determine value.",
+          "recommendedIdentifiers": ["maker_label", "dyeing_technique", "silk_grade"],
+          "recommendedViewTypes": ["full_garment_front", "full_garment_back", "fabric_detail", "obi_detail", "label"],
+          "defaultUrgency": "none",
+          "disposalComplexity": "medium",
+          "typicalValuationMethod": "specialist_dealer",
+          "culturalNotes": "Kimono are deeply woven into Japanese cultural identity and mark life milestones — weddings, coming-of-age ceremonies, and funerals each have specific garments. Family crests (kamon) on kimono may hold genealogical significance. Store flat or rolled, never on hangers."
+        },
+        {
+          "subcategory": "batik_heritage",
+          "label": "Heritage batik textiles",
+          "description": "Hand-drawn (tulis) and stamped (cap) batik textiles from Indonesia, Malaysia, and the wider region. UNESCO-recognised as Intangible Cultural Heritage. Provenance, age, and technique determine value.",
+          "recommendedIdentifiers": ["maker_label", "regional_origin", "technique_classification"],
+          "recommendedViewTypes": ["full_textile", "pattern_detail", "wax_resist_detail", "condition", "label"],
+          "defaultUrgency": "none",
+          "disposalComplexity": "medium",
+          "typicalValuationMethod": "specialist_dealer",
+          "culturalNotes": "Batik is recognised by UNESCO as an Intangible Cultural Heritage of Humanity (Indonesian batik, 2009). Certain patterns (motifs) are historically reserved for royalty or specific ceremonies. Heritage pieces from established batik houses carry cultural as well as monetary value.",
+          "recommendedBrands": [
+            { "name": "Batik Keris", "type": "maker" },
+            { "name": "Batik Danar Hadi", "wikidataId": "Q4868809", "type": "maker" }
+          ]
+        }
+      ],
+      "recommendedIdentifiers": ["designer_label", "authentication_code"],
+      "recommendedViewTypes": ["overview", "identification", "condition", "label", "maker_mark"],
+      "recommendedBrands": ["Hermès", "Chanel", "Louis Vuitton", "Burberry"],
+      "defaultUrgency": "none",
+      "containerFlag": false,
+      "locationClass": "physical",
+      "disposalComplexity": "medium",
+      "typicalValuationMethod": "specialist_dealer"
+    },
+    "firearms_sporting": {
+      "label": "Firearms & Sporting",
+      "description": "Firearms, sporting equipment, fishing tackle, golf equipment, and outdoor gear. Firearms must be surrendered to police within 7 days of death in the UK under the Firearms Act.",
+      "subcategories": [
+        { "value": "firearms", "label": "Firearms" },
+        { "value": "sporting_equipment", "label": "Sporting Equipment" },
+        { "value": "fishing_tackle", "label": "Fishing Tackle" },
+        { "value": "golf_equipment", "label": "Golf Equipment" },
+        { "value": "outdoor_gear", "label": "Outdoor Gear" }
+      ],
+      "recommendedIdentifiers": ["serial_number", "firearms_certificate", "section_reference"],
+      "recommendedViewTypes": ["overview", "identification", "serial_number", "condition", "maker_mark"],
+      "recommendedBrands": ["Purdey", "Holland & Holland", "Hardy Bros", "Titleist", "Ping"],
+      "defaultUrgency": "immediate",
+      "containerFlag": false,
+      "locationClass": "physical",
+      "disposalComplexity": "high",
+      "typicalValuationMethod": "specialist_dealer"
+    },
+    "digital": {
+      "label": "Digital",
+      "description": "Digital assets including domain names, social media accounts, subscriptions, digital media libraries, cryptocurrency wallets, NFTs, and cloud storage. Access credentials are critical for asset recovery.",
+      "subcategories": [
+        { "value": "domain_name", "label": "Domain Name" },
+        { "value": "social_media", "label": "Social Media" },
+        { "value": "subscription", "label": "Subscription" },
+        { "value": "digital_media", "label": "Digital Media" },
+        { "value": "cryptocurrency", "label": "Cryptocurrency" },
+        { "value": "nft", "label": "NFT" },
+        { "value": "cloud_storage", "label": "Cloud Storage" }
+      ],
+      "recommendedIdentifiers": ["registrar_reference", "wallet_address", "account_handle"],
+      "recommendedViewTypes": [],
+      "recommendedBrands": [],
+      "defaultUrgency": "within_7_days",
+      "containerFlag": false,
+      "locationClass": "digital",
+      "disposalComplexity": "medium",
+      "typicalValuationMethod": "market_value"
+    },
+    "business": {
+      "label": "Business",
+      "description": "Business interests, partnerships, intellectual property, stock compensation, franchises, and royalty streams. Early engagement with the business or its accountant is essential for continuity.",
+      "subcategories": [
+        { "value": "business_interest", "label": "Business Interest" },
+        { "value": "partnership", "label": "Partnership" },
+        { "value": "intellectual_property", "label": "Intellectual Property" },
+        { "value": "stock_compensation", "label": "Stock Compensation" },
+        { "value": "franchise", "label": "Franchise" },
+        { "value": "royalty_stream", "label": "Royalty Stream" }
+      ],
+      "recommendedIdentifiers": ["company_number", "patent_number", "trademark_reference"],
+      "recommendedViewTypes": ["certificate", "label"],
+      "recommendedBrands": [],
+      "defaultUrgency": "within_7_days",
+      "containerFlag": false,
+      "locationClass": "intangible",
+      "disposalComplexity": "high",
+      "typicalValuationMethod": "professional_accountant"
+    },
+    "islamic_financial": {
+      "label": "Islamic Financial",
+      "description": "Shariah-compliant financial instruments including sukuk, takaful, Islamic deposits, mudarabah, and musharakah contracts. These require handling in accordance with Islamic finance principles.",
+      "subcategories": [
+        { "value": "sukuk", "label": "Sukuk" },
+        { "value": "takaful", "label": "Takaful" },
+        { "value": "islamic_deposit", "label": "Islamic Deposit" },
+        { "value": "mudarabah", "label": "Mudarabah" },
+        { "value": "musharakah", "label": "Musharakah" }
+      ],
+      "recommendedIdentifiers": ["certificate_reference", "ISIN"],
+      "recommendedViewTypes": ["certificate"],
+      "recommendedBrands": [],
+      "defaultUrgency": "within_7_days",
+      "containerFlag": false,
+      "locationClass": "financial",
+      "disposalComplexity": "medium",
+      "typicalValuationMethod": "statement"
+    },
+    "other": {
+      "label": "Other",
+      "description": "A catch-all category for items that do not fit into any other specialized category. Use this when no better classification is available.",
+      "subcategories": [
+        { "value": "other", "label": "Other" }
+      ],
+      "recommendedIdentifiers": [],
+      "recommendedViewTypes": ["overview", "identification", "condition"],
+      "recommendedBrands": [],
+      "defaultUrgency": "none",
+      "containerFlag": false,
+      "locationClass": "physical",
+      "disposalComplexity": "medium",
+      "typicalValuationMethod": "estimated"
+    }
+  }
+}

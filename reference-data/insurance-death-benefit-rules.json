@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "INHERIT Insurance Death Benefit Rules",
+  "description": "Reference data for insurance death benefit rules by type and jurisdiction. Covers trust implications, nomination expiry, and contestability periods",
+  "_metadata": {
+    "lastVerified": "2026-04-06",
+    "source": "FCA and FSCS published rules",
+    "jurisdiction": "GB",
+    "disclaimer": "This data is provided for interoperability purposes. It does not constitute legal, tax, or financial advice. Users must verify independently before relying on these figures for official purposes.",
+    "deprecationPattern": "Individual entries within this file may carry deprecated: true, deprecatedAt, deprecatedReason, and supersededBy fields. Deprecated entries are retained for historical reference and audit trail purposes. Applications should filter to non-deprecated entries for current data.",
+    "deprecated": false,
+    "deprecatedAt": null,
+    "deprecatedReason": null,
+    "supersededBy": null
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "jurisdiction",
+      "insuranceType"
+    ],
+    "properties": {
+      "jurisdiction": {
+        "type": "string",
+        "description": "ISO 3166 code"
+      },
+      "insuranceType": {
+        "type": "string"
+      },
+      "writtenInTrustImplication": {
+        "type": "string",
+        "description": "Effect of writing the policy in trust"
+      },
+      "nominationExpiryRule": {
+        "type": "string",
+        "description": "Whether and when nominations expire"
+      },
+      "contestabilityPeriod": {
+        "type": "string",
+        "description": "Period during which insurer can contest a claim"
+      },
+      "notes": {
+        "type": "string"
+      }
+    }
+  }
+}

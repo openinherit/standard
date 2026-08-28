@@ -1,0 +1,169 @@
+{
+  "target": "../../../v3/acknowledgement.json",
+  "tests": [
+    {
+      "description": "valid — minimal acknowledgement",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "entityType": "executor_appointment",
+        "entityId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "personId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "acknowledgedAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated acknowledgement",
+      "data": {
+        "id": "72750b01-ed6f-4111-b9b3-d3bd2d387fc8",
+        "entityType": "bequest",
+        "entityId": "482429af-1b9d-405c-a601-4c007f5156c3",
+        "personId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "acknowledgedAt": "2026-03-30T14:00:00Z",
+        "method": "in_app",
+        "notes": "Beneficiary acknowledged bequest via the MyFamilyInherits platform"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required entityType",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "entityId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "personId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "acknowledgedAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown entityType",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "entityType": "magic",
+        "entityId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "personId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "acknowledgedAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unevaluated property",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "entityType": "bequest",
+        "entityId": "482429af-1b9d-405c-a601-4c007f5156c3",
+        "personId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "acknowledgedAt": "2026-03-30T10:00:00Z",
+        "badField": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "entityType": "executor_appointment",
+        "entityId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "personId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "acknowledgedAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required entityId",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "entityType": "executor_appointment",
+        "personId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "acknowledgedAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required personId",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "entityType": "executor_appointment",
+        "entityId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "acknowledgedAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required acknowledgedAt",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "entityType": "executor_appointment",
+        "entityId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "personId": "d73880dc-c616-4724-ad29-79364bad1719"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — entityType as number instead of string",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "entityType": 42,
+        "entityId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "personId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "acknowledgedAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — acknowledgedAt as number instead of string",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "entityType": "executor_appointment",
+        "entityId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "personId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "acknowledgedAt": 1711789200
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a valid UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "entityType": "executor_appointment",
+        "entityId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "personId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "acknowledgedAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — acknowledgedAt in wrong datetime format",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "entityType": "executor_appointment",
+        "entityId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "personId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "acknowledgedAt": "30/03/2026 10:00"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — personId is not a valid UUID",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "entityType": "executor_appointment",
+        "entityId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "personId": "bad-uuid-here",
+        "acknowledgedAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — personIdDisplay exceeds maxLength 255",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "entityType": "executor_appointment",
+        "entityId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "personId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "acknowledgedAt": "2026-03-30T10:00:00Z",
+        "personIdDisplay": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    }
+  ]
+}

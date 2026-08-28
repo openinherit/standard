@@ -1,0 +1,445 @@
+{
+  "$schema": "https://openinherit.org/v3/extensions-registry-schema.json",
+  "version": "3.0.0",
+  "extensions": [
+    {
+      "id": "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json",
+      "name": "UK England & Wales",
+      "tier": "core",
+      "maturity": "stable",
+      "seeking": "",
+      "legalTradition": "Common law",
+      "keyFeatures": "IHT nil-rate band, residence nil-rate band, probate registry integration, deed of variation, intestacyHierarchy (9 AEA 1925 s.46 tiers), statutoryLegacy (£322k SI 2023/877)",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "GB-ENG",
+        "GB-WLS"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/uk-england-wales/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "comprehensive"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/us-estate/us-estate.json",
+      "name": "US Estate",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "Multi-state probate practitioners",
+      "legalTradition": "Common law",
+      "keyFeatures": "Federal estate tax, state estate/inheritance tax, community property, elective share, SECURE Act retirement rules, probate variation (UPC), trust features (QTIP/dynasty), ancillary probate, advance directives, intestacyDepth (UPC compliance, parentele limit, laughing heir cutoff), collateralHeirRules (cousin inheritance, representation)",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "US"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/us-estate/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "comprehensive"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/australia-nz/australia-nz.json",
+      "name": "Australia & New Zealand",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "",
+      "legalTradition": "Common law",
+      "keyFeatures": "State/territory variation, family provision claims, superannuation death benefits, relationshipCategory enum on FamilyProvisionClaim (7 categories), whangai (Maori customary adoption) recognition on MaoriLandDetails, customaryAdoptionRecognised on AboriginalLandDetails (kupai omasker, NSW s4.4)",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "AU",
+        "NZ"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/australia-nz/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "partial"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/brazil/brazil.json",
+      "name": "Brazil",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "",
+      "legalTradition": "Civil law",
+      "keyFeatures": "Leg\u00edtima (forced heirship 50%), mea\u00e7\u00e3o (spousal share), ITCMD state tax, invent\u00e1rio/arrolamento",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "BR"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/brazil/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "partial"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/eu-succession/eu-succession.json",
+      "name": "EU Succession",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "Country-specific reviewers (DE, FR, NL, PL)",
+      "legalTradition": "Mixed civil law",
+      "keyFeatures": "EU Regulation 650/2012, European Certificate of Succession, habitual residence rule, choice-of-law",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "AT",
+        "BE",
+        "BG",
+        "HR",
+        "CY",
+        "CZ",
+        "DK",
+        "EE",
+        "FI",
+        "FR",
+        "DE",
+        "GR",
+        "HU",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "MT",
+        "NL",
+        "PL",
+        "PT",
+        "RO",
+        "SK",
+        "SI",
+        "ES",
+        "SE"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/eu-succession/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "partial"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/israel/israel.json",
+      "name": "Israel",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "",
+      "legalTradition": "Mixed statutory",
+      "keyFeatures": "Inheritance Law 1965, religious court jurisdiction, mutual wills, inheritance tax (abolished/reinstated)",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "IL"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/israel/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "partial"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/japan/japan.json",
+      "name": "Japan",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "",
+      "legalTradition": "Civil law",
+      "keyFeatures": "Forced heirship (iryubun), family court mediation, inheritance tax brackets, agricultural succession, relationshipCategory on IryubunClaim (spouse/child/lineal_ascendant/sibling), yoshi adoption → core kinship type mapping (futsu_yoshi/tokubetsu_yoshi), saishi custodial succession clarification",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "JP"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/japan/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "partial"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/scotland/scotland.json",
+      "name": "Scotland",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "",
+      "legalTradition": "Mixed civil / common",
+      "keyFeatures": "Legal rights (jus relictae/relicti), confirmation, intestacy (2024 Act), heritable/moveable classification, executry, survivorship destinations, crofting succession, LBTT, cohabitation claims",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "GB-SCT"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/scotland/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "partial"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/africa-customary/africa-customary.json",
+      "name": "Africa Customary Succession",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "",
+      "legalTradition": "Customary / statutory",
+      "keyFeatures": "Customary law succession, statutory overlay, communal land tenure, widow/widower protection reforms",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "tradition",
+      "applicableJurisdictions": [
+        "ZA",
+        "NG",
+        "GH",
+        "KE",
+        "TZ",
+        "UG"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/africa-customary/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "outline"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/hindu-succession/hindu-succession.json",
+      "name": "Hindu Succession",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "Indian succession law practitioner",
+      "legalTradition": "Hindu customary",
+      "keyFeatures": "Mitakshara coparcenary, Dayabhaga principles, 2005 amendment equal daughter rights, HUF property, scheduleEntry for precise Hindu Succession Act Schedule references, Class I/II/agnate/cognate kinship mapping documentation, 2005 Amendment coparcenary equality",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "tradition",
+      "applicableJurisdictions": [
+        "IN",
+        "NP",
+        "LK",
+        "MY",
+        "SG",
+        "GB",
+        "US",
+        "AU",
+        "CA"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/hindu-succession/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "outline"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json",
+      "name": "Islamic Succession",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "",
+      "legalTradition": "Islamic (Sharia)",
+      "keyFeatures": "Fixed-share inheritance (fara'id), wasiyyah (bequest limit 1/3), awl/radd calculation, madhab variation, asabaRank (1-15), expanded heirClass (22 values), full asaba hierarchy documentation, uncle/cousin/nephew types, dhawu al-arham mapping",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "tradition",
+      "applicableJurisdictions": [
+        "SG",
+        "MY",
+        "ID",
+        "AE",
+        "SA",
+        "PK",
+        "BD",
+        "GB",
+        "US",
+        "AU",
+        "CA"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/islamic-succession/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "outline"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json",
+      "name": "Jewish Succession",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "Beth Din / halachic law reviewer",
+      "legalTradition": "Jewish (Halakha)",
+      "keyFeatures": "Bechor (firstborn) share, matanah (gift) structures, halachic will mechanisms, beit din jurisdiction, expanded halachicClass (12 values including av_av, ach_av, ben_ach, ben_ach_av), full Numbers 27 + Bava Batra inheritance order, bekhor patrilineal restriction, mezonot distinction",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "tradition",
+      "applicableJurisdictions": [
+        "IL",
+        "GB",
+        "US",
+        "CA",
+        "AU",
+        "FR"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/jewish-succession/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "outline"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/canada/canada.json",
+      "name": "Canada",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "Quebec notarial and Indigenous law expertise",
+      "legalTradition": "Common / civil (QC)",
+      "keyFeatures": "Provincial probate fees, deemed disposition on death, Quebec civil code forced heirship, 13 province/territory ISO 3166-2 codes, intestacyRules with distributionOrder and preferentialShare, quebecCivilLaw (family patrimony)",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "CA"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/canada/",
+      "successionCoverage": "partial",
+      "taxCoverage": "outline"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/hong-kong/hong-kong.json",
+      "name": "Hong Kong",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "",
+      "legalTradition": "Common law",
+      "keyFeatures": "Intestacy ordinance, no estate duty (abolished 2006), MPF death benefit nomination, intestacyHierarchy (Cap. 73), newTerritoriesCustomaryLaw (tso/tong Cap. 97), preReformCustomaryLaw (pre-1971 MRO)",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "HK"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/hong-kong/",
+      "successionCoverage": "partial",
+      "taxCoverage": "outline"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/india/india.json",
+      "name": "India",
+      "tier": "core",
+      "maturity": "draft",
+      "seeking": "Practitioners across Hindu, Muslim, Parsi, and statutory succession",
+      "legalTradition": "Mixed statutory",
+      "keyFeatures": "Hindu Succession Act coparcenary, Muslim personal law, Indian Succession Act, stamp duty variation, Parsi succession rules (ISA 1925 Part V), Christian succession rules, coparcenary deprecation notes",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "IN"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/india/",
+      "successionCoverage": "partial",
+      "taxCoverage": "outline"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/ireland/ireland.json",
+      "name": "Ireland",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "Irish probate practitioner",
+      "legalTradition": "Common law",
+      "keyFeatures": "Legal right share, CAT thresholds, Probate Office requirements, dwelling house exemption, expanded distributionOrder (nephews_nieces, grandparents, uncles_aunts, first_cousins)",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "IE"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/ireland/",
+      "successionCoverage": "partial",
+      "taxCoverage": "outline"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/latin-america/latin-america.json",
+      "name": "Latin America",
+      "tier": "core",
+      "maturity": "draft",
+      "seeking": "Argentina, Colombia, Venezuela practitioners",
+      "legalTradition": "Civil law",
+      "keyFeatures": "Forced heirship (leg\u00edtima), mejora (improvement share), notarial succession, country-specific variation",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "BR",
+        "AR",
+        "MX",
+        "CO",
+        "CL",
+        "PE"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/latin-america/",
+      "successionCoverage": "partial",
+      "taxCoverage": "outline"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/prc-china/prc-china.json",
+      "name": "PRC China",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "PRC succession law practitioner",
+      "legalTradition": "Civil law (socialist)",
+      "keyFeatures": "Civil Code Book 6, statutory succession order, notarised wills, rural land use rights, relationshipCategory on first/second order forced heirship heirs, contributingInLaws (Article 1129 widowed in-laws), Article 1128 per stirpes representation documentation",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "CN"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/prc-china/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "outline"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json",
+      "name": "Singapore & Malaysia",
+      "tier": "core",
+      "maturity": "candidate",
+      "seeking": "CPF/EPF specialists, Syariah court practitioners",
+      "legalTradition": "Common law / Islamic",
+      "keyFeatures": "Intestate Succession Act, Syariah court for Muslim estates, CPF nomination, distribution certificates, relationshipCategory enum on ISA and Malaysian Distribution Act share schedules, ISA Schedule 2 distribution rules, CPF sub-account allocations (ordinary/special/medisave/retirement), nomination form version (pre/post 2010), marriage-triggered revocation tracking",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "hybrid",
+      "applicableJurisdictions": [
+        "SG",
+        "MY"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/singapore-malaysia/",
+      "successionCoverage": "comprehensive",
+      "taxCoverage": "outline"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/switzerland/switzerland.json",
+      "name": "Switzerland",
+      "tier": "core",
+      "maturity": "draft",
+      "seeking": "Cantonal succession law expertise",
+      "legalTradition": "Civil law",
+      "keyFeatures": "2023 revised forced heirship rules, cantonal succession tax variation, usufruct rights",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "CH"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/switzerland/",
+      "successionCoverage": "partial",
+      "taxCoverage": "outline"
+    },
+    {
+      "id": "https://openinherit.org/v3/extensions/uae/uae.json",
+      "name": "UAE",
+      "tier": "core",
+      "maturity": "draft",
+      "seeking": "DIFC and Sharia court practitioners",
+      "legalTradition": "Islamic / common (DIFC)",
+      "keyFeatures": "Sharia default rules, DIFC Wills Service Centre, free zone asset treatment, non-Muslim will registration, homeCountryLawElection (Decree Law 41/2022), home country code + DIFC registration tracking",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "AE"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/uae/",
+      "successionCoverage": "partial",
+      "taxCoverage": "outline"
+    }
+  ]
+}

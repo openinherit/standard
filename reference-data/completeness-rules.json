@@ -1,0 +1,298 @@
+{
+  "_disclaimer": "Informational reference data only. Not legal, tax, or financial advice. Verify with qualified professionals before relying on any values. Current as of March 2026.",
+  "title": "Estate Completeness Rules",
+  "description": "Declarative rules for computing estate completeness scores. Rules adapt to estate status and jurisdiction.",
+  "lastUpdated": "2026-03-28",
+  "categories": {
+    "personal_details": {
+      "label": "Personal Details",
+      "items": [
+        {
+          "id": "pd_testator_name",
+          "item": "Testator full name recorded",
+          "weight": 10,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "pd_testator_dob",
+          "item": "Testator date of birth",
+          "weight": 5,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "pd_testator_address",
+          "item": "Testator current address recorded",
+          "weight": 5,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "pd_jurisdiction",
+          "item": "Estate jurisdiction specified",
+          "weight": 8,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "pd_marital_status",
+          "item": "Testator marital status recorded",
+          "weight": 6,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        }
+      ]
+    },
+    "assets_and_valuations": {
+      "label": "Assets & Valuations",
+      "items": [
+        {
+          "id": "av_at_least_one_asset",
+          "item": "At least one asset recorded in the estate",
+          "weight": 10,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "av_all_assets_categorized",
+          "item": "All assets have a category assigned",
+          "weight": 6,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "av_professional_valuation_high_value",
+          "item": "Professional valuations obtained for assets estimated over £50,000",
+          "weight": 8,
+          "appliesWhen": { "statuses": ["confirmed", "pre_probate", "in_administration"], "conditions": ["hasHighValueAssets"] }
+        },
+        {
+          "id": "av_property_survey",
+          "item": "Property survey or formal appraisal obtained for real property",
+          "weight": 7,
+          "appliesWhen": { "statuses": ["pre_probate", "in_administration"], "conditions": ["hasRealProperty"] }
+        },
+        {
+          "id": "av_valuations_current",
+          "item": "All valuations dated within the last 2 years",
+          "weight": 5,
+          "appliesWhen": { "statuses": ["confirmed", "pre_probate", "in_administration"] }
+        }
+      ]
+    },
+    "liabilities": {
+      "label": "Liabilities",
+      "items": [
+        {
+          "id": "li_liabilities_documented",
+          "item": "All known liabilities documented",
+          "weight": 8,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "li_creditors_identified",
+          "item": "Creditors identified with contact details",
+          "weight": 6,
+          "appliesWhen": { "statuses": ["pre_probate", "in_administration"] }
+        },
+        {
+          "id": "li_amounts_current",
+          "item": "Liability amounts are current and verified",
+          "weight": 5,
+          "appliesWhen": { "statuses": ["pre_probate", "in_administration"] }
+        }
+      ]
+    },
+    "beneficiaries": {
+      "label": "Beneficiaries",
+      "items": [
+        {
+          "id": "bn_all_identified",
+          "item": "All beneficiaries identified in the estate plan",
+          "weight": 10,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "bn_contact_details",
+          "item": "Contact details recorded for all beneficiaries",
+          "weight": 5,
+          "appliesWhen": { "statuses": ["confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "bn_shares_allocated",
+          "item": "Shares or specific bequests allocated to all beneficiaries",
+          "weight": 8,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "bn_residuary_allocated",
+          "item": "Residuary estate allocation totals 100%",
+          "weight": 7,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        }
+      ]
+    },
+    "executors": {
+      "label": "Executors",
+      "items": [
+        {
+          "id": "ex_at_least_one",
+          "item": "At least one executor appointed",
+          "weight": 10,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "ex_professional_if_complex",
+          "item": "Professional executor appointed if estate is complex",
+          "weight": 6,
+          "appliesWhen": { "statuses": ["planning", "confirmed"], "conditions": ["isComplexEstate"] }
+        },
+        {
+          "id": "ex_contact_details",
+          "item": "Executor contact details recorded",
+          "weight": 5,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "ex_substitute_named",
+          "item": "Substitute executor named",
+          "weight": 4,
+          "appliesWhen": { "statuses": ["planning", "confirmed"] }
+        }
+      ]
+    },
+    "guardians": {
+      "label": "Guardians",
+      "items": [
+        {
+          "id": "gd_guardian_appointed",
+          "item": "Guardian appointed for minor children",
+          "weight": 10,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"], "conditions": ["hasMinorChildren"] }
+        },
+        {
+          "id": "gd_substitute_named",
+          "item": "Substitute guardian named",
+          "weight": 5,
+          "appliesWhen": { "statuses": ["planning", "confirmed"], "conditions": ["hasMinorChildren"] }
+        },
+        {
+          "id": "gd_guardian_consented",
+          "item": "Guardian has been informed and consented",
+          "weight": 7,
+          "appliesWhen": { "statuses": ["planning", "confirmed"], "conditions": ["hasMinorChildren"] }
+        }
+      ]
+    },
+    "tax_information": {
+      "label": "Tax Information",
+      "items": [
+        {
+          "id": "tx_position_calculated",
+          "item": "Tax position calculated for the estate",
+          "weight": 9,
+          "appliesWhen": { "statuses": ["confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "tx_lifetime_transfers_documented",
+          "item": "Lifetime transfers within lookback period documented",
+          "weight": 8,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "tx_gift_exemptions_claimed",
+          "item": "Available gift exemptions identified and claimed",
+          "weight": 6,
+          "appliesWhen": { "statuses": ["confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "tx_reliefs_applied",
+          "item": "Applicable reliefs identified and applied",
+          "weight": 7,
+          "appliesWhen": { "statuses": ["confirmed", "pre_probate", "in_administration"] }
+        }
+      ]
+    },
+    "legal_documents": {
+      "label": "Legal Documents",
+      "items": [
+        {
+          "id": "ld_will_executed",
+          "item": "Will has been executed with valid signatures and witnesses",
+          "weight": 10,
+          "appliesWhen": { "statuses": ["confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "ld_will_execution_date",
+          "item": "Will execution date recorded",
+          "weight": 7,
+          "appliesWhen": { "statuses": ["confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "ld_codicils_current",
+          "item": "All codicils are current and consistent with the will",
+          "weight": 6,
+          "appliesWhen": { "statuses": ["confirmed", "pre_probate", "in_administration"], "conditions": ["hasCodicils"] }
+        },
+        {
+          "id": "ld_powers_of_attorney",
+          "item": "Powers of attorney documented where applicable",
+          "weight": 5,
+          "appliesWhen": { "statuses": ["planning", "confirmed"] }
+        }
+      ]
+    },
+    "lifetime_transfers": {
+      "label": "Lifetime Transfers",
+      "items": [
+        {
+          "id": "lt_lookback_documented",
+          "item": "All transfers within the lookback period documented",
+          "weight": 9,
+          "appliesWhen": { "statuses": ["confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "lt_exemptions_recorded",
+          "item": "Applicable exemptions recorded for each transfer",
+          "weight": 7,
+          "appliesWhen": { "statuses": ["confirmed", "pre_probate", "in_administration"] }
+        },
+        {
+          "id": "lt_tax_returns_filed",
+          "item": "Tax returns filed for chargeable lifetime transfers",
+          "weight": 8,
+          "appliesWhen": { "statuses": ["pre_probate", "in_administration"], "conditions": ["hasChargeableTransfers"] }
+        },
+        {
+          "id": "lt_donee_details",
+          "item": "Donee details recorded for each transfer",
+          "weight": 5,
+          "appliesWhen": { "statuses": ["confirmed", "pre_probate", "in_administration"] }
+        }
+      ]
+    },
+    "pension_and_insurance": {
+      "label": "Pension & Insurance",
+      "items": [
+        {
+          "id": "pi_pension_nominations_current",
+          "item": "Pension death benefit nominations are current",
+          "weight": 8,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"], "conditions": ["hasPensions"] }
+        },
+        {
+          "id": "pi_death_benefits_documented",
+          "item": "Death benefit amounts and provider details documented",
+          "weight": 7,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"], "conditions": ["hasPensions"] }
+        },
+        {
+          "id": "pi_insurance_beneficiaries",
+          "item": "Insurance policy beneficiary designations recorded",
+          "weight": 7,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"], "conditions": ["hasInsurancePolicies"] }
+        },
+        {
+          "id": "pi_written_in_trust_status",
+          "item": "Written-in-trust status recorded for each insurance policy",
+          "weight": 6,
+          "appliesWhen": { "statuses": ["planning", "confirmed", "pre_probate", "in_administration"], "conditions": ["hasInsurancePolicies"] }
+        }
+      ]
+    }
+  }
+}

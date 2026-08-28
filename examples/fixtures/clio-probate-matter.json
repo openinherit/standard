@@ -1,0 +1,245 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-03-28T10:15:00Z",
+  "generator": {
+    "name": "Clio Manage",
+    "version": "6.8.0",
+    "url": "https://www.clio.com"
+  },
+  "estate": {
+    "id": "20000001-0000-4000-a000-000000000001",
+    "testatorPersonId": "20000001-0000-4000-a000-000000000010",
+    "status": "pre_probate",
+    "notes": "Probate matter exported from Clio. Testator deceased on 15 February 2026. Grant of probate application in progress. Estate is being gathered — some asset values are provisional.",
+    "createdAt": "2026-02-20T09:00:00Z",
+    "lastModifiedAt": "2026-03-28T10:15:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    }
+  },
+  "people": [
+    {
+      "id": "20000001-0000-4000-a000-000000000010",
+      "givenName": "Margaret",
+      "familyName": "Thornton",
+      "dateOfBirth": "1941-08-23",
+      "dateOfDeath": "2026-02-15",
+      "roles": [
+        "testator"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "14 Lime Tree Close",
+          "addressLocality": "Winchester",
+          "addressRegion": "Hampshire",
+          "postalCode": "SO23 7RD",
+          "addressCountry": "GB"
+        }
+      }
+    },
+    {
+      "id": "20000001-0000-4000-a000-000000000011",
+      "givenName": "Robert",
+      "familyName": "Thornton",
+      "dateOfBirth": "1968-04-12",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ]
+    },
+    {
+      "id": "20000001-0000-4000-a000-000000000012",
+      "givenName": "Claire",
+      "familyName": "Thornton",
+      "dateOfBirth": "1971-09-30",
+      "roles": [
+        "beneficiary"
+      ]
+    },
+    {
+      "id": "20000001-0000-4000-a000-000000000013",
+      "givenName": "Thomas",
+      "familyName": "Thornton",
+      "dateOfBirth": "1998-12-05",
+      "roles": [
+        "beneficiary"
+      ],
+      "notes": "Grandchild — son of Robert. Receives a specific pecuniary bequest of £10,000."
+    }
+  ],
+  "kinships": [
+    {
+      "id": "20000001-0000-4000-b000-000000000001",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "20000001-0000-4000-a000-000000000010",
+      "toPersonId": "20000001-0000-4000-a000-000000000011"
+    },
+    {
+      "id": "20000001-0000-4000-b000-000000000002",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "20000001-0000-4000-a000-000000000010",
+      "toPersonId": "20000001-0000-4000-a000-000000000012"
+    },
+    {
+      "id": "20000001-0000-4000-b000-000000000003",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "20000001-0000-4000-a000-000000000011",
+      "toPersonId": "20000001-0000-4000-a000-000000000013"
+    }
+  ],
+  "relationships": [],
+  "properties": [
+    {
+      "id": "20000001-0000-4000-d000-000000000001",
+      "name": "14 Lime Tree Close, Winchester",
+      "propertyType": "detached",
+      "address": {
+        "streetAddress": "14 Lime Tree Close",
+        "addressLocality": "Winchester",
+        "addressRegion": "Hampshire",
+        "postalCode": "SO23 7RD",
+        "addressCountry": "GB"
+      },
+      "estimatedValue": {
+        "amount": 62500000,
+        "currency": "GBP"
+      },
+      "tenureType": "ownership",
+      "ownershipPercentage": 100,
+      "notes": "Sole owner following husband's death in 2019. Transferable nil rate band available."
+    }
+  ],
+  "assets": [
+    {
+      "id": "20000001-0000-4000-e000-000000000001",
+      "name": "NatWest Savings Account",
+      "category": "financial",
+      "subcategory": "savings account",
+      "estimatedValue": {
+        "amount": 4500000,
+        "currency": "GBP"
+      },
+      "notes": "Balance as at date of death. Date of death certificate requested from NatWest."
+    },
+    {
+      "id": "20000001-0000-4000-e000-000000000002",
+      "name": "NS&I Premium Bonds",
+      "category": "financial",
+      "subcategory": "premium bonds",
+      "estimatedValue": {
+        "amount": 5000000,
+        "currency": "GBP"
+      },
+      "notes": "£50,000 in Premium Bonds. NS&I notified of death; unclaimed prizes being checked."
+    },
+    {
+      "id": "20000001-0000-4000-e000-000000000003",
+      "name": "Royal Worcester Porcelain Collection",
+      "category": "collectibles",
+      "estimatedValue": {
+        "amount": 800000,
+        "currency": "GBP"
+      },
+      "notes": "Collection of approximately 40 pieces of Royal Worcester porcelain. Professional valuation pending."
+    }
+  ],
+  "executors": [
+    {
+      "id": "20000001-0000-4000-7000-000000000001",
+      "personId": "20000001-0000-4000-a000-000000000011",
+      "role": "primary",
+      "isProfessional": false,
+      "grantType": "grant_of_probate",
+      "grantReference": "2026-PROB-WIN-00412",
+      "grantDate": "2026-03-25",
+      "issuingCourt": "Winchester Combined Court Centre",
+      "notes": "Grant application submitted 25 March 2026. Awaiting issue."
+    }
+  ],
+  "documents": [
+    {
+      "id": "20000001-0000-4000-9000-000000000001",
+      "type": "death_certificate",
+      "title": "Death Certificate — Margaret Thornton",
+      "fileFormat": "pdf",
+      "notes": "Certified copy of death certificate. Date of death: 15 February 2026. Cause of death: natural causes."
+    },
+    {
+      "id": "20000001-0000-4000-9000-000000000002",
+      "type": "will",
+      "title": "Last Will and Testament of Margaret Thornton",
+      "fileFormat": "pdf",
+      "createdAt": "2020-11-10T10:00:00Z",
+      "notes": "Will dated 10 November 2020. Original held by Macfarlanes LLP. Appoints Robert as sole executor."
+    },
+    {
+      "id": "20000001-0000-4000-9000-000000000003",
+      "type": "grant_of_probate",
+      "title": "Grant of Probate Application — Estate of Margaret Thornton",
+      "fileFormat": "pdf",
+      "notes": "PA1P probate application submitted to Winchester Combined Court Centre on 25 March 2026."
+    }
+  ],
+  "bequests": [
+    {
+      "id": "20000001-0000-4000-f000-000000000001",
+      "bequestType": "pecuniary",
+      "beneficiaryId": "20000001-0000-4000-a000-000000000013",
+      "amount": {
+        "amount": 1000000,
+        "currency": "GBP"
+      },
+      "description": "£10,000 to my grandson Thomas Thornton"
+    },
+    {
+      "id": "20000001-0000-4000-f000-000000000002",
+      "bequestType": "specific",
+      "beneficiaryId": "20000001-0000-4000-a000-000000000012",
+      "description": "The Royal Worcester porcelain collection to my daughter Claire Thornton"
+    },
+    {
+      "id": "20000001-0000-4000-f000-000000000003",
+      "bequestType": "residuary",
+      "beneficiaryId": "20000001-0000-4000-a000-000000000011",
+      "sharePercentage": 50,
+      "description": "50% of the residuary estate to my son Robert Thornton"
+    },
+    {
+      "id": "20000001-0000-4000-f000-000000000004",
+      "bequestType": "residuary",
+      "beneficiaryId": "20000001-0000-4000-a000-000000000012",
+      "sharePercentage": 50,
+      "description": "50% of the residuary estate to my daughter Claire Thornton"
+    }
+  ],
+  "trusts": [],
+  "liabilities": [],
+  "guardians": [],
+  "wishes": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "organisations": [
+    {
+      "id": "20000001-0000-4000-6000-000000000001",
+      "name": "Macfarlanes LLP",
+      "organisationType": "legal_firm",
+      "estateRoles": [
+        "will_writer"
+      ],
+      "notes": "Firm that drafted the will and holds the original."
+    }
+  ],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-03-28T10:15:00Z",
+    "validatedBy": "Clio Manage",
+    "schemaVersion": "6.3.0"
+  }
+}

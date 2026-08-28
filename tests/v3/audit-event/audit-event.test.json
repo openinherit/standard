@@ -1,0 +1,261 @@
+{
+  "target": "../../../v3/common/audit-event.json",
+  "tests": [
+    {
+      "description": "valid — minimal required fields only (action + performedAt)",
+      "data": {
+        "action": "created",
+        "performedAt": "2026-04-06T10:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — full audit event with all optional fields populated",
+      "data": {
+        "action": "modified",
+        "performedAt": "2026-04-06T14:30:00Z",
+        "agentPersonId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "agentDescription": "Probate practitioner — file review",
+        "entityType": "Estate",
+        "entityId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        "detail": "Updated estimated gross estate value from £250,000 to £310,000 following receipt of property valuation report dated 1 April 2026.",
+        "previousValue": "250000",
+        "newValue": "310000",
+        "redacted": false,
+        "evidenceUrl": "https://documents.example.com/valuations/estate-f47ac10b/property-report-2026-04-01.pdf"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — action: created",
+      "data": {
+        "action": "created",
+        "performedAt": "2026-01-15T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — action: modified",
+      "data": {
+        "action": "modified",
+        "performedAt": "2026-01-15T09:05:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — action: deleted",
+      "data": {
+        "action": "deleted",
+        "performedAt": "2026-01-15T09:10:00Z",
+        "detail": "Draft document removed at testator's request."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — action: accessed",
+      "data": {
+        "action": "accessed",
+        "performedAt": "2026-01-15T09:15:00Z",
+        "agentPersonId": "c2d3e4f5-a6b7-8901-bcde-f01234567890"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — action: exported",
+      "data": {
+        "action": "exported",
+        "performedAt": "2026-01-15T09:20:00Z",
+        "entityType": "Will",
+        "entityId": "d4e5f6a7-b8c9-0123-cdef-012345678901"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — action: validated",
+      "data": {
+        "action": "validated",
+        "performedAt": "2026-01-15T09:25:00Z",
+        "detail": "Schema validation passed against INHERIT v3."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — action: version_created",
+      "data": {
+        "action": "version_created",
+        "performedAt": "2026-01-15T09:30:00Z",
+        "entityType": "Document",
+        "entityId": "e5f6a7b8-c9d0-1234-defa-123456789012"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — action: granted",
+      "data": {
+        "action": "granted",
+        "performedAt": "2026-01-15T09:35:00Z",
+        "detail": "Read access granted to instructed solicitor."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — action: revoked",
+      "data": {
+        "action": "revoked",
+        "performedAt": "2026-01-15T09:40:00Z",
+        "agentDescription": "System — session expiry"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — action: challenged",
+      "data": {
+        "action": "challenged",
+        "performedAt": "2026-01-15T09:45:00Z",
+        "detail": "Beneficiary challenged validity of codicil dated 10 March 2025.",
+        "evidenceUrl": "https://courts.example.com/cases/2026/ch-00123"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — redacted event preserving structural record",
+      "data": {
+        "action": "accessed",
+        "performedAt": "2025-06-01T08:00:00Z",
+        "redacted": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — evidenceUrl with https scheme",
+      "data": {
+        "action": "modified",
+        "performedAt": "2026-04-06T11:00:00Z",
+        "evidenceUrl": "https://storage.example.com/evidence/court-order-2026.pdf"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — agentDescription used instead of agentPersonId for system action",
+      "data": {
+        "action": "validated",
+        "performedAt": "2026-04-06T00:01:00Z",
+        "agentDescription": "Automated nightly validation job v2.4.1"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — previousValue and newValue for field-level audit trail",
+      "data": {
+        "action": "modified",
+        "performedAt": "2026-04-06T15:00:00Z",
+        "entityType": "Person",
+        "entityId": "f6a7b8c9-d0e1-2345-efab-234567890123",
+        "detail": "Corrected date of birth following production of birth certificate.",
+        "previousValue": "1948-03-20",
+        "newValue": "1948-03-15"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required action",
+      "data": {
+        "performedAt": "2026-04-06T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required performedAt",
+      "data": {
+        "action": "created"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — action value not in enum",
+      "data": {
+        "action": "view",
+        "performedAt": "2026-04-06T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — action value not in enum (approve)",
+      "data": {
+        "action": "approve",
+        "performedAt": "2026-04-06T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — action value not in enum (redact)",
+      "data": {
+        "action": "redact",
+        "performedAt": "2026-04-06T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — performedAt not a valid date-time string",
+      "data": {
+        "action": "created",
+        "performedAt": "not-a-date"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — agentPersonId not a valid UUID",
+      "data": {
+        "action": "modified",
+        "performedAt": "2026-04-06T10:00:00Z",
+        "agentPersonId": "not-a-uuid"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — entityId not a valid UUID",
+      "data": {
+        "action": "modified",
+        "performedAt": "2026-04-06T10:00:00Z",
+        "entityId": "12345"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — evidenceUrl not a valid URI (no scheme)",
+      "data": {
+        "action": "modified",
+        "performedAt": "2026-04-06T10:00:00Z",
+        "evidenceUrl": "not-a-url"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additional property not allowed",
+      "data": {
+        "action": "created",
+        "performedAt": "2026-04-06T10:00:00Z",
+        "unknownField": "should not be here"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — redacted is not a boolean",
+      "data": {
+        "action": "accessed",
+        "performedAt": "2026-04-06T10:00:00Z",
+        "redacted": "yes"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — agentDescription exceeds maxLength of 255 characters",
+      "data": {
+        "action": "modified",
+        "performedAt": "2026-04-06T10:00:00Z",
+        "agentDescription": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    }
+  ]
+}

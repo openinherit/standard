@@ -1,0 +1,872 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/reference-data/gift-exemptions.json",
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal or tax advice. Tax laws change frequently — always verify with current legislation and qualified professionals. Data current as of March 2026.",
+  "title": "Gift & Lifetime Transfer Exemptions",
+  "description": "Gift tax exemptions, annual exclusions, and lifetime transfer allowances by jurisdiction, including lookback periods for gifts made before death.",
+  "lastUpdated": "2026-03-30",
+  "_metadata": {
+    "lastVerified": "2026-04-06",
+    "source": "HMRC IHT gift exemptions guidance",
+    "jurisdiction": "GB",
+    "disclaimer": "This data is provided for interoperability purposes. It does not constitute legal, tax, or financial advice. Users must verify independently before relying on these figures for official purposes.",
+    "deprecationPattern": "Individual entries within this file may carry deprecated: true, deprecatedAt, deprecatedReason, and supersededBy fields. Deprecated entries are retained for historical reference and audit trail purposes. Applications should filter to non-deprecated entries for current data.",
+    "deprecated": false,
+    "deprecatedAt": null,
+    "deprecatedReason": null,
+    "supersededBy": null
+  },
+  "jurisdictions": {
+    "GB": {
+      "name": "United Kingdom",
+      "currency": "GBP",
+      "lookbackPeriod": {
+        "years": {
+          "value": 7,
+          "effectiveFrom": "1986-03-18",
+          "effectiveUntil": null,
+          "status": "enacted",
+          "legislativeReference": "Inheritance Tax Act 1984 s.3A (as amended by Finance Act 1986)",
+          "predecessorValue": null,
+          "notes": "Gifts made within 7 years of death are potentially exempt transfers (PETs) and may become chargeable. Taper relief applies 3–7 years."
+        },
+        "description": "Gifts made within 7 years of death are potentially exempt transfers (PETs) and may become chargeable. Gifts surviving 7 years are fully exempt. Taper relief applies to tax on gifts made 3–7 years before death."
+      },
+      "exemptions": [
+        {
+          "type": "annualExemption",
+          "label": "Annual Exemption",
+          "amount": {
+            "value": 3000,
+            "effectiveFrom": "1981-04-06",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Inheritance Tax Act 1984 s.19",
+            "predecessorValue": null,
+            "notes": "Annual exemption — unchanged since 1981. Each person can give away £3,000 per tax year free of IHT."
+          },
+          "perYear": true,
+          "description": "Each person can give away £3,000 per tax year free of IHT. Unused exemption can be carried forward one year only.",
+          "carryForward": true,
+          "carryForwardLimit": 1,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "smallGifts",
+          "label": "Small Gifts Exemption",
+          "amount": {
+            "value": 250,
+            "effectiveFrom": "1981-04-06",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Inheritance Tax Act 1984 s.20",
+            "predecessorValue": null,
+            "notes": "Small gifts exemption — unchanged since 1981"
+          },
+          "perRecipient": true,
+          "description": "Any number of gifts of up to £250 per recipient per tax year are exempt, provided the recipient has not received any part of the annual exemption.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "marriageGifts",
+          "label": "Marriage/Civil Partnership Gifts",
+          "amounts": {
+            "parent": {
+              "value": 5000,
+              "effectiveFrom": "1981-04-06",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Inheritance Tax Act 1984 s.22",
+              "predecessorValue": null,
+              "notes": "Gift from parent on occasion of marriage/civil partnership"
+            },
+            "grandparent": {
+              "value": 2500,
+              "effectiveFrom": "1981-04-06",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Inheritance Tax Act 1984 s.22",
+              "predecessorValue": null,
+              "notes": "Gift from grandparent or remoter ancestor on occasion of marriage/civil partnership"
+            },
+            "other": {
+              "value": 1000,
+              "effectiveFrom": "1981-04-06",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Inheritance Tax Act 1984 s.22",
+              "predecessorValue": null,
+              "notes": "Gift from any other person on occasion of marriage/civil partnership"
+            }
+          },
+          "description": "Gifts in consideration of marriage or civil partnership. Amount depends on the donor's relationship to the recipient.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "normalExpenditure",
+          "label": "Normal Expenditure out of Income",
+          "amount": null,
+          "description": "Gifts that form part of the donor's normal expenditure, made out of income (not capital), and leave the donor with sufficient income to maintain their standard of living. No monetary limit — must satisfy all three conditions.",
+          "conditions": [
+            "Part of normal expenditure",
+            "Made out of income",
+            "Donor retains sufficient income for standard of living"
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "spouseExemption",
+          "label": "Spouse/Civil Partner Exemption",
+          "amount": {
+            "value": true,
+            "effectiveFrom": "1975-03-13",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Inheritance Tax Act 1984 s.18",
+            "predecessorValue": null,
+            "notes": "Unlimited inter-spouse exemption. For non-UK-domiciled recipient spouse, limited to the NRB (currently £325,000) unless they elect to be treated as UK-domiciled."
+          },
+          "unlimited": true,
+          "description": "Gifts between spouses or civil partners are wholly exempt, provided both are UK-domiciled. Where the recipient is non-UK-domiciled, the exemption is limited to £325,000 (or they may elect to be treated as UK-domiciled).",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "charityExemption",
+          "label": "Charity Exemption",
+          "amount": {
+            "value": true,
+            "effectiveFrom": "1984-07-31",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Inheritance Tax Act 1984 s.23",
+            "predecessorValue": null,
+            "notes": "Unlimited exemption for gifts to qualifying UK charities"
+          },
+          "unlimited": true,
+          "description": "Gifts to qualifying UK charities and registered community amateur sports clubs are wholly exempt.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "politicalParties",
+          "label": "Gifts to Political Parties",
+          "amount": {
+            "value": true,
+            "effectiveFrom": "1984-07-31",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Inheritance Tax Act 1984 s.24",
+            "predecessorValue": null,
+            "notes": "Unlimited exemption for gifts to qualifying political parties"
+          },
+          "unlimited": true,
+          "description": "Gifts to qualifying political parties are exempt, subject to conditions on party qualification.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Inheritance Tax Act 1984, ss. 18–28",
+      "regulatoryBody": "HM Revenue & Customs (HMRC)"
+    },
+    "US": {
+      "name": "United States",
+      "currency": "USD",
+      "lookbackPeriod": {
+        "years": null,
+        "unlimited": true,
+        "description": "There is no lookback period as such — all taxable gifts (those exceeding the annual exclusion) made during the donor's lifetime are cumulated and reduce the unified estate tax exemption. Gifts within 3 years of death are included in the gross estate for certain purposes (e.g., gift tax paid, life insurance transfers)."
+      },
+      "exemptions": [
+        {
+          "type": "annualExclusion",
+          "label": "Annual Gift Tax Exclusion",
+          "amount": [
+            {
+              "value": 18000,
+              "effectiveFrom": "2024-01-01",
+              "effectiveUntil": "2024-12-31",
+              "status": "enacted",
+              "legislativeReference": "IRC § 2503(b); Revenue Procedure 2023-34",
+              "predecessorValue": 17000,
+              "notes": "Per-recipient annual exclusion for 2024. Married couples can gift-split to effectively give $36,000 per recipient."
+            },
+            {
+              "value": 19000,
+              "effectiveFrom": "2025-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "IRC § 2503(b); Revenue Procedure 2024-40",
+              "predecessorValue": 18000,
+              "notes": "Per-recipient annual exclusion for 2025. Indexed for inflation."
+            }
+          ],
+          "perRecipient": true,
+          "perYear": true,
+          "description": "Each donor can give up to the exclusion amount per recipient per year without incurring gift tax or reducing the lifetime exemption. Married couples can 'gift-split' to effectively double the amount per recipient.",
+          "indexedForInflation": true,
+          "giftSplitting": true,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "lifetimeExemption",
+          "label": "Lifetime Gift Tax Exemption",
+          "amount": [
+            {
+              "value": 13610000,
+              "effectiveFrom": "2024-01-01",
+              "effectiveUntil": "2024-12-31",
+              "status": "enacted",
+              "legislativeReference": "IRC § 2505; Revenue Procedure 2023-34",
+              "predecessorValue": 12920000,
+              "notes": "Unified with the estate tax exemption for 2024. Taxable gifts reduce the available estate tax exemption dollar-for-dollar."
+            },
+            {
+              "value": 13990000,
+              "effectiveFrom": "2025-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "IRC § 2505; Revenue Procedure 2024-40",
+              "predecessorValue": 13610000,
+              "notes": "Unified with the estate tax exemption for 2025. The elevated exemption under TCJA is scheduled to sunset after 2025, reverting to approximately $7 million (indexed)."
+            }
+          ],
+          "unifiedWithEstateTax": true,
+          "description": "Unified with the estate tax exemption. Taxable gifts (above the annual exclusion) reduce the available estate tax exemption dollar-for-dollar.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "maritalDeduction",
+          "label": "Unlimited Marital Deduction",
+          "amount": {
+            "value": true,
+            "effectiveFrom": "1982-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "IRC § 2523",
+            "predecessorValue": null,
+            "notes": "Unlimited marital deduction for gifts to US-citizen spouses. For non-citizen spouses, a separate annual exclusion applies."
+          },
+          "unlimited": true,
+          "nonCitizenSpouseLimit": {
+            "value": 185000,
+            "effectiveFrom": "2024-01-01",
+            "effectiveUntil": "2024-12-31",
+            "status": "enacted",
+            "legislativeReference": "IRC § 2523(i); Revenue Procedure 2023-34",
+            "predecessorValue": 175000,
+            "notes": "Annual gift exclusion for non-citizen spouse, 2024. Indexed for inflation."
+          },
+          "description": "Gifts between US-citizen spouses are fully exempt. For gifts to a non-citizen spouse, a higher annual exclusion applies.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "charitableDeduction",
+          "label": "Charitable Gift Deduction",
+          "amount": {
+            "value": true,
+            "effectiveFrom": "1954-08-16",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "IRC § 2522",
+            "predecessorValue": null,
+            "notes": "Unlimited charitable gift deduction"
+          },
+          "unlimited": true,
+          "description": "Gifts to qualifying charitable organisations are fully exempt from gift tax.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "educationExclusion",
+          "label": "Education Exclusion",
+          "amount": {
+            "value": true,
+            "effectiveFrom": "1982-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "IRC § 2503(e)",
+            "predecessorValue": null,
+            "notes": "Unlimited exclusion for tuition payments made directly to the educational institution"
+          },
+          "unlimited": true,
+          "description": "Payments made directly to a qualifying educational institution for tuition are exempt. Does not cover room, board, or books.",
+          "condition": "Payment must be made directly to the institution",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "medicalExclusion",
+          "label": "Medical Exclusion",
+          "amount": {
+            "value": true,
+            "effectiveFrom": "1982-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "IRC § 2503(e)",
+            "predecessorValue": null,
+            "notes": "Unlimited exclusion for medical payments made directly to the provider"
+          },
+          "unlimited": true,
+          "description": "Payments made directly to a medical provider for someone's medical expenses are exempt.",
+          "condition": "Payment must be made directly to the provider",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "529Plan",
+          "label": "529 Plan Superfunding",
+          "amount": [
+            {
+              "value": 90000,
+              "effectiveFrom": "2024-01-01",
+              "effectiveUntil": "2024-12-31",
+              "status": "enacted",
+              "legislativeReference": "IRC § 529(c)(2)(B)",
+              "predecessorValue": 85000,
+              "notes": "5 × $18,000 annual exclusion for 2024"
+            },
+            {
+              "value": 95000,
+              "effectiveFrom": "2025-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "IRC § 529(c)(2)(B)",
+              "predecessorValue": 90000,
+              "notes": "5 × $19,000 annual exclusion for 2025"
+            }
+          ],
+          "description": "A donor may contribute up to 5 years' worth of annual exclusions to a 529 education savings plan in a single year, treated as spread over 5 years for gift tax purposes.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Internal Revenue Code §§ 2503, 2505, 2513, 2522, 2523, 2035",
+      "regulatoryBody": "Internal Revenue Service (IRS)"
+    },
+    "AU": {
+      "name": "Australia",
+      "currency": "AUD",
+      "lookbackPeriod": {
+        "years": null,
+        "description": "No gift tax. However, gifts may be assessed under Centrelink's deprivation rules for social security purposes (5-year lookback, $10,000 per year or $30,000 over 5 years)."
+      },
+      "exemptions": [],
+      "description": "Australia has no gift tax. Gifts are not subject to income tax for the recipient. The gifted asset's cost base transfers for CGT purposes.",
+      "source": "Social Security Act 1991 (Cth), s. 1123; Income Tax Assessment Act 1997 (Cth)",
+      "regulatoryBody": "Australian Taxation Office (ATO)"
+    },
+    "CA": {
+      "name": "Canada",
+      "currency": "CAD",
+      "lookbackPeriod": {
+        "years": null,
+        "description": "No gift tax. However, gifting an asset triggers a deemed disposition at fair market value, potentially creating a capital gain for the donor."
+      },
+      "exemptions": [
+        {
+          "type": "interSpousal",
+          "label": "Inter-spousal transfer rollover",
+          "description": "Gifts between spouses can be transferred at adjusted cost base (rollover), deferring any capital gain. Attribution rules apply — income from the gifted property may be attributed back to the donor.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "description": "Canada has no gift tax per se, but the deemed disposition rules mean the donor may owe capital gains tax. The attribution rules are a key consideration for inter-spousal and minor child gifts.",
+      "source": "Income Tax Act (R.S.C., 1985, c. 1 (5th Supp.)), ss. 73, 74.1–74.5",
+      "regulatoryBody": "Canada Revenue Agency (CRA)"
+    },
+    "FR": {
+      "name": "France",
+      "currency": "EUR",
+      "lookbackPeriod": {
+        "years": {
+          "value": 15,
+          "effectiveFrom": "2012-08-17",
+          "effectiveUntil": null,
+          "status": "enacted",
+          "legislativeReference": "Code général des impôts, Article 784",
+          "predecessorValue": 10,
+          "notes": "Increased from 10 to 15 years by Loi n° 2012-958 du 16 août 2012"
+        },
+        "description": "Gift allowances (abattements) are renewed every 15 years. Gifts made more than 15 years before the donor's death are not aggregated with the estate for succession tax purposes."
+      },
+      "exemptions": [
+        {
+          "type": "directDescendants",
+          "label": "Abattement per child",
+          "amount": {
+            "value": 100000,
+            "effectiveFrom": "2012-08-17",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Code général des impôts, Article 779 I",
+            "predecessorValue": 159325,
+            "notes": "€100,000 per child, renewable every 15 years. Reduced from €159,325 by Loi n° 2012-958."
+          },
+          "renewalPeriod": 15,
+          "description": "€100,000 per child, renewable every 15 years.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "grandchildren",
+          "label": "Abattement per grandchild",
+          "amount": {
+            "value": 31865,
+            "effectiveFrom": "2012-08-17",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Code général des impôts, Article 779 IV",
+            "predecessorValue": null,
+            "notes": "Per-grandchild allowance, renewable every 15 years"
+          },
+          "renewalPeriod": 15,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "donsExceptionnels",
+          "label": "Dons exceptionnels de sommes d'argent",
+          "amount": {
+            "value": 31865,
+            "effectiveFrom": "2006-06-23",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Code général des impôts, Article 790G",
+            "predecessorValue": null,
+            "notes": "Additional exemption for cash gifts. Donor must be under 80, recipient must be over 18."
+          },
+          "description": "Additional exemption for cash gifts to children, grandchildren, or great-grandchildren, provided the donor is under 80 and the recipient is over 18.",
+          "conditions": [
+            "Donor under 80",
+            "Recipient over 18",
+            "Cash gifts only"
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Code général des impôts, Articles 779, 784, 790G",
+      "regulatoryBody": "Direction générale des finances publiques (DGFiP)"
+    },
+    "DE": {
+      "name": "Germany",
+      "currency": "EUR",
+      "lookbackPeriod": {
+        "years": {
+          "value": 10,
+          "effectiveFrom": "1974-04-01",
+          "effectiveUntil": null,
+          "status": "enacted",
+          "legislativeReference": "ErbStG § 14",
+          "predecessorValue": null,
+          "notes": "Gift tax allowances renew every 10 years"
+        },
+        "description": "Gift tax allowances renew every 10 years. Gifts made more than 10 years before the donor's death are not aggregated with the estate."
+      },
+      "exemptions": [
+        {
+          "type": "spouse",
+          "label": "Spouse/civil partner allowance",
+          "amount": {
+            "value": 500000,
+            "effectiveFrom": "2009-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "ErbStG § 16 Abs. 1 Nr. 1",
+            "predecessorValue": 307000,
+            "notes": "Increased from €307,000 by the 2009 reform"
+          },
+          "renewalPeriod": 10,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "children",
+          "label": "Per-child allowance",
+          "amount": {
+            "value": 400000,
+            "effectiveFrom": "2009-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "ErbStG § 16 Abs. 1 Nr. 2",
+            "predecessorValue": 205000,
+            "notes": "Increased from €205,000 by the 2009 reform"
+          },
+          "renewalPeriod": 10,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "grandchildren",
+          "label": "Per-grandchild allowance",
+          "amount": {
+            "value": 200000,
+            "effectiveFrom": "2009-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "ErbStG § 16 Abs. 1 Nr. 3",
+            "predecessorValue": 51200,
+            "notes": "Increased from €51,200 by the 2009 reform"
+          },
+          "renewalPeriod": 10,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "description": "German gift tax (Schenkungsteuer) uses the same allowances and rates as inheritance tax. Strategic gifting every 10 years can significantly reduce the overall tax burden.",
+      "source": "Erbschaftsteuer- und Schenkungsteuergesetz (ErbStG), §§ 14–16",
+      "regulatoryBody": "Bundeszentralamt für Steuern"
+    },
+    "IN": {
+      "name": "India",
+      "currency": "INR",
+      "lookbackPeriod": {
+        "years": null,
+        "description": "No lookback period for gifts. Gifts are taxed in the recipient's hands under income tax if they exceed thresholds, but gifts from specified relatives are always exempt."
+      },
+      "exemptions": [
+        {
+          "type": "relativeGifts",
+          "label": "Gifts from specified relatives",
+          "amount": {
+            "value": true,
+            "effectiveFrom": "2004-09-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Income Tax Act 1961, s. 56(2)(x)",
+            "predecessorValue": null,
+            "notes": "Unlimited exemption for gifts from specified relatives (spouse, siblings, lineal ascendants/descendants, and certain in-laws)"
+          },
+          "unlimited": true,
+          "description": "Gifts from specified relatives (spouse, siblings, lineal ascendants/descendants, and certain in-laws) are fully exempt regardless of amount.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "generalThreshold",
+          "label": "General gift threshold",
+          "amount": {
+            "value": 50000,
+            "effectiveFrom": "2004-09-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Income Tax Act 1961, s. 56(2)(x)",
+            "predecessorValue": null,
+            "notes": "Aggregate gifts from non-relatives below ₹50,000 in a financial year are exempt. If total exceeds ₹50,000, the entire amount is taxable."
+          },
+          "description": "Aggregate gifts from non-relatives below ₹50,000 in a financial year are exempt. If total gifts exceed ₹50,000, the entire amount is taxable.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "marriageGifts",
+          "label": "Gifts on occasion of marriage",
+          "amount": {
+            "value": true,
+            "effectiveFrom": "2004-09-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Income Tax Act 1961, s. 56(2)(x) proviso (ii)",
+            "predecessorValue": null,
+            "notes": "Unlimited exemption for gifts received on the occasion of marriage"
+          },
+          "unlimited": true,
+          "description": "Gifts received on the occasion of marriage are fully exempt.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "inheritance",
+          "label": "Gifts by way of inheritance",
+          "amount": {
+            "value": true,
+            "effectiveFrom": "2004-09-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Income Tax Act 1961, s. 56(2)(x) proviso (iii)",
+            "predecessorValue": null,
+            "notes": "Unlimited exemption for property received by way of inheritance or under a will"
+          },
+          "unlimited": true,
+          "description": "Property received by way of inheritance or under a will is exempt.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Income Tax Act 1961, s. 56(2)(x)",
+      "regulatoryBody": "Central Board of Direct Taxes (CBDT)"
+    },
+    "JP": {
+      "name": "Japan",
+      "currency": "JPY",
+      "lookbackPeriod": {
+        "years": [
+          {
+            "value": 3,
+            "effectiveFrom": "1958-01-01",
+            "effectiveUntil": "2023-12-31",
+            "status": "enacted",
+            "legislativeReference": "Sōzokuzei-hō (相続税法), Article 19",
+            "predecessorValue": null,
+            "notes": "Original 3-year lookback period for gifts added to estate"
+          },
+          {
+            "value": 7,
+            "effectiveFrom": "2024-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Sōzokuzei-hō (相続税法), Article 19 (as amended 2023)",
+            "predecessorValue": 3,
+            "notes": "Extended from 3 to 7 years. Phased in from 2024 to 2031 — transitional rules apply."
+          }
+        ],
+        "description": "Gifts made within 7 years of death (extended from 3 years in 2024) are added back to the estate for inheritance tax purposes. Transitional rules apply: the 7-year period is phased in from 2024 to 2031."
+      },
+      "exemptions": [
+        {
+          "type": "annualExclusion",
+          "label": "Annual gift tax exclusion",
+          "amount": {
+            "value": 1100000,
+            "effectiveFrom": "2001-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Sōzokuzei-hō (相続税法), Article 21-5",
+            "predecessorValue": 600000,
+            "notes": "Per-recipient annual exclusion (aggregate from all donors). Increased from ¥600,000."
+          },
+          "perRecipient": false,
+          "perYear": true,
+          "description": "Each recipient can receive up to ¥1,100,000 per year tax-free (aggregate from all donors).",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "educationFund",
+          "label": "Education fund gift exemption",
+          "amount": {
+            "value": 15000000,
+            "effectiveFrom": "2013-04-01",
+            "effectiveUntil": "2026-03-31",
+            "status": "enacted",
+            "legislativeReference": "Sozei Tokubetsu Sochi-hō (租税特別措置法), Article 70-2-2",
+            "predecessorValue": null,
+            "notes": "One-off exemption for education gifts via designated trust account. Recipient must be under 30. Expires 31 March 2026."
+          },
+          "description": "One-off exemption for gifts to a child or grandchild under 30 for education expenses, via a designated trust account. Expires 31 March 2026.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "marriageChildcare",
+          "label": "Marriage/childcare fund gift exemption",
+          "amount": {
+            "value": 10000000,
+            "effectiveFrom": "2015-04-01",
+            "effectiveUntil": "2025-03-31",
+            "status": "enacted",
+            "legislativeReference": "Sozei Tokubetsu Sochi-hō (租税特別措置法), Article 70-2-3",
+            "predecessorValue": null,
+            "notes": "One-off exemption for marriage/childcare gifts. Recipient must be aged 18–49. Expired 31 March 2025."
+          },
+          "description": "One-off exemption for gifts to a child or grandchild aged 18–49 for marriage or childcare expenses. Expires 31 March 2025.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "settlementTaxation",
+          "label": "Settlement taxation (相続時精算課税)",
+          "description": "Elective system for gifts from parents/grandparents (aged 60+) to children/grandchildren (aged 18+). Provides a lifetime exemption with excess taxed at 20%, but all gifts are added back to the estate on death. From 2024, includes an annual ¥1,100,000 exclusion within this system.",
+          "lifetimeExemption": {
+            "value": 25000000,
+            "effectiveFrom": "2003-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Sōzokuzei-hō (相続税法), Article 21-12",
+            "predecessorValue": null,
+            "notes": "Lifetime exemption under the settlement taxation system"
+          },
+          "annualExclusion": {
+            "value": 1100000,
+            "effectiveFrom": "2024-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Sōzokuzei-hō (相続税法), Article 21-11-2 (as amended 2023)",
+            "predecessorValue": null,
+            "notes": "New annual exclusion within settlement taxation system, introduced from 2024"
+          },
+          "rateOnExcess": {
+            "value": 20,
+            "effectiveFrom": "2003-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Sōzokuzei-hō (相続税法), Article 21-13",
+            "predecessorValue": null,
+            "notes": "Flat 20% rate on amounts exceeding the lifetime exemption"
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Sōzokuzei-hō (相続税法), Articles 19, 21-9 to 21-18; Sozei Tokubetsu Sochi-hō (租税特別措置法)",
+      "regulatoryBody": "National Tax Agency (国税庁)"
+    },
+    "SG": {
+      "name": "Singapore",
+      "currency": "SGD",
+      "lookbackPeriod": {
+        "years": null,
+        "description": "No estate duty or gift tax."
+      },
+      "exemptions": [],
+      "description": "Singapore has no gift tax, estate duty, or capital gains tax. Gifts are not taxable for either the donor or the recipient.",
+      "source": "Estate Duty (Abolition) Act 2008",
+      "regulatoryBody": "Inland Revenue Authority of Singapore (IRAS)"
+    },
+    "IE": {
+      "name": "Ireland",
+      "currency": "EUR",
+      "lookbackPeriod": {
+        "years": null,
+        "lifetime": true,
+        "description": "All gifts and inheritances within the same group threshold are aggregated over the recipient's lifetime. There is no time-based lookback — the lifetime threshold is cumulative."
+      },
+      "exemptions": [
+        {
+          "type": "smallGift",
+          "label": "Small Gift Exemption",
+          "amount": {
+            "value": 3000,
+            "effectiveFrom": "2003-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Capital Acquisitions Tax Consolidation Act 2003, s. 69",
+            "predecessorValue": null,
+            "notes": "Per-donor, per-year small gift exemption. Does not count towards the lifetime threshold."
+          },
+          "perDonor": true,
+          "perYear": true,
+          "description": "Each person can receive gifts up to €3,000 from each donor per year without it counting towards the lifetime threshold.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "spouseExemption",
+          "label": "Spouse/Civil Partner Exemption",
+          "amount": {
+            "value": true,
+            "effectiveFrom": "2003-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Capital Acquisitions Tax Consolidation Act 2003, s. 70",
+            "predecessorValue": null,
+            "notes": "Unlimited exemption for gifts and inheritances between spouses or civil partners"
+          },
+          "unlimited": true,
+          "description": "Gifts and inheritances between spouses or civil partners are fully exempt.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "dwellingHouseExemption",
+          "label": "Dwelling House Exemption",
+          "description": "Inheritance of a dwelling house may be exempt if the beneficiary occupied it as their principal private residence for 3 years before the inheritance and does not own another property.",
+          "conditions": [
+            "Beneficiary lived in the property for 3 years prior",
+            "Beneficiary does not own another residential property",
+            "Beneficiary continues to live in the property for 6 years after"
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Capital Acquisitions Tax Consolidation Act 2003, ss. 69, 70, 86",
+      "regulatoryBody": "Revenue Commissioners"
+    },
+    "NZ": {
+      "name": "New Zealand",
+      "currency": "NZD",
+      "lookbackPeriod": {
+        "years": null,
+        "description": "No gift tax (abolished 2011) and no estate tax."
+      },
+      "exemptions": [],
+      "description": "New Zealand has no gift duty (abolished 1 October 2011), no estate tax, and no general capital gains tax.",
+      "source": "Taxation (Tax Administration and Remedial Matters) Act 2011",
+      "regulatoryBody": "Inland Revenue (Te Tari Taake)"
+    }
+  }
+}

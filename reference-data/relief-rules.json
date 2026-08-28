@@ -1,0 +1,938 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/reference-data/relief-rules.json",
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal or tax advice. Tax laws change frequently — always verify with current legislation and qualified professionals. Data current as of March 2026.",
+  "title": "Tax Reliefs & Deductions",
+  "description": "Inheritance and estate tax reliefs, deductions, and exemptions by jurisdiction, including conditions, limitations, and qualifying criteria.",
+  "lastUpdated": "2026-03-30",
+  "_metadata": {
+    "lastVerified": "2026-04-06",
+    "source": "HMRC Business Property Relief and Agricultural Property Relief guidance",
+    "jurisdiction": "GB",
+    "disclaimer": "This data is provided for interoperability purposes. It does not constitute legal, tax, or financial advice. Users must verify independently before relying on these figures for official purposes.",
+    "deprecationPattern": "Individual entries within this file may carry deprecated: true, deprecatedAt, deprecatedReason, and supersededBy fields. Deprecated entries are retained for historical reference and audit trail purposes. Applications should filter to non-deprecated entries for current data.",
+    "deprecated": false,
+    "deprecatedAt": null,
+    "deprecatedReason": null,
+    "supersededBy": null
+  },
+  "jurisdictions": {
+    "GB": {
+      "name": "United Kingdom",
+      "currency": "GBP",
+      "reliefs": [
+        {
+          "type": "businessPropertyRelief",
+          "label": "Business Property Relief (BPR)",
+          "rates": [
+            {
+              "rate": {
+                "value": 100,
+                "effectiveFrom": "1992-03-10",
+                "effectiveUntil": "2026-04-05",
+                "status": "enacted",
+                "legislativeReference": "Inheritance Tax Act 1984 s.104",
+                "predecessorValue": 50,
+                "notes": "100% relief on unquoted shares and business interests. From April 2026, subject to new £1,000,000 combined APR/BPR cap at 100%, with 50% on excess."
+              },
+              "appliesTo": [
+                "Unquoted shares",
+                "Business or interest in a business",
+                "Land, buildings, or machinery used in the business (owned by a partner or controlling shareholder)"
+              ]
+            },
+            {
+              "rate": {
+                "value": 100,
+                "effectiveFrom": "2026-04-06",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "Finance Act 2025 (Autumn Budget 2024 measures)",
+                "predecessorValue": 100,
+                "notes": "100% relief continues but only on the first £1,000,000 of combined APR/BPR qualifying assets. 50% relief applies above this threshold. AIM-listed shares reduced to 50% relief."
+              },
+              "appliesTo": [
+                "Unquoted shares (first £1,000,000 combined with APR)",
+                "Business or interest in a business"
+              ]
+            },
+            {
+              "rate": {
+                "value": 50,
+                "effectiveFrom": "1992-03-10",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "Inheritance Tax Act 1984 s.104",
+                "predecessorValue": null,
+                "notes": "50% relief rate for controlling quoted shareholdings and personally-owned business assets"
+              },
+              "appliesTo": [
+                "Quoted shares giving control (>50%)",
+                "Land, buildings, or machinery used in the business (owned personally and used by a partnership/company the deceased controlled)"
+              ]
+            }
+          ],
+          "minimumOwnership": "2 years",
+          "exclusions": [
+            "Investment companies",
+            "Companies dealing in securities, stocks, shares, land, or buildings",
+            "Companies making or holding investments"
+          ],
+          "note": "From April 2026, the government has enacted reforms to BPR for AIM-listed shares (reducing relief from 100% to 50%) and a £1,000,000 cap on combined APR/BPR at 100%, with 50% relief above this threshold.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "agriculturalPropertyRelief",
+          "label": "Agricultural Property Relief (APR)",
+          "rates": [
+            {
+              "rate": {
+                "value": 100,
+                "effectiveFrom": "1992-09-01",
+                "effectiveUntil": "2026-04-05",
+                "status": "enacted",
+                "legislativeReference": "Inheritance Tax Act 1984 s.116(2)",
+                "predecessorValue": 50,
+                "notes": "100% relief for agricultural property with vacant possession or post-1995 tenancies. Subject to reform from April 2026."
+              },
+              "appliesTo": [
+                "Agricultural property with vacant possession or right to obtain it within 24 months",
+                "Let agricultural property on tenancies beginning on or after 1 September 1995"
+              ]
+            },
+            {
+              "rate": {
+                "value": 100,
+                "effectiveFrom": "2026-04-06",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "Finance Act 2025 (Autumn Budget 2024 measures)",
+                "predecessorValue": 100,
+                "notes": "100% relief continues but only on the first £1,000,000 of combined APR/BPR qualifying assets. 50% relief applies above this threshold."
+              },
+              "appliesTo": [
+                "Agricultural property (first £1,000,000 combined with BPR)"
+              ]
+            },
+            {
+              "rate": {
+                "value": 50,
+                "effectiveFrom": "1984-03-15",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "Inheritance Tax Act 1984 s.116(3)",
+                "predecessorValue": null,
+                "notes": "50% relief for pre-September 1995 tenancies. Also applies above the £1,000,000 combined APR/BPR cap from April 2026."
+              },
+              "appliesTo": [
+                "Let agricultural property on tenancies beginning before 1 September 1995"
+              ]
+            }
+          ],
+          "minimumOwnership": "2 years (owner-occupied) or 7 years (let)",
+          "definition": "Agricultural property means agricultural land or pasture, including woodland and buildings used in connection with the intensive rearing of livestock or fish, cottages, farm buildings, and farmhouses.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "spouseExemption",
+          "label": "Spouse/Civil Partner Exemption",
+          "rate": {
+            "value": 100,
+            "effectiveFrom": "1975-03-13",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Inheritance Tax Act 1984 s.18",
+            "predecessorValue": null,
+            "notes": "Unlimited inter-spouse/civil partner exemption"
+          },
+          "unlimited": true,
+          "description": "Transfers between spouses or civil partners are wholly exempt from IHT, whether made during lifetime or on death.",
+          "nonDomicileLimit": {
+            "value": 325000,
+            "effectiveFrom": "2013-04-06",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Inheritance Tax Act 1984 s.18(2)",
+            "predecessorValue": null,
+            "notes": "Limit for non-UK-domiciled recipient spouse, equal to the nil-rate band. Recipient may elect to be treated as UK-domiciled."
+          },
+          "nonDomicileNote": "Where the recipient spouse is non-UK-domiciled, the exemption is limited to £325,000 unless the recipient elects to be treated as UK-domiciled for IHT purposes.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "charityExemption",
+          "label": "Charity Exemption",
+          "rate": {
+            "value": 100,
+            "effectiveFrom": "1984-07-31",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Inheritance Tax Act 1984 s.23",
+            "predecessorValue": null,
+            "notes": "Unlimited exemption for gifts to qualifying UK charities"
+          },
+          "unlimited": true,
+          "description": "Gifts to qualifying UK charities and registered community amateur sports clubs are wholly exempt from IHT.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "woodlandsRelief",
+          "label": "Woodlands Relief",
+          "description": "IHT on the value of timber (not the land) can be deferred until the timber is sold or otherwise disposed of. The land itself may qualify for APR.",
+          "deferral": {
+            "value": true,
+            "effectiveFrom": "1984-07-31",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Inheritance Tax Act 1984 ss.125–130",
+            "predecessorValue": null,
+            "notes": "Deferral of IHT on timber value until disposal"
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "quickSuccessionRelief",
+          "label": "Quick Succession Relief",
+          "description": "Where the same property is taxed twice within 5 years (because the first recipient dies shortly after inheriting), relief is given as a percentage of the tax paid on the first death.",
+          "bands": [
+            {
+              "years": "0–1",
+              "reliefPercent": {
+                "value": 100,
+                "effectiveFrom": "1984-07-31",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "Inheritance Tax Act 1984 s.141",
+                "predecessorValue": null,
+                "notes": "100% relief where second death occurs within 1 year"
+              }
+            },
+            {
+              "years": "1–2",
+              "reliefPercent": {
+                "value": 80,
+                "effectiveFrom": "1984-07-31",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "Inheritance Tax Act 1984 s.141",
+                "predecessorValue": null,
+                "notes": "80% relief where second death occurs 1–2 years after first"
+              }
+            },
+            {
+              "years": "2–3",
+              "reliefPercent": {
+                "value": 60,
+                "effectiveFrom": "1984-07-31",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "Inheritance Tax Act 1984 s.141",
+                "predecessorValue": null,
+                "notes": "60% relief where second death occurs 2–3 years after first"
+              }
+            },
+            {
+              "years": "3–4",
+              "reliefPercent": {
+                "value": 40,
+                "effectiveFrom": "1984-07-31",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "Inheritance Tax Act 1984 s.141",
+                "predecessorValue": null,
+                "notes": "40% relief where second death occurs 3–4 years after first"
+              }
+            },
+            {
+              "years": "4–5",
+              "reliefPercent": {
+                "value": 20,
+                "effectiveFrom": "1984-07-31",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "Inheritance Tax Act 1984 s.141",
+                "predecessorValue": null,
+                "notes": "20% relief where second death occurs 4–5 years after first"
+              }
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "heritageRelief",
+          "label": "Heritage Property Exemption",
+          "description": "Conditionally exempt for property of national, scientific, historic, or artistic interest, subject to undertakings regarding public access and maintenance.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Inheritance Tax Act 1984, ss. 18, 23–28, 103–124C, 125–130; Finance Act 2024",
+      "regulatoryBody": "HM Revenue & Customs (HMRC)"
+    },
+    "US": {
+      "name": "United States",
+      "currency": "USD",
+      "reliefs": [
+        {
+          "type": "unlimitedMaritalDeduction",
+          "label": "Unlimited Marital Deduction",
+          "rate": {
+            "value": 100,
+            "effectiveFrom": "1982-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "IRC § 2056",
+            "predecessorValue": null,
+            "notes": "Unlimited marital deduction for property passing to a surviving US-citizen spouse. Economic Recovery Tax Act of 1981."
+          },
+          "unlimited": true,
+          "description": "Property passing to a surviving spouse who is a US citizen is fully deductible from the gross estate. For non-citizen spouses, a Qualified Domestic Trust (QDOT) is required to claim the deduction.",
+          "nonCitizenRequirement": "Qualified Domestic Trust (QDOT)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "charitableDeduction",
+          "label": "Charitable Deduction",
+          "rate": {
+            "value": 100,
+            "effectiveFrom": "1954-08-16",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "IRC § 2055",
+            "predecessorValue": null,
+            "notes": "Unlimited charitable deduction from the gross estate"
+          },
+          "unlimited": true,
+          "description": "Bequests to qualifying charitable organisations are fully deductible from the gross estate.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "qualifiedFamilyOwnedBusinessInterest",
+          "label": "Qualified Family-Owned Business Interest (QFOBI) Deduction — §2057",
+          "description": "Allowed an additional deduction for qualifying family-owned business interests. Note: this provision was effectively repealed by the Economic Growth and Tax Relief Reconciliation Act of 2001 (EGTRRA) for estates of decedents dying after 2003, as the increased unified credit makes it redundant. Included for historical reference.",
+          "status": "effectively repealed",
+          "repealedBy": "EGTRRA 2001",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "specialUseValuation",
+          "label": "Special Use Valuation (IRC § 2032A)",
+          "description": "Allows qualifying real property used in farming or closely held business to be valued at its current use value rather than highest and best use value.",
+          "maximumReduction": [
+            {
+              "value": 1390000,
+              "effectiveFrom": "2024-01-01",
+              "effectiveUntil": "2024-12-31",
+              "status": "enacted",
+              "legislativeReference": "IRC § 2032A(a)(2); Revenue Procedure 2023-34",
+              "predecessorValue": 1310000,
+              "notes": "Maximum reduction in value for 2024. Indexed for inflation."
+            },
+            {
+              "value": 1430000,
+              "effectiveFrom": "2025-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "IRC § 2032A(a)(2); Revenue Procedure 2024-40",
+              "predecessorValue": 1390000,
+              "notes": "Maximum reduction in value for 2025. Indexed for inflation."
+            }
+          ],
+          "conditions": [
+            "Real property used in farming or closely held business",
+            "Property must pass to qualified heir",
+            "Decedent or family member must have used property for 5 of 8 years preceding death",
+            "Property must continue in qualifying use for 10 years after death (recapture rules apply)"
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "deferredPayment",
+          "label": "Deferred Payment of Estate Tax (IRC § 6166)",
+          "description": "Estates with closely held business interests exceeding 35% of the adjusted gross estate may defer estate tax payments for up to 14 years (5-year deferral of principal, then 10 annual instalments).",
+          "deferralPeriod": {
+            "value": "Up to 14 years",
+            "effectiveFrom": "1976-10-04",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "IRC § 6166",
+            "predecessorValue": null,
+            "notes": "5-year deferral of principal, then 10 annual instalments. Interest-only payments during deferral at a reduced 2% rate on the first portion of deferred tax."
+          },
+          "threshold": "Business interest > 35% of adjusted gross estate",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "stateDeathTaxDeduction",
+          "label": "State Death Tax Deduction (IRC § 2058)",
+          "description": "Estate taxes paid to state governments are deductible from the federal gross estate.",
+          "rate": {
+            "value": 100,
+            "effectiveFrom": "2005-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "IRC § 2058",
+            "predecessorValue": null,
+            "notes": "Replaced the state death tax credit (§ 2011) from 2005. Full deduction for state estate taxes paid."
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "administrationExpenses",
+          "label": "Administration Expenses and Debts Deduction",
+          "description": "Funeral expenses, administration costs, debts of the decedent, and certain unpaid mortgages are deductible from the gross estate.",
+          "source": "IRC §§ 2053, 2054",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Internal Revenue Code §§ 2053–2058, 2032A, 2056, 6166",
+      "regulatoryBody": "Internal Revenue Service (IRS)"
+    },
+    "AU": {
+      "name": "Australia",
+      "reliefs": [],
+      "description": "No inheritance tax, therefore no specific reliefs. CGT rollover relief is available for assets transferred to beneficiaries from a deceased estate — the beneficiary inherits the deceased's cost base and acquisition date.",
+      "source": "Income Tax Assessment Act 1997 (Cth), Subdivision 128-A",
+      "regulatoryBody": "Australian Taxation Office (ATO)"
+    },
+    "CA": {
+      "name": "Canada",
+      "currency": "CAD",
+      "reliefs": [
+        {
+          "type": "spousalRollover",
+          "label": "Spousal Rollover",
+          "description": "Assets transferred to a surviving spouse or common-law partner on death are deemed to be disposed of at the deceased's adjusted cost base, deferring any capital gain until the surviving spouse disposes of the asset or dies.",
+          "rate": {
+            "value": true,
+            "effectiveFrom": "1972-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Income Tax Act (R.S.C., 1985, c. 1 (5th Supp.)), s. 70(6)",
+            "predecessorValue": null,
+            "notes": "Automatic rollover at adjusted cost base to surviving spouse"
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "principalResidence",
+          "label": "Principal Residence Exemption",
+          "description": "Capital gains on a principal residence are exempt from tax on deemed disposition at death.",
+          "rate": {
+            "value": 100,
+            "effectiveFrom": "1972-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Income Tax Act (R.S.C., 1985, c. 1 (5th Supp.)), s. 40(2)(b)",
+            "predecessorValue": null,
+            "notes": "Full exemption from capital gains on principal residence"
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "qualifiedFarmProperty",
+          "label": "Qualified Farm or Fishing Property",
+          "description": "Eligible farm or fishing property can be transferred to a child at the deceased's adjusted cost base. Lifetime capital gains exemption available.",
+          "lifetimeExemption": {
+            "value": 1250000,
+            "effectiveFrom": "2024-06-25",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Income Tax Act (R.S.C., 1985, c. 1 (5th Supp.)), s. 110.6; Budget 2024",
+            "predecessorValue": 1016836,
+            "notes": "Increased to $1,250,000 by Budget 2024. Previously indexed for inflation."
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "qualifiedSmallBusinessShares",
+          "label": "Qualified Small Business Corporation Shares",
+          "description": "Lifetime capital gains exemption on qualifying small business corporation shares.",
+          "lifetimeExemption": {
+            "value": 1250000,
+            "effectiveFrom": "2024-06-25",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Income Tax Act (R.S.C., 1985, c. 1 (5th Supp.)), s. 110.6; Budget 2024",
+            "predecessorValue": 1016836,
+            "notes": "Increased to $1,250,000 by Budget 2024. Previously indexed for inflation."
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Income Tax Act (R.S.C., 1985, c. 1 (5th Supp.)), ss. 40(2)(b), 70(6), 73, 110.6",
+      "regulatoryBody": "Canada Revenue Agency (CRA)"
+    },
+    "FR": {
+      "name": "France",
+      "currency": "EUR",
+      "reliefs": [
+        {
+          "type": "spouseExemption",
+          "label": "Spouse/PACS Partner Exemption",
+          "rate": {
+            "value": 100,
+            "effectiveFrom": "2007-08-22",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Code général des impôts, Article 796-0 bis (Loi TEPA 2007)",
+            "predecessorValue": null,
+            "notes": "Full exemption for surviving spouse/PACS partner, introduced by Loi TEPA (Loi n° 2007-1223)"
+          },
+          "unlimited": true,
+          "description": "Surviving spouse or PACS partner is fully exempt from succession tax.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "lifeInsurance",
+          "label": "Life Insurance (Assurance-vie)",
+          "description": "Life insurance proceeds benefit from a separate tax regime. Premiums paid before age 70: per-beneficiary exemption, then 20% up to €700,000 and 31.25% above. Premiums paid after age 70: global exemption, then subject to succession tax.",
+          "thresholdBefore70": {
+            "value": 152500,
+            "effectiveFrom": "1998-11-13",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Code général des impôts, Article 990 I",
+            "predecessorValue": null,
+            "notes": "€152,500 per beneficiary exempt for premiums paid before donor turned 70"
+          },
+          "thresholdAfter70": {
+            "value": 30500,
+            "effectiveFrom": "1998-11-13",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Code général des impôts, Article 757 B",
+            "predecessorValue": null,
+            "notes": "€30,500 global exemption for premiums paid after donor turned 70"
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "pacteduval",
+          "label": "Pacte Dutreil — Business Transmission Relief",
+          "rate": {
+            "value": 75,
+            "effectiveFrom": "2000-06-14",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Code général des impôts, Article 787 B",
+            "predecessorValue": null,
+            "notes": "75% exemption on value of business interests subject to collective and individual holding commitments"
+          },
+          "description": "75% exemption on the value of business interests (shares or sole trader businesses) subject to a collective commitment to hold the shares for at least 2 years and individual commitment for at least 4 years after.",
+          "conditions": [
+            "Collective holding commitment of 2 years",
+            "Individual holding commitment of 4 years",
+            "One beneficiary must exercise a management function for 3 years"
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Code général des impôts, Articles 757B, 787B, 790A, 796-0",
+      "regulatoryBody": "Direction générale des finances publiques (DGFiP)"
+    },
+    "DE": {
+      "name": "Germany",
+      "currency": "EUR",
+      "reliefs": [
+        {
+          "type": "familyHome",
+          "label": "Family Home Exemption",
+          "description": "The family home is exempt from inheritance tax if inherited by the surviving spouse or children (for children, limited to 200 m² living space), provided the heir continues to use it as their main residence for 10 years.",
+          "condition": "Continued residence for 10 years",
+          "childSizeLimit": "200 m²",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "businessPropertyRelief",
+          "label": "Business Asset Exemption (Regelverschonung / Optionsverschonung)",
+          "rates": [
+            {
+              "scheme": "Regelverschonung",
+              "rate": {
+                "value": 85,
+                "effectiveFrom": "2009-01-01",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "ErbStG § 13a Abs. 1",
+                "predecessorValue": null,
+                "notes": "Standard option: 85% exemption with 5-year holding period and 400% payroll maintenance"
+              },
+              "holdingPeriod": "5 years",
+              "payrollRequirement": "400% of average payroll maintained over 5 years",
+              "adminAssetLimit": "90% (business must not consist of more than 90% administrative assets)"
+            },
+            {
+              "scheme": "Optionsverschonung",
+              "rate": {
+                "value": 100,
+                "effectiveFrom": "2009-01-01",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "ErbStG § 13a Abs. 10",
+                "predecessorValue": null,
+                "notes": "Full exemption option: 100% exemption with 7-year holding period and 700% payroll maintenance"
+              },
+              "holdingPeriod": "7 years",
+              "payrollRequirement": "700% of average payroll maintained over 7 years",
+              "adminAssetLimit": "20%"
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "pensionExemption",
+          "label": "Pension/Maintenance Allowance (Versorgungsfreibetrag)",
+          "description": "Additional tax-free allowance for the surviving spouse and children (age-dependent), reduced by the present value of any pension or annuity rights.",
+          "spouseAmount": {
+            "value": 256000,
+            "effectiveFrom": "2009-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "ErbStG § 17 Abs. 1",
+            "predecessorValue": null,
+            "notes": "Pension/maintenance allowance for surviving spouse"
+          },
+          "childAmounts": [
+            {
+              "ageUnder": 5,
+              "amount": {
+                "value": 52000,
+                "effectiveFrom": "2009-01-01",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "ErbStG § 17 Abs. 2",
+                "predecessorValue": null,
+                "notes": "Pension/maintenance allowance for child under 5"
+              }
+            },
+            {
+              "ageUnder": 10,
+              "amount": {
+                "value": 41000,
+                "effectiveFrom": "2009-01-01",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "ErbStG § 17 Abs. 2",
+                "predecessorValue": null,
+                "notes": "Pension/maintenance allowance for child aged 5–9"
+              }
+            },
+            {
+              "ageUnder": 15,
+              "amount": {
+                "value": 30700,
+                "effectiveFrom": "2009-01-01",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "ErbStG § 17 Abs. 2",
+                "predecessorValue": null,
+                "notes": "Pension/maintenance allowance for child aged 10–14"
+              }
+            },
+            {
+              "ageUnder": 20,
+              "amount": {
+                "value": 20500,
+                "effectiveFrom": "2009-01-01",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "ErbStG § 17 Abs. 2",
+                "predecessorValue": null,
+                "notes": "Pension/maintenance allowance for child aged 15–19"
+              }
+            },
+            {
+              "ageUnder": 27,
+              "amount": {
+                "value": 10300,
+                "effectiveFrom": "2009-01-01",
+                "effectiveUntil": null,
+                "status": "enacted",
+                "legislativeReference": "ErbStG § 17 Abs. 2",
+                "predecessorValue": null,
+                "notes": "Pension/maintenance allowance for child aged 20–26"
+              }
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Erbschaftsteuer- und Schenkungsteuergesetz (ErbStG), §§ 13, 13a, 13b, 13c, 17",
+      "regulatoryBody": "Bundeszentralamt für Steuern"
+    },
+    "IN": {
+      "name": "India",
+      "reliefs": [],
+      "description": "No inheritance or estate tax — no reliefs required. Income from inherited assets is taxed under normal income tax provisions.",
+      "source": "Income Tax Act 1961",
+      "regulatoryBody": "Central Board of Direct Taxes (CBDT)"
+    },
+    "JP": {
+      "name": "Japan",
+      "currency": "JPY",
+      "reliefs": [
+        {
+          "type": "spouseDeduction",
+          "label": "Spouse Tax Credit",
+          "description": "The surviving spouse pays no inheritance tax on the greater of ¥160,000,000 or their statutory share of the estate (typically one-half).",
+          "amount": {
+            "value": 160000000,
+            "effectiveFrom": "1988-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Sōzokuzei-hō (相続税法), Article 19-2",
+            "predecessorValue": null,
+            "notes": "Minimum spouse tax credit — the actual credit is the greater of ¥160,000,000 or the spouse's statutory share"
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "minorDeduction",
+          "label": "Minor's Deduction",
+          "description": "Heirs under 18 receive a deduction per year until they reach age 18.",
+          "perYear": {
+            "value": 100000,
+            "effectiveFrom": "2022-04-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Sōzokuzei-hō (相続税法), Article 19-3",
+            "predecessorValue": null,
+            "notes": "¥100,000 per year until age 18. Age of majority changed from 20 to 18 in April 2022."
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "disabledDeduction",
+          "label": "Disabled Person's Deduction",
+          "description": "Disabled heirs receive a deduction per year until age 85.",
+          "amounts": {
+            "standard": {
+              "value": 100000,
+              "effectiveFrom": "1988-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Sōzokuzei-hō (相続税法), Article 19-4",
+              "predecessorValue": null,
+              "notes": "Standard disabled person's deduction per year until age 85"
+            },
+            "severe": {
+              "value": 200000,
+              "effectiveFrom": "1988-01-01",
+              "effectiveUntil": null,
+              "status": "enacted",
+              "legislativeReference": "Sōzokuzei-hō (相続税法), Article 19-4",
+              "predecessorValue": null,
+              "notes": "Severely disabled person's deduction per year until age 85"
+            }
+          },
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "smallResidenceLand",
+          "label": "Small-scale Residential Land Reduction",
+          "description": "Reduction in assessed value for qualifying residential land and business-use land.",
+          "residentialRate": {
+            "value": 80,
+            "effectiveFrom": "2015-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Sozei Tokubetsu Sochi-hō (租税特別措置法), Article 69-4",
+            "predecessorValue": null,
+            "notes": "80% reduction for qualifying residential land up to 330 m²"
+          },
+          "residentialMaxArea": 330,
+          "businessRate": {
+            "value": 80,
+            "effectiveFrom": "2015-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Sozei Tokubetsu Sochi-hō (租税特別措置法), Article 69-4",
+            "predecessorValue": null,
+            "notes": "80% reduction for qualifying business-use land up to 400 m²"
+          },
+          "businessMaxArea": 400,
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "quickSuccession",
+          "label": "Quick Succession Relief (相次相続控除)",
+          "description": "Where inheritance tax was paid on a previous death within 10 years, relief is available on a sliding scale (10% reduction per year elapsed).",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Sōzokuzei-hō (相続税法), Articles 19-2 to 20-2; Sozei Tokubetsu Sochi-hō (租税特別措置法), Article 69-4",
+      "regulatoryBody": "National Tax Agency (国税庁)"
+    },
+    "SG": {
+      "name": "Singapore",
+      "reliefs": [],
+      "description": "No estate duty — no reliefs applicable.",
+      "source": "Estate Duty (Abolition) Act 2008",
+      "regulatoryBody": "Inland Revenue Authority of Singapore (IRAS)"
+    },
+    "IE": {
+      "name": "Ireland",
+      "currency": "EUR",
+      "reliefs": [
+        {
+          "type": "agriculturalRelief",
+          "label": "Agricultural Relief",
+          "rate": {
+            "value": 90,
+            "effectiveFrom": "2015-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Capital Acquisitions Tax Consolidation Act 2003, s. 89",
+            "predecessorValue": null,
+            "notes": "90% reduction in market value of agricultural property for CAT purposes"
+          },
+          "description": "90% reduction in the market value of agricultural property (land, livestock, bloodstock, machinery) for CAT purposes. The beneficiary must be a 'farmer' (at least 80% of their assets after the gift/inheritance must be agricultural property).",
+          "condition": "Beneficiary must be a 'farmer' — 80% asset test",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "businessRelief",
+          "label": "Business Relief",
+          "rate": {
+            "value": 90,
+            "effectiveFrom": "2015-01-01",
+            "effectiveUntil": null,
+            "status": "enacted",
+            "legislativeReference": "Capital Acquisitions Tax Consolidation Act 2003, s. 93",
+            "predecessorValue": null,
+            "notes": "90% reduction in taxable value of relevant business property"
+          },
+          "description": "90% reduction in the taxable value of relevant business property. Minimum ownership period of 5 years for the disponer (2 years if the disponer inherited the property).",
+          "minimumOwnership": "5 years (2 years if inherited)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "favouriteNieceNephew",
+          "label": "Favourite Niece/Nephew Relief",
+          "description": "A niece or nephew who has worked substantially on a full-time basis in the business for 5 of the 6 years preceding the transfer may qualify for Group A threshold (€335,000) instead of Group B (€32,500).",
+          "condition": "5 of 6 years full-time work in the business",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "type": "dwellingHouseExemption",
+          "label": "Dwelling House Exemption",
+          "description": "Complete exemption for inherited dwelling houses where the beneficiary resided for 3 years prior and does not own another property. Must continue to reside for 6 years after.",
+          "conditions": [
+            "3 years prior residence",
+            "No other residential property owned",
+            "6 years continued residence"
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Capital Acquisitions Tax Consolidation Act 2003, ss. 86, 89, 92, 93",
+      "regulatoryBody": "Revenue Commissioners"
+    },
+    "NZ": {
+      "name": "New Zealand",
+      "reliefs": [],
+      "description": "No inheritance or estate tax — no reliefs applicable.",
+      "source": "Estate Duty Abolition Act 1993",
+      "regulatoryBody": "Inland Revenue (Te Tari Taake)"
+    }
+  }
+}

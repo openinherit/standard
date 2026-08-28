@@ -1,0 +1,141 @@
+{
+  "target": "../../../v3/common/identifier.json",
+  "tests": [
+    {
+      "description": "valid \u2014 minimal (value only, no system or type)",
+      "data": {
+        "value": "AB123456C"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 UK National Insurance number with system and type",
+      "data": {
+        "system": "urn:hmrc:nino",
+        "value": "AB123456C",
+        "type": "national_insurance"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 Japanese My Number identifier",
+      "data": {
+        "system": "urn:jpn:my-number",
+        "value": "1234 5678 9012",
+        "type": "national_id"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 Indian Aadhaar number",
+      "data": {
+        "system": "urn:uidai:aadhaar",
+        "value": "1234 5678 9012",
+        "type": "national_id"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 US Social Security Number",
+      "data": {
+        "system": "urn:ssa:ssn",
+        "value": "123-45-6789",
+        "type": "social_security"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 UK charity commission number",
+      "data": {
+        "system": "urn:charity-commission:number",
+        "value": "SC012345",
+        "type": "charity_number"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 Korean resident registration number",
+      "data": {
+        "system": "urn:krn:rrn",
+        "value": "800101-1234567",
+        "type": "national_id"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing required value",
+      "data": {
+        "system": "urn:hmrc:nino",
+        "type": "national_insurance"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 additional property not allowed",
+      "data": {
+        "value": "AB123456C",
+        "issuer": "HMRC"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 value is not a string (number)",
+      "data": {
+        "value": 123456789
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 value empty string (minLength:1)",
+      "data": {
+        "value": ""
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 value is null",
+      "data": {
+        "value": null
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 system exceeds maxLength (101 chars)",
+      "data": {
+        "system": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "value": "AB123456C"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 value exceeds maxLength (256 chars)",
+      "data": {
+        "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 type exceeds maxLength (101 chars)",
+      "data": {
+        "value": "AB123456C",
+        "type": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 value at minimum length (1 char)",
+      "data": {
+        "value": "X"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 system at maximum length (100 chars)",
+      "data": {
+        "system": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "value": "AB123456C"
+      },
+      "valid": true
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/space.json",
+  "title": "Space",
+  "description": "A distinguishable space within or associated with a property — rooms, outbuildings, storage areas, and outdoor zones where assets may be located. Maps to schema:Place in JSON-LD",
+  "type": "object",
+  "required": [ "id", "propertyId", "spaceType" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this space within the INHERIT document",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "propertyId": {
+      "description": "Reference to the Property.id that contains or is associated with this space",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "spaceType": {
+      "description": "The type of space. Use x-inherit- prefix for cultural or jurisdiction-specific space types not covered by the core enum",
+      "$comment": "Core enum covers common residential spaces across UK, North America, and Asia. Cultural spaces (prayer_room, puja_room, tatami_room, majlis, genkan, helpers_room) are in the core enum because they appear in INHERIT's target jurisdictions. Off-site locations (self_storage, safe_deposit_box, workplace) are included because they are common locations for estate assets. portable: item travels with the owner between locations (watches, jewellery). Not fixed to a single address.",
+      "anyOf": [
+        {
+          "enum": [
+            "living_room",
+            "dining_room",
+            "kitchen",
+            "kitchen_diner",
+            "breakfast_room",
+            "family_room",
+            "sitting_room",
+            "drawing_room",
+            "conservatory",
+            "sunroom",
+            "snug",
+            "bedroom",
+            "guest_bedroom",
+            "nursery",
+            "spare_room",
+            "dressing_room",
+            "bathroom",
+            "en_suite",
+            "shower_room",
+            "wet_room",
+            "cloakroom",
+            "wc",
+            "hallway",
+            "entrance_hall",
+            "landing",
+            "corridor",
+            "porch",
+            "vestibule",
+            "study",
+            "home_office",
+            "library",
+            "workshop",
+            "studio",
+            "music_room",
+            "craft_room",
+            "art_studio",
+            "games_room",
+            "home_cinema",
+            "gym",
+            "utility_room",
+            "laundry_room",
+            "boot_room",
+            "pantry",
+            "larder",
+            "airing_cupboard",
+            "boiler_room",
+            "loft",
+            "attic",
+            "basement",
+            "cellar",
+            "wine_cellar",
+            "walk_in_wardrobe",
+            "storage_room",
+            "cupboard_under_stairs",
+            "box_room",
+            "garage",
+            "double_garage",
+            "carport",
+            "shed",
+            "greenhouse",
+            "summerhouse",
+            "garden_room",
+            "outbuilding",
+            "barn",
+            "annex",
+            "stable",
+            "front_garden",
+            "rear_garden",
+            "side_garden",
+            "patio",
+            "terrace",
+            "balcony",
+            "roof_terrace",
+            "driveway",
+            "courtyard",
+            "yard",
+            "swimming_pool",
+            "prayer_room",
+            "puja_room",
+            "butsudan_room",
+            "tatami_room",
+            "genkan",
+            "majlis",
+            "helpers_room",
+            "gurdwara_room",
+            "meditation_room",
+            "gun_room",
+            "safe_room",
+            "safe",
+            "self_storage",
+            "safe_deposit_box",
+            "workplace",
+            "relatives_house",
+            "holiday_home",
+            "vehicle_car",
+            "vehicle_boat",
+            "vehicle_caravan",
+            "allotment",
+            "digital_storage",
+            "portable",
+            "other"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+"
+        }
+      ]
+    },
+    "name": {
+      "description": "Display name for this space. Allows personalisation beyond the spaceType label",
+      "examples": [
+        "Dad's workshop",
+        "Andrew's old room",
+        "The cellar at Oakfield Road",
+        "Safe deposit box #42, Barclays Manchester"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "floor": {
+      "description": "Which floor this space is on, if applicable",
+      "enum": [
+        "basement",
+        "ground",
+        "first",
+        "second",
+        "third",
+        "fourth",
+        "fifth",
+        "attic",
+        "mezzanine",
+        "other"
+      ]
+    },
+    "notes": {
+      "description": "Additional notes about this space — access instructions, security details, storage conditions",
+      "examples": [
+        "Key is in the kitchen drawer, labelled 'cellar'",
+        "Temperature-controlled. Do not turn off the cooling unit.",
+        "Box 42, main branch. Requires two keys — mine is in the study safe, bank holds the other."
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "images": {
+      "description": "Photographs of this space — overview, contents, access points",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "$ref": "common/media.json"
+      }
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

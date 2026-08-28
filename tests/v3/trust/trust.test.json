@@ -1,0 +1,1767 @@
+{
+  "target": "../../../v3/trust.json",
+  "tests": [
+    {
+      "description": "valid minimal trust (required fields only)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid fully populated trust — testamentary nil rate band trust",
+      "data": {
+        "id": "c9d0e1f2-a3b4-5678-c901-23456789abcd",
+        "name": "NRB Discretionary Trust",
+        "trustType": "nil_rate_band",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          },
+          {
+            "personId": "22222222-0000-0000-0000-000000000002",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "33333333-0000-0000-0000-000000000003",
+            "interestType": "both"
+          },
+          {
+            "classDefinition": "All my grandchildren and their descendants",
+            "interestType": "discretionary"
+          }
+        ],
+        "settlor": "44444444-0000-0000-0000-000000000004",
+        "isTestamentary": true,
+        "creationType": "testamentary",
+        "revocability": "irrevocable",
+        "perpetual": false,
+        "trustPeriod": "125 years from date of settlement",
+        "vestingConditions": [
+          "Beneficiary must have reached age 18"
+        ],
+        "notes": "Established to absorb the nil-rate band and reduce IHT on the survivor's estate."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid trust — Islamic waqf (perpetual endowment, using x-inherit-waqf extension)",
+      "data": {
+        "id": "d0e1f2a3-b4c5-6789-d012-3456789abcde",
+        "name": "Al-Rahman Waqf",
+        "trustType": "x-inherit-waqf",
+        "trustees": [
+          {
+            "personId": "55555555-0000-0000-0000-000000000005",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "organisationName": "Islamic Relief UK",
+            "interestType": "income"
+          }
+        ],
+        "revocability": "perpetual",
+        "perpetual": true,
+        "notes": "Waqf income designated for educational scholarships in perpetuity. Cannot be revoked or inherited."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing name",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — trustees array is empty (minItems: 1)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Smith Trust",
+        "trustType": "bare",
+        "trustees": [],
+        "beneficiaries": [
+          {
+            "interestType": "capital"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — trustType not in enum",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Smith Trust",
+        "trustType": "pension_trust",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "income"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid: trust with x-inherit- extension type",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-a789-0123456789ab",
+        "name": "Waqf Endowment",
+        "trustType": "x-inherit-waqf",
+        "trustees": [
+          {
+            "personId": "b8c9d0e1-f2a3-4567-8901-23456789abcd",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "c9d0e1f2-a3b4-5678-9012-3456789abcde",
+            "interestType": "both"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid: trust with old waqf value (removed from core)",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-a789-0123456789ab",
+        "name": "Waqf Endowment",
+        "trustType": "waqf",
+        "trustees": [
+          {
+            "personId": "b8c9d0e1-f2a3-4567-8901-23456789abcd",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "c9d0e1f2-a3b4-5678-9012-3456789abcde",
+            "interestType": "both"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid: trust with unprefixed custom type",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-a789-0123456789ab",
+        "name": "Test Trust",
+        "trustType": "custom_trust",
+        "trustees": [
+          {
+            "personId": "b8c9d0e1-f2a3-4567-8901-23456789abcd",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "c9d0e1f2-a3b4-5678-9012-3456789abcde",
+            "interestType": "both"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — trust with trustees and conditions",
+      "data": {
+        "id": "e1f2a3b4-c5d6-7890-e123-456789abcdef",
+        "name": "Sharma Children's Trust",
+        "trustType": "accumulation_and_maintenance",
+        "trustees": [
+          {
+            "personId": "11111111-0000-4000-a000-000000000001",
+            "role": "trustee"
+          },
+          {
+            "personId": "33333333-0000-4000-a000-000000000003",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "22222222-0000-4000-a000-000000000002",
+            "interestType": "capital"
+          }
+        ],
+        "conditions": "Distribute capital when beneficiary reaches age 25",
+        "conditionType": "age_attainment",
+        "reviewDate": "2027-06-01"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — trust with protector",
+      "data": {
+        "id": "f2a3b4c5-d6e7-8901-f234-56789abcdef0",
+        "name": "Okonkwo Family Discretionary Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "44444444-0000-4000-a000-000000000004",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "classDefinition": "All children of the settlor",
+            "interestType": "discretionary"
+          }
+        ],
+        "protectorPersonId": "55555555-0000-4000-a000-000000000005",
+        "conditionType": "discretionary"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — conditionType not in enum",
+      "data": {
+        "id": "a3b4c5d6-e7f8-9012-a345-6789abcdef01",
+        "name": "Test Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "66666666-0000-4000-a000-000000000006",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ],
+        "conditionType": "automatic"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — testamentary trust with petId (pet care trust)",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000600",
+        "trustType": "discretionary",
+        "petId": "b2c3d4e5-0000-4000-a000-000000000600",
+        "name": "Trouble Care Trust",
+        "trustees": [
+          {
+            "personId": "c3d4e5f6-0000-4000-a000-000000000600",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "d4e5f6a7-0000-4000-a000-000000000600",
+            "interestType": "both"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — discretionary trust with multiple trustees",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000601",
+        "trustType": "discretionary",
+        "name": "Family Discretionary Trust",
+        "trustees": [
+          {
+            "personId": "c3d4e5f6-0000-4000-a000-000000000601",
+            "role": "trustee"
+          },
+          {
+            "personId": "d4e5f6a7-0000-4000-a000-000000000601",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "d4e5f6a7-0000-4000-a000-000000000600",
+            "interestType": "both"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — trust with provenance",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-a000-000000000602",
+        "trustType": "discretionary",
+        "provenance": {
+          "source": "manual",
+          "confidence": 1,
+          "humanVerdict": "approved"
+        },
+        "name": "Test Trust",
+        "trustees": [
+          {
+            "personId": "c3d4e5f6-0000-4000-a000-000000000600",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "d4e5f6a7-0000-4000-a000-000000000600",
+            "interestType": "both"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing name",
+      "data": {
+        "id": "a1000026-0000-4000-a000-000000001026",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "role": "trustee",
+            "personId": "b1000026-0000-4000-a000-000000001026"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "both"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing trustees",
+      "data": {
+        "id": "a1000027-0000-4000-a000-000000001027",
+        "name": "Test",
+        "trustType": "discretionary",
+        "beneficiaries": [
+          {
+            "interestType": "both"
+          }
+        ]
+      },
+      "valid": false
+    },
+
+    {
+      "description": "invalid — missing id (required field)",
+      "data": {
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing trustType (required field)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing beneficiaries (required field)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ]
+      },
+      "valid": false
+    },
+
+    {
+      "description": "invalid — name is number (must be string)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": 12345,
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — trustType is boolean (must be string)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustType": true,
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — trustees is string (must be array)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": "John Smith",
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — beneficiaries is object (must be array)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": {
+          "interestType": "discretionary"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — vestingAge is string (must be integer)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ],
+        "vestingAge": "eighteen"
+      },
+      "valid": false
+    },
+
+    {
+      "description": "invalid — name is empty string (minLength: 1 violation)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — name at maxLength boundary (255 characters)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — name exceeds maxLength (256 characters)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — vestingAge at minimum boundary (0)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ],
+        "vestingAge": 0
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — vestingAge below minimum (-1)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ],
+        "vestingAge": -1
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — beneficiaries array is empty (minItems: 1 violation)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": []
+      },
+      "valid": false
+    },
+
+    {
+      "description": "invalid — id is not a UUID (format and pattern violation)",
+      "data": {
+        "id": "not-a-uuid",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — createdAt is not ISO 8601 date-time format",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ],
+        "createdAt": "01/01/2026"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — trustee personId is not a UUID",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "not-a-valid-uuid",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": false
+    },
+
+    {
+      "description": "invalid — unknown additional property at root level (unevaluatedProperties: false)",
+      "data": {
+        "id": "b8c9d0e1-f2a3-4567-b890-123456789abc",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ],
+        "unknownField": "should be rejected"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — trustType: life_interest",
+      "data": {
+        "id": "bb000001-0000-4000-a000-000000000001",
+        "name": "Life Interest Trust for Surviving Spouse",
+        "trustType": "life_interest",
+        "trustees": [
+          {
+            "personId": "cc000001-0000-4000-a000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000001-0000-4000-a000-000000000001",
+            "interestType": "income"
+          }
+        ],
+        "isTestamentary": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — trustType: bare (bare trust for adult beneficiary)",
+      "data": {
+        "id": "bb000002-0000-4000-a000-000000000002",
+        "name": "Bare Trust — James Davies",
+        "trustType": "bare",
+        "trustees": [
+          {
+            "personId": "cc000002-0000-4000-a000-000000000002",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000002-0000-4000-a000-000000000002",
+            "interestType": "both"
+          }
+        ],
+        "vestingAge": 18
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — trustType: disabled_persons",
+      "data": {
+        "id": "bb000003-0000-4000-a000-000000000003",
+        "name": "Disabled Persons Trust — Emily Clarke",
+        "trustType": "disabled_persons",
+        "trustees": [
+          {
+            "personId": "cc000003-0000-4000-a000-000000000003",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000003-0000-4000-a000-000000000003",
+            "interestType": "both"
+          }
+        ],
+        "notes": "HMRC-qualifying disabled persons trust under IHTA 1984 s.89."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — trustType: charitable",
+      "data": {
+        "id": "bb000004-0000-4000-a000-000000000004",
+        "name": "Davies Charitable Foundation",
+        "trustType": "charitable",
+        "trustees": [
+          {
+            "personId": "cc000004-0000-4000-a000-000000000004",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "organisationName": "Cancer Research UK",
+            "interestType": "income"
+          }
+        ],
+        "revocability": "irrevocable",
+        "perpetual": false
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — trustType: other",
+      "data": {
+        "id": "bb000005-0000-4000-a000-000000000005",
+        "name": "Purpose Trust — Cayman STAR",
+        "trustType": "other",
+        "trustees": [
+          {
+            "personId": "cc000005-0000-4000-a000-000000000005",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "classDefinition": "All descendants of the settlor",
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — creationType: inter_vivos_revocable (US living trust)",
+      "data": {
+        "id": "bb000006-0000-4000-a000-000000000006",
+        "name": "Johnson Revocable Living Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000006-0000-4000-a000-000000000006",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000006-0000-4000-a000-000000000006",
+            "interestType": "both"
+          }
+        ],
+        "creationType": "inter_vivos_revocable",
+        "revocability": "revocable",
+        "isTestamentary": false
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — creationType: inter_vivos_irrevocable (offshore asset protection)",
+      "data": {
+        "id": "bb000007-0000-4000-a000-000000000007",
+        "name": "Cook Islands Asset Protection Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000007-0000-4000-a000-000000000007",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000007-0000-4000-a000-000000000007",
+            "interestType": "both"
+          }
+        ],
+        "creationType": "inter_vivos_irrevocable",
+        "revocability": "irrevocable"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — assetProtectionFeatures (Cook Islands self-settled trust)",
+      "data": {
+        "id": "bb000008-0000-4000-a000-000000000008",
+        "name": "Rarotonga Asset Protection Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000008-0000-4000-a000-000000000008",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000008-0000-4000-a000-000000000008",
+            "interestType": "both"
+          }
+        ],
+        "assetProtectionFeatures": {
+          "selfSettled": true,
+          "spendthriftClause": true,
+          "fraudulentTransferLookback": "2 years",
+          "domesticationDate": "2023-06-01"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — assetProtectionFeatures minimal (spendthrift only)",
+      "data": {
+        "id": "bb000009-0000-4000-a000-000000000009",
+        "name": "Nevada Domestic Asset Protection Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000009-0000-4000-a000-000000000009",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000009-0000-4000-a000-000000000009",
+            "interestType": "both"
+          }
+        ],
+        "assetProtectionFeatures": {
+          "selfSettled": false,
+          "spendthriftClause": true,
+          "fraudulentTransferLookback": "4 years"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fleeClause (offshore trust with flee clause)",
+      "data": {
+        "id": "bb000010-0000-4000-a000-000000000010",
+        "name": "Jersey Offshore Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000010-0000-4000-a000-000000000010",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000010-0000-4000-a000-000000000010",
+            "interestType": "both"
+          }
+        ],
+        "fleeClause": {
+          "present": true,
+          "triggerEvents": [
+            "Change of law adverse to trust beneficiaries",
+            "Political instability",
+            "Exchange control imposition"
+          ],
+          "destinationJurisdiction": {
+            "country": "KY"
+          },
+          "automaticOrDiscretionary": "automatic"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fleeClause discretionary",
+      "data": {
+        "id": "bb000011-0000-4000-a000-000000000011",
+        "name": "Guernsey Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000011-0000-4000-a000-000000000011",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000011-0000-4000-a000-000000000011",
+            "interestType": "income"
+          }
+        ],
+        "fleeClause": {
+          "present": true,
+          "automaticOrDiscretionary": "discretionary"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — contingentInterests array",
+      "data": {
+        "id": "bb000012-0000-4000-a000-000000000012",
+        "name": "Life Interest Trust with Remainders",
+        "trustType": "life_interest",
+        "trustees": [
+          {
+            "personId": "cc000012-0000-4000-a000-000000000012",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000012-0000-4000-a000-000000000012",
+            "interestType": "income"
+          }
+        ],
+        "contingentInterests": [
+          "If the life tenant dies without issue, capital passes to the British Heart Foundation",
+          "On the youngest child reaching 25, the trust winds up"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — reservedPowers: investment + distribution",
+      "data": {
+        "id": "bb000013-0000-4000-a000-000000000013",
+        "name": "BVI VISTA Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000013-0000-4000-a000-000000000013",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000013-0000-4000-a000-000000000013",
+            "interestType": "both"
+          }
+        ],
+        "reservedPowers": [
+          {
+            "powerType": "investment",
+            "heldByPersonId": "ee000013-0000-4000-a000-000000000013",
+            "heldByPersonIdDisplay": "Richard Davies",
+            "conditions": "May only be exercised with protector consent"
+          },
+          {
+            "powerType": "distribution",
+            "heldByPersonId": "ee000013-0000-4000-a000-000000000013"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — reservedPowers: amendment + revocation",
+      "data": {
+        "id": "bb000014-0000-4000-a000-000000000014",
+        "name": "Revocable Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000014-0000-4000-a000-000000000014",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000014-0000-4000-a000-000000000014",
+            "interestType": "discretionary"
+          }
+        ],
+        "reservedPowers": [
+          {
+            "powerType": "amendment"
+          },
+          {
+            "powerType": "revocation"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — reservedPowers: addition_of_beneficiaries + removal_of_trustees + change_of_governing_law",
+      "data": {
+        "id": "bb000015-0000-4000-a000-000000000015",
+        "name": "Offshore Dynasty Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000015-0000-4000-a000-000000000015",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "classDefinition": "All lineal descendants",
+            "interestType": "discretionary"
+          }
+        ],
+        "reservedPowers": [
+          {
+            "powerType": "addition_of_beneficiaries"
+          },
+          {
+            "powerType": "removal_of_trustees",
+            "conditions": "Requires 30 days written notice"
+          },
+          {
+            "powerType": "change_of_governing_law"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — protectorPowers: consent_to_distribution + remove_trustee",
+      "data": {
+        "id": "bb000016-0000-4000-a000-000000000016",
+        "name": "Cayman STAR Trust",
+        "trustType": "other",
+        "trustees": [
+          {
+            "personId": "cc000016-0000-4000-a000-000000000016",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000016-0000-4000-a000-000000000016",
+            "interestType": "both"
+          }
+        ],
+        "protectorPowers": [
+          {
+            "powerType": "consent_to_distribution",
+            "protectorPersonId": "ee000016-0000-4000-a000-000000000016",
+            "protectorPersonIdDisplay": "James Smith",
+            "exerciseConditions": "Must act in the best interests of the beneficiaries"
+          },
+          {
+            "powerType": "remove_trustee",
+            "protectorPersonId": "ee000016-0000-4000-a000-000000000016"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — protectorPowers: appoint_trustee + veto_investment + add_beneficiary + exclude_beneficiary + enforce_purpose + change_governing_law",
+      "data": {
+        "id": "bb000017-0000-4000-a000-000000000017",
+        "name": "Purpose Trust with Full Protector Powers",
+        "trustType": "other",
+        "trustees": [
+          {
+            "personId": "cc000017-0000-4000-a000-000000000017",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "classDefinition": "Charitable purposes",
+            "interestType": "income"
+          }
+        ],
+        "protectorPowers": [
+          {
+            "powerType": "appoint_trustee",
+            "protectorPersonId": "ee000017-0000-4000-a000-000000000017"
+          },
+          {
+            "powerType": "veto_investment",
+            "protectorPersonId": "ee000017-0000-4000-a000-000000000017"
+          },
+          {
+            "powerType": "add_beneficiary",
+            "protectorPersonId": "ee000017-0000-4000-a000-000000000017"
+          },
+          {
+            "powerType": "exclude_beneficiary",
+            "protectorPersonId": "ee000017-0000-4000-a000-000000000017"
+          },
+          {
+            "powerType": "enforce_purpose",
+            "protectorPersonId": "ee000017-0000-4000-a000-000000000017"
+          },
+          {
+            "powerType": "change_governing_law",
+            "protectorPersonId": "ee000017-0000-4000-a000-000000000017"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — jurisdictionalRecognition (Switzerland recognises, France does not)",
+      "data": {
+        "id": "bb000018-0000-4000-a000-000000000018",
+        "name": "Geneva Offshore Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000018-0000-4000-a000-000000000018",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000018-0000-4000-a000-000000000018",
+            "interestType": "both"
+          }
+        ],
+        "jurisdictionalRecognition": [
+          {
+            "jurisdiction": { "country": "CH" },
+            "recognised": true,
+            "hagueTrustConventionApplies": true,
+            "notes": "Switzerland recognises under Hague Convention"
+          },
+          {
+            "jurisdiction": { "country": "FR" },
+            "recognised": false,
+            "recognisedAs": "fiducie",
+            "hagueTrustConventionApplies": false,
+            "notes": "France treats as a fiducie — different tax implications"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — trustee with organisationId (corporate trustee)",
+      "data": {
+        "id": "bb000019-0000-4000-a000-000000000019",
+        "name": "Corporate Trustee Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "organisationId": "ff000019-0000-4000-a000-000000000019",
+            "organisationIdDisplay": "Barclays Private Bank Trustees Ltd",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000019-0000-4000-a000-000000000019",
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — trustee with role: protector",
+      "data": {
+        "id": "bb000020-0000-4000-a000-000000000020",
+        "name": "Trust with Named Protector",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000020-0000-4000-a000-000000000020",
+            "role": "trustee"
+          },
+          {
+            "personId": "ee000020-0000-4000-a000-000000000020",
+            "role": "protector"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000020-0000-4000-a000-000000000020",
+            "interestType": "both"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — trustee with role: enforcer (Cayman STAR)",
+      "data": {
+        "id": "bb000021-0000-4000-a000-000000000021",
+        "name": "STAR Purpose Trust",
+        "trustType": "other",
+        "trustees": [
+          {
+            "personId": "cc000021-0000-4000-a000-000000000021",
+            "role": "trustee"
+          },
+          {
+            "personId": "ee000021-0000-4000-a000-000000000021",
+            "role": "enforcer"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "classDefinition": "Charitable purposes",
+            "interestType": "income"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — beneficiary with interestType: income",
+      "data": {
+        "id": "bb000022-0000-4000-a000-000000000022",
+        "name": "Income Beneficiary Trust",
+        "trustType": "life_interest",
+        "trustees": [
+          {
+            "personId": "cc000022-0000-4000-a000-000000000022",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000022-0000-4000-a000-000000000022",
+            "interestType": "income"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — beneficiary with interestType: capital",
+      "data": {
+        "id": "bb000023-0000-4000-a000-000000000023",
+        "name": "Capital Beneficiary Trust",
+        "trustType": "bare",
+        "trustees": [
+          {
+            "personId": "cc000023-0000-4000-a000-000000000023",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000023-0000-4000-a000-000000000023",
+            "interestType": "capital"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — conditionType: event_based",
+      "data": {
+        "id": "bb000024-0000-4000-a000-000000000024",
+        "name": "Event-Based Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000024-0000-4000-a000-000000000024",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000024-0000-4000-a000-000000000024",
+            "interestType": "both"
+          }
+        ],
+        "conditionType": "event_based",
+        "conditions": "Distribute on beneficiary's marriage or graduation"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — conditionType: fixed_date",
+      "data": {
+        "id": "bb000025-0000-4000-a000-000000000025",
+        "name": "Fixed Date Distribution Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000025-0000-4000-a000-000000000025",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000025-0000-4000-a000-000000000025",
+            "interestType": "both"
+          }
+        ],
+        "conditionType": "fixed_date",
+        "vestingDate": "2040-01-01"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — conditionType: accumulation",
+      "data": {
+        "id": "bb000026-0000-4000-a000-000000000026",
+        "name": "Accumulation Trust",
+        "trustType": "accumulation_and_maintenance",
+        "trustees": [
+          {
+            "personId": "cc000026-0000-4000-a000-000000000026",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000026-0000-4000-a000-000000000026",
+            "interestType": "both"
+          }
+        ],
+        "conditionType": "accumulation"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — conditionType: other",
+      "data": {
+        "id": "bb000027-0000-4000-a000-000000000027",
+        "name": "Trust with Unusual Condition",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000027-0000-4000-a000-000000000027",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000027-0000-4000-a000-000000000027",
+            "interestType": "discretionary"
+          }
+        ],
+        "conditionType": "other",
+        "conditions": "Complex bespoke conditions as set out in Schedule 1 of the trust deed"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — vestingConditions array with multiple items",
+      "data": {
+        "id": "bb000028-0000-4000-a000-000000000028",
+        "name": "Davies Family Discretionary Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000028-0000-4000-a000-000000000028",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000028-0000-4000-a000-000000000028",
+            "interestType": "both"
+          }
+        ],
+        "vestingConditions": [
+          "Beneficiary must have graduated from university",
+          "Beneficiary must be in stable employment",
+          "Trustees must approve the distribution"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — reservedPowers powerType not in enum",
+      "data": {
+        "id": "bb000029-0000-4000-a000-000000000029",
+        "name": "Invalid Power Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000029-0000-4000-a000-000000000029",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000029-0000-4000-a000-000000000029",
+            "interestType": "both"
+          }
+        ],
+        "reservedPowers": [
+          {
+            "powerType": "veto_everything"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — protectorPowers missing required protectorPersonId",
+      "data": {
+        "id": "bb000030-0000-4000-a000-000000000030",
+        "name": "Missing Protector Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000030-0000-4000-a000-000000000030",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000030-0000-4000-a000-000000000030",
+            "interestType": "both"
+          }
+        ],
+        "protectorPowers": [
+          {
+            "powerType": "consent_to_distribution"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — fleeClause automaticOrDiscretionary not in enum",
+      "data": {
+        "id": "bb000031-0000-4000-a000-000000000031",
+        "name": "Bad Flee Clause Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000031-0000-4000-a000-000000000031",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000031-0000-4000-a000-000000000031",
+            "interestType": "both"
+          }
+        ],
+        "fleeClause": {
+          "present": true,
+          "automaticOrDiscretionary": "mandatory"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — trustee role not in enum",
+      "data": {
+        "id": "bb000032-0000-4000-a000-000000000032",
+        "name": "Bad Role Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000032-0000-4000-a000-000000000032",
+            "role": "administrator"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — beneficiary interestType not in enum",
+      "data": {
+        "id": "bb000033-0000-4000-a000-000000000033",
+        "name": "Invalid Interest Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000033-0000-4000-a000-000000000033",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "dd000033-0000-4000-a000-000000000033",
+            "interestType": "residuary"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — revocability not in enum",
+      "data": {
+        "id": "bb000034-0000-4000-a000-000000000034",
+        "name": "Invalid Revocability Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000034-0000-4000-a000-000000000034",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ],
+        "revocability": "semi_revocable"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — creationType not in enum",
+      "data": {
+        "id": "bb000035-0000-4000-a000-000000000035",
+        "name": "Invalid Creation Type Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "cc000035-0000-4000-a000-000000000035",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ],
+        "creationType": "by_court_order"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — trust with generationSkipping classification",
+      "data": {
+        "id": "b0000001-0000-4000-a000-000000000001",
+        "name": "Generation-Skipping Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "a0000001-0000-4000-a000-000000000099",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "a0000001-0000-4000-a000-000000000001",
+            "interestType": "capital",
+            "generationLevel": 2
+          }
+        ],
+        "generationSkipping": {
+          "applies": true,
+          "classification": "direct_skip",
+          "gstExemptionAllocated": { "amount": 1292000000, "currency": "USD" }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — trust with letterOfWishesDocumentId and status",
+      "data": {
+        "id": "d0000001-0000-4000-d000-000000020001",
+        "name": "Davies Discretionary Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "interestType": "discretionary"
+          }
+        ],
+        "letterOfWishesDocumentId": "a0000001-0000-4000-a000-000000030001",
+        "letterOfWishesStatus": "non_binding"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — charitable remainder trust with CRT details",
+      "data": {
+        "id": "d0000002-0000-4000-d000-000000020002",
+        "name": "Davies Charitable Remainder Unitrust",
+        "trustType": "charitable",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "22222222-0000-0000-0000-000000000002",
+            "interestType": "income"
+          },
+          {
+            "organisationName": "Cancer Research UK",
+            "interestType": "capital"
+          }
+        ],
+        "charitableRemainderDetails": {
+          "crtType": "unitrust",
+          "incomeInterestBeneficiaryId": "22222222-0000-0000-0000-000000000002",
+          "remainderBeneficiaryId": "33333333-0000-0000-0000-000000000003",
+          "payoutRate": 5,
+          "termType": "life"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — nil-rate band trust with taxPlanningDetails",
+      "data": {
+        "id": "d0000003-0000-4000-d000-000000020003",
+        "name": "NRB Discretionary Trust",
+        "trustType": "nil_rate_band",
+        "trustees": [
+          {
+            "personId": "11111111-0000-0000-0000-000000000001",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "classDefinition": "All my children and their descendants",
+            "interestType": "discretionary"
+          }
+        ],
+        "taxPlanningDetails": {
+          "structure": "nil_rate_band_discretionary",
+          "fundingMechanism": "up_to_threshold",
+          "thresholdReference": "UK IHT nil-rate band (currently £325,000)"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — trust with conflictsOfInterest",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-fabc-456789012345",
+        "name": "The Davies Family Trust",
+        "trustType": "discretionary",
+        "trustees": [
+          {
+            "personId": "66666666-7777-8888-9999-aaaaaaaaaaaa",
+            "role": "trustee"
+          }
+        ],
+        "beneficiaries": [
+          {
+            "personId": "66666666-7777-8888-9999-aaaaaaaaaaaa",
+            "interestType": "discretionary"
+          }
+        ],
+        "conflictsOfInterest": [
+          {
+            "conflictType": "beneficiary",
+            "relatedPersonId": "66666666-7777-8888-9999-aaaaaaaaaaaa",
+            "disclosed": true,
+            "independentOversightRequired": false,
+            "notes": "Trustee is also a discretionary beneficiary — common in family trusts"
+          }
+        ]
+      },
+      "valid": true
+    }
+  ]
+}

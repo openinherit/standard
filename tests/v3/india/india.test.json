@@ -1,0 +1,171 @@
+{
+  "target": "../../../v3/extensions/india/india.json",
+  "tests": [
+    {
+      "description": "valid — Hindu succession",
+      "data": {
+        "personalLaw": "hindu_succession_act_1956",
+        "state": "Maharashtra"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Muslim personal law",
+      "data": {
+        "personalLaw": "muslim_personal_law",
+        "state": "Uttar Pradesh"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Christian succession (Indian Succession Act)",
+      "data": {
+        "personalLaw": "indian_succession_act_1925",
+        "state": "Kerala",
+        "probateRequired": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Goa Portuguese Civil Code exception",
+      "data": {
+        "personalLaw": "goa_civil_code",
+        "state": "Goa",
+        "goaException": {
+          "applies": true,
+          "communityOfProperty": true,
+          "forcedHeirship": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — NRI with FEMA restrictions",
+      "data": {
+        "personalLaw": "hindu_succession_act_1956",
+        "state": "Delhi",
+        "nriComplications": {
+          "isNri": true,
+          "femaRestrictions": true,
+          "dtaa": "India-UK DTAA"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with agricultural land restrictions",
+      "data": {
+        "personalLaw": "hindu_succession_act_1956",
+        "state": "Punjab",
+        "agriculturalLand": {
+          "hasAgriculturalLand": true,
+          "stateCeilingApplies": true,
+          "willingRestriction": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required personalLaw",
+      "data": {
+        "state": "Maharashtra"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — personalLaw not in enum",
+      "data": {
+        "personalLaw": "common_law"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "personalLaw": "hindu_succession_act_1956",
+        "dowryDetails": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — probateJurisdiction courtType not in enum",
+      "data": {
+        "personalLaw": "indian_succession_act_1925",
+        "probateJurisdiction": {
+          "courtType": "supreme_court"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — nriComplications.isNri is string",
+      "data": {
+        "personalLaw": "hindu_succession_act_1956",
+        "nriComplications": {
+          "isNri": "yes"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — notes at maxLength boundary",
+      "data": {
+        "personalLaw": "hindu_succession_act_1956",
+        "notes": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Parsi succession",
+      "data": {
+        "personalLaw": "parsi_succession",
+        "state": "Maharashtra",
+        "probateRequired": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Special Marriage Act",
+      "data": {
+        "personalLaw": "special_marriage_act",
+        "state": "Delhi"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — stamp duty with exemptions",
+      "data": {
+        "personalLaw": "hindu_succession_act_1956",
+        "stampDuty": {
+          "stateRate": 5,
+          "exemptions": [
+            "spouse_exemption",
+            "agricultural_land"
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Parsi succession rules",
+      "data": {
+        "personalLaw": "parsi_succession",
+        "parsiSuccessionRules": {
+          "daughterShareRule": "Daughter receives half a son's share",
+          "widowShareRule": "Widow receives equal to one child's share"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Christian succession following ISA",
+      "data": {
+        "personalLaw": "indian_succession_act_1925",
+        "christianSuccessionRules": {
+          "followsIndianSuccessionAct": true
+        }
+      },
+      "valid": true
+    }
+  ]
+}

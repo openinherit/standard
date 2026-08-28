@@ -1,0 +1,113 @@
+{
+  "$comment": "Test fixture exercising all fields of the Japan extension schema",
+  "kosekiRecords": [
+    {
+      "personId": "1d3265a6-d16e-4b24-896d-e330866369d3",
+      "honseki": "Minato-ku, Tokyo",
+      "kosekiHead": "Tanaka Ichiro",
+      "kosekiReference": "Tokyo Legal Affairs Bureau Reference 2025-KS-4471",
+      "registrationType": "Birth registration"
+    },
+    {
+      "personId": "8bd2b6eb-e3eb-4c4b-8ed1-1a8122765c23",
+      "honseki": "Chiyoda-ku, Tokyo",
+      "kosekiHead": "Tanaka Ichiro",
+      "kosekiReference": "Tokyo Legal Affairs Bureau Reference 2025-KS-4472",
+      "registrationType": "Marriage registration"
+    }
+  ],
+  "iryubunClaims": [
+    {
+      "personId": "253ec1f7-7b07-43f3-9590-71fc6d3fd6e6",
+      "relationship": "Spouse",
+      "reservedFraction": "1/2",
+      "targetAssetIds": [
+        "0bc92942-2a8d-452c-bb53-4d3c1b33f9db",
+        "ae5081c4-d3a3-4ae8-9b76-b6c710853eb7"
+      ],
+      "targetPropertyIds": [
+        "fad4bd5b-f0dc-4c87-862b-93414ccf122f",
+        "a6eff076-aa5c-4754-8b67-305f73d505d2"
+      ],
+      "claimFiled": true,
+      "claimOutcome": "upheld"
+    },
+    {
+      "personId": "3039bb6a-cf50-4617-a2bc-72377a094291",
+      "relationship": "Child (eldest daughter)",
+      "reservedFraction": "1/4",
+      "targetAssetIds": [
+        "17707722-8f4c-40aa-912a-4e1b4b49aa7d"
+      ],
+      "targetPropertyIds": [
+        "f94fd412-36f2-418d-9885-a24a980408ff"
+      ],
+      "claimFiled": false,
+      "claimOutcome": "waived"
+    }
+  ],
+  "yoshiAdoptions": [
+    {
+      "personId": "023363af-e152-42bf-aebb-f662051e6134",
+      "adoptionType": "futsu_yoshi",
+      "adoptionDate": "2018-04-15",
+      "inheritanceScope": "both_families"
+    },
+    {
+      "personId": "859c7b5a-0f7e-4635-8146-a4e1af3d0f06",
+      "adoptionType": "tokubetsu_yoshi",
+      "adoptionDate": "2020-09-01",
+      "inheritanceScope": "adoptive_only"
+    }
+  ],
+  "spousesResidenceRight": {
+    "propertyId": "fad4bd5b-f0dc-4c87-862b-93414ccf122f",
+    "spousePersonId": "253ec1f7-7b07-43f3-9590-71fc6d3fd6e6",
+    "rightType": "long_term",
+    "duration": "Lifetime — registered as long-term residence right",
+    "actuarialValue": {
+      "amount": 15000000,
+      "currency": "JPY"
+    },
+    "registeredAtLegalAffairsBureau": true
+  },
+  "saishiSuccessor": "3039bb6a-cf50-4617-a2bc-72377a094291",
+  "localWillFormality": "kosei_shosho",
+  "inkanVerified": true,
+  "isanBunkatsu": {
+    "type": "voluntary",
+    "agreed": true,
+    "agreementDate": "2025-11-20",
+    "allHeirsConsented": true,
+    "participants": [
+      "253ec1f7-7b07-43f3-9590-71fc6d3fd6e6",
+      "3039bb6a-cf50-4617-a2bc-72377a094291",
+      "023363af-e152-42bf-aebb-f662051e6134"
+    ],
+    "registeredAt": "Tokyo Legal Affairs Bureau, Minato Branch",
+    "registrationDate": "2025-12-05",
+    "courtReference": "N/A — voluntary agreement, no court involvement",
+    "documentRef": "bf418fda-6a6c-49b4-a1b9-b2c8cf7b3f69"
+  },
+  "legislativeChanges": [
+    {
+      "description": "2019 reform introducing spousal residence right (配偶者居住権) under revised Civil Code Articles 1028-1036",
+      "status": "enacted",
+      "effectiveDate": "2020-04-01",
+      "notes": "Applies to successions opening on or after 1 April 2020. Allows surviving spouse to retain residence without consuming their intestate share."
+    },
+    {
+      "description": "Proposed digitalisation of koseki records to enable online verification by legal professionals",
+      "status": "consultation",
+      "effectiveDate": "2027-04-01",
+      "notes": "Ministry of Justice consultation paper published March 2026. Would permit electronic koseki abstracts for succession proceedings."
+    }
+  ],
+  "notes": "Fictional estate of Tanaka Ichiro, deceased 15 October 2025. Three heirs: spouse (Tanaka Yuko), eldest daughter (Tanaka Sakura), and adopted son (Tanaka Kenji). Notarised will executed at Tokyo Notary Office No. 12.",
+  "x-inherit-familyGrave": {
+    "value": "Tanaka family plot at Zojoji Temple, Minato-ku"
+  },
+  "x-inherit-buddhistAltar": {
+    "value": "Butsudan held at the family residence in Minato-ku"
+  }
+}

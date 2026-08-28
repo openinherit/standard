@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "no_empty_comment",
+  "description": "Comments must not be empty strings",
+  "if": {
+    "required": ["$comment"]
+  },
+  "then": {
+    "properties": {
+      "$comment": {
+        "minLength": 1
+      }
+    }
+  }
+}

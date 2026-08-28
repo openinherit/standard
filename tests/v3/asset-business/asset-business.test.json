@@ -1,0 +1,110 @@
+{
+  "target": "../../../v3/asset-categories/business.json",
+  "tests": [
+    {
+      "description": "valid — empty (all fields optional)",
+      "data": {},
+      "valid": true
+    },
+    {
+      "description": "valid — business interest with company details",
+      "data": {
+        "businessInterest": {
+          "businessName": "Davies & Co Ltd",
+          "businessType": "limited_company",
+          "ownershipPercentage": 51
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — intellectual property",
+      "data": {
+        "intellectualProperty": {
+          "ipType": "patent"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — stock compensation (RSU with vesting details)",
+      "data": {
+        "stockCompensation": {
+          "compensationType": "rsu",
+          "grantDate": "2022-03-15",
+          "vestingSchedule": "4-year vest with 1-year cliff",
+          "vestedQuantity": 2500,
+          "unvestedQuantity": 7500,
+          "acceleratesOnDeath": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — co-ownership as joint tenants",
+      "data": {
+        "coOwnership": {
+          "ownershipType": "joint_tenants",
+          "ownershipPercentage": 50
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — businessInterest businessType not in enum",
+      "data": {
+        "businessInterest": {
+          "businessName": "Test Co",
+          "businessType": "charity"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — intellectualProperty ipType not in enum",
+      "data": {
+        "intellectualProperty": {
+          "ipType": "franchise_right"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — stockCompensation compensationType not in enum",
+      "data": {
+        "stockCompensation": {
+          "compensationType": "bonus_shares"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — coOwnership ownershipType not in enum",
+      "data": {
+        "coOwnership": {
+          "ownershipType": "family_trust"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — businessInterest ownershipPercentage above 100",
+      "data": {
+        "businessInterest": {
+          "ownershipPercentage": 110
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — businessInterest with additional property",
+      "data": {
+        "businessInterest": {
+          "businessName": "Test Co",
+          "unknownProp": "should fail"
+        }
+      },
+      "valid": false
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "US Estate",
+  "id": "https://openinherit.org/v3/extensions/us-estate.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "US"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "islamic-succession",
+    "jewish-succession",
+    "hindu-succession"
+  ],
+  "legalSystems": [
+    "common_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-03-26",
+  "dataProvenance": "Internal Revenue Code (Title 26), Uniform Probate Code, state community property statutes, RUFADAA",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "US estate planning: community/separate property, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes.",
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "comprehensive",
+  "keyFeatures": "Federal estate tax, state estate/inheritance tax, community property, elective share, SECURE Act retirement rules, probate variation (UPC), trust features (QTIP/dynasty), ancillary probate, advance directives, intestacyDepth (UPC compliance, parentele limit, laughing heir cutoff), collateralHeirRules (cousin inheritance, representation)",
+  "legalTradition": "Common law",
+  "seeking": "Multi-state probate practitioners",
+  "tier": "core"
+}

@@ -1,0 +1,93 @@
+{
+  "target": "../../../v3/extensions/israel/israel.json",
+  "tests": [
+    {
+      "description": "valid — minimal Israel extension (notes only)",
+      "data": {
+        "notes": "Estate administered under Inheritance Law 1965."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with parallel court system and Inheritance Law 1965 details",
+      "data": {
+        "parallelCourtSystems": {
+          "adjudicatingCourt": "registrar_of_inheritance",
+          "courtOrderReference": "YER-2026-00712",
+          "courtOrderDate": "2026-03-15",
+          "allPartiesConsented": true
+        },
+        "inheritanceLaw1965": {
+          "successionOrderType": "tzevu_yerusha",
+          "objectionPeriodExpired": true,
+          "objectionsReceived": false,
+          "spouseEntitlement": {
+            "moveableFraction": "1/2",
+            "immoveableFraction": "1/2",
+            "dwellingRightGranted": true
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with rabbinical court and religious authority order",
+      "data": {
+        "parallelCourtSystems": {
+          "adjudicatingCourt": "rabbinical_court",
+          "allPartiesConsented": true
+        },
+        "religiousAuthorityOrder": {
+          "authority": "bet_din",
+          "orderType": "halachic_will_validation",
+          "orderReference": "BD-TEL-2026-0089",
+          "orderDate": "2026-02-20",
+          "binding": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with kibbutz property and Holocaust restitution",
+      "data": {
+        "kibbutzProperty": {
+          "communalOwnershipType": "kibbutz_communal",
+          "membershipRightsTransferable": false,
+          "communityName": "Kibbutz Ein Harod",
+          "personalPropertyValue": {
+            "amount": 250000,
+            "currency": "ILS"
+          }
+        },
+        "holocaustRestitution": {
+          "restitutionAssetsExist": true,
+          "restitutionSource": "claims_conference",
+          "originalOwnerKnown": true,
+          "ongoingClaims": false,
+          "estimatedValue": {
+            "amount": 8500000,
+            "currency": "EUR"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — adjudicatingCourt not in enum",
+      "data": {
+        "parallelCourtSystems": {
+          "adjudicatingCourt": "secular_court"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown property at root level",
+      "data": {
+        "notes": "Valid note.",
+        "unknownIsraelField": "should be rejected"
+      },
+      "valid": false
+    }
+  ]
+}

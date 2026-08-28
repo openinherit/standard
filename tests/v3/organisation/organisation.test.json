@@ -1,0 +1,1378 @@
+{
+  "target": "../../../v3/organisation.json",
+  "tests": [
+    {
+      "description": "valid — minimal organisation (required fields only)",
+      "data": {
+        "id": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "name": "IDR Law",
+        "organisationType": "legal_firm"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated organisation with registrations",
+      "data": {
+        "id": "868f2f78-647c-4754-b330-94c8e5a4a9ee",
+        "name": "Macmillan Cancer Support",
+        "organisationType": "charity",
+        "estateRoles": [
+          "beneficiary"
+        ],
+        "jurisdiction": "GB",
+        "address": {
+          "formattedAddress": "89 Albert Embankment, London SE1 7UQ",
+          "addressCountry": "GB"
+        },
+        "url": "https://www.macmillan.org.uk",
+        "email": "donations@macmillan.org.uk",
+        "phone": "+44 20 7840 7840",
+        "wikidataId": "Q4424418",
+        "description": "Cancer charity named in the will as residuary beneficiary (10%)",
+        "registrations": [
+          {
+            "body": "ccew",
+            "number": "261017",
+            "status": "active",
+            "verificationUrl": "https://register-of-charities.charitycommission.gov.uk/charity-search/-/charity-details/261017",
+            "domicile": "GB-ENG"
+          },
+          {
+            "body": "oscr",
+            "number": "SC039907",
+            "status": "active",
+            "domicile": "GB-SCT"
+          }
+        ],
+        "contactPerson": "Legacy Team",
+        "notes": "Margaret wanted 10% of residuary estate to go to Macmillan. Contact the legacy team, not general enquiries.",
+        "provenance": {
+          "confidence": 0.98,
+          "importSourceId": "will-scan-001"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — x-inherit- extension type",
+      "data": {
+        "id": "c629a8db-bef2-43f1-91ac-036514c360e3",
+        "name": "Sharia Advisory Council",
+        "organisationType": "x-inherit-sharia-advisory"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — x-inherit- extension estate role",
+      "data": {
+        "id": "1e2df850-d0e3-41d2-a5ba-e5764072d405",
+        "name": "Family Waqf Foundation",
+        "organisationType": "charity",
+        "estateRoles": [
+          "x-inherit-waqf-manager"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — registration with all fields",
+      "data": {
+        "id": "5b38b2d8-d759-4747-b1a5-bd4825327a4d",
+        "name": "Smith & Jones Solicitors",
+        "organisationType": "legal_firm",
+        "registrations": [
+          {
+            "body": "sra",
+            "number": "642790",
+            "status": "active",
+            "verificationUrl": "https://www.sra.org.uk/consumers/register/organisation/?sraNumber=642790",
+            "verifiedAt": "2026-03-15T10:30:00Z",
+            "domicile": "GB-ENG"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "name": "IDR Law",
+        "organisationType": "legal_firm"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required name",
+      "data": {
+        "id": "10df6003-536b-481b-b0ce-a387e430f9ec",
+        "organisationType": "legal_firm"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required organisationType",
+      "data": {
+        "id": "6f81528a-e9ca-403e-bfac-d4c8384b1b31",
+        "name": "IDR Law"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown organisationType (not x-inherit- prefixed)",
+      "data": {
+        "id": "5c013c81-cefb-4c0b-9e8a-1ba2a52d6c0e",
+        "name": "IDR Law",
+        "organisationType": "law_practice"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown estate role (not x-inherit- prefixed)",
+      "data": {
+        "id": "aa40fc30-773f-45ef-bcbd-a6012f03f1df",
+        "name": "IDR Law",
+        "organisationType": "legal_firm",
+        "estateRoles": [
+          "lawyer"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unevaluated property rejected",
+      "data": {
+        "id": "fa67f57c-bf08-4d6b-99e4-1d9b5399be73",
+        "name": "IDR Law",
+        "organisationType": "legal_firm",
+        "badField": true
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — x-inherit- extension property allowed",
+      "data": {
+        "id": "a673803f-1163-450d-b8a5-016fa4161395",
+        "name": "IDR Law",
+        "organisationType": "legal_firm",
+        "x-inherit-sra-tier": {
+          "value": "gold"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — wikidataId wrong format",
+      "data": {
+        "id": "93cbcc5e-6ddf-462f-8b30-8febf048407d",
+        "name": "HMRC",
+        "organisationType": "government_body",
+        "wikidataId": "P12345"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — registration missing required body",
+      "data": {
+        "id": "aad1316b-1845-49e3-9fec-7a69cb222dfe",
+        "name": "Smith & Jones",
+        "organisationType": "legal_firm",
+        "registrations": [
+          {
+            "number": "642790"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — registration missing required number",
+      "data": {
+        "id": "87add4b6-09f7-4ff7-b225-31f18ca4df0f",
+        "name": "Smith & Jones",
+        "organisationType": "legal_firm",
+        "registrations": [
+          {
+            "body": "sra"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — registration invalid status",
+      "data": {
+        "id": "07acf96f-3b16-438f-a0ce-f0a76e80b464",
+        "name": "Smith & Jones",
+        "organisationType": "legal_firm",
+        "registrations": [
+          {
+            "body": "sra",
+            "number": "642790",
+            "status": "unknown"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — organisation with one Trustpilot rating (minimal required fields)",
+      "data": {
+        "id": "f08667c0-51f9-44ad-b1c9-d84ea355dfd3",
+        "name": "Harrison & Webb Solicitors",
+        "organisationType": "legal_firm",
+        "ratings": [
+          {
+            "platform": "trustpilot",
+            "ratingValue": 4.7,
+            "retrievedAt": "2026-03-30T10:00:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisation with ratings from three platforms",
+      "data": {
+        "id": "bc6e836d-8dc4-49a4-8a92-e5db1af4ee95",
+        "name": "Clarke & Sons Estate Services",
+        "organisationType": "valuation_firm",
+        "ratings": [
+          {
+            "platform": "trustpilot",
+            "ratingValue": 4.7,
+            "reviewCount": 182,
+            "profileUrl": "https://uk.trustpilot.com/review/clarkeestimates.co.uk",
+            "retrievedAt": "2026-03-30T10:00:00Z"
+          },
+          {
+            "platform": "google",
+            "ratingValue": 4.5,
+            "reviewCount": 94,
+            "profileUrl": "https://maps.google.com/?cid=1234567890",
+            "retrievedAt": "2026-03-30T10:05:00Z"
+          },
+          {
+            "platform": "feefo",
+            "ratingValue": 4.8,
+            "reviewCount": 67,
+            "profileUrl": "https://www.feefo.com/en-GB/reviews/clarke-sons",
+            "retrievedAt": "2026-03-30T10:10:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisation with Checkatrade rating using bestRating 10",
+      "data": {
+        "id": "f725bfb3-5ff0-4410-a8c5-e4afcee9cda0",
+        "name": "Didcot House Clearance",
+        "organisationType": "other",
+        "ratings": [
+          {
+            "platform": "checkatrade",
+            "ratingValue": 9.4,
+            "bestRating": 10,
+            "worstRating": 1,
+            "reviewCount": 31,
+            "profileUrl": "https://www.checkatrade.com/trades/didcot-house-clearance",
+            "retrievedAt": "2026-03-28T14:00:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisation with x-inherit- extension platform",
+      "data": {
+        "id": "17efeb8e-c771-4b9b-91fa-ea9a775a2427",
+        "name": "Dignity Funerals Ltd",
+        "organisationType": "funeral_provider",
+        "ratings": [
+          {
+            "platform": "x-inherit-bark",
+            "ratingValue": 4.2,
+            "reviewCount": 15,
+            "retrievedAt": "2026-03-25T09:00:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — rating missing required retrievedAt",
+      "data": {
+        "id": "611c3ad9-49de-441b-b9a8-c89222337d34",
+        "name": "Smith & Jones",
+        "organisationType": "legal_firm",
+        "ratings": [
+          {
+            "platform": "trustpilot",
+            "ratingValue": 4.5
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — rating with additional property",
+      "data": {
+        "id": "431dd127-c4a8-4f1b-9b48-f5a08b64a922",
+        "name": "Smith & Jones",
+        "organisationType": "legal_firm",
+        "ratings": [
+          {
+            "platform": "trustpilot",
+            "ratingValue": 4.5,
+            "retrievedAt": "2026-03-30T10:00:00Z",
+            "unknownField": "should fail"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — ratingValue above maximum",
+      "data": {
+        "id": "8c4c80c5-3853-479a-915f-9041e27b5675",
+        "name": "Smith & Jones",
+        "organisationType": "legal_firm",
+        "ratings": [
+          {
+            "platform": "google",
+            "ratingValue": 10.1,
+            "retrievedAt": "2026-03-30T10:00:00Z"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — ratingValue below minimum (negative)",
+      "data": {
+        "id": "35f1f4fa-aedd-4aa5-b456-84c75fab8d22",
+        "name": "Smith & Jones",
+        "organisationType": "legal_firm",
+        "ratings": [
+          {
+            "platform": "trustpilot",
+            "ratingValue": -1,
+            "retrievedAt": "2026-03-30T10:00:00Z"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — Companies House liveCheck with all fields",
+      "data": {
+        "id": "0e1cff02-7e4a-4c70-a121-7e7f4346b934",
+        "name": "Rails of Sheffield Ltd",
+        "organisationType": "dealer",
+        "registrations": [
+          {
+            "body": "companies_house",
+            "number": "03456789",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "companyStatus": "active",
+              "sicCodes": [
+                "47789"
+              ],
+              "incorporatedAt": "1998-04-15",
+              "accountsOverdue": false,
+              "insolvencyFlag": false
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — FCA liveCheck with authorisation and permissions",
+      "data": {
+        "id": "92da7763-5635-4719-b5cb-38ea497a50cf",
+        "name": "Hargreaves Lansdown",
+        "organisationType": "financial_institution",
+        "registrations": [
+          {
+            "body": "fca",
+            "number": "115248",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:05:00Z",
+              "authorisationStatus": "authorised",
+              "firmReference": "115248",
+              "permissions": [
+                "Advising on investments",
+                "Arranging deals in investments",
+                "Managing investments"
+              ],
+              "effectiveFrom": "2001-12-01"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Charity Commission liveCheck with income and objects",
+      "data": {
+        "id": "102f0b6f-02fe-41c5-b846-42267c37902f",
+        "name": "Macmillan Cancer Support",
+        "organisationType": "charity",
+        "registrations": [
+          {
+            "body": "ccew",
+            "number": "261017",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:10:00Z",
+              "charityStatus": "registered",
+              "income": 19500000000,
+              "objects": "To improve the lives of people affected by cancer",
+              "dateRegistered": "1989-05-22",
+              "reportingStatus": "up-to-date"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — OSCR liveCheck for Scottish charity",
+      "data": {
+        "id": "bd1440b8-74ff-45cd-903c-1f64eef8dc95",
+        "name": "Marie Curie Scotland",
+        "organisationType": "charity",
+        "registrations": [
+          {
+            "body": "oscr",
+            "number": "SC038731",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:15:00Z",
+              "charityStatus": "registered",
+              "income": 1800000000,
+              "reportingStatus": "up-to-date"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — minimal liveCheck with only retrievedAt",
+      "data": {
+        "id": "ca74ed4d-ef47-4a2c-a09b-847527ea11d4",
+        "name": "Smith & Jones Solicitors",
+        "organisationType": "legal_firm",
+        "registrations": [
+          {
+            "body": "sra",
+            "number": "642790",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T09:00:00Z"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — liveCheck missing required retrievedAt",
+      "data": {
+        "id": "42cd6081-8b24-4677-a183-6f54818c9952",
+        "name": "Smith & Jones Solicitors",
+        "organisationType": "legal_firm",
+        "registrations": [
+          {
+            "body": "companies_house",
+            "number": "01234567",
+            "status": "active",
+            "liveCheck": {
+              "companyStatus": "active"
+            }
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — liveCheck with unknown property",
+      "data": {
+        "id": "83d4a7ca-78d7-4e31-a5a8-31c53c1c3a32",
+        "name": "Smith & Jones Solicitors",
+        "organisationType": "legal_firm",
+        "registrations": [
+          {
+            "body": "companies_house",
+            "number": "01234567",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "unknownField": "should fail"
+            }
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — registration without liveCheck (optional)",
+      "data": {
+        "id": "1f0c3ccc-0ccd-4b4f-ab08-f0843293ca27",
+        "name": "Harrison & Webb",
+        "organisationType": "legal_firm",
+        "registrations": [
+          {
+            "body": "sra",
+            "number": "642790",
+            "status": "active"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Companies House liveCheck with insolvencyFlag true (warning data)",
+      "data": {
+        "id": "9e17f7ed-3226-4cde-97ff-0e9291ce64c1",
+        "name": "Dodgy Dealers Ltd",
+        "organisationType": "dealer",
+        "registrations": [
+          {
+            "body": "companies_house",
+            "number": "09876543",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T11:00:00Z",
+              "companyStatus": "active",
+              "accountsOverdue": true,
+              "insolvencyFlag": true
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — name as number (must be string)",
+      "data": {
+        "id": "a0000070-0000-4000-a000-000000000070",
+        "name": 42,
+        "organisationType": "legal_firm"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — organisationType as boolean (must be string/enum)",
+      "data": {
+        "id": "a0000071-0000-4000-a000-000000000071",
+        "name": "Test Org",
+        "organisationType": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a valid UUID",
+      "data": {
+        "id": "not-a-valid-uuid",
+        "name": "Test Org",
+        "organisationType": "legal_firm"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — email is not a valid email format",
+      "data": {
+        "id": "a0000072-0000-4000-a000-000000000072",
+        "name": "Test Org",
+        "organisationType": "legal_firm",
+        "email": "not-an-email"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — url is not a valid URI format",
+      "data": {
+        "id": "a0000073-0000-4000-a000-000000000073",
+        "name": "Test Org",
+        "organisationType": "legal_firm",
+        "url": "not a url at all"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — verifiedAt in registration is not ISO date-time",
+      "data": {
+        "id": "a0000074-0000-4000-a000-000000000074",
+        "name": "Test Org",
+        "organisationType": "legal_firm",
+        "registrations": [
+          {
+            "body": "sra",
+            "number": "642790",
+            "verifiedAt": "31/03/2026 10:30"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — name is empty string (minLength 1)",
+      "data": {
+        "id": "a0000075-0000-4000-a000-000000000075",
+        "name": "",
+        "organisationType": "legal_firm"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — name exceeds maxLength (256 chars)",
+      "data": {
+        "id": "a0000076-0000-4000-a000-000000000076",
+        "name": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "organisationType": "legal_firm"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — organisation with dealer profile",
+      "data": {
+        "id": "b6000001-0000-4000-b000-000000006001",
+        "name": "Rails of Sheffield",
+        "organisationType": "dealer",
+        "dealerProfile": {
+          "categories": [
+            "model_railways",
+            "locomotives",
+            "rolling_stock"
+          ],
+          "dealerTier": "professional",
+          "fulfilmentCapabilities": [
+            "inspection",
+            "grading",
+            "photography",
+            "shipping"
+          ],
+          "geographicReach": "national",
+          "averageResponseTime": "2 business days"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisation with VAT configuration",
+      "data": {
+        "id": "b6000002-0000-4000-b000-000000006002",
+        "name": "Antiques Emporium Ltd",
+        "organisationType": "dealer",
+        "vatConfiguration": {
+          "vatRegistered": true,
+          "vatScheme": "margin_scheme",
+          "vatNumber": "GB123456789",
+          "vatCountry": "GB"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisation with international shipping",
+      "data": {
+        "id": "b6000003-0000-4000-b000-000000006003",
+        "name": "Global Collectibles Ltd",
+        "organisationType": "dealer",
+        "internationalShipping": {
+          "shipsToCountries": [
+            "GB",
+            "US",
+            "DE",
+            "FR",
+            "JP"
+          ],
+          "receivesFromCountries": [
+            "GB",
+            "US",
+            "AU"
+          ],
+          "customsHandling": true,
+          "importDutyPolicy": "buyer_pays",
+          "currency": "GBP"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "Invalid organisation — vatConfiguration with lowercase country",
+      "data": {
+        "id": "b6000004-0000-4000-b000-000000006004",
+        "name": "Antiques Emporium Ltd",
+        "organisationType": "dealer",
+        "vatConfiguration": {
+          "vatRegistered": true,
+          "vatScheme": "margin_scheme",
+          "vatNumber": "GB123456789",
+          "vatCountry": "gb"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "Invalid organisation — vatConfiguration with bad scheme",
+      "data": {
+        "id": "b6000005-0000-4000-b000-000000006005",
+        "name": "Antiques Emporium Ltd",
+        "organisationType": "dealer",
+        "vatConfiguration": {
+          "vatRegistered": true,
+          "vatScheme": "made_up",
+          "vatNumber": "GB123456789",
+          "vatCountry": "GB"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "Invalid organisation — internationalShipping with bad import duty policy",
+      "data": {
+        "id": "b6000006-0000-4000-b000-000000006006",
+        "name": "Global Collectibles Ltd",
+        "organisationType": "dealer",
+        "internationalShipping": {
+          "shipsToCountries": [ "GB", "US" ],
+          "importDutyPolicy": "ignore_it"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "Invalid organisation — dealerProfile with bad dealerTier",
+      "data": {
+        "id": "b6000007-0000-4000-b000-000000006007",
+        "name": "Rails of Sheffield",
+        "organisationType": "dealer",
+        "dealerProfile": {
+          "categories": [ "model_railways" ],
+          "dealerTier": "legendary"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — organisationType: financial_institution with estateRoles: asset_holder, insurer",
+      "data": {
+        "id": "c7000001-0000-4000-c000-000000007001",
+        "name": "Barclays Bank UK PLC",
+        "organisationType": "financial_institution",
+        "estateRoles": [ "asset_holder", "insurer" ],
+        "jurisdiction": "GB"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: pension_provider with estateRole: liability_holder",
+      "data": {
+        "id": "c7000002-0000-4000-c000-000000007002",
+        "name": "Nest Pensions",
+        "organisationType": "pension_provider",
+        "estateRoles": [ "liability_holder" ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: insurance_provider with estateRoles: insurer, recommended_dealer",
+      "data": {
+        "id": "c7000003-0000-4000-c000-000000007003",
+        "name": "Hiscox Insurance",
+        "organisationType": "insurance_provider",
+        "estateRoles": [ "insurer", "recommended_dealer" ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: auction_house with estateRoles: valuer, will_writer",
+      "data": {
+        "id": "c7000004-0000-4000-c000-000000007004",
+        "name": "Christie's",
+        "organisationType": "auction_house",
+        "estateRoles": [ "valuer" ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: valuation_firm with estateRole: professional_adviser",
+      "data": {
+        "id": "c7000005-0000-4000-c000-000000007005",
+        "name": "RICS Valuers Ltd",
+        "organisationType": "valuation_firm",
+        "estateRoles": [ "professional_adviser" ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: funeral_provider with estateRole: funeral_provider",
+      "data": {
+        "id": "c7000006-0000-4000-c000-000000007006",
+        "name": "Dignity Funerals Ltd",
+        "organisationType": "funeral_provider",
+        "estateRoles": [ "funeral_provider" ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: religious_institution with estateRole: regulatory_body",
+      "data": {
+        "id": "c7000007-0000-4000-c000-000000007007",
+        "name": "Manchester Cathedral",
+        "organisationType": "religious_institution",
+        "estateRoles": [ "regulatory_body" ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: employer with estateRole: employer",
+      "data": {
+        "id": "c7000008-0000-4000-c000-000000007008",
+        "name": "NHS Greater Manchester",
+        "organisationType": "employer",
+        "estateRoles": [ "employer" ],
+        "notes": "Death-in-service benefit: 2x salary. HR contact: Julie Patel."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: trust_corporation with estateRoles: executor, trustee",
+      "data": {
+        "id": "c7000009-0000-4000-c000-000000007009",
+        "name": "Barclays Trust Company Ltd",
+        "organisationType": "trust_corporation",
+        "estateRoles": [ "executor", "trustee" ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: accountancy_firm with estateRole: will_writer",
+      "data": {
+        "id": "c7000010-0000-4000-c000-000000007010",
+        "name": "KPMG Estate Services",
+        "organisationType": "accountancy_firm",
+        "estateRoles": [ "will_writer", "professional_adviser" ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: retailer with estateRole: retailer",
+      "data": {
+        "id": "c7000011-0000-4000-c000-000000007011",
+        "name": "Mappin & Webb",
+        "organisationType": "retailer",
+        "estateRoles": [ "retailer" ],
+        "notes": "Original jeweller — provenance documentation held on file."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: manufacturer with estateRole: service_provider",
+      "data": {
+        "id": "c7000012-0000-4000-c000-000000007012",
+        "name": "Hornby PLC",
+        "organisationType": "manufacturer",
+        "estateRoles": [ "service_provider" ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: property_management",
+      "data": {
+        "id": "c7000013-0000-4000-c000-000000007013",
+        "name": "FirstPort Property Services",
+        "organisationType": "property_management",
+        "notes": "Leasehold management company for the Manchester apartment block."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: storage_facility",
+      "data": {
+        "id": "c7000014-0000-4000-c000-000000007014",
+        "name": "Safestore Trafford Park",
+        "organisationType": "storage_facility"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: digital_platform",
+      "data": {
+        "id": "c7000015-0000-4000-c000-000000007015",
+        "name": "Coinbase",
+        "organisationType": "digital_platform",
+        "notes": "Cryptocurrency exchange holding Bitcoin wallet. Contact support@coinbase.com."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisationType: utility_provider",
+      "data": {
+        "id": "c7000016-0000-4000-c000-000000007016",
+        "name": "British Gas",
+        "organisationType": "utility_provider"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — registration status: suspended",
+      "data": {
+        "id": "c7000017-0000-4000-c000-000000007017",
+        "name": "Suspended Solicitors LLP",
+        "organisationType": "legal_firm",
+        "registrations": [
+          {
+            "body": "sra",
+            "number": "123456",
+            "status": "suspended"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — registration status: revoked",
+      "data": {
+        "id": "c7000018-0000-4000-c000-000000007018",
+        "name": "Former Advisers Ltd",
+        "organisationType": "accountancy_firm",
+        "registrations": [
+          {
+            "body": "fca",
+            "number": "987654",
+            "status": "revoked"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — registration status: voluntary",
+      "data": {
+        "id": "c7000019-0000-4000-c000-000000007019",
+        "name": "Manchester Model Railway Club",
+        "organisationType": "other",
+        "registrations": [
+          {
+            "body": "model_railway_society",
+            "number": "MRC-2024-0042",
+            "status": "voluntary"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — registration status: expired",
+      "data": {
+        "id": "c7000020-0000-4000-c000-000000007020",
+        "name": "Old Insurance Co",
+        "organisationType": "insurance_provider",
+        "registrations": [
+          {
+            "body": "fca",
+            "number": "456789",
+            "status": "expired"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck companyStatus: dissolved",
+      "data": {
+        "id": "c7000021-0000-4000-c000-000000007021",
+        "name": "Dissolved Business Ltd",
+        "organisationType": "other",
+        "registrations": [
+          {
+            "body": "companies_house",
+            "number": "11223344",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "companyStatus": "dissolved"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck companyStatus: liquidation",
+      "data": {
+        "id": "c7000022-0000-4000-c000-000000007022",
+        "name": "Failing Firm Ltd",
+        "organisationType": "other",
+        "registrations": [
+          {
+            "body": "companies_house",
+            "number": "22334455",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "companyStatus": "liquidation",
+              "insolvencyFlag": true
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck companyStatus: receivership, administration, voluntary-arrangement",
+      "data": {
+        "id": "c7000023-0000-4000-c000-000000007023",
+        "name": "Troubled Trading Ltd",
+        "organisationType": "other",
+        "registrations": [
+          {
+            "body": "companies_house",
+            "number": "33445566",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "companyStatus": "receivership"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck companyStatus: administration",
+      "data": {
+        "id": "c7000024-0000-4000-c000-000000007024",
+        "name": "Administration Co Ltd",
+        "organisationType": "other",
+        "registrations": [
+          {
+            "body": "companies_house",
+            "number": "44556677",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "companyStatus": "administration"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck companyStatus: voluntary-arrangement",
+      "data": {
+        "id": "c7000025-0000-4000-c000-000000007025",
+        "name": "CVA Firm Ltd",
+        "organisationType": "other",
+        "registrations": [
+          {
+            "body": "companies_house",
+            "number": "55667788",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "companyStatus": "voluntary-arrangement"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck companyStatus: converted-closed",
+      "data": {
+        "id": "c7000026-0000-4000-c000-000000007026",
+        "name": "Converted Business Ltd",
+        "organisationType": "other",
+        "registrations": [
+          {
+            "body": "companies_house",
+            "number": "66778899",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "companyStatus": "converted-closed"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck FCA authorisationStatus: revoked",
+      "data": {
+        "id": "c7000027-0000-4000-c000-000000007027",
+        "name": "Revoked Advisor Ltd",
+        "organisationType": "financial_institution",
+        "registrations": [
+          {
+            "body": "fca",
+            "number": "111222",
+            "status": "revoked",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "authorisationStatus": "revoked"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck FCA authorisationStatus: suspended",
+      "data": {
+        "id": "c7000028-0000-4000-c000-000000007028",
+        "name": "Suspended Advisor Ltd",
+        "organisationType": "financial_institution",
+        "registrations": [
+          {
+            "body": "fca",
+            "number": "222333",
+            "status": "suspended",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "authorisationStatus": "suspended"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck FCA authorisationStatus: cancelled and no-longer-authorised",
+      "data": {
+        "id": "c7000029-0000-4000-c000-000000007029",
+        "name": "Cancelled Firm Ltd",
+        "organisationType": "financial_institution",
+        "registrations": [
+          {
+            "body": "fca",
+            "number": "333444",
+            "status": "expired",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "authorisationStatus": "cancelled"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck FCA authorisationStatus: no-longer-authorised",
+      "data": {
+        "id": "c7000030-0000-4000-c000-000000007030",
+        "name": "Former Authorised Firm",
+        "organisationType": "financial_institution",
+        "registrations": [
+          {
+            "body": "fca",
+            "number": "444555",
+            "status": "expired",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "authorisationStatus": "no-longer-authorised"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck charityStatus: removed",
+      "data": {
+        "id": "c7000031-0000-4000-c000-000000007031",
+        "name": "Removed Charity",
+        "organisationType": "charity",
+        "registrations": [
+          {
+            "body": "ccew",
+            "number": "9999999",
+            "status": "revoked",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "charityStatus": "removed"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck charityStatus: suspended and in-default with reportingStatus: overdue",
+      "data": {
+        "id": "c7000032-0000-4000-c000-000000007032",
+        "name": "Suspended Charity Ltd",
+        "organisationType": "charity",
+        "registrations": [
+          {
+            "body": "oscr",
+            "number": "SC099999",
+            "status": "suspended",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "charityStatus": "suspended",
+              "reportingStatus": "overdue"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — liveCheck charityStatus: in-default with reportingStatus: not-required",
+      "data": {
+        "id": "c7000033-0000-4000-c000-000000007033",
+        "name": "Defaulting Charity",
+        "organisationType": "charity",
+        "registrations": [
+          {
+            "body": "ccew",
+            "number": "8888888",
+            "status": "active",
+            "liveCheck": {
+              "retrievedAt": "2026-03-31T10:00:00Z",
+              "charityStatus": "in-default",
+              "reportingStatus": "not-required"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — vatConfiguration scheme: global_accounting",
+      "data": {
+        "id": "c7000034-0000-4000-c000-000000007034",
+        "name": "Antiques Centre Manchester",
+        "organisationType": "dealer",
+        "vatConfiguration": {
+          "vatRegistered": true,
+          "vatScheme": "global_accounting",
+          "vatNumber": "GB987654321",
+          "vatCountry": "GB"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — vatConfiguration scheme: standard_vat",
+      "data": {
+        "id": "c7000035-0000-4000-c000-000000007035",
+        "name": "Standard VAT Business Ltd",
+        "organisationType": "other",
+        "vatConfiguration": {
+          "vatRegistered": true,
+          "vatScheme": "standard_vat",
+          "vatNumber": "GB111222333",
+          "vatCountry": "GB"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — internationalShipping importDutyPolicy: dealer_absorbs",
+      "data": {
+        "id": "c7000036-0000-4000-c000-000000007036",
+        "name": "Premium International Dealers",
+        "organisationType": "dealer",
+        "internationalShipping": {
+          "shipsToCountries": [ "GB", "US", "AU" ],
+          "importDutyPolicy": "dealer_absorbs",
+          "currency": "GBP"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — internationalShipping importDutyPolicy: included_in_shipping",
+      "data": {
+        "id": "c7000037-0000-4000-c000-000000007037",
+        "name": "All-in Shipping Co",
+        "organisationType": "dealer",
+        "internationalShipping": {
+          "shipsToCountries": [ "DE", "FR", "IT" ],
+          "importDutyPolicy": "included_in_shipping"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — dealerProfile dealerTier: free with fulfilmentCapabilities: storage, restoration",
+      "data": {
+        "id": "c7000038-0000-4000-c000-000000007038",
+        "name": "Local Antiques Dealer",
+        "organisationType": "dealer",
+        "dealerProfile": {
+          "categories": [ "antiques", "furniture" ],
+          "dealerTier": "free",
+          "fulfilmentCapabilities": [ "storage", "restoration" ],
+          "geographicReach": "local"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — dealerProfile dealerTier: standard with geographicReach: international",
+      "data": {
+        "id": "c7000039-0000-4000-c000-000000007039",
+        "name": "Mid-tier Collectibles Ltd",
+        "organisationType": "dealer",
+        "dealerProfile": {
+          "categories": [ "collectibles" ],
+          "dealerTier": "standard",
+          "geographicReach": "international"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — ratings platform: reviews_io and funeral_guide",
+      "data": {
+        "id": "c7000040-0000-4000-c000-000000007040",
+        "name": "Approved Valuers Ltd",
+        "organisationType": "valuation_firm",
+        "ratings": [
+          {
+            "platform": "reviews_io",
+            "ratingValue": 4.6,
+            "reviewCount": 53,
+            "retrievedAt": "2026-03-30T09:00:00Z"
+          },
+          {
+            "platform": "funeral_guide",
+            "ratingValue": 4.9,
+            "reviewCount": 210,
+            "retrievedAt": "2026-03-30T09:05:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — organisation with identifiers",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-abcd-567890123456",
+        "name": "Singapore Red Cross Society",
+        "organisationType": "charity",
+        "identifiers": [
+          {
+            "system": "urn:sg:uen",
+            "type": "registration_number",
+            "value": "S86CC0370E"
+          }
+        ]
+      },
+      "valid": true
+    }
+  ]
+}

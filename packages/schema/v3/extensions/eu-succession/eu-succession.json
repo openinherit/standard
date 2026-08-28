@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/eu-succession/eu-succession.json",
+  "title": "EU Succession Extension",
+  "description": "European succession rules: Brussels IV choice of law and European Certificate of Succession, Spanish regional regimes, forced heirship variants across civil law traditions, and post-Brexit UK asset handling.",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "AT",
+    "BE",
+    "BG",
+    "HR",
+    "CY",
+    "CZ",
+    "DK",
+    "EE",
+    "FI",
+    "FR",
+    "DE",
+    "GR",
+    "HU",
+    "IT",
+    "LV",
+    "LT",
+    "LU",
+    "MT",
+    "NL",
+    "PL",
+    "PT",
+    "RO",
+    "SK",
+    "SI",
+    "ES",
+    "SE"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "civil_law"
+  ],
+  "dataProvenance": "Regulation (EU) No 650/2012 (Brussels IV), Spanish Civil Code, French Code civil, German BGB",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": [
+    "islamic-succession",
+    "jewish-succession"
+  ],
+  "type": "object",
+  "$defs": {
+    "BrusselsIVChoiceOfLaw": {
+      "type": "object",
+      "properties": {
+        "habitualResidence": {
+          "$ref": "../../common/jurisdiction.json"
+        },
+        "nationalityElection": {
+          "type": "boolean"
+        },
+        "electedNationality": {
+          "$ref": "../../common/jurisdiction.json"
+        },
+        "electionDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "EuropeanCertificateOfSuccession": {
+      "type": "object",
+      "properties": {
+        "issued": {
+          "type": "boolean"
+        },
+        "certificateReference": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "issuingAuthority": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "issueDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SpanishRegionalRegime": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "string",
+          "enum": [
+            "common_civil",
+            "catalan",
+            "basque",
+            "navarre",
+            "aragon",
+            "balearic",
+            "galician"
+          ]
+        },
+        "forcedHeirshipRules": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "region"
+      ],
+      "additionalProperties": false
+    },
+    "ForcedHeirshipVariant": {
+      "$comment": "Which kinship types qualify as protected (forced) heirs under each model: french_reserve: descendants only (since 2006 reform — parents lost reserved share). german_pflichtteil: descendants, parents, spouse. italian_legittima: spouse, children (including adopted), parents. scandinavian_laglott: descendants only. dutch_deferred: children only (monetary claim, not property share). polish_zachowek: descendants, spouse, parents (2/3 of intestate share, or 1/2 for non-dependants). swiss_pflichtteil: descendants, spouse (parents removed by 1 January 2023 reform — see Switzerland extension).",
+      "type": "object",
+      "properties": {
+        "model": {
+          "type": "string",
+          "enum": [
+            "french_reserve",
+            "german_pflichtteil",
+            "scandinavian_laglott",
+            "dutch_deferred",
+            "polish_zachowek",
+            "swiss_pflichtteil",
+            "italian_legittima"
+          ]
+        },
+        "claimNature": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "reservedFraction": {
+          "type": "string",
+          "maxLength": 255,
+          "pattern": "^[0-9]+/[0-9]+$"
+        },
+        "calculationNotes": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "effectiveDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "reformVersion": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "temporalRule": {
+          "$ref": "../../common/temporal-rule.json"
+        }
+      },
+      "required": [
+        "model"
+      ],
+      "additionalProperties": false
+    },
+    "PostBrexitAssetHandling": {
+      "type": "object",
+      "properties": {
+        "ukAssetsSubjectToEURule": {
+          "type": "boolean"
+        },
+        "ukAssetsHandledUnder": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "memberState": {
+      "description": "ISO 3166-1 alpha-2 country code of the EU member state whose succession rules apply — determines Brussels IV regulation applicability",
+      "type": "string",
+      "pattern": "^[A-Z]{2}$",
+      "$comment": "ISO 3166-1 alpha-2 country code for the EU/EEA member state."
+    },
+    "brusselsIV": {
+      "$ref": "#/$defs/BrusselsIVChoiceOfLaw"
+    },
+    "europeanCertificate": {
+      "$ref": "#/$defs/EuropeanCertificateOfSuccession"
+    },
+    "spanishRegionalRegime": {
+      "$ref": "#/$defs/SpanishRegionalRegime"
+    },
+    "forcedHeirshipVariant": {
+      "$ref": "#/$defs/ForcedHeirshipVariant"
+    },
+    "postBrexitHandling": {
+      "$ref": "#/$defs/PostBrexitAssetHandling"
+    },
+    "legislativeChanges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "enacted",
+              "royal_assent",
+              "bill_stage",
+              "consultation",
+              "announced"
+            ]
+          },
+          "effectiveDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "description",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 50
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "memberState"
+  ],
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

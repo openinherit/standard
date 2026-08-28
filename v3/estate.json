@@ -1,0 +1,2584 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/estate.json",
+  "title": "Estate",
+  "description": "The root estate record — will, intestacy, or trust-based succession plan. Contains testator details, jurisdiction, will formalities, forced heirship, probate grants, death record, multi-jurisdiction administration, and tax treaty positions",
+  "type": "object",
+  "required": [
+    "id",
+    "testatorPersonId",
+    "status",
+    "domicile",
+    "createdAt",
+    "lastModifiedAt"
+  ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this estate record",
+      "examples": [ "b2c3d4e5-f6a7-8901-bcde-f12345678901" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "testatorPersonId": {
+      "description": "Reference to the Person.id of the testator (the person whose estate this is)",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "testatorPersonIdDisplay": {
+      "description": "Human-readable display name for the referenced testator person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "status": {
+      "description": "The lifecycle status of this estate record. Progresses from planning through to closure",
+      "$comment": "planning: estate plan is being prepared, not yet finalised. confirmed: estate plan is signed and in effect — the will has been executed. pre_probate: testator has died, estate is being gathered before applying for probate/grant. in_administration: grant obtained, estate is being administered — collecting assets, paying debts, distributing. distributed: all assets distributed to beneficiaries, final accounts pending. closed: estate administration is complete — all accounts filed, all distributions confirmed.",
+      "examples": [ "planning", "confirmed", "in_administration" ],
+      "default": "planning",
+      "enum": [
+        "planning",
+        "confirmed",
+        "pre_probate",
+        "in_administration",
+        "distributed",
+        "closed"
+      ]
+    },
+    "domicile": {
+      "description": "The testator's domicile — the jurisdiction whose succession law governs moveable property by default. For cross-border estates, individual assets may declare their own applicableLaw",
+      "$ref": "common/jurisdiction.json"
+    },
+    "willType": {
+      "description": "The type of will. Extension types use x-inherit- prefix",
+      "$comment": "secular: standard civil will. religious: will governed by religious law. dual: separate secular and religious components. composite: single document blending secular and religious provisions. oral_witnessed: oral will with witnesses. oral_customary: oral will under customary law. holographic: entirely handwritten. notarised: executed before a notary. privileged_will: military/mariner's will with relaxed formalities.",
+      "anyOf": [
+        {
+          "enum": [
+            "secular",
+            "religious",
+            "dual",
+            "composite",
+            "oral_witnessed",
+            "oral_customary",
+            "holographic",
+            "notarised",
+            "privileged_will"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+$"
+        }
+      ]
+    },
+    "companionEstateId": {
+      "description": "Links to a companion estate record — either a parallel estate under a different legal system, or a household companion's estate",
+      "$comment": "For dual-system estates — links secular and religious estate records. Also used for companion (household/couples) estates.",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "mirrorWillId": {
+      "description": "Reference to the companion estate's id when this will was created as a mirror of the companion's will. Mirror wills have substantially the same provisions — typically leaving everything to each other and then to shared beneficiaries. This field records the intent, not a guarantee that the wills remain identical (either partner may subsequently diverge)",
+      "$comment": "Set automatically when a mirror will template is used. Either partner may later modify their will independently — divergence is expected and should be flagged by implementations as an inconsistency worth reviewing, not an error.",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "companionLinkStatus": {
+      "description": "Current state of the companion estate link. Absent if the estate has never been linked to a companion",
+      "$comment": "Lifecycle: invited → active → decoupling → decoupled. See docs/companion-estates.md for full semantics.",
+      "examples": [ "active", "decoupled" ],
+      "enum": [ "invited", "active", "decoupling", "decoupled" ]
+    },
+    "linkedAt": {
+      "description": "ISO 8601 timestamp when the companion link became active",
+      "examples": [ "2026-03-15T10:00:00Z" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "decoupledAt": {
+      "description": "ISO 8601 timestamp when the companion link was severed",
+      "examples": [ "2026-09-01T16:00:00Z" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "primaryInstrument": {
+      "description": "The primary instrument governing succession for this estate",
+      "$comment": "will: estate passes primarily through the will. revocable_trust: estate passes through a revocable (living) trust — common in US estate planning. both: combination of will and trust. intestacy: no will exists — estate distributes under intestacy rules.",
+      "examples": [ "will", "intestacy" ],
+      "enum": [ "will", "revocable_trust", "both", "intestacy" ]
+    },
+    "defaultPropertyRegime": {
+      "description": "The default marital property regime for this estate. Determines which assets the testator may freely dispose of",
+      "$comment": "community_property: assets acquired during marriage are jointly owned 50/50 (US community property states, France, Spain). separate_property: each spouse owns what they acquire (England and Wales, most common law). equitable_distribution: court divides property fairly on divorce/death (most US states on divorce). deferred_community: assets are separate during marriage but shared on dissolution (Scandinavia, Germany). universal_community: all assets are joint from marriage (Netherlands pre-2018, some Indonesian adat). participation_in_acquisitions: Swiss regime — separate during marriage, share gains on dissolution. islamic_dower: mahr-based system — property is separate, wife has deferred mahr claim.",
+      "examples": [ "separate_property", "community_property" ],
+      "enum": [
+        "community_property",
+        "separate_property",
+        "equitable_distribution",
+        "deferred_community",
+        "universal_community",
+        "participation_in_acquisitions",
+        "islamic_dower"
+      ]
+    },
+    "totalEstimatedValue": {
+      "description": "Estimated total value of the estate before liabilities. In minor currency units",
+      "$ref": "common/money.json"
+    },
+    "attestation": {
+      "description": "Will execution formalities — witnesses, signing method, and compliance checks",
+      "$ref": "attestation.json"
+    },
+    "testamentaryCapacity": {
+      "description": "Record of testamentary capacity assessment for the testator",
+      "$ref": "#/$defs/TestamentaryCapacity"
+    },
+    "codicils": {
+      "description": "Amendments to the will. Each codicil must be executed with proper formalities",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/Codicil"
+      }
+    },
+    "revokesDocumentIds": {
+      "description": "Document IDs of prior wills or instruments this estate record expressly revokes",
+      "examples": [
+        [ "c3d4e5f6-a7b8-9012-cdef-123456789012" ]
+      ],
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+        "format": "uuid"
+      }
+    },
+    "revocationClause": {
+      "description": "Whether the will contains a general revocation clause ('I revoke all former wills and testamentary dispositions')",
+      "examples": [ true ],
+      "type": "boolean"
+    },
+    "forcedHeirship": {
+      "description": "Forced heirship regime applicable to this estate, if any",
+      "$ref": "#/$defs/ForcedHeirship"
+    },
+    "adjudicatingBodies": {
+      "description": "Courts and bodies with jurisdiction over this estate. Plural legal systems may involve multiple courts",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/AdjudicatingBody"
+      }
+    },
+    "parallelDistributions": {
+      "description": "Parallel distribution schemes under different legal systems — customary, religious, or statutory",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/ParallelDistribution"
+      }
+    },
+    "probateGrant": {
+      "description": "The probate grant or letters of administration for this estate",
+      "$ref": "#/$defs/ProbateGrant"
+    },
+    "deathRecord": {
+      "description": "Details of the testator's death",
+      "$ref": "#/$defs/DeathRecord"
+    },
+    "successionConflicts": {
+      "description": "Known conflicts between legal systems regarding succession for this estate",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/SuccessionConflict"
+      }
+    },
+    "choiceOfLaw": {
+      "description": "Choice of law declaration under the Brussels IV Regulation (EU Succession Regulation 650/2012) or equivalent. Allows the testator to choose which jurisdiction's succession law applies",
+      "$comment": "Brussels IV Regulation choice of law. Allows EU nationals to choose their nationality's law for succession.",
+      "type": "object",
+      "properties": {
+        "chosenLaw": {
+          "description": "The jurisdiction whose law the testator has chosen to govern succession",
+          "$ref": "common/jurisdiction.json"
+        },
+        "basis": {
+          "description": "Legal basis for the choice of law",
+          "examples": [
+            "Brussels IV Regulation Art. 22 — nationality at time of choice",
+            "Hague Convention on the Law Applicable to Succession"
+          ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "documentRef": {
+          "description": "Reference to the document containing the choice of law declaration",
+          "examples": [ "DOC-2024-COL-001" ],
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "additionalProperties": false
+    },
+    "electiveShareRight": {
+      "description": "Surviving spouse's elective share right (US). Allows the spouse to claim a statutory share of the estate regardless of the will's provisions",
+      "$comment": "US — surviving spouse's right to elect against the will.",
+      "type": "object",
+      "properties": {
+        "available": {
+          "description": "Whether elective share is available in this jurisdiction",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "electedAmount": {
+          "description": "The amount elected by the surviving spouse, if the election has been made",
+          "$ref": "common/money.json"
+        },
+        "statute": {
+          "description": "The statute governing elective share in this jurisdiction",
+          "examples": [
+            "Uniform Probate Code §2-202",
+            "New York EPTL §5-1.1-A"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "description": "Additional notes on the elective share",
+          "examples": [
+            "Augmented estate calculation includes revocable trust assets"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "priorMatrimonialClaim": {
+      "description": "A prior matrimonial claim against the estate — typically from a former spouse under a financial order",
+      "type": "object",
+      "properties": {
+        "exists": {
+          "description": "Whether a prior matrimonial claim exists",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "description": {
+          "description": "Description of the claim",
+          "examples": [
+            "Former wife has lump sum order of £50,000 outstanding from 2018 divorce"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        },
+        "claimantPersonId": {
+          "description": "Reference to the Person.id of the claimant",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "claimantPersonIdDisplay": {
+          "description": "Human-readable display name for the referenced claimant person",
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "description": "Additional context",
+          "examples": [ "Clean break order obtained — no further claims" ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "noContestClause": {
+      "description": "In terrorem (no-contest) clause — a provision that a beneficiary forfeits their gift if they challenge the will. Enforceability varies by jurisdiction",
+      "$comment": "In terrorem clause — beneficiary forfeits gift if they challenge the will.",
+      "type": "object",
+      "properties": {
+        "present": {
+          "description": "Whether the will contains a no-contest clause",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "enforceability": {
+          "description": "Enforceability status in the governing jurisdiction",
+          "examples": [
+            "Enforceable in Florida",
+            "Generally unenforceable in England and Wales",
+            "Enforceable unless probable cause exists (California)"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "description": "Additional context about the clause",
+          "examples": [
+            "Clause includes safe harbour for challenges brought in good faith"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "pretermittedHeirClaims": {
+      "description": "Claims by pretermitted heirs — children born or adopted after the will was executed who are not mentioned in it",
+      "$comment": "Claims by children born/adopted after the will was made.",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "properties": {
+          "claimantPersonId": {
+            "description": "Reference to the Person.id of the pretermitted heir",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "claimantPersonIdDisplay": {
+            "description": "Human-readable display name for the referenced claimant person",
+            "type": "string",
+            "maxLength": 255
+          },
+          "status": {
+            "description": "Current status of this claim",
+            "examples": [
+              "pending",
+              "settled",
+              "dismissed",
+              "intestate share awarded"
+            ],
+            "type": "string",
+            "maxLength": 100
+          },
+          "notes": {
+            "description": "Additional context about the claim",
+            "examples": [
+              "Child born 2023, will executed 2020 — no mention in will or codicil"
+            ],
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "testamentaryPromises": {
+      "description": "Claims under the Law Reform (Testamentary Promises) Act 1949 (New Zealand). Allows claims by persons who provided services to the deceased in reliance on a promise of testamentary provision",
+      "$comment": "NZ — claims under the Law Reform (Testamentary Promises) Act 1949.",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "properties": {
+          "claimantPersonId": {
+            "description": "Reference to the Person.id of the claimant",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "claimantPersonIdDisplay": {
+            "description": "Human-readable display name for the referenced claimant person",
+            "type": "string",
+            "maxLength": 255
+          },
+          "promiseDescription": {
+            "description": "Description of the promise made by the testator",
+            "examples": [
+              "Promised to leave the farm to nephew in return for 10 years of farm management"
+            ],
+            "type": "string",
+            "maxLength": 2000
+          },
+          "status": {
+            "description": "Current status of this claim",
+            "examples": [ "pending", "claim filed", "settled", "dismissed" ],
+            "type": "string",
+            "maxLength": 100
+          },
+          "notes": {
+            "description": "Additional context",
+            "examples": [ "Multiple witnesses to the promise — strong claim" ],
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "judicialVariationPower": {
+      "description": "Court power to vary a will to make reasonable financial provision for family and dependants. Applies in England and Wales (Inheritance Act 1975), New Zealand, and similar jurisdictions",
+      "$comment": "UK/NZ — court power to vary a will under the Inheritance (Provision for Family and Dependants) Act 1975 or equivalent.",
+      "type": "object",
+      "properties": {
+        "available": {
+          "description": "Whether judicial variation is available in this jurisdiction",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "statute": {
+          "description": "The statute granting variation power",
+          "examples": [
+            "Inheritance (Provision for Family and Dependants) Act 1975",
+            "Family Protection Act 1955 (NZ)"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "description": "Additional context",
+          "examples": [
+            "Claim must be brought within 6 months of grant of representation"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "commorientesRule": {
+      "description": "Commorientes rule — the legal presumption for order of death when two or more people die in the same event. Critical for determining which estate inherits from which",
+      "$comment": "Rule determining order of death when people die in the same event. Varies by jurisdiction.",
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "description": "Whether the commorientes rule is relevant to this estate",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "rule": {
+          "description": "The applicable commorientes rule",
+          "examples": [
+            "s.184 Law of Property Act 1925 — deaths presumed in order of seniority",
+            "Uniform Simultaneous Death Act — treated as if each predeceased the other"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "jurisdiction": {
+          "description": "Jurisdiction whose commorientes rule applies",
+          "$ref": "common/jurisdiction.json"
+        },
+        "notes": {
+          "description": "Additional context — e.g. specific facts of the case",
+          "examples": [
+            "Husband (72) and wife (68) died in same road traffic accident"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        },
+        "affectedPersonIds": {
+          "description": "Person IDs of those who died in the same event",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        },
+        "provedSurvivalOrder": {
+          "description": "Person IDs in proved order of death, if established by evidence. First ID died first",
+          "type": [ "array", "null" ],
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        },
+        "statute": {
+          "description": "The governing statute for commorientes in this jurisdiction",
+          "examples": [ "Law of Property Act 1925 s.184" ],
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "additionalProperties": false
+    },
+    "ancillaryProbate": {
+      "description": "Ancillary probate proceedings in jurisdictions other than the primary domiciliary jurisdiction. Required when the estate includes assets in foreign jurisdictions",
+      "$comment": "Multi-jurisdiction estate administration. Each entry represents one jurisdiction's administration.",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "jurisdiction" ],
+        "properties": {
+          "jurisdiction": {
+            "description": "The jurisdiction where ancillary probate is needed",
+            "$ref": "common/jurisdiction.json"
+          },
+          "fiduciaryPersonId": {
+            "description": "Reference to the Person.id of the local fiduciary or administrator",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "fiduciaryPersonIdDisplay": {
+            "description": "Human-readable display name for the referenced fiduciary person",
+            "type": "string",
+            "maxLength": 255
+          },
+          "status": {
+            "description": "Current status of ancillary probate in this jurisdiction",
+            "$comment": "not_started: ancillary probate has not yet been initiated. applied: application has been submitted. granted: grant has been issued. completed: administration in this jurisdiction is finished. waived: ancillary probate is not required (e.g. small estate exemption).",
+            "enum": [
+              "not_started",
+              "applied",
+              "granted",
+              "completed",
+              "waived"
+            ]
+          },
+          "grantReference": {
+            "description": "Local grant reference number",
+            "examples": [ "ANC-2025-FR-001" ],
+            "type": "string",
+            "maxLength": 500
+          },
+          "localCounsel": {
+            "description": "Name of local legal counsel handling this jurisdiction",
+            "examples": [
+              "Maître Dupont, Paris",
+              "Tanaka & Associates, Tokyo",
+              "Okonkwo & Partners, Lagos",
+              "Sharma Legal, Mumbai",
+              "Al-Tamimi & Company, Dubai"
+            ],
+            "type": "string",
+            "maxLength": 255
+          },
+          "notes": {
+            "description": "Additional notes",
+            "examples": [ "French notaire requires apostilled UK grant" ],
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "registrations": {
+      "description": "Registrations of the will with official will registries. Not all jurisdictions have will registries, and registration is rarely compulsory",
+      "$comment": "Will registries worldwide (DIFC Wills Service Centre, UK Probate Registry, etc.).",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "registry" ],
+        "properties": {
+          "registry": {
+            "description": "Name of the will registry",
+            "examples": [
+              "Certainty National Will Register",
+              "DIFC Wills Service Centre",
+              "Japan Legal Affairs Bureau"
+            ],
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "registrationNumber": {
+            "description": "Registration reference number",
+            "examples": [ "CNWR-2024-123456", "DIFC-W-2024-0789" ],
+            "type": "string",
+            "maxLength": 500
+          },
+          "jurisdictionScope": {
+            "description": "What the registration covers — may be limited to certain jurisdictions or asset classes",
+            "examples": [
+              "England and Wales only",
+              "DIFC-registered assets only",
+              "Worldwide"
+            ],
+            "type": "string",
+            "maxLength": 500
+          },
+          "registrationDate": {
+            "description": "Date the will was registered",
+            "examples": [ "2024-07-01" ],
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "format": "date"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "reportingCurrency": {
+      "description": "The currency used for probate reporting and estate accounts. All values in this estate may need converting to this currency",
+      "$comment": "ISO 4217 currency for probate reporting.",
+      "examples": [ "GBP", "USD", "EUR" ],
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "conversionRates": {
+      "description": "Exchange rates used when converting foreign-currency assets to the reporting currency. Document the rate and date to satisfy probate courts",
+      "$comment": "Exchange rates used for estate valuation in cross-border estates.",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "required": [ "fromCurrency", "toCurrency", "rate", "rateDate" ],
+        "properties": {
+          "fromCurrency": {
+            "description": "Source currency code (ISO 4217)",
+            "examples": [ "EUR", "JPY" ],
+            "type": "string",
+            "pattern": "^[A-Z]{3}$"
+          },
+          "toCurrency": {
+            "description": "Target currency code (ISO 4217)",
+            "examples": [ "GBP", "USD" ],
+            "type": "string",
+            "pattern": "^[A-Z]{3}$"
+          },
+          "rate": {
+            "description": "Exchange rate — one unit of fromCurrency equals this many units of toCurrency",
+            "examples": [ 0.86, 0.0054 ],
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "rateDate": {
+            "description": "Date this exchange rate was sourced",
+            "examples": [ "2025-09-30" ],
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "format": "date"
+          },
+          "source": {
+            "description": "Source of the exchange rate",
+            "examples": [
+              "Bank of England daily rate",
+              "HMRC monthly rate",
+              "XE.com"
+            ],
+            "type": "string",
+            "maxLength": 255
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "taxTreatyPositions": {
+      "description": "Tax treaty positions relevant to the estate. Documents which treaties are being relied upon for double taxation relief",
+      "$comment": "Bilateral tax treaty claims relevant to the estate.",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "treaty" ],
+        "properties": {
+          "treaty": {
+            "description": "Name of the bilateral tax treaty",
+            "examples": [
+              "UK-US Estate Tax Treaty 1979",
+              "Japan-US Estate Tax Treaty 1955"
+            ],
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "primaryTaxingJurisdiction": {
+            "description": "The jurisdiction with primary taxing rights under this treaty",
+            "$ref": "common/jurisdiction.json"
+          },
+          "claimedCredits": {
+            "description": "Tax credits claimed under this treaty",
+            "examples": [
+              "Credit for UK IHT against US federal estate tax",
+              "Full exemption under Art. 8"
+            ],
+            "type": "string",
+            "maxLength": 255
+          },
+          "relevantArticle": {
+            "description": "The specific treaty article being relied upon",
+            "examples": [ "Art. 5(1)", "Art. 8", "Art. 11(2)(a)" ],
+            "type": "string",
+            "maxLength": 255
+          },
+          "notes": {
+            "description": "Additional context",
+            "examples": [
+              "Treaty predates FATCA — potential interaction with reporting requirements"
+            ],
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "suggestedPractitionerNeeds": {
+      "description": "Informational list of practitioner activity codes suggesting the types of professional help this estate may need. Computed from estate complexity, not user-entered",
+      "$comment": "Informational. Activity codes computed from estate complexity — e.g. trust_preparation, cross_border, iht_planning. Canonical taxonomy at openinherit.org/reference/practitioner-activities.json.",
+      "examples": [
+        [ "cross_border", "iht_planning", "trust_preparation" ],
+        [ "simple_probate" ]
+      ],
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      }
+    },
+    "createdAt": {
+      "description": "Timestamp when this estate record was first created",
+      "examples": [ "2024-01-15T09:00:00Z" ],
+      "readOnly": true,
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "lastModifiedAt": {
+      "description": "Timestamp when this estate record was last modified",
+      "examples": [ "2025-03-27T14:30:00Z" ],
+      "readOnly": true,
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "executionDate": {
+      "description": "Date the will was formally executed (signed with proper attestation). Enables look-back period calculations when combined with lifetime transfers",
+      "examples": [ "2024-06-15", "2020-03-01" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "administration": {
+      "description": "Estate administration details. Tracks the journey from death through grant, tax clearance, distribution, and closure",
+      "$comment": "Administration phase data — populated when the testator dies and the estate enters pre_probate or in_administration status.",
+      "type": "object",
+      "properties": {
+        "dateOfDeath": {
+          "description": "Date of death — the date from which succession takes effect",
+          "examples": [ "2026-01-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "dateOfGrant": {
+          "description": "Date the probate grant or letters of administration were issued",
+          "examples": [ "2026-06-01" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "grantType": {
+          "description": "Type of grant authorising estate administration",
+          "$comment": "grant_of_probate: E&W/AU/NZ — court confirms named executor. letters_of_administration: E&W — no will, court appoints administrator. letters_of_administration_with_will_annexed: E&W — will exists but named executor cannot act. succession_certificate: IN/PK — Indian Succession Act s.372. certificate_of_inheritance: DE/JP/FR — Erbschein (DE), 相続証明書 (JP), Acte de notoriété (FR). court_appointment: generic court appointment of administrator. resealing: foreign grant recognised locally (Commonwealth). european_certificate_of_succession: EU Brussels IV certificate. other: jurisdiction-specific grant type.",
+          "enum": [
+            "grant_of_probate",
+            "letters_of_administration",
+            "letters_of_administration_with_will_annexed",
+            "succession_certificate",
+            "certificate_of_inheritance",
+            "court_appointment",
+            "resealing",
+            "european_certificate_of_succession",
+            "other"
+          ]
+        },
+        "grantReference": {
+          "description": "Court reference number for the grant",
+          "examples": [ "PRO-2026-123456" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "court": {
+          "description": "Name of the issuing court or registry",
+          "examples": [
+            "Principal Registry of the Family Division",
+            "Leeds District Probate Registry",
+            "Tokyo Family Court"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "grossEstateValue": {
+          "description": "Gross value of the estate at date of death, before deducting liabilities",
+          "$ref": "common/money.json"
+        },
+        "netEstateValue": {
+          "description": "Net value of the estate after deducting liabilities",
+          "$ref": "common/money.json"
+        },
+        "taxLiability": {
+          "description": "Total inheritance/estate tax liability",
+          "$ref": "common/money.json"
+        },
+        "taxPaid": {
+          "description": "Amount of inheritance/estate tax paid so far",
+          "$ref": "common/money.json"
+        },
+        "taxClearance": {
+          "description": "Tax clearance status — confirmation from the tax authority that no further tax is owed",
+          "type": "object",
+          "properties": {
+            "status": {
+              "description": "Current status of tax clearance",
+              "$comment": "not_applied: clearance not yet applied for. applied: application submitted. received: clearance certificate received. not_required: estate below tax threshold.",
+              "enum": [ "not_applied", "applied", "received", "not_required" ]
+            },
+            "clearanceDate": {
+              "description": "Date clearance was received",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            },
+            "reference": {
+              "description": "Tax clearance reference number",
+              "examples": [ "HMRC-IHT-CLR-2026-789" ],
+              "type": "string",
+              "maxLength": 500
+            }
+          },
+          "additionalProperties": false
+        },
+        "distributions": {
+          "description": "Record of distributions made to beneficiaries during administration",
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "required": [ "beneficiaryPersonId", "distributionDate" ],
+            "properties": {
+              "beneficiaryPersonId": {
+                "description": "Person ID of the beneficiary receiving the distribution",
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                "format": "uuid"
+              },
+              "bequestId": {
+                "description": "Reference to the Bequest being fulfilled",
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                "format": "uuid"
+              },
+              "distributionDate": {
+                "description": "Date the distribution was made",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "format": "date"
+              },
+              "assetId": {
+                "description": "Asset ID if a specific asset was transferred",
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                "format": "uuid"
+              },
+              "propertyId": {
+                "description": "Property ID if a property was transferred",
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                "format": "uuid"
+              },
+              "cashAmount": {
+                "description": "Cash amount distributed, in minor currency units",
+                "$ref": "common/money.json"
+              },
+              "receipt": {
+                "description": "Whether a receipt/acknowledgement has been obtained from the beneficiary",
+                "examples": [ true, false ],
+                "type": "boolean"
+              },
+              "notes": {
+                "description": "Additional distribution notes",
+                "examples": [
+                  "Interim distribution — further distribution expected after property sale"
+                ],
+                "type": "string",
+                "maxLength": 2000
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "estateAccountsFiled": {
+          "description": "Whether the estate accounts have been prepared and filed/approved",
+          "examples": [ false ],
+          "type": "boolean"
+        },
+        "notes": {
+          "description": "Additional administration notes",
+          "examples": [
+            "Awaiting sale of Spanish property before final distribution"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "defaultSuccessionRegime": {
+      "description": "The default succession regime for all assets and properties in this estate. Individual assets/properties may override with their own successionRegime",
+      "type": "object",
+      "properties": {
+        "governingLaw": {
+          "description": "The default governing law for succession",
+          "type": "object",
+          "properties": {
+            "jurisdiction": {
+              "description": "Jurisdiction whose succession law applies by default",
+              "$ref": "common/jurisdiction.json"
+            },
+            "legalTradition": {
+              "description": "Which legal tradition applies",
+              "enum": [
+                "common_law",
+                "civil_law",
+                "mixed",
+                "customary_law",
+                "islamic_law",
+                "hindu_law",
+                "jewish_law",
+                "canon_law"
+              ]
+            },
+            "statute": {
+              "description": "Name of the governing statute",
+              "examples": [
+                "Wills Act 1837",
+                "PRC Civil Code",
+                "Hindu Succession Act 1956"
+              ],
+              "type": "string",
+              "maxLength": 255
+            },
+            "section": {
+              "description": "Specific section of the statute",
+              "type": "string",
+              "maxLength": 255
+            }
+          },
+          "additionalProperties": false
+        },
+        "determinedBy": {
+          "description": "How the governing law was determined",
+          "enum": [
+            "domicile",
+            "situs",
+            "nationality",
+            "personal_status",
+            "choice_of_law",
+            "treaty"
+          ]
+        },
+        "binding": {
+          "description": "Whether this succession regime is legally binding",
+          "type": "boolean"
+        },
+        "extensions": {
+          "description": "INHERIT extension IDs that apply",
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "notes": {
+          "description": "Additional context about the succession regime",
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "religiousConsideration": {
+      "description": "The testator's faith-based wishes for succession. Explicitly separate from legal succession regime — may or may not be binding depending on jurisdiction",
+      "$comment": "Estate-level only. Asset-level sacred/religious concerns are handled by culturalDisposition. tradition uses the same enum as legalSystems to maintain consistency.",
+      "type": "object",
+      "properties": {
+        "tradition": {
+          "description": "The religious legal tradition the testator wishes to follow",
+          "enum": [
+            "common_law",
+            "civil_law",
+            "mixed",
+            "customary_law",
+            "islamic_law",
+            "hindu_law",
+            "jewish_law",
+            "canon_law"
+          ]
+        },
+        "binding": {
+          "description": "Whether this religious consideration is legally binding in the estate's jurisdiction",
+          "type": "boolean"
+        },
+        "notes": {
+          "description": "Context for the religious consideration",
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "notes": {
+      "description": "Free-text notes about the estate. Use for anything not captured by structured fields",
+      "examples": [
+        "Complex cross-border estate — UK, France, and Singapore assets. Dual will structure."
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "deathCertificateDate": {
+      "description": "Date of the death certificate",
+      "examples": [ "2026-01-15" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "deathCertificateReference": {
+      "description": "Death certificate reference number",
+      "examples": [ "DC-2026-12345" ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "administrationDeadline": {
+      "description": "Target deadline for completing estate administration",
+      "examples": [ "2027-01-15" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "administrationDeadlineSource": {
+      "description": "Source or basis for the administration deadline",
+      "examples": [
+        "12 months from grant of probate per UK practice direction"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "probateReadiness": {
+      "description": "Machine-generated completeness assessments against jurisdiction-specific probate form requirements. This is data completeness, NOT legal validation — it says 'you haven't entered the death certificate reference yet', not 'this estate is legally ready for probate'",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "$ref": "#/$defs/ProbateReadiness"
+      }
+    },
+    "externalReferences": {
+      "description": "References to this estate in external systems — practice management software, court filing systems, government portals. Enables round-trip synchronisation between INHERIT and PMS",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "$ref": "#/$defs/ExternalReference"
+      }
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    },
+    "jurisdictionRules": {
+      "description": "Conflict of laws rules governing this estate — determines which jurisdiction's succession law applies to which assets",
+      "type": "object",
+      "properties": {
+        "doctrine": {
+          "description": "Whether moveable and immoveable property are governed by different laws (scission) or the same law (unity)",
+          "enum": [ "scission", "unity", "hybrid" ]
+        },
+        "immoveableRule": {
+          "description": "Which law governs immoveable property (real estate)",
+          "enum": [ "lex_situs", "lex_domicilii", "lex_patriae", "chosen_law" ]
+        },
+        "moveableRule": {
+          "description": "Which law governs moveable property",
+          "enum": [ "lex_domicilii", "lex_patriae", "chosen_law" ]
+        },
+        "choiceOfLaw": {
+          "type": "object",
+          "properties": {
+            "chosenJurisdiction": {
+              "$ref": "common/jurisdiction.json"
+            },
+            "basis": {
+              "enum": [ "nationality", "habitual_residence", "domicile" ]
+            },
+            "instrument": {
+              "enum": [
+                "brussels_iv",
+                "hague_convention",
+                "bilateral_treaty",
+                "domestic_law"
+              ]
+            },
+            "validIn": {
+              "description": "Jurisdiction codes where this choice is recognised, e.g. [\"EU\"] for Brussels IV",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 10
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "contestability": {
+      "description": "Structured assessment of grounds on which this will could be contested — the challenge surface",
+      "type": "object",
+      "required": [ "status" ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not_assessed",
+            "assessed_no_grounds",
+            "grounds_identified"
+          ]
+        },
+        "grounds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [ "ground", "jurisdiction" ],
+            "properties": {
+              "ground": {
+                "$comment": "These are grounds for CHALLENGING a will. Revocation and rectification are separate legal actions.",
+                "enum": [
+                  "lack_of_testamentary_capacity",
+                  "undue_influence",
+                  "fraud",
+                  "forgery",
+                  "lack_of_knowledge_and_approval",
+                  "want_of_due_execution"
+                ]
+              },
+              "jurisdiction": {
+                "$ref": "common/jurisdiction.json"
+              },
+              "legalTest": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "limbs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [ "name" ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "maxLength": 255,
+                      "minLength": 1
+                    },
+                    "satisfied": {
+                      "type": [ "boolean", "null" ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "assessedBy": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "assessedDate": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "format": "date"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "influenceFactors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [ "influencerPersonId", "subjectPersonId" ],
+            "properties": {
+              "influencerPersonId": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                "format": "uuid"
+              },
+              "subjectPersonId": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                "format": "uuid"
+              },
+              "relationshipType": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "cohabiting": {
+                "type": "boolean"
+              },
+              "financialDependency": {
+                "enum": [
+                  "none",
+                  "subject_on_influencer",
+                  "influencer_on_subject",
+                  "mutual"
+                ]
+              },
+              "giftsDuringLifetime": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "taxTreaties": {
+      "description": "Double taxation treaties affecting this estate — determines which jurisdiction taxes which assets and how double taxation is relieved",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [ "between", "treatyType" ],
+        "properties": {
+          "between": {
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Z]{2}$"
+            }
+          },
+          "treatyType": {
+            "enum": [
+              "estate_and_inheritance",
+              "gift_tax",
+              "income_tax",
+              "comprehensive"
+            ]
+          },
+          "primaryTaxingRight": {
+            "type": "object",
+            "properties": {
+              "immoveable": {
+                "enum": [ "situs", "domicile", "nationality" ]
+              },
+              "moveable": {
+                "enum": [ "domicile", "nationality", "situs" ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "reliefMethod": {
+            "enum": [ "credit", "exemption", "deduction" ]
+          },
+          "treatyReference": {
+            "type": "string",
+            "maxLength": 255
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "deathVerification": {
+      "description": "Verification of the testator's death — addresses the delegation trigger gap identified by the OpenID Foundation",
+      "type": "object",
+      "properties": {
+        "method": {
+          "enum": [
+            "death_certificate",
+            "coroner_report",
+            "civil_registry",
+            "court_order",
+            "medical_certificate",
+            "community_declaration",
+            "presumption_of_death"
+          ]
+        },
+        "issuingAuthority": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "jurisdiction": {
+          "$ref": "common/jurisdiction.json"
+        },
+        "referenceNumber": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "dateOfDeath": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "registrationDate": {
+          "description": "Date death was officially registered — may differ from dateOfDeath",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "verifiedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "verifiedBy": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "trustLevel": {
+          "description": "Trust level of the death verification — maps to emerging digital estate delegation trust frameworks",
+          "$comment": "government_certified: verified by a government authority (death certificate, civil registry). medical_certified: verified by a medical professional (medical certificate of death). platform_detected: detected by a platform through inactivity or signal analysis. community_declared: declared by community members under customary law. self_reported: self-reported by a family member or other party without independent verification.",
+          "enum": [
+            "government_certified",
+            "medical_certified",
+            "platform_detected",
+            "community_declared",
+            "self_reported"
+          ]
+        },
+        "fhirPatientRef": {
+          "description": "URI pointing to the FHIR Patient resource whose death triggered the estate. Enables data exchange between healthcare systems and INHERIT",
+          "$comment": "FHIR R5 Patient resource reference. Zero complexity for non-FHIR users — simply omit.",
+          "type": "string",
+          "pattern": "^https?://",
+          "format": "uri",
+          "maxLength": 2048
+        }
+      },
+      "additionalProperties": false
+    },
+    "escheatment": {
+      "description": "Escheatment — the reversion of unclaimed estate property to the state. Applies when no valid heirs can be identified after statutory dormancy periods",
+      "$comment": "Texas Comptroller-requested: US states actively pursue escheatment of dormant estate assets",
+      "type": "object",
+      "properties": {
+        "jurisdiction": {
+          "description": "Jurisdiction whose escheatment laws apply",
+          "$ref": "common/jurisdiction.json"
+        },
+        "dormancyPeriodYears": {
+          "description": "Statutory dormancy period in years before escheatment",
+          "type": "integer",
+          "minimum": 0
+        },
+        "escheatDate": {
+          "description": "Date on which escheatment takes effect (or is projected to take effect)",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "claimingAuthority": {
+          "description": "Name of the government authority claiming the escheated property",
+          "type": "string",
+          "maxLength": 255
+        },
+        "status": {
+          "description": "Current status of the escheatment",
+          "enum": [ "at_risk", "dormancy_running", "escheated", "reclaimed" ]
+        },
+        "affectedAssetIds": {
+          "description": "Asset IDs affected by escheatment",
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "testamentaryScenarios": {
+      "description": "Testamentary scenarios — declarative conditions for mirror wills, survivorship, commorientes, and remarriage revocation",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [ "id", "description", "conditions" ],
+        "properties": {
+          "id": {
+            "$comment": "Human-readable slugs (e.g. james-dies-first), not UUIDs — supports practitioner-facing scenario names",
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [ "personId", "event" ],
+              "properties": {
+                "personId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                  "format": "uuid"
+                },
+                "event": {
+                  "enum": [
+                    "death",
+                    "survives",
+                    "remarriage",
+                    "commorientes",
+                    "incapacity"
+                  ]
+                },
+                "order": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "rule": {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "jurisdiction": {
+                  "$ref": "common/jurisdiction.json"
+                },
+                "presumption": {
+                  "type": "string",
+                  "maxLength": 100
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "activeBequests": {
+            "description": "Bequest IDs that activate under this scenario",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "activeExecutors": {
+            "description": "Executor IDs that activate under this scenario",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "integrity": {
+      "description": "Cryptographic digest of the canonical form of this document, excluding the integrity field itself — used for tamper detection and signing readiness",
+      "$comment": "The digest is computed over the canonical JSON serialisation (keys in lexicographic order, no whitespace, UTF-8 NFC). See docs/policies/canonical-json.md for the full specification.",
+      "type": "object",
+      "properties": {
+        "algorithm": {
+          "description": "Hash algorithm used to compute the digest",
+          "enum": [ "sha-256", "sha-384", "sha-512" ]
+        },
+        "digest": {
+          "description": "Hex-encoded digest value",
+          "type": "string",
+          "pattern": "^[0-9a-f]+$",
+          "minLength": 64,
+          "maxLength": 128
+        }
+      },
+      "required": [ "algorithm", "digest" ],
+      "additionalProperties": false
+    },
+    "disinheritedPersons": {
+      "description": "Persons whom the testator has explicitly excluded from inheriting. Distinguishes deliberate exclusion from oversight — critical for family provision and forced heirship claims",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "personId": {
+            "description": "Reference to the Person.id of the excluded individual",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "personIdDisplay": {
+            "description": "Human-readable label for the excluded person, for display purposes only",
+            "type": "string",
+            "maxLength": 255
+          },
+          "statement": {
+            "description": "The testator's own words regarding the exclusion, as recorded in the will or codicil",
+            "type": "string",
+            "maxLength": 2000
+          },
+          "clauseReference": {
+            "description": "Reference to the clause or section of the will containing the exclusion — e.g. 'clause 5', 'schedule 2 para 3'",
+            "type": "string",
+            "maxLength": 100
+          },
+          "reason": {
+            "description": "Practitioner-recorded reason for the exclusion, separate from the testator's own statement",
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [ "personId" ],
+        "additionalProperties": false
+      }
+    },
+    "governingJurisdictions": {
+      "description": "Jurisdictions governing succession for this estate, with scope. Use when multiple legal systems apply to different assets (e.g. lex situs for immovable property abroad). Per-asset law is recorded on each asset/property via applicableLaw; this array provides the estate-level coordination map",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [ "jurisdiction", "scope" ],
+        "properties": {
+          "jurisdiction": {
+            "$ref": "common/jurisdiction.json"
+          },
+          "scope": {
+            "description": "Whether this jurisdiction applies to the whole estate or specific assets",
+            "enum": [ "default", "specific_assets" ]
+          },
+          "assetIds": {
+            "description": "Asset IDs governed by this jurisdiction (when scope is specific_assets)",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+              "format": "uuid"
+            }
+          },
+          "propertyIds": {
+            "description": "Property IDs governed by this jurisdiction (when scope is specific_assets)",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+              "format": "uuid"
+            }
+          },
+          "statute": {
+            "description": "Governing statute",
+            "type": "string",
+            "maxLength": 500
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "mutualWillAgreement": {
+      "description": "A binding mutual will agreement — two testators promise not to revoke their wills without notice. Creates a constructive trust on the survivor's estate. Distinct from mirror wills (which are independent)",
+      "type": "object",
+      "properties": {
+        "exists": {
+          "type": "boolean"
+        },
+        "counterpartyPersonId": {
+          "description": "The other testator bound by the agreement",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "counterpartyEstateId": {
+          "description": "Reference to the counterparty's estate document, if available",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "binding": {
+          "type": "boolean"
+        },
+        "agreementDocumentId": {
+          "description": "Reference to Document.id recording the mutual promise",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "terms": {
+          "description": "Summary of the agreement terms",
+          "type": "string",
+          "maxLength": 2000
+        },
+        "revocable": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "parallelSuccessionConflicts": {
+      "description": "Conflicts between parallel legal systems where the will cannot override customary or statutory rights",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [ "legalSystem", "natureOfRight" ],
+        "properties": {
+          "legalSystem": {
+            "description": "The legal system asserting the right",
+            "examples": [
+              "igbo_customary",
+              "zulu_customary",
+              "maori_tikanga",
+              "aboriginal_customary"
+            ],
+            "type": "string",
+            "maxLength": 100
+          },
+          "affectedPersonId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "natureOfRight": {
+            "description": "Description of the customary right that conflicts with the will",
+            "type": "string",
+            "maxLength": 2000
+          },
+          "overridableByWill": {
+            "type": "boolean"
+          },
+          "statutoryBasis": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "resolution": {
+            "enum": [
+              "pending",
+              "resolved_by_will",
+              "resolved_by_court",
+              "irreconcilable"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "careProvisions": {
+      "description": "Ongoing care provisions for dependent adults, linking person, trust, and guardian",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [ "dependantPersonId" ],
+        "properties": {
+          "dependantPersonId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "trustId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "guardianId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "annualEstimatedCost": {
+            "$ref": "common/money.json"
+          },
+          "careNeeds": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "familyProvisionClaims": {
+      "description": "Potential or actual family provision claims against the estate. Tracks claims under statutes like the Inheritance (Provision for Family and Dependants) Act 1975",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [ "claimantPersonId", "claimType" ],
+        "properties": {
+          "claimantPersonId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "claimType": {
+            "enum": [
+              "spouse",
+              "cohabitant",
+              "child",
+              "dependant",
+              "maintained_person"
+            ]
+          },
+          "jurisdiction": {
+            "$ref": "common/jurisdiction.json"
+          },
+          "statute": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "status": {
+            "enum": [ "potential", "filed", "settled", "dismissed" ]
+          },
+          "amount": {
+            "$ref": "common/money.json"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "connections": {
+      "description": "Non-familial connections between people in the estate. Directed: fromPersonId has the connection to toPersonId",
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "required": [ "fromPersonId", "toPersonId", "connectionType" ],
+        "properties": {
+          "fromPersonId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "toPersonId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "connectionType": {
+            "enum": [
+              "friend",
+              "solicitor",
+              "financial_adviser",
+              "accountant",
+              "employer",
+              "employee",
+              "colleague",
+              "neighbour",
+              "carer",
+              "religious_leader",
+              "medical_practitioner",
+              "business_partner",
+              "other"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "constructionClauses": {
+      "description": "Interpretive and construction rules expressed in the will",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [ "clauseType", "content" ],
+        "properties": {
+          "clauseType": {
+            "enum": [
+              "gender_neutrality",
+              "severability",
+              "governing_law",
+              "interpretation_rule",
+              "definitions",
+              "custom"
+            ]
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "clauseReference": {
+            "type": "string",
+            "maxLength": 50
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "validityStatus": {
+      "description": "Ongoing validity state of the will. Records life events that may invalidate the document",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [ "conditionType" ],
+        "properties": {
+          "conditionType": {
+            "enum": [
+              "unmarried",
+              "not_divorced",
+              "not_converted",
+              "domiciled_in",
+              "testamentary_capacity",
+              "no_subsequent_will",
+              "custom"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "status": {
+            "enum": [ "satisfied", "breached", "unknown" ]
+          },
+          "breachedDate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "format": "date"
+          },
+          "statute": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "administrationPhases": {
+      "description": "Universal priority phases for estate administration. Lower priority numbers satisfied first",
+      "type": "array",
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": [ "priority", "category" ],
+        "properties": {
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 99
+          },
+          "category": {
+            "enum": [
+              "funeral_expenses",
+              "testamentary_expenses",
+              "secured_debts",
+              "unsecured_debts",
+              "distribution",
+              "custom"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "executorPowers": {
+      "description": "Statutory and express powers granted to executors/trustees for estate administration",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [ "powerType" ],
+        "properties": {
+          "powerType": {
+            "enum": [
+              "statutory_default",
+              "sale_and_conversion",
+              "postponement",
+              "appropriation",
+              "insurance",
+              "investment",
+              "delegation",
+              "custom"
+            ]
+          },
+          "statute": {
+            "description": "The statute conferring or modifying this power",
+            "examples": [
+              "Trustee Act 2000",
+              "Administration of Estates Act 1925 s.41"
+            ],
+            "type": "string",
+            "maxLength": 500
+          },
+          "description": {
+            "description": "The specific power as expressed in the will",
+            "type": "string",
+            "maxLength": 2000
+          },
+          "clauseReference": {
+            "type": "string",
+            "maxLength": 50
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "statutoryExclusions": {
+      "description": "Statutes explicitly excluded from applying to this estate. Common: Apportionment Act 1870, Trustee Act 2000 s.31/s.32",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [ "statute" ],
+        "properties": {
+          "statute": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "sections": {
+            "description": "Specific sections excluded",
+            "type": "string",
+            "maxLength": 100
+          },
+          "jurisdiction": {
+            "$ref": "common/jurisdiction.json"
+          },
+          "effect": {
+            "description": "What the exclusion means in practice",
+            "type": "string",
+            "maxLength": 1000
+          },
+          "clauseReference": {
+            "type": "string",
+            "maxLength": 50
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "dependentRequired": {
+    "companionEstateId": [ "companionLinkStatus" ]
+  },
+  "$defs": {
+    "Codicil": {
+      "description": "An amendment to an existing will. Codicils must be executed with the same formalities as the will itself",
+      "type": "object",
+      "required": [ "id", "codicilDate" ],
+      "properties": {
+        "id": {
+          "description": "Unique identifier for this codicil",
+          "examples": [ "a1b2c3d4-e5f6-7890-abcd-ef1234567890" ],
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "codicilDate": {
+          "description": "Date the codicil was executed",
+          "examples": [ "2024-06-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "description": {
+          "description": "Summary of what this codicil changes in the original will",
+          "examples": [
+            "Replaces executor appointment — substitutes daughter for brother-in-law"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        },
+        "attestation": {
+          "description": "Execution formalities for this codicil",
+          "$ref": "attestation.json"
+        },
+        "documentId": {
+          "description": "Reference to the Document entity storing the codicil text",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "amendsClauseIds": {
+          "description": "Clause identifiers in the original will that this codicil amends. Enables computing the effective will after amendments",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "maxItems": 100,
+          "uniqueItems": true
+        },
+        "revokesClauseIds": {
+          "description": "Clause identifiers in the original will that this codicil revokes entirely",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "maxItems": 100,
+          "uniqueItems": true
+        },
+        "priorDocumentId": {
+          "description": "Identifier of the will or codicil that this codicil amends — links to the Document entity of the prior instrument",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "effectiveDate": {
+          "description": "Date when this codicil takes effect, if different from the execution date — supports conditional or deferred codicils",
+          "examples": [ "2025-01-01" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TestamentaryCapacity": {
+      "description": "Record of testamentary capacity assessment. The testator must understand the nature of making a will, the extent of their estate, and the claims of those they are excluding",
+      "type": "object",
+      "properties": {
+        "assessed": {
+          "description": "Whether a capacity assessment was carried out",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "assessmentDate": {
+          "description": "Date the capacity assessment took place",
+          "examples": [ "2024-03-10" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "assessorName": {
+          "description": "Name of the person who assessed capacity",
+          "examples": [
+            "Dr Sarah Patel",
+            "Dr Kenji Watanabe",
+            "Dr Aisha Ibrahim",
+            "Dr Tendai Moyo"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "assessorRole": {
+          "description": "Professional role of the assessor — typically a GP, psychiatrist, or solicitor",
+          "examples": [
+            "General Practitioner",
+            "Consultant Psychiatrist",
+            "Solicitor"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "capacityConfirmed": {
+          "description": "Whether the assessor confirmed the testator has testamentary capacity",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "goldenRuleComplied": {
+          "description": "Whether the 'golden rule' was followed — a medical practitioner assessing capacity for elderly or seriously ill testators",
+          "$comment": "The 'golden rule' (Kenward v Adams [1975]) — elderly/seriously ill testators should have a medical practitioner assess capacity.",
+          "type": "boolean"
+        },
+        "notes": {
+          "description": "Additional notes on the capacity assessment",
+          "examples": [
+            "Testator showed clear understanding of estate and family circumstances"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "ForcedHeirship": {
+      "description": "Forced heirship regime details. Many civil law jurisdictions reserve a portion of the estate for certain heirs regardless of the will",
+      "type": "object",
+      "properties": {
+        "applies": {
+          "description": "Whether forced heirship rules apply to this estate",
+          "examples": [ true ],
+          "type": "boolean"
+        },
+        "reservedPortion": {
+          "description": "Percentage of the estate reserved for protected heirs. In France, this is 50% for one child, 66.67% for two, 75% for three or more",
+          "examples": [ 50, 66.67, 75 ],
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "disposableQuota": {
+          "description": "Percentage of the estate the testator may freely dispose of by will",
+          "examples": [ 50, 33.33, 25 ],
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "jurisdiction": {
+          "description": "The jurisdiction whose forced heirship rules apply",
+          "$ref": "common/jurisdiction.json"
+        },
+        "claimNature": {
+          "description": "The legal nature of the forced heir's claim — whether they receive property, cash, or a court-determined provision",
+          "$comment": "property_share: heir receives a share of the actual estate property (France, Germany). cash_claim: heir has a monetary claim against the estate but not a property right (Switzerland post-2023, Japan). usufruct: heir receives a right of use/enjoyment, not ownership (some Spanish regions). court_discretion: court decides the form of provision (England and Wales — Inheritance Act 1975).",
+          "examples": [ "property_share", "cash_claim" ],
+          "enum": [
+            "property_share",
+            "cash_claim",
+            "usufruct",
+            "court_discretion"
+          ]
+        },
+        "calculationBasis": {
+          "description": "How the reserved portion is calculated",
+          "$comment": "fixed: a set percentage regardless of family size (Japan: 50% of intestate share). per_child_sliding: varies by number of children (France). court_discretion: no fixed formula — court determines reasonable provision (England and Wales). conditional: depends on specific conditions being met.",
+          "examples": [ "fixed", "per_child_sliding" ],
+          "enum": [
+            "fixed",
+            "per_child_sliding",
+            "court_discretion",
+            "conditional"
+          ]
+        },
+        "applicableTo": {
+          "description": "Which categories of heir are protected by forced heirship",
+          "$comment": "children_only: only direct children are protected heirs. children_and_spouse: surviving spouse and children are protected. all_descendants: includes grandchildren and further issue. all_heirs: all persons in the intestacy hierarchy (rare).",
+          "examples": [ "children_and_spouse" ],
+          "enum": [
+            "children_only",
+            "children_and_spouse",
+            "all_descendants",
+            "all_heirs"
+          ]
+        },
+        "deferralRule": {
+          "description": "Rule for deferring forced heirship claims — e.g. life interest to surviving spouse with remainder to children",
+          "examples": [
+            "Surviving spouse receives usufruct; children receive bare ownership"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "effectiveDate": {
+          "description": "Date when the applicable forced heirship rules came into force. Important for reform transitions",
+          "$comment": "When these forced heirship rules took effect. Swiss 2023 reform: 2023-01-01.",
+          "examples": [ "2023-01-01", "2006-07-01" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "reformVersion": {
+          "description": "The specific legislative reform establishing these rules",
+          "$comment": "e.g., 'Swiss Code 2023 revision', 'French loi 2006-728'.",
+          "examples": [ "Swiss Code 2023 revision", "French loi 2006-728" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "description": "Additional notes on forced heirship — exceptions, pending challenges, or reform context",
+          "examples": [
+            "Swiss 2023 reform reduced children's reserved portion from 75% to 50%"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "AdjudicatingBody": {
+      "description": "A court or authority with jurisdiction over this estate or part of it. Plural legal systems may have multiple adjudicating bodies for the same estate",
+      "type": "object",
+      "required": [ "type" ],
+      "properties": {
+        "type": {
+          "description": "The type of adjudicating body",
+          "$comment": "secular_court: state civil or probate court. religious_court: a religious tribunal (unspecified denomination). beth_din: Jewish rabbinical court. shariah_court: Islamic law court. tribal_court: indigenous/tribal judicial body. family_court: state family division. family_council: collective family decision-making body (West African, Pacific Island). community_elders: informal elder-led adjudication. partition_meeting: Hindu joint family partition proceedings. karta_decision: decision by the karta (manager) of a Hindu Undivided Family. maori_land_court: New Zealand court for Maori land succession. high_court: national or state high court (typically for contested probate).",
+          "enum": [
+            "secular_court",
+            "religious_court",
+            "beth_din",
+            "shariah_court",
+            "tribal_court",
+            "family_court",
+            "family_council",
+            "community_elders",
+            "partition_meeting",
+            "karta_decision",
+            "maori_land_court",
+            "high_court"
+          ]
+        },
+        "name": {
+          "description": "Name of the specific court or body",
+          "examples": [
+            "Principal Registry of the Family Division",
+            "Lagos High Court",
+            "Beth Din of Manchester"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "jurisdiction": {
+          "description": "Jurisdiction this adjudicating body operates in",
+          "$ref": "common/jurisdiction.json"
+        },
+        "caseReference": {
+          "description": "Case or filing reference number",
+          "examples": [ "PR-2025-001234", "SH/2025/0456" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "authoritative": {
+          "description": "Whether this body's decisions are binding. A beth din ruling may be persuasive but not enforceable without secular court recognition",
+          "examples": [ true, false ],
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ParallelDistribution": {
+      "description": "A parallel distribution scheme operating alongside the primary estate distribution. Common in plural legal systems where statutory and customary/religious distributions run concurrently",
+      "type": "object",
+      "required": [ "system" ],
+      "properties": {
+        "system": {
+          "description": "The legal system governing this parallel distribution",
+          "examples": [
+            "Igbo customary law",
+            "Islamic faraid",
+            "Hindu Mitakshara"
+          ],
+          "type": "string",
+          "maxLength": 100
+        },
+        "jurisdiction": {
+          "description": "Jurisdiction where this parallel distribution applies",
+          "$ref": "common/jurisdiction.json"
+        },
+        "description": {
+          "description": "Summary of how this system distributes the estate",
+          "examples": [
+            "Family compound passes to eldest son as custodian under Igbo customary law"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        },
+        "notes": {
+          "description": "Additional context or conflict notes",
+          "examples": [
+            "Customary distribution of family land conflicts with testamentary gift to daughter"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "ProbateGrant": {
+      "description": "A grant of probate or letters of administration issued by a court. Without a grant, executors have no legal authority to administer the estate",
+      "type": "object",
+      "properties": {
+        "grantType": {
+          "description": "The type of grant issued",
+          "examples": [
+            "Grant of Probate",
+            "Letters of Administration",
+            "Letters of Administration with Will Annexed",
+            "European Certificate of Succession"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "grantDate": {
+          "description": "Date the grant was issued by the court",
+          "examples": [ "2025-06-15" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "grantReference": {
+          "description": "Court reference number for the grant",
+          "examples": [ "PRO-2025-123456" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "issuingCourt": {
+          "description": "Name of the court or registry that issued the grant",
+          "examples": [
+            "Principal Registry of the Family Division",
+            "Birmingham District Probate Registry",
+            "Supreme Court of New South Wales"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "jurisdiction": {
+          "description": "Jurisdiction that issued this grant",
+          "$ref": "common/jurisdiction.json"
+        },
+        "notes": {
+          "description": "Additional notes about the grant",
+          "examples": [ "Limited grant — foreign property excluded" ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "DeathRecord": {
+      "description": "Details of the testator's death. Establishes the date from which succession takes effect and the domicile at death (which determines governing law for moveables)",
+      "type": "object",
+      "properties": {
+        "dateOfDeath": {
+          "description": "Date of death in ISO 8601 format",
+          "examples": [ "2025-09-30" ],
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "placeOfDeath": {
+          "description": "Place where death occurred",
+          "examples": [
+            "Manchester Royal Infirmary",
+            "At home, 42 Acacia Avenue, London",
+            "Tokyo Metropolitan Hospital"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "deathCertificateRef": {
+          "description": "Death certificate reference number",
+          "examples": [ "DC-2025-123456" ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "domicileAtDeath": {
+          "description": "The testator's domicile at the time of death. This determines which succession law governs moveable property",
+          "$ref": "common/jurisdiction.json"
+        },
+        "notes": {
+          "description": "Additional notes about the death record",
+          "examples": [
+            "Death registered in two jurisdictions — UK and France"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "SuccessionConflict": {
+      "description": "A conflict between legal systems regarding succession for this estate. Common in plural jurisdictions and cross-border estates",
+      "type": "object",
+      "required": [ "description" ],
+      "properties": {
+        "description": {
+          "description": "Summary of the conflict between legal systems",
+          "examples": [
+            "Statutory will gives daughter the house; Igbo customary law gives eldest son custodianship",
+            "French forced heirship claim conflicts with English testamentary freedom"
+          ],
+          "type": "string",
+          "maxLength": 2000
+        },
+        "systems": {
+          "description": "The legal systems in conflict",
+          "examples": [
+            [ "statutory", "Igbo customary" ],
+            [ "French civil law", "English common law" ]
+          ],
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "resolutionStatus": {
+          "description": "Current status of this conflict",
+          "$comment": "unresolved: no resolution attempt yet. resolved: conflict has been settled. pending_court: matter referred to a court. pending_arbitration: matter referred to arbitration or mediation.",
+          "enum": [
+            "unresolved",
+            "resolved",
+            "pending_court",
+            "pending_arbitration"
+          ]
+        },
+        "notes": {
+          "description": "Additional context or resolution details",
+          "examples": [ "Family council meeting scheduled for December 2025" ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "ProbateReadiness": {
+      "description": "Completeness assessment of estate data against a jurisdiction-specific probate form. This is data completeness, NOT legal validation",
+      "type": "object",
+      "required": [
+        "jurisdiction",
+        "targetForm",
+        "requiredFieldsPresent",
+        "requiredFieldsTotal",
+        "assessedAt"
+      ],
+      "properties": {
+        "jurisdiction": {
+          "description": "The jurisdiction this assessment applies to",
+          "$ref": "common/jurisdiction.json"
+        },
+        "targetForm": {
+          "description": "Form identifier from form-requirements.json",
+          "examples": [ "PA1P", "IHT400", "Form74A", "Form109" ],
+          "type": "string",
+          "maxLength": 50
+        },
+        "requiredFieldsPresent": {
+          "description": "Number of required fields that are populated",
+          "examples": [ 14 ],
+          "type": "integer",
+          "minimum": 0
+        },
+        "requiredFieldsTotal": {
+          "description": "Total number of required fields for this form",
+          "examples": [ 16 ],
+          "type": "integer",
+          "minimum": 1
+        },
+        "missingFields": {
+          "description": "INHERIT field paths that are required by the form but not yet populated",
+          "examples": [
+            [
+              "estate.deathRecord.deathCertificateRef",
+              "estate.administration.ihtFormReference"
+            ]
+          ],
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "string",
+            "maxLength": 255
+          }
+        },
+        "assessedAt": {
+          "description": "When this assessment was performed",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "assessedBy": {
+          "description": "Who or what performed the assessment",
+          "$comment": "system: automated check by the hosting application. solicitor: manually assessed by a legal professional. willscan: assessed by WillScan.ai extraction. manual: other manual assessment.",
+          "anyOf": [
+            {
+              "enum": [ "system", "solicitor", "willscan", "manual" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "notes": {
+          "description": "Additional context about the assessment",
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "ExternalReference": {
+      "description": "A reference to this estate in an external system — practice management software, court filing systems, government portals",
+      "type": "object",
+      "required": [ "system", "referenceId", "referenceType" ],
+      "properties": {
+        "system": {
+          "description": "The external system name",
+          "examples": [
+            "clio",
+            "actionstep",
+            "leap",
+            "mycase",
+            "practicepanther",
+            "hmcts",
+            "companies_house"
+          ],
+          "type": "string",
+          "maxLength": 100
+        },
+        "referenceId": {
+          "description": "The matter/case/action ID in the external system",
+          "examples": [ "MTR-2026-00412", "PRB-2026-EN-78901" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "referenceType": {
+          "description": "What type of entity this references in the external system",
+          "$comment": "matter: a case/matter in PMS. contact: a contact record. document: a document/file. filing: a court filing or submission. other: any other external reference.",
+          "anyOf": [
+            {
+              "enum": [
+                "matter",
+                "contact",
+                "document",
+                "case",
+                "action",
+                "filing",
+                "other"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+"
+            }
+          ]
+        },
+        "referenceUrl": {
+          "description": "Deep link to the entity in the external system",
+          "examples": [ "https://app.clio.com/nc/#/matters/12345" ],
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2000
+        },
+        "syncedAt": {
+          "description": "When this reference was last synchronised",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "notes": {
+          "description": "Additional context about this reference",
+          "examples": [ "PA1P application submitted 15 Mar 2026" ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

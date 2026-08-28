@@ -1,0 +1,64 @@
+name: Staleness Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Check schema sync
+        run: |
+          if ! diff -r v3/ packages/schema/v3/ > /dev/null 2>&1; then
+            echo "::error::packages/schema/v3/ is out of sync with v3/"
+            echo ""
+            echo "Run: rsync -av --delete v3/ packages/schema/v3/"
+            echo "Then commit and push."
+            echo ""
+            diff -r v3/ packages/schema/v3/ || true
+            exit 1
+          fi
+          echo "Schema sync: OK"
+
+      - name: Check extensions-registry sync
+        run: |
+          if ! diff extensions-registry.json packages/schema/extensions-registry.json > /dev/null 2>&1; then
+            echo "::error::packages/schema/extensions-registry.json is out of sync with root extensions-registry.json"
+            echo ""
+            echo "Run: cp extensions-registry.json packages/schema/extensions-registry.json"
+            echo "Then commit and push."
+            exit 1
+          fi
+          echo "Extensions registry sync: OK"
+
+      - name: Check schema formatting
+        run: |
+          TAG=$(gh api repos/sourcemeta/jsonschema/releases/latest --jq '.tag_name')
+          VERSION="${TAG#v}"
+          curl -fsSL "https://github.com/sourcemeta/jsonschema/releases/download/${TAG}/jsonschema-${VERSION}-linux-x86_64.zip" -o /tmp/jsonschema.zip
+          unzip -o /tmp/jsonschema.zip -d /tmp/jsonschema-extract
+          cp /tmp/jsonschema-extract/*/bin/jsonschema /usr/local/bin/jsonschema
+          chmod +x /usr/local/bin/jsonschema
+          if ! jsonschema fmt --check --keep-ordering v3/*.json v3/common/*.json v3/asset-categories/*.json; then
+            echo "::error::Schema formatting is inconsistent"
+            echo ""
+            echo "Run: jsonschema fmt --keep-ordering v3/*.json v3/common/*.json v3/asset-categories/*.json"
+            echo "Then commit and push."
+            exit 1
+          fi
+          echo "Schema formatting: OK"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Check bundled schema is current
+        run: |
+          if [ ! -f dist/inherit-v3-bundled.json ]; then
+            echo "::warning::dist/inherit-v3-bundled.json is missing. Run 'pnpm bundle' locally."
+          else
+            echo "Bundled schema: present ($(wc -c < dist/inherit-v3-bundled.json) bytes)"
+          fi

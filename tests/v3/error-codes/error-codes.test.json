@@ -1,0 +1,183 @@
+{
+  "target": "../../../v3/common/error-codes.json",
+  "tests": [
+    {
+      "description": "valid — minimal valid codes registry (empty array)",
+      "data": {
+        "codes": []
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — single error-severity code",
+      "data": {
+        "codes": [
+          {
+            "code": "INHERIT_SCHEMA_INVALID",
+            "level": 1,
+            "description": "Document does not conform to JSON Schema",
+            "severity": "error"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — single warning-severity code",
+      "data": {
+        "codes": [
+          {
+            "code": "INHERIT_REF_ORPHAN",
+            "level": 2,
+            "description": "Entity exists but is not referenced by any other entity",
+            "severity": "warning"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — single info-severity code",
+      "data": {
+        "codes": [
+          {
+            "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+            "level": 3,
+            "description": "Required jurisdiction-specific field is absent",
+            "severity": "info"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — full registry with multiple severity levels",
+      "data": {
+        "codes": [
+          {
+            "code": "INHERIT_SCHEMA_INVALID",
+            "level": 1,
+            "description": "Document does not conform to JSON Schema",
+            "severity": "error"
+          },
+          {
+            "code": "INHERIT_REF_ORPHAN",
+            "level": 2,
+            "description": "Entity exists but is not referenced by any other entity",
+            "severity": "warning"
+          },
+          {
+            "code": "INHERIT_COMPLETENESS_COUNT_LOW",
+            "level": 3,
+            "description": "Minimum count for a jurisdiction-specific array not met",
+            "severity": "info"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — severity not in enum",
+      "data": {
+        "codes": [
+          {
+            "code": "INHERIT_CUSTOM",
+            "level": 1,
+            "description": "Custom error",
+            "severity": "critical"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — level above maximum (3)",
+      "data": {
+        "codes": [
+          {
+            "code": "INHERIT_CUSTOM",
+            "level": 4,
+            "description": "Custom error"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — level below minimum (1)",
+      "data": {
+        "codes": [
+          {
+            "code": "INHERIT_CUSTOM",
+            "level": 0,
+            "description": "Custom error"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required code field",
+      "data": {
+        "codes": [
+          {
+            "level": 1,
+            "description": "Missing code field"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required level field",
+      "data": {
+        "codes": [
+          {
+            "code": "INHERIT_CUSTOM",
+            "description": "Missing level field"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required description field",
+      "data": {
+        "codes": [
+          {
+            "code": "INHERIT_CUSTOM",
+            "level": 1
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — code as empty string (minLength 1)",
+      "data": {
+        "codes": [
+          {
+            "code": "",
+            "level": 1,
+            "description": "Empty code"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — code item with additional property",
+      "data": {
+        "codes": [
+          {
+            "code": "INHERIT_CUSTOM",
+            "level": 1,
+            "description": "Custom error",
+            "extraField": "should fail"
+          }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

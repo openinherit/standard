@@ -1,0 +1,1117 @@
+{
+  "target": "../../../v3/common/cultural-disposition.json",
+  "tests": [
+    {
+      "description": "valid \u2014 minimal with sacredStatus only",
+      "data": {
+        "sacredStatus": "secular"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 consecrated Buddha statue with disposal restrictions",
+      "data": {
+        "sacredStatus": "consecrated",
+        "culturalSignificance": "community",
+        "bequeathable": false,
+        "disposalRestrictions": [
+          {
+            "authority": "Wat Phra Kaew Temple",
+            "authorityType": "religious_body",
+            "requirement": "Must be returned to temple",
+            "jurisdiction": {
+              "country": "TH"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 Japanese sword with export restrictions",
+      "data": {
+        "sacredStatus": "secular",
+        "culturalSignificance": "national_heritage",
+        "bequeathable": true,
+        "exportRestrictions": [
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "cultural_property",
+            "authority": "Agency for Cultural Affairs",
+            "licenceRequired": true,
+            "notes": "NBTHK-certified swords require export licence"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 waqf endowment (inalienable)",
+      "data": {
+        "sacredStatus": "inalienable_endowment",
+        "culturalSignificance": "community",
+        "bequeathable": false
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 family heirloom jade",
+      "data": {
+        "sacredStatus": "secular",
+        "culturalSignificance": "family_heirloom",
+        "bequeathable": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 empty object (all fields optional)",
+      "data": {},
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 sacredStatus not in enum",
+      "data": {
+        "sacredStatus": "holy"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 culturalSignificance not in enum",
+      "data": {
+        "culturalSignificance": "priceless"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 exportRestrictions missing required jurisdiction",
+      "data": {
+        "exportRestrictions": [
+          {
+            "restrictionType": "cultural_property",
+            "authority": "Agency for Cultural Affairs",
+            "licenceRequired": true
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 disposalRestrictions missing required requirement field",
+      "data": {
+        "disposalRestrictions": [
+          {
+            "authority": "Temple",
+            "authorityType": "religious_body"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 bequeathable as string instead of boolean",
+      "data": {
+        "bequeathable": "yes"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 bequeathable as integer instead of boolean",
+      "data": {
+        "bequeathable": 1
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 disposalRestrictions requirement empty string (minLength:1)",
+      "data": {
+        "disposalRestrictions": [
+          {
+            "requirement": ""
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 disposalRestrictions exceeds maxItems (101 items)",
+      "data": {
+        "disposalRestrictions": [
+          {
+            "requirement": "r1"
+          },
+          {
+            "requirement": "r2"
+          },
+          {
+            "requirement": "r3"
+          },
+          {
+            "requirement": "r4"
+          },
+          {
+            "requirement": "r5"
+          },
+          {
+            "requirement": "r6"
+          },
+          {
+            "requirement": "r7"
+          },
+          {
+            "requirement": "r8"
+          },
+          {
+            "requirement": "r9"
+          },
+          {
+            "requirement": "r10"
+          },
+          {
+            "requirement": "r11"
+          },
+          {
+            "requirement": "r12"
+          },
+          {
+            "requirement": "r13"
+          },
+          {
+            "requirement": "r14"
+          },
+          {
+            "requirement": "r15"
+          },
+          {
+            "requirement": "r16"
+          },
+          {
+            "requirement": "r17"
+          },
+          {
+            "requirement": "r18"
+          },
+          {
+            "requirement": "r19"
+          },
+          {
+            "requirement": "r20"
+          },
+          {
+            "requirement": "r21"
+          },
+          {
+            "requirement": "r22"
+          },
+          {
+            "requirement": "r23"
+          },
+          {
+            "requirement": "r24"
+          },
+          {
+            "requirement": "r25"
+          },
+          {
+            "requirement": "r26"
+          },
+          {
+            "requirement": "r27"
+          },
+          {
+            "requirement": "r28"
+          },
+          {
+            "requirement": "r29"
+          },
+          {
+            "requirement": "r30"
+          },
+          {
+            "requirement": "r31"
+          },
+          {
+            "requirement": "r32"
+          },
+          {
+            "requirement": "r33"
+          },
+          {
+            "requirement": "r34"
+          },
+          {
+            "requirement": "r35"
+          },
+          {
+            "requirement": "r36"
+          },
+          {
+            "requirement": "r37"
+          },
+          {
+            "requirement": "r38"
+          },
+          {
+            "requirement": "r39"
+          },
+          {
+            "requirement": "r40"
+          },
+          {
+            "requirement": "r41"
+          },
+          {
+            "requirement": "r42"
+          },
+          {
+            "requirement": "r43"
+          },
+          {
+            "requirement": "r44"
+          },
+          {
+            "requirement": "r45"
+          },
+          {
+            "requirement": "r46"
+          },
+          {
+            "requirement": "r47"
+          },
+          {
+            "requirement": "r48"
+          },
+          {
+            "requirement": "r49"
+          },
+          {
+            "requirement": "r50"
+          },
+          {
+            "requirement": "r51"
+          },
+          {
+            "requirement": "r52"
+          },
+          {
+            "requirement": "r53"
+          },
+          {
+            "requirement": "r54"
+          },
+          {
+            "requirement": "r55"
+          },
+          {
+            "requirement": "r56"
+          },
+          {
+            "requirement": "r57"
+          },
+          {
+            "requirement": "r58"
+          },
+          {
+            "requirement": "r59"
+          },
+          {
+            "requirement": "r60"
+          },
+          {
+            "requirement": "r61"
+          },
+          {
+            "requirement": "r62"
+          },
+          {
+            "requirement": "r63"
+          },
+          {
+            "requirement": "r64"
+          },
+          {
+            "requirement": "r65"
+          },
+          {
+            "requirement": "r66"
+          },
+          {
+            "requirement": "r67"
+          },
+          {
+            "requirement": "r68"
+          },
+          {
+            "requirement": "r69"
+          },
+          {
+            "requirement": "r70"
+          },
+          {
+            "requirement": "r71"
+          },
+          {
+            "requirement": "r72"
+          },
+          {
+            "requirement": "r73"
+          },
+          {
+            "requirement": "r74"
+          },
+          {
+            "requirement": "r75"
+          },
+          {
+            "requirement": "r76"
+          },
+          {
+            "requirement": "r77"
+          },
+          {
+            "requirement": "r78"
+          },
+          {
+            "requirement": "r79"
+          },
+          {
+            "requirement": "r80"
+          },
+          {
+            "requirement": "r81"
+          },
+          {
+            "requirement": "r82"
+          },
+          {
+            "requirement": "r83"
+          },
+          {
+            "requirement": "r84"
+          },
+          {
+            "requirement": "r85"
+          },
+          {
+            "requirement": "r86"
+          },
+          {
+            "requirement": "r87"
+          },
+          {
+            "requirement": "r88"
+          },
+          {
+            "requirement": "r89"
+          },
+          {
+            "requirement": "r90"
+          },
+          {
+            "requirement": "r91"
+          },
+          {
+            "requirement": "r92"
+          },
+          {
+            "requirement": "r93"
+          },
+          {
+            "requirement": "r94"
+          },
+          {
+            "requirement": "r95"
+          },
+          {
+            "requirement": "r96"
+          },
+          {
+            "requirement": "r97"
+          },
+          {
+            "requirement": "r98"
+          },
+          {
+            "requirement": "r99"
+          },
+          {
+            "requirement": "r100"
+          },
+          {
+            "requirement": "r101"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 exportRestrictions exceeds maxItems (101 items)",
+      "data": {
+        "exportRestrictions": [
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          },
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "antiquity"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 exportRestrictions notes exceeds maxLength (2001 chars)",
+      "data": {
+        "exportRestrictions": [
+          {
+            "jurisdiction": {
+              "country": "CN"
+            },
+            "restrictionType": "antiquity",
+            "notes": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 disposalRestrictions authority exceeds maxLength (256 chars)",
+      "data": {
+        "disposalRestrictions": [
+          {
+            "requirement": "Must consult council",
+            "authority": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 disposalRestrictions additional property not allowed",
+      "data": {
+        "disposalRestrictions": [
+          {
+            "requirement": "Must consult",
+            "penalty": "fine"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 licenceRequired as string instead of boolean",
+      "data": {
+        "exportRestrictions": [
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "cultural_property",
+            "licenceRequired": "yes"
+          }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

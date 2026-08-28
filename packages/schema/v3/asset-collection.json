@@ -1,0 +1,342 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/asset-collection.json",
+  "title": "Asset Collection",
+  "description": "A named group of related assets — e.g. a model railway collection, vinyl record library, or art portfolio. Lets families and dealers understand which items belong together and should be considered as a set",
+  "type": "object",
+  "required": [ "id", "rootDocumentId", "name" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this asset collection",
+      "examples": [ "b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "rootDocumentId": {
+      "description": "The root document this entity belongs to — either an estate document (schema.json) or a catalogue document (catalogue.json)",
+      "examples": [ "a1b2c3d4-e5f6-7890-abcd-ef1234567890" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "name": {
+      "description": "Display name for this collection",
+      "examples": [
+        "Model railway collection",
+        "Vinyl record library",
+        "Japanese woodblock prints"
+      ],
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "description": {
+      "description": "Context for family members and dealers about the collection's scope, provenance, or significance",
+      "examples": [
+        "OO gauge collection started in 1985, mostly Hornby with some Lima coaches. Layout stored in the loft at Oakfield Road."
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "category": {
+      "description": "The primary category of items in this collection",
+      "$comment": "Broad category for the collection. Use 'other' for niche collections (e.g. vintage typewriters, fountain pens). Individual assets within the collection may have more specific categories.",
+      "examples": [ "model_railways", "vinyl_records", "art" ],
+      "enum": [
+        "model_railways",
+        "vinyl_records",
+        "art",
+        "jewellery",
+        "wine",
+        "stamps",
+        "coins",
+        "books",
+        "musical_instruments",
+        "fishing_gear",
+        "handbags",
+        "power_tools",
+        "watches",
+        "ceramics",
+        "memorabilia",
+        "other"
+      ]
+    },
+    "estimatedValue": {
+      "description": "Estimated total value of the collection as a whole",
+      "examples": [
+        {
+          "amount": 1500000,
+          "currency": "GBP"
+        }
+      ],
+      "$ref": "common/money.json"
+    },
+    "valuationSource": {
+      "description": "How the estimated value was determined",
+      "$comment": "self_estimated = owner's own guess. dealer_valuation = assessed by a specialist dealer. auction_estimate = provided by an auction house. insurance_value = the insured replacement value.",
+      "examples": [ "dealer_valuation" ],
+      "enum": [
+        "self_estimated",
+        "dealer_valuation",
+        "auction_estimate",
+        "insurance_value"
+      ]
+    },
+    "valuationDate": {
+      "description": "Date the valuation was performed or last updated",
+      "examples": [ "2025-11-15" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "disposalWishes": {
+      "description": "Free-text guidance from the testator about what should happen to this collection — keep together, sell at auction, donate to a museum, etc",
+      "examples": [
+        "Keep together if possible. Contact Dave at Manchester Model Railway Club — he knows the right dealers. Do not sell on eBay individually."
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "disposalStrategy": {
+      "description": "The testator's preferred strategy for disposing of this collection. More structured than disposalWishes",
+      "$comment": "keep_together: collection should remain intact — bequeathed to one person or institution. sell_as_collection: sell as a single lot to one buyer. sell_individually: break up and sell items separately. auction: sell through an auction house. donate: donate to a museum, institution, or charity. gift_to_person: give to a specific named person. dealer_bids: use CherishedItems-style competitive dealer bidding. mixed: combination of approaches for different parts. undecided: testator has not decided.",
+      "examples": [ "dealer_bids", "keep_together" ],
+      "enum": [
+        "keep_together",
+        "sell_as_collection",
+        "sell_individually",
+        "auction",
+        "donate",
+        "gift_to_person",
+        "dealer_bids",
+        "mixed",
+        "undecided"
+      ]
+    },
+    "minimumAcceptableValue": {
+      "description": "The minimum total value the testator or executor will accept for the collection. Prevents fire-sale disposal. In minor currency units",
+      "$ref": "common/money.json"
+    },
+    "preferredDisposalMethod": {
+      "description": "Preferred channel for disposing of the collection",
+      "$comment": "private_sale: direct sale to a known buyer. auction_house: through an established auction house (Christie's, Bonhams, etc.). dealer_network: through specialist dealers in the collecting domain. online_marketplace: eBay, Catawiki, etc. specialist_fair: at a collecting fair or exhibition. museum_acquisition: sale or donation to a museum. other: any other method.",
+      "examples": [ "dealer_network", "auction_house" ],
+      "enum": [
+        "private_sale",
+        "auction_house",
+        "dealer_network",
+        "online_marketplace",
+        "specialist_fair",
+        "museum_acquisition",
+        "other"
+      ]
+    },
+    "specialistDealerNotes": {
+      "description": "Notes about specialist dealers who might be interested in this collection. Names, contact details, areas of expertise",
+      "examples": [
+        "Rails of Sheffield (01onal@railsofsheffield.com) — largest UK model railway dealer. Hattons of Liverpool — strong on Bachmann/Hornby. Avoid eBay 'lot sellers' — they undervalue specialist items."
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "notes": {
+      "description": "Any additional notes about this collection",
+      "examples": [
+        "Insurance policy with Hiscox, ref HX-2024-1234. Photos in Google Drive folder 'Railway Collection'."
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "images": {
+      "description": "Overview photographs and videos of the collection as a whole — the display, the storage, the scale of the collection",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "common/media.json"
+      }
+    },
+    "splitFrom": {
+      "description": "Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split",
+      "type": "object",
+      "required": [ "entityType", "entityId", "splitAt" ],
+      "properties": {
+        "entityType": {
+          "description": "The type of entity that was split",
+          "enum": [ "asset", "asset_collection" ]
+        },
+        "entityId": {
+          "description": "The id of the original entity that was split",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "splitAt": {
+          "description": "When the split occurred",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "reason": {
+          "description": "Why the split was requested",
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "disposalHistory": {
+      "description": "History of how items in this collection were disposed of during estate administration",
+      "type": "array",
+      "maxItems": 500,
+      "items": {
+        "type": "object",
+        "properties": {
+          "assetId": {
+            "description": "Asset.id of the disposed item",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "disposalMethod": {
+            "description": "How the item was disposed of",
+            "enum": [
+              "sold_as_collection",
+              "sold_individually",
+              "gifted_to_beneficiary",
+              "donated",
+              "kept",
+              "other"
+            ]
+          },
+          "proceeds": {
+            "description": "Sale proceeds",
+            "$ref": "common/money.json"
+          },
+          "recipientPersonId": {
+            "description": "Person.id of the recipient",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "recipientPersonIdDisplay": {
+            "description": "Human-readable display name for the referenced recipient person",
+            "type": "string",
+            "maxLength": 255
+          },
+          "recipientOrganisationId": {
+            "description": "Organisation.id of the recipient",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "recipientOrganisationIdDisplay": {
+            "description": "Human-readable display name for the referenced recipient organisation",
+            "type": "string",
+            "maxLength": 255
+          },
+          "date": {
+            "description": "Date of disposal",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "format": "date"
+          },
+          "notes": {
+            "description": "Notes about the disposal",
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "mergedInto": {
+      "description": "Records that this entity was merged into another entity — the target entity is the canonical version",
+      "type": "object",
+      "properties": {
+        "entityType": {
+          "description": "Type of the target entity",
+          "enum": [ "asset", "asset_collection" ]
+        },
+        "entityId": {
+          "description": "ID of the target entity",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "mergedAt": {
+          "description": "When the merge occurred",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "reason": {
+          "description": "Why the entities were merged",
+          "examples": [ "Duplicate entries identified during estate inventory" ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "valuationComparison": {
+      "description": "Comparison of different valuation sources for this collection — insurance, dealer, auction",
+      "type": "object",
+      "properties": {
+        "insuranceValue": {
+          "description": "Insurance valuation",
+          "$ref": "common/money.json"
+        },
+        "insuranceDate": {
+          "description": "Date of insurance valuation",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "dealerEstimate": {
+          "description": "Dealer's estimate",
+          "$ref": "common/money.json"
+        },
+        "dealerDate": {
+          "description": "Date of dealer estimate",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "auctionEstimate": {
+          "description": "Auction house estimate",
+          "$ref": "common/money.json"
+        },
+        "auctionDate": {
+          "description": "Date of auction estimate",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "likelyRealisableAmount": {
+          "description": "Most likely realisable amount considering all sources",
+          "$ref": "common/money.json"
+        }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,96 @@
+{
+  "$comment": "Test fixture exercising all fields of the Singapore / Malaysia extension schema",
+  "country": "SG",
+  "singaporeISA": {
+    "applicable": true,
+    "shareSchedule": [
+      {
+        "relationship": "Spouse",
+        "share": "1/2",
+        "notes": "Spouse receives half under ISA Rule 2 where there are children but no parents"
+      },
+      {
+        "relationship": "Children (two, in equal shares)",
+        "share": "1/2",
+        "notes": "Remaining half divided equally among surviving children under ISA Rule 2"
+      }
+    ],
+    "notes": "Non-Muslim intestate distribution under the Intestate Succession Act (Cap. 146). Applicable because the deceased was not a Muslim and died without a valid will."
+  },
+  "singaporeAMLA": {
+    "applicable": false,
+    "school": "shafii",
+    "faraidRef": "N/A — deceased was not Muslim; included for completeness",
+    "notes": "AMLA (Administration of Muslim Law Act) distribution does not apply. The Shafi'i school is the default in Singapore for Muslim estates."
+  },
+  "cpfNominations": [
+    {
+      "accountId": "e62ee11b-7dda-4eb7-a0c3-5ed6747c31c2",
+      "nominatedPersonIds": [
+        "8e1bb59b-8ae3-4afd-a4d7-79aba5974391",
+        "890a9ae0-0475-47b0-a462-3ac0a995371e"
+      ],
+      "binding": true,
+      "nominationDate": "2022-06-15",
+      "notes": "CPF nomination made under the CPF (Nominations) Rules. Both children nominated in equal shares. Nomination is binding and overrides intestate rules for CPF moneys."
+    },
+    {
+      "accountId": "64fb6015-7799-4a5f-9a16-fbabb620e27c",
+      "nominatedPersonIds": [
+        "3750d55e-7501-4489-8e62-99b68db8b025"
+      ],
+      "binding": true,
+      "nominationDate": "2023-01-10",
+      "notes": "Supplementary Retirement Scheme (SRS) account nomination to spouse."
+    }
+  ],
+  "malaysianDistributionAct": {
+    "applicable": false,
+    "shareSchedule": [
+      {
+        "relationship": "Spouse",
+        "share": "1/3",
+        "notes": "Under the Distribution Act 1958, where deceased leaves spouse and children"
+      },
+      {
+        "relationship": "Children",
+        "share": "2/3",
+        "notes": "Divided equally among children"
+      }
+    ],
+    "notes": "Malaysian Distribution Act 1958 does not apply — deceased was domiciled in Singapore. Share schedule included for reference only."
+  },
+  "malaysianShariah": {
+    "applicable": false,
+    "shariaCourtReference": "N/A — no Shariah court jurisdiction for this estate",
+    "notes": "Shariah court jurisdiction applies only to Muslim estates in Malaysia. Included for completeness as the extension covers both jurisdictions."
+  },
+  "epfNominations": [
+    {
+      "accountId": "a61373b2-07ba-4baa-9712-25a0e65b983e",
+      "nominatedPersonIds": [
+        "fa16fb0e-5ddb-4bb9-af12-a15476ecd5bc",
+        "596ab82f-b9a0-4ca0-876b-931b3a4ea1fe"
+      ],
+      "binding": false,
+      "nominationDate": "2021-03-22",
+      "notes": "Malaysian EPF nomination — non-binding for non-Muslim members. EPF moneys distributed per nomination as trustee, not as beneficiary."
+    },
+    {
+      "accountId": "cc7950f2-c37d-4344-bce4-7cb81cd60e19",
+      "nominatedPersonIds": [
+        "fa16fb0e-5ddb-4bb9-af12-a15476ecd5bc"
+      ],
+      "binding": true,
+      "nominationDate": "2024-08-01",
+      "notes": "Second EPF account nomination, single nominee."
+    }
+  ],
+  "notes": "Fictional estate of Lim Mei Hua, deceased 12 September 2025 in Singapore. Non-Muslim Singaporean citizen. Two adult children and surviving spouse. CPF nominations in place; no valid will found.",
+  "x-inherit-hdbFlat": {
+    "value": "4-room HDB flat at Toa Payoh — subject to HDB resale eligibility rules on succession"
+  },
+  "x-inherit-insuranceNominations": {
+    "value": "Two NTUC Income policies with irrevocable nominations to children"
+  }
+}

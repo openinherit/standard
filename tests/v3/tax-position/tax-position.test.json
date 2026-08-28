@@ -1,0 +1,328 @@
+{
+  "target": "../../../v3/common/tax-position.json",
+  "tests": [
+    {
+      "description": "valid minimal tax position (required fields only)",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid fully populated tax position — UK IHT calculation",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "netEstateValue": {
+          "amount": 162500000,
+          "currency": "GBP"
+        },
+        "lifetimeTransfersInLookback": {
+          "amount": 15000000,
+          "currency": "GBP"
+        },
+        "lookbackPeriod": "7 years",
+        "availableExemptions": [
+          {
+            "name": "Nil-rate band",
+            "amount": {
+              "amount": 32500000,
+              "currency": "GBP"
+            },
+            "applied": true,
+            "notes": "Transferred nil-rate band from predeceased spouse — double allowance."
+          },
+          {
+            "name": "Residence nil-rate band",
+            "amount": {
+              "amount": 17500000,
+              "currency": "GBP"
+            },
+            "applied": true,
+            "notes": "Primary residence passes to direct descendant."
+          }
+        ],
+        "taxableEstate": {
+          "amount": 112500000,
+          "currency": "GBP"
+        },
+        "estimatedLiability": {
+          "amount": 45000000,
+          "currency": "GBP"
+        },
+        "effectiveRate": 24.32,
+        "warnings": [
+          "No professional valuation on file for 2 properties — using owner estimates.",
+          "Lifetime transfers may be incomplete — only gifts over £3,000 recorded."
+        ],
+        "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing jurisdiction",
+      "data": {
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only."
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing disclaimer",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — grossEstateValue missing currency",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000
+        },
+        "disclaimer": "Estimated for planning purposes only."
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing calculatedAt",
+      "data": {
+        "jurisdiction": "GB",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only."
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing grossEstateValue",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "disclaimer": "Estimated for planning purposes only."
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — jurisdiction wrong type (number instead of string)",
+      "data": {
+        "jurisdiction": 44,
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only."
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — disclaimer wrong type (boolean instead of string)",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — effectiveRate below minimum (negative)",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only.",
+        "effectiveRate": -1
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — effectiveRate above maximum (101)",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only.",
+        "effectiveRate": 101
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — effectiveRate at minimum boundary (0)",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only.",
+        "effectiveRate": 0
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — effectiveRate at maximum boundary (100)",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only.",
+        "effectiveRate": 100
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — calculatedAt bad format (not ISO 8601 date-time)",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "28/03/2026 14:30",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only."
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — calculatedAt date-only (missing time component)",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only."
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — disclaimer empty string (minLength:1)",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": ""
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — jurisdiction empty string (minLength:1)",
+      "data": {
+        "jurisdiction": "",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only."
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — effectiveRate wrong type (string instead of number)",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only.",
+        "effectiveRate": "40"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — charitableReliefPercentage above maximum (101)",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only.",
+        "charitableReliefPercentage": 101
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — charitableGiftsAsPercentage below minimum (-1)",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only.",
+        "charitableGiftsAsPercentage": -1
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — with charitable relief fields",
+      "data": {
+        "jurisdiction": "GB",
+        "calculatedAt": "2026-03-28T14:30:00Z",
+        "grossEstateValue": {
+          "amount": 185000000,
+          "currency": "GBP"
+        },
+        "disclaimer": "Estimated for planning purposes only.",
+        "charitableReliefApplicable": true,
+        "charitableReliefPercentage": 36,
+        "charitableReliefBasis": "10%+ of net estate to registered charities per IHT Act 1984 Schedule 1A",
+        "charitableReliefJurisdiction": "GB",
+        "charitableGiftsTotal": {
+          "amount": 20000000,
+          "currency": "GBP"
+        },
+        "charitableGiftsAsPercentage": 12.5
+      },
+      "valid": true
+    }
+  ]
+}

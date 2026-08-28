@@ -1,0 +1,134 @@
+{
+  "target": "../../../v3/extensions/islamic-succession/islamic-succession.json",
+  "tests": [
+    {
+      "description": "valid — minimal with required school",
+      "data": {
+        "school": "hanafi"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — full faraid configuration",
+      "data": {
+        "school": "hanafi",
+        "faraidApplies": true,
+        "awlApplied": false,
+        "raddApplied": false
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Shafii school with wasiyya",
+      "data": {
+        "school": "shafii",
+        "faraidApplies": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Hanbali school",
+      "data": {
+        "school": "hanbali"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required school",
+      "data": {
+        "faraidApplies": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — school not in enum",
+      "data": {
+        "school": "zen"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "school": "hanafi",
+        "taxRate": 0
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — Islamic succession with dedicated mahr field",
+      "data": {
+        "school": "hanafi",
+        "mahr": {
+          "amount": { "amount": 5000000, "currency": "GBP" },
+          "agreed": true,
+          "paidInFull": false,
+          "outstandingAmount": { "amount": 2500000, "currency": "GBP" },
+          "creditorPersonId": "a0000001-0000-0000-0000-000000000001",
+          "documentRef": "Nikah contract dated 2015-06-01"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — heir with cousin_paternal_full and asabaRank",
+      "data": {
+        "school": "hanafi",
+        "faraidApplies": true,
+        "heirClassifications": [
+          {
+            "personId": "ff000001-0000-4000-f000-000000000001",
+            "heirClass": "cousin_paternal_full",
+            "residuaryClass": "asaba_by_self",
+            "asabaRank": 11
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — heir with nephew_brother_full and asabaRank 7",
+      "data": {
+        "school": "shafii",
+        "faraidApplies": true,
+        "heirClassifications": [
+          {
+            "personId": "ff000001-0000-4000-f000-000000000002",
+            "heirClass": "nephew_brother_full",
+            "residuaryClass": "asaba_by_self",
+            "asabaRank": 7
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — asabaRank below minimum (0)",
+      "data": {
+        "school": "hanafi",
+        "heirClassifications": [
+          {
+            "personId": "ff000001-0000-4000-f000-000000000003",
+            "heirClass": "son",
+            "asabaRank": 0
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — asabaRank above maximum (16)",
+      "data": {
+        "school": "hanafi",
+        "heirClassifications": [
+          {
+            "personId": "ff000001-0000-4000-f000-000000000004",
+            "heirClass": "son",
+            "asabaRank": 16
+          }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

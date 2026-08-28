@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/kinship.json",
+  "title": "Kinship",
+  "description": "A familial bond between two people. Essential for intestacy calculation — inheritance rules in every jurisdiction depend on parent-child, sibling, and other familial relationships. Direction: fromPersonId is the parent/elder, toPersonId is the child/younger (for parent-child types). Indian extensions may add parent_child_coparcenary, karta_member. See extensions/hindu-succession/hindu-succession.json",
+  "type": "object",
+  "required": [ "id", "kinshipType", "fromPersonId", "toPersonId" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this kinship bond within the INHERIT document",
+      "examples": [ "a3b4c5d6-e7f8-9012-a345-6789abcdef01" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "kinshipType": {
+      "description": "The type of familial bond. Use the lineage property to distinguish paternal from maternal lines (critical for Islamic faraid, Hindu succession, matrilineal African systems). Use bloodDegree for whole/half-blood distinction (English, Hong Kong, New Zealand intestacy)",
+      "$comment": "parent_child_biological: natural parent-child relationship. parent_child_adopted: legally adopted child — treated as biological for most inheritance purposes. parent_child_step: stepchild — typically no automatic inheritance rights unless adopted. parent_child_foster: foster child — rarely has inheritance rights. parent_child_acknowledged: father acknowledges a child of uncertain parentage — relevant for Islamic inheritance. sibling: full sibling (same two parents). half_sibling: half-sibling sharing one parent — use lineage to specify paternal (same father) or maternal (same mother). Critical for Islamic faraid where paternal half-siblings inherit differently from maternal. step_sibling: child of a parent's spouse from a different relationship. grandparent_grandchild: grandparent to grandchild relationship — use lineage to specify paternal or maternal line. uncle_aunt: parent's sibling to sibling's child. Direction: fromPersonId is the elder (uncle/aunt), toPersonId is the younger (nephew/niece). Specific genders derived from Person.gender. Supports matrilineal African succession (maternal uncle inherits) and Islamic ta'sib hierarchy. cousin: child of a parent's sibling. Use lineage for paternal/maternal line. Required for Islamic ibn al-'amm (asaba ranks 11-12), civil law 4th-degree collateral, Korean 4촌, halachic hierarchy.",
+      "examples": [ "parent_child_biological", "sibling", "half_sibling" ],
+      "enum": [
+        "parent_child_biological",
+        "parent_child_adopted",
+        "parent_child_step",
+        "parent_child_foster",
+        "parent_child_acknowledged",
+        "sibling",
+        "half_sibling",
+        "step_sibling",
+        "grandparent_grandchild",
+        "uncle_aunt",
+        "cousin"
+      ]
+    },
+    "fromPersonId": {
+      "description": "The parent, elder, or senior person in this kinship bond (Person.id). For parent-child types, this is always the parent",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "fromPersonIdDisplay": {
+      "description": "Human-readable display name for the referenced from person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "toPersonId": {
+      "description": "The child, younger, or junior person in this kinship bond (Person.id). For parent-child types, this is always the child",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "toPersonIdDisplay": {
+      "description": "Human-readable display name for the referenced to person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "legalStatus": {
+      "description": "The legal recognition status of this familial bond",
+      "$comment": "recognised: the kinship is legally established and accepted. contested: the kinship is disputed (e.g. paternity challenge). pending: legal proceedings are underway to establish the kinship. unrecognised: the kinship exists in fact but is not legally recognised.",
+      "examples": [ "recognised", "contested" ],
+      "enum": [ "recognised", "contested", "pending", "unrecognised" ]
+    },
+    "legitimacy": {
+      "description": "Legitimacy status. Many modern jurisdictions have abolished this distinction, but it remains critical for Islamic and some customary inheritance systems",
+      "$comment": "legitimate: child born within a recognised marriage. illegitimate: child born outside marriage — affects inheritance in Islamic law (illegitimate children do not inherit via faraid), some African customary systems, and pre-1970 English law. legitimated: born illegitimate but subsequently legitimated (e.g. by parents' later marriage). not_applicable: the jurisdiction has abolished the distinction between legitimate and illegitimate children.",
+      "examples": [ "legitimate", "not_applicable" ],
+      "enum": [ "legitimate", "illegitimate", "legitimated", "not_applicable" ]
+    },
+    "adoptionDate": {
+      "description": "Date of the adoption order, for PARENT_CHILD_ADOPTED kinships",
+      "examples": [ "2018-07-15" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "courtOrderRef": {
+      "description": "Court order reference or adoption certificate number",
+      "examples": [ "ADOPT/2018/MC/001234", "FC-2020-001567" ],
+      "type": "string",
+      "maxLength": 500
+    },
+    "notes": {
+      "description": "Free-text notes about this kinship. Use for context on contested kinships, acknowledgement records, or customary recognition",
+      "examples": [
+        "Paternity established by DNA test in 2022",
+        "Child acknowledged by father under Islamic law — inheritance rights confirmed"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    },
+    "effectiveFrom": {
+      "description": "Date this family relationship became effective (e.g. date of marriage for step-child, date of adoption order)",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "effectiveTo": {
+      "description": "Date this family relationship ended (e.g. date of divorce). Null means ongoing. Missing means unknown",
+      "$comment": "Null means the relationship is ongoing. Missing means the end date is unknown.",
+      "type": [ "string", "null" ],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "legalBasis": {
+      "description": "The legal basis for this family relationship — determines inheritance rights in jurisdiction-specific calculators",
+      "$comment": "biological: natural biological relationship. adoption_order: court-ordered adoption (Western-style, severs biological ties). marriage: relationship established through marriage (e.g. step-parent). civil_partnership: relationship established through civil partnership. treated_as_child: child treated as own without formal adoption. surrogacy_order: parentage established via surrogacy. parental_order: court order transferring parentage. customary_adoption: adoption under customary law where biological family ties are NOT severed — child may inherit from both families. Covers Maori whāngai, African customary adoption, Torres Strait Islander kupai omasker, Japanese futsu yōshi.",
+      "enum": [
+        "biological",
+        "adoption_order",
+        "marriage",
+        "civil_partnership",
+        "treated_as_child",
+        "surrogacy_order",
+        "parental_order",
+        "customary_adoption"
+      ]
+    },
+    "recognisedIn": {
+      "description": "Jurisdictions where this relationship is legally recognised. A same-sex adoption may be recognised in GB-ENG but not in SA",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [ "jurisdiction", "recognised" ],
+        "properties": {
+          "jurisdiction": {
+            "$ref": "common/jurisdiction.json"
+          },
+          "recognised": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "parentalOrderDetails": {
+      "description": "Details of a parental order (surrogacy), when legalBasis is parental_order",
+      "type": "object",
+      "properties": {
+        "orderDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "orderingCourt": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "surrogatePersonId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "biologicalParentIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kinshipType": {
+            "enum": [
+              "half_sibling",
+              "grandparent_grandchild",
+              "uncle_aunt",
+              "cousin"
+            ]
+          }
+        },
+        "required": [ "kinshipType" ]
+      },
+      "then": {
+        "properties": {
+          "lineage": {
+            "description": "Whether the kinship runs through the paternal or maternal line. Critical for Islamic faraid (true vs false grandfather, paternal vs maternal uncle), Hindu succession (agnate vs cognate priority), and matrilineal African succession (maternal uncle inherits). When the intermediate parent-child chain is present in the document, lineage must agree with it. When the chain is absent, lineage is the sole source",
+            "$comment": "paternal: the kinship runs through the father's line (e.g. father's brother, father's parent). maternal: the kinship runs through the mother's line (e.g. mother's brother, mother's parent).",
+            "examples": [ "paternal", "maternal" ],
+            "enum": [ "paternal", "maternal" ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kinshipType": {
+            "enum": [ "uncle_aunt", "cousin" ]
+          }
+        },
+        "required": [ "kinshipType" ]
+      },
+      "then": {
+        "properties": {
+          "bloodDegree": {
+            "description": "Whether this kinship is through a full-blood or half-blood relative. English intestacy law (AEA 1925 s.46), Hong Kong, and New Zealand distinguish whole-blood from half-blood uncles/aunts and cousins, with whole blood taking priority",
+            "$comment": "whole: the uncle/aunt/cousin is a full sibling of the relevant parent. half: the uncle/aunt/cousin is a half-sibling of the relevant parent.",
+            "examples": [ "whole", "half" ],
+            "enum": [ "whole", "half" ]
+          }
+        }
+      }
+    }
+  ],
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

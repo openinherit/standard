@@ -1,0 +1,16 @@
+# gitleaks configuration for openinherit/standard.
+# Extends the default gitleaks ruleset and allowlists confirmed non-secrets.
+[extend]
+useDefault = true
+
+[allowlist]
+description = """
+Public, non-secret values that the generic-api-key heuristic mis-flags.
+f7237fc4-... is the Uniform Law Commission's PUBLIC CommunityKey query param in
+the RUFADAA committee-page URL, embedded in schema $comment fields
+(https://www.uniformlaws.org/committees/community-home?CommunityKey=...). It has
+been public in the @openinherit/schema npm package since 2026. Not a credential.
+"""
+regexes = [
+  '''f7237fc4-74c2-4728-81c6-b39a91ecdf22''',
+]

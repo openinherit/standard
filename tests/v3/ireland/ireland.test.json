@@ -1,0 +1,131 @@
+{
+  "target": "../../../v3/extensions/ireland/ireland.json",
+  "tests": [
+    {
+      "description": "invalid — empty object (minProperties: 1 requires at least one property)",
+      "data": {},
+      "valid": false
+    },
+    {
+      "description": "valid — spouse legal right share with children",
+      "data": {
+        "spouseLegalRightShare": {
+          "fraction": "1/3",
+          "hasChildren": true,
+          "renounced": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Section 117 claim applicable",
+      "data": {
+        "section117Claim": {
+          "applicable": true,
+          "claimDeadlineMonths": 6
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — CAT thresholds",
+      "data": {
+        "capitalAcquisitionsTax": {
+          "groupAThreshold": {
+            "value": {
+              "amount": 33500000,
+              "currency": "EUR"
+            },
+            "effectiveFrom": "2024-01-01",
+            "status": "enacted"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — probate process",
+      "data": {
+        "probateProcess": {
+          "probateOffice": "Probate Office, Four Courts, Dublin",
+          "inlandRevenueAffidavit": true,
+          "grantType": "probate"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — unknown property at root",
+      "data": {
+        "inheritanceTax": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — probateProcess grantType not in enum",
+      "data": {
+        "probateProcess": {
+          "grantType": "fast_track"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — spouseLegalRightShare.renounced is string",
+      "data": {
+        "spouseLegalRightShare": {
+          "renounced": "no"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — notes at maxLength boundary",
+      "data": {
+        "notes": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — spouse without children (1/2 share)",
+      "data": {
+        "spouseLegalRightShare": {
+          "fraction": "1/2",
+          "hasChildren": false,
+          "renounced": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — EPA with registered date",
+      "data": {
+        "enduringPowerOfAttorney": {
+          "registered": true,
+          "registrationDate": "2025-06-01"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — distributionOrder uncles_aunts",
+      "data": {
+        "intestacyRules": {
+          "distributionOrder": "uncles_aunts",
+          "hasSpouse": false,
+          "hasIssue": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — distributionOrder 'second_cousins' not in Irish hierarchy",
+      "data": {
+        "intestacyRules": {
+          "distributionOrder": "second_cousins"
+        }
+      },
+      "valid": false
+    }
+  ]
+}

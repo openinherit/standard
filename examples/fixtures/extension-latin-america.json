@@ -1,0 +1,56 @@
+{
+  "$comment": "Test fixture exercising all fields of the latin-america extension",
+  "country": "BR",
+  "brazilianSuccession": {
+    "legitimaFraction": "1/2",
+    "necessaryHeirs": [
+      {
+        "personId": "a1b1c1d1-e1f1-4a2b-3c4d-5e6f7a8b9c0d",
+        "category": "descendant"
+      },
+      {
+        "personId": "b2c2d2e2-f2a3-4b4c-5d6e-7f8a9b0c1d2e",
+        "category": "spouse"
+      }
+    ],
+    "meacaoHerancaSplit": true,
+    "stableUnionRights": true,
+    "notes": "Deceased was in a stable union (uniao estavel) recognised under Brazilian Civil Code art. 1723. Community property regime (comunhao parcial de bens) applies; meacao split performed before succession."
+  },
+  "argentineSuccession": {
+    "legitimaDescendants": "2/3",
+    "legitimaAscendants": "1/2",
+    "porcionDisponible": "One-third of the estate available for free disposition",
+    "collation": true,
+    "notes": "Collation (colacion) required for lifetime gifts to forced heirs per Argentine Civil and Commercial Code art. 2385. Gift of Buenos Aires flat to eldest daughter must be brought into hotchpot."
+  },
+  "colombianSuccession": {
+    "system": "fourths",
+    "legitimaRigurosa": "First quarter: divided equally among forced heirs",
+    "cuartaDeMejoras": "Second quarter: allocated to eldest son as mejora",
+    "cuartaDeLibreDisposicion": "Fourth quarter: bequeathed to charitable foundation",
+    "forcedHeirs": [
+      {
+        "personId": "c3d3e3f3-a4b5-4c6d-7e8f-9a0b1c2d3e4f",
+        "relationship": "Eldest son"
+      },
+      {
+        "personId": "d4e4f4a5-b6c7-4d8e-9f0a-1b2c3d4e5f6a",
+        "relationship": "Youngest daughter"
+      }
+    ],
+    "notes": "Colombian fourths system applied per Civil Code art. 1226. Testator allocated the cuarta de mejoras to the eldest son and the cuarta de libre disposicion to a registered charitable foundation in Bogota."
+  },
+  "venezuelanSuccession": {
+    "legitimaFraction": "1/2",
+    "applicableLaw": "Venezuelan Civil Code, Book III, Title II — Of Successions",
+    "notes": "Legitima fraction of one half applies to descendants. Venezuelan law governs immovable property situated in Caracas regardless of domicile of the deceased."
+  },
+  "notes": "Comprehensive fixture covering all four Latin American succession sub-schemas. In practice, a single estate would typically populate only one country-specific section. This fixture populates all sections for full schema coverage testing.",
+  "x-inherit-cartorio-registration": {
+    "value": "Inventario registered at 5th Cartorio de Registro Civil, Sao Paulo, process number 1234567-89.2025.8.26.0100"
+  },
+  "x-inherit-escritura-publica": {
+    "value": "Public deed of succession executed before Notario Publico No. 12 of Bogota, reference EP-2025-04471"
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/guardian.json",
+  "title": "Guardian",
+  "description": "A guardian appointment for a minor child. Supports testamentary, court-appointed, shariah court, community-appointed, and religious court appointments. Guardianship structures include individual, collective, rotating, and family council determined",
+  "type": "object",
+  "anyOf": [
+    {
+      "required": [ "personId" ]
+    },
+    {
+      "required": [ "organisationId" ]
+    }
+  ],
+  "required": [ "id", "childPersonId", "role", "appointmentType" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this guardian appointment within the INHERIT document",
+      "examples": [ "d0e1f2a3-b4c5-6789-d012-3456789abcde" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "personId": {
+      "description": "Reference to the Person.id of the guardian being appointed",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "personIdDisplay": {
+      "description": "Human-readable display name for the referenced person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "childPersonId": {
+      "description": "Reference to the Person.id of the child this guardian is appointed for",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "childPersonIdDisplay": {
+      "description": "Human-readable display name for the referenced child person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "role": {
+      "description": "The guardian's priority in the appointment",
+      "$comment": "primary: the first-choice guardian. secondary: acts alongside the primary or takes over if primary cannot act. substitute: named replacement if primary and secondary cannot act.",
+      "examples": [ "primary", "substitute" ],
+      "enum": [ "primary", "secondary", "substitute" ]
+    },
+    "appointmentType": {
+      "description": "How this guardian was appointed",
+      "$comment": "testamentary: appointed by the parent in their will. parental_responsibility: appointed by a parent with parental responsibility under statute (e.g. Children Act 1989 s.5). court_appointed: appointed by a secular court. shariah_court_appointed: appointed by a Shariah court — Islamic guardianship (hadanah/wilayah). community_appointed: appointed by a community body (e.g. family council in West Africa). religious_court_appointed: appointed by a religious court other than Shariah (e.g. beth din).",
+      "examples": [ "testamentary", "court_appointed" ],
+      "enum": [
+        "testamentary",
+        "parental_responsibility",
+        "court_appointed",
+        "shariah_court_appointed",
+        "community_appointed",
+        "religious_court_appointed"
+      ]
+    },
+    "guardianshipStructure": {
+      "description": "The structure of the guardianship arrangement",
+      "$comment": "individual: one named guardian. collective: multiple guardians acting jointly. rotating: guardianship rotates among family members (common in some African customary systems). family_council_determined: a family council determines the guardian — the will names the mechanism rather than the person.",
+      "examples": [ "individual", "collective" ],
+      "enum": [
+        "individual",
+        "collective",
+        "rotating",
+        "family_council_determined"
+      ]
+    },
+    "familyCouncilDecisionRef": {
+      "description": "Reference to the family council decision that appointed this guardian, if the appointment was council-determined",
+      "$comment": "Reference to a family council decision document or record.",
+      "examples": [
+        "FC/2025/001 — Ogbuagu family council decision of 15 March 2025"
+      ],
+      "type": "string",
+      "maxLength": 500
+    },
+    "conditions": {
+      "description": "Conditions on the guardianship — when it takes effect, any restrictions, or circumstances under which it lapses",
+      "examples": [
+        "Takes effect only if both parents die before the child reaches 18",
+        "Guardian must maintain the child's existing school placement"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "notes": {
+      "description": "Free-text notes about this guardianship appointment",
+      "examples": [
+        "Guardian lives in Canada — may need to apply for child's visa",
+        "Both parents wish the child to be raised in the Islamic faith",
+        "Guardian Auntie Lakshmi confirmed — child to continue at current school in Mumbai",
+        "Kwame Mensah agreed to act as guardian — family council approved"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "organisationId": {
+      "description": "Reference to the Organisation.id if the guardian is an institutional care provider. Mutually exclusive with personId",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "organisationIdDisplay": {
+      "description": "Human-readable display name for the referenced organisation",
+      "type": "string",
+      "maxLength": 255
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    },
+    "dependantType": {
+      "description": "The type of dependant this guardian is appointed for. Extends guardian beyond minors to cover adult dependants",
+      "enum": [ "minor", "adult_with_disability", "adult_with_incapacity" ]
+    },
+    "guardianshipModel": {
+      "description": "The cultural or legal model of guardianship. Differs across legal traditions — individual appointment (common law), family council (West African), collective care (South Asian extended family), court-appointed (civil law)",
+      "enum": [
+        "individual",
+        "family_council",
+        "collective",
+        "extended_family",
+        "rotating",
+        "court_appointed",
+        "custom"
+      ]
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,77 @@
+{
+  "$comment": "Test fixture exercising all fields of the EU Succession extension schema",
+  "memberState": "FR",
+  "brusselsIV": {
+    "habitualResidence": {
+      "country": "FR",
+      "subdivision": "FR-75",
+      "legalSystems": [
+        "civil_law"
+      ],
+      "name": "Paris"
+    },
+    "nationalityElection": true,
+    "electedNationality": {
+      "country": "IT",
+      "legalSystems": [
+        "civil_law"
+      ],
+      "name": "Italy"
+    },
+    "electionDate": "2023-05-14"
+  },
+  "europeanCertificate": {
+    "issued": true,
+    "certificateReference": "ECS-FR-2025-00847",
+    "issuingAuthority": "Tribunal judiciaire de Paris, Pôle Successions",
+    "issueDate": "2025-09-22"
+  },
+  "spanishRegionalRegime": {
+    "region": "catalan",
+    "forcedHeirshipRules": "Catalan Civil Code Book IV — legitimate portion (llegítima) is 25% of estate divided equally among descendants",
+    "notes": "Applicable to immovable property situated in Catalonia. The deceased held a holiday villa in Girona subject to Catalan forced heirship rules despite habitual residence in France."
+  },
+  "forcedHeirshipVariant": {
+    "model": "french_reserve",
+    "claimNature": "Réserve héréditaire — real right in the estate, not merely a monetary claim",
+    "reservedFraction": "2/3",
+    "calculationNotes": "Two surviving children: reserved portion is 2/3 of the net estate (Code civil Art. 913). The disposable portion (quotité disponible) is 1/3.",
+    "effectiveDate": "2006-01-01",
+    "reformVersion": "Law 2006-728 of 23 June 2006 reforming successions and gifts",
+    "temporalRule": {
+      "value": "2/3",
+      "effectiveFrom": "2006-01-01",
+      "effectiveUntil": null,
+      "status": "enacted",
+      "predecessorValue": "3/4",
+      "legislativeReference": "Code civil Art. 913 (as amended by Law 2006-728)",
+      "notes": "The 2006 reform reduced the reserved portion for two children from 3/4 to 2/3 and introduced the renunciation anticipée (advance waiver)."
+    }
+  },
+  "postBrexitHandling": {
+    "ukAssetsSubjectToEURule": false,
+    "ukAssetsHandledUnder": "English domestic law — UK is not bound by Brussels IV Regulation post-Brexit",
+    "notes": "The deceased held a buy-to-let flat in London. As the UK does not participate in Brussels IV, English succession law applies to the UK-situs immovable property. A separate English grant of probate is required."
+  },
+  "legislativeChanges": [
+    {
+      "description": "European Commission review of Brussels IV Regulation (EU) No 650/2012 — proposed amendments to strengthen mutual recognition of authentic instruments",
+      "status": "consultation",
+      "effectiveDate": "2027-01-01",
+      "notes": "Public consultation closed February 2026. Draft amendments expected Q3 2026. Focus on reducing refusal grounds for recognition of ECS across member states."
+    },
+    {
+      "description": "French Cour de cassation ruling (Civ. 1re, 15 March 2025) confirming that Brussels IV choice-of-law election survives a subsequent change of habitual residence",
+      "status": "enacted",
+      "effectiveDate": "2025-03-15",
+      "notes": "Landmark ruling clarifying that a valid nationality election under Article 22 of Brussels IV is not invalidated by later relocation to a different member state."
+    }
+  ],
+  "notes": "Fictional estate of Marco Bianchi, Italian national habitually resident in Paris, deceased 10 July 2025. Cross-border estate spanning France, Italy (nationality election), Spain (Catalan property), and England (post-Brexit investment property). Two surviving children entitled to French réserve héréditaire.",
+  "x-inherit-notaireRef": {
+    "value": "Maître Dubois, Étude notariale, 42 Rue de Rivoli, 75001 Paris"
+  },
+  "x-inherit-scellés": {
+    "value": "Court-ordered sealing of the Paris apartment carried out 12 July 2025 pending inventory"
+  }
+}

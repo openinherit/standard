@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/conformance-declaration.json",
+  "title": "INHERIT Conformance Declaration",
+  "description": "Machine-readable declaration of an implementation's conformance to the INHERIT standard. Governance requires two independent Level 2 implementations to promote schemas from draft to stable",
+  "type": "object",
+  "required": [
+    "implementation",
+    "implementationVersion",
+    "inheritVersion",
+    "conformanceLevel",
+    "declaredAt",
+    "entities"
+  ],
+  "properties": {
+    "implementation": {
+      "description": "Name of the implementation (product, service, or library)",
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "implementationVersion": {
+      "description": "Version of the implementation being declared",
+      "type": "string",
+      "maxLength": 50,
+      "minLength": 1
+    },
+    "inheritVersion": {
+      "description": "INHERIT schema version this declaration applies to",
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "maxLength": 20
+    },
+    "conformanceLevel": {
+      "description": "Overall conformance level achieved. The minimum across all declared entities",
+      "enum": [ 1, 2, 3 ]
+    },
+    "declaredAt": {
+      "description": "ISO 8601 timestamp when this declaration was generated",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "validatorDetails": {
+      "description": "Details of the validator used to verify conformance",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Validator name or library",
+          "type": "string",
+          "maxLength": 255
+        },
+        "version": {
+          "description": "Validator version",
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "additionalProperties": false
+    },
+    "entities": {
+      "description": "Per-entity conformance results. Keys are entity schema names (e.g. 'estate', 'person', 'bequest')",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/EntityConformance"
+      }
+    },
+    "extensions": {
+      "description": "Per-extension conformance results. Keys are extension identifiers (e.g. 'uk-england-wales', 'islamic-succession')",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/ExtensionConformance"
+      }
+    },
+    "notes": {
+      "description": "Free-text notes about this conformance declaration",
+      "type": "string",
+      "maxLength": 2000
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    },
+    "disclaimer": {
+      "description": "Legal disclaimer on validation results. Validation checks JSON Schema conformance and referential integrity. It does not verify legal accuracy, completeness, or suitability for any jurisdiction's requirements",
+      "const": "Validation results are informational. They verify schema conformance and data structure, not legal accuracy or completeness. Do not rely on validation results as the sole basis for legal or financial decisions."
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "EntityConformance": {
+      "description": "Conformance result for a single entity schema",
+      "type": "object",
+      "required": [ "level", "passed" ],
+      "properties": {
+        "level": {
+          "description": "Conformance level tested",
+          "enum": [ 1, 2, 3 ]
+        },
+        "passed": {
+          "description": "Whether the entity passed at the declared level",
+          "type": "boolean"
+        },
+        "errors": {
+          "description": "Number of validation errors (0 if passed)",
+          "type": "integer",
+          "minimum": 0
+        },
+        "warnings": {
+          "description": "Number of validation warnings",
+          "type": "integer",
+          "minimum": 0
+        },
+        "skipped": {
+          "description": "Whether this entity was skipped (not applicable to this implementation)",
+          "type": "boolean"
+        },
+        "notes": {
+          "description": "Per-entity notes",
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "additionalProperties": false
+    },
+    "ExtensionConformance": {
+      "description": "Conformance result for a single extension",
+      "type": "object",
+      "required": [ "level", "passed" ],
+      "properties": {
+        "level": {
+          "description": "Conformance level tested",
+          "enum": [ 1, 2, 3 ]
+        },
+        "passed": {
+          "description": "Whether the extension passed at the declared level",
+          "type": "boolean"
+        },
+        "errors": {
+          "description": "Number of validation errors",
+          "type": "integer",
+          "minimum": 0
+        },
+        "warnings": {
+          "description": "Number of validation warnings",
+          "type": "integer",
+          "minimum": 0
+        },
+        "jurisdictionsVerified": {
+          "description": "Which jurisdictions were verified for Level 3",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          }
+        },
+        "notes": {
+          "description": "Per-extension notes",
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

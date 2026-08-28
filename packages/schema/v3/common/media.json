@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/media.json",
+  "title": "Media",
+  "description": "A media attachment — photograph, video, or document scan. Used for identification, valuation, condition documentation, and provenance records",
+  "type": "object",
+  "required": [ "url" ],
+  "properties": {
+    "url": {
+      "description": "URI pointing to the media file. May be an HTTPS URL, S3 URI, or other storage reference",
+      "examples": [
+        "https://storage.example.com/photos/ring-001.jpg",
+        "s3://estate-docs/assets/painting.jpg"
+      ],
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9+.-]*://",
+      "format": "uri",
+      "maxLength": 2048
+    },
+    "caption": {
+      "description": "Human-readable description of what this media shows",
+      "examples": [
+        "Front view of the engagement ring",
+        "Walk-through video of the model railway layout",
+        "Scan of the GIA diamond certificate"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "mediaType": {
+      "description": "MIME type of the media file. Maps to Schema.org encodingFormat",
+      "$comment": "Common values: image/jpeg, image/png, image/webp (photos), video/mp4, video/quicktime (videos), application/pdf (document scans, certificates).",
+      "examples": [ "image/jpeg", "image/png", "video/mp4", "application/pdf" ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "content": {
+      "description": "Base64-encoded media content for self-contained documents. Use for small files (attestation scans, signatures, certificates) that must travel with the estate plan. For large files (photos, videos), use url instead",
+      "$comment": "Enables offline use and archival durability. The mediaType field describes the decoded content type. Size limit ~7.5MB decoded (10MB base64).",
+      "type": "string",
+      "maxLength": 10485760,
+      "contentEncoding": "base64",
+      "contentMediaType": "image/jpeg"
+    },
+    "viewType": {
+      "description": "The purpose of this media — what question does it answer? Enables executors and dealers to find specific documentation without scrolling through galleries",
+      "$comment": "overview: general view showing the whole item in context. identification: close-up of the feature that identifies this specific item (catalogue number, hallmark, label). condition: shows current condition, wear, patina. provenance: documentation of ownership history (receipts, auction records). maker_mark: manufacturer's mark, stamp, or signature. serial_number: close-up of serial/chassis/reference number. damage: specific damage, repairs, or defects. scale_reference: item photographed alongside a ruler or known object for size. label: product label, wine label, stamp on reverse. certificate: valuation certificate, authenticity certificate, gemological report. receipt: purchase receipt or invoice. environment: the storage environment (wine cellar temperature, gun cabinet, display case).",
+      "examples": [ "overview", "identification", "condition", "serial_number" ],
+      "enum": [
+        "overview",
+        "identification",
+        "condition",
+        "provenance",
+        "maker_mark",
+        "serial_number",
+        "damage",
+        "scale_reference",
+        "label",
+        "certificate",
+        "receipt",
+        "environment"
+      ]
+    },
+    "takenAt": {
+      "description": "When this media was captured. Useful for establishing condition at a point in time",
+      "examples": [ "2026-03-15T14:30:00Z" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "thumbnailUrl": {
+      "description": "URI for a smaller preview version of the media. Maps to Schema.org thumbnail",
+      "examples": [
+        "https://storage.example.com/thumbnails/ring-001-thumb.jpg"
+      ],
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9+.-]*://",
+      "format": "uri",
+      "maxLength": 2048
+    }
+  },
+  "additionalProperties": false
+}

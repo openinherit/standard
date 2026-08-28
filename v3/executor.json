@@ -1,0 +1,238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/executor.json",
+  "title": "Executor",
+  "description": "A person appointed to administer an estate. Includes professional executors, administrators (intestacy), and administrators with will annexed",
+  "type": "object",
+  "anyOf": [
+    {
+      "required": [ "personId" ]
+    },
+    {
+      "required": [ "organisationId" ]
+    }
+  ],
+  "required": [ "id", "role" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this executor appointment within the INHERIT document",
+      "examples": [ "c9d0e1f2-a3b4-5678-c901-23456789abcd" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "personId": {
+      "description": "Reference to the Person.id of the appointed executor or administrator",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "personIdDisplay": {
+      "description": "Human-readable display name for the referenced person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "role": {
+      "description": "The executor's role in the estate administration",
+      "$comment": "primary: the first-named executor who acts unless unable or unwilling. secondary: acts alongside the primary executor or takes over if the primary cannot act. substitute: named as a replacement if the primary and secondary cannot act. administrator: appointed by the court when there is no will (intestacy). administrator_with_will_annexed: appointed by the court when the will exists but the named executor cannot or will not act. literary: appointed to manage literary works, manuscripts, and intellectual property. digital: appointed to manage digital assets, online accounts, and cryptocurrency. specialist: appointed for a specific category of assets defined by the scope property.",
+      "examples": [ "primary", "substitute", "administrator" ],
+      "enum": [
+        "primary",
+        "secondary",
+        "substitute",
+        "administrator",
+        "administrator_with_will_annexed",
+        "literary",
+        "digital",
+        "specialist"
+      ]
+    },
+    "isProfessional": {
+      "description": "Whether this executor is a professional (solicitor, accountant, trust corporation). Professional executors typically charge fees",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "firmName": {
+      "description": "Name of the professional firm, if the executor is acting in a professional capacity",
+      "examples": [
+        "Irwin Mitchell LLP",
+        "Evelyn Partners",
+        "National Westminster Bank Trustee Services",
+        "Nishimura & Asahi",
+        "Anjarwalla & Khanna LLP",
+        "Shardul Amarchand Mangaldas"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "grantType": {
+      "description": "The type of grant issued by the court authorising this person to act. Includes territory-neutral alternatives for non-Commonwealth jurisdictions",
+      "$comment": "grant_of_probate: E&W/AU/NZ — court confirms the executor named in the will. letters_of_administration: E&W — court appoints an administrator when there is no will. letters_of_administration_with_will_annexed: E&W — court appoints an administrator when the named executor cannot act. succession_certificate: IN/PK — Indian Succession Act s.372, entitles holder to collect assets. certificate_of_inheritance: DE (Erbschein), JP (相続証明書), FR (Acte de notoriété) — certifies inheritance rights. court_appointment: generic court appointment of administrator (various jurisdictions). resealing: a foreign grant is recognised by a local court (common in Commonwealth jurisdictions). european_certificate_of_succession: EU document proving an heir's or executor's status under the Brussels IV Regulation.",
+      "examples": [
+        "grant_of_probate",
+        "letters_of_administration",
+        "succession_certificate",
+        "certificate_of_inheritance"
+      ],
+      "enum": [
+        "grant_of_probate",
+        "letters_of_administration",
+        "letters_of_administration_with_will_annexed",
+        "succession_certificate",
+        "certificate_of_inheritance",
+        "court_appointment",
+        "resealing",
+        "european_certificate_of_succession"
+      ]
+    },
+    "grantDate": {
+      "description": "Date the grant was issued",
+      "examples": [ "2025-08-01" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "grantReference": {
+      "description": "Court reference number for the grant",
+      "examples": [ "PRO-2025-654321" ],
+      "type": "string",
+      "maxLength": 500
+    },
+    "issuingCourt": {
+      "description": "Name of the court or registry that issued the grant",
+      "examples": [
+        "Leeds District Probate Registry",
+        "Supreme Court of Victoria",
+        "Surrogate's Court, New York County",
+        "Tokyo Family Court",
+        "Lagos High Court",
+        "Bombay High Court"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "notes": {
+      "description": "Free-text notes about this executor appointment — reservations, renunciations, or special circumstances",
+      "examples": [
+        "Power reserved to the secondary executor",
+        "Executor renounced — administrator with will annexed appointed"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "organisationId": {
+      "description": "Reference to the Organisation.id if the executor is a trust corporation or professional firm acting as executor. Mutually exclusive with personId",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "organisationIdDisplay": {
+      "description": "Human-readable display name for the referenced organisation",
+      "type": "string",
+      "maxLength": 255
+    },
+    "primary": {
+      "description": "Whether this is the primary (lead) executor. Only one executor per estate should be marked as primary",
+      "type": "boolean"
+    },
+    "consultWith": {
+      "description": "Person IDs of individuals the executor should consult before making significant decisions. Models co-equal authority and consultation requirements",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+        "format": "uuid"
+      }
+    },
+    "scope": {
+      "description": "The scope of this executor's authority, for specialist executors. If absent, the executor has authority over the entire estate",
+      "$comment": "Use for literary executors (manuscripts, IP), digital executors (online accounts, crypto), or any executor appointed for specific asset categories only",
+      "type": "object",
+      "properties": {
+        "description": {
+          "description": "Human-readable description of the scope",
+          "examples": [
+            "Digital assets and online accounts only",
+            "Literary works, manuscripts, and intellectual property"
+          ],
+          "type": "string",
+          "maxLength": 500
+        },
+        "assetCategories": {
+          "description": "Asset categories this executor manages",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "assetIds": {
+          "description": "Specific asset IDs this executor manages",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    },
+    "conflictsOfInterest": {
+      "description": "Declared conflicts of interest — executor/trustee who is also a beneficiary, drafter, or family member",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [ "conflictType" ],
+        "properties": {
+          "conflictType": {
+            "enum": [
+              "beneficiary",
+              "drafter",
+              "family_member",
+              "business_associate"
+            ]
+          },
+          "relatedPersonId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "disclosed": {
+            "type": "boolean"
+          },
+          "independentOversightRequired": {
+            "type": "boolean"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "dependentRequired": {
+    "grantReference": [ "grantDate", "issuingCourt" ]
+  }
+}

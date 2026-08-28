@@ -1,0 +1,227 @@
+{
+  "target": "../../../v3/common/temporal-rule.json",
+  "tests": [
+    {
+      "description": "valid minimal temporal rule \u2014 numeric value",
+      "data": {
+        "value": 32500000,
+        "effectiveFrom": "2017-04-06",
+        "status": "enacted"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid temporal rule \u2014 boolean value",
+      "data": {
+        "value": true,
+        "effectiveFrom": "2023-01-01",
+        "status": "enacted"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid temporal rule \u2014 string value with fraction",
+      "data": {
+        "value": "0.75",
+        "effectiveFrom": "2024-04-06",
+        "status": "enacted"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid fully populated temporal rule \u2014 UK IHT nil-rate band",
+      "data": {
+        "value": 32500000,
+        "effectiveFrom": "2017-04-06",
+        "effectiveUntil": null,
+        "status": "enacted",
+        "predecessorValue": 25000000,
+        "legislativeReference": "Inheritance Tax Act 1984 s.7",
+        "notes": "Frozen at \u00a3325,000 since 2009 \u2014 widely expected to increase in next Budget."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — royal_assent status",
+      "data": {
+        "value": 50000000,
+        "effectiveFrom": "2027-04-06",
+        "status": "royal_assent"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bill_stage status",
+      "data": {
+        "value": 50000000,
+        "effectiveFrom": "2027-04-06",
+        "status": "bill_stage"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — consultation status",
+      "data": {
+        "value": 50000000,
+        "effectiveFrom": "2027-04-06",
+        "status": "consultation"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid temporal rule \u2014 announced future change",
+      "data": {
+        "value": 50000000,
+        "effectiveFrom": "2027-04-06",
+        "status": "announced",
+        "legislativeReference": "Finance Bill 2027 (draft)",
+        "notes": "Proposed increase to nil-rate band \u2014 subject to parliamentary approval."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing value",
+      "data": {
+        "effectiveFrom": "2023-01-01",
+        "status": "enacted"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 status not in enum",
+      "data": {
+        "value": 32500000,
+        "effectiveFrom": "2023-01-01",
+        "status": "proposed"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing effectiveFrom",
+      "data": {
+        "value": 32500000,
+        "status": "enacted"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 value as array (not an allowed type)",
+      "data": {
+        "value": [
+          32500000,
+          50000000
+        ],
+        "effectiveFrom": "2023-01-01",
+        "status": "enacted"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 value as null (not an allowed type)",
+      "data": {
+        "value": null,
+        "effectiveFrom": "2023-01-01",
+        "status": "enacted"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 effectiveFrom bad date format (DD/MM/YYYY)",
+      "data": {
+        "value": 32500000,
+        "effectiveFrom": "01/01/2023",
+        "status": "enacted"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 effectiveFrom with time component (should be date only)",
+      "data": {
+        "value": 32500000,
+        "effectiveFrom": "2023-01-01T00:00:00Z",
+        "status": "enacted"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 effectiveUntil bad date format (MM-DD-YYYY)",
+      "data": {
+        "value": 32500000,
+        "effectiveFrom": "2023-01-01",
+        "effectiveUntil": "04-05-2024",
+        "status": "enacted"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 effectiveUntil as explicit date string",
+      "data": {
+        "value": 32500000,
+        "effectiveFrom": "2017-04-06",
+        "effectiveUntil": "2024-04-05",
+        "status": "enacted"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 value as object (complex rule)",
+      "data": {
+        "value": {
+          "baseRate": 40,
+          "taper": "2_per_1_above_threshold"
+        },
+        "effectiveFrom": "2023-01-01",
+        "status": "enacted"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 predecessorValue as null (first known value)",
+      "data": {
+        "value": 32500000,
+        "effectiveFrom": "2009-04-06",
+        "status": "enacted",
+        "predecessorValue": null
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 legislativeReference exceeds maxLength (501 chars)",
+      "data": {
+        "value": 32500000,
+        "effectiveFrom": "2023-01-01",
+        "status": "enacted",
+        "legislativeReference": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 notes exceeds maxLength (2001 chars)",
+      "data": {
+        "value": 32500000,
+        "effectiveFrom": "2023-01-01",
+        "status": "enacted",
+        "notes": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing status",
+      "data": {
+        "value": 32500000,
+        "effectiveFrom": "2023-01-01"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 additional property not allowed",
+      "data": {
+        "value": 32500000,
+        "effectiveFrom": "2023-01-01",
+        "status": "enacted",
+        "source": "HMRC"
+      },
+      "valid": false
+    }
+  ]
+}

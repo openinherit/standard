@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# INHERIT pre-commit hook
+# 1. Secret / build-artefact guard.
+# 2. When v3/ schemas are staged, sync derived files automatically.
+
+# --- 1. Secret + artefact guard ---
+# Runs the guard in .githooks/pre-commit via husky (the resolved hook path).
+# CI is the non-bypassable backstop for the --no-verify case.
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+if [ -f "$REPO_ROOT/.githooks/pre-commit" ]; then
+  bash "$REPO_ROOT/.githooks/pre-commit" || exit 1
+fi
+
+# --- Publication content gate: the check for this public repo.
+# See scripts/check-publication-redline.py. CI (redline.yml) is the backstop.
+python3 "$REPO_ROOT/scripts/check-publication-redline.py" --staged || exit 1
+
+# --- 2. v3/ schema sync ---
+# When nothing in v3/ is staged, exit immediately (zero overhead).
+STAGED_V3=$(git diff --cached --name-only --diff-filter=ACMR -- 'v3/')
+
+if [ -z "$STAGED_V3" ]; then
+  exit 0
+fi
+
+echo "Pre-commit: v3/ schemas changed — syncing derived files..."
+
+# 1. Sync schemas to npm package directory
+rsync -av --delete v3/ packages/schema/v3/
+git add packages/schema/v3/
+
+# 2. Sync extensions-registry.json if it changed
+if git diff --cached --name-only | grep -q '^extensions-registry.json$'; then
+  cp extensions-registry.json packages/schema/extensions-registry.json
+  git add packages/schema/extensions-registry.json
+  echo "Pre-commit: extensions-registry.json synced to packages/schema/"
+fi
+
+# 3. Regenerate bundled schema
+export PATH="$HOME/.local/bin:$PATH"
+if pnpm bundle 2>/dev/null; then
+  git add dist/inherit-v3-bundled.json 2>/dev/null || true
+  echo "Pre-commit: bundled schema regenerated"
+else
+  echo "Pre-commit: WARNING — pnpm bundle failed. Bundled schema may be stale."
+  echo "Run 'pnpm bundle' manually to regenerate."
+fi
+
+echo "Pre-commit: sync complete."

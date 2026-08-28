@@ -1,0 +1,495 @@
+{
+  "target": "../../../v3/kinship.json",
+  "tests": [
+    {
+      "description": "valid minimal kinship (required fields only)",
+      "data": {
+        "id": "a3b4c5d6-e7f8-9012-a345-6789abcdef01",
+        "kinshipType": "parent_child_biological",
+        "fromPersonId": "11111111-0000-0000-0000-000000000001",
+        "toPersonId": "22222222-0000-0000-0000-000000000002"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid fully populated kinship — adopted child with court order",
+      "data": {
+        "id": "b4c5d6e7-f8a9-0123-b456-789abcdef012",
+        "kinshipType": "parent_child_adopted",
+        "fromPersonId": "11111111-0000-0000-0000-000000000001",
+        "toPersonId": "33333333-0000-0000-0000-000000000003",
+        "legalStatus": "recognised",
+        "legitimacy": "legitimated",
+        "adoptionDate": "2018-07-15",
+        "courtOrderRef": "ADOPT/2018/MC/001234",
+        "notes": "Adoption order granted by Manchester Family Court. Child treated as biological for all succession purposes."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — half_sibling with paternal lineage",
+      "data": {
+        "id": "c5d6e7f8-a9b0-1234-c567-89abcdef0123",
+        "kinshipType": "half_sibling",
+        "fromPersonId": "44444444-0000-0000-0000-000000000004",
+        "toPersonId": "55555555-0000-0000-0000-000000000005",
+        "lineage": "paternal",
+        "legalStatus": "recognised",
+        "legitimacy": "legitimate",
+        "notes": "Same father, different mothers. Critical distinction for Islamic faraid calculation."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing kinshipType",
+      "data": {
+        "id": "a3b4c5d6-e7f8-9012-a345-6789abcdef01",
+        "fromPersonId": "11111111-0000-0000-0000-000000000001",
+        "toPersonId": "22222222-0000-0000-0000-000000000002"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — kinshipType not in enum (uppercase COUSIN)",
+      "data": {
+        "id": "a3b4c5d6-e7f8-9012-a345-6789abcdef01",
+        "kinshipType": "COUSIN",
+        "fromPersonId": "11111111-0000-0000-0000-000000000001",
+        "toPersonId": "22222222-0000-0000-0000-000000000002"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing fromPersonId",
+      "data": {
+        "id": "a3b4c5d6-e7f8-9012-a345-6789abcdef01",
+        "kinshipType": "sibling",
+        "toPersonId": "22222222-0000-0000-0000-000000000002"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — step-child with effectiveFrom, legalBasis, recognisedIn",
+      "data": {
+        "id": "e8c13c13-9fe9-4775-9bae-ca1c150ab3e7",
+        "kinshipType": "parent_child_step",
+        "fromPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "toPersonId": "6101470a-a634-4fc2-9faa-06bddcc08e5d",
+        "effectiveFrom": "2015-06-20",
+        "effectiveTo": null,
+        "legalBasis": "marriage",
+        "recognisedIn": [
+          {
+            "jurisdiction": {
+              "country": "GB",
+              "subdivision": "GB-ENG"
+            },
+            "recognised": true
+          },
+          {
+            "jurisdiction": {
+              "country": "SA"
+            },
+            "recognised": false
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — adoption with legal basis and court order",
+      "data": {
+        "id": "6adc4ad5-f9b9-4d73-baf1-bbc77d3413d8",
+        "kinshipType": "parent_child_adopted",
+        "fromPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "toPersonId": "5e3de571-86a5-4b86-ac69-33d9dee9aafe",
+        "effectiveFrom": "2018-07-15",
+        "legalBasis": "adoption_order",
+        "adoptionDate": "2018-07-15",
+        "courtOrderRef": "ADOPT/2018/MC/001234"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — legalBasis value not in enum",
+      "data": {
+        "id": "9e25de3f-0ee5-41ef-ab22-745909939c77",
+        "kinshipType": "parent_child_biological",
+        "fromPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "toPersonId": "a571357f-778f-4e24-a1bf-45558643c64c",
+        "legalBasis": "unknown_basis"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — kinship with consolidated provenance object",
+      "data": {
+        "id": "c9d0e1f2-a3b4-4567-2345-789012345678",
+        "kinshipType": "parent_child_biological",
+        "fromPersonId": "d0e1f2a3-b4c5-4678-3456-890123456789",
+        "toPersonId": "e1f2a3b4-c5d6-4789-4567-901234567890",
+        "provenance": {
+          "source": "ai_generated",
+          "confidence": 0.92,
+          "aiProvenance": {
+            "model": "claude",
+            "confidence": 92
+          },
+          "humanVerdict": "approved",
+          "verdictAt": "2026-03-15T10:00:00Z"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — aiProvenance at root level (must be inside provenance)",
+      "data": {
+        "id": "d0e1f2a3-b4c5-4678-3456-890123456780",
+        "kinshipType": "sibling",
+        "fromPersonId": "e1f2a3b4-c5d6-4789-4567-901234567891",
+        "toPersonId": "f2a3b4c5-d6e7-4890-5678-012345678901",
+        "aiProvenance": {
+          "model": "claude-3"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — notes at maxLength boundary (2000 chars)",
+      "data": {
+        "id": "a1000005-0000-4000-a000-000000001004",
+        "kinshipType": "sibling",
+        "fromPersonId": "b1000005-0000-4000-a000-000000001004",
+        "toPersonId": "c1000005-0000-4000-a000-000000001004",
+        "notes": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — notes exceeds maxLength (2001 chars)",
+      "data": {
+        "id": "a1000006-0000-4000-a000-000000001005",
+        "kinshipType": "sibling",
+        "fromPersonId": "b1000006-0000-4000-a000-000000001005",
+        "toPersonId": "c1000006-0000-4000-a000-000000001005",
+        "notes": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing kinshipType",
+      "data": {
+        "id": "a1000028-0000-4000-a000-000000001028",
+        "fromPersonId": "b1000028-0000-4000-a000-000000001028",
+        "toPersonId": "c1000028-0000-4000-a000-000000001028"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing fromPersonId",
+      "data": {
+        "id": "a1000029-0000-4000-a000-000000001029",
+        "kinshipType": "sibling",
+        "toPersonId": "c1000029-0000-4000-a000-000000001029"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — effectiveFrom is not ISO date format",
+      "data": {
+        "id": "a1000032-0000-4000-a000-000000001032",
+        "kinshipType": "parent_child_biological",
+        "fromPersonId": "b1000032-0000-4000-a000-000000001032",
+        "toPersonId": "c1000032-0000-4000-a000-000000001032",
+        "effectiveFrom": "15/06/2015"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — kinshipType not in enum",
+      "data": {
+        "id": "a1000045-0000-4000-a000-000000001045",
+        "kinshipType": "BEST_FRIEND",
+        "fromPersonId": "b1000045-0000-4000-a000-000000001045",
+        "toPersonId": "c1000045-0000-4000-a000-000000001045"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing toPersonId",
+      "data": {
+        "id": "a1000050-0000-4000-a000-000000001050",
+        "kinshipType": "sibling",
+        "fromPersonId": "b1000050-0000-4000-a000-000000001050"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — fromPersonId as number (must be string UUID)",
+      "data": {
+        "id": "a1000051-0000-4000-a000-000000001051",
+        "kinshipType": "parent_child_biological",
+        "fromPersonId": 12345,
+        "toPersonId": "c1000051-0000-4000-a000-000000001051"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — kinshipType as boolean (must be string enum)",
+      "data": {
+        "id": "a1000052-0000-4000-a000-000000001052",
+        "kinshipType": true,
+        "fromPersonId": "b1000052-0000-4000-a000-000000001052",
+        "toPersonId": "c1000052-0000-4000-a000-000000001052"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — parent_child_foster with contested legalStatus and illegitimate legitimacy",
+      "data": {
+        "id": "cc000001-0000-4000-c000-000000000001",
+        "kinshipType": "parent_child_foster",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000001-0000-4000-d000-000000000001",
+        "legalStatus": "contested",
+        "legitimacy": "illegitimate"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — parent_child_acknowledged with pending legalStatus and biological legalBasis",
+      "data": {
+        "id": "cc000002-0000-4000-c000-000000000002",
+        "kinshipType": "parent_child_acknowledged",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000002-0000-4000-d000-000000000002",
+        "legalStatus": "pending",
+        "legalBasis": "biological"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — half_sibling with maternal lineage and unrecognised legalStatus",
+      "data": {
+        "id": "cc000003-0000-4000-c000-000000000003",
+        "kinshipType": "half_sibling",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000003-0000-4000-d000-000000000003",
+        "lineage": "maternal",
+        "legalStatus": "unrecognised",
+        "legitimacy": "not_applicable"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — step_sibling with civil_partnership legalBasis",
+      "data": {
+        "id": "cc000004-0000-4000-c000-000000000004",
+        "kinshipType": "step_sibling",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000004-0000-4000-d000-000000000004",
+        "legalBasis": "civil_partnership"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — grandparent_grandchild with treated_as_child legalBasis",
+      "data": {
+        "id": "cc000005-0000-4000-c000-000000000005",
+        "kinshipType": "grandparent_grandchild",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000005-0000-4000-d000-000000000005",
+        "legalBasis": "treated_as_child"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — uncle_aunt with paternal lineage and surrogacy_order legalBasis",
+      "data": {
+        "id": "cc000006-0000-4000-c000-000000000006",
+        "kinshipType": "uncle_aunt",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000006-0000-4000-d000-000000000006",
+        "lineage": "paternal",
+        "legalBasis": "surrogacy_order"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — uncle_aunt with maternal lineage and parental_order legalBasis",
+      "data": {
+        "id": "cc000007-0000-4000-c000-000000000007",
+        "kinshipType": "uncle_aunt",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000007-0000-4000-d000-000000000007",
+        "lineage": "maternal",
+        "legalBasis": "parental_order"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — cousin with paternal lineage",
+      "data": {
+        "id": "dd000001-0000-4000-d000-000000000010",
+        "kinshipType": "cousin",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000001-0000-4000-d000-000000000011",
+        "lineage": "paternal"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — uncle_aunt with maternal lineage and whole bloodDegree",
+      "data": {
+        "id": "dd000001-0000-4000-d000-000000000012",
+        "kinshipType": "uncle_aunt",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000001-0000-4000-d000-000000000013",
+        "lineage": "maternal",
+        "bloodDegree": "whole"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — uncle_aunt with half bloodDegree only",
+      "data": {
+        "id": "dd000001-0000-4000-d000-000000000014",
+        "kinshipType": "uncle_aunt",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000001-0000-4000-d000-000000000015",
+        "bloodDegree": "half"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — grandparent_grandchild with paternal lineage",
+      "data": {
+        "id": "dd000001-0000-4000-d000-000000000016",
+        "kinshipType": "grandparent_grandchild",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000001-0000-4000-d000-000000000017",
+        "lineage": "paternal"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — half_sibling with maternal lineage",
+      "data": {
+        "id": "dd000001-0000-4000-d000-000000000018",
+        "kinshipType": "half_sibling",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000001-0000-4000-d000-000000000019",
+        "lineage": "maternal"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — parent_child_adopted with customary_adoption legalBasis",
+      "data": {
+        "id": "dd000001-0000-4000-d000-000000000020",
+        "kinshipType": "parent_child_adopted",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "dd000001-0000-4000-d000-000000000021",
+        "legalBasis": "customary_adoption",
+        "notes": "Maori whāngai — biological family ties preserved"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — id is not a valid UUID",
+      "data": {
+        "id": "not-a-valid-uuid",
+        "kinshipType": "sibling",
+        "fromPersonId": "b1000053-0000-4000-a000-000000001053",
+        "toPersonId": "c1000053-0000-4000-a000-000000001053"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — lineage on parent_child_biological (not applicable)",
+      "data": {
+        "id": "ee000001-0000-4000-e000-000000000001",
+        "kinshipType": "parent_child_biological",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "ee000001-0000-4000-e000-000000000002",
+        "lineage": "paternal"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — lineage on sibling (not applicable)",
+      "data": {
+        "id": "ee000001-0000-4000-e000-000000000003",
+        "kinshipType": "sibling",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "ee000001-0000-4000-e000-000000000004",
+        "lineage": "maternal"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — bloodDegree on grandparent_grandchild (not applicable)",
+      "data": {
+        "id": "ee000001-0000-4000-e000-000000000005",
+        "kinshipType": "grandparent_grandchild",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "ee000001-0000-4000-e000-000000000006",
+        "bloodDegree": "whole"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — bloodDegree on half_sibling (not applicable — type already implies half-blood)",
+      "data": {
+        "id": "ee000001-0000-4000-e000-000000000007",
+        "kinshipType": "half_sibling",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "ee000001-0000-4000-e000-000000000008",
+        "bloodDegree": "half"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — lineage value not in enum",
+      "data": {
+        "id": "ee000001-0000-4000-e000-000000000009",
+        "kinshipType": "uncle_aunt",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "ee000001-0000-4000-e000-000000000010",
+        "lineage": "bilateral"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — bloodDegree value not in enum",
+      "data": {
+        "id": "ee000001-0000-4000-e000-000000000011",
+        "kinshipType": "cousin",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "ee000001-0000-4000-e000-000000000012",
+        "bloodDegree": "quarter"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — kinship with parentalOrderDetails",
+      "data": {
+        "id": "ff000001-0000-4000-f000-000000000001",
+        "kinshipType": "parent_child_adopted",
+        "fromPersonId": "aa000001-0000-4000-a000-000000000001",
+        "toPersonId": "ff000001-0000-4000-f000-000000000002",
+        "legalBasis": "parental_order",
+        "parentalOrderDetails": {
+          "orderDate": "2023-06-15",
+          "orderingCourt": "Central Family Court, London",
+          "surrogatePersonId": "ff000001-0000-4000-f000-000000000003",
+          "biologicalParentIds": [
+            "aa000001-0000-4000-a000-000000000001",
+            "ff000001-0000-4000-f000-000000000004"
+          ]
+        }
+      },
+      "valid": true
+    }
+  ]
+}

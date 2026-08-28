@@ -1,0 +1,103 @@
+{
+  "$comment": "Test fixture exercising all fields of the islamic-succession extension",
+  "school": "hanafi",
+  "faraidApplies": true,
+  "heirClassifications": [
+    {
+      "personId": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "heirClass": "son",
+      "fixedShareFraction": "1/4",
+      "residuaryClass": "asaba_by_self",
+      "blocked": false,
+      "blockedBy": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+      "notes": "Eldest son, entitled to residuary share as asaba bi-nafsihi"
+    },
+    {
+      "personId": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+      "heirClass": "daughter",
+      "fixedShareFraction": "1/2",
+      "residuaryClass": "asaba_with_other",
+      "blocked": false,
+      "blockedBy": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
+      "notes": "Only daughter; receives fixed share of one half per Surah An-Nisa 4:11"
+    }
+  ],
+  "awlApplied": false,
+  "raddApplied": true,
+  "wasiyyaRules": {
+    "maxPortion": 33.33,
+    "toNonHeirsOnly": true,
+    "requiresHeirConsent": true,
+    "notes": "Wasiyya limited to one-third of net estate under Hanafi jurisprudence; bequests to heirs require unanimous consent of all other heirs"
+  },
+  "iddahPeriods": [
+    {
+      "personId": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
+      "periodType": "death",
+      "startDate": "2025-11-01",
+      "endDate": "2026-02-28",
+      "notes": "Widow observing iddah of four months and ten days following death of husband"
+    },
+    {
+      "personId": "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c",
+      "periodType": "divorce",
+      "startDate": "2025-09-15",
+      "endDate": null,
+      "notes": "Former wife observing three menstrual cycles following talaq"
+    }
+  ],
+  "waqfDetails": [
+    {
+      "waqfId": "11223344-5566-4778-899a-bbccddeeff00",
+      "waqfType": "ahli",
+      "dedicationDate": "2020-06-15",
+      "notes": "Family waqf established for benefit of descendants; residential property in Kuala Lumpur"
+    },
+    {
+      "waqfId": "22334455-6677-4889-9aab-ccddeeff0011",
+      "waqfType": "khairi",
+      "dedicationDate": "2018-01-20",
+      "notes": "Charitable waqf dedicated to local orphanage and educational institution"
+    }
+  ],
+  "priorityDebts": [
+    {
+      "description": "Deferred mahr owed to surviving wife as stipulated in the nikah-nama",
+      "type": "mahr",
+      "amount": {
+        "amount": 5000000,
+        "currency": "MYR"
+      },
+      "creditorPersonId": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
+      "notes": "Mahr amount confirmed by original nikah-nama dated 2005-03-12"
+    },
+    {
+      "description": "Funeral and burial costs including kafan and cemetery fees",
+      "type": "kafan",
+      "amount": {
+        "amount": 350000,
+        "currency": "MYR"
+      },
+      "creditorPersonId": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "notes": "Burial conducted in accordance with Islamic rites at Jalan Kuari Muslim cemetery"
+    }
+  ],
+  "hijriDates": {
+    "deathDateHijri": "1447-05-03",
+    "willDateHijri": "1446-11-20"
+  },
+  "islamicFormalities": {
+    "shariaCourtReference": "SYC/KL/2025/4471",
+    "muftiFatwReference": "FATWA/FT/2025/0892",
+    "certifiedByScholar": true,
+    "scholarName": "Ustaz Ahmad bin Ibrahim",
+    "notes": "Faraid certificate issued by the Syariah Court of Kuala Lumpur; distribution certified by qualified scholar"
+  },
+  "notes": "Estate of a Malaysian Muslim domiciled in Kuala Lumpur. Faraid rules apply under the Administration of Islamic Law (Federal Territories) Act 1993. Radd applied as fixed shares totalled less than the full estate.",
+  "x-inherit-nikah-nama": {
+    "value": "Original nikah-nama registered at Pejabat Agama Islam, dated 2005-03-12"
+  },
+  "x-inherit-waqfiyyah": {
+    "value": "Waqf deed registered with Majlis Agama Islam Wilayah Persekutuan"
+  }
+}

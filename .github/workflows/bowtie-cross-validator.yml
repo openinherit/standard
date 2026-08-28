@@ -1,0 +1,91 @@
+name: Bowtie Cross-Implementation Validation
+
+# Validates INHERIT schemas and fixtures against multiple JSON Schema 2020-12
+# implementations via Bowtie (https://bowtie.report). Ensures the standard
+# validates identically across validators in different languages.
+#
+# Security: This workflow processes only repository files — no untrusted input
+# (issue titles, PR descriptions, commit messages) is used in run commands.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'v3/**'
+      - 'examples/fixtures/**'
+  pull_request:
+    paths:
+      - 'v3/**'
+      - 'examples/fixtures/**'
+
+jobs:
+  bowtie-validate:
+    name: Cross-implementation validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Bowtie
+        uses: bowtie-json-schema/bowtie@main
+
+      - name: Verify Bowtie installation
+        run: bowtie --version
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Sourcemeta CLI
+        run: |
+          curl -sSL https://github.com/sourcemeta/jsonschema/releases/latest/download/jsonschema-linux-x86_64 -o /usr/local/bin/jsonschema
+          chmod +x /usr/local/bin/jsonschema
+
+      - name: Generate bundled schema
+        run: mkdir -p dist && pnpm bundle > dist/inherit-v3-bundled.json
+
+      - name: Validate fixtures across 4 implementations
+        run: |
+          IMPLEMENTATIONS="python-jsonschema js-hyperjump dotnet-jsonschema-net rust-jsonschema"
+          PASSED=0
+          FAILED=0
+          for impl in $IMPLEMENTATIONS; do
+            echo ""
+            echo "=== $impl ==="
+            for fixture in examples/fixtures/*.json; do
+              fname=$(basename "$fixture")
+              case "$fname" in extension-*|catalogue-*|broken-*|sample-*) continue;; esac
+              if bowtie validate -i "$impl" --dialect 2020-12 dist/inherit-v3-bundled.json "$fixture" > /dev/null 2>&1; then
+                echo "  PASS: $fname"
+                PASSED=$((PASSED + 1))
+              else
+                echo "  FAIL: $fname"
+                FAILED=$((FAILED + 1))
+              fi
+            done
+          done
+          echo ""
+          echo "=== Results: $PASSED passed, $FAILED failed ==="
+          if [ "$FAILED" -gt 0 ]; then
+            exit 1
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Bowtie Cross-Implementation Validation" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Validated INHERIT estate fixtures against:" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Python jsonschema** (Python, reference implementation)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Hyperjump** (JavaScript)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **JsonSchema.Net** (.NET)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **jsonschema-rs** (Rust)" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Dialect: JSON Schema 2020-12" >> "$GITHUB_STEP_SUMMARY"

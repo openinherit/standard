@@ -1,0 +1,725 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/person.json",
+  "title": "Person",
+  "description": "A person involved in the estate. Schema.org name alignment. Any Unicode script. Supports CJK phonetic readings, chieftaincy titles, clan/lineage identifiers, dual legal personalities, and tax residency across multiple jurisdictions",
+  "type": "object",
+  "required": [ "id", "givenName", "roles" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this person within the INHERIT document. Must be referenced consistently across all entities",
+      "$comment": "https://www.rfc-editor.org/rfc/rfc4122",
+      "examples": [ "f47ac10b-58cc-4372-a567-0e02b2c3d479" ],
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "givenName": {
+      "description": "The person's given (first) name. For cultures where given name follows family name (e.g. Japanese, Chinese), this is still the given name — display ordering is a presentation concern",
+      "examples": [
+        "James",
+        "Margaret",
+        "裕子",
+        "Priya",
+        "محمد",
+        "Soo-jin",
+        "Amara",
+        "Fatima",
+        "Arjun",
+        "Chioma",
+        "Haruki",
+        "Aisha"
+      ],
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "familyName": {
+      "description": "The person's family name (surname). Some cultures do not use family names — Tamil, Icelandic patronymic, and mononymous naming conventions are all valid without this field",
+      "$comment": "Optional — Tamil naming uses a single name. Systems must handle absent familyName.",
+      "examples": [
+        "Davies",
+        "Nakamura",
+        "O'Brien",
+        "김",
+        "Müller",
+        "Sharma",
+        "Al-Hassan",
+        "Okonkwo",
+        "Watanabe",
+        "Ibrahim",
+        "Mensah",
+        "Patel"
+      ],
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "additionalName": {
+      "description": "Middle name(s) or additional given names. Multiple middle names should be space-separated",
+      "examples": [
+        "William",
+        "María del Carmen",
+        "Raj Kumar",
+        "Yuki",
+        "Omar",
+        "Tendai"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "preferredName": {
+      "description": "Name the person prefers to be called. May differ from legal name — use this for correspondence and display where appropriate",
+      "examples": [ "Jim", "Maggie", "ゆう", "Bobby", "Riya", "Mo", "Kwame" ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "phoneticReading": {
+      "description": "Phonetic reading of the person's name. Essential for CJK names to ensure correct pronunciation by non-native speakers and systems",
+      "$comment": "Required for CJK names. Japanese: furigana/romaji. Chinese: pinyin. Korean: romanisation. Ensures names can be read by non-native systems.",
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "givenName": {
+          "description": "Phonetic reading of the given name",
+          "examples": [ "ゆうこ", "Yūko", "Wěi" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "familyName": {
+          "description": "Phonetic reading of the family name",
+          "examples": [ "たなか", "Tanaka", "Zhāng" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "fullName": {
+          "description": "Phonetic reading of the complete name as a single string",
+          "examples": [ "たなか ゆうこ", "Tanaka Yūko", "Zhāng Wěi" ],
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "titles": {
+      "description": "Formal titles held by this person. Multiple titles are common — a person may hold academic, professional, and traditional titles simultaneously",
+      "$comment": "Chieftaincy titles (Nigerian), honorifics (Japanese), caste/clan titles (Indian), religious titles, academic degrees.",
+      "examples": [
+        [
+          {
+            "title": "Dr",
+            "type": "academic"
+          }
+        ],
+        [
+          {
+            "title": "Eze",
+            "type": "chieftaincy"
+          },
+          {
+            "title": "Professor",
+            "type": "academic"
+          }
+        ]
+      ],
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "title" ],
+        "properties": {
+          "title": {
+            "description": "The title text itself",
+            "examples": [ "Dr", "Prof", "Eze", "Rabbi", "Alhaji", "Dame" ],
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "type": {
+            "$comment": "chieftaincy: Nigerian/West African chieftaincy title (Eze, Oba, Chief). traditional: hereditary or cultural title not tied to a chieftaincy. religious: Rabbi, Imam, Reverend, Swami. professional: solicitor, barrister, notary. honorific: knighthood, CBE, OBE, MBE. clan: caste or clan-based title (Indian gotra-related). academic: PhD, Professor, Dr. military: Colonel, Brigadier, etc. other: anything not covered above.",
+            "enum": [
+              "chieftaincy",
+              "traditional",
+              "religious",
+              "professional",
+              "honorific",
+              "clan",
+              "academic",
+              "military",
+              "other"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "clanOrLineage": {
+      "description": "Clan, tribe, lineage, or gotra affiliation. In some legal systems (Hindu, customary African), this determines inheritance rights and succession order",
+      "$comment": "Used exclusively in jurisdictions where customary succession law determines inheritance rights based on clan membership (e.g. South Africa Customary Marriages Act 1998, Nigerian Igbo/Yoruba customary law, Kenyan Law of Succession Act s.32-33). Also covers Indian gotra under Hindu Succession Act 1956. Not collected in jurisdictions where clan affiliation has no legal relevance to succession.",
+      "examples": [ "Bharadwaja", "Ogbuagu", "MacDonald" ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "dateOfBirth": {
+      "description": "The person's date of birth in ISO 8601 format. Used to determine age-dependent inheritance rights and guardianship requirements",
+      "examples": [ "1952-03-15", "1998-11-22", "2020-07-01" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "dateOfDeath": {
+      "description": "The person's date of death in ISO 8601 format, if deceased. Relevant for determining predecease rules, commorientes, and survivorship",
+      "examples": [ "2025-09-30", "2024-01-15" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "gender": {
+      "description": "The person's gender. Optional, but required where inheritance rules are gender-dependent (e.g. Islamic faraid, Hindu succession)",
+      "$comment": "Optional but needed for gender-dependent inheritance (Islamic faraid, Hindu succession pre-2005). Halachic/Islamic gender categories available via x-inherit-* extensions. male: legally or self-identified male. female: legally or self-identified female. non_binary: person does not identify as exclusively male or female. other: gender identity not covered by other values. prefer_not_to_say: person has declined to state. unknown: gender has not been recorded.",
+      "examples": [ "female", "male", "non_binary" ],
+      "enum": [
+        "male",
+        "female",
+        "non_binary",
+        "other",
+        "prefer_not_to_say",
+        "unknown"
+      ]
+    },
+    "domicile": {
+      "description": "The person's legal domicile. Domicile — not nationality or residence — determines which succession law governs moveable property",
+      "$comment": "Domicile (not residence/nationality) determines succession law for moveables in conflict-of-laws. A British citizen domiciled in France has moveables governed by French forced heirship.",
+      "$ref": "common/jurisdiction.json"
+    },
+    "roles": {
+      "description": "The roles this person plays in the estate. A person may hold multiple roles simultaneously (e.g. beneficiary and executor)",
+      "$comment": "testator: the person whose estate this is. beneficiary: someone who receives a gift or share. executor: appointed to administer the estate. guardian: appointed to care for minor children. trustee: manages trust assets. witness: attested the will signing. attorney: holds power of attorney. proxy: authorised to act on behalf of a party. protector: oversees a trust. enforcer: enforces trust terms (common in Islamic trusts and Cayman STAR trusts). Core roles define the person's function in the estate. Extension-specific roles (bekhor, karta, okpara, mutawalli) should be added via x-inherit-* blocks alongside core roles. The array is intentionally extensible — a person can be both 'executor' (core) and 'karta' (x-inherit-hindu-succession). Extensions should NOT attempt to add values to this enum.",
+      "examples": [
+        [ "testator" ],
+        [ "beneficiary", "executor" ],
+        [ "witness" ],
+        [ "trustee", "protector" ]
+      ],
+      "type": "array",
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "testator",
+          "beneficiary",
+          "executor",
+          "guardian",
+          "trustee",
+          "witness",
+          "attorney",
+          "proxy",
+          "protector",
+          "enforcer"
+        ]
+      }
+    },
+    "contact": {
+      "description": "Contact details for this person. All fields are optional — some parties may have no known contact information",
+      "type": "object",
+      "properties": {
+        "email": {
+          "description": "Email address for correspondence",
+          "$comment": "https://www.rfc-editor.org/rfc/rfc5322",
+          "examples": [
+            "james.davies@example.com",
+            "tanaka.yuko@example.jp",
+            "priya.sharma@example.in",
+            "omar.ibrahim@example.ae",
+            "amara.mensah@example.gh"
+          ],
+          "writeOnly": true,
+          "type": "string",
+          "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+          "format": "email"
+        },
+        "phone": {
+          "description": "Phone number in E.164 format recommended. National formats are accepted but may be ambiguous across jurisdictions",
+          "examples": [
+            "+44 7700 900000",
+            "+1 212 555 0100",
+            "+81 90 1234 5678"
+          ],
+          "writeOnly": true,
+          "type": "string",
+          "maxLength": 255
+        },
+        "address": {
+          "description": "Postal address for this person",
+          "$ref": "common/address.json"
+        }
+      },
+      "additionalProperties": false
+    },
+    "preferredChannel": {
+      "description": "This person's preferred communication channel. Helps executors and professionals contact the right people in the right way",
+      "$comment": "email: electronic mail. phone: telephone call. post: physical mail. in_person: face-to-face meeting. video_call: video conferencing (Zoom, Teams, etc.). messaging: text message, WhatsApp, or similar.",
+      "examples": [ "email", "phone" ],
+      "enum": [
+        "email",
+        "phone",
+        "post",
+        "in_person",
+        "video_call",
+        "messaging"
+      ]
+    },
+    "identifiers": {
+      "description": "External identifiers for this person — passport numbers, national ID, tax reference numbers, etc. Used for probate applications and cross-border identification",
+      "examples": [
+        [
+          {
+            "system": "urn:hmrc:nino",
+            "value": "AB123456C",
+            "type": "national_insurance"
+          }
+        ],
+        [
+          {
+            "system": "urn:ssa:ssn",
+            "value": "123-45-6789",
+            "type": "social_security"
+          }
+        ]
+      ],
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common/identifier.json"
+      }
+    },
+    "ritualName": {
+      "description": "The person's name within a religious naming tradition. Required for religious court filings, halachic documents, and Shariah proceedings",
+      "$comment": "Religiously significant name used in succession documents where religious courts have jurisdiction. Hebrew name (e.g. 'Dovid ben Avraham') is required for Jewish wills (shtar tzava'ah) and ketubah obligations adjudicated by a beth din. Arabic nasab (e.g. 'Ahmed ibn Muhammad') is required for Islamic wills (wasiyya) and Shariah court filings. Hindu gotra name is relevant for Hindu Succession Act proceedings. These are legal identifiers within their respective court systems, not cultural labels.",
+      "type": "object",
+      "required": [ "name" ],
+      "properties": {
+        "name": {
+          "description": "The full ritual or religious name as used in religious proceedings",
+          "examples": [
+            "Dovid ben Avraham",
+            "Ahmed ibn Muhammad",
+            "Lakshmi devi"
+          ],
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "patronymic": {
+          "description": "The patronymic element of the ritual name (ben/bat, ibn/bint, etc.)",
+          "examples": [
+            "ben Avraham",
+            "bat Sarah",
+            "ibn Muhammad",
+            "bint Fatimah"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "nameSystem": {
+          "description": "The religious or cultural naming tradition this name follows",
+          "examples": [ "hebrew", "arabic_nasab", "hindu", "buddhist", "sikh" ],
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "legalPersonalities": {
+      "description": "Legal personalities this person holds across different legal systems. A single person may have distinct legal identities under statutory, customary, and religious law simultaneously",
+      "$comment": "A person can have different legal identities across systems. Under statutory law: property owner. Under customary law: okpara (first son) with custodial authority. Under religious law: a Kohen.",
+      "examples": [
+        [
+          {
+            "system": "statutory",
+            "role": "property owner",
+            "notes": "Registered owner of 3 Acacia Avenue"
+          }
+        ],
+        [
+          {
+            "system": "customary",
+            "role": "okpara",
+            "notes": "First son — custodial authority over family compound"
+          }
+        ]
+      ],
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "system", "role" ],
+        "properties": {
+          "system": {
+            "description": "The legal system under which this personality exists",
+            "$comment": "statutory: the formal legal system of the jurisdiction. customary: indigenous or customary law (e.g. Nigerian customary law). religious: a religious legal system (halacha, Shariah, canon law). traditional: traditional authority systems not classified as customary law.",
+            "enum": [ "statutory", "customary", "religious", "traditional" ]
+          },
+          "role": {
+            "description": "The person's role or status within this legal system",
+            "examples": [
+              "property owner",
+              "okpara",
+              "Kohen",
+              "karta",
+              "mutawalli"
+            ],
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "jurisdiction": {
+            "description": "The jurisdiction where this legal personality is recognised",
+            "$ref": "common/jurisdiction.json"
+          },
+          "notes": {
+            "description": "Additional context about this legal personality",
+            "examples": [ "Recognised as family head by Igbo customary law" ],
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "taxResidency": {
+      "description": "Tax residency declarations for one or more jurisdictions. A person may be simultaneously tax-resident in multiple countries, triggering reporting obligations under FATCA, CRS, and bilateral treaties",
+      "$comment": "Tax residency in one or more jurisdictions. Handles FATCA (US), CRS, JP/US estate tax treaty, expat tax. A person may be tax-resident in multiple jurisdictions simultaneously.",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "jurisdiction" ],
+        "properties": {
+          "jurisdiction": {
+            "description": "The jurisdiction where this person is tax-resident",
+            "$ref": "common/jurisdiction.json"
+          },
+          "taxpayerIdentifier": {
+            "description": "The person's tax identification number in this jurisdiction",
+            "$comment": "SSN (US), TFN (AU), My Number (JP), NINO (UK)",
+            "examples": [ "AB123456C", "123-45-6789", "1234 5678 9012" ],
+            "type": "string",
+            "maxLength": 255
+          },
+          "treatyPosition": {
+            "description": "Any relevant tax treaty claim that affects estate tax liability in this jurisdiction",
+            "$comment": "Relevant treaty claim, e.g., 'US-JP Estate Tax Treaty Art. 4'",
+            "examples": [
+              "US-JP Estate Tax Treaty Art. 4",
+              "UK-France Double Taxation Convention Art. 5"
+            ],
+            "type": "string",
+            "maxLength": 255
+          },
+          "fatcaStatus": {
+            "description": "FATCA (Foreign Account Tax Compliance Act) classification for this person",
+            "$comment": "FATCA classification. us_person: US citizen, green card holder, or substantial presence. non_us_person: no US tax obligations. exempt: exempt organisation or foreign government. unknown: FATCA status has not been determined. US persons have worldwide reporting obligations.",
+            "enum": [ "us_person", "non_us_person", "exempt", "unknown" ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "sharedWithCompanion": {
+      "description": "Whether this person record is shared with the companion estate. When true, changes sync between linked estates",
+      "$comment": "Shared people (e.g. children, mutual contacts) appear in both companion estates. On decoupling, each estate gets an independent copy. See docs/companion-estates.md.",
+      "examples": [ true, false ],
+      "default": false,
+      "type": "boolean"
+    },
+    "language": {
+      "description": "BCP 47 language tag for the person's preferred language. Used for correspondence and document generation",
+      "$comment": "https://www.rfc-editor.org/info/bcp47",
+      "examples": [ "en-GB", "ja-JP", "ar-SA", "hi-IN", "fr-FR" ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "notes": {
+      "description": "Free-text notes about this person. Use for anything not captured by structured fields — health conditions, access requirements, or context for professionals",
+      "examples": [
+        "Requires large-print documents due to visual impairment",
+        "Currently residing abroad — use email for all correspondence"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "fieldProvenance": {
+      "description": "Per-field provenance records — how each field's value was obtained",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "common/field-provenance.json"
+      }
+    },
+    "comments": {
+      "description": "Discussion comments on this entity",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "id", "content", "createdAt" ],
+        "properties": {
+          "id": {
+            "description": "Unique identifier for this comment",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "authorPersonId": {
+            "description": "Person.id of the comment author",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "authorPersonIdDisplay": {
+            "description": "Human-readable display name for the referenced author person",
+            "type": "string",
+            "maxLength": 255
+          },
+          "content": {
+            "description": "Comment text",
+            "type": "string",
+            "maxLength": 5000,
+            "minLength": 1
+          },
+          "createdAt": {
+            "description": "When the comment was created",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "format": "date-time"
+          },
+          "visibility": {
+            "$ref": "common/visibility.json"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "accessibilityNeeds": {
+      "description": "Accessibility requirements for communicating with and providing services to this person",
+      "type": "object",
+      "properties": {
+        "preferredFormat": {
+          "description": "Preferred document format",
+          "enum": [
+            "standard",
+            "large_print",
+            "audio",
+            "braille",
+            "easy_read",
+            "other"
+          ]
+        },
+        "screenReaderUser": {
+          "description": "Whether the person uses a screen reader",
+          "type": "boolean"
+        },
+        "reducedMotion": {
+          "description": "Whether the person requires reduced motion in digital interfaces",
+          "type": "boolean"
+        },
+        "communicationPreference": {
+          "description": "Preferred method of communication",
+          "enum": [ "email", "phone", "post", "in_person", "video_call" ]
+        },
+        "notes": {
+          "description": "Additional accessibility notes",
+          "examples": [ "Prefers phone calls over email — hard of sight" ],
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "sameAs": {
+      "description": "URIs identifying this entity elsewhere (schema.org sameAs). e.g. Wikidata, LinkedIn, DBpedia",
+      "$comment": "https://schema.org/sameAs",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    },
+    "jurisdictionRoles": {
+      "description": "Extension-specific roles that the core roles enum cannot cover — e.g. faraid_heir, karta, okpara",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [ "extension", "role" ],
+        "properties": {
+          "extension": {
+            "description": "Extension id, e.g. islamic-succession, hindu-succession",
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "role": {
+            "description": "Role within that extension, e.g. faraid_heir, karta, okpara",
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "posthumousAiConsent": {
+      "description": "The person's wishes regarding posthumous AI recreation of their likeness or identity. Typically set on the testator and possibly their spouse",
+      "$comment": "Implementations should typically only set this on the testator and possibly their spouse — not all people in the document.",
+      "type": "object",
+      "properties": {
+        "aiRecreation": {
+          "enum": [ "permitted", "prohibited", "limited" ]
+        },
+        "likenessUse": {
+          "enum": [ "permitted", "prohibited", "limited" ]
+        },
+        "scope": {
+          "description": "If limited, describes what is permitted (e.g. memorial video only, no interactive chatbot)",
+          "type": "string",
+          "maxLength": 1000
+        },
+        "recordedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "identity": {
+      "description": "Canonical identity for cross-document person matching. The fingerprint is deterministic: same inputs always produce the same key",
+      "$comment": "inherit-ici-v1 algorithm: (1) Require familyName, givenName, dateOfBirth, countryOfBirth — null if any missing. (2) NFC normalise. (3) ASCII-fold diacritics. (4) Lowercase. (5) Strip Unicode categories Z (whitespace), P (punctuation), S (symbols). (6) First given name only. (7) Concatenate: familyname|givenname|YYYY-MM-DD|cc",
+      "type": "object",
+      "properties": {
+        "fingerprint": {
+          "$comment": "Null when required components are missing.",
+          "type": [ "string", "null" ],
+          "pattern": "^[a-z]+\\|[a-z]+\\|\\d{4}-\\d{2}-\\d{2}\\|[a-z]{2}$"
+        },
+        "algorithm": {
+          "const": "inherit-ici-v1"
+        },
+        "components": {
+          "type": "object",
+          "properties": {
+            "familyName": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "givenName": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "dateOfBirth": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            },
+            "countryOfBirth": {
+              "$comment": "Stored uppercase (ISO 3166-1). Lowercased in fingerprint computation.",
+              "type": "string",
+              "pattern": "^[A-Z]{2}$"
+            }
+          }
+        },
+        "externalIds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [ "system", "type" ],
+            "properties": {
+              "system": {
+                "type": "string",
+                "maxLength": 100,
+                "minLength": 1
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "type": {
+                "type": "string",
+                "maxLength": 100,
+                "minLength": 1
+              },
+              "redacted": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "confidence": {
+          "enum": [ "high", "medium", "low" ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "religion": {
+      "description": "The person's religious affiliation as a legal status. In jurisdictions where religion determines succession law (Singapore AMLA, Malaysian faraid, Israeli rabbinical courts), this is a jurisdictional switch, not a personal belief declaration",
+      "type": "object",
+      "properties": {
+        "faith": {
+          "enum": [
+            "animist",
+            "buddhist",
+            "christian",
+            "confucian",
+            "hindu",
+            "jain",
+            "jewish",
+            "muslim",
+            "shinto",
+            "sikh",
+            "taoist",
+            "zoroastrian",
+            "none",
+            "other"
+          ]
+        },
+        "denomination": {
+          "description": "Specific denomination if relevant",
+          "type": "string",
+          "maxLength": 100
+        },
+        "asAtDate": {
+          "description": "Date this religious status was last confirmed",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Latin America",
+  "id": "https://openinherit.org/v3/extensions/latin-america.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "BR",
+    "AR",
+    "MX",
+    "CO",
+    "CL",
+    "PE"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [],
+  "legalSystems": [
+    "civil_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-03-26",
+  "dataProvenance": "Brazilian Civil Code (legítima), Argentine Civil and Commercial Code, Colombian Civil Code",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession.",
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "partial",
+  "taxCoverage": "outline",
+  "keyFeatures": "Forced heirship (legítima), mejora (improvement share), notarial succession, country-specific variation",
+  "legalTradition": "Civil law",
+  "seeking": "Argentina, Colombia, Venezuela practitioners",
+  "tier": "core"
+}

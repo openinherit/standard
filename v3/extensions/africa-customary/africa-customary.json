@@ -1,0 +1,346 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/africa-customary/africa-customary.json",
+  "title": "Africa Customary Succession Extension",
+  "description": "Customary succession rules across African ethnic groups: patrilineal/matrilineal systems, family council decisions, communal property, widow rights, lobola, land tenure, and constitutional challenges.",
+  "maturity": "draft",
+  "extensionType": "tradition",
+  "applicableJurisdictions": [
+    "ZA",
+    "NG",
+    "GH",
+    "KE",
+    "TZ",
+    "UG"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "customary_law"
+  ],
+  "dataProvenance": "Reform of Customary Law of Succession and Regulation of Related Matters Act 11 of 2009 (ZA), various constitutional court decisions",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": [
+    "uk-england-wales"
+  ],
+  "type": "object",
+  "$defs": {
+    "FamilyCouncilDecision": {
+      "type": "object",
+      "properties": {
+        "decisionDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "decisionType": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "decidedBy": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "maxItems": 50,
+          "uniqueItems": true
+        },
+        "chairPersonId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "outcome": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "constitutionalChallengeOutcome": {
+          "type": "string",
+          "enum": [
+            "not_challenged",
+            "upheld",
+            "struck_down",
+            "pending"
+          ]
+        },
+        "challengeable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "decisionType"
+      ],
+      "additionalProperties": false
+    },
+    "CustomarySuccessionRule": {
+      "type": "object",
+      "properties": {
+        "ethnicGroup": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "successionSystem": {
+          "type": "string",
+          "enum": [
+            "patrilineal_primogeniture",
+            "patrilineal_equal",
+            "matrilineal",
+            "bilateral",
+            "ultimogeniture"
+          ]
+        },
+        "widowInheritanceRight": {
+          "type": "string",
+          "enum": [
+            "full_inheritance",
+            "usufruct_only",
+            "levirate_marriage",
+            "none",
+            "statutory_override"
+          ]
+        },
+        "daughterInheritanceRight": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "constitutionalOverride": {
+          "type": "boolean"
+        },
+        "caseReference": {
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "required": [
+        "ethnicGroup",
+        "successionSystem"
+      ],
+      "additionalProperties": false
+    },
+    "CommunalPropertyDetail": {
+      "type": "object",
+      "properties": {
+        "propertyId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "communityName": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "tenureType": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "propertyId"
+      ],
+      "additionalProperties": false
+    },
+    "WidowRights": {
+      "type": "object",
+      "properties": {
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "customaryRight": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "statutoryRight": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "widowRitesRequired": {
+          "type": "boolean"
+        },
+        "widowRitesCompleted": {
+          "type": "boolean"
+        },
+        "ritesDescription": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "ritesCompletionDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "personId"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "ethnicGroup": {
+      "description": "The ethnic group whose customary succession law applies — determines the inheritance system (patrilineal, matrilineal, bilateral, or mixed)",
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "customaryRules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CustomarySuccessionRule"
+      },
+      "maxItems": 50
+    },
+    "familyCouncilDecisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/FamilyCouncilDecision"
+      },
+      "maxItems": 50
+    },
+    "communalPropertyDetails": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CommunalPropertyDetail"
+      },
+      "maxItems": 50
+    },
+    "widowRights": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/WidowRights"
+      },
+      "maxItems": 50
+    },
+    "lobolaDetails": {
+      "type": "object",
+      "$comment": "Derive fullyPaid from totalAgreed === paidToDate",
+      "properties": {
+        "totalAgreed": {
+          "$ref": "../../common/money.json"
+        },
+        "paidToDate": {
+          "$ref": "../../common/money.json"
+        },
+        "includesLivestock": {
+          "type": "boolean"
+        },
+        "livestockDetails": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "landTenureDetails": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "tenureType": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "communityAuthority": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "propertyId"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 50
+    },
+    "constitutionalChallenges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1
+          },
+          "caseReference": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "not_challenged",
+              "upheld",
+              "struck_down",
+              "pending"
+            ]
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "description"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 50
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "ethnicGroup"
+  ],
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://openinherit.org/reference-data/regulatory-bodies-schema.json",
+  "version": "1.0.0",
+  "lastUpdated": "2026-03-26",
+  "bodies": [
+    {
+      "id": "sra",
+      "name": "Solicitors Regulation Authority",
+      "jurisdiction": "GB-ENG",
+      "country": "GB",
+      "url": "https://www.sra.org.uk",
+      "regulates": ["solicitors", "law_firms"],
+      "activities": ["will_drafting", "probate_administration", "trust_preparation", "iht_planning"]
+    },
+    {
+      "id": "lss",
+      "name": "Law Society of Scotland",
+      "jurisdiction": "GB-SCT",
+      "country": "GB",
+      "url": "https://www.lawscot.org.uk",
+      "regulates": ["solicitors"],
+      "activities": ["will_drafting", "probate_administration", "trust_preparation"]
+    },
+    {
+      "id": "lsi",
+      "name": "Law Society of Ireland",
+      "jurisdiction": "IE",
+      "country": "IE",
+      "url": "https://www.lawsociety.ie",
+      "regulates": ["solicitors"],
+      "activities": ["will_drafting", "probate_administration", "trust_preparation"]
+    },
+    {
+      "id": "nysba",
+      "name": "New York State Bar Association",
+      "jurisdiction": "US-NY",
+      "country": "US",
+      "url": "https://nysba.org",
+      "regulates": ["attorneys"],
+      "activities": ["will_drafting", "probate_administration", "trust_preparation", "estate_litigation"]
+    },
+    {
+      "id": "lso",
+      "name": "Law Society of Ontario",
+      "jurisdiction": "CA-ON",
+      "country": "CA",
+      "url": "https://lso.ca",
+      "regulates": ["lawyers", "paralegals"],
+      "activities": ["will_drafting", "probate_administration", "trust_preparation"]
+    },
+    {
+      "id": "lsnsw",
+      "name": "Law Society of New South Wales",
+      "jurisdiction": "AU-NSW",
+      "country": "AU",
+      "url": "https://www.lawsociety.com.au",
+      "regulates": ["solicitors"],
+      "activities": ["will_drafting", "probate_administration", "trust_preparation", "superannuation"]
+    },
+    {
+      "id": "sal",
+      "name": "Singapore Academy of Law",
+      "jurisdiction": "SG",
+      "country": "SG",
+      "url": "https://www.sal.org.sg",
+      "regulates": ["advocates_solicitors"],
+      "activities": ["will_drafting", "probate_administration", "cpf_nominations"]
+    },
+    {
+      "id": "difc",
+      "name": "DIFC Courts (Wills & Probate Registry)",
+      "jurisdiction": "AE",
+      "country": "AE",
+      "url": "https://www.difccourts.ae",
+      "regulates": ["registered_practitioners"],
+      "activities": ["will_drafting", "probate_administration", "cross_border"]
+    },
+    {
+      "id": "jfba",
+      "name": "Japan Federation of Bar Associations",
+      "jurisdiction": "JP",
+      "country": "JP",
+      "url": "https://www.nichibenren.or.jp",
+      "regulates": ["bengoshi"],
+      "activities": ["will_drafting", "probate_administration", "isan_bunkatsu"]
+    },
+    {
+      "id": "bci",
+      "name": "Bar Council of India",
+      "jurisdiction": "IN-MH",
+      "country": "IN",
+      "url": "https://www.barcouncilofindia.org",
+      "regulates": ["advocates"],
+      "activities": ["will_drafting", "probate_administration", "huf_matters"]
+    }
+  ]
+}

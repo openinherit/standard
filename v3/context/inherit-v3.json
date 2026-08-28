@@ -1,0 +1,29 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "inherit": "https://openinherit.org/v3/",
+    "schema": "https://schema.org/",
+    "Estate": "inherit:estate.json",
+    "Person": "inherit:person.json",
+    "Relationship": "inherit:relationship.json",
+    "Kinship": "inherit:kinship.json",
+    "Property": "inherit:property.json",
+    "Asset": "inherit:asset.json",
+    "Liability": "inherit:liability.json",
+    "Bequest": "inherit:bequest.json",
+    "Trust": "inherit:trust.json",
+    "Executor": "inherit:executor.json",
+    "Guardian": "inherit:guardian.json",
+    "Wish": "inherit:wish.json",
+    "Document": "inherit:document.json",
+    "Attestation": "inherit:attestation.json",
+    "ProxyAuthorisation": "inherit:proxy-authorisation.json",
+    "DealerInterest": "inherit:dealer-interest.json",
+    "NonprobateTransfer": "inherit:nonprobate-transfer.json",
+    "Money": "inherit:common/money.json",
+    "Address": "inherit:common/address.json",
+    "Jurisdiction": "inherit:common/jurisdiction.json",
+    "Identifier": "inherit:common/identifier.json",
+    "TemporalRule": "inherit:common/temporal-rule.json"
+  }
+}

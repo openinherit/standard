@@ -1,0 +1,409 @@
+{
+  "target": "../../../v3/asset-collection.json",
+  "tests": [
+    {
+      "description": "valid — minimal asset collection with required fields only",
+      "data": {
+        "id": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Model railway collection"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated vinyl record collection with disposal strategy",
+      "data": {
+        "id": "1d57c13f-caae-41c8-95f0-ede18d36df09",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Vinyl record library — Northern Soul and Motown",
+        "description": "Approximately 800 Northern Soul and Motown 45s collected over 40 years. Includes rare UK pressings. Stored in custom library cabinets in the back bedroom at 14 Ashfield Road, Leeds.",
+        "category": "vinyl_records",
+        "estimatedValue": {
+          "amount": 1200000,
+          "currency": "GBP"
+        },
+        "valuationSource": "dealer_valuation",
+        "valuationDate": "2025-10-20",
+        "disposalWishes": "Please keep together — do not split and sell individually. Contact Soul Source forum members first.",
+        "disposalStrategy": "sell_as_collection",
+        "minimumAcceptableValue": {
+          "amount": 800000,
+          "currency": "GBP"
+        },
+        "preferredDisposalMethod": "dealer_network",
+        "specialistDealerNotes": "Soul Brother Records, Brixton — specialist in Northern Soul. Goldmine Records, Manchester. Avoid general eBay lot sellers.",
+        "notes": "Insurance policy with Hiscox, ref HX-VINYL-2024. Photos in Google Drive folder 'Record Collection'."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Japanese woodblock print collection with auction disposal",
+      "data": {
+        "id": "54627541-57aa-40d6-bf42-6cbbfbae08db",
+        "rootDocumentId": "8aac9018-8461-4874-a57f-02e64ffdacba",
+        "name": "Edo-period woodblock prints — Hiroshige and Hokusai",
+        "description": "Collection of 23 Edo-period ukiyo-e woodblock prints. Assembled by Haruki Tanaka over 35 years. Documented in a handwritten catalogue stored with the prints.",
+        "category": "art",
+        "estimatedValue": {
+          "amount": 8500000,
+          "currency": "JPY"
+        },
+        "valuationSource": "auction_estimate",
+        "valuationDate": "2025-06-01",
+        "disposalStrategy": "auction",
+        "preferredDisposalMethod": "auction_house",
+        "specialistDealerNotes": "Christie's Tokyo have expressed interest. Contact Yamada-san at Mitsukoshi Gallery as secondary option.",
+        "disposalWishes": "Should be sold as a complete collection. The pieces were acquired together and have greater value as a set."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Model railway collection"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required estateId",
+      "data": {
+        "id": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "name": "Model railway collection"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required name",
+      "data": {
+        "id": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — category is not a valid enum value",
+      "data": {
+        "id": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Vintage typewriter collection",
+        "category": "typewriters"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — disposalStrategy is not a valid enum value",
+      "data": {
+        "id": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Stamp collection",
+        "disposalStrategy": "burn_it"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — collection with splitFrom provenance",
+      "data": {
+        "id": "bb8d0c9e-16f3-4b04-ae6d-347de065a2be",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Model trains (from mixed transport collection)",
+        "category": "model_railways",
+        "splitFrom": {
+          "entityType": "asset_collection",
+          "entityId": "bc14f67e-e45d-4464-bcd1-a8686d09916a",
+          "splitAt": "2026-03-10T09:00:00Z",
+          "reason": "Collection contained model trains and model cars — split into separate collections by subcategory"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — splitFrom missing required fields",
+      "data": {
+        "id": "64c0c5eb-1a8d-41f3-9330-cfa96ea007d0",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Test collection",
+        "category": "other",
+        "splitFrom": {
+          "entityType": "asset_collection"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — name is number (must be string)",
+      "data": {
+        "id": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": 12345
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — name is empty string (minLength 1)",
+      "data": {
+        "id": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": ""
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Test collection"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — estateId is not a UUID",
+      "data": {
+        "id": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "rootDocumentId": "not-a-uuid",
+        "name": "Test collection"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — valuationDate is not ISO date format",
+      "data": {
+        "id": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Test collection",
+        "valuationDate": "15/10/2025"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — valuationSource not in enum",
+      "data": {
+        "id": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Test collection",
+        "valuationSource": "psychic_estimate"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — preferredDisposalMethod not in enum",
+      "data": {
+        "id": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Test collection",
+        "preferredDisposalMethod": "charity_bin"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — category jewellery with self_estimated valuation source",
+      "data": {
+        "id": "ac000001-0000-4000-a000-000000000001",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Victorian jewellery collection",
+        "category": "jewellery",
+        "valuationSource": "self_estimated",
+        "estimatedValue": { "amount": 500000, "currency": "GBP" }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category wine with insurance_value valuation source and keep_together disposal",
+      "data": {
+        "id": "ac000002-0000-4000-a000-000000000002",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Bordeaux wine cellar",
+        "category": "wine",
+        "valuationSource": "insurance_value",
+        "disposalStrategy": "keep_together",
+        "preferredDisposalMethod": "private_sale"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category stamps with sell_individually disposal strategy and online_marketplace",
+      "data": {
+        "id": "ac000003-0000-4000-a000-000000000003",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "First edition stamps collection",
+        "category": "stamps",
+        "disposalStrategy": "sell_individually",
+        "preferredDisposalMethod": "online_marketplace"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category coins with donate disposal and museum_acquisition method",
+      "data": {
+        "id": "ac000004-0000-4000-a000-000000000004",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Roman coin collection",
+        "category": "coins",
+        "disposalStrategy": "donate",
+        "preferredDisposalMethod": "museum_acquisition"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category books with gift_to_person disposal and specialist_fair method",
+      "data": {
+        "id": "ac000005-0000-4000-a000-000000000005",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "First edition book collection",
+        "category": "books",
+        "disposalStrategy": "gift_to_person",
+        "preferredDisposalMethod": "specialist_fair"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category musical_instruments with mixed disposal and other preferredDisposalMethod",
+      "data": {
+        "id": "ac000006-0000-4000-a000-000000000006",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Vintage guitar collection",
+        "category": "musical_instruments",
+        "disposalStrategy": "mixed",
+        "preferredDisposalMethod": "other"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category fishing_gear with undecided disposal strategy",
+      "data": {
+        "id": "ac000007-0000-4000-a000-000000000007",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Hardy fly fishing collection",
+        "category": "fishing_gear",
+        "disposalStrategy": "undecided"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category handbags with dealer_bids disposal strategy",
+      "data": {
+        "id": "ac000008-0000-4000-a000-000000000008",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Hermès handbag collection",
+        "category": "handbags",
+        "disposalStrategy": "dealer_bids"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category power_tools with sell_as_collection disposal",
+      "data": {
+        "id": "ac000009-0000-4000-a000-000000000009",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Workshop power tools collection",
+        "category": "power_tools",
+        "disposalStrategy": "sell_as_collection"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category watches",
+      "data": {
+        "id": "ac000010-0000-4000-a000-000000000010",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Vintage watch collection",
+        "category": "watches"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category ceramics",
+      "data": {
+        "id": "ac000011-0000-4000-a000-000000000011",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Wedgwood ceramics collection",
+        "category": "ceramics"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category memorabilia",
+      "data": {
+        "id": "ac000012-0000-4000-a000-000000000012",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "1966 World Cup memorabilia",
+        "category": "memorabilia"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — disposalHistory with sold_individually, gifted_to_beneficiary, donated, kept, other methods",
+      "data": {
+        "id": "ac000013-0000-4000-a000-000000000013",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Mixed antiques",
+        "disposalHistory": [
+          {
+            "assetId": "dd000001-0000-4000-d000-000000000001",
+            "disposalMethod": "sold_individually",
+            "date": "2026-06-01"
+          },
+          {
+            "assetId": "dd000002-0000-4000-d000-000000000002",
+            "disposalMethod": "gifted_to_beneficiary",
+            "recipientPersonId": "ee000001-0000-4000-e000-000000000001",
+            "date": "2026-06-02"
+          },
+          {
+            "assetId": "dd000003-0000-4000-d000-000000000003",
+            "disposalMethod": "donated",
+            "date": "2026-06-03"
+          },
+          {
+            "assetId": "dd000004-0000-4000-d000-000000000004",
+            "disposalMethod": "kept",
+            "date": "2026-06-04"
+          },
+          {
+            "assetId": "dd000005-0000-4000-d000-000000000005",
+            "disposalMethod": "other",
+            "notes": "Returned to original owner",
+            "date": "2026-06-05"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — mergedInto with asset_collection entityType",
+      "data": {
+        "id": "ac000014-0000-4000-a000-000000000014",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Vintage toys (merged)",
+        "mergedInto": {
+          "entityType": "asset_collection",
+          "entityId": "ac000099-0000-4000-a000-000000000099",
+          "mergedAt": "2026-04-01T10:00:00Z",
+          "reason": "Merged into larger toys collection"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — mergedInto with asset entityType and splitFrom with asset entityType",
+      "data": {
+        "id": "ac000015-0000-4000-a000-000000000015",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Single rare print",
+        "splitFrom": {
+          "entityType": "asset",
+          "entityId": "ac000088-0000-4000-a000-000000000088",
+          "splitAt": "2026-03-15T09:00:00Z",
+          "reason": "Extracted from lot for individual valuation"
+        },
+        "mergedInto": {
+          "entityType": "asset",
+          "entityId": "ac000077-0000-4000-a000-000000000077",
+          "mergedAt": "2026-04-10T09:00:00Z"
+        }
+      },
+      "valid": true
+    }
+  ]
+}

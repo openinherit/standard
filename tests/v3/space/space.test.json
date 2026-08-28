@@ -1,0 +1,1145 @@
+{
+  "target": "../../../v3/space.json",
+  "tests": [
+    {
+      "description": "valid — minimal space (required fields only)",
+      "data": {
+        "id": "7bc58028-1216-4931-a40c-9d81935087aa",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "living_room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated space",
+      "data": {
+        "id": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "cellar",
+        "name": "The cellar at Oakfield Road",
+        "floor": "basement",
+        "notes": "Key is in the kitchen drawer, labelled 'cellar'. Temperature-controlled wine section at the back.",
+        "images": [
+          {
+            "url": "https://example.com/cellar-overview.jpg",
+            "caption": "Cellar overview showing wine rack and storage shelves",
+            "viewType": "overview"
+          }
+        ],
+        "provenance": {
+          "confidence": 0.95,
+          "source": "import",
+          "importSourceId": "property-scan-001"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — cultural space type (prayer room)",
+      "data": {
+        "id": "1f016e38-67f7-4e6f-8b45-697b8c97e203",
+        "propertyId": "1d57c13f-caae-41c8-95f0-ede18d36df09",
+        "spaceType": "prayer_room",
+        "name": "Family prayer room",
+        "floor": "first"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — off-site location (safe deposit box)",
+      "data": {
+        "id": "3087e16c-325f-41b7-9716-dd22fe01778c",
+        "propertyId": "54627541-57aa-40d6-bf42-6cbbfbae08db",
+        "spaceType": "safe_deposit_box",
+        "name": "Box 42, Barclays Manchester",
+        "notes": "Requires two keys — mine is in the study safe, bank holds the other."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — x-inherit- extension space type",
+      "data": {
+        "id": "3390ce51-7a06-4d40-9243-50aa4b7c0512",
+        "propertyId": "197c0783-15fb-4ada-8360-7ad68ce18279",
+        "spaceType": "x-inherit-bomb-shelter"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — x-inherit- extension property allowed",
+      "data": {
+        "id": "c6ba33c4-7c48-456b-8e08-31c4c2e6c911",
+        "propertyId": "197c0783-15fb-4ada-8360-7ad68ce18279",
+        "spaceType": "garage",
+        "x-inherit-parking-spaces": {
+          "value": 2
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "kitchen"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required propertyId",
+      "data": {
+        "id": "493f0c82-28fb-4445-a956-8af6d751a1cd",
+        "spaceType": "kitchen"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required spaceType",
+      "data": {
+        "id": "9250d441-817e-498c-9c56-a76a60697bfb",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown spaceType (not x-inherit- prefixed)",
+      "data": {
+        "id": "11c49d9a-7cd6-4f32-af0c-22e4c4a25a9c",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "dungeon"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown floor value",
+      "data": {
+        "id": "ad6cff55-b64e-43f3-98ff-0762dabd49f7",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "bedroom",
+        "floor": "sixth"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unevaluated property rejected",
+      "data": {
+        "id": "25b41919-790e-4f4c-99b4-3d73ca3615eb",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "kitchen",
+        "badField": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — spaceType is a number (string required)",
+      "data": {
+        "id": "7bc58028-1216-4931-a40c-9d81935087aa",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": 42
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — propertyId is a number (string UUID required)",
+      "data": {
+        "id": "7bc58028-1216-4931-a40c-9d81935087aa",
+        "propertyId": 12345,
+        "spaceType": "living_room"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — name is a boolean (string required)",
+      "data": {
+        "id": "7bc58028-1216-4931-a40c-9d81935087aa",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "living_room",
+        "name": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a valid UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "living_room"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — propertyId is not a valid UUID",
+      "data": {
+        "id": "7bc58028-1216-4931-a40c-9d81935087aa",
+        "propertyId": "not-a-uuid-either",
+        "spaceType": "living_room"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — name at maxLength boundary (255 characters)",
+      "data": {
+        "id": "7bc58028-1216-4931-a40c-9d81935087aa",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "living_room",
+        "name": "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — name exceeds maxLength (256 characters)",
+      "data": {
+        "id": "7bc58028-1216-4931-a40c-9d81935087aa",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "living_room",
+        "name": "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — space with portable type",
+      "data": {
+        "id": "f6000001-0000-4000-f000-000000006001",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "portable",
+        "name": "On person — worn or carried daily",
+        "notes": "Watch and signet ring worn daily. Location is wherever the owner is."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — kitchen_diner spaceType",
+      "data": {
+        "id": "a1000001-0000-4000-a000-000000000101",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "kitchen_diner"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — en_suite spaceType",
+      "data": {
+        "id": "a1000002-0000-4000-a000-000000000102",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "en_suite",
+        "name": "Master en suite"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — home_office spaceType",
+      "data": {
+        "id": "a1000003-0000-4000-a000-000000000103",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "home_office",
+        "floor": "first"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — wine_cellar spaceType with notes",
+      "data": {
+        "id": "a1000004-0000-4000-a000-000000000104",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "wine_cellar",
+        "name": "The wine cellar",
+        "notes": "Temperature controlled at 13°C. Contains approximately 400 bottles."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — walk_in_wardrobe spaceType",
+      "data": {
+        "id": "a1000005-0000-4000-a000-000000000105",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "walk_in_wardrobe",
+        "floor": "first"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — self_storage off-site spaceType",
+      "data": {
+        "id": "a1000006-0000-4000-a000-000000000106",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "self_storage",
+        "name": "Safestore unit 14B, Trafford Park",
+        "notes": "Unit 14B. Access code 4521. Contains model railway layouts and boxes."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — gun_room spaceType",
+      "data": {
+        "id": "a1000007-0000-4000-a000-000000000107",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "gun_room",
+        "notes": "Licensed gun cabinet. Contents require Section 1 certificates."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — greenhouse spaceType",
+      "data": {
+        "id": "a1000008-0000-4000-a000-000000000108",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "greenhouse",
+        "name": "Victorian greenhouse"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — stable spaceType",
+      "data": {
+        "id": "a1000009-0000-4000-a000-000000000109",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "stable",
+        "name": "Three-bay stable block"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — butsudan_room cultural spaceType",
+      "data": {
+        "id": "a1000010-0000-4000-a000-000000000110",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "butsudan_room",
+        "name": "Buddhist altar room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital_storage spaceType",
+      "data": {
+        "id": "a1000011-0000-4000-a000-000000000111",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "digital_storage",
+        "name": "NAS drive — Study",
+        "notes": "Synology DS923+ on local network. Contains 8TB of family photos and documents."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — vehicle_boat spaceType",
+      "data": {
+        "id": "a1000012-0000-4000-a000-000000000112",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "vehicle_boat",
+        "name": "Narrow boat Ophelia, moored at Pontcysyllte"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — floor: mezzanine",
+      "data": {
+        "id": "a1000013-0000-4000-a000-000000000113",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "studio",
+        "floor": "mezzanine"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — floor: attic",
+      "data": {
+        "id": "a1000014-0000-4000-a000-000000000114",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "loft",
+        "floor": "attic"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — floor: other",
+      "data": {
+        "id": "a1000015-0000-4000-a000-000000000115",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "other",
+        "floor": "other",
+        "name": "Roof space"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — workspace spaceType",
+      "data": {
+        "id": "a1000016-0000-4000-a000-000000000116",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "workplace",
+        "name": "Office at Davies Solicitors, Manchester"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — allotment spaceType",
+      "data": {
+        "id": "a1000017-0000-4000-a000-000000000117",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "allotment",
+        "name": "Plot 12B, Withington Allotments"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — puja_room cultural spaceType",
+      "data": {
+        "id": "a1000018-0000-4000-a000-000000000118",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "puja_room",
+        "name": "Family puja room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — genkan cultural spaceType",
+      "data": {
+        "id": "a1000019-0000-4000-a000-000000000119",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "genkan",
+        "name": "Entry vestibule"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — majlis cultural spaceType",
+      "data": {
+        "id": "a1000020-0000-4000-a000-000000000120",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "majlis",
+        "name": "Formal reception room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — dining_room and breakfast_room spaceTypes",
+      "data": {
+        "id": "b1000001-0000-4000-b000-000000000001",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "dining_room",
+        "name": "Formal dining room",
+        "floor": "ground"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — breakfast_room spaceType with floor: second",
+      "data": {
+        "id": "b1000002-0000-4000-b000-000000000002",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "breakfast_room",
+        "floor": "second"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — family_room and sitting_room spaceTypes",
+      "data": {
+        "id": "b1000003-0000-4000-b000-000000000003",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "family_room",
+        "name": "Family television room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — sitting_room with floor: third",
+      "data": {
+        "id": "b1000004-0000-4000-b000-000000000004",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "sitting_room",
+        "floor": "third"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — drawing_room spaceType",
+      "data": {
+        "id": "b1000005-0000-4000-b000-000000000005",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "drawing_room",
+        "name": "Drawing room",
+        "floor": "ground"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — conservatory spaceType",
+      "data": {
+        "id": "b1000006-0000-4000-b000-000000000006",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "conservatory",
+        "name": "Victorian conservatory"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — sunroom and snug spaceTypes",
+      "data": {
+        "id": "b1000007-0000-4000-b000-000000000007",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "sunroom"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — snug spaceType",
+      "data": {
+        "id": "b1000008-0000-4000-b000-000000000008",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "snug",
+        "name": "The snug by the fireplace"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bedroom spaceType (valid enum value)",
+      "data": {
+        "id": "b1000009-0000-4000-b000-000000000009",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "bedroom",
+        "name": "Main bedroom",
+        "floor": "first"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — guest_bedroom and nursery spaceTypes",
+      "data": {
+        "id": "b1000010-0000-4000-b000-000000000010",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "guest_bedroom",
+        "floor": "first"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — nursery spaceType",
+      "data": {
+        "id": "b1000011-0000-4000-b000-000000000011",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "nursery",
+        "name": "Former nursery"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — spare_room and dressing_room spaceTypes",
+      "data": {
+        "id": "b1000012-0000-4000-b000-000000000012",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "spare_room",
+        "floor": "first"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — dressing_room spaceType with floor: fourth",
+      "data": {
+        "id": "b1000013-0000-4000-b000-000000000013",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "dressing_room",
+        "floor": "fourth"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — bathroom spaceType",
+      "data": {
+        "id": "b1000014-0000-4000-b000-000000000014",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "bathroom",
+        "name": "Family bathroom",
+        "floor": "first"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — shower_room and wet_room spaceTypes",
+      "data": {
+        "id": "b1000015-0000-4000-b000-000000000015",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "shower_room",
+        "floor": "first"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — wet_room spaceType with floor: fifth",
+      "data": {
+        "id": "b1000016-0000-4000-b000-000000000016",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "wet_room",
+        "floor": "fifth"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — cloakroom and wc spaceTypes",
+      "data": {
+        "id": "b1000017-0000-4000-b000-000000000017",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "cloakroom",
+        "floor": "ground"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — wc spaceType",
+      "data": {
+        "id": "b1000018-0000-4000-b000-000000000018",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "wc"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — hallway and entrance_hall spaceTypes",
+      "data": {
+        "id": "b1000019-0000-4000-b000-000000000019",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "hallway",
+        "floor": "ground"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — entrance_hall spaceType",
+      "data": {
+        "id": "b1000020-0000-4000-b000-000000000020",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "entrance_hall",
+        "name": "Main entrance hall"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — landing and corridor spaceTypes",
+      "data": {
+        "id": "b1000021-0000-4000-b000-000000000021",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "landing",
+        "floor": "first"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — corridor spaceType",
+      "data": {
+        "id": "b1000022-0000-4000-b000-000000000022",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "corridor"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — porch and vestibule spaceTypes",
+      "data": {
+        "id": "b1000023-0000-4000-b000-000000000023",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "porch"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — vestibule spaceType",
+      "data": {
+        "id": "b1000024-0000-4000-b000-000000000024",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "vestibule",
+        "name": "Inner vestibule"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — study and library spaceTypes",
+      "data": {
+        "id": "b1000025-0000-4000-b000-000000000025",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "study",
+        "name": "The study",
+        "floor": "ground"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — library spaceType",
+      "data": {
+        "id": "b1000026-0000-4000-b000-000000000026",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "library",
+        "name": "Private library"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — workshop and craft_room spaceTypes",
+      "data": {
+        "id": "b1000027-0000-4000-b000-000000000027",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "workshop",
+        "name": "Woodworking workshop"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — craft_room spaceType",
+      "data": {
+        "id": "b1000028-0000-4000-b000-000000000028",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "craft_room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — music_room and art_studio spaceTypes",
+      "data": {
+        "id": "b1000029-0000-4000-b000-000000000029",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "music_room",
+        "name": "Practice room — upright piano and guitar collection"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — art_studio spaceType",
+      "data": {
+        "id": "b1000030-0000-4000-b000-000000000030",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "art_studio",
+        "name": "North-light studio"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — games_room and home_cinema spaceTypes",
+      "data": {
+        "id": "b1000031-0000-4000-b000-000000000031",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "games_room",
+        "name": "Games room — pool table and arcade machines"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — home_cinema spaceType",
+      "data": {
+        "id": "b1000032-0000-4000-b000-000000000032",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "home_cinema",
+        "name": "4K home cinema room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — gym spaceType",
+      "data": {
+        "id": "b1000033-0000-4000-b000-000000000033",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "gym",
+        "name": "Home gym"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — utility_room and laundry_room spaceTypes",
+      "data": {
+        "id": "b1000034-0000-4000-b000-000000000034",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "utility_room",
+        "floor": "ground"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — laundry_room spaceType",
+      "data": {
+        "id": "b1000035-0000-4000-b000-000000000035",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "laundry_room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — boot_room and pantry spaceTypes",
+      "data": {
+        "id": "b1000036-0000-4000-b000-000000000036",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "boot_room",
+        "name": "Boot room off back door"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — pantry spaceType",
+      "data": {
+        "id": "b1000037-0000-4000-b000-000000000037",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "pantry"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — larder and airing_cupboard spaceTypes",
+      "data": {
+        "id": "b1000038-0000-4000-b000-000000000038",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "larder",
+        "name": "Walk-in larder"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — airing_cupboard spaceType",
+      "data": {
+        "id": "b1000039-0000-4000-b000-000000000039",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "airing_cupboard"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — boiler_room and attic spaceTypes",
+      "data": {
+        "id": "b1000040-0000-4000-b000-000000000040",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "boiler_room",
+        "notes": "Gas boiler and hot water tank. Do not tamper."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — attic spaceType (distinct from loft)",
+      "data": {
+        "id": "b1000041-0000-4000-b000-000000000041",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "attic",
+        "name": "Attic storage"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — basement spaceType (as spaceType, not floor)",
+      "data": {
+        "id": "b1000042-0000-4000-b000-000000000042",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "basement",
+        "name": "Basement level",
+        "floor": "basement"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — storage_room and cupboard_under_stairs spaceTypes",
+      "data": {
+        "id": "b1000043-0000-4000-b000-000000000043",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "storage_room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — cupboard_under_stairs spaceType",
+      "data": {
+        "id": "b1000044-0000-4000-b000-000000000044",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "cupboard_under_stairs",
+        "name": "Under-stairs storage"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — box_room and double_garage spaceTypes",
+      "data": {
+        "id": "b1000045-0000-4000-b000-000000000045",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "box_room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — double_garage spaceType",
+      "data": {
+        "id": "b1000046-0000-4000-b000-000000000046",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "double_garage",
+        "name": "Double garage with workshop bench"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — carport and shed spaceTypes",
+      "data": {
+        "id": "b1000047-0000-4000-b000-000000000047",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "carport"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — shed spaceType",
+      "data": {
+        "id": "b1000048-0000-4000-b000-000000000048",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "shed",
+        "name": "Large garden shed — power tools stored inside"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — summerhouse and garden_room spaceTypes",
+      "data": {
+        "id": "b1000049-0000-4000-b000-000000000049",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "summerhouse",
+        "name": "Cedar summerhouse"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — garden_room spaceType",
+      "data": {
+        "id": "b1000050-0000-4000-b000-000000000050",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "garden_room",
+        "name": "Insulated garden office"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — outbuilding and barn spaceTypes",
+      "data": {
+        "id": "b1000051-0000-4000-b000-000000000051",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "outbuilding"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — barn spaceType",
+      "data": {
+        "id": "b1000052-0000-4000-b000-000000000052",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "barn",
+        "name": "Stone barn — converted to storage"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — annex spaceType",
+      "data": {
+        "id": "b1000053-0000-4000-b000-000000000053",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "annex",
+        "name": "Self-contained annexe — rear garden"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — front_garden and rear_garden spaceTypes",
+      "data": {
+        "id": "b1000054-0000-4000-b000-000000000054",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "front_garden"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — rear_garden spaceType",
+      "data": {
+        "id": "b1000055-0000-4000-b000-000000000055",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "rear_garden",
+        "name": "Rear walled garden"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — side_garden and patio spaceTypes",
+      "data": {
+        "id": "b1000056-0000-4000-b000-000000000056",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "side_garden"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — patio spaceType",
+      "data": {
+        "id": "b1000057-0000-4000-b000-000000000057",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "patio",
+        "name": "South-facing stone patio"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — terrace and balcony spaceTypes",
+      "data": {
+        "id": "b1000058-0000-4000-b000-000000000058",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "terrace"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — balcony spaceType",
+      "data": {
+        "id": "b1000059-0000-4000-b000-000000000059",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "balcony",
+        "name": "Juliette balcony — master bedroom",
+        "floor": "first"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — roof_terrace and driveway spaceTypes",
+      "data": {
+        "id": "b1000060-0000-4000-b000-000000000060",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "roof_terrace",
+        "name": "Roof terrace with city views"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — driveway spaceType",
+      "data": {
+        "id": "b1000061-0000-4000-b000-000000000061",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "driveway",
+        "name": "Gravel driveway — space for 4 vehicles"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — courtyard and yard spaceTypes",
+      "data": {
+        "id": "b1000062-0000-4000-b000-000000000062",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "courtyard"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — yard spaceType",
+      "data": {
+        "id": "b1000063-0000-4000-b000-000000000063",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "yard",
+        "name": "Rear service yard"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — swimming_pool spaceType",
+      "data": {
+        "id": "b1000064-0000-4000-b000-000000000064",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "swimming_pool",
+        "name": "Heated outdoor swimming pool"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — tatami_room cultural spaceType",
+      "data": {
+        "id": "b1000065-0000-4000-b000-000000000065",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "tatami_room",
+        "name": "Japanese-style tatami room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — gurdwara_room cultural spaceType",
+      "data": {
+        "id": "b1000066-0000-4000-b000-000000000066",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "gurdwara_room",
+        "name": "Family Sikh prayer room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — meditation_room spaceType",
+      "data": {
+        "id": "b1000067-0000-4000-b000-000000000067",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "meditation_room"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — safe_room spaceType",
+      "data": {
+        "id": "b1000068-0000-4000-b000-000000000068",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "safe_room",
+        "notes": "Reinforced secure room. Contains secondary safe and document storage."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — safe spaceType",
+      "data": {
+        "id": "b1000069-0000-4000-b000-000000000069",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "safe",
+        "name": "Study safe — Chubb Centurion 1000",
+        "notes": "Combination known to solicitor. Contains will, jewellery, and passports."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — relatives_house spaceType",
+      "data": {
+        "id": "b1000070-0000-4000-b000-000000000070",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "relatives_house",
+        "name": "Items kept at sister's house — Sheffield"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — holiday_home spaceType",
+      "data": {
+        "id": "b1000071-0000-4000-b000-000000000071",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "holiday_home",
+        "name": "Cottage in the Lake District"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — vehicle_car spaceType",
+      "data": {
+        "id": "b1000072-0000-4000-b000-000000000072",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "vehicle_car",
+        "name": "BMW 5 Series — items stored in boot"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — vehicle_caravan spaceType",
+      "data": {
+        "id": "b1000073-0000-4000-b000-000000000073",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "vehicle_caravan",
+        "name": "Bailey Unicorn — stored at Chorley caravan storage"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — helpers_room cultural spaceType",
+      "data": {
+        "id": "b1000074-0000-4000-b000-000000000074",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "helpers_room",
+        "name": "Live-in helper's room"
+      },
+      "valid": true
+    }
+  ]
+}

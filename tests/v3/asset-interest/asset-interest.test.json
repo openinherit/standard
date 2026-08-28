@@ -1,0 +1,516 @@
+{
+  "target": "../../../v3/asset-interest.json",
+  "tests": [
+    {
+      "description": "valid — minimal asset interest with required fields only",
+      "data": {
+        "id": "1008c5c4-4b31-40ae-a130-15a852fa59cf",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "interestLevel": "expressed_interest"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated interest in a specific asset",
+      "data": {
+        "id": "44b93250-d5ef-49ce-91bc-fb9a9537fd73",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "collectionId": null,
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "agreed",
+        "sourceType": "family_conversation",
+        "testatorAcknowledged": true,
+        "notes": "Sarah mentioned at Christmas 2024 that she'd love Mum's engagement ring. Mum seemed pleased and would like Sarah to have it."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — interest in a collection, strongly wants, observed by testator",
+      "data": {
+        "id": "1819f782-330c-4313-839c-6b710bb0dcb4",
+        "rootDocumentId": "8aac9018-8461-4874-a57f-02e64ffdacba",
+        "collectionId": "1d57c13f-caae-41c8-95f0-ede18d36df09",
+        "personId": "b3f2a357-814f-46ab-ac49-715dcf86314d",
+        "interestLevel": "strongly_wants",
+        "sourceType": "testator_observed",
+        "testatorAcknowledged": false,
+        "notes": "Haruki has always admired the woodblock print collection — discussed at Obon 2024. He has studied Japanese art history and would be a natural custodian."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — interest with proxy-reported source",
+      "data": {
+        "id": "e2509857-4e8d-4ca7-884e-eba94f5596c6",
+        "rootDocumentId": "116e46f0-f66b-40e0-9745-a10435fa5e3f",
+        "assetId": "c4b6eb56-3133-4ccb-96bf-1c6e045160c4",
+        "personId": "12c51788-d3ae-4df7-8f89-3fc257b49433",
+        "interestLevel": "mentioned",
+        "sourceType": "proxy_reported",
+        "testatorAcknowledged": false,
+        "notes": "Amara expressed interest in the family compound during the last family council meeting in Lagos. Reported by elder brother Emeka."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required id",
+      "data": {
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "interestLevel": "expressed_interest"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required personId",
+      "data": {
+        "id": "1008c5c4-4b31-40ae-a130-15a852fa59cf",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "interestLevel": "expressed_interest"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — interestLevel is not a valid enum value",
+      "data": {
+        "id": "1008c5c4-4b31-40ae-a130-15a852fa59cf",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "interestLevel": "obsessed"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — sourceType is not a valid enum value",
+      "data": {
+        "id": "1008c5c4-4b31-40ae-a130-15a852fa59cf",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "interestLevel": "mentioned",
+        "sourceType": "telepathy"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — v2.6.0 collector wishlist with productMatch (acquire intent)",
+      "data": {
+        "id": "1d3265a6-d16e-4b24-896d-e330866369d3",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "expressedByRole": "testator",
+        "intentType": "acquire",
+        "productMatch": {
+          "identifierSystem": "manufacturer_sku",
+          "identifierValue": "R3457",
+          "brand": "Hornby",
+          "brandWikidataId": "Q1139498",
+          "category": "model_railways",
+          "subcategory": "locomotives",
+          "minimumCondition": "good",
+          "notes": "DCC fitted preferred"
+        },
+        "quantity": 3,
+        "interestLevel": "strongly_wants",
+        "notes": "Bill is building a rake of three for his West Coast Main Line layout. Needs good condition or better for running.",
+        "expressedAt": "2026-03-15T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — v2.6.0 external wishlist import with x-inherit- extension role",
+      "data": {
+        "id": "8bd2b6eb-e3eb-4c4b-8ed1-1a8122765c23",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "40db466d-7170-470c-8ba1-e7c64731b04c",
+        "expressedByRole": "x-inherit-collector",
+        "intentType": "acquire",
+        "productMatch": {
+          "identifierSystem": "manufacturer_sku",
+          "identifierValue": "R3456",
+          "brand": "Hornby",
+          "brandWikidataId": "Q1139498",
+          "category": "model_railways",
+          "subcategory": "locomotives"
+        },
+        "quantity": 1,
+        "interestLevel": "expressed_interest",
+        "notes": "Imported from Rails of Sheffield wishlist on 2026-03-20.",
+        "expressedAt": "2026-03-20T14:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — v2.6.0 testator allocation (allocate intent, specific asset)",
+      "data": {
+        "id": "253ec1f7-7b07-43f3-9590-71fc6d3fd6e6",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "assetId": "4807f694-fc41-4e92-bab6-ccb26c05d04e",
+        "expressedByRole": "testator",
+        "intentType": "allocate",
+        "interestLevel": "strongly_wants",
+        "notes": "Bill wants Dave from the Didcot Model Railway Club to have this.",
+        "expressedAt": "2026-02-10T19:45:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — v2.6.0 testator directive with allocate intent",
+      "data": {
+        "id": "3039bb6a-cf50-4617-a2bc-72377a094291",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "assetId": "68736ae3-ce81-4078-9e85-7833335c0f08",
+        "expressedByRole": "testator",
+        "intentType": "allocate",
+        "interestLevel": "strongly_wants",
+        "notes": "Bill has always said Paul should have the grandfather clock.",
+        "expressedAt": "2026-01-05T11:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — v2.6.0 beneficiary preference (receive intent)",
+      "data": {
+        "id": "023363af-e152-42bf-aebb-f662051e6134",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "03c9a644-9c33-4613-a01b-d300c829218d",
+        "assetId": "68736ae3-ce81-4078-9e85-7833335c0f08",
+        "expressedByRole": "beneficiary",
+        "intentType": "receive",
+        "interestLevel": "strongly_wants",
+        "notes": "Paul has mentioned several times that the grandfather clock means a lot to him.",
+        "expressedAt": "2026-01-12T16:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — v2.6.0 executor observation with agreed level",
+      "data": {
+        "id": "859c7b5a-0f7e-4635-8146-a4e1af3d0f06",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "8b7edf63-7dd1-43f7-a861-f83d18e53cae",
+        "assetId": "68736ae3-ce81-4078-9e85-7833335c0f08",
+        "expressedByRole": "executor",
+        "intentType": "allocate",
+        "interestLevel": "agreed",
+        "notes": "Margaret (executor) confirms Bill consistently said the grandfather clock should go to Paul.",
+        "expressedAt": "2026-03-28T09:15:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — v2.6.0 willingness to sell (sell intent)",
+      "data": {
+        "id": "8e79e53e-152b-4203-b1d0-abb7b3115be5",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "assetId": "6ccef715-f6b7-4567-a523-fbc52b219fb9",
+        "expressedByRole": "testator",
+        "intentType": "sell",
+        "interestLevel": "expressed_interest",
+        "notes": "Motor is burnt out. Not worth repairing. Happy to sell for spares.",
+        "expressedAt": "2026-03-22T20:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — v2.6.0 legacy record without new fields (backwards compatible)",
+      "data": {
+        "id": "c045752d-8a3b-480d-83f2-55599943df65",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "03c9a644-9c33-4613-a01b-d300c829218d",
+        "assetId": "33104a0a-ddb0-4358-9ce3-08a189f88e7e",
+        "interestLevel": "mentioned",
+        "notes": "Paul mentioned he'd quite like the dining table if nobody else wants it.",
+        "expressedAt": "2025-12-25T13:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — v2.6.0 productMatch with additionalProperties",
+      "data": {
+        "id": "095d41da-f664-4aa0-a2ed-ccba5a707f98",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "intentType": "acquire",
+        "productMatch": {
+          "brand": "Hornby",
+          "unknownField": "should fail"
+        },
+        "interestLevel": "expressed_interest"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — v2.6.0 quantity below minimum",
+      "data": {
+        "id": "690fb408-7f06-4cbf-9527-9c2159fa512b",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "intentType": "acquire",
+        "quantity": 0,
+        "interestLevel": "expressed_interest"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required estateId",
+      "data": {
+        "id": "1008c5c4-4b31-40ae-a130-15a852fa59cf",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "interestLevel": "expressed_interest"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing required interestLevel",
+      "data": {
+        "id": "1008c5c4-4b31-40ae-a130-15a852fa59cf",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — interestLevel is number (must be string enum)",
+      "data": {
+        "id": "1008c5c4-4b31-40ae-a130-15a852fa59cf",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "interestLevel": 3
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — estateId is number (must be UUID string)",
+      "data": {
+        "id": "1008c5c4-4b31-40ae-a130-15a852fa59cf",
+        "rootDocumentId": 12345,
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "interestLevel": "expressed_interest"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "interestLevel": "expressed_interest"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — expressedAt is not ISO datetime",
+      "data": {
+        "id": "1008c5c4-4b31-40ae-a130-15a852fa59cf",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "interestLevel": "expressed_interest",
+        "expressedAt": "15/03/2026"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — quantity exceeds maximum 1000",
+      "data": {
+        "id": "1008c5c4-4b31-40ae-a130-15a852fa59cf",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "interestLevel": "expressed_interest",
+        "quantity": 1001
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — asset-interest with preOrderStatus",
+      "data": {
+        "id": "c6000001-0000-4000-c000-000000006001",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "strongly_wants",
+        "intentType": "acquire",
+        "productMatch": {
+          "brand": "Hornby",
+          "category": "model_railways"
+        },
+        "preOrderStatus": {
+          "orderStatus": "pre_ordered_paid",
+          "orderedFrom": "Rails of Sheffield",
+          "orderReference": "ROS-2026-04521",
+          "orderDate": "2026-01-10",
+          "expectedDeliveryDate": "2026-09-30",
+          "paymentStatus": "fully_paid",
+          "amountPaid": {
+            "amount": 15499,
+            "currency": "GBP"
+          },
+          "paymentMethod": "Credit card"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — preOrderStatus with unknown property",
+      "data": {
+        "id": "c6000002-0000-4000-c000-000000006002",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "expressed_interest",
+        "preOrderStatus": {
+          "orderStatus": "wanted",
+          "unknownField": "should fail"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — written_request sourceType with proxy expressedByRole and admire intentType",
+      "data": {
+        "id": "ab000001-0000-4000-a000-000000000001",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "mentioned",
+        "sourceType": "written_request",
+        "expressedByRole": "proxy",
+        "intentType": "admire"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — chat_message sourceType",
+      "data": {
+        "id": "ab000002-0000-4000-a000-000000000002",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "mentioned",
+        "sourceType": "chat_message"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — platform_private_message sourceType",
+      "data": {
+        "id": "ab000003-0000-4000-a000-000000000003",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "expressed_interest",
+        "sourceType": "platform_private_message"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — platform_group_message sourceType",
+      "data": {
+        "id": "ab000004-0000-4000-a000-000000000004",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "mentioned",
+        "sourceType": "platform_group_message"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — manual sourceType with excellent minimumCondition",
+      "data": {
+        "id": "ab000005-0000-4000-a000-000000000005",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "strongly_wants",
+        "sourceType": "manual",
+        "productMatch": {
+          "brand": "Hornby",
+          "minimumCondition": "excellent"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — productMatch with fair minimumCondition",
+      "data": {
+        "id": "ab000006-0000-4000-a000-000000000006",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "mentioned",
+        "productMatch": {
+          "category": "model_railways",
+          "minimumCondition": "fair"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — productMatch with poor minimumCondition",
+      "data": {
+        "id": "ab000007-0000-4000-a000-000000000007",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "mentioned",
+        "productMatch": {
+          "category": "model_railways",
+          "minimumCondition": "poor"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — preOrderStatus with pre_ordered_unpaid orderStatus and unpaid paymentStatus",
+      "data": {
+        "id": "ab000008-0000-4000-a000-000000000008",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "strongly_wants",
+        "preOrderStatus": {
+          "orderStatus": "pre_ordered_unpaid",
+          "paymentStatus": "unpaid"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — preOrderStatus with dispatched orderStatus and deposit_paid paymentStatus",
+      "data": {
+        "id": "ab000009-0000-4000-a000-000000000009",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "strongly_wants",
+        "preOrderStatus": {
+          "orderStatus": "dispatched",
+          "paymentStatus": "deposit_paid"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — preOrderStatus with received orderStatus and refunded paymentStatus",
+      "data": {
+        "id": "ab000010-0000-4000-a000-000000000010",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "mentioned",
+        "preOrderStatus": {
+          "orderStatus": "received",
+          "paymentStatus": "refunded"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "Invalid asset-interest — preOrderStatus with bad orderStatus",
+      "data": {
+        "id": "c6000003-0000-4000-c000-000000006003",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "personId": "a2379dbe-4f3f-4329-91e4-8d4a24c3bc5f",
+        "interestLevel": "expressed_interest",
+        "preOrderStatus": {
+          "orderStatus": "teleporting"
+        }
+      },
+      "valid": false
+    }
+  ]
+}

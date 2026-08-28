@@ -1,0 +1,357 @@
+{
+  "target": "../../../v3/executor.json",
+  "tests": [
+    {
+      "description": "valid \u2014 minimal executor with required fields only",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "primary"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 professional executor with full grant details",
+      "data": {
+        "id": "d0fedf8a-14fb-4fcd-b67d-c18ac02fbaa4",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "role": "primary",
+        "isProfessional": true,
+        "firmName": "Irwin Mitchell LLP",
+        "grantType": "grant_of_probate",
+        "grantDate": "2025-08-01",
+        "grantReference": "PRO-2025-654321",
+        "issuingCourt": "Leeds District Probate Registry",
+        "notes": "Lead solicitor is Ms Helen Rao. Power reserved to the secondary executor."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 Indian executor with succession certificate",
+      "data": {
+        "id": "61442fec-4a00-465e-9daa-ed69ccd9ec1e",
+        "personId": "b3f2a357-814f-46ab-ac49-715dcf86314d",
+        "role": "administrator",
+        "isProfessional": false,
+        "grantType": "succession_certificate",
+        "grantDate": "2025-11-12",
+        "grantReference": "SC-MUM-2025-7821",
+        "issuingCourt": "Bombay High Court",
+        "notes": "Succession certificate issued under Indian Succession Act s.372 to authorise collection of fixed deposits."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 Japanese executor with certificate of inheritance",
+      "data": {
+        "id": "e7e9d4fc-8049-433d-ba1d-0de1033fa04f",
+        "personId": "12c51788-d3ae-4df7-8f89-3fc257b49433",
+        "role": "administrator",
+        "isProfessional": true,
+        "firmName": "Nishimura & Asahi",
+        "grantType": "certificate_of_inheritance",
+        "grantDate": "2025-07-20",
+        "issuingCourt": "Tokyo Family Court",
+        "notes": "Acting as judicial scrivener for the estate of Hiroshi Tanaka."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 substitute executor (lay person)",
+      "data": {
+        "id": "86bbaa56-d5e6-498c-a684-ec769f6a0e9a",
+        "personId": "b3ae6c5a-c226-4e2e-bb41-57ae50bc066f",
+        "role": "substitute",
+        "isProfessional": false,
+        "notes": "Named as substitute if both primary and secondary executors are unable or unwilling to act."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing required id",
+      "data": {
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "primary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required personId",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "role": "primary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 role is not a valid enum value",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "executor_in_chief"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 grantType is not a valid enum value",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "primary",
+        "grantType": "letters_rogatoire"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 grantReference present without grantDate and issuingCourt (dependentRequired)",
+      "data": {
+        "id": "d73880dc-c616-4724-ad29-79364bad1719",
+        "personId": "482429af-1b9d-405c-a601-4c007f5156c3",
+        "role": "primary",
+        "grantReference": "PRO-2025-999999"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 grantReference present with grantDate but missing issuingCourt (dependentRequired)",
+      "data": {
+        "id": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "0b2f2b95-93db-4681-bc07-f159be7472c4",
+        "role": "primary",
+        "grantReference": "PRO-2025-999999",
+        "grantDate": "2025-08-01"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 grantDate and issuingCourt without grantReference (no dependentRequired trigger)",
+      "data": {
+        "id": "b16cd101-c771-4299-9e5f-6dd9cf1d7c92",
+        "personId": "e1bf3f36-c4c3-42eb-a55b-3ace01ed64ec",
+        "role": "primary",
+        "grantType": "grant_of_probate",
+        "grantDate": "2025-08-01",
+        "issuingCourt": "Leeds District Probate Registry"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 primary executor with consultWith",
+      "data": {
+        "id": "40858599-0515-4737-a4a9-fdaac104d909",
+        "personId": "ca21cfd4-df1c-4d91-bc3a-6e925fd87aef",
+        "role": "primary",
+        "primary": true,
+        "consultWith": [
+          "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+          "1d57c13f-caae-41c8-95f0-ede18d36df09"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 non-primary executor",
+      "data": {
+        "id": "884106a4-e869-4949-a7df-fe0996993d4e",
+        "personId": "269306b8-8bf7-491f-b51e-df24f8259105",
+        "role": "secondary",
+        "primary": false
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing required role",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 role as number instead of enum string",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": 1
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 personId as number instead of UUID string",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": 12345,
+        "role": "primary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 isProfessional as string instead of boolean",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "primary",
+        "isProfessional": "yes"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 firmName exceeds maxLength 255",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "primary",
+        "firmName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 notes exceeds maxLength 2000",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "primary",
+        "notes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAx"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 id is not a valid UUID format",
+      "data": {
+        "id": "not-a-uuid",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "primary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 grantDate in wrong date format (DD/MM/YYYY instead of YYYY-MM-DD)",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "primary",
+        "grantDate": "15/01/2026"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 personId is not a valid UUID format",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "not-a-valid-uuid",
+        "role": "primary"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 unknown additional property at root level (unevaluatedProperties false)",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "primary",
+        "favouriteColour": "blue"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 executor with organisationId instead of personId",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "organisationId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "primary",
+        "isProfessional": true,
+        "firmName": "National Westminster Bank Trustee Services"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 firmName as empty string (no minLength constraint)",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "primary",
+        "firmName": ""
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 firmName at exactly maxLength 255",
+      "data": {
+        "id": "b4a35d18-7a3b-4c3e-bc3c-e26b6512e1fe",
+        "personId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+        "role": "primary",
+        "firmName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — digital executor with scope",
+      "data": {
+        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "personId": "11111111-2222-3333-4444-555555555555",
+        "role": "digital",
+        "scope": {
+          "description": "Digital assets and online accounts only",
+          "assetCategories": ["digital"]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — literary executor with specific asset scope",
+      "data": {
+        "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+        "personId": "22222222-3333-4444-5555-666666666666",
+        "role": "literary",
+        "scope": {
+          "description": "Literary works, manuscripts, and intellectual property",
+          "assetIds": [
+            "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+            "bbbbbbbb-cccc-dddd-eeee-ffffffffffff"
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — specialist executor without scope",
+      "data": {
+        "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+        "personId": "33333333-4444-5555-6666-777777777777",
+        "role": "specialist",
+        "notes": "Appointed to manage agricultural holdings in Kent"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — scope with additional property",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-defa-234567890123",
+        "personId": "44444444-5555-6666-7777-888888888888",
+        "role": "digital",
+        "scope": {
+          "description": "Digital assets",
+          "extraField": "this should not be allowed"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — executor with conflictsOfInterest",
+      "data": {
+        "id": "e5f6a7b8-c9d0-1234-efab-345678901234",
+        "personId": "55555555-6666-7777-8888-999999999999",
+        "role": "primary",
+        "conflictsOfInterest": [
+          {
+            "conflictType": "beneficiary",
+            "disclosed": true,
+            "independentOversightRequired": true,
+            "notes": "Executor is also a residuary beneficiary under the will"
+          }
+        ]
+      },
+      "valid": true
+    }
+  ]
+}

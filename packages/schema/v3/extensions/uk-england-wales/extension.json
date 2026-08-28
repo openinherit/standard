@@ -1,0 +1,67 @@
+{
+  "name": "UK England & Wales",
+  "id": "https://openinherit.org/v3/extensions/uk-england-wales.json",
+  "version": "1.1.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "stable",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "GB-ENG",
+    "GB-WLS"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "islamic-succession",
+    "jewish-succession",
+    "hindu-succession"
+  ],
+  "legalSystems": [
+    "common_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-04-14",
+  "dataProvenance": "Inheritance Tax Act 1984, Administration of Estates Act 1925, Inheritance (Provision for Family and Dependants) Act 1975",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "IHT thresholds, intestacy rules, IFPA 1975 eligibility, temporal legislation tracking for England & Wales.",
+  "conformanceRules": [
+    {
+      "id": "uk-ew-001",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "IHT nil-rate band must be specified for English estates",
+      "check": "exists",
+      "path": "x-inherit-uk-england-wales.nilRateBand",
+      "severity": "warning"
+    },
+    {
+      "id": "uk-ew-002",
+      "code": "INHERIT_COMPLETENESS_COUNT_LOW",
+      "description": "At least one executor must be appointed",
+      "check": "minCount",
+      "path": "executors",
+      "minCount": 1,
+      "severity": "error"
+    },
+    {
+      "id": "uk-ew-003",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "Testator must have a date of birth for age-based calculations",
+      "check": "exists",
+      "path": "people[?roles contains testator].dateOfBirth",
+      "severity": "warning"
+    }
+  ],
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "comprehensive",
+  "keyFeatures": "IHT nil-rate band, residence nil-rate band, probate registry integration, deed of variation, intestacyHierarchy (9 AEA 1925 s.46 tiers), statutoryLegacy (£322k SI 2023/877), marriageRevocation (Wills Act 1837 s.18)",
+  "legalTradition": "Common law",
+  "seeking": "",
+  "tier": "core"
+}

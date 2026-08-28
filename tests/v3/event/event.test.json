@@ -1,0 +1,457 @@
+{
+  "target": "../../../v3/event.json",
+  "tests": [
+    {
+      "description": "valid \u2014 minimal event",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440060",
+        "eventType": "probate_granted",
+        "occurredAt": "2026-06-15T14:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 fully populated event (Shariah validation via x-inherit- extension)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440061",
+        "eventType": "x-inherit-shariah-validation",
+        "occurredAt": "2026-07-01T09:00:00Z",
+        "trigger": "court_action",
+        "description": "Inheritance certificate issued by Shariah Court, Singapore",
+        "affectedEntityIds": [
+          "550e8400-e29b-41d4-a716-446655440062"
+        ],
+        "affectedEntityTypes": [
+          "estate"
+        ],
+        "actor": {
+          "name": "Shariah Court (Mahkamah Syariah)",
+          "type": "religious_body",
+          "jurisdiction": {
+            "country": "SG"
+          }
+        },
+        "metadata": {
+          "certificateNumber": "SC-2026-04521"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 marketplace event (asset sold)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440063",
+        "eventType": "asset_sold",
+        "occurredAt": "2026-08-10T16:45:00Z",
+        "trigger": "marketplace_action",
+        "affectedEntityIds": [
+          "550e8400-e29b-41d4-a716-446655440064"
+        ],
+        "affectedEntityTypes": [
+          "asset"
+        ],
+        "actor": {
+          "name": "CherishedItems",
+          "type": "marketplace"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing required id",
+      "data": {
+        "eventType": "death_registered",
+        "occurredAt": "2026-01-01T00:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required eventType",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440065",
+        "occurredAt": "2026-01-01T00:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required occurredAt",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440066",
+        "eventType": "probate_granted"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 trigger not in enum",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440067",
+        "eventType": "probate_granted",
+        "occurredAt": "2026-01-01T00:00:00Z",
+        "trigger": "magic"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 actor type not in enum",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440068",
+        "eventType": "asset_valued",
+        "occurredAt": "2026-01-01T00:00:00Z",
+        "actor": {
+          "name": "Someone",
+          "type": "alien"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid: event with core type",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-a789-0123456789ab",
+        "eventType": "death_registered",
+        "occurredAt": "2026-01-15T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid: event with x-inherit- extension type",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-a789-0123456789ab",
+        "eventType": "x-inherit-iddah-started",
+        "occurredAt": "2026-01-15T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid: event with unprefixed custom type",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-a789-0123456789ab",
+        "eventType": "custom_event",
+        "occurredAt": "2026-01-15T10:30:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid: event with old timestamp field (renamed to occurredAt)",
+      "data": {
+        "id": "a7b8c9d0-e1f2-3456-a789-0123456789ab",
+        "eventType": "death_registered",
+        "timestamp": "2026-01-15T10:30:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 eventType as number (wrong type)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440060",
+        "eventType": 42,
+        "occurredAt": "2026-06-15T14:30:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 occurredAt as number (wrong type)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440060",
+        "eventType": "probate_granted",
+        "occurredAt": 1719492600
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 description as boolean (wrong type)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440060",
+        "eventType": "probate_granted",
+        "occurredAt": "2026-06-15T14:30:00Z",
+        "description": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 id is not a valid UUID",
+      "data": {
+        "id": "not-a-valid-uuid",
+        "eventType": "probate_granted",
+        "occurredAt": "2026-06-15T14:30:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 occurredAt in non-ISO datetime format (DD/MM/YYYY)",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440060",
+        "eventType": "death_registered",
+        "occurredAt": "01/01/2026"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 occurredAt as date-only without time component",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440060",
+        "eventType": "death_registered",
+        "occurredAt": "2026-01-01"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 will_located event",
+      "data": {
+        "id": "c0000001-0000-4000-c000-000000008001",
+        "eventType": "will_located",
+        "occurredAt": "2026-02-01T09:30:00Z",
+        "description": "Original will located in the study safe at 42 Acacia Avenue"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 asset_valued event with metadata",
+      "data": {
+        "id": "c0000002-0000-4000-c000-000000008002",
+        "eventType": "asset_valued",
+        "occurredAt": "2026-03-15T14:00:00Z",
+        "trigger": "executor_action",
+        "actor": {
+          "name": "Bonhams Valuations Ltd",
+          "type": "valuer"
+        },
+        "metadata": {
+          "valuedAmount": {
+            "amount": 850000,
+            "currency": "GBP"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 distribution_made event with recipient metadata",
+      "data": {
+        "id": "c0000003-0000-4000-c000-000000008003",
+        "eventType": "distribution_made",
+        "occurredAt": "2026-09-01T10:00:00Z",
+        "trigger": "executor_action",
+        "metadata": {
+          "recipientPersonIdDisplay": "Sarah Davies",
+          "distributionAmount": {
+            "amount": 5000000,
+            "currency": "GBP"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 deed_of_variation_executed event",
+      "data": {
+        "id": "c0000004-0000-4000-c000-000000008004",
+        "eventType": "deed_of_variation_executed",
+        "occurredAt": "2026-08-15T11:00:00Z",
+        "trigger": "beneficiary_action",
+        "description": "Deed of variation executed — Sarah Davies redirects legacy to her children"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 letters_of_administration_granted event",
+      "data": {
+        "id": "c0000005-0000-4000-c000-000000008005",
+        "eventType": "letters_of_administration_granted",
+        "occurredAt": "2026-05-20T09:00:00Z",
+        "trigger": "court_action",
+        "actor": {
+          "name": "Manchester District Probate Registry",
+          "type": "court"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 tax_return_filed event",
+      "data": {
+        "id": "c0000006-0000-4000-c000-000000008006",
+        "eventType": "tax_return_filed",
+        "occurredAt": "2026-11-30T17:00:00Z",
+        "trigger": "executor_action",
+        "actor": {
+          "name": "HMRC",
+          "type": "tax_authority"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 event with system_generated trigger",
+      "data": {
+        "id": "c0000007-0000-4000-c000-000000008007",
+        "eventType": "asset_identified",
+        "occurredAt": "2026-01-20T08:00:00Z",
+        "trigger": "system_generated",
+        "actor": {
+          "name": "INHERIT Scanner v2",
+          "type": "system"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 claim_received event",
+      "data": {
+        "id": "c0000008-0000-4000-c000-000000008008",
+        "eventType": "claim_received",
+        "occurredAt": "2026-04-10T14:00:00Z",
+        "trigger": "beneficiary_action",
+        "description": "Claim received from sibling contesting the will"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 event with calendar_deadline trigger",
+      "data": {
+        "id": "c0000009-0000-4000-c000-000000008009",
+        "eventType": "tax_clearance_received",
+        "occurredAt": "2027-01-31T17:00:00Z",
+        "trigger": "calendar_deadline"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — will_read with executor actor type and institutional_action trigger",
+      "data": {
+        "id": "ec000001-0000-4000-e000-000000000001",
+        "eventType": "will_read",
+        "occurredAt": "2026-03-01T10:00:00Z",
+        "trigger": "institutional_action",
+        "actor": {
+          "name": "Faber & Faber Solicitors",
+          "type": "executor"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — executor_appointed with beneficiary actor type",
+      "data": {
+        "id": "ec000002-0000-4000-e000-000000000002",
+        "eventType": "executor_appointed",
+        "occurredAt": "2026-03-05T11:00:00Z",
+        "actor": {
+          "name": "Sarah Davies",
+          "type": "beneficiary"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — probate_applied with bank actor type and legislative_change trigger",
+      "data": {
+        "id": "ec000003-0000-4000-e000-000000000003",
+        "eventType": "probate_applied",
+        "occurredAt": "2026-04-10T09:30:00Z",
+        "trigger": "legislative_change",
+        "actor": {
+          "name": "Barclays Bank",
+          "type": "bank"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset_collected with insurer actor type",
+      "data": {
+        "id": "ec000004-0000-4000-e000-000000000004",
+        "eventType": "asset_collected",
+        "occurredAt": "2026-05-15T14:00:00Z",
+        "actor": {
+          "name": "Aviva Insurance",
+          "type": "insurer"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — asset_transferred event",
+      "data": {
+        "id": "ec000005-0000-4000-e000-000000000005",
+        "eventType": "asset_transferred",
+        "occurredAt": "2026-06-20T10:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — debt_identified and debt_paid events",
+      "data": {
+        "id": "ec000006-0000-4000-e000-000000000006",
+        "eventType": "debt_identified",
+        "occurredAt": "2026-07-01T08:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — debt_paid event",
+      "data": {
+        "id": "ec000007-0000-4000-e000-000000000007",
+        "eventType": "debt_paid",
+        "occurredAt": "2026-07-15T12:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate_accounts_filed event",
+      "data": {
+        "id": "ec000008-0000-4000-e000-000000000008",
+        "eventType": "estate_accounts_filed",
+        "occurredAt": "2026-10-01T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — estate_closed event",
+      "data": {
+        "id": "ec000009-0000-4000-e000-000000000009",
+        "eventType": "estate_closed",
+        "occurredAt": "2026-12-31T17:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — claim_resolved event",
+      "data": {
+        "id": "ec000010-0000-4000-e000-000000000010",
+        "eventType": "claim_resolved",
+        "occurredAt": "2026-08-30T16:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — disclaimer_received event",
+      "data": {
+        "id": "ec000011-0000-4000-e000-000000000011",
+        "eventType": "disclaimer_received",
+        "occurredAt": "2026-05-01T11:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — other eventType",
+      "data": {
+        "id": "ec000012-0000-4000-e000-000000000012",
+        "eventType": "other",
+        "occurredAt": "2026-09-15T10:00:00Z",
+        "description": "Custom estate administration milestone recorded"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 description exceeds maxLength of 2000",
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440060",
+        "eventType": "probate_granted",
+        "occurredAt": "2026-06-15T14:30:00Z",
+        "description": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    }
+  ]
+}

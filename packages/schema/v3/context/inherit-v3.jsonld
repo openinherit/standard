@@ -1,0 +1,398 @@
+{
+  "@context": {
+    "@version": 1.1,
+
+    "schema": "https://schema.org/",
+    "fibo": "https://spec.edmcouncil.org/fibo/ontology/SEC/Securities/SecuritiesListings/",
+    "gs1": "https://www.gs1.org/voc/",
+    "wd": "http://www.wikidata.org/entity/",
+    "inherit": "https://openinherit.org/v2/vocab/",
+    "fibo-trust": "https://spec.edmcouncil.org/fibo/ontology/BE/Trusts/Trusts/",
+    "rel": "http://purl.org/vocab/relationship/",
+
+    "name": "schema:name",
+    "givenName": "schema:givenName",
+    "familyName": "schema:familyName",
+    "brand": "schema:brand",
+    "model": "schema:model",
+    "description": "schema:description",
+    "estimatedValue": "schema:price",
+    "address": "schema:address",
+    "images": {
+      "@id": "schema:image",
+      "@container": "@set"
+    },
+    "condition": "schema:itemCondition",
+    "category": "schema:category",
+    "subcategory": "gs1:subCategory",
+
+    "sameAs": "schema:sameAs",
+    "contentUrl": "schema:contentUrl",
+    "sender": "schema:sender",
+    "recipient": "schema:recipient",
+    "agent": "schema:agent",
+    "provider": "schema:provider",
+    "sec": "https://w3id.org/security#",
+    "verificationMethod": "sec:verificationMethod",
+    "proofPurpose": "sec:proofPurpose",
+    "dcterms": "http://purl.org/dc/terms/",
+
+    "shareholding": {
+      "@id": "inherit:shareholding",
+      "@type": "@id",
+      "@context": {
+        "@type": "fibo:EquityInstrument"
+      }
+    },
+    "pension": {
+      "@id": "inherit:pension",
+      "@type": "@id",
+      "@context": {
+        "@type": "fibo:PensionFund"
+      }
+    },
+
+    "people": {
+      "@id": "inherit:people",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Person"
+      }
+    },
+    "assets": {
+      "@id": "inherit:assets",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Product",
+        "vehicle": {
+          "@id": "inherit:vehicle",
+          "@context": {
+            "@type": "schema:Vehicle",
+            "make": "schema:manufacturer",
+            "model": "schema:model",
+            "fuelType": "schema:fuelType",
+            "colour": "schema:color",
+            "vin": "schema:vehicleIdentificationNumber",
+            "engineCapacity": "schema:vehicleEngine"
+          }
+        }
+      }
+    },
+    "properties": {
+      "@id": "inherit:properties",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:RealEstateListing",
+        "epc": {
+          "@id": "inherit:epc",
+          "@context": {
+            "@type": "schema:EnergyConsumptionDetails",
+            "rating": "schema:energyEfficiencyScaleMax",
+            "certificateUrl": "schema:url"
+          }
+        },
+        "landRegistry": {
+          "@id": "inherit:landRegistry",
+          "@context": {
+            "@type": "schema:PropertyValue",
+            "titleNumber": "schema:propertyID",
+            "lastSalePrice": "schema:price"
+          }
+        }
+      }
+    },
+    "valuations": {
+      "@id": "inherit:valuations",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:PriceSpecification"
+      }
+    },
+    "liabilities": {
+      "@id": "inherit:liabilities",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:MonetaryAmount"
+      }
+    },
+    "bequests": {
+      "@id": "inherit:bequests",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:AllocateAction"
+      }
+    },
+    "executors": {
+      "@id": "inherit:executors",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Role",
+        "roleName": {
+          "@id": "schema:roleName",
+          "@value": "executor"
+        }
+      }
+    },
+    "documents": {
+      "@id": "inherit:documents",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:DigitalDocument"
+      }
+    },
+    "organisations": {
+      "@id": "inherit:organisations",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Organization",
+        "name": "schema:legalName",
+        "url": "schema:url",
+        "address": "schema:address",
+        "logo": "schema:logo",
+        "email": "schema:email",
+        "phone": "schema:telephone",
+        "ratings": {
+          "@id": "schema:aggregateRating",
+          "@container": "@set",
+          "@context": {
+            "@type": "schema:AggregateRating",
+            "ratingValue": "schema:ratingValue",
+            "bestRating": "schema:bestRating",
+            "worstRating": "schema:worstRating",
+            "reviewCount": "schema:reviewCount",
+            "profileUrl": "schema:url"
+          }
+        }
+      }
+    },
+    "spaces": {
+      "@id": "inherit:spaces",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Place",
+        "name": "schema:name",
+        "containedInPlace": "schema:containedInPlace"
+      }
+    },
+
+    "assetInterests": {
+      "@id": "inherit:assetInterests",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:ReactAction",
+        "expressedByRole": "schema:roleName",
+        "intentType": "inherit:intentType",
+        "productMatch": {
+          "@type": "schema:Product",
+          "identifierValue": "schema:productID",
+          "brand": "schema:brand",
+          "brandWikidataId": "schema:identifier",
+          "category": "schema:category"
+        }
+      }
+    },
+    "lifetimeTransfers": {
+      "@id": "inherit:lifetimeTransfers",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:GiveAction"
+      }
+    },
+    "nonprobateTransfers": {
+      "@id": "inherit:nonprobateTransfers",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:TransferAction"
+      }
+    },
+    "proxyAuthorisations": {
+      "@id": "inherit:proxyAuthorisations",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:AuthorizeAction"
+      }
+    },
+    "importSources": {
+      "@id": "inherit:importSources",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:DataFeed"
+      }
+    },
+    "trusts": {
+      "@id": "inherit:trusts",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Organization",
+        "schema:additionalType": "fibo-trust:Trust"
+      }
+    },
+    "relationships": {
+      "@id": "inherit:relationships",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Role",
+        "rel:spouseOf": "rel:spouseOf",
+        "rel:lifePartnerOf": "rel:lifePartnerOf"
+      }
+    },
+    "kinships": {
+      "@id": "inherit:kinships",
+      "@container": "@set",
+      "@context": {
+        "@type": "inherit:Kinship",
+        "$comment": "Kinship type values (biological, adoptive, step, foster, guardian, half-sibling) are aligned with GEDCOM 7.0 lineage types. See https://gedcom.io/ for the reference vocabulary.",
+        "parent": "schema:parent",
+        "child": "schema:children",
+        "sibling": "schema:sibling"
+      }
+    },
+    "pets": {
+      "@id": "inherit:pets",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Thing",
+        "$comment": "Schema.org has no Animal/Pet type (issue #746, open since 2015, unresolved). Maps to schema:Thing with schema:owns for the ownership relationship. Reference Wikidata P1429 ('has pet') via sameAs for interoperability with knowledge graphs.",
+        "owner": "schema:owns"
+      }
+    },
+    "insurancePolicies": {
+      "@id": "inherit:insurancePolicies",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:FinancialProduct",
+        "$comment": "Schema.org has no InsurancePolicy type. schema:FinancialProduct is the closest base type. Schema4i.org (https://github.com/b-ox/schema4i.org) provides a third-party insurance extension but is not widely adopted."
+      }
+    },
+    "wishes": {
+      "@id": "inherit:wishes",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:CreativeWork"
+      }
+    },
+    "notifications": {
+      "@id": "inherit:notifications",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:CommunicateAction"
+      }
+    },
+    "acknowledgements": {
+      "@id": "inherit:acknowledgements",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:AcceptAction"
+      }
+    },
+    "subscriptions": {
+      "@id": "inherit:subscriptions",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Intangible"
+      }
+    },
+    "dealerInterests": {
+      "@id": "inherit:dealerInterests",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Offer"
+      }
+    },
+    "events": {
+      "@id": "inherit:events",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Action"
+      }
+    },
+    "assetCollections": {
+      "@id": "inherit:assetCollections",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Collection"
+      }
+    },
+    "guardians": {
+      "@id": "inherit:guardians",
+      "@container": "@set",
+      "@context": {
+        "@type": "schema:Role"
+      }
+    },
+
+    "identifiers": {
+      "@id": "inherit:identifiers",
+      "@container": "@set",
+      "@context": {
+        "system": {
+          "@id": "gs1:identificationScheme",
+          "@type": "@id"
+        }
+      }
+    },
+
+    "wikidataId": {
+      "@id": "wd:wikidataId",
+      "@type": "@id"
+    },
+
+    "knownBrands": {
+      "@id": "inherit:knownBrands",
+      "@context": {
+        "Hornby": "wd:Q164484",
+        "Bachmann": "wd:Q1988550",
+        "Rolex": "wd:Q62288",
+        "Omega": "wd:Q659027",
+        "Cartier": "wd:Q538587",
+        "PatekPhilippe": "wd:Q659096",
+        "AudemarsPiguet": "wd:Q667425",
+        "Breitling": "wd:Q665740",
+        "TAGHeuer": "wd:Q645984",
+        "JaegerLeCoultre": "wd:Q378698",
+        "VacheronConstantin": "wd:Q62341",
+        "IWC": "wd:Q662902",
+        "Tudor": "wd:Q3541852",
+        "TiffanyAndCo": "wd:Q1066858",
+        "Bulgari": "wd:Q752515",
+        "VanCleefArpels": "wd:Q2708181",
+        "Chopard": "wd:Q670112",
+        "RoyalDoulton": "wd:Q2057955",
+        "Wedgwood": "wd:Q595544",
+        "Lladro": "wd:Q285006",
+        "Meissen": "wd:Q822407",
+        "RoyalCopenhagen": "wd:Q1440151",
+        "Sevres": "wd:Q653307",
+        "Steinway": "wd:Q156391",
+        "Gibson": "wd:Q210278",
+        "Fender": "wd:Q175391",
+        "Yamaha": "wd:Q188454",
+        "Hermes": "wd:Q843887",
+        "LouisVuitton": "wd:Q191485",
+        "Chanel": "wd:Q218115",
+        "Gucci": "wd:Q178516",
+        "Burberry": "wd:Q390107",
+        "Prada": "wd:Q193136",
+        "Ferrari": "wd:Q27586",
+        "Porsche": "wd:Q40993",
+        "AstonMartin": "wd:Q27074",
+        "RollsRoyce": "wd:Q234803",
+        "Bentley": "wd:Q27224",
+        "Jaguar": "wd:Q30055",
+        "MercedesBenz": "wd:Q36008",
+        "BMW": "wd:Q26678",
+        "Purdey": "wd:Q877460",
+        "HollandAndHolland": "wd:Q3398859",
+        "Beretta": "wd:Q324782",
+        "ChateauLafiteRothschild": "wd:Q1090558",
+        "ChateauMargaux": "wd:Q1063236",
+        "DomaineDeLaRomaneeConti": "wd:Q2142623",
+        "TheMacallan": "wd:Q982891",
+        "Glenfiddich": "wd:Q911587",
+        "Apple": "wd:Q312",
+        "Google": "wd:Q95",
+        "Microsoft": "wd:Q2283"
+      }
+    }
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "target": "../../../v3/extensions/hindu-succession/hindu-succession.json",
+  "tests": [
+    {
+      "description": "valid — minimal (applicableLaw only)",
+      "data": {
+        "applicableLaw": "hindu_succession_act_1956"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Maharashtra probate with all new WillScan fields",
+      "data": {
+        "applicableLaw": "hindu_succession_act_1956",
+        "school": "mitakshara",
+        "instrumentType": "probate",
+        "probateAdvisable": true,
+        "crossStateAssets": true,
+        "hufProperty": false,
+        "notes": "Section 213 repealed Dec 2025 but Bombay HC practice still expects probate for large estates"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — succession certificate for movable assets only",
+      "data": {
+        "applicableLaw": "indian_succession_act_1925",
+        "instrumentType": "succession_certificate",
+        "probateAdvisable": false,
+        "crossStateAssets": false,
+        "hufProperty": false
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — HUF coparcenary property with cross-state assets",
+      "data": {
+        "applicableLaw": "hindu_succession_act_1956",
+        "school": "mitakshara",
+        "instrumentType": "letters_of_administration",
+        "hufProperty": true,
+        "crossStateAssets": true,
+        "hufDetails": {
+          "kartaPersonId": "d73880dc-c616-4724-ad29-79364bad1719",
+          "coparceners": [
+            {
+              "personId": "482429af-1b9d-405c-a601-4c007f5156c3",
+              "relationship": "son",
+              "coparcenaryShareFraction": "1/4"
+            },
+            {
+              "personId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+              "relationship": "daughter",
+              "coparcenaryShareFraction": "1/4"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Muslim personal law (no HUF, will limited to 1/3)",
+      "data": {
+        "applicableLaw": "muslim_personal_law",
+        "instrumentType": "letters_of_administration",
+        "probateAdvisable": false
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing applicableLaw (required)",
+      "data": {
+        "instrumentType": "probate",
+        "probateAdvisable": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown instrumentType",
+      "data": {
+        "applicableLaw": "hindu_succession_act_1956",
+        "instrumentType": "writ_petition"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — instrumentType wrong type (not string)",
+      "data": {
+        "applicableLaw": "hindu_succession_act_1956",
+        "instrumentType": 42
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — applicableLaw not in enum",
+      "data": {
+        "applicableLaw": "common_law"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "applicableLaw": "hindu_succession_act_1956",
+        "dowryDetails": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — IndianHeirClassification with scheduleEntry",
+      "data": {
+        "applicableLaw": "hindu_succession_act_1956",
+        "heirClassifications": [
+          {
+            "personId": "ff000002-0000-4000-f000-000000000001",
+            "heirClass": "class_I",
+            "scheduleEntry": "Class I, Entry 9: widow of a predeceased son"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — agnate heir with scheduleEntry for paternal uncle",
+      "data": {
+        "applicableLaw": "hindu_succession_act_1956",
+        "heirClassifications": [
+          {
+            "personId": "ff000002-0000-4000-f000-000000000002",
+            "heirClass": "agnate",
+            "scheduleEntry": "Agnate: father's father's brother"
+          }
+        ]
+      },
+      "valid": true
+    }
+  ]
+}

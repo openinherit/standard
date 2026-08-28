@@ -1,0 +1,202 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "1.9.0",
+  "exportedAt": "2026-04-07T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "a3c7e9f1-4b82-4d6e-9a1f-7c3d5e8b2a04",
+    "testatorPersonId": "d4f8a2c6-1e39-4b7d-8c5f-6a9e3d1b7f42",
+    "status": "planning",
+    "createdAt": "2026-04-01T00:00:00Z",
+    "lastModifiedAt": "2026-04-07T00:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    }
+  },
+  "people": [
+    {
+      "id": "d4f8a2c6-1e39-4b7d-8c5f-6a9e3d1b7f42",
+      "givenName": "James",
+      "familyName": "Pemberton",
+      "dateOfBirth": "1958-11-03",
+      "roles": [
+        "testator"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "14 Eaton Square",
+          "addressLocality": "London",
+          "addressRegion": "Greater London",
+          "postalCode": "SW1W 9DD",
+          "addressCountry": "GB"
+        }
+      }
+    },
+    {
+      "id": "b7e2c5a8-3f14-4d69-ae82-9c6d1f4b8e53",
+      "givenName": "Helena",
+      "familyName": "Pemberton",
+      "dateOfBirth": "1962-06-18",
+      "roles": [
+        "executor",
+        "beneficiary"
+      ]
+    }
+  ],
+  "kinships": [],
+  "relationships": [],
+  "properties": [
+    {
+      "id": "e9a1c3d5-7b24-4f68-9e1a-3c5d7f9b2e46",
+      "name": "London Property Portfolio — Belgravia & Mayfair",
+      "propertyType": "mixed_use",
+      "estimatedValue": {
+        "amount": 8500000000,
+        "currency": "GBP"
+      },
+      "address": {
+        "streetAddress": "14 Eaton Square",
+        "addressLocality": "London",
+        "addressRegion": "Greater London",
+        "postalCode": "SW1W 9DD",
+        "addressCountry": "GB"
+      }
+    }
+  ],
+  "assets": [
+    {
+      "id": "f2b4d6e8-1a3c-4e57-8f29-4b6d8e1a3c5f",
+      "name": "Japanese Art Collection — Edo & Meiji Period",
+      "category": "art",
+      "estimatedValue": {
+        "amount": 2500000000,
+        "currency": "JPY",
+        "exponent": 0
+      }
+    },
+    {
+      "id": "a5c7e9f1-2b4d-4a68-9c1e-3d5f7a9b2c4e",
+      "name": "Kuwaiti Sovereign Investment Fund Holding",
+      "category": "financial",
+      "subcategory": "investment_fund",
+      "estimatedValue": {
+        "amount": 15000000,
+        "currency": "KWD",
+        "exponent": 3
+      }
+    },
+    {
+      "id": "c8e1a3d5-4f27-4b69-8e1a-5c7d9f2b4a6e",
+      "name": "Swiss Private Bank Account — Zurich",
+      "category": "financial",
+      "subcategory": "savings_account",
+      "estimatedValue": {
+        "amount": 4200000000,
+        "currency": "CHF"
+      }
+    }
+  ],
+  "liabilities": [],
+  "bequests": [],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "d1e3a5c7-8f29-4b4d-ae12-6c8d1f3b5e7a",
+      "personId": "b7e2c5a8-3f14-4d69-ae82-9c6d1f4b8e53",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [
+    {
+      "id": "uk-england-wales",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json"
+    }
+  ],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_2",
+    "validatedAt": "2026-04-07T12:00:00Z",
+    "validatedBy": "INHERIT Examples",
+    "schemaVersion": "1.9.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 35,
+      "maxScore": 100,
+      "jurisdiction": "GB-ENG",
+      "estateStatus": "planning",
+      "calculatedAt": "2026-04-07T12:00:00Z",
+      "checklist": [
+        {
+          "category": "personal_details",
+          "item": "Testator full name recorded",
+          "weight": 10,
+          "status": "complete"
+        },
+        {
+          "category": "personal_details",
+          "item": "Testator jurisdiction",
+          "weight": 5,
+          "status": "complete"
+        },
+        {
+          "category": "assets_and_valuations",
+          "item": "At least one asset recorded",
+          "weight": 10,
+          "status": "complete"
+        },
+        {
+          "category": "executors",
+          "item": "At least one executor appointed",
+          "weight": 10,
+          "status": "complete"
+        },
+        {
+          "category": "legal_documents",
+          "item": "Will executed",
+          "weight": 10,
+          "status": "incomplete"
+        }
+      ]
+    },
+    "recommendedActions": [
+      {
+        "id": "act-001",
+        "category": "completeness",
+        "priority": "high",
+        "title": "Create and execute a will",
+        "description": "No will execution date is recorded. Sir James should instruct solicitors to prepare and execute a will given the scale of his international estate.",
+        "status": "pending",
+        "triggeredBy": "No executionDate and zero documents"
+      }
+    ],
+    "taxPosition": {
+      "jurisdiction": "GB-ENG",
+      "calculatedAt": "2026-04-07T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 8500000000,
+        "currency": "GBP"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Multi-currency assets require specialist cross-border estate planning."
+    }
+  }
+}

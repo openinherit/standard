@@ -1,0 +1,50 @@
+{
+  "name": "Hindu Succession",
+  "id": "https://openinherit.org/v3/extensions/hindu-succession/hindu-succession.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "tradition",
+  "applicableJurisdictions": [
+    "IN",
+    "NP",
+    "LK",
+    "MY",
+    "SG",
+    "GB",
+    "US",
+    "AU",
+    "CA"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "uk-england-wales",
+    "us-estate",
+    "canada",
+    "australia-nz",
+    "singapore-malaysia"
+  ],
+  "legalSystems": [
+    "hindu_law",
+    "common_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-03-26",
+  "dataProvenance": "Hindu Succession Act 1956 (as amended 2005), Indian Succession Act 1925, Transfer of Property Act 1882",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications, stridhan assets, agricultural land ceiling rules, NRI complications.",
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "comprehensive",
+  "taxCoverage": "outline",
+  "keyFeatures": "Mitakshara coparcenary, Dayabhaga principles, 2005 amendment equal daughter rights, HUF property, scheduleEntry for precise Hindu Succession Act Schedule references, Class I/II/agnate/cognate kinship mapping documentation, 2005 Amendment coparcenary equality",
+  "legalTradition": "Hindu customary",
+  "seeking": "Indian succession law practitioner",
+  "tier": "core"
+}

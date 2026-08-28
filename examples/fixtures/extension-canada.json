@@ -1,0 +1,59 @@
+{
+  "$comment": "Test fixture exercising all fields of the canada extension, spanning multiple provinces to populate all $defs",
+  "province": "CA-ON",
+  "quebecPatrimony": {
+    "applicable": true,
+    "patrimonyValue": {
+      "amount": 42500000,
+      "currency": "CAD"
+    },
+    "equalisation": "Equal division of family patrimony between surviving spouse and estate",
+    "notes": "Quebec family patrimony includes family residences, furnishings, motor vehicles, and registered retirement savings. Applies notwithstanding the matrimonial regime chosen."
+  },
+  "ontarioEqualization": {
+    "netFamilyProperty": {
+      "amount": 85000000,
+      "currency": "CAD"
+    },
+    "equalizationPayment": {
+      "amount": 21250000,
+      "currency": "CAD"
+    },
+    "canBeNegative": true,
+    "notes": "Surviving spouse elected to receive equalization payment under the Family Law Act rather than the entitlement under the will. Net family property calculated as of valuation date."
+  },
+  "bcWesaVariation": {
+    "variationApplied": true,
+    "courtReference": "Vancouver Registry No. P-2025-04832, In the Matter of the Estate of Margaret Chen",
+    "notes": "Wills, Estates and Succession Act s.60 variation order granted to adult child who was not adequately provided for. Court varied the will to provide a lump sum of $150,000."
+  },
+  "albertaDower": {
+    "dowerRight": true,
+    "spousePersonId": "5e6f7a8b-9c0d-4e1f-2a3b-4c5d6e7f8a9b",
+    "propertyId": "6f7a8b9c-0d1e-4f2a-3b4c-5d6e7f8a9b0c",
+    "consentGiven": false,
+    "notes": "Surviving spouse has a life estate in the homestead under the Dower Act. Consent to disposition was not given prior to death."
+  },
+  "indigenousLandDetails": [
+    {
+      "propertyId": "7a8b9c0d-1e2f-4a3b-4c5d-6e7f8a9b0c1d",
+      "reserveName": "Six Nations of the Grand River",
+      "treatyNumber": "Treaty 4",
+      "landType": "certificate_of_possession",
+      "successionRestrictions": "Transfer restricted to band members under Indian Act s.49",
+      "notes": "Certificate of Possession land on Six Nations reserve. Succession must be approved by the Minister and the transferee must be a band member."
+    },
+    {
+      "propertyId": "8b9c0d1e-2f3a-4b4c-5d6e-7f8a9b0c1d2e",
+      "reserveName": "Kahnawake Mohawk Territory",
+      "treatyNumber": "Two Row Wampum",
+      "landType": "reserve",
+      "successionRestrictions": "Community-governed allocation; no individual title",
+      "notes": "Reserve land allocated by Mohawk Council of Kahnawake. Not subject to provincial succession law."
+    }
+  ],
+  "notes": "Composite fixture demonstrating all provincial-specific features of the Canada extension. In practice, a single estate would typically engage only one province's rules.",
+  "x-inherit-caseManagementRef": {
+    "value": "Goldstein & Partners, Toronto, matter ref GP-2026-ON-1187"
+  }
+}

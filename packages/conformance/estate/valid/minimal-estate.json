@@ -1,0 +1,163 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "1.9.0",
+  "exportedAt": "2026-03-27T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+    "testatorPersonId": "1d3265a6-d16e-4b24-896d-e330866369d3",
+    "status": "planning",
+    "createdAt": "2026-03-27T00:00:00Z",
+    "lastModifiedAt": "2026-03-27T00:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    }
+  },
+  "people": [
+    {
+      "id": "1d3265a6-d16e-4b24-896d-e330866369d3",
+      "givenName": "James",
+      "familyName": "Ashford",
+      "roles": [
+        "testator"
+      ]
+    }
+  ],
+  "kinships": [],
+  "relationships": [],
+  "properties": [],
+  "assets": [],
+  "liabilities": [],
+  "bequests": [],
+  "trusts": [],
+  "executors": [],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-03-28T12:00:00Z",
+    "validatedBy": "INHERIT Examples",
+    "schemaVersion": "1.2.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 12,
+      "maxScore": 100,
+      "jurisdiction": "GB-ENG",
+      "estateStatus": "planning",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "checklist": [
+        {
+          "category": "personal_details",
+          "item": "Testator full name recorded",
+          "weight": 10,
+          "status": "complete"
+        },
+        {
+          "category": "personal_details",
+          "item": "Testator jurisdiction",
+          "weight": 5,
+          "status": "complete"
+        },
+        {
+          "category": "assets_and_valuations",
+          "item": "At least one asset recorded",
+          "weight": 10,
+          "status": "incomplete"
+        },
+        {
+          "category": "beneficiaries",
+          "item": "At least one beneficiary identified",
+          "weight": 10,
+          "status": "incomplete"
+        },
+        {
+          "category": "executors",
+          "item": "At least one executor appointed",
+          "weight": 10,
+          "status": "incomplete"
+        },
+        {
+          "category": "legal_documents",
+          "item": "Will executed",
+          "weight": 10,
+          "status": "incomplete"
+        }
+      ]
+    },
+    "recommendedActions": [
+      {
+        "id": "act-001",
+        "category": "completeness",
+        "priority": "critical",
+        "title": "Add at least one beneficiary",
+        "description": "No beneficiaries are identified. The estate plan is incomplete without named recipients.",
+        "status": "pending",
+        "triggeredBy": "Zero people with beneficiary role"
+      },
+      {
+        "id": "act-002",
+        "category": "completeness",
+        "priority": "critical",
+        "title": "Appoint an executor",
+        "description": "No executor has been appointed. Without an executor, the court will appoint an administrator.",
+        "status": "pending",
+        "triggeredBy": "Zero executors"
+      },
+      {
+        "id": "act-003",
+        "category": "completeness",
+        "priority": "high",
+        "title": "Record at least one asset or property",
+        "description": "No assets or properties are recorded. An estate plan without assets has nothing to distribute.",
+        "status": "pending",
+        "triggeredBy": "Zero assets and zero properties"
+      },
+      {
+        "id": "act-004",
+        "category": "legal_requirement",
+        "priority": "high",
+        "title": "Create and execute a will",
+        "description": "No will execution date is recorded and no documents are listed. The testator should create and execute a will.",
+        "status": "pending",
+        "triggeredBy": "No executionDate and zero documents"
+      },
+      {
+        "id": "act-005",
+        "category": "tax_planning",
+        "priority": "medium",
+        "title": "Calculate tax position",
+        "description": "No tax position has been calculated. This will be needed once assets are recorded.",
+        "status": "pending",
+        "triggeredBy": "No taxPosition present"
+      }
+    ],
+    "taxPosition": {
+      "jurisdiction": "GB-ENG",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 0,
+        "currency": "GBP"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    }
+  }
+}

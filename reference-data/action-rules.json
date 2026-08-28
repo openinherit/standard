@@ -1,0 +1,264 @@
+{
+  "_disclaimer": "Informational reference data only. Not legal, tax, or financial advice. Verify with qualified professionals before relying on any values. Current as of March 2026.",
+  "title": "Recommended Action Rules",
+  "description": "Declarative rules for generating recommended estate actions. Each rule describes a condition and the action to recommend when the condition is met.",
+  "lastUpdated": "2026-03-28",
+  "rules": [
+    {
+      "id": "missing_valuation_high_value",
+      "category": "valuation",
+      "priority": "high",
+      "title": "Get professional valuation for high-value asset",
+      "description": "Assets estimated over £50,000 should have a professional valuation for tax purposes.",
+      "condition": {
+        "entityType": "asset",
+        "field": "estimatedValue.amount",
+        "operator": "gt",
+        "value": 5000000,
+        "and": { "field": "valuations", "operator": "empty" }
+      },
+      "relatedEntityType": "asset"
+    },
+    {
+      "id": "stale_valuation",
+      "category": "valuation",
+      "priority": "medium",
+      "title": "Update stale valuation",
+      "description": "Valuations older than 2 years may not reflect current market value and should be refreshed.",
+      "condition": {
+        "entityType": "valuation",
+        "field": "date",
+        "operator": "olderThan",
+        "value": "P2Y"
+      },
+      "relatedEntityType": "asset"
+    },
+    {
+      "id": "missing_property_survey",
+      "category": "valuation",
+      "priority": "medium",
+      "title": "Obtain property survey or formal appraisal",
+      "description": "Real property should have a professional survey or appraisal for accurate estate valuation.",
+      "condition": {
+        "entityType": "property",
+        "field": "valuations",
+        "operator": "empty"
+      },
+      "relatedEntityType": "property"
+    },
+    {
+      "id": "incomplete_transfer_lookback",
+      "category": "lifetime_transfers",
+      "priority": "high",
+      "title": "Complete lifetime transfer documentation within lookback period",
+      "description": "Lifetime transfers within the jurisdiction's lookback period must be fully documented for accurate tax calculation.",
+      "condition": {
+        "entityType": "lifetimeTransfer",
+        "field": "transferDate",
+        "operator": "withinLookback",
+        "and": { "field": "description", "operator": "empty" }
+      },
+      "relatedEntityType": "lifetimeTransfer"
+    },
+    {
+      "id": "pension_no_nomination",
+      "category": "pension",
+      "priority": "high",
+      "title": "Add death benefit nomination to pension",
+      "description": "Pensions without a nomination expression of wish form may result in benefits being paid at the scheme trustees' discretion.",
+      "condition": {
+        "entityType": "pension",
+        "field": "nominatedBeneficiaryPersonIds",
+        "operator": "empty"
+      },
+      "relatedEntityType": "pension"
+    },
+    {
+      "id": "insurance_no_beneficiary",
+      "category": "insurance",
+      "priority": "high",
+      "title": "Designate beneficiary on insurance policy",
+      "description": "Insurance policies without a designated beneficiary may form part of the estate and be subject to tax.",
+      "condition": {
+        "entityType": "insurancePolicy",
+        "field": "beneficiaryPersonIds",
+        "operator": "empty"
+      },
+      "relatedEntityType": "insurancePolicy"
+    },
+    {
+      "id": "insurance_not_in_trust",
+      "category": "insurance",
+      "priority": "medium",
+      "title": "Consider writing insurance policy into trust",
+      "description": "Insurance policies not written in trust form part of the estate for tax purposes. Writing them into trust can reduce the taxable estate.",
+      "condition": {
+        "entityType": "insurancePolicy",
+        "field": "writtenInTrust",
+        "operator": "eq",
+        "value": false
+      },
+      "relatedEntityType": "insurancePolicy"
+    },
+    {
+      "id": "no_executor_appointed",
+      "category": "executor",
+      "priority": "critical",
+      "title": "Appoint at least one executor",
+      "description": "An estate without a named executor will require the court to appoint an administrator, causing delays and additional cost.",
+      "condition": {
+        "entityType": "estate",
+        "field": "executors",
+        "operator": "empty"
+      },
+      "relatedEntityType": "estate"
+    },
+    {
+      "id": "no_guardian_minor_children",
+      "category": "guardian",
+      "priority": "critical",
+      "title": "Appoint guardian for minor children",
+      "description": "If the testator has minor children and no guardian is appointed, the court will decide guardianship.",
+      "condition": {
+        "entityType": "estate",
+        "field": "guardians",
+        "operator": "empty",
+        "when": { "field": "hasMinorChildren", "operator": "eq", "value": true }
+      },
+      "relatedEntityType": "estate"
+    },
+    {
+      "id": "missing_will_execution_date",
+      "category": "legal_documents",
+      "priority": "high",
+      "title": "Record will execution date",
+      "description": "The will execution date is required to establish which version of the will is current and valid.",
+      "condition": {
+        "entityType": "estate",
+        "field": "willExecutionDate",
+        "operator": "empty"
+      },
+      "relatedEntityType": "estate"
+    },
+    {
+      "id": "urgent_asset_no_disposal_plan",
+      "category": "asset_management",
+      "priority": "high",
+      "title": "Create disposal plan for urgent asset",
+      "description": "Assets flagged as urgent (e.g., perishable goods, time-limited investments) need a documented disposal or realization plan.",
+      "condition": {
+        "entityType": "asset",
+        "field": "urgency",
+        "operator": "eq",
+        "value": "high",
+        "and": { "field": "disposalPlan", "operator": "empty" }
+      },
+      "relatedEntityType": "asset"
+    },
+    {
+      "id": "no_tax_position",
+      "category": "tax",
+      "priority": "high",
+      "title": "Calculate estate tax position",
+      "description": "A tax position should be calculated to understand the estate's potential tax liability and identify planning opportunities.",
+      "condition": {
+        "entityType": "estate",
+        "field": "taxPosition",
+        "operator": "empty"
+      },
+      "relatedEntityType": "estate"
+    },
+    {
+      "id": "low_completeness_score",
+      "category": "completeness",
+      "priority": "medium",
+      "title": "Improve estate completeness score",
+      "description": "The estate completeness score is below 50%. Review the completeness checklist and address outstanding items.",
+      "condition": {
+        "entityType": "estate",
+        "field": "completenessScore",
+        "operator": "lt",
+        "value": 50
+      },
+      "relatedEntityType": "estate"
+    },
+    {
+      "id": "missing_death_certificate",
+      "category": "administration",
+      "priority": "critical",
+      "title": "Obtain death certificate",
+      "description": "A death certificate is required before probate can be applied for and before most estate administration tasks can proceed.",
+      "condition": {
+        "entityType": "estate",
+        "field": "deathCertificateDate",
+        "operator": "empty",
+        "when": { "field": "status", "operator": "in", "value": ["in_administration"] }
+      },
+      "relatedEntityType": "estate"
+    },
+    {
+      "id": "no_probate_application",
+      "category": "administration",
+      "priority": "high",
+      "title": "Apply for probate / letters of administration",
+      "description": "The estate has been in pre-probate status for over 3 months. Probate or letters of administration should be applied for promptly.",
+      "condition": {
+        "entityType": "estate",
+        "field": "status",
+        "operator": "eq",
+        "value": "pre_probate",
+        "and": {
+          "field": "statusChangedDate",
+          "operator": "olderThan",
+          "value": "P3M"
+        }
+      },
+      "relatedEntityType": "estate"
+    },
+    {
+      "id": "transfer_missing_exemption_claim",
+      "category": "lifetime_transfers",
+      "priority": "medium",
+      "title": "Review lifetime transfer for applicable exemptions",
+      "description": "This lifetime transfer has no exemptions claimed. Review whether annual exemption, small gifts exemption, or other reliefs apply.",
+      "condition": {
+        "entityType": "lifetimeTransfer",
+        "field": "exemptions",
+        "operator": "empty",
+        "and": {
+          "field": "transferDate",
+          "operator": "withinLookback"
+        }
+      },
+      "relatedEntityType": "lifetimeTransfer"
+    },
+    {
+      "id": "beneficiary_missing_contact",
+      "category": "beneficiaries",
+      "priority": "medium",
+      "title": "Add contact details for beneficiary",
+      "description": "Beneficiaries need contact details on file so they can be notified during estate administration.",
+      "condition": {
+        "entityType": "person",
+        "field": "contactDetails",
+        "operator": "empty",
+        "when": { "field": "roles", "operator": "contains", "value": "beneficiary" }
+      },
+      "relatedEntityType": "person"
+    },
+    {
+      "id": "asset_missing_ownership_details",
+      "category": "asset_management",
+      "priority": "medium",
+      "title": "Record ownership details for co-owned asset",
+      "description": "Co-owned assets need ownership shares documented to determine the portion that forms part of the estate.",
+      "condition": {
+        "entityType": "asset",
+        "field": "coOwnership",
+        "operator": "exists",
+        "and": { "field": "coOwnership.ownershipShare", "operator": "empty" }
+      },
+      "relatedEntityType": "asset"
+    }
+  ]
+}

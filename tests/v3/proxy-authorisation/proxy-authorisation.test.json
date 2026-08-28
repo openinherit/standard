@@ -1,0 +1,942 @@
+{
+  "target": "../../../v3/proxy-authorisation.json",
+  "tests": [
+    {
+      "description": "valid minimal proxy authorisation (required fields only)",
+      "data": {
+        "id": "d6e7f8a9-b0c1-2345-d678-9abcdef01234",
+        "delegateType": "person",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000001",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000002",
+        "scope": "information_gathering",
+        "consentRecord": {
+          "consentGiven": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid fully populated proxy authorisation — full scope with witnesses",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "delegateType": "person",
+        "proxyPersonId": "33333333-0000-0000-0000-000000000003",
+        "testatorPersonId": "44444444-0000-0000-0000-000000000004",
+        "scope": "full",
+        "consentRecord": {
+          "consentGiven": true,
+          "consentDate": "2025-03-15",
+          "consentMethod": "in_person_written",
+          "witnesses": [
+            {
+              "personId": "55555555-0000-0000-0000-000000000005",
+              "role": "solicitor",
+              "witnessedDate": "2025-03-15"
+            },
+            {
+              "personId": "66666666-0000-0000-0000-000000000006",
+              "role": "family_elder",
+              "witnessedDate": "2025-03-15"
+            }
+          ],
+          "documentRef": "DOC-2025-PROXY-001",
+          "notes": "Consent given in the presence of solicitor and family elder."
+        },
+        "dealerNegotiationPermitted": true,
+        "startDate": "2025-03-15",
+        "expiryDate": "2026-03-15",
+        "auditTrailEnabled": true,
+        "notes": "Proxy is testator's daughter — authorised to liaise with Bonhams regarding the art collection."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing proxyPersonId",
+      "data": {
+        "id": "d6e7f8a9-b0c1-2345-d678-9abcdef01234",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000002",
+        "scope": "communication",
+        "consentRecord": {
+          "consentGiven": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — scope not in enum",
+      "data": {
+        "id": "d6e7f8a9-b0c1-2345-d678-9abcdef01234",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000001",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000002",
+        "scope": "limited",
+        "consentRecord": {
+          "consentGiven": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — consentRecord missing consentGiven",
+      "data": {
+        "id": "d6e7f8a9-b0c1-2345-d678-9abcdef01234",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000001",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000002",
+        "scope": "information_gathering",
+        "consentRecord": {
+          "consentDate": "2025-03-15"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — on-behalf-of delegation with constraints",
+      "data": {
+        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "delegateType": "person",
+        "proxyPersonId": "aaaaaaaa-0000-0000-0000-000000000001",
+        "testatorPersonId": "bbbbbbbb-0000-0000-0000-000000000002",
+        "scope": "decision_making",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "delegationType": "on_behalf_of",
+        "delegationConstraints": {
+          "maxTransactionValue": {
+            "amount": 500000,
+            "currency": "GBP"
+          },
+          "requiresCoApproval": true,
+          "coApproverPersonId": "cccccccc-0000-0000-0000-000000000003"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — delegation triggered on death",
+      "data": {
+        "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+        "delegateType": "person",
+        "proxyPersonId": "dddddddd-0000-0000-0000-000000000004",
+        "testatorPersonId": "eeeeeeee-0000-0000-0000-000000000005",
+        "scope": "full",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "activationTrigger": "on_death",
+        "activationVerificationMethod": "death_certificate"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — delegation with audit log",
+      "data": {
+        "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+        "delegateType": "person",
+        "proxyPersonId": "ffffffff-0000-0000-0000-000000000006",
+        "testatorPersonId": "11111111-0000-0000-0000-000000000007",
+        "scope": "communication",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "auditLog": [
+          {
+            "action": "granted",
+            "agent": "Solicitor Smith",
+            "performedAt": "2026-03-01T10:00:00Z"
+          },
+          {
+            "action": "exercised",
+            "agent": "Executor Jones",
+            "performedAt": "2026-04-01T14:00:00Z",
+            "detail": "Accessed bank accounts"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — co-equal delegation",
+      "data": {
+        "id": "d4e5f6a7-b8c9-0123-defa-234567890123",
+        "delegateType": "person",
+        "proxyPersonId": "22222222-0000-0000-0000-000000000008",
+        "testatorPersonId": "33333333-0000-0000-0000-000000000009",
+        "scope": "negotiation",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "delegationType": "co_equal",
+        "delegationConstraints": {
+          "coApproverPersonId": "44444444-0000-0000-0000-000000000010"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — audit log entry missing required action",
+      "data": {
+        "id": "e5f6a7b8-c9d0-1234-efab-345678901234",
+        "proxyPersonId": "55555555-0000-0000-0000-000000000011",
+        "testatorPersonId": "66666666-0000-0000-0000-000000000012",
+        "scope": "information_gathering",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "auditLog": [
+          {
+            "agent": "someone",
+            "performedAt": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — invalid activation trigger",
+      "data": {
+        "id": "f6a7b8c9-d0e1-2345-fabc-456789012345",
+        "proxyPersonId": "77777777-0000-0000-0000-000000000013",
+        "testatorPersonId": "88888888-0000-0000-0000-000000000014",
+        "scope": "full",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "activationTrigger": "whenever"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — delegation with structured revocation",
+      "data": {
+        "id": "a9b0c1d2-e3f4-5678-9abc-def012345678",
+        "delegateType": "person",
+        "proxyPersonId": "99999999-0000-0000-0000-000000000015",
+        "testatorPersonId": "aaaaaaaa-0000-0000-0000-000000000016",
+        "scope": "information_gathering",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "revocation": {
+          "revokedAt": "2026-04-01T10:00:00Z",
+          "revokedBy": "Solicitor Smith",
+          "revocationMethod": "written_notice",
+          "enforcementStatus": "enforced"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — revocation with challenge period",
+      "data": {
+        "id": "b0c1d2e3-f4a5-6789-abcd-ef0123456789",
+        "delegateType": "person",
+        "proxyPersonId": "bbbbbbbb-0000-0000-0000-000000000017",
+        "testatorPersonId": "cccccccc-0000-0000-0000-000000000018",
+        "scope": "full",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "revocation": {
+          "revokedAt": "2026-04-01T10:00:00Z",
+          "revocationMethod": "court_order",
+          "challengePeriodDays": 28,
+          "challengeDeadline": "2026-04-29",
+          "enforcementStatus": "pending",
+          "revocationJurisdiction": {
+            "country": "GB",
+            "subdivision": "GB-ENG"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — revocation with bad enforcement status",
+      "data": {
+        "id": "c1d2e3f4-a5b6-7890-bcde-f01234567890",
+        "proxyPersonId": "dddddddd-0000-0000-0000-000000000019",
+        "testatorPersonId": "eeeeeeee-0000-0000-0000-000000000020",
+        "scope": "information_gathering",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "revocation": {
+          "enforcementStatus": "cancelled"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — proxy authorisation with on_inactivity trigger",
+      "data": {
+        "id": "d6e7f8a9-0000-4000-a000-000000000234",
+        "delegateType": "person",
+        "proxyPersonId": "a0000001-0000-4000-a000-000000000001",
+        "testatorPersonId": "a0000002-0000-4000-a000-000000000002",
+        "scope": "full",
+        "activationTrigger": "on_inactivity",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — proxy authorisation with subDelegation and credentialRef",
+      "data": {
+        "id": "d6e7f8a9-0000-4000-a000-000000000235",
+        "delegateType": "person",
+        "proxyPersonId": "a0000001-0000-4000-a000-000000000001",
+        "testatorPersonId": "a0000002-0000-4000-a000-000000000002",
+        "scope": "full",
+        "consentRecord": { "consentGiven": true },
+        "subDelegation": {
+          "permitted": true,
+          "maxDepth": 2,
+          "constraints": "Sub-delegation only permitted to qualified solicitors"
+        },
+        "credentialRef": "https://delegation.example.org/credentials/abc123"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — subDelegation maxDepth exceeds maximum",
+      "data": {
+        "id": "d6e7f8a9-0000-4000-a000-000000000236",
+        "proxyPersonId": "a0000001-0000-4000-a000-000000000001",
+        "testatorPersonId": "a0000002-0000-4000-a000-000000000002",
+        "scope": "full",
+        "consentRecord": { "consentGiven": true },
+        "subDelegation": {
+          "permitted": true,
+          "maxDepth": 100
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — proxy authorisation with FHIR interop fields and display names",
+      "data": {
+        "id": "d6e7f8a9-b0c1-2345-d678-9abcdef01237",
+        "delegateType": "person",
+        "proxyPersonId": "a0000001-0000-4000-a000-000000000001",
+        "proxyPersonIdDisplay": "Catherine Ashford",
+        "testatorPersonId": "a0000002-0000-4000-a000-000000000002",
+        "testatorPersonIdDisplay": "James Davies",
+        "scope": "full",
+        "consentRecord": { "consentGiven": true },
+        "externalConsentRef": "https://fhir.example.org/Consent/abc123",
+        "healthcareRecordAccess": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — proxy authorisation with externalConsentRef only",
+      "data": {
+        "id": "d6e7f8a9-0000-4000-a000-000000000240",
+        "delegateType": "person",
+        "proxyPersonId": "a0000001-0000-4000-a000-000000000010",
+        "testatorPersonId": "a0000002-0000-4000-a000-000000000010",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true },
+        "externalConsentRef": "https://fhir.example.org/Consent/12345"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing id",
+      "data": {
+        "proxyPersonId": "11111111-0000-0000-0000-000000000001",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000002",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing testatorPersonId",
+      "data": {
+        "id": "d6e7f8a9-b0c1-2345-d678-9abcdef01234",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000001",
+        "scope": "communication",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing scope",
+      "data": {
+        "id": "d6e7f8a9-b0c1-2345-d678-9abcdef01234",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000001",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000002",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — scope as number (must be string enum)",
+      "data": {
+        "id": "d6e7f8a9-b0c1-2345-d678-9abcdef01234",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000001",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000002",
+        "scope": 42,
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — proxyPersonId as boolean (must be string UUID)",
+      "data": {
+        "id": "d6e7f8a9-b0c1-2345-d678-9abcdef01234",
+        "proxyPersonId": true,
+        "testatorPersonId": "22222222-0000-0000-0000-000000000002",
+        "scope": "full",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — id is not a valid UUID",
+      "data": {
+        "id": "not-a-valid-uuid",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000001",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000002",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — proxyPersonId is not a valid UUID",
+      "data": {
+        "id": "d6e7f8a9-b0c1-2345-d678-9abcdef01234",
+        "proxyPersonId": "not-a-uuid-at-all",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000002",
+        "scope": "full",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — expiryDate is not ISO date format",
+      "data": {
+        "id": "d6e7f8a9-b0c1-2345-d678-9abcdef01234",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000001",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000002",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true },
+        "expiryDate": "15/03/2026"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid agent delegation — minimal",
+      "data": {
+        "id": "a1000001-0000-4000-a000-000000000001",
+        "delegateType": "agent",
+        "agentId": "arthur-v1",
+        "testatorPersonId": "a2000001-0000-4000-a000-000000000001",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid agent delegation — full capabilities",
+      "data": {
+        "id": "a1000002-0000-4000-a000-000000000002",
+        "delegateType": "agent",
+        "agentId": "legacylists-operations-ai-v2",
+        "agentIdDisplay": "Operations AI (LegacyLists)",
+        "testatorPersonId": "a2000002-0000-4000-a000-000000000002",
+        "scope": "full",
+        "consentRecord": {
+          "consentGiven": true,
+          "consentDate": "2026-01-15",
+          "consentMethod": "in_person_written"
+        },
+        "agentCapabilities": [
+          "read_catalogue",
+          "send_notifications",
+          "execute_sales",
+          "manage_communications",
+          "generate_reports",
+          "process_corrections",
+          "manage_dealer_offers",
+          "generate_legacy_letter"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid agent delegation — with authentication method",
+      "data": {
+        "id": "a1000003-0000-4000-a000-000000000003",
+        "delegateType": "agent",
+        "agentId": "arthur-cataloguing-v1",
+        "agentIdDisplay": "Arthur (LegacyLists cataloguing assistant)",
+        "testatorPersonId": "a2000003-0000-4000-a000-000000000003",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true },
+        "agentCapabilities": ["read_catalogue", "generate_reports"],
+        "authenticationMethod": "mcp_session"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid organisation delegation — minimal",
+      "data": {
+        "id": "a1000004-0000-4000-a000-000000000004",
+        "delegateType": "organisation",
+        "proxyPersonId": "a3000001-0000-4000-a000-000000000001",
+        "testatorPersonId": "a2000004-0000-4000-a000-000000000004",
+        "scope": "negotiation",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid organisation delegation — with organisation details",
+      "data": {
+        "id": "a1000005-0000-4000-a000-000000000005",
+        "delegateType": "organisation",
+        "proxyPersonId": "a3000002-0000-4000-a000-000000000002",
+        "proxyPersonIdDisplay": "Farrer & Co LLP (Representative)",
+        "testatorPersonId": "a2000005-0000-4000-a000-000000000005",
+        "testatorPersonIdDisplay": "Margaret Thornton",
+        "scope": "full",
+        "consentRecord": {
+          "consentGiven": true,
+          "consentDate": "2026-02-01",
+          "consentMethod": "in_person_written",
+          "documentRef": "DOC-2026-ORG-PROXY-001"
+        },
+        "delegationType": "on_behalf_of",
+        "auditTrailEnabled": true
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid agent delegation — missing agentId",
+      "data": {
+        "id": "a1000006-0000-4000-a000-000000000006",
+        "delegateType": "agent",
+        "testatorPersonId": "a2000006-0000-4000-a000-000000000006",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid agent delegation — agentId exceeds maxLength",
+      "data": {
+        "id": "a1000007-0000-4000-a000-000000000007",
+        "delegateType": "agent",
+        "agentId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "testatorPersonId": "a2000007-0000-4000-a000-000000000007",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — delegateType value not in enum",
+      "data": {
+        "id": "a1000008-0000-4000-a000-000000000008",
+        "delegateType": "robot",
+        "testatorPersonId": "a2000008-0000-4000-a000-000000000008",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — agentCapabilities contains unrecognised non-extension value",
+      "data": {
+        "id": "a1000009-0000-4000-a000-000000000009",
+        "delegateType": "agent",
+        "agentId": "some-agent-v1",
+        "testatorPersonId": "a2000009-0000-4000-a000-000000000009",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true },
+        "agentCapabilities": ["flying"]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid person delegation — missing proxyPersonId",
+      "data": {
+        "id": "a1000010-0000-4000-a000-000000000010",
+        "delegateType": "person",
+        "testatorPersonId": "a2000010-0000-4000-a000-000000000010",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid agent delegation with delegation_protocol authentication",
+      "data": {
+        "id": "b1000011-0000-4000-a000-000000000011",
+        "delegateType": "agent",
+        "agentId": "openid-delegate-agent-v1",
+        "agentIdDisplay": "OpenID Foundation Delegate Agent",
+        "testatorPersonId": "a2000011-0000-4000-a000-000000000011",
+        "scope": "decision_making",
+        "consentRecord": {
+          "consentGiven": true,
+          "consentDate": "2026-03-01",
+          "consentMethod": "in_person_written"
+        },
+        "authenticationMethod": "delegation_protocol",
+        "agentCapabilities": ["read_catalogue", "generate_reports", "manage_dealer_offers"],
+        "credentialRef": "https://credentials.example.org/delegation/openid-abc123",
+        "auditTrailEnabled": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid person delegation with biometric (human_verified) authentication",
+      "data": {
+        "id": "b1000012-0000-4000-a000-000000000012",
+        "delegateType": "person",
+        "proxyPersonId": "a3000012-0000-4000-a000-000000000012",
+        "proxyPersonIdDisplay": "Priya Nair",
+        "testatorPersonId": "a2000012-0000-4000-a000-000000000012",
+        "testatorPersonIdDisplay": "Ranjit Singh",
+        "scope": "full",
+        "consentRecord": {
+          "consentGiven": true,
+          "consentDate": "2026-02-14",
+          "consentMethod": "in_person_written",
+          "witnesses": [
+            {
+              "personId": "c0000012-0000-4000-a000-000000000012",
+              "role": "solicitor",
+              "witnessedDate": "2026-02-14"
+            }
+          ],
+          "documentRef": "DOC-2026-PROXY-BIOMETRIC-001"
+        },
+        "authenticationMethod": "human_verified",
+        "activationTrigger": "on_death",
+        "activationVerificationMethod": "death_certificate",
+        "dealerNegotiationPermitted": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid agent delegation with api_key authentication",
+      "data": {
+        "id": "b1000013-0000-4000-a000-000000000013",
+        "delegateType": "agent",
+        "agentId": "legacylists-sync-agent-v3",
+        "agentIdDisplay": "LegacyLists Sync Agent v3",
+        "testatorPersonId": "a2000013-0000-4000-a000-000000000013",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true },
+        "authenticationMethod": "api_key",
+        "agentCapabilities": ["read_catalogue", "send_notifications"]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — oauth_token authenticationMethod with verifiable_credential",
+      "data": {
+        "id": "c2000001-0000-4000-a000-000000000001",
+        "delegateType": "agent",
+        "agentId": "inherit-portal-agent-v1",
+        "testatorPersonId": "c3000001-0000-4000-a000-000000000001",
+        "scope": "negotiation",
+        "consentRecord": { "consentGiven": true },
+        "authenticationMethod": "oauth_token"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — verifiable_credential authenticationMethod",
+      "data": {
+        "id": "c2000002-0000-4000-a000-000000000002",
+        "delegateType": "person",
+        "proxyPersonId": "c3000002-0000-4000-a000-000000000002",
+        "testatorPersonId": "c4000002-0000-4000-a000-000000000002",
+        "scope": "decision_making",
+        "consentRecord": {
+          "consentGiven": true,
+          "consentMethod": "video_recorded"
+        },
+        "authenticationMethod": "verifiable_credential",
+        "credentialRef": "https://credentials.example.org/vc/abc123"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — consentMethod phone_recorded with assumed_cultural_norm",
+      "data": {
+        "id": "c2000003-0000-4000-a000-000000000003",
+        "delegateType": "person",
+        "proxyPersonId": "c3000003-0000-4000-a000-000000000003",
+        "testatorPersonId": "c4000003-0000-4000-a000-000000000003",
+        "scope": "communication",
+        "consentRecord": {
+          "consentGiven": true,
+          "consentMethod": "phone_recorded"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — consentMethod assumed_cultural_norm",
+      "data": {
+        "id": "c2000004-0000-4000-a000-000000000004",
+        "delegateType": "person",
+        "proxyPersonId": "c3000004-0000-4000-a000-000000000004",
+        "testatorPersonId": "c4000004-0000-4000-a000-000000000004",
+        "scope": "full",
+        "consentRecord": {
+          "consentGiven": true,
+          "consentMethod": "assumed_cultural_norm",
+          "notes": "Eldest son assumed authority per family custom"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — consentMethod witnessed_verbal",
+      "data": {
+        "id": "c2000005-0000-4000-a000-000000000005",
+        "delegateType": "person",
+        "proxyPersonId": "c3000005-0000-4000-a000-000000000005",
+        "testatorPersonId": "c4000005-0000-4000-a000-000000000005",
+        "scope": "information_gathering",
+        "consentRecord": {
+          "consentGiven": true,
+          "consentMethod": "witnessed_verbal",
+          "witnesses": [
+            {
+              "personId": "c5000005-0000-4000-a000-000000000005",
+              "role": "community_leader",
+              "witnessedDate": "2026-01-15"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — activationTrigger on_incapacity with medical_certificate verification",
+      "data": {
+        "id": "c2000006-0000-4000-a000-000000000006",
+        "delegateType": "person",
+        "proxyPersonId": "c3000006-0000-4000-a000-000000000006",
+        "testatorPersonId": "c4000006-0000-4000-a000-000000000006",
+        "scope": "full",
+        "consentRecord": { "consentGiven": true },
+        "activationTrigger": "on_incapacity",
+        "activationVerificationMethod": "medical_certificate"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — activationTrigger on_court_order with court_order verification",
+      "data": {
+        "id": "c2000007-0000-4000-a000-000000000007",
+        "delegateType": "person",
+        "proxyPersonId": "c3000007-0000-4000-a000-000000000007",
+        "testatorPersonId": "c4000007-0000-4000-a000-000000000007",
+        "scope": "decision_making",
+        "consentRecord": { "consentGiven": true },
+        "activationTrigger": "on_court_order",
+        "activationVerificationMethod": "court_order"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — activationTrigger on_date with community_declaration verification",
+      "data": {
+        "id": "c2000008-0000-4000-a000-000000000008",
+        "delegateType": "person",
+        "proxyPersonId": "c3000008-0000-4000-a000-000000000008",
+        "testatorPersonId": "c4000008-0000-4000-a000-000000000008",
+        "scope": "negotiation",
+        "consentRecord": { "consentGiven": true },
+        "activationTrigger": "on_date",
+        "activationDate": "2027-01-01",
+        "activationVerificationMethod": "community_declaration"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — activationTrigger manual with platform_detection verification and none verification",
+      "data": {
+        "id": "c2000009-0000-4000-a000-000000000009",
+        "delegateType": "person",
+        "proxyPersonId": "c3000009-0000-4000-a000-000000000009",
+        "testatorPersonId": "c4000009-0000-4000-a000-000000000009",
+        "scope": "communication",
+        "consentRecord": { "consentGiven": true },
+        "activationTrigger": "manual",
+        "activationVerificationMethod": "platform_detection"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — activationVerificationMethod none (immediate trigger)",
+      "data": {
+        "id": "c2000010-0000-4000-a000-000000000010",
+        "delegateType": "person",
+        "proxyPersonId": "c3000010-0000-4000-a000-000000000010",
+        "testatorPersonId": "c4000010-0000-4000-a000-000000000010",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true },
+        "activationTrigger": "immediate",
+        "activationVerificationMethod": "none"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — delegationType impersonation",
+      "data": {
+        "id": "c2000011-0000-4000-a000-000000000011",
+        "delegateType": "person",
+        "proxyPersonId": "c3000011-0000-4000-a000-000000000011",
+        "testatorPersonId": "c4000011-0000-4000-a000-000000000011",
+        "scope": "full",
+        "consentRecord": { "consentGiven": true },
+        "delegationType": "impersonation"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — delegationType supervised",
+      "data": {
+        "id": "c2000012-0000-4000-a000-000000000012",
+        "delegateType": "person",
+        "proxyPersonId": "c3000012-0000-4000-a000-000000000012",
+        "testatorPersonId": "c4000012-0000-4000-a000-000000000012",
+        "scope": "decision_making",
+        "consentRecord": { "consentGiven": true },
+        "delegationType": "supervised"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — revocation methods: platform_action, automatic_expiry, death_of_delegate, mutual_agreement, other",
+      "data": {
+        "id": "c2000013-0000-4000-a000-000000000013",
+        "delegateType": "person",
+        "proxyPersonId": "c3000013-0000-4000-a000-000000000013",
+        "testatorPersonId": "c4000013-0000-4000-a000-000000000013",
+        "scope": "information_gathering",
+        "consentRecord": { "consentGiven": true },
+        "revocation": {
+          "revokedAt": "2026-05-01T09:00:00Z",
+          "revocationMethod": "platform_action",
+          "enforcementStatus": "challenged"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — revocation method automatic_expiry with overturned enforcement status",
+      "data": {
+        "id": "c2000014-0000-4000-a000-000000000014",
+        "delegateType": "person",
+        "proxyPersonId": "c3000014-0000-4000-a000-000000000014",
+        "testatorPersonId": "c4000014-0000-4000-a000-000000000014",
+        "scope": "full",
+        "consentRecord": { "consentGiven": true },
+        "revocation": {
+          "revokedAt": "2026-03-01T09:00:00Z",
+          "revocationMethod": "automatic_expiry",
+          "enforcementStatus": "overturned"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — revocation method death_of_delegate with expired enforcement status",
+      "data": {
+        "id": "c2000015-0000-4000-a000-000000000015",
+        "delegateType": "person",
+        "proxyPersonId": "c3000015-0000-4000-a000-000000000015",
+        "testatorPersonId": "c4000015-0000-4000-a000-000000000015",
+        "scope": "negotiation",
+        "consentRecord": { "consentGiven": true },
+        "revocation": {
+          "revokedAt": "2026-02-01T09:00:00Z",
+          "revocationMethod": "death_of_delegate",
+          "enforcementStatus": "expired"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — revocation method mutual_agreement",
+      "data": {
+        "id": "c2000016-0000-4000-a000-000000000016",
+        "delegateType": "person",
+        "proxyPersonId": "c3000016-0000-4000-a000-000000000016",
+        "testatorPersonId": "c4000016-0000-4000-a000-000000000016",
+        "scope": "communication",
+        "consentRecord": { "consentGiven": true },
+        "revocation": {
+          "revokedAt": "2026-01-15T09:00:00Z",
+          "revocationMethod": "mutual_agreement",
+          "enforcementStatus": "enforced"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — revocation method other",
+      "data": {
+        "id": "c2000017-0000-4000-a000-000000000017",
+        "delegateType": "person",
+        "proxyPersonId": "c3000017-0000-4000-a000-000000000017",
+        "testatorPersonId": "c4000017-0000-4000-a000-000000000017",
+        "scope": "full",
+        "consentRecord": { "consentGiven": true },
+        "revocation": {
+          "revokedAt": "2025-12-01T09:00:00Z",
+          "revocationMethod": "other",
+          "enforcementStatus": "pending"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — auditLog with revoked, challenged, modified, expired actions",
+      "data": {
+        "id": "c2000018-0000-4000-a000-000000000018",
+        "delegateType": "person",
+        "proxyPersonId": "c3000018-0000-4000-a000-000000000018",
+        "testatorPersonId": "c4000018-0000-4000-a000-000000000018",
+        "scope": "full",
+        "consentRecord": { "consentGiven": true },
+        "auditLog": [
+          {
+            "action": "revoked",
+            "agent": "Testator directly",
+            "performedAt": "2026-05-01T10:00:00Z"
+          },
+          {
+            "action": "challenged",
+            "agent": "Beneficiary dispute",
+            "performedAt": "2026-05-10T14:00:00Z"
+          },
+          {
+            "action": "modified",
+            "agent": "Solicitor Smith",
+            "performedAt": "2026-03-15T09:00:00Z",
+            "detail": "Scope reduced from full to negotiation"
+          },
+          {
+            "action": "expired",
+            "agent": "System",
+            "performedAt": "2026-06-01T00:00:00Z"
+          }
+        ]
+      },
+      "valid": true
+    }
+  ]
+}

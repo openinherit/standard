@@ -1,0 +1,422 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-03-30T16:00:00Z",
+  "generator": {
+    "name": "Actionstep",
+    "version": "5.4.2",
+    "url": "https://www.actionstep.com"
+  },
+  "estate": {
+    "id": "40000001-0000-4000-a000-000000000001",
+    "testatorPersonId": "40000001-0000-4000-a000-000000000010",
+    "status": "planning",
+    "notes": "Estate plan for a married couple with mirror wills. Exported from Actionstep practice management. The couple have two adult children and two minor grandchildren. Estate planning includes guardianship, specific gifts, and residuary provisions.",
+    "createdAt": "2026-03-15T09:00:00Z",
+    "lastModifiedAt": "2026-03-30T16:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    },
+    "companionEstateId": "40000001-0000-4000-a000-000000000002",
+    "companionLinkStatus": "active"
+  },
+  "people": [
+    {
+      "id": "40000001-0000-4000-a000-000000000010",
+      "givenName": "David",
+      "familyName": "Pritchard",
+      "dateOfBirth": "1972-05-20",
+      "roles": [
+        "testator"
+      ],
+      "contact": {
+        "email": "david.pritchard@example.com",
+        "phone": "+447700900123",
+        "address": {
+          "streetAddress": "Rosemount, 8 The Crescent",
+          "addressLocality": "Bath",
+          "addressRegion": "Somerset",
+          "postalCode": "BA1 2NA",
+          "addressCountry": "GB"
+        }
+      }
+    },
+    {
+      "id": "40000001-0000-4000-a000-000000000011",
+      "givenName": "Sarah",
+      "familyName": "Pritchard",
+      "dateOfBirth": "1974-09-08",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ],
+      "notes": "David's wife. Has a companion estate (mirror will) as estate 40000001-0000-4000-a000-000000000002."
+    },
+    {
+      "id": "40000001-0000-4000-a000-000000000012",
+      "givenName": "William",
+      "familyName": "Pritchard",
+      "dateOfBirth": "1998-03-15",
+      "roles": [
+        "beneficiary"
+      ]
+    },
+    {
+      "id": "40000001-0000-4000-a000-000000000013",
+      "givenName": "Hannah",
+      "familyName": "Pritchard",
+      "dateOfBirth": "2001-11-22",
+      "roles": [
+        "beneficiary"
+      ]
+    },
+    {
+      "id": "40000001-0000-4000-a000-000000000014",
+      "givenName": "Oscar",
+      "familyName": "Pritchard",
+      "dateOfBirth": "2020-06-10",
+      "roles": [
+        "beneficiary"
+      ],
+      "notes": "Grandchild — son of William. Minor — guardian appointment required."
+    },
+    {
+      "id": "40000001-0000-4000-a000-000000000015",
+      "givenName": "Isla",
+      "familyName": "Pritchard",
+      "dateOfBirth": "2022-12-03",
+      "roles": [
+        "beneficiary"
+      ],
+      "notes": "Grandchild — daughter of William. Minor — guardian appointment required."
+    },
+    {
+      "id": "40000001-0000-4000-a000-000000000016",
+      "givenName": "Michael",
+      "familyName": "Hendry",
+      "roles": [
+        "guardian"
+      ],
+      "notes": "David's brother. Appointed testamentary guardian for Oscar and Isla."
+    },
+    {
+      "id": "40000001-0000-4000-a000-000000000017",
+      "givenName": "Emma",
+      "familyName": "Hendry",
+      "roles": [
+        "guardian"
+      ],
+      "notes": "Michael's wife. Joint testamentary guardian for Oscar and Isla."
+    }
+  ],
+  "kinships": [
+    {
+      "id": "40000001-0000-4000-b000-000000000001",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "40000001-0000-4000-a000-000000000010",
+      "toPersonId": "40000001-0000-4000-a000-000000000012"
+    },
+    {
+      "id": "40000001-0000-4000-b000-000000000002",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "40000001-0000-4000-a000-000000000010",
+      "toPersonId": "40000001-0000-4000-a000-000000000013"
+    },
+    {
+      "id": "40000001-0000-4000-b000-000000000003",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "40000001-0000-4000-a000-000000000012",
+      "toPersonId": "40000001-0000-4000-a000-000000000014"
+    },
+    {
+      "id": "40000001-0000-4000-b000-000000000004",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "40000001-0000-4000-a000-000000000012",
+      "toPersonId": "40000001-0000-4000-a000-000000000015"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "40000001-0000-4000-c000-000000000001",
+      "type": "marriage_civil",
+      "partners": [
+        {
+          "personId": "40000001-0000-4000-a000-000000000010",
+          "ordinal": 1
+        },
+        {
+          "personId": "40000001-0000-4000-a000-000000000011",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "40000001-0000-4000-d000-000000000001",
+      "name": "Rosemount, 8 The Crescent, Bath",
+      "propertyType": "detached",
+      "address": {
+        "streetAddress": "Rosemount, 8 The Crescent",
+        "addressLocality": "Bath",
+        "addressRegion": "Somerset",
+        "postalCode": "BA1 2NA",
+        "addressCountry": "GB"
+      },
+      "estimatedValue": {
+        "amount": 95000000,
+        "currency": "GBP"
+      },
+      "tenureType": "ownership",
+      "ownershipPercentage": 50,
+      "notes": "Family home. Held as joint tenants with Sarah. On first death passes by survivorship — outside the estate for probate purposes."
+    },
+    {
+      "id": "40000001-0000-4000-d000-000000000002",
+      "name": "Coastal Retreat, Polzeath",
+      "propertyType": "detached",
+      "address": {
+        "streetAddress": "Coastal Retreat, Dunders Hill",
+        "addressLocality": "Polzeath",
+        "addressRegion": "Cornwall",
+        "postalCode": "PL27 6QR",
+        "addressCountry": "GB"
+      },
+      "estimatedValue": {
+        "amount": 55000000,
+        "currency": "GBP"
+      },
+      "tenureType": "ownership",
+      "ownershipPercentage": 100,
+      "notes": "Holiday home. Sole ownership — David's name only. Let as a holiday cottage when not in personal use."
+    }
+  ],
+  "assets": [
+    {
+      "id": "40000001-0000-4000-e000-000000000001",
+      "name": "Scottish Widows Workplace Pension",
+      "category": "financial",
+      "subcategory": "workplace pension",
+      "estimatedValue": {
+        "amount": 45000000,
+        "currency": "GBP"
+      },
+      "notes": "Defined contribution workplace pension. Expression of wish nominates Sarah, then children equally."
+    },
+    {
+      "id": "40000001-0000-4000-e000-000000000002",
+      "name": "Nationwide ISA",
+      "category": "financial",
+      "subcategory": "ISA",
+      "estimatedValue": {
+        "amount": 8500000,
+        "currency": "GBP"
+      }
+    }
+  ],
+  "insurancePolicies": [
+    {
+      "id": "40000001-0000-4000-5000-000000000001",
+      "policyType": "life",
+      "providerOrganisationId": "40000001-0000-4000-6000-000000000002",
+      "policyNumber": "AV-LIFE-2018-44721",
+      "coverAmount": {
+        "amount": 50000000,
+        "currency": "GBP"
+      },
+      "premiumAmount": {
+        "amount": 8500,
+        "currency": "GBP"
+      },
+      "premiumFrequency": "monthly",
+      "renewalDate": "2028-06-01",
+      "deathBenefit": {
+        "amount": {
+          "amount": 50000000,
+          "currency": "GBP"
+        },
+        "nomineePersonId": "40000001-0000-4000-a000-000000000011"
+      },
+      "notes": "Level term life insurance. Written in trust — proceeds pass outside the estate. Nominee: Sarah Pritchard."
+    },
+    {
+      "id": "40000001-0000-4000-5000-000000000002",
+      "policyType": "home",
+      "providerOrganisationId": "40000001-0000-4000-6000-000000000003",
+      "policyNumber": "AX-HOME-2025-99102",
+      "coverAmount": {
+        "amount": 95000000,
+        "currency": "GBP"
+      },
+      "premiumAmount": {
+        "amount": 65000,
+        "currency": "GBP"
+      },
+      "premiumFrequency": "annual",
+      "renewalDate": "2027-01-01",
+      "notes": "Buildings and contents insurance for Rosemount. Rebuild cost: £950,000."
+    }
+  ],
+  "guardians": [
+    {
+      "id": "40000001-0000-4000-4000-000000000001",
+      "childPersonId": "40000001-0000-4000-a000-000000000014",
+      "personId": "40000001-0000-4000-a000-000000000016",
+      "role": "primary",
+      "appointmentType": "testamentary",
+      "notes": "Michael and Emma Hendry appointed as joint guardians for Oscar. Michael is David's brother."
+    },
+    {
+      "id": "40000001-0000-4000-4000-000000000002",
+      "childPersonId": "40000001-0000-4000-a000-000000000015",
+      "personId": "40000001-0000-4000-a000-000000000016",
+      "role": "primary",
+      "appointmentType": "testamentary",
+      "notes": "Michael and Emma Hendry appointed as joint guardians for Isla."
+    },
+    {
+      "id": "40000001-0000-4000-4000-000000000003",
+      "childPersonId": "40000001-0000-4000-a000-000000000014",
+      "personId": "40000001-0000-4000-a000-000000000017",
+      "role": "primary",
+      "appointmentType": "testamentary",
+      "notes": "Emma Hendry — joint guardian for Oscar."
+    },
+    {
+      "id": "40000001-0000-4000-4000-000000000004",
+      "childPersonId": "40000001-0000-4000-a000-000000000015",
+      "personId": "40000001-0000-4000-a000-000000000017",
+      "role": "primary",
+      "appointmentType": "testamentary",
+      "notes": "Emma Hendry — joint guardian for Isla."
+    }
+  ],
+  "bequests": [
+    {
+      "id": "40000001-0000-4000-f000-000000000001",
+      "bequestType": "specific",
+      "beneficiaryId": "40000001-0000-4000-a000-000000000012",
+      "description": "The holiday home at Polzeath to my son William Pritchard",
+      "notes": "Specific devise of the Cornwall property to William."
+    },
+    {
+      "id": "40000001-0000-4000-f000-000000000002",
+      "bequestType": "pecuniary",
+      "beneficiaryId": "40000001-0000-4000-a000-000000000014",
+      "amount": {
+        "amount": 2000000,
+        "currency": "GBP"
+      },
+      "description": "£20,000 to my grandson Oscar Pritchard, to be held on trust until age 18"
+    },
+    {
+      "id": "40000001-0000-4000-f000-000000000003",
+      "bequestType": "pecuniary",
+      "beneficiaryId": "40000001-0000-4000-a000-000000000015",
+      "amount": {
+        "amount": 2000000,
+        "currency": "GBP"
+      },
+      "description": "£20,000 to my granddaughter Isla Pritchard, to be held on trust until age 18"
+    },
+    {
+      "id": "40000001-0000-4000-f000-000000000004",
+      "bequestType": "residuary",
+      "beneficiaryId": "40000001-0000-4000-a000-000000000011",
+      "sharePercentage": 100,
+      "description": "The entire residuary estate to my wife Sarah Pritchard. If she predeceases me, to William and Hannah in equal shares.",
+      "notes": "Substitutional gift: if Sarah predeceases, residuary passes to children equally."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "40000001-0000-4000-7000-000000000001",
+      "personId": "40000001-0000-4000-a000-000000000011",
+      "role": "primary",
+      "isProfessional": false
+    },
+    {
+      "id": "40000001-0000-4000-7000-000000000002",
+      "personId": "40000001-0000-4000-a000-000000000012",
+      "role": "substitute",
+      "isProfessional": false,
+      "notes": "William acts as substitute executor if Sarah is unable or unwilling to act."
+    }
+  ],
+  "documents": [
+    {
+      "id": "40000001-0000-4000-9000-000000000001",
+      "type": "will",
+      "title": "Draft Will of David Pritchard",
+      "fileFormat": "docx",
+      "notes": "Draft will — not yet executed. Mirror will with Sarah's estate plan. Awaiting review appointment."
+    }
+  ],
+  "liabilities": [],
+  "wishes": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "organisations": [
+    {
+      "id": "40000001-0000-4000-6000-000000000001",
+      "name": "Thatcher + Hallam LLP",
+      "organisationType": "legal_firm",
+      "estateRoles": [
+        "will_writer"
+      ],
+      "notes": "Bath-based solicitors handling the estate planning."
+    },
+    {
+      "id": "40000001-0000-4000-6000-000000000002",
+      "name": "Aviva Life & Pensions UK Ltd",
+      "organisationType": "insurance_provider",
+      "estateRoles": [
+        "insurer"
+      ]
+    },
+    {
+      "id": "40000001-0000-4000-6000-000000000003",
+      "name": "AXA Insurance UK PLC",
+      "organisationType": "insurance_provider",
+      "estateRoles": [
+        "insurer"
+      ]
+    }
+  ],
+  "applicationState": {
+    "events": [
+      {
+        "id": "40000001-0000-4000-3000-000000000001",
+        "eventType": "other",
+        "occurredAt": "2026-03-15T10:00:00Z",
+        "trigger": "executor_action",
+        "description": "Initial estate planning consultation with David and Sarah Pritchard. Instructions taken for mirror wills."
+      },
+      {
+        "id": "40000001-0000-4000-3000-000000000002",
+        "eventType": "other",
+        "occurredAt": "2027-03-15T10:00:00Z",
+        "trigger": "calendar_deadline",
+        "description": "Annual will review appointment. Scheduled for 15 March 2027."
+      }
+    ]
+  },
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-03-30T16:00:00Z",
+    "validatedBy": "Actionstep",
+    "schemaVersion": "6.3.0"
+  }
+}

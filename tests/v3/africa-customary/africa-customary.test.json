@@ -1,0 +1,235 @@
+{
+  "target": "../../../v3/extensions/africa-customary/africa-customary.json",
+  "tests": [
+    {
+      "description": "valid — minimal with required ethnicGroup",
+      "data": {
+        "ethnicGroup": "Yoruba"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with family council",
+      "data": {
+        "ethnicGroup": "Zulu",
+        "familyCouncilDecisions": [
+          {
+            "decisionType": "inheritance_allocation",
+            "outcome": "Eldest son inherits homestead"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required ethnicGroup",
+      "data": {
+        "customaryRules": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "ethnicGroup": "Yoruba",
+        "dowryDetails": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — fully populated with all sections",
+      "data": {
+        "ethnicGroup": "Kikuyu",
+        "customaryRules": [
+          {
+            "ethnicGroup": "Kikuyu",
+            "successionSystem": "patrilineal_primogeniture",
+            "widowInheritanceRight": "usufruct_only",
+            "daughterInheritanceRight": "Daughters inherit movable property only",
+            "constitutionalOverride": false,
+            "caseReference": "Nairobi HCCC 42/2019"
+          }
+        ],
+        "familyCouncilDecisions": [
+          {
+            "decisionType": "land_allocation",
+            "decisionDate": "2023-06-15",
+            "decidedBy": "Village Elder Council",
+            "participants": [
+              "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+              "b2c3d4e5-f6a7-8901-bcde-f12345678901"
+            ],
+            "chairPersonId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "outcome": "Eldest son receives the family homestead",
+            "constitutionalChallengeOutcome": "not_challenged",
+            "challengeable": true
+          }
+        ],
+        "communalPropertyDetails": [
+          {
+            "propertyId": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+            "communityName": "Kikuyu Central Lands Trust",
+            "tenureType": "communal_customary",
+            "notes": "Held under trust for the benefit of community members"
+          }
+        ],
+        "widowRights": [
+          {
+            "personId": "d4e5f6a7-b8c9-0123-defa-234567890123",
+            "customaryRight": "Right to occupy matrimonial home during widowhood",
+            "statutoryRight": "Kenya Succession Act Section 35",
+            "widowRitesRequired": true,
+            "widowRitesCompleted": true,
+            "ritesDescription": "Purification ceremony conducted by elders",
+            "ritesCompletionDate": "2023-07-01",
+            "notes": "Statutory rights override customary restrictions per court ruling"
+          }
+        ],
+        "lobolaDetails": {
+          "totalAgreed": { "amount": 500000, "currency": "KES" },
+          "paidToDate": { "amount": 500000, "currency": "KES" },
+          "includesLivestock": true,
+          "livestockDetails": "Five cattle and ten goats",
+          "notes": "Fully paid prior to marriage ceremony"
+        },
+        "landTenureDetails": [
+          {
+            "propertyId": "e5f6a7b8-c9d0-1234-efab-345678901234",
+            "tenureType": "customary_freehold",
+            "communityAuthority": "Kikuyu County Land Board",
+            "notes": "Registered under the Land Registration Act 2012"
+          }
+        ],
+        "constitutionalChallenges": [
+          {
+            "description": "Challenge to exclusion of daughters from inheriting land",
+            "caseReference": "Petition 12/2021 — High Court Nyeri",
+            "outcome": "struck_down",
+            "notes": "Court held the rule violated Article 27 of the Constitution of Kenya"
+          }
+        ],
+        "notes": "Estate subject to both customary and statutory succession rules; statutory rules prevail where in conflict."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with x-inherit-* extension property",
+      "data": {
+        "ethnicGroup": "Akan",
+        "x-inherit-ghana-customary": {
+          "stoolLandClaim": true,
+          "familyHeadApproval": "obtained"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — successionSystem enum violation",
+      "data": {
+        "ethnicGroup": "Zulu",
+        "customaryRules": [
+          {
+            "ethnicGroup": "Zulu",
+            "successionSystem": "invalid_system"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — widowInheritanceRight enum violation in CustomarySuccessionRule",
+      "data": {
+        "ethnicGroup": "Luo",
+        "customaryRules": [
+          {
+            "ethnicGroup": "Luo",
+            "successionSystem": "patrilineal_primogeniture",
+            "widowInheritanceRight": "forced_remarriage"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — FamilyCouncilDecision missing required decisionType",
+      "data": {
+        "ethnicGroup": "Xhosa",
+        "familyCouncilDecisions": [
+          {
+            "decisionDate": "2024-01-20",
+            "outcome": "Property divided equally among sons"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — CustomarySuccessionRule missing both required fields",
+      "data": {
+        "ethnicGroup": "Igbo",
+        "customaryRules": [
+          {
+            "constitutionalOverride": false
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalProperties in FamilyCouncilDecision",
+      "data": {
+        "ethnicGroup": "Sotho",
+        "familyCouncilDecisions": [
+          {
+            "decisionType": "asset_distribution",
+            "eldersPresent": 7
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalProperties in CustomarySuccessionRule",
+      "data": {
+        "ethnicGroup": "Hausa",
+        "customaryRules": [
+          {
+            "ethnicGroup": "Hausa",
+            "successionSystem": "patrilineal_equal",
+            "islamicOverride": true
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — customaryRules is string instead of array",
+      "data": {
+        "ethnicGroup": "Tswana",
+        "customaryRules": "patrilineal_primogeniture"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — familyCouncilDecisions is string instead of array",
+      "data": {
+        "ethnicGroup": "Ndebele",
+        "familyCouncilDecisions": "elders decided on 2024-03-01"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — constitutionalChallenges item missing required description",
+      "data": {
+        "ethnicGroup": "Ganda",
+        "constitutionalChallenges": [
+          {
+            "caseReference": "UGSC 007/2022",
+            "outcome": "pending"
+          }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

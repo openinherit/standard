@@ -1,0 +1,490 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "schemaVersion": "6.4.2",
+  "exportedAt": "2026-04-12T10:00:00Z",
+  "generator": {
+    "name": "Claude Code — AI Will Extraction",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "e1000001-0000-4000-a000-000000000001",
+    "testatorPersonId": "a1000001-0000-4000-a000-000000000001",
+    "status": "confirmed",
+    "defaultSuccessionRegime": {
+      "governingLaw": {
+        "jurisdiction": {
+          "country": "SG"
+        },
+        "legalTradition": "common_law",
+        "statute": "Wills Act (Cap 352)"
+      },
+      "determinedBy": "domicile",
+      "binding": true,
+      "notes": "Katrina is non-Muslim. Her testate estate is governed by the Wills Act. If the will were partially invalid, the Intestate Succession Act would apply to the undisposed portion."
+    },
+    "notes": "CPF monies are subject to a separate CPF Board nomination and do not form part of this estate (clause 5 of will). HDB flat is bequeathed outright (not held as joint tenants), so it passes under the will, not by survivorship.",
+    "createdAt": "2023-08-22T00:00:00Z",
+    "lastModifiedAt": "2026-04-12T10:00:00Z",
+    "domicile": {
+      "country": "SG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "Singapore"
+    },
+    "constructionClauses": [
+      {
+        "clauseType": "gender_neutrality",
+        "content": "Words importing one gender shall include all other genders.",
+        "clauseReference": "8.1"
+      },
+      {
+        "clauseType": "severability",
+        "content": "If any provision of this Will is found to be invalid or unenforceable, the remaining provisions shall continue in full force and effect.",
+        "clauseReference": "8.2"
+      }
+    ],
+    "validityStatus": [
+      {
+        "conditionType": "unmarried",
+        "description": "Will revoked on marriage under Wills Act (Cap 352) s.13",
+        "status": "satisfied",
+        "statute": "Wills Act (Cap 352) s.13"
+      }
+    ],
+    "administrationPhases": [
+      { "priority": 1, "category": "funeral_expenses" },
+      { "priority": 2, "category": "testamentary_expenses" },
+      { "priority": 3, "category": "unsecured_debts" },
+      { "priority": 4, "category": "distribution" }
+    ]
+  },
+  "people": [
+    {
+      "id": "a1000001-0000-4000-a000-000000000001",
+      "givenName": "Wei Lin",
+      "familyName": "Tan",
+      "preferredName": "Katrina",
+      "gender": "female",
+      "roles": [
+        "testator"
+      ],
+      "identifiers": [
+        {
+          "system": "urn:sg:nric",
+          "type": "national_id",
+          "value": "S8234567A"
+        }
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "Blk 247 Toa Payoh Lorong 1",
+          "addressLine2": "#08-123",
+          "addressLocality": "Toa Payoh",
+          "postalCode": "310247",
+          "addressCountry": "SG"
+        }
+      },
+      "religion": {
+        "faith": "buddhist"
+      }
+    },
+    {
+      "id": "a1000001-0000-4000-a000-000000000002",
+      "givenName": "Kah Wai",
+      "familyName": "Lim",
+      "preferredName": "James",
+      "gender": "male",
+      "roles": [
+        "executor"
+      ],
+      "identifiers": [
+        {
+          "system": "urn:sg:nric",
+          "type": "national_id",
+          "value": "S7945678B"
+        }
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "15 Jalan Bukit Merah",
+          "addressLine2": "#03-45",
+          "addressLocality": "Bukit Merah",
+          "postalCode": "150015",
+          "addressCountry": "SG"
+        }
+      }
+    },
+    {
+      "id": "a1000001-0000-4000-a000-000000000003",
+      "givenName": "Wei Hao",
+      "familyName": "Tan",
+      "preferredName": "Daniel",
+      "gender": "male",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "Blk 112 Ang Mo Kio Avenue 4",
+          "addressLine2": "#06-789",
+          "addressLocality": "Ang Mo Kio",
+          "postalCode": "560112",
+          "addressCountry": "SG"
+        }
+      }
+    },
+    {
+      "id": "a1000001-0000-4000-a000-000000000004",
+      "givenName": "Xin Yi",
+      "familyName": "Tan",
+      "preferredName": "Rachel",
+      "gender": "female",
+      "roles": [
+        "beneficiary"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "Blk 112 Ang Mo Kio Avenue 4",
+          "addressLine2": "#06-789",
+          "addressLocality": "Ang Mo Kio",
+          "postalCode": "560112",
+          "addressCountry": "SG"
+        }
+      }
+    },
+    {
+      "id": "a1000001-0000-4000-a000-000000000005",
+      "givenName": "Siew Eng",
+      "familyName": "Lim",
+      "gender": "female",
+      "roles": [],
+      "notes": "Katrina's late mother (deceased). The jade bangle was inherited from her. Kinship node only — no active role in the estate."
+    }
+  ],
+  "kinships": [
+    {
+      "id": "ca000001-0000-4000-a000-000000000001",
+      "kinshipType": "sibling",
+      "fromPersonId": "a1000001-0000-4000-a000-000000000001",
+      "fromPersonIdDisplay": "Katrina Tan Wei Lin",
+      "toPersonId": "a1000001-0000-4000-a000-000000000003",
+      "toPersonIdDisplay": "Daniel Tan Wei Hao",
+      "legalStatus": "recognised",
+      "notes": "Full siblings — same mother (Madam Lim Siew Eng). Will clause 2.2 and 3.1 refer to Daniel as 'my brother'."
+    },
+    {
+      "id": "ca000001-0000-4000-a000-000000000002",
+      "kinshipType": "uncle_aunt",
+      "fromPersonId": "a1000001-0000-4000-a000-000000000001",
+      "fromPersonIdDisplay": "Katrina Tan Wei Lin (aunt)",
+      "toPersonId": "a1000001-0000-4000-a000-000000000004",
+      "toPersonIdDisplay": "Rachel Tan Xin Yi (niece)",
+      "lineage": "paternal",
+      "bloodDegree": "whole",
+      "legalStatus": "recognised",
+      "notes": "Katrina is Rachel's paternal aunt (Daniel's sister). Rachel lives at Daniel's address, consistent with being his daughter. Will clause 3.2 refers to Rachel as 'my niece'."
+    },
+    {
+      "id": "ca000001-0000-4000-a000-000000000003",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "a1000001-0000-4000-a000-000000000003",
+      "fromPersonIdDisplay": "Daniel Tan Wei Hao (father)",
+      "toPersonId": "a1000001-0000-4000-a000-000000000004",
+      "toPersonIdDisplay": "Rachel Tan Xin Yi (daughter)",
+      "legalStatus": "recognised",
+      "notes": "Inferred — Rachel shares Daniel's surname and address. The will does not state this explicitly but 'niece' implies she is Daniel's daughter."
+    },
+    {
+      "id": "ca000001-0000-4000-a000-000000000004",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "a1000001-0000-4000-a000-000000000005",
+      "fromPersonIdDisplay": "Madam Lim Siew Eng (mother)",
+      "toPersonId": "a1000001-0000-4000-a000-000000000001",
+      "toPersonIdDisplay": "Katrina Tan Wei Lin (daughter)",
+      "legalStatus": "recognised"
+    },
+    {
+      "id": "ca000001-0000-4000-a000-000000000005",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "a1000001-0000-4000-a000-000000000005",
+      "fromPersonIdDisplay": "Madam Lim Siew Eng (mother)",
+      "toPersonId": "a1000001-0000-4000-a000-000000000003",
+      "toPersonIdDisplay": "Daniel Tan Wei Hao (son)",
+      "legalStatus": "recognised"
+    }
+  ],
+  "relationships": [],
+  "properties": [
+    {
+      "id": "da000001-0000-4000-a000-000000000001",
+      "name": "HDB Flat, Blk 247 Toa Payoh Lorong 1 #08-123",
+      "propertyType": "apartment",
+      "tenureType": "lease",
+      "ownershipType": "sole",
+      "isPrimaryResidence": true,
+      "address": {
+        "streetAddress": "Blk 247 Toa Payoh Lorong 1",
+        "addressLine2": "#08-123",
+        "addressLocality": "Toa Payoh",
+        "postalCode": "310247",
+        "addressCountry": "SG"
+      },
+      "notes": "Will clause 3.1: 'all my right, title, interest, and share therein'. Bequeathed absolutely to Daniel."
+    }
+  ],
+  "assets": [
+    {
+      "id": "5a000001-0000-4000-a000-000000000001",
+      "name": "Jade bangle (inherited from Madam Lim Siew Eng)",
+      "category": "jewellery_watches",
+      "significance": {
+        "type": "family_heirloom",
+        "description": "Jade bangle inherited from late mother Madam Lim Siew Eng — passed through generations",
+        "restrictionOnDisposal": {
+          "exists": false
+        }
+      },
+      "notes": "Will clause 3.2: 'my jade bangle, inherited from my late mother Madam Lim Siew Eng'. Bequeathed to niece Rachel Tan Xin Yi. Sentimental/provenance value — inherited from Katrina's late mother."
+    },
+    {
+      "id": "5a000001-0000-4000-a000-000000000002",
+      "name": "POSB Savings Account (ending 7812)",
+      "category": "financial",
+      "subcategory": "savings_account",
+      "notes": "Will clause 4: included in residuary estate. Bequeathed to Daniel as part of residue."
+    },
+    {
+      "id": "5a000001-0000-4000-a000-000000000003",
+      "name": "CPF Account (Central Provident Fund)",
+      "category": "financial",
+      "subcategory": "pension",
+      "passesOutsideEstate": true,
+      "notes": "Will clause 5: 'My CPF monies are subject to a separate nomination made with the Central Provident Fund Board and do not form part of this Will.'"
+    }
+  ],
+  "assetCollections": [],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "b1000001-0000-4000-a000-000000000001",
+      "bequestType": "specific",
+      "beneficiaryId": "a1000001-0000-4000-a000-000000000003",
+      "propertyIds": [
+        "da000001-0000-4000-a000-000000000001"
+      ],
+      "description": "Will clause 3.1: HDB flat at Blk 247 Toa Payoh Lorong 1 #08-123, together with all right, title, interest, and share therein, to brother Daniel Tan Wei Hao absolutely.",
+      "priority": 1,
+      "clauseReference": "3.1",
+      "conditions": [
+        {
+          "conditionType": "survival_period",
+          "description": "Beneficiary must survive testatrix by 30 days (will clause 6)",
+          "survivalDays": 30
+        }
+      ]
+    },
+    {
+      "id": "b1000001-0000-4000-a000-000000000002",
+      "bequestType": "specific",
+      "beneficiaryId": "a1000001-0000-4000-a000-000000000004",
+      "assetIds": [
+        "5a000001-0000-4000-a000-000000000001"
+      ],
+      "description": "Will clause 3.2: jade bangle, inherited from late mother Madam Lim Siew Eng, to niece Rachel Tan Xin Yi absolutely.",
+      "priority": 2,
+      "clauseReference": "3.2",
+      "conditions": [
+        {
+          "conditionType": "survival_period",
+          "description": "Beneficiary must survive testatrix by 30 days (will clause 6)",
+          "survivalDays": 30
+        }
+      ]
+    },
+    {
+      "id": "b1000001-0000-4000-a000-000000000003",
+      "bequestType": "pecuniary",
+      "beneficiaryOrganisation": {
+        "name": "Community Chest",
+        "type": "charity",
+        "registrationNumber": "S86CC0370E"
+      },
+      "amount": {
+        "amount": 1000000,
+        "currency": "SGD"
+      },
+      "description": "Will clause 3.3: SGD $10,000 to Community Chest (UEN: S86CC0370E). Receipt of authorised officer is sufficient discharge to executor.",
+      "priority": 3,
+      "clauseReference": "3.3",
+      "executorDirections": [
+        {
+          "directive": "Receipt of the authorised officer of Community Chest shall be a sufficient discharge to my Executor",
+          "binding": true,
+          "clauseReference": "3.3"
+        }
+      ]
+    },
+    {
+      "id": "b1000001-0000-4000-a000-000000000004",
+      "bequestType": "residuary",
+      "beneficiaryId": "a1000001-0000-4000-a000-000000000003",
+      "description": "Will clause 4: all rest and residue including POSB Savings Account (ending 7812), other bank accounts, investments, insurance policies, and personal effects, to brother Daniel Tan Wei Hao absolutely.",
+      "priority": 4,
+      "clauseReference": "4"
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "ea000001-0000-4000-a000-000000000001",
+      "personId": "a1000001-0000-4000-a000-000000000002",
+      "role": "primary",
+      "notes": "Will clause 2.1: James Lim Kah Wai appointed sole Executor and Trustee."
+    },
+    {
+      "id": "ea000001-0000-4000-a000-000000000002",
+      "personId": "a1000001-0000-4000-a000-000000000003",
+      "role": "substitute",
+      "notes": "Will clause 2.2: Daniel Tan Wei Hao appointed substitute Executor and Trustee in the event James is unable or unwilling to act."
+    }
+  ],
+  "guardians": [],
+  "wishes": [
+    {
+      "id": "fa000001-0000-4000-a000-000000000001",
+      "title": "Buddhist funeral rites",
+      "wishType": "funeral",
+
+      "content": "Will clause 7.1: funeral conducted in accordance with Buddhist rites."
+    },
+    {
+      "id": "fa000001-0000-4000-a000-000000000002",
+      "title": "Cremation at Mandai",
+      "wishType": "funeral",
+
+      "content": "Will clause 7.2: remains cremated at Mandai Crematorium."
+    },
+    {
+      "id": "fa000001-0000-4000-a000-000000000003",
+      "title": "Ashes at Nirvana Memorial Garden",
+      "wishType": "funeral",
+
+      "content": "Will clause 7.3: ashes placed at Nirvana Memorial Garden."
+    }
+  ],
+  "documents": [
+    {
+      "id": "d1000001-0000-4000-a000-000000000001",
+      "type": "will",
+      "title": "Last Will and Testament of Katrina Tan Wei Lin",
+      "fileFormat": "pdf",
+      "createdAt": "2023-08-22T00:00:00Z",
+      "notes": "Executed on 22 August 2023. Witnessed by Ng Mei Ling (neighbour, Blk 248 Toa Payoh Lorong 1 #05-456) and Ahmad bin Ibrahim (colleague, 22 Lorong 8 Toa Payoh #10-234). 3 pages, each signed by testatrix and both witnesses. Pursuant to Wills Act (Cap 352).",
+      "clauses": [
+        {
+          "id": "c1000001-0000-4000-a000-000000000001",
+          "clauseNumber": 1,
+          "title": "Revocation",
+          "content": "Revokes all former Wills, Codicils, and other Testamentary dispositions."
+        },
+        {
+          "id": "c1000001-0000-4000-a000-000000000002",
+          "clauseNumber": 2,
+          "title": "Appointment of Executor and Trustee",
+          "content": "Primary: James Lim Kah Wai. Substitute: Daniel Tan Wei Hao (brother).",
+          "relatedEntityIds": [
+            "ea000001-0000-4000-a000-000000000001",
+            "ea000001-0000-4000-a000-000000000002"
+          ]
+        },
+        {
+          "id": "c1000001-0000-4000-a000-000000000003",
+          "clauseNumber": 3,
+          "title": "Specific Bequests",
+          "content": "3.1: HDB flat to Daniel. 3.2: jade bangle to niece Rachel. 3.3: SGD $10,000 to Community Chest.",
+          "relatedEntityIds": [
+            "b1000001-0000-4000-a000-000000000001",
+            "b1000001-0000-4000-a000-000000000002",
+            "b1000001-0000-4000-a000-000000000003"
+          ]
+        },
+        {
+          "id": "c1000001-0000-4000-a000-000000000004",
+          "clauseNumber": 4,
+          "title": "Residuary Estate",
+          "content": "All rest and residue to Daniel Tan Wei Hao absolutely.",
+          "relatedEntityIds": [
+            "b1000001-0000-4000-a000-000000000004"
+          ]
+        },
+        {
+          "id": "c1000001-0000-4000-a000-000000000005",
+          "clauseNumber": 5,
+          "title": "Central Provident Fund",
+          "content": "CPF monies subject to separate nomination. This Will has no effect on CPF distribution."
+        },
+        {
+          "id": "c1000001-0000-4000-a000-000000000006",
+          "clauseNumber": 6,
+          "title": "Survivorship Clause",
+          "content": "Beneficiary must survive testatrix by 30 days, otherwise bequest lapses into residue."
+        },
+        {
+          "id": "c1000001-0000-4000-a000-000000000007",
+          "clauseNumber": 7,
+          "title": "Funeral Wishes",
+          "content": "Buddhist rites. Cremation at Mandai Crematorium. Ashes at Nirvana Memorial Garden. Non-binding.",
+          "relatedEntityIds": [
+            "fa000001-0000-4000-a000-000000000001",
+            "fa000001-0000-4000-a000-000000000002",
+            "fa000001-0000-4000-a000-000000000003"
+          ]
+        },
+        {
+          "id": "c1000001-0000-4000-a000-000000000008",
+          "clauseNumber": 8,
+          "title": "General Provisions",
+          "content": "Gender-neutral interpretation. Severability of invalid provisions."
+        }
+      ]
+    }
+  ],
+  "nonprobateTransfers": [
+    {
+      "id": "1a000001-0000-4000-a000-000000000001",
+      "transferType": "cpf_nomination",
+      "passesOutsideEstate": true,
+      "assetIds": [
+        "5a000001-0000-4000-a000-000000000003"
+      ],
+      "bindingNomination": true,
+      "description": "CPF monies pass outside the estate via separate CPF Board nomination (will clause 5).",
+      "jurisdiction": {
+        "country": "SG"
+      }
+    }
+  ],
+  "proxyAuthorisations": [],
+  "organisations": [
+    {
+      "id": "0a000001-0000-4000-a000-000000000001",
+      "name": "Community Chest",
+      "organisationType": "charity",
+      "notes": "UEN: S86CC0370E. Charitable beneficiary. Will clause 3.3: SGD $10,000 bequest."
+    }
+  ],
+  "spaces": [],
+  "insurancePolicies": [],
+  "pets": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "extensions": [],
+  "conformance": {
+    "level": "level_2",
+    "validatedAt": "2026-04-12T10:00:00Z",
+    "validatedBy": "Claude Code — AI Will Extraction",
+    "schemaVersion": "6.4.2"
+  }
+}

@@ -1,0 +1,12 @@
+title: "General"
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For anything that doesn't fit the other categories — feedback, ideas, or general conversation about INHERIT and estate data interchange.
+  - type: textarea
+    attributes:
+      label: What's on your mind?
+    validations:
+      required: true

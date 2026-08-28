@@ -1,0 +1,21 @@
+{
+  "name": "inherit-examples",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "create": "tsx create-estate.ts",
+    "validate": "tsx validate-document.ts",
+    "import-export": "tsx import-export.ts",
+    "extract": "tsx extract-entities.ts",
+    "catalogue": "tsx create-catalogue.ts",
+    "precompile": "jsonschema compile ../v3/schema.json --resolve ../v3/dialect.json --resolve ../v3/vocab/estate/meta.json --resolve ../v3/asset-collection.json --resolve ../v3/asset-interest.json --resolve ../v3/asset.json --resolve ../v3/attestation.json --resolve ../v3/bequest.json --resolve ../v3/catalogue.json --resolve ../v3/dealer-interest.json --resolve ../v3/document.json --resolve ../v3/event.json --resolve ../v3/estate.json --resolve ../v3/executor.json --resolve ../v3/guardian.json --resolve ../v3/kinship.json --resolve ../v3/liability.json --resolve ../v3/lifetime-transfer.json --resolve ../v3/nonprobate-transfer.json --resolve ../v3/organisation.json --resolve ../v3/person.json --resolve ../v3/space.json --resolve ../v3/property.json --resolve ../v3/proxy-authorisation.json --resolve ../v3/relationship.json --resolve ../v3/trust.json --resolve ../v3/valuation.json --resolve ../v3/insurance-policy.json --resolve ../v3/notification.json --resolve ../v3/pet.json --resolve ../v3/acknowledgement.json --resolve ../v3/subscription.json --resolve ../v3/wish.json --resolve ../v3/conformance-declaration.json --resolve ../v3/common/ > compiled/schema-template.json && jsonschema compile ../v3/catalogue.json --resolve ../v3/dialect.json --resolve ../v3/vocab/estate/meta.json --resolve ../v3/asset-collection.json --resolve ../v3/asset-interest.json --resolve ../v3/asset.json --resolve ../v3/attestation.json --resolve ../v3/bequest.json --resolve ../v3/schema.json --resolve ../v3/dealer-interest.json --resolve ../v3/document.json --resolve ../v3/event.json --resolve ../v3/estate.json --resolve ../v3/executor.json --resolve ../v3/guardian.json --resolve ../v3/kinship.json --resolve ../v3/liability.json --resolve ../v3/lifetime-transfer.json --resolve ../v3/nonprobate-transfer.json --resolve ../v3/organisation.json --resolve ../v3/person.json --resolve ../v3/space.json --resolve ../v3/property.json --resolve ../v3/proxy-authorisation.json --resolve ../v3/relationship.json --resolve ../v3/trust.json --resolve ../v3/valuation.json --resolve ../v3/insurance-policy.json --resolve ../v3/notification.json --resolve ../v3/pet.json --resolve ../v3/acknowledgement.json --resolve ../v3/subscription.json --resolve ../v3/wish.json --resolve ../v3/conformance-declaration.json --resolve ../v3/common/ > compiled/catalogue-template.json"
+  },
+  "dependencies": {
+    "@sourcemeta/blaze": "0.0.2",
+    "@anthropic-ai/sdk": "^0.80.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0"
+  }
+}

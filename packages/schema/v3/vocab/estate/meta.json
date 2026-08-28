@@ -1,0 +1,129 @@
+{
+  "$id": "https://openinherit.org/v3/vocab/estate/meta.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$dynamicAnchor": "meta",
+  "title": "INHERIT Estate Vocabulary Meta-Schema",
+  "description": "Validates the syntax of INHERIT estate vocabulary keywords. These keywords describe schema-level metadata for estate data schemas.",
+  "properties": {
+    "jurisdiction": {
+      "title": "The jurisdiction this schema targets or operates within",
+      "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
+    },
+    "successionRegime": {
+      "title": "The succession regime this schema implements",
+      "type": "object",
+      "properties": {
+        "legalTradition": {
+          "type": "string",
+          "enum": [
+            "common_law",
+            "civil_law",
+            "mixed",
+            "customary_law",
+            "islamic_law",
+            "hindu_law",
+            "jewish_law",
+            "canon_law"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      }
+    },
+    "maturity": {
+      "title": "Schema lifecycle stage",
+      "type": "string",
+      "enum": [
+        "draft",
+        "stable",
+        "deprecated"
+      ]
+    },
+    "extensionType": {
+      "title": "Classification of extension schema",
+      "type": "string",
+      "enum": [
+        "tradition",
+        "geographic"
+      ]
+    },
+    "applicableJurisdictions": {
+      "title": "ISO 3166-1 alpha-2 country codes where this extension applies",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z]{2}$",
+        "minLength": 2,
+        "maxLength": 2
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "inheritVersion": {
+      "title": "Compatible INHERIT version range (semver)",
+      "type": "string",
+      "examples": [
+        ">=2.0.0 <3.0.0"
+      ],
+      "maxLength": 50
+    },
+    "legalSystems": {
+      "title": "Legal traditions implemented by this schema",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 100
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "dataProvenance": {
+      "title": "Source of legal authority for this schema",
+      "type": "string",
+      "maxLength": 2000
+    },
+    "maintainers": {
+      "title": "Schema maintainer details",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "role"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "organisation": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "lead",
+              "contributor",
+              "reviewer"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "compatibleWith": {
+      "title": "Extension IDs this schema is compatible with",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "uniqueItems": true
+    }
+  }
+}

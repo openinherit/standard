@@ -1,0 +1,47 @@
+{
+  "name": "Hong Kong",
+  "id": "https://openinherit.org/v3/extensions/hong-kong/hong-kong.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "HK"
+  ],
+  "compatibleWith": [
+    "prc-china"
+  ],
+  "providesOwnProcedure": false,
+  "legalSystems": [
+    "common_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-04-04",
+  "dataProvenance": "Wills Ordinance (Cap. 30), Intestates' Estates Ordinance (Cap. 73), Probate and Administration Ordinance (Cap. 10), Non-Contentious Probate Rules (Cap. 10A), Mandatory Provident Fund Schemes Ordinance (Cap. 485)",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Hong Kong succession rules: grant types under Cap. 10, MPF death benefit nominations under Cap. 485, cross-border PRC asset considerations, intestacy distribution under Cap. 73, and small estate grants.",
+  "conformanceRules": [
+    {
+      "id": "hk-001",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "Local grant type should be specified for Hong Kong estates entering probate",
+      "check": "exists",
+      "path": "x-inherit-hong-kong.localGrantTypes",
+      "severity": "warning"
+    }
+  ],
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "partial",
+  "taxCoverage": "outline",
+  "keyFeatures": "Intestacy ordinance, no estate duty (abolished 2006), MPF death benefit nomination, intestacyHierarchy (Cap. 73), newTerritoriesCustomaryLaw (tso/tong Cap. 97), preReformCustomaryLaw (pre-1971 MRO)",
+  "legalTradition": "Common law",
+  "seeking": "",
+  "tier": "core"
+}

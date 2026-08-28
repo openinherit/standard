@@ -1,0 +1,224 @@
+{
+  "target": "../../../v3/common/media.json",
+  "tests": [
+    {
+      "description": "valid \u2014 minimal (url only)",
+      "data": {
+        "url": "https://storage.example.com/photos/ring-001.jpg"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 fully populated jewellery photo",
+      "data": {
+        "url": "https://storage.example.com/photos/engagement-ring-overview.jpg",
+        "thumbnailUrl": "https://storage.example.com/thumbnails/engagement-ring-thumb.jpg",
+        "caption": "Overview of the diamond solitaire engagement ring, 1.2ct round brilliant",
+        "mediaType": "image/jpeg",
+        "viewType": "overview",
+        "takenAt": "2026-03-15T10:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 condition documentation with damage viewType",
+      "data": {
+        "url": "https://storage.example.com/photos/vase-crack.jpg",
+        "caption": "Close-up of hairline crack on the base of the Ming vase",
+        "mediaType": "image/png",
+        "viewType": "damage"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 PDF certificate from Srinivasan estate",
+      "data": {
+        "url": "https://storage.example.com/docs/gia-cert-12345.pdf",
+        "caption": "GIA diamond grading certificate for the 2.4ct cushion cut",
+        "mediaType": "application/pdf",
+        "viewType": "certificate"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 video walkthrough via S3 URI",
+      "data": {
+        "url": "s3://estate-docs/assets/model-railway-walkthrough.mp4",
+        "caption": "Walk-through video of the OO gauge model railway layout in the loft",
+        "mediaType": "video/mp4",
+        "viewType": "overview"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 hallmark close-up for silver candelabra",
+      "data": {
+        "url": "https://storage.example.com/photos/candelabra-hallmark.jpg",
+        "caption": "London assay office hallmark on underside of silver candelabra",
+        "mediaType": "image/jpeg",
+        "viewType": "maker_mark",
+        "takenAt": "2026-01-20T09:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing required url",
+      "data": {
+        "caption": "A photograph of the painting",
+        "mediaType": "image/jpeg"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 url is not a string (number)",
+      "data": {
+        "url": 12345
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 viewType not in enum",
+      "data": {
+        "url": "https://storage.example.com/photos/item.jpg",
+        "viewType": "front_view"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 additional property not allowed",
+      "data": {
+        "url": "https://storage.example.com/photos/item.jpg",
+        "fileSize": 204800
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 media with embedded base64 content (hybrid approach)",
+      "data": {
+        "url": "https://storage.example.com/scans/attestation-page1.jpg",
+        "caption": "Scan of attestation certificate \u2014 page 1",
+        "mediaType": "image/jpeg",
+        "content": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcG",
+        "viewType": "certificate",
+        "takenAt": "2026-03-28T14:30:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 url malformed (no scheme, fails pattern)",
+      "data": {
+        "url": "not-a-url"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 url with uppercase scheme (fails pattern)",
+      "data": {
+        "url": "HTTP://storage.example.com/photos/item.jpg"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 url as empty string",
+      "data": {
+        "url": ""
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 url exceeds maxLength (2049 chars)",
+      "data": {
+        "url": "https://storage.example.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 takenAt bad format (not ISO 8601 date-time)",
+      "data": {
+        "url": "https://storage.example.com/photos/item.jpg",
+        "takenAt": "15/03/2026 10:30"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 content wrong type (number instead of string)",
+      "data": {
+        "url": "https://storage.example.com/photos/item.jpg",
+        "content": 12345
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — identification viewType",
+      "data": {
+        "url": "https://storage.example.com/photos/hallmark-close.jpg",
+        "viewType": "identification"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — condition viewType",
+      "data": {
+        "url": "https://storage.example.com/photos/condition-check.jpg",
+        "viewType": "condition"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — provenance viewType",
+      "data": {
+        "url": "https://storage.example.com/docs/auction-receipt.pdf",
+        "viewType": "provenance"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — serial_number viewType",
+      "data": {
+        "url": "https://storage.example.com/photos/serial-plate.jpg",
+        "viewType": "serial_number"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — scale_reference viewType",
+      "data": {
+        "url": "https://storage.example.com/photos/ruler-comparison.jpg",
+        "viewType": "scale_reference"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — label viewType",
+      "data": {
+        "url": "https://storage.example.com/photos/wine-label.jpg",
+        "viewType": "label"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — receipt viewType",
+      "data": {
+        "url": "https://storage.example.com/photos/purchase-receipt.jpg",
+        "viewType": "receipt"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — environment viewType",
+      "data": {
+        "url": "https://storage.example.com/photos/wine-cellar.jpg",
+        "viewType": "environment"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 thumbnailUrl malformed (no scheme, fails pattern)",
+      "data": {
+        "url": "https://storage.example.com/photos/item.jpg",
+        "thumbnailUrl": "just-a-path/thumb.jpg"
+      },
+      "valid": false
+    }
+  ]
+}

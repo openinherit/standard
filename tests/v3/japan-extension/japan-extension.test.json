@@ -1,0 +1,258 @@
+{
+  "target": "../../../v3/extensions/japan/japan.json",
+  "tests": [
+    {
+      "description": "valid — empty (no required fields)",
+      "data": {
+        "kosekiRecords": []
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with koseki records",
+      "data": {
+        "kosekiRecords": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009010",
+            "honseki": "Tokyo"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with iryubun claim",
+      "data": {
+        "iryubunClaims": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009011"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "kosekiRecords": [
+          {
+            "personId": "a1b2c3d4-0000-4000-a000-000000009010"
+          }
+        ],
+        "taxRate": 0
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — empty object violates minProperties: 1",
+      "data": {},
+      "valid": false
+    },
+    {
+      "description": "valid — minimal single property (notes field only)",
+      "data": {
+        "notes": "Estate administered under Japanese Civil Code."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — yoshi adoption futsu_yoshi type",
+      "data": {
+        "yoshiAdoptions": [
+          {
+            "personId": "b2c3d4e5-0000-4000-a000-000000009020",
+            "adoptionType": "futsu_yoshi",
+            "adoptionDate": "2010-03-15",
+            "inheritanceScope": "both_families"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — yoshi adoption tokubetsu_yoshi type",
+      "data": {
+        "yoshiAdoptions": [
+          {
+            "personId": "c3d4e5f6-0000-4000-a000-000000009021",
+            "adoptionType": "tokubetsu_yoshi",
+            "inheritanceScope": "adoptive_only"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — spouse's residence right long_term",
+      "data": {
+        "spousesResidenceRight": {
+          "propertyId": "d4e5f6a7-0000-4000-a000-000000009030",
+          "spousePersonId": "e5f6a7b8-0000-4000-a000-000000009031",
+          "rightType": "long_term",
+          "duration": "lifetime",
+          "registeredAtLegalAffairsBureau": true
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — spouse's residence right short_term with actuarial value",
+      "data": {
+        "spousesResidenceRight": {
+          "propertyId": "f6a7b8c9-0000-4000-a000-000000009032",
+          "spousePersonId": "a7b8c9d0-0000-4000-a000-000000009033",
+          "rightType": "short_term",
+          "actuarialValue": { "amount": 5000000, "currency": "JPY" }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — iryubun claims with full fields",
+      "data": {
+        "iryubunClaims": [
+          {
+            "personId": "b8c9d0e1-0000-4000-a000-000000009040",
+            "relationship": "child",
+            "reservedFraction": "1/4",
+            "claimFiled": true,
+            "claimOutcome": "upheld"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — koseki records with all fields",
+      "data": {
+        "kosekiRecords": [
+          {
+            "personId": "c9d0e1f2-0000-4000-a000-000000009050",
+            "honseki": "Osaka-shi, Osaka-fu",
+            "kosekiHead": "Tanaka Hiroshi",
+            "kosekiReference": "REF-2023-OSK-00412",
+            "registrationType": "birth"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — fully populated",
+      "data": {
+        "kosekiRecords": [
+          {
+            "personId": "d0e1f2a3-0000-4000-a000-000000009060",
+            "honseki": "Kyoto-shi, Kyoto-fu",
+            "kosekiHead": "Yamamoto Keiko"
+          }
+        ],
+        "iryubunClaims": [
+          {
+            "personId": "e1f2a3b4-0000-4000-a000-000000009061",
+            "relationship": "spouse",
+            "reservedFraction": "1/2",
+            "claimFiled": true,
+            "claimOutcome": "pending"
+          }
+        ],
+        "yoshiAdoptions": [
+          {
+            "personId": "f2a3b4c5-0000-4000-a000-000000009062",
+            "adoptionType": "futsu_yoshi",
+            "adoptionDate": "2005-06-20",
+            "inheritanceScope": "both_families"
+          }
+        ],
+        "spousesResidenceRight": {
+          "propertyId": "a3b4c5d6-0000-4000-a000-000000009063",
+          "spousePersonId": "e1f2a3b4-0000-4000-a000-000000009061",
+          "rightType": "long_term",
+          "duration": "lifetime",
+          "actuarialValue": { "amount": 15000000, "currency": "JPY" },
+          "registeredAtLegalAffairsBureau": true
+        },
+        "saishiSuccessor": "b4c5d6e7-0000-4000-a000-000000009064",
+        "localWillFormality": "kosei_shosho",
+        "inkanVerified": true,
+        "isanBunkatsu": {
+          "type": "voluntary",
+          "agreed": true,
+          "agreementDate": "2024-09-01",
+          "allHeirsConsented": true
+        },
+        "notes": "Full estate administered per 2019 spousal residence reform."
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — YoshiAdoption missing required adoptionType",
+      "data": {
+        "yoshiAdoptions": [
+          {
+            "personId": "c5d6e7f8-0000-4000-a000-000000009070"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — YoshiAdoption adoptionType enum violation",
+      "data": {
+        "yoshiAdoptions": [
+          {
+            "personId": "d6e7f8a9-0000-4000-a000-000000009071",
+            "adoptionType": "regular"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — SpousesResidenceRight missing required rightType",
+      "data": {
+        "spousesResidenceRight": {
+          "propertyId": "e7f8a9b0-0000-4000-a000-000000009080",
+          "spousePersonId": "f8a9b0c1-0000-4000-a000-000000009081"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — SpousesResidenceRight rightType enum violation",
+      "data": {
+        "spousesResidenceRight": {
+          "propertyId": "a9b0c1d2-0000-4000-a000-000000009082",
+          "spousePersonId": "b0c1d2e3-0000-4000-a000-000000009083",
+          "rightType": "permanent"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — IryubunClaim missing required personId",
+      "data": {
+        "iryubunClaims": [
+          {
+            "relationship": "child",
+            "reservedFraction": "1/4"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalProperties in YoshiAdoption nested object",
+      "data": {
+        "yoshiAdoptions": [
+          {
+            "personId": "c1d2e3f4-0000-4000-a000-000000009090",
+            "adoptionType": "futsu_yoshi",
+            "legalStatus": "confirmed"
+          }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

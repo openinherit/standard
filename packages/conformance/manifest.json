@@ -1,0 +1,31 @@
+{
+  "name": "INHERIT Conformance Test Kit",
+  "version": "6.1.1",
+  "schemaVersion": "v3",
+  "tests": [
+    { "file": "estate/valid/english-family-estate.json", "expected": "expected/english-family-estate.expected.json" },
+    { "file": "estate/valid/minimal-estate.json", "expected": "expected/minimal-estate.expected.json" },
+    { "file": "estate/valid/new-york-estate.json", "expected": "expected/new-york-estate.expected.json" },
+    { "file": "estate/valid/scottish-estate.json", "expected": "expected/scottish-estate.expected.json" },
+    { "file": "estate/valid/singapore-estate.json", "expected": "expected/singapore-estate.expected.json" },
+    { "file": "estate/valid/dubai-estate.json", "expected": "expected/dubai-estate.expected.json" },
+    { "file": "estate/invalid/missing-required-fields.json", "expected": "expected/missing-required-fields.expected.json" },
+    { "file": "estate/invalid/wrong-type-people.json", "expected": "expected/wrong-type-people.expected.json" },
+    { "file": "estate/invalid/bad-uuid.json", "expected": "expected/bad-uuid.expected.json" },
+    { "file": "estate/invalid/invalid-enum.json", "expected": "expected/invalid-enum.expected.json" },
+    { "file": "estate/invalid/extra-property-name.json", "expected": "expected/extra-property-name.expected.json" },
+    { "file": "estate/invalid/invalid-extension-values.json", "expected": "expected/invalid-extension-values.expected.json", "note": "Level 1 valid — extension-level invalid (Hindu succession enum). Requires extension schema to reject" },
+    { "file": "catalogue/valid/catalogue-only.json", "expected": "expected/catalogue-only.expected.json" },
+    { "file": "catalogue/invalid/missing-assets.json", "expected": "expected/missing-assets.expected.json" },
+    { "file": "catalogue/invalid/assets-wrong-type.json", "expected": "expected/assets-wrong-type.expected.json" },
+    { "file": "estate/valid/broken-references.json", "expected": "expected/broken-references.expected.json", "note": "Level 1 valid, Level 2 invalid — has orphaned UUID references" },
+    { "file": "estate/valid/high-net-worth-multi-currency.json", "expected": "expected/high-net-worth-multi-currency.expected.json" },
+    { "file": "estate/valid/multi-script-names.json", "expected": "expected/multi-script-names.expected.json" },
+    { "file": "estate/valid/england-islamic-dual.json", "expected": "expected/england-islamic-dual.expected.json" },
+    { "file": "estate/valid/singapore-hindu-dual.json", "expected": "expected/singapore-hindu-dual.expected.json" },
+    { "file": "estate/valid/us-japan-cultural.json", "expected": "expected/us-japan-cultural.expected.json" },
+    { "file": "estate/invalid/broken-extension-refs.json", "expected": "expected/broken-extension-refs.expected.json", "note": "Level 1 valid, Level 2 invalid — broken executor personId in multi-extension document" },
+    { "file": "estate/invalid/missing-extension-required.json", "expected": "expected/missing-extension-required.expected.json", "note": "Level 1 valid — extension-level invalid (US estate missing required field). Requires extension schema to reject" },
+    { "file": "estate/invalid/empty-extension-data.json", "expected": "expected/empty-extension-data.expected.json", "note": "Level 1 valid — extension declared but no data block provided" }
+  ]
+}

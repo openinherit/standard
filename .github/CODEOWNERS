@@ -1,0 +1,33 @@
+# INHERIT CODEOWNERS
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Core schemas — require Rich's approval
+/v3/*.json                            @davieshq
+/v3/common/**                         @davieshq
+/v3/asset-categories/**               @davieshq
+/openapi/**                           @davieshq
+
+# Core extensions — jurisdiction partners
+# As partners are onboarded, their GitHub usernames replace @davieshq
+/v3/extensions/uk-england-wales/**    @davieshq
+/v3/extensions/scotland/**            @davieshq
+/v3/extensions/ireland/**             @davieshq
+/v3/extensions/islamic-succession/**  @davieshq
+/v3/extensions/jewish-succession/**   @davieshq
+/v3/extensions/hindu-succession/**    @davieshq
+/v3/extensions/japan/**               @davieshq
+/v3/extensions/africa-customary/**    @davieshq
+/v3/extensions/us-estate/**           @davieshq
+/v3/extensions/canada/**              @davieshq
+/v3/extensions/australia-nz/**        @davieshq
+/v3/extensions/eu-succession/**       @davieshq
+/v3/extensions/prc-china/**           @davieshq
+/v3/extensions/singapore-malaysia/**  @davieshq
+/v3/extensions/latin-america/**       @davieshq
+/v3/extensions/india/**               @davieshq
+/v3/extensions/uae/**                 @davieshq
+
+# Governance docs — Rich only
+/GOVERNANCE.md                        @davieshq
+/CONTRIBUTING.md                      @davieshq
+/SECURITY.md                          @davieshq

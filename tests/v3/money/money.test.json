@@ -1,0 +1,184 @@
+{
+  "target": "../../../v3/common/money.json",
+  "tests": [
+    {
+      "description": "valid money with integer amount and ISO 4217 currency",
+      "data": {
+        "amount": 32500,
+        "currency": "GBP"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid zero amount",
+      "data": {
+        "amount": 0,
+        "currency": "USD"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid negative amount (debts)",
+      "data": {
+        "amount": -15000,
+        "currency": "EUR"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid Japanese Yen",
+      "data": {
+        "amount": 1000000,
+        "currency": "JPY"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — float amount",
+      "data": {
+        "amount": 325.5,
+        "currency": "GBP"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing currency",
+      "data": {
+        "amount": 1000
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — missing amount",
+      "data": {
+        "currency": "GBP"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — lowercase currency code",
+      "data": {
+        "amount": 1000,
+        "currency": "gbp"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — two-letter currency code",
+      "data": {
+        "amount": 1000,
+        "currency": "GB"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — JPY with exponent 0 (no decimal places)",
+      "data": {
+        "amount": 1000000,
+        "currency": "JPY",
+        "exponent": 0
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — KWD with exponent 3 (three decimal places)",
+      "data": {
+        "amount": 5250000,
+        "currency": "KWD",
+        "exponent": 3
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — maximum safe integer amount (IEEE 754 boundary)",
+      "data": {
+        "amount": 999999999999999,
+        "currency": "GBP"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — minimum safe integer amount (negative boundary)",
+      "data": {
+        "amount": -999999999999999,
+        "currency": "GBP"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — amount exactly one above maximum (boundary + 1)",
+      "data": {
+        "amount": 1000000000000000,
+        "currency": "GBP"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — amount exactly one below minimum (boundary - 1)",
+      "data": {
+        "amount": -1000000000000000,
+        "currency": "GBP"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — amount exceeds IEEE 754 safe boundary",
+      "data": {
+        "amount": 10000000000000000,
+        "currency": "GBP"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — exponent exceeds maximum (4)",
+      "data": {
+        "amount": 1000,
+        "currency": "GBP",
+        "exponent": 5
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — negative exponent",
+      "data": {
+        "amount": 1000,
+        "currency": "GBP",
+        "exponent": -1
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — amount is string (must be integer)",
+      "data": {
+        "amount": "32500",
+        "currency": "GBP"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — exponent is string (must be integer)",
+      "data": {
+        "amount": 32500,
+        "currency": "GBP",
+        "exponent": "2"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — currency code is 4 letters",
+      "data": {
+        "amount": 1000,
+        "currency": "GBPS"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — currency code has numbers",
+      "data": {
+        "amount": 1000,
+        "currency": "GB1"
+      },
+      "valid": false
+    }
+  ]
+}

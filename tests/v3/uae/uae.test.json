@@ -1,0 +1,170 @@
+{
+  "target": "../../../v3/extensions/uae/uae.json",
+  "tests": [
+    {
+      "description": "valid — Sharia track",
+      "data": {
+        "successionTrack": "sharia"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — DIFC track with registered will",
+      "data": {
+        "successionTrack": "difc",
+        "difcWill": {
+          "registered": true,
+          "registrationNumber": "DWSC-2025-001",
+          "registrationDate": "2025-06-15",
+          "willType": "full"
+        },
+        "emirate": "dubai"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — expatriate using home country law",
+      "data": {
+        "successionTrack": "decree_law_41_home_country",
+        "expatriateHandling": {
+          "homeCountryLawElected": true,
+          "homeCountry": {
+            "country": "GB"
+          },
+          "decreeApplicable": true
+        },
+        "emirate": "abu_dhabi"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with free zone assets",
+      "data": {
+        "successionTrack": "difc",
+        "freeZoneAssets": [
+          {
+            "freeZone": "DIFC",
+            "assetType": "Company shares",
+            "estimatedValue": {
+              "amount": 500000000,
+              "currency": "AED"
+            }
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required successionTrack",
+      "data": {
+        "emirate": "dubai"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — successionTrack not in enum",
+      "data": {
+        "successionTrack": "civil_law"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — emirate not in enum",
+      "data": {
+        "successionTrack": "sharia",
+        "emirate": "new_york"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — difcWill.willType not in enum",
+      "data": {
+        "successionTrack": "difc",
+        "difcWill": {
+          "willType": "mega_will"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "successionTrack": "sharia",
+        "taxRate": 0
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — notes at maxLength boundary",
+      "data": {
+        "successionTrack": "sharia",
+        "notes": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — all seven emirates",
+      "data": {
+        "successionTrack": "sharia",
+        "emirate": "ras_al_khaimah"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — DIFC guardianship will type",
+      "data": {
+        "successionTrack": "difc",
+        "difcWill": {
+          "registered": true,
+          "willType": "guardianship"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — home-country law election under Decree Law 41",
+      "data": {
+        "successionTrack": "decree_law_41_home_country",
+        "homeCountryLawElection": {
+          "electedCountry": "GB",
+          "electionRegistered": true,
+          "registrationReference": "DL41-2024-001234"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — electedCountry 'GBR' must be 2-letter alpha-2",
+      "data": {
+        "successionTrack": "decree_law_41_home_country",
+        "homeCountryLawElection": {
+          "electedCountry": "GBR"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — marriageRevocation (DIFC non-Muslim wills track)",
+      "data": {
+        "successionTrack": "difc",
+        "marriageRevocation": {
+          "revokesPriorWill": false,
+          "statute": "DIFC Wills Service Regulations 2019; Federal Decree-Law No. 41/2022",
+          "contemplationException": false,
+          "contemplationRule": "Not applicable. UAE non-Muslim wills registered with DIFC or ADGM are not automatically revoked by marriage. Muslim estates are governed by Sharia fara'id regardless of marital status."
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — marriageRevocation missing required statute",
+      "data": {
+        "successionTrack": "sharia",
+        "marriageRevocation": {
+          "revokesPriorWill": false
+        }
+      },
+      "valid": false
+    }
+  ]
+}

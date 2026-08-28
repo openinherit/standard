@@ -1,0 +1,295 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/hindu-succession/hindu-succession.json",
+  "$comment": "This extension implements succession rules derived from Hindu law as codified in specific jurisdictions. The extension name references the legal tradition, not the personal religious beliefs of any individual. A person of any faith (or none) may be subject to these rules depending on their jurisdiction of domicile.",
+  "title": "Hindu Succession Extension",
+  "description": "Hindu succession law specifics: Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications under the Hindu Succession Act 1956, stridhan assets, agricultural land ceiling rules, and NRI complications.",
+  "maturity": "draft",
+  "extensionType": "tradition",
+  "applicableJurisdictions": [
+    "IN",
+    "NP",
+    "LK",
+    "MY",
+    "SG",
+    "GB",
+    "US",
+    "AU",
+    "CA"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "hindu_law",
+    "common_law"
+  ],
+  "dataProvenance": "Hindu Succession Act 1956 (as amended 2005), Indian Succession Act 1925, Transfer of Property Act 1882",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": [
+    "uk-england-wales",
+    "us-estate",
+    "canada",
+    "australia-nz",
+    "singapore-malaysia"
+  ],
+  "type": "object",
+  "$defs": {
+    "Coparcener": {
+      "type": "object",
+      "properties": {
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "relationship": {
+          "$comment": "Should align with core kinshipType values (e.g. parent_child_biological for son/daughter, grandparent_grandchild for grandson). The 2005 Amendment to the Hindu Succession Act gives daughters equal coparcenary rights — coparceners are no longer limited to male descendants",
+          "type": "string",
+          "maxLength": 255
+        },
+        "coparcenaryShareFraction": {
+          "type": "string",
+          "maxLength": 255,
+          "pattern": "^[0-9]+/[0-9]+$"
+        }
+      },
+      "required": [
+        "personId",
+        "relationship"
+      ],
+      "additionalProperties": false
+    },
+    "HUFDetails": {
+      "type": "object",
+      "properties": {
+        "kartaPersonId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "coparceners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Coparcener"
+          },
+          "maxItems": 50
+        },
+        "panNumber": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "kartaPersonId",
+        "coparceners"
+      ],
+      "additionalProperties": false
+    },
+    "IndianHeirClassification": {
+      "type": "object",
+      "properties": {
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "heirClass": {
+          "$comment": "class_I: 16 heirs under the 2005 Amendment — spouse (relationship.json), children (parent_child_biological), mother, grandchildren through sons and daughters (grandparent_grandchild + lineage), great-grandchildren (chained parent_child), widow of predeceased son (derived from relationship + kinship chain). class_II: 9 entries — Entry V: father's father/mother (grandparent_grandchild + lineage: paternal). Entry VII: father's brother/sister (uncle_aunt + lineage: paternal = agnate). Entry VIII: mother's father/mother (grandparent_grandchild + lineage: maternal). Entry IX: mother's brother/sister (uncle_aunt + lineage: maternal = cognate). agnate: relatives traced wholly through males — every kinship hop has lineage: paternal. cognate: at least one female link in the chain — at least one hop has lineage: maternal. The agnate-before-cognate priority means uncle_aunt + lineage: paternal inherits before uncle_aunt + lineage: maternal.",
+          "type": "string",
+          "enum": [
+            "class_I",
+            "class_II",
+            "agnate",
+            "cognate"
+          ]
+        },
+        "scheduleParagraph": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "disputed": {
+          "type": "boolean"
+        },
+        "disputeDetails": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "scheduleEntry": {
+          "description": "The specific entry from the Hindu Succession Act Schedule that this heir falls under. More precise than heirClass alone — distinguishes e.g. 'son of predeceased daughter' from 'daughter of predeceased son' within Class I",
+          "examples": [
+            "Class I, Entry 9: widow of a predeceased son",
+            "Class II, Entry VII: father's brother, father's sister"
+          ],
+          "type": "string",
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "personId",
+        "heirClass"
+      ],
+      "additionalProperties": false
+    },
+    "StridhanAsset": {
+      "type": "object",
+      "properties": {
+        "assetId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "assetId",
+        "description"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "applicableLaw": {
+      "type": "string",
+      "enum": [
+        "hindu_succession_act_1956",
+        "indian_succession_act_1925",
+        "muslim_personal_law",
+        "special_marriage_act",
+        "parsi_succession",
+        "goa_civil_code"
+      ]
+    },
+    "school": {
+      "type": "string",
+      "enum": [
+        "mitakshara",
+        "dayabhaga"
+      ]
+    },
+    "hufDetails": {
+      "$ref": "#/$defs/HUFDetails"
+    },
+    "heirClassifications": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/IndianHeirClassification"
+      },
+      "maxItems": 50
+    },
+    "stridhanAssets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/StridhanAsset"
+      },
+      "maxItems": 50
+    },
+    "agriculturalLand": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "state": {
+            "type": "string",
+            "maxLength": 255,
+            "pattern": "^IN-[A-Z]{2}$",
+            "$comment": "ISO 3166-2 Indian state code (e.g. IN-MH, IN-KA)"
+          },
+          "stateSuccessionLaw": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "ceilingApplies": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "propertyId",
+          "state"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 50
+    },
+    "nriComplications": {
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "foreignJurisdiction": {
+          "$ref": "../../common/jurisdiction.json"
+        },
+        "taxImplications": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "instrumentType": {
+      "description": "Type of probate instrument being sought or granted. India has three distinct instruments depending on whether the deceased left a will and the nature of the assets",
+      "$comment": "probate: testate estates (deceased left a valid will). letters_of_administration: intestate estates (no will) — movable assets and debts only, does not cover immovable property. succession_certificate: establishes heir's right to specific movable assets (bank accounts, shares, insurance) — often used alongside or instead of probate.",
+      "type": "string",
+      "enum": [
+        "probate",
+        "letters_of_administration",
+        "succession_certificate"
+      ]
+    },
+    "probateAdvisable": {
+      "description": "Whether probate is advisable for this estate. Section 213 (mandatory probate in Mumbai/Kolkata/Chennai) was deleted by the Repealing and Amending Act 2025 (Presidential assent 20 Dec 2025). Probate is now optional everywhere in India but remains strongly advisable — banks and housing societies may still request it in practice",
+      "type": "boolean"
+    },
+    "crossStateAssets": {
+      "description": "Whether the estate includes assets in Indian states other than the primary jurisdiction. Affects which state's agricultural land ceiling laws apply and may require multiple court filings",
+      "type": "boolean"
+    },
+    "hufProperty": {
+      "description": "Whether the estate includes Hindu Undivided Family coparcenary property. HUF property has special succession rules under the Hindu Succession Act — the 2005 Amendment gave daughters equal coparcenary rights. Must be distinguished from self-acquired property",
+      "type": "boolean"
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "applicableLaw"
+  ],
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

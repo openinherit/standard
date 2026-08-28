@@ -1,0 +1,598 @@
+{
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal, tax, or regulatory advice. Deadlines and filing requirements change — always verify with current legislation and qualified professionals.",
+  "version": "1.0.0",
+  "description": "Government forms, deadlines, and filing methods required for estate administration by jurisdiction",
+  "lastUpdated": "2026-03-28",
+  "jurisdictions": {
+    "JP": {
+      "name": "Japan (日本)",
+      "submissions": [
+        {
+          "id": "jp-quasi-final-tax",
+          "name": "準確定申告",
+          "nameEnglish": "Quasi-final income tax return",
+          "description": "Final income tax return for the deceased covering the period from 1 January to the date of death. Filed by the heirs on behalf of the deceased.",
+          "deadlineRule": "4 months from date of death",
+          "deadlineMonths": 4,
+          "filingMethod": "paper_or_online",
+          "authority": "Tax Office (税務署) — National Tax Agency (国税庁)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.jurisdiction",
+            "person.taxResidency[].taxpayerIdentifier",
+            "person.givenName",
+            "person.familyName",
+            "asset[].category"
+          ],
+          "notes": "Must be filed at the tax office with jurisdiction over the deceased's last address. If the deceased had income exceeding ¥20 million or income from multiple sources, this return is mandatory."
+        },
+        {
+          "id": "jp-inheritance-tax",
+          "name": "相続税申告書",
+          "nameEnglish": "Inheritance tax return",
+          "description": "Declares the total value of the estate and calculates inheritance tax payable. Required when the estate exceeds the basic exemption (¥30 million + ¥6 million per statutory heir).",
+          "deadlineRule": "10 months from date of death",
+          "deadlineMonths": 10,
+          "filingMethod": "paper_or_online",
+          "authority": "Tax Office (税務署) — National Tax Agency (国税庁)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.totalEstimatedValue",
+            "estate.jurisdiction",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "asset[].id",
+            "asset[].category",
+            "property[].id",
+            "property[].name",
+            "liability[].id",
+            "liability[].amount",
+            "valuation[].assetId",
+            "valuation[].valuedAmount",
+            "kinship[].relationship"
+          ],
+          "notes": "All heirs must jointly file. Tax is payable by each heir in proportion to their share. Instalment and deferral provisions exist for illiquid estates."
+        },
+        {
+          "id": "jp-estate-division-agreement",
+          "name": "遺産分割協議書",
+          "nameEnglish": "Estate division agreement",
+          "description": "Agreement among all heirs on the division of estate assets. Required to transfer registered assets (property, bank accounts, vehicles) when no will exists or the will does not cover all assets.",
+          "deadlineRule": "No statutory deadline, but inheritance tax return requires it within 10 months for favourable treatment",
+          "deadlineMonths": null,
+          "filingMethod": "notarised",
+          "authority": "Legal Affairs Bureau (法務局) for property; individual institutions for financial assets",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "person[].id",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "asset[].id",
+            "asset[].name",
+            "property[].id",
+            "property[].name",
+            "bequest[].beneficiaryId",
+            "kinship[].relationship"
+          ],
+          "notes": "All statutory heirs must sign and affix their registered personal seal (実印). An officially issued seal certificate (印鑑証明書) is required for each signatory."
+        }
+      ]
+    },
+    "SG": {
+      "name": "Singapore (新加坡)",
+      "submissions": [
+        {
+          "id": "sg-probate-letters",
+          "name": "Probate / Letters of Administration",
+          "nameEnglish": "Probate / Letters of Administration",
+          "description": "Court application to obtain legal authority to administer the deceased's estate. Probate is granted when a will exists; Letters of Administration when there is no will.",
+          "deadlineRule": "No statutory deadline, but should be filed promptly to avoid asset deterioration",
+          "deadlineMonths": null,
+          "filingMethod": "paper_or_online",
+          "authority": "Family Justice Courts (Singapore)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.jurisdiction",
+            "estate.willType",
+            "estate.deathRecord.deathCertificateRef",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "executor[].personId"
+          ],
+          "notes": "Applications are made to the Family Justice Courts. If the estate exceeds SGD 5 million, the case is heard in the General Division of the High Court. Muslim estates are administered under the Administration of Muslim Law Act and go through the Syariah Court."
+        },
+        {
+          "id": "sg-schedule-of-assets",
+          "name": "Schedule of Assets (Form 8A / Form 8B)",
+          "nameEnglish": "Schedule of Assets",
+          "description": "Detailed inventory of the deceased's assets and liabilities, filed as part of the probate or letters of administration application. Form 8A for testate estates, Form 8B for intestate.",
+          "deadlineRule": "Filed together with probate or letters of administration application",
+          "deadlineMonths": null,
+          "filingMethod": "paper",
+          "authority": "Family Justice Courts (Singapore)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.totalEstimatedValue",
+            "asset[].id",
+            "asset[].name",
+            "asset[].category",
+            "property[].id",
+            "property[].name",
+            "liability[].id",
+            "liability[].liabilityType",
+            "liability[].amount",
+            "valuation[].assetId",
+            "valuation[].valuedAmount"
+          ],
+          "notes": "The Commissioner for Estate Duties was abolished in 2008 (estate duty was repealed for deaths on or after 15 February 2008). The schedule is now used solely for the court application."
+        },
+        {
+          "id": "sg-cpf-claim",
+          "name": "CPF Claim",
+          "nameEnglish": "Central Provident Fund withdrawal claim",
+          "description": "Claim to withdraw the deceased member's CPF savings. Distribution follows the CPF nomination if one exists, or intestacy rules if none.",
+          "deadlineRule": "No statutory deadline",
+          "deadlineMonths": null,
+          "filingMethod": "paper_or_online",
+          "authority": "Central Provident Fund Board (CPF Board)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.deathRecord.deathCertificateRef",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "asset[].category"
+          ],
+          "notes": "CPF monies are not part of the estate and are distributed separately according to the member's CPF nomination. If no nomination exists, the Public Trustee distributes under the Intestate Succession Act (or the Administration of Muslim Law Act for Muslims)."
+        }
+      ]
+    },
+    "IN": {
+      "name": "India (भारत)",
+      "submissions": [
+        {
+          "id": "in-succession-certificate",
+          "name": "Succession Certificate",
+          "nameEnglish": "Succession Certificate",
+          "description": "Court-issued certificate authorising the legal heirs to inherit the deceased's debts and securities. Governed by the Indian Succession Act 1925, Section 372.",
+          "deadlineRule": "No statutory deadline",
+          "deadlineMonths": null,
+          "filingMethod": "paper",
+          "authority": "District Court (जिला न्यायालय) having jurisdiction over the deceased's last domicile",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.jurisdiction",
+            "estate.deathRecord.deathCertificateRef",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "kinship[].relationship",
+            "asset[].id",
+            "asset[].category"
+          ],
+          "notes": "Court fees are typically a percentage of the estate value (varies by state). The certificate is valid throughout India. Not required for property transfers — a separate mutation process applies."
+        },
+        {
+          "id": "in-legal-heir-certificate",
+          "name": "Legal Heir Certificate",
+          "nameEnglish": "Legal Heir Certificate",
+          "description": "Certificate issued by the revenue authority or tehsildar confirming the legal heirs of the deceased. Used for pension, insurance, and bank claims.",
+          "deadlineRule": "No statutory deadline",
+          "deadlineMonths": null,
+          "filingMethod": "paper_or_online",
+          "authority": "Tehsildar / Revenue Authority (तहसीलदार) or Municipal Corporation",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.deathRecord.deathCertificateRef",
+            "person[].givenName",
+            "person[].familyName",
+            "kinship[].relationship"
+          ],
+          "notes": "Simpler and cheaper than a succession certificate. Accepted by many government departments, banks, and insurance companies. Some states now offer online applications through e-District portals."
+        },
+        {
+          "id": "in-probate",
+          "name": "Probate",
+          "nameEnglish": "Probate",
+          "description": "Court order authenticating the will and conferring authority on the executor to administer the estate. Mandatory in Maharashtra, West Bengal, Chennai (Madras), and for wills of Hindu, Buddhist, Sikh, or Jain testators who die in these jurisdictions.",
+          "deadlineRule": "No statutory deadline, but should be filed promptly",
+          "deadlineMonths": null,
+          "filingMethod": "paper",
+          "authority": "High Court or District Court depending on estate value",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.willType",
+            "estate.jurisdiction",
+            "estate.deathRecord.deathCertificateRef",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "executor[].personId",
+            "document[].type"
+          ],
+          "notes": "Probate is mandatory for wills in Mumbai, Kolkata, and Chennai. In other parts of India, a succession certificate may suffice. Court fees vary by state and estate value. The process can take 6–18 months."
+        }
+      ]
+    },
+    "KR": {
+      "name": "South Korea (대한민국)",
+      "submissions": [
+        {
+          "id": "kr-inheritance-tax",
+          "name": "상속세 신고",
+          "nameEnglish": "Inheritance tax return",
+          "description": "Declares the total value of the estate and calculates inheritance tax payable. Filed by the heirs or estate administrator.",
+          "deadlineRule": "6 months from date of death (9 months if the deceased or heirs are non-resident)",
+          "deadlineMonths": 6,
+          "filingMethod": "paper_or_online",
+          "authority": "National Tax Service (국세청) — district tax office with jurisdiction over the deceased's last address",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.totalEstimatedValue",
+            "estate.jurisdiction",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "person[].taxResidency[].taxpayerIdentifier",
+            "asset[].id",
+            "asset[].category",
+            "property[].id",
+            "property[].name",
+            "liability[].id",
+            "liability[].amount",
+            "valuation[].assetId",
+            "valuation[].valuedAmount",
+            "kinship[].relationship"
+          ],
+          "notes": "Basic deduction of KRW 500 million applies. Additional deductions for spouse, minor children, elderly, and disabled heirs. Late filing incurs a 20% penalty surcharge."
+        },
+        {
+          "id": "kr-estate-division",
+          "name": "상속재산분할협의서",
+          "nameEnglish": "Estate division agreement",
+          "description": "Agreement among heirs on the division of inherited assets. Must be notarised or certified. Required to transfer property titles and financial assets.",
+          "deadlineRule": "No statutory deadline, but should be completed before inheritance tax filing for optimal treatment",
+          "deadlineMonths": null,
+          "filingMethod": "notarised",
+          "authority": "Family Court (가정법원) if disputed; otherwise filed directly with relevant registries",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "person[].id",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "asset[].id",
+            "asset[].name",
+            "property[].id",
+            "property[].name",
+            "bequest[].beneficiaryId",
+            "kinship[].relationship"
+          ],
+          "notes": "If heirs cannot agree, any heir may petition the Family Court for a division order under Article 1013 of the Korean Civil Code. Court-ordered division is binding on all parties."
+        }
+      ]
+    },
+    "CN": {
+      "name": "China (中国)",
+      "submissions": [
+        {
+          "id": "cn-inheritance-notarisation",
+          "name": "继承权公证",
+          "nameEnglish": "Inheritance rights notarisation",
+          "description": "Notarial certificate confirming the heirs' right to inherit. Required by banks, land registries, and other institutions before they will transfer assets.",
+          "deadlineRule": "No statutory deadline",
+          "deadlineMonths": null,
+          "filingMethod": "notarised",
+          "authority": "Notary Public Office (公证处) — local notarial bureau",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.jurisdiction",
+            "estate.deathRecord.deathCertificateRef",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "kinship[].relationship"
+          ],
+          "notes": "All heirs must appear in person at the notary office. If any heir is abroad, a notarised and apostilled power of attorney is required. Since 2021, courts may also issue inheritance certificates as an alternative."
+        },
+        {
+          "id": "cn-property-transfer",
+          "name": "不动产转移登记",
+          "nameEnglish": "Immovable property transfer registration",
+          "description": "Application to transfer ownership of real property from the deceased to the heirs. Filed at the local land and resources bureau.",
+          "deadlineRule": "No statutory deadline, but transfer should be completed promptly to avoid complications",
+          "deadlineMonths": null,
+          "filingMethod": "paper",
+          "authority": "Natural Resources Bureau (自然资源局) — local branch",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "property[].id",
+            "property[].name",
+            "property[].propertyType",
+            "person[].givenName",
+            "person[].familyName",
+            "kinship[].relationship"
+          ],
+          "notes": "Requires the inheritance notarisation certificate, death certificate, property certificate, and identity documents of all heirs. Deed tax exemption applies for inheritance by statutory heirs under the Deed Tax Law (2021)."
+        },
+        {
+          "id": "cn-bank-notification",
+          "name": "银行账户继承通知",
+          "nameEnglish": "Bank account inheritance notification",
+          "description": "Notification to financial institutions to freeze and then release the deceased's accounts to the heirs. Each bank has its own requirements.",
+          "deadlineRule": "No statutory deadline, but accounts may be frozen upon death notification",
+          "deadlineMonths": null,
+          "filingMethod": "paper",
+          "authority": "Individual financial institutions; overseen by the People's Bank of China (中国人民银行)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.deathRecord.deathCertificateRef",
+            "person[].givenName",
+            "person[].familyName",
+            "asset[].id",
+            "asset[].name",
+            "asset[].category"
+          ],
+          "notes": "For accounts below CNY 10,000 (as of 2024 regulations), a simplified procedure may apply without notarisation. Banks typically require the inheritance notarisation certificate, death certificate, and identity documents."
+        }
+      ]
+    },
+    "GB": {
+      "name": "England & Wales",
+      "submissions": [
+        {
+          "id": "gb-death-registration",
+          "name": "Death certificate registration",
+          "nameEnglish": "Death certificate registration",
+          "description": "Registration of the death with the local register office. Must be done before any probate or tax filings can proceed.",
+          "deadlineRule": "5 days from date of death (England & Wales)",
+          "deadlineMonths": null,
+          "filingMethod": "paper",
+          "authority": "General Register Office (local register office)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.deathRecord.placeOfDeath",
+            "person.givenName",
+            "person.familyName",
+            "person.dateOfBirth"
+          ],
+          "notes": "The informant (usually a relative or person present at death) registers the death. Certified copies of the death certificate are needed for all subsequent filings. The 5-day deadline is a legal requirement under the Births and Deaths Registration Act 1953."
+        },
+        {
+          "id": "gb-probate-application",
+          "name": "Probate application (PA1P / PA1A)",
+          "nameEnglish": "Probate application",
+          "description": "Application for a Grant of Probate (PA1P, with a will) or Letters of Administration (PA1A, without a will). Authorises the executor or administrator to deal with the estate.",
+          "deadlineRule": "No statutory deadline, but typically filed within 6–12 months of death",
+          "deadlineMonths": null,
+          "filingMethod": "paper_or_online",
+          "authority": "HM Courts & Tribunals Service — Probate Registry",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.willType",
+            "estate.jurisdiction",
+            "estate.deathRecord.deathCertificateRef",
+            "estate.totalEstimatedValue",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "executor[].personId",
+            "document[].type"
+          ],
+          "notes": "Online applications are available via GOV.UK. The application must include the original will (if applicable), a death certificate, and an inheritance tax form (IHT400 or confirmation that the estate is excepted). Processing typically takes 8–16 weeks."
+        },
+        {
+          "id": "gb-iht400",
+          "name": "IHT400 — Inheritance Tax Account",
+          "nameEnglish": "Inheritance Tax Account",
+          "description": "Full inheritance tax return required when the estate exceeds the nil rate band and does not qualify as an excepted estate, or when IHT is payable.",
+          "deadlineRule": "12 months from end of the month of death (tax payment due at 6 months)",
+          "deadlineMonths": 12,
+          "filingMethod": "paper_or_online",
+          "authority": "HM Revenue & Customs (HMRC)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.totalEstimatedValue",
+            "estate.jurisdiction",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "person[].taxResidency[].taxpayerIdentifier",
+            "asset[].id",
+            "asset[].name",
+            "asset[].category",
+            "property[].id",
+            "property[].name",
+            "liability[].id",
+            "liability[].liabilityType",
+            "liability[].amount",
+            "valuation[].assetId",
+            "valuation[].valuedAmount",
+            "kinship[].relationship",
+            "bequest[].beneficiaryId",
+            "bequest[].bequestType"
+          ],
+          "notes": "For deaths on or after 1 January 2022, most excepted estates no longer need a separate IHT form — the information is captured in the probate application. The IHT400 has over 20 supplementary schedules (IHT401–IHT430). Tax on property and certain assets must be paid before the grant is issued."
+        }
+      ]
+    },
+    "US": {
+      "name": "United States",
+      "submissions": [
+        {
+          "id": "us-probate-petition",
+          "name": "Petition for Probate",
+          "nameEnglish": "Petition for Probate",
+          "description": "Court petition to open probate proceedings and appoint a personal representative (executor or administrator). Procedure and forms vary by state.",
+          "deadlineRule": "Varies by state; typically must be filed within 30 days to 3 years of death",
+          "deadlineMonths": null,
+          "filingMethod": "paper_or_online",
+          "authority": "Probate Court (varies by state — Superior Court, Surrogate's Court, Circuit Court)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.willType",
+            "estate.jurisdiction",
+            "estate.deathRecord.deathCertificateRef",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "executor[].personId",
+            "document[].type"
+          ],
+          "notes": "Small estates may qualify for simplified procedures (affidavit or summary administration) in most states. Thresholds vary widely — from USD 25,000 (some states) to USD 184,500 (California). Some states require the petition to be filed in the county where the deceased was domiciled."
+        },
+        {
+          "id": "us-form-706",
+          "name": "Form 706 — United States Estate (and Generation-Skipping Transfer) Tax Return",
+          "nameEnglish": "Federal estate tax return",
+          "description": "Federal estate tax return required when the gross estate plus adjusted taxable gifts exceeds the federal exemption amount (USD 13.61 million for 2024 deaths).",
+          "deadlineRule": "9 months from date of death (6-month extension available)",
+          "deadlineMonths": 9,
+          "filingMethod": "paper",
+          "authority": "Internal Revenue Service (IRS)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.totalEstimatedValue",
+            "estate.jurisdiction",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "person[].taxResidency[].taxpayerIdentifier",
+            "person[].taxResidency[].fatcaStatus",
+            "asset[].id",
+            "asset[].name",
+            "asset[].category",
+            "property[].id",
+            "property[].name",
+            "liability[].id",
+            "liability[].liabilityType",
+            "liability[].amount",
+            "valuation[].assetId",
+            "valuation[].valuedAmount",
+            "kinship[].relationship",
+            "bequest[].beneficiaryId"
+          ],
+          "notes": "The federal exemption is scheduled to revert to approximately USD 7 million (inflation-adjusted) after 2025 unless Congress acts. Portability allows the surviving spouse to use the deceased spouse's unused exemption by filing Form 706 even if no tax is owed."
+        },
+        {
+          "id": "us-state-inheritance-tax",
+          "name": "State inheritance or estate tax return",
+          "nameEnglish": "State inheritance or estate tax return",
+          "description": "State-level estate or inheritance tax return. As of 2024, 12 states and DC impose an estate tax, and 6 states impose an inheritance tax (some impose both).",
+          "deadlineRule": "Varies by state; typically 9 months from date of death",
+          "deadlineMonths": 9,
+          "filingMethod": "paper_or_online",
+          "authority": "State Department of Revenue / Taxation (varies by state)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.totalEstimatedValue",
+            "estate.jurisdiction",
+            "person[].roles",
+            "person[].taxResidency[].taxpayerIdentifier",
+            "asset[].id",
+            "asset[].category",
+            "property[].id",
+            "liability[].id",
+            "liability[].amount",
+            "valuation[].assetId",
+            "valuation[].valuedAmount",
+            "kinship[].relationship"
+          ],
+          "notes": "State exemption thresholds are generally much lower than the federal exemption. For example, Oregon's threshold is USD 1 million and Massachusetts' is USD 2 million. Some states (e.g. Maryland) impose both an estate tax and an inheritance tax. Always check the laws of the state where the deceased was domiciled and any state where property is located."
+        }
+      ]
+    },
+    "AU": {
+      "name": "Australia",
+      "submissions": [
+        {
+          "id": "au-probate-letters",
+          "name": "Probate / Letters of Administration",
+          "nameEnglish": "Probate / Letters of Administration",
+          "description": "Application to the Supreme Court for a Grant of Probate (with a will) or Letters of Administration (without a will). Authorises the executor or administrator to deal with the estate.",
+          "deadlineRule": "No statutory deadline; typically filed within 6 months of death",
+          "deadlineMonths": null,
+          "filingMethod": "paper_or_online",
+          "authority": "Supreme Court of the relevant state or territory (e.g. Supreme Court of New South Wales, Supreme Court of Victoria)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.willType",
+            "estate.jurisdiction",
+            "estate.deathRecord.deathCertificateRef",
+            "estate.totalEstimatedValue",
+            "person[].givenName",
+            "person[].familyName",
+            "person[].roles",
+            "executor[].personId",
+            "document[].type"
+          ],
+          "notes": "Each state and territory has its own probate rules and forms. Small estates (typically under AUD 50,000–100,000 depending on the jurisdiction) may not require a grant. NSW, VIC, and QLD accept online applications."
+        },
+        {
+          "id": "au-death-certificate",
+          "name": "Death certificate registration",
+          "nameEnglish": "Death certificate registration",
+          "description": "Registration of the death with the relevant state or territory Registry of Births, Deaths and Marriages. Required before probate can proceed.",
+          "deadlineRule": "14 days from date of death (varies by state/territory)",
+          "deadlineMonths": null,
+          "filingMethod": "paper_or_online",
+          "authority": "Registry of Births, Deaths and Marriages (state or territory)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.deathRecord.placeOfDeath",
+            "person.givenName",
+            "person.familyName",
+            "person.dateOfBirth"
+          ],
+          "notes": "The attending medical practitioner provides a cause of death certificate, which the funeral director typically lodges with the registry. The family then applies for certified copies. Timeframes vary: NSW requires registration within 7 days by the funeral director."
+        },
+        {
+          "id": "au-tax-clearance",
+          "name": "Tax clearance certificate",
+          "nameEnglish": "Tax clearance certificate",
+          "description": "Certificate from the Australian Taxation Office confirming that the deceased's tax affairs are in order and all outstanding liabilities have been settled or arrangements made.",
+          "deadlineRule": "Final tax return due by 31 October following the financial year of death (or later if a tax agent is appointed)",
+          "deadlineMonths": null,
+          "filingMethod": "paper_or_online",
+          "authority": "Australian Taxation Office (ATO)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.jurisdiction",
+            "person.givenName",
+            "person.familyName",
+            "person.taxResidency[].taxpayerIdentifier",
+            "asset[].id",
+            "asset[].category",
+            "liability[].liabilityType"
+          ],
+          "notes": "Australia does not impose a separate inheritance or estate tax. However, capital gains tax may apply to assets transferred to beneficiaries. The executor must lodge a date-of-death tax return and may need to lodge trust tax returns for the estate during administration."
+        }
+      ]
+    }
+  }
+}

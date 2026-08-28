@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/money.json",
+  "title": "Money",
+  "description": "Monetary value in integer minor currency units with ISO 4217 code. Never floating point",
+  "$comment": "Display value = amount / 10^exponent. Default exponent is 2 (GBP, USD, EUR). Set 0 for JPY/KRW, 3 for KWD/BHD/OMR. Bounds (±999999999999999) ensure IEEE 754 double precision safety across all client languages including JavaScript. NOTE: `default` in JSON Schema is an annotation — validators do NOT fill it in. SDKs and consumers MUST implement the exponent default of 2 in code. See https://www.iso.org/iso-4217-currency-codes.html",
+  "type": "object",
+  "required": [ "amount", "currency" ],
+  "properties": {
+    "amount": {
+      "description": "Value in the smallest currency unit (pence, cents, sen). The consumer must apply the ISO 4217 exponent to convert to a display value",
+      "examples": [ 32500, 1000000, 500000, 0 ],
+      "type": "integer",
+      "maximum": 999999999999999,
+      "minimum": -999999999999999
+    },
+    "currency": {
+      "description": "ISO 4217 three-letter currency code. Use the code for the currency of the amount, not the reporting currency",
+      "$comment": "https://www.iso.org/iso-4217-currency-codes.html",
+      "examples": [ "GBP", "USD", "EUR", "JPY", "INR", "AED", "SGD" ],
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "exponent": {
+      "description": "Number of decimal places for this currency. Display value = amount / 10^exponent. Most currencies use 2 (default). JPY/KRW use 0. KWD/BHD/OMR use 3",
+      "default": 2,
+      "type": "integer",
+      "maximum": 4,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false
+}

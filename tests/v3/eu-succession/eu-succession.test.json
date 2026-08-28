@@ -1,0 +1,174 @@
+{
+  "target": "../../../v3/extensions/eu-succession/eu-succession.json",
+  "tests": [
+    {
+      "description": "valid — minimal with required memberState",
+      "data": {
+        "memberState": "DE"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Brussels IV applicable",
+      "data": {
+        "memberState": "FR",
+        "brusselsIV": {
+          "habitualResidence": {
+            "country": "FR"
+          },
+          "nationalityElection": true,
+          "electedNationality": {
+            "country": "DE"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — missing required memberState",
+      "data": {
+        "brusselsIV": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "memberState": "DE",
+        "ukBrexit": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — minimal memberState only (FR)",
+      "data": {
+        "memberState": "FR"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Brussels IV with election date",
+      "data": {
+        "memberState": "ES",
+        "brusselsIV": {
+          "habitualResidence": {
+            "country": "ES"
+          },
+          "nationalityElection": true,
+          "electedNationality": {
+            "country": "GB"
+          },
+          "electionDate": "2023-06-15"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Spanish regional regime (catalan)",
+      "data": {
+        "memberState": "ES",
+        "spanishRegionalRegime": {
+          "region": "catalan",
+          "forcedHeirshipRules": "Catalonia applies a reduced forced heirship scheme under Book IV of the Civil Code of Catalonia.",
+          "notes": "One quarter of the estate is reserved for forced heirs under Catalan law."
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — forced heirship variant (french_reserve)",
+      "data": {
+        "memberState": "FR",
+        "forcedHeirshipVariant": {
+          "model": "french_reserve",
+          "claimNature": "in-kind entitlement",
+          "reservedFraction": "3/4",
+          "calculationNotes": "Three-quarters reserved for three or more children under French law post-2006 reform.",
+          "effectiveDate": "2007-01-01"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — forced heirship variant (german_pflichtteil)",
+      "data": {
+        "memberState": "DE",
+        "forcedHeirshipVariant": {
+          "model": "german_pflichtteil",
+          "claimNature": "monetary claim only",
+          "reservedFraction": "1/2"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — memberState pattern violation (lowercase country code)",
+      "data": {
+        "memberState": "france"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — memberState pattern violation (numeric code)",
+      "data": {
+        "memberState": "33"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — SpanishRegionalRegime missing required region",
+      "data": {
+        "memberState": "ES",
+        "spanishRegionalRegime": {
+          "notes": "Missing region field."
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — SpanishRegionalRegime region enum violation",
+      "data": {
+        "memberState": "ES",
+        "spanishRegionalRegime": {
+          "region": "valencian"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — ForcedHeirshipVariant missing required model",
+      "data": {
+        "memberState": "FR",
+        "forcedHeirshipVariant": {
+          "claimNature": "in-kind entitlement",
+          "reservedFraction": "3/4"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — reservedFraction pattern violation (word fraction)",
+      "data": {
+        "memberState": "FR",
+        "forcedHeirshipVariant": {
+          "model": "french_reserve",
+          "reservedFraction": "half"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalProperties in BrusselsIVChoiceOfLaw",
+      "data": {
+        "memberState": "DE",
+        "brusselsIV": {
+          "habitualResidence": {
+            "country": "DE"
+          },
+          "unknownField": "not allowed"
+        }
+      },
+      "valid": false
+    }
+  ]
+}

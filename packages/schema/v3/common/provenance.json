@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/provenance.json",
+  "title": "Provenance",
+  "description": "Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it",
+  "type": "object",
+  "properties": {
+    "source": {
+      "description": "How this entity's data was originally created",
+      "enum": [ "import", "manual", "ai_generated" ]
+    },
+    "confidence": {
+      "description": "Overall confidence score for this entity's data (0.0 = no confidence, 1.0 = fully verified)",
+      "type": "number",
+      "maximum": 1,
+      "minimum": 0
+    },
+    "importSourceId": {
+      "description": "References importSources[].id on the root document — identifies which import source produced this entity's data. Plain string, not UUID",
+      "type": "string",
+      "maxLength": 255
+    },
+    "aiProvenance": {
+      "description": "AI provenance metadata — which AI model produced this data and whether a human has verified it",
+      "$ref": "ai-provenance.json"
+    },
+    "humanVerdict": {
+      "description": "Human review verdict on AI-generated or imported data",
+      "enum": [ "approved", "rejected", "modified", "pending_review" ]
+    },
+    "rejectionReason": {
+      "description": "Reason for rejecting or modifying data",
+      "type": "string",
+      "maxLength": 2000
+    },
+    "verdictAt": {
+      "description": "When the human verdict was recorded",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "agentTaskId": {
+      "description": "ID of the agent task that created or modified this entity — links to the agent orchestration system",
+      "examples": [ "task-enrich-001", "task-extract-will-003" ],
+      "type": "string",
+      "maxLength": 255
+    }
+  },
+  "additionalProperties": false
+}

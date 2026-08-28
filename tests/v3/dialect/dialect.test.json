@@ -1,0 +1,25 @@
+{
+  "target": "../../../v3/dialect.json",
+  "tests": [
+    {
+      "description": "valid: schema using INHERIT dialect with vocabulary keyword",
+      "data": {
+        "$schema": "https://openinherit.org/v3/dialect.json",
+        "$id": "https://example.com/test.json",
+        "maturity": "draft",
+        "type": "object"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid: maturity keyword with wrong value",
+      "data": {
+        "$schema": "https://openinherit.org/v3/dialect.json",
+        "$id": "https://example.com/test.json",
+        "maturity": "experimental",
+        "type": "object"
+      },
+      "valid": false
+    }
+  ]
+}

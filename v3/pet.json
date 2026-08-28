@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/pet.json",
+  "title": "Pet",
+  "description": "A pet or animal requiring care arrangements after the owner's death",
+  "type": "object",
+  "required": [ "id", "petName", "species" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this pet",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "petName": {
+      "description": "The pet's name",
+      "examples": [ "Biscuit", "Mochi", "Max" ],
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "species": {
+      "description": "The species of the pet",
+      "anyOf": [
+        {
+          "enum": [
+            "dog",
+            "cat",
+            "bird",
+            "horse",
+            "rabbit",
+            "fish",
+            "reptile",
+            "other"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+"
+        }
+      ]
+    },
+    "breed": {
+      "description": "Breed of the pet",
+      "examples": [ "Labrador Retriever", "British Shorthair" ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "dateOfBirth": {
+      "description": "Pet's date of birth",
+      "examples": [ "2020-06-15" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "microchipNumber": {
+      "description": "Microchip identification number",
+      "examples": [ "985141000123456" ],
+      "type": "string",
+      "maxLength": 100
+    },
+    "vaccinesUpToDate": {
+      "description": "Whether vaccinations are current",
+      "type": "boolean"
+    },
+    "healthConditions": {
+      "description": "Known health conditions",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      }
+    },
+    "medicationRequired": {
+      "description": "Current medications",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      }
+    },
+    "dietaryNeeds": {
+      "description": "Special dietary requirements",
+      "type": "string",
+      "maxLength": 500
+    },
+    "temperament": {
+      "description": "Temperament and behaviour notes",
+      "type": "string",
+      "maxLength": 500
+    },
+    "caregiverPersonId": {
+      "description": "Person.id of the preferred caregiver",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "caregiverPersonIdDisplay": {
+      "description": "Human-readable display name for the referenced caregiver person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "alternativeCaregiverPersonId": {
+      "description": "Person.id of an alternative caregiver",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "alternativeCaregiverPersonIdDisplay": {
+      "description": "Human-readable display name for the referenced alternative caregiver person",
+      "type": "string",
+      "maxLength": 255
+    },
+    "veterinarianOrganisationId": {
+      "description": "Organisation.id of the vet practice",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "veterinarianOrganisationIdDisplay": {
+      "description": "Human-readable display name for the referenced veterinarian organisation",
+      "type": "string",
+      "maxLength": 255
+    },
+    "petInsuranceOrganisationId": {
+      "description": "Organisation.id of the pet insurance provider",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "petInsuranceOrganisationIdDisplay": {
+      "description": "Human-readable display name for the referenced pet insurance organisation",
+      "type": "string",
+      "maxLength": 255
+    },
+    "estimatedMonthlyCareCost": {
+      "description": "Estimated monthly care cost",
+      "$ref": "common/money.json"
+    },
+    "fundingForCare": {
+      "description": "Amount set aside for ongoing care",
+      "$ref": "common/money.json"
+    },
+    "immediateActionRequired": {
+      "description": "Urgent actions needed after death",
+      "type": "string",
+      "maxLength": 500
+    },
+    "keyLocationForPet": {
+      "description": "Where the pet is usually kept",
+      "type": "string",
+      "maxLength": 500
+    },
+    "transportInstructions": {
+      "description": "How to transport this pet",
+      "type": "string",
+      "maxLength": 500
+    },
+    "images": {
+      "description": "Photographs of the pet",
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "$ref": "common/media.json"
+      }
+    },
+    "notes": {
+      "description": "Additional care notes",
+      "type": "string",
+      "maxLength": 2000
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    },
+    "petCareArrangement": {
+      "description": "Links this pet to the trust or bequest funding its care. Pets cannot be beneficiaries — money flows to a trust or nominated carer",
+      "type": "object",
+      "properties": {
+        "trustId": {
+          "description": "Reference to a Trust.id established for this pet's care",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "bequestId": {
+          "description": "Reference to a Bequest.id funding this pet's care",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "nominatedCarerPersonId": {
+          "description": "Reference to Person.id of the nominated carer",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "nominatedCarerPersonIdDisplay": {
+          "description": "Human-readable display name for the referenced nominated carer person",
+          "type": "string",
+          "maxLength": 255
+        },
+        "careInstructions": {
+          "description": "Specific care instructions (diet, vet, exercise, end-of-life preferences)",
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

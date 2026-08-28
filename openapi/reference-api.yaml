@@ -1,0 +1,3792 @@
+openapi: '3.1.1'
+info:
+  title: INHERIT Reference REST API
+  version: '6.4.2'
+  description: |
+    Reference CRUD REST API for the INHERIT open estate data standard.
+    This API provides estate lifecycle management — create, read, update,
+    delete, import, export, and companion linking — built on top of the
+    INHERIT JSON Schema bundle.
+
+    For the schema bundle and validation endpoint, see openapi.yaml.
+    For the full specification, visit https://openinherit.org
+  license:
+    name: Apache 2.0
+    identifier: Apache-2.0
+  contact:
+    name: OpenInherit
+    url: https://openinherit.org
+    email: hello@openinherit.org
+
+servers:
+  - url: https://api.example.com/v1
+    description: Reference implementation server
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Estates
+    description: Estate lifecycle management
+  - name: People
+    description: People within an estate
+  - name: Relationships
+    description: Relationships between people in an estate
+  - name: Kinships
+    description: Legal kinship records within an estate
+  - name: Properties
+    description: Real property held by an estate
+  - name: Assets
+    description: Financial and other assets held by an estate
+  - name: Liabilities
+    description: Liabilities and debts of an estate
+  - name: Bequests
+    description: Bequests and gifts made by the estate
+  - name: Trusts
+    description: Trusts established within an estate
+  - name: Executors
+    description: Executors appointed to administer an estate
+  - name: Guardians
+    description: Guardians appointed for dependants within an estate
+  - name: Wishes
+    description: Wishes and preferences recorded against an estate
+  - name: Documents
+    description: Legal and supporting documents attached to an estate
+  - name: Attestations
+    description: Attestations and witness records for an estate
+  - name: NonprobateTransfers
+    description: Nonprobate transfers associated with an estate
+  - name: ProxyAuthorisations
+    description: Proxy authorisations granted within an estate
+  - name: DealerInterests
+    description: Dealer and third-party interests registered against an estate
+  - name: Import/Export
+    description: Bulk import and export of complete INHERIT documents
+  - name: Validation
+    description: Progressive conformance validation of stored estates
+  - name: Couples
+    description: Companion estate linking for couples and household planning
+  - name: Catalogues
+    description: Dealer and platform asset catalogues
+  - name: Valuations
+    description: Formal and estimated valuations of estate assets
+  - name: InsurancePolicies
+    description: Life and other insurance policies linked to the estate
+  - name: Organisations
+    description: Organisations (charities, companies, institutions) referenced in the estate
+
+paths:
+  /estates:
+    post:
+      operationId: createEstate
+      summary: Create a new estate
+      description: |
+        Creates a new estate record. The request body must conform to the
+        INHERIT Estate schema. Returns the created estate with an ETag for
+        optimistic concurrency control.
+      tags:
+        - Estates
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Estate'
+      responses:
+        '201':
+          description: Estate created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Estate'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+
+    get:
+      operationId: listEstates
+      summary: List estates
+      description: |
+        Returns a paginated list of estates visible to the authenticated caller.
+        Supports cursor-based pagination and filtering by status and jurisdiction.
+      tags:
+        - Estates
+      parameters:
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - name: status
+          in: query
+          description: Filter by estate status
+          required: false
+          schema:
+            type: string
+            enum:
+              - draft
+              - active
+              - locked
+              - archived
+        - name: jurisdiction
+          in: query
+          description: Filter by jurisdiction code (ISO 3166-2)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Paginated list of estates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEstateList'
+
+  /estates/{estateId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+
+    get:
+      operationId: getEstate
+      summary: Get a single estate
+      description: Returns a single estate by its unique identifier.
+      tags:
+        - Estates
+      responses:
+        '200':
+          description: Estate retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Estate'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      operationId: updateEstate
+      summary: Update an estate
+      description: |
+        Partially or fully updates an estate. Callers SHOULD supply an
+        If-Match header containing the ETag from a previous GET or POST
+        response to enable optimistic concurrency control. If the ETag does
+        not match, a 412 Precondition Failed is returned.
+      tags:
+        - Estates
+      parameters:
+        - name: If-Match
+          in: header
+          description: ETag value from a previous response for optimistic concurrency control
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Estate'
+      responses:
+        '200':
+          description: Estate updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Estate'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '412':
+          description: Precondition failed — ETag mismatch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      operationId: deleteEstate
+      summary: Delete an estate
+      description: Permanently deletes an estate and all its associated entities.
+      tags:
+        - Estates
+      responses:
+        '204':
+          description: Estate deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: People ──────────────────────────────────────────────────
+
+  /estates/{estateId}/people:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createPerson
+      summary: Add a person to the estate
+      tags:
+        - People
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Person'
+      responses:
+        '201':
+          description: Person created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Person'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listPeople
+      summary: List all people in the estate
+      tags:
+        - People
+      responses:
+        '200':
+          description: List of people
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Person'
+
+  /estates/{estateId}/people/{personId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: personId
+        in: path
+        required: true
+        description: Unique identifier for the person (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getPerson
+      summary: Get a person
+      tags:
+        - People
+      responses:
+        '200':
+          description: Person retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Person'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replacePerson
+      summary: Replace a person (full update)
+      tags:
+        - People
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Person'
+      responses:
+        '200':
+          description: Person replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Person'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updatePerson
+      summary: Partial update a person
+      tags:
+        - People
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Person'
+      responses:
+        '200':
+          description: Person updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Person'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deletePerson
+      summary: Remove a person from the estate
+      tags:
+        - People
+      responses:
+        '204':
+          description: Person deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  # ── Sub-resource: Relationships ───────────────────────────────────────────
+
+  /estates/{estateId}/relationships:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createRelationship
+      summary: Add a relationship to the estate
+      tags:
+        - Relationships
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Relationship'
+      responses:
+        '201':
+          description: Relationship created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Relationship'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listRelationships
+      summary: List all relationships in the estate
+      tags:
+        - Relationships
+      responses:
+        '200':
+          description: List of relationships
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Relationship'
+
+  /estates/{estateId}/relationships/{relationshipId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: relationshipId
+        in: path
+        required: true
+        description: Unique identifier for the relationship (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getRelationship
+      summary: Get a relationship
+      tags:
+        - Relationships
+      responses:
+        '200':
+          description: Relationship retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Relationship'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceRelationship
+      summary: Replace a relationship (full update)
+      tags:
+        - Relationships
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Relationship'
+      responses:
+        '200':
+          description: Relationship replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Relationship'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateRelationship
+      summary: Partial update a relationship
+      tags:
+        - Relationships
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Relationship'
+      responses:
+        '200':
+          description: Relationship updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Relationship'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteRelationship
+      summary: Remove a relationship from the estate
+      tags:
+        - Relationships
+      responses:
+        '204':
+          description: Relationship deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Kinships ────────────────────────────────────────────────
+
+  /estates/{estateId}/kinships:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createKinship
+      summary: Add a kinship to the estate
+      tags:
+        - Kinships
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Kinship'
+      responses:
+        '201':
+          description: Kinship created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Kinship'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listKinships
+      summary: List all kinships in the estate
+      tags:
+        - Kinships
+      responses:
+        '200':
+          description: List of kinships
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Kinship'
+
+  /estates/{estateId}/kinships/{kinshipId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: kinshipId
+        in: path
+        required: true
+        description: Unique identifier for the kinship (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getKinship
+      summary: Get a kinship
+      tags:
+        - Kinships
+      responses:
+        '200':
+          description: Kinship retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Kinship'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceKinship
+      summary: Replace a kinship (full update)
+      tags:
+        - Kinships
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Kinship'
+      responses:
+        '200':
+          description: Kinship replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Kinship'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateKinship
+      summary: Partial update a kinship
+      tags:
+        - Kinships
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Kinship'
+      responses:
+        '200':
+          description: Kinship updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Kinship'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteKinship
+      summary: Remove a kinship from the estate
+      tags:
+        - Kinships
+      responses:
+        '204':
+          description: Kinship deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Properties ──────────────────────────────────────────────
+
+  /estates/{estateId}/properties:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createProperty
+      summary: Add a property to the estate
+      tags:
+        - Properties
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Property'
+      responses:
+        '201':
+          description: Property created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Property'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listProperties
+      summary: List all properties in the estate
+      tags:
+        - Properties
+      responses:
+        '200':
+          description: List of properties
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Property'
+
+  /estates/{estateId}/properties/{propertyId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: propertyId
+        in: path
+        required: true
+        description: Unique identifier for the property (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getProperty
+      summary: Get a property
+      tags:
+        - Properties
+      responses:
+        '200':
+          description: Property retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Property'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceProperty
+      summary: Replace a property (full update)
+      tags:
+        - Properties
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Property'
+      responses:
+        '200':
+          description: Property replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Property'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateProperty
+      summary: Partial update a property
+      tags:
+        - Properties
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Property'
+      responses:
+        '200':
+          description: Property updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Property'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteProperty
+      summary: Remove a property from the estate
+      tags:
+        - Properties
+      responses:
+        '204':
+          description: Property deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  # ── Sub-resource: Assets ──────────────────────────────────────────────────
+
+  /estates/{estateId}/assets:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createAsset
+      summary: Add an asset to the estate
+      tags:
+        - Assets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Asset'
+      responses:
+        '201':
+          description: Asset created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Asset'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listAssets
+      summary: List all assets in the estate
+      tags:
+        - Assets
+      responses:
+        '200':
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Asset'
+
+  /estates/{estateId}/assets/{assetId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: assetId
+        in: path
+        required: true
+        description: Unique identifier for the asset (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getAsset
+      summary: Get an asset
+      tags:
+        - Assets
+      responses:
+        '200':
+          description: Asset retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Asset'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceAsset
+      summary: Replace an asset (full update)
+      tags:
+        - Assets
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Asset'
+      responses:
+        '200':
+          description: Asset replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Asset'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateAsset
+      summary: Partial update an asset
+      tags:
+        - Assets
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Asset'
+      responses:
+        '200':
+          description: Asset updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Asset'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteAsset
+      summary: Remove an asset from the estate
+      tags:
+        - Assets
+      responses:
+        '204':
+          description: Asset deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  # ── Sub-resource: Liabilities ─────────────────────────────────────────────
+
+  /estates/{estateId}/liabilities:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createLiability
+      summary: Add a liability to the estate
+      tags:
+        - Liabilities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Liability'
+      responses:
+        '201':
+          description: Liability created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Liability'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listLiabilities
+      summary: List all liabilities in the estate
+      tags:
+        - Liabilities
+      responses:
+        '200':
+          description: List of liabilities
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Liability'
+
+  /estates/{estateId}/liabilities/{liabilityId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: liabilityId
+        in: path
+        required: true
+        description: Unique identifier for the liability (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getLiability
+      summary: Get a liability
+      tags:
+        - Liabilities
+      responses:
+        '200':
+          description: Liability retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Liability'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceLiability
+      summary: Replace a liability (full update)
+      tags:
+        - Liabilities
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Liability'
+      responses:
+        '200':
+          description: Liability replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Liability'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateLiability
+      summary: Partial update a liability
+      tags:
+        - Liabilities
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Liability'
+      responses:
+        '200':
+          description: Liability updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Liability'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteLiability
+      summary: Remove a liability from the estate
+      tags:
+        - Liabilities
+      responses:
+        '204':
+          description: Liability deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Bequests ────────────────────────────────────────────────
+
+  /estates/{estateId}/bequests:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createBequest
+      summary: Add a bequest to the estate
+      tags:
+        - Bequests
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Bequest'
+      responses:
+        '201':
+          description: Bequest created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Bequest'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listBequests
+      summary: List all bequests in the estate
+      tags:
+        - Bequests
+      responses:
+        '200':
+          description: List of bequests
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Bequest'
+
+  /estates/{estateId}/bequests/{bequestId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: bequestId
+        in: path
+        required: true
+        description: Unique identifier for the bequest (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getBequest
+      summary: Get a bequest
+      tags:
+        - Bequests
+      responses:
+        '200':
+          description: Bequest retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Bequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceBequest
+      summary: Replace a bequest (full update)
+      tags:
+        - Bequests
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Bequest'
+      responses:
+        '200':
+          description: Bequest replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Bequest'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateBequest
+      summary: Partial update a bequest
+      tags:
+        - Bequests
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Bequest'
+      responses:
+        '200':
+          description: Bequest updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Bequest'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteBequest
+      summary: Remove a bequest from the estate
+      tags:
+        - Bequests
+      responses:
+        '204':
+          description: Bequest deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Trusts ──────────────────────────────────────────────────
+
+  /estates/{estateId}/trusts:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createTrust
+      summary: Add a trust to the estate
+      tags:
+        - Trusts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Trust'
+      responses:
+        '201':
+          description: Trust created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Trust'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listTrusts
+      summary: List all trusts in the estate
+      tags:
+        - Trusts
+      responses:
+        '200':
+          description: List of trusts
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Trust'
+
+  /estates/{estateId}/trusts/{trustId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: trustId
+        in: path
+        required: true
+        description: Unique identifier for the trust (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getTrust
+      summary: Get a trust
+      tags:
+        - Trusts
+      responses:
+        '200':
+          description: Trust retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Trust'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceTrust
+      summary: Replace a trust (full update)
+      tags:
+        - Trusts
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Trust'
+      responses:
+        '200':
+          description: Trust replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Trust'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateTrust
+      summary: Partial update a trust
+      tags:
+        - Trusts
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Trust'
+      responses:
+        '200':
+          description: Trust updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Trust'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteTrust
+      summary: Remove a trust from the estate
+      tags:
+        - Trusts
+      responses:
+        '204':
+          description: Trust deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Executors ───────────────────────────────────────────────
+
+  /estates/{estateId}/executors:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createExecutor
+      summary: Add an executor to the estate
+      tags:
+        - Executors
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Executor'
+      responses:
+        '201':
+          description: Executor created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Executor'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listExecutors
+      summary: List all executors in the estate
+      tags:
+        - Executors
+      responses:
+        '200':
+          description: List of executors
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Executor'
+
+  /estates/{estateId}/executors/{executorId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: executorId
+        in: path
+        required: true
+        description: Unique identifier for the executor (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getExecutor
+      summary: Get an executor
+      tags:
+        - Executors
+      responses:
+        '200':
+          description: Executor retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Executor'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceExecutor
+      summary: Replace an executor (full update)
+      tags:
+        - Executors
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Executor'
+      responses:
+        '200':
+          description: Executor replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Executor'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateExecutor
+      summary: Partial update an executor
+      tags:
+        - Executors
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Executor'
+      responses:
+        '200':
+          description: Executor updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Executor'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteExecutor
+      summary: Remove an executor from the estate
+      tags:
+        - Executors
+      responses:
+        '204':
+          description: Executor deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Guardians ───────────────────────────────────────────────
+
+  /estates/{estateId}/guardians:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createGuardian
+      summary: Add a guardian to the estate
+      tags:
+        - Guardians
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Guardian'
+      responses:
+        '201':
+          description: Guardian created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Guardian'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listGuardians
+      summary: List all guardians in the estate
+      tags:
+        - Guardians
+      responses:
+        '200':
+          description: List of guardians
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Guardian'
+
+  /estates/{estateId}/guardians/{guardianId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: guardianId
+        in: path
+        required: true
+        description: Unique identifier for the guardian (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getGuardian
+      summary: Get a guardian
+      tags:
+        - Guardians
+      responses:
+        '200':
+          description: Guardian retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Guardian'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceGuardian
+      summary: Replace a guardian (full update)
+      tags:
+        - Guardians
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Guardian'
+      responses:
+        '200':
+          description: Guardian replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Guardian'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateGuardian
+      summary: Partial update a guardian
+      tags:
+        - Guardians
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Guardian'
+      responses:
+        '200':
+          description: Guardian updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Guardian'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteGuardian
+      summary: Remove a guardian from the estate
+      tags:
+        - Guardians
+      responses:
+        '204':
+          description: Guardian deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Wishes ──────────────────────────────────────────────────
+
+  /estates/{estateId}/wishes:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createWish
+      summary: Add a wish to the estate
+      tags:
+        - Wishes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Wish'
+      responses:
+        '201':
+          description: Wish created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Wish'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listWishes
+      summary: List all wishes in the estate
+      tags:
+        - Wishes
+      responses:
+        '200':
+          description: List of wishes
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Wish'
+
+  /estates/{estateId}/wishes/{wishId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: wishId
+        in: path
+        required: true
+        description: Unique identifier for the wish (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getWish
+      summary: Get a wish
+      tags:
+        - Wishes
+      responses:
+        '200':
+          description: Wish retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Wish'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceWish
+      summary: Replace a wish (full update)
+      tags:
+        - Wishes
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Wish'
+      responses:
+        '200':
+          description: Wish replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Wish'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateWish
+      summary: Partial update a wish
+      tags:
+        - Wishes
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Wish'
+      responses:
+        '200':
+          description: Wish updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Wish'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteWish
+      summary: Remove a wish from the estate
+      tags:
+        - Wishes
+      responses:
+        '204':
+          description: Wish deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Documents ───────────────────────────────────────────────
+
+  /estates/{estateId}/documents:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createDocument
+      summary: Add a document to the estate
+      tags:
+        - Documents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Document'
+      responses:
+        '201':
+          description: Document created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listDocuments
+      summary: List all documents in the estate
+      tags:
+        - Documents
+      responses:
+        '200':
+          description: List of documents
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Document'
+
+  /estates/{estateId}/documents/{documentId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: documentId
+        in: path
+        required: true
+        description: Unique identifier for the document (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getDocument
+      summary: Get a document
+      tags:
+        - Documents
+      responses:
+        '200':
+          description: Document retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Document'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceDocument
+      summary: Replace a document (full update)
+      tags:
+        - Documents
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Document'
+      responses:
+        '200':
+          description: Document replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateDocument
+      summary: Partial update a document
+      tags:
+        - Documents
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Document'
+      responses:
+        '200':
+          description: Document updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteDocument
+      summary: Remove a document from the estate
+      tags:
+        - Documents
+      responses:
+        '204':
+          description: Document deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Attestations ────────────────────────────────────────────
+
+  /estates/{estateId}/attestations:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createAttestation
+      summary: Add an attestation to the estate
+      tags:
+        - Attestations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Attestation'
+      responses:
+        '201':
+          description: Attestation created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Attestation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listAttestations
+      summary: List all attestations in the estate
+      tags:
+        - Attestations
+      responses:
+        '200':
+          description: List of attestations
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Attestation'
+
+  /estates/{estateId}/attestations/{attestationId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: attestationId
+        in: path
+        required: true
+        description: Unique identifier for the attestation (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getAttestation
+      summary: Get an attestation
+      tags:
+        - Attestations
+      responses:
+        '200':
+          description: Attestation retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Attestation'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceAttestation
+      summary: Replace an attestation (full update)
+      tags:
+        - Attestations
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Attestation'
+      responses:
+        '200':
+          description: Attestation replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Attestation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateAttestation
+      summary: Partial update an attestation
+      tags:
+        - Attestations
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Attestation'
+      responses:
+        '200':
+          description: Attestation updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Attestation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteAttestation
+      summary: Remove an attestation from the estate
+      tags:
+        - Attestations
+      responses:
+        '204':
+          description: Attestation deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: NonprobateTransfers ─────────────────────────────────────
+
+  /estates/{estateId}/nonprobate-transfers:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createNonprobateTransfer
+      summary: Add a nonprobate transfer to the estate
+      tags:
+        - NonprobateTransfers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/NonprobateTransfer'
+      responses:
+        '201':
+          description: NonprobateTransfer created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/NonprobateTransfer'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listNonprobateTransfers
+      summary: List all nonprobate transfers in the estate
+      tags:
+        - NonprobateTransfers
+      responses:
+        '200':
+          description: List of nonprobate transfers
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/NonprobateTransfer'
+
+  /estates/{estateId}/nonprobate-transfers/{transferId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: transferId
+        in: path
+        required: true
+        description: Unique identifier for the nonprobate transfer (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getNonprobateTransfer
+      summary: Get a nonprobate transfer
+      tags:
+        - NonprobateTransfers
+      responses:
+        '200':
+          description: NonprobateTransfer retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/NonprobateTransfer'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceNonprobateTransfer
+      summary: Replace a nonprobate transfer (full update)
+      tags:
+        - NonprobateTransfers
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/NonprobateTransfer'
+      responses:
+        '200':
+          description: NonprobateTransfer replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/NonprobateTransfer'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateNonprobateTransfer
+      summary: Partial update a nonprobate transfer
+      tags:
+        - NonprobateTransfers
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/NonprobateTransfer'
+      responses:
+        '200':
+          description: NonprobateTransfer updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/NonprobateTransfer'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteNonprobateTransfer
+      summary: Remove a nonprobate transfer from the estate
+      tags:
+        - NonprobateTransfers
+      responses:
+        '204':
+          description: NonprobateTransfer deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: ProxyAuthorisations ────────────────────────────────────
+
+  /estates/{estateId}/proxy-authorisations:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createProxyAuthorisation
+      summary: Add a proxy authorisation to the estate
+      tags:
+        - ProxyAuthorisations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/ProxyAuthorisation'
+      responses:
+        '201':
+          description: ProxyAuthorisation created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/ProxyAuthorisation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listProxyAuthorisations
+      summary: List all proxy authorisations in the estate
+      tags:
+        - ProxyAuthorisations
+      responses:
+        '200':
+          description: List of proxy authorisations
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/ProxyAuthorisation'
+
+  /estates/{estateId}/proxy-authorisations/{authorisationId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: authorisationId
+        in: path
+        required: true
+        description: Unique identifier for the proxy authorisation (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getProxyAuthorisation
+      summary: Get a proxy authorisation
+      tags:
+        - ProxyAuthorisations
+      responses:
+        '200':
+          description: ProxyAuthorisation retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/ProxyAuthorisation'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceProxyAuthorisation
+      summary: Replace a proxy authorisation (full update)
+      tags:
+        - ProxyAuthorisations
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/ProxyAuthorisation'
+      responses:
+        '200':
+          description: ProxyAuthorisation replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/ProxyAuthorisation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateProxyAuthorisation
+      summary: Partial update a proxy authorisation
+      tags:
+        - ProxyAuthorisations
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/ProxyAuthorisation'
+      responses:
+        '200':
+          description: ProxyAuthorisation updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/ProxyAuthorisation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteProxyAuthorisation
+      summary: Remove a proxy authorisation from the estate
+      tags:
+        - ProxyAuthorisations
+      responses:
+        '204':
+          description: ProxyAuthorisation deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: DealerInterests ────────────────────────────────────────
+
+  /estates/{estateId}/dealer-interests:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createDealerInterest
+      summary: Add a dealer interest to the estate
+      tags:
+        - DealerInterests
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/DealerInterest'
+      responses:
+        '201':
+          description: DealerInterest created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/DealerInterest'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listDealerInterests
+      summary: List all dealer interests in the estate
+      tags:
+        - DealerInterests
+      responses:
+        '200':
+          description: List of dealer interests
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/DealerInterest'
+
+  /estates/{estateId}/dealer-interests/{interestId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: interestId
+        in: path
+        required: true
+        description: Unique identifier for the dealer interest (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getDealerInterest
+      summary: Get a dealer interest
+      tags:
+        - DealerInterests
+      responses:
+        '200':
+          description: DealerInterest retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/DealerInterest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceDealerInterest
+      summary: Replace a dealer interest (full update)
+      tags:
+        - DealerInterests
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/DealerInterest'
+      responses:
+        '200':
+          description: DealerInterest replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/DealerInterest'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateDealerInterest
+      summary: Partial update a dealer interest
+      tags:
+        - DealerInterests
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/DealerInterest'
+      responses:
+        '200':
+          description: DealerInterest updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/DealerInterest'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteDealerInterest
+      summary: Remove a dealer interest from the estate
+      tags:
+        - DealerInterests
+      responses:
+        '204':
+          description: DealerInterest deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /estates/{estateId}/export/json:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: exportEstateJson
+      summary: Export estate as INHERIT JSON document
+      description: |
+        Returns a complete INHERIT root document containing all entities for the
+        estate. The exportedAt, exportedBy, and generator fields are set by the
+        server at the time of export.
+      tags:
+        - Import/Export
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportJsonRequest'
+      responses:
+        '200':
+          description: INHERIT document exported successfully
+          content:
+            application/vnd.openinherit.v1+json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/InheritDocument'
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/InheritDocument'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /estates/{estateId}/export/pdf:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: exportEstatePdf
+      summary: Export estate as a PDF report
+      description: |
+        Renders a PDF report of the estate using the specified template.
+        Three templates are available: full (for the testator), summary (for
+        the family), and professional (for an estate planning professional).
+      tags:
+        - Import/Export
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportPdfRequest'
+      responses:
+        '200':
+          description: PDF report generated successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /estates/import:
+    post:
+      operationId: importEstate
+      summary: Import an INHERIT JSON document as a new estate
+      description: |
+        Accepts a complete INHERIT JSON document and creates a new estate from it.
+        Level 1 conformance is required for import to succeed. Levels 2–3
+        produce non-fatal warnings included in the response.
+      tags:
+        - Import/Export
+      requestBody:
+        required: true
+        content:
+          application/vnd.openinherit.v1+json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/InheritDocument'
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/InheritDocument'
+      responses:
+        '201':
+          description: Estate imported successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportResult'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+
+  /estates/{estateId}/validate:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    get:
+      operationId: validateEstate
+      summary: Validate a stored estate at all conformance levels
+      description: |
+        Validates the stored estate against all three INHERIT conformance levels
+        progressively. Returns detailed validation results including the highest
+        level achieved and any violations found at each level.
+      tags:
+        - Validation
+      responses:
+        '200':
+          description: Validation result returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/ValidationResult'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /estates/{estateId}/companion:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: linkCompanion
+      summary: Link a companion estate
+      description: |
+        Links another estate as a companion to this one, typically used for
+        couples where each partner has their own estate record. Both estates
+        must exist and must not already be linked to a companion.
+      tags:
+        - Couples
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanionLink'
+      responses:
+        '200':
+          description: Companion linked successfully
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Estate'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    get:
+      operationId: getCompanion
+      summary: Get the companion estate summary
+      description: |
+        Returns a summary of the estate linked as a companion to this one.
+        Returns 404 if this estate has no companion linked.
+      tags:
+        - Couples
+      responses:
+        '200':
+          description: Companion estate summary returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EstateSummary'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: unlinkCompanion
+      summary: Unlink the companion estate
+      description: Removes the companion link between this estate and its companion.
+      tags:
+        - Couples
+      responses:
+        '204':
+          description: Companion unlinked successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /estates/{estateId}/summary:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    get:
+      operationId: getEstateSummary
+      summary: Get derived estate summary statistics
+      description: |
+        Returns derived statistics for the estate including entity counts,
+        estimated values, conformance level, completeness indicators, and
+        complexity indicators. Complexity data is used by the INHERIT matchmaker
+        to assess suitability for estate planning professional referral.
+      tags:
+        - Estates
+      responses:
+        '200':
+          description: Estate summary returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EstateSummary'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Catalogues ───────────────────────────────────────────────────────────
+
+  /catalogues:
+    post:
+      operationId: createCatalogue
+      summary: Create a new catalogue
+      description: |
+        Creates a new INHERIT catalogue record. Catalogues are dealer or
+        platform asset collections distinct from individual estates.
+      tags:
+        - Catalogues
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Catalogue'
+      responses:
+        '201':
+          description: Catalogue created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Catalogue'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+
+    get:
+      operationId: listCatalogues
+      summary: List catalogues
+      description: Returns a paginated list of catalogues visible to the authenticated caller.
+      tags:
+        - Catalogues
+      parameters:
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: Paginated list of catalogues
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                  - hasMore
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Catalogue'
+                  cursor:
+                    type: string
+                  hasMore:
+                    type: boolean
+
+  /catalogues/{catalogueId}:
+    parameters:
+      - name: catalogueId
+        in: path
+        required: true
+        description: Unique identifier for the catalogue (UUID v4)
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      operationId: getCatalogue
+      summary: Get a single catalogue
+      description: Returns a single catalogue by its unique identifier.
+      tags:
+        - Catalogues
+      responses:
+        '200':
+          description: Catalogue retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Catalogue'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      operationId: updateCatalogue
+      summary: Update a catalogue
+      description: Partially or fully updates a catalogue.
+      tags:
+        - Catalogues
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Catalogue'
+      responses:
+        '200':
+          description: Catalogue updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Catalogue'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '412':
+          description: Precondition failed — ETag mismatch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      operationId: deleteCatalogue
+      summary: Delete a catalogue
+      description: Permanently deletes a catalogue and all its associated records.
+      tags:
+        - Catalogues
+      responses:
+        '204':
+          description: Catalogue deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Valuations ─────────────────────────────────────────────
+
+  /estates/{estateId}/valuations:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createValuation
+      summary: Add a valuation to the estate
+      description: Records a formal or estimated valuation for an asset or the overall estate.
+      tags:
+        - Valuations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Valuation'
+      responses:
+        '201':
+          description: Valuation created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Valuation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+
+    get:
+      operationId: listValuations
+      summary: List all valuations in the estate
+      tags:
+        - Valuations
+      responses:
+        '200':
+          description: List of valuations
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Valuation'
+
+  /estates/{estateId}/valuations/{valuationId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: valuationId
+        in: path
+        required: true
+        description: Unique identifier for the valuation (UUID v4)
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      operationId: getValuation
+      summary: Get a valuation
+      tags:
+        - Valuations
+      responses:
+        '200':
+          description: Valuation retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Valuation'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      operationId: replaceValuation
+      summary: Replace a valuation (full update)
+      tags:
+        - Valuations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Valuation'
+      responses:
+        '200':
+          description: Valuation replaced successfully
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Valuation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      operationId: deleteValuation
+      summary: Delete a valuation
+      tags:
+        - Valuations
+      responses:
+        '204':
+          description: Valuation deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Insurance Policies ─────────────────────────────────────
+
+  /estates/{estateId}/insurance-policies:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createInsurancePolicy
+      summary: Add an insurance policy to the estate
+      description: Records a life or other insurance policy linked to the estate.
+      tags:
+        - InsurancePolicies
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/InsurancePolicy'
+      responses:
+        '201':
+          description: Insurance policy created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/InsurancePolicy'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+
+    get:
+      operationId: listInsurancePolicies
+      summary: List all insurance policies in the estate
+      tags:
+        - InsurancePolicies
+      responses:
+        '200':
+          description: List of insurance policies
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/InsurancePolicy'
+
+  /estates/{estateId}/insurance-policies/{policyId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: policyId
+        in: path
+        required: true
+        description: Unique identifier for the insurance policy (UUID v4)
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      operationId: getInsurancePolicy
+      summary: Get an insurance policy
+      tags:
+        - InsurancePolicies
+      responses:
+        '200':
+          description: Insurance policy retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/InsurancePolicy'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      operationId: replaceInsurancePolicy
+      summary: Replace an insurance policy (full update)
+      tags:
+        - InsurancePolicies
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/InsurancePolicy'
+      responses:
+        '200':
+          description: Insurance policy replaced successfully
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/InsurancePolicy'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      operationId: deleteInsurancePolicy
+      summary: Delete an insurance policy
+      tags:
+        - InsurancePolicies
+      responses:
+        '204':
+          description: Insurance policy deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Organisations ──────────────────────────────────────────
+
+  /estates/{estateId}/organisations:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createOrganisation
+      summary: Add an organisation to the estate
+      description: |
+        Records an organisation (charity, company, institution) referenced
+        in the estate, for example as a beneficiary or executor.
+      tags:
+        - Organisations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Organisation'
+      responses:
+        '201':
+          description: Organisation created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Organisation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+
+    get:
+      operationId: listOrganisations
+      summary: List all organisations in the estate
+      tags:
+        - Organisations
+      responses:
+        '200':
+          description: List of organisations
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/Organisation'
+
+  /estates/{estateId}/organisations/{organisationId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: organisationId
+        in: path
+        required: true
+        description: Unique identifier for the organisation (UUID v4)
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      operationId: getOrganisation
+      summary: Get an organisation
+      tags:
+        - Organisations
+      responses:
+        '200':
+          description: Organisation retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Organisation'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      operationId: replaceOrganisation
+      summary: Replace an organisation (full update)
+      tags:
+        - Organisations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/Organisation'
+      responses:
+        '200':
+          description: Organisation replaced successfully
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Organisation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      operationId: deleteOrganisation
+      summary: Delete an organisation
+      tags:
+        - Organisations
+      responses:
+        '204':
+          description: Organisation deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── Sub-resource: Powers of Appointment ──────────────────────────────────
+
+  /estates/{estateId}/powersOfAppointment:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: createPowerOfAppointment
+      summary: Add a power of appointment to the estate
+      tags:
+        - Powers of Appointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/PowerOfAppointment'
+      responses:
+        '201':
+          description: Power of appointment created successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/PowerOfAppointment'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: listPowersOfAppointment
+      summary: List all powers of appointment in the estate
+      tags:
+        - Powers of Appointment
+      responses:
+        '200':
+          description: List of powers of appointment
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: './openapi.yaml#/components/schemas/PowerOfAppointment'
+
+  /estates/{estateId}/powersOfAppointment/{powerOfAppointmentId}:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+      - name: powerOfAppointmentId
+        in: path
+        required: true
+        description: Unique identifier for the power of appointment (UUID v4)
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getPowerOfAppointment
+      summary: Get a power of appointment
+      tags:
+        - Powers of Appointment
+      responses:
+        '200':
+          description: Power of appointment retrieved successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/PowerOfAppointment'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replacePowerOfAppointment
+      summary: Replace a power of appointment (full update)
+      tags:
+        - Powers of Appointment
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/PowerOfAppointment'
+      responses:
+        '200':
+          description: Power of appointment replaced successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/PowerOfAppointment'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updatePowerOfAppointment
+      summary: Partial update a power of appointment
+      tags:
+        - Powers of Appointment
+      parameters:
+        - name: If-Match
+          in: header
+          required: false
+          description: ETag value for optimistic concurrency control
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/PowerOfAppointment'
+      responses:
+        '200':
+          description: Power of appointment updated successfully
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/PowerOfAppointment'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deletePowerOfAppointment
+      summary: Remove a power of appointment from the estate
+      tags:
+        - Powers of Appointment
+      responses:
+        '204':
+          description: Power of appointment deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT bearer token issued by the INHERIT identity provider
+
+  parameters:
+    estateId:
+      name: estateId
+      in: path
+      description: Unique identifier for the estate (UUID v4)
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+    cursor:
+      name: cursor
+      in: query
+      description: Opaque cursor for pagination — use the value returned in the previous response
+      required: false
+      schema:
+        type: string
+
+    limit:
+      name: limit
+      in: query
+      description: Maximum number of items to return (1–100)
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+  schemas:
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+              example: ESTATE_NOT_FOUND
+            message:
+              type: string
+              description: Human-readable error description
+              example: No estate found with the given identifier
+            details:
+              type: object
+              description: Additional structured detail about the error
+              additionalProperties: true
+
+    PaginatedEstateList:
+      type: object
+      required:
+        - items
+        - hasMore
+      properties:
+        items:
+          type: array
+          description: Page of estate records
+          items:
+            $ref: './openapi.yaml#/components/schemas/Estate'
+        cursor:
+          type: string
+          description: Opaque cursor to fetch the next page; absent when hasMore is false
+        hasMore:
+          type: boolean
+          description: Whether further pages are available
+
+    ImportResult:
+      type: object
+      required:
+        - estateId
+        - conformanceLevel
+      properties:
+        estateId:
+          type: string
+          format: uuid
+          description: Identifier assigned to the newly imported estate
+        conformanceLevel:
+          type: integer
+          enum: [1, 2, 3]
+          description: |
+            Highest conformance level achieved:
+            1 = Schema Valid, 2 = Referentially Intact, 3 = Jurisdiction Complete
+        warnings:
+          type: array
+          description: Non-fatal warnings produced during import
+          items:
+            type: string
+        entitiesCreated:
+          type: object
+          description: Count of each entity type created during import
+          properties:
+            persons:
+              type: integer
+            relationships:
+              type: integer
+            kinships:
+              type: integer
+            properties:
+              type: integer
+            assets:
+              type: integer
+            liabilities:
+              type: integer
+            bequests:
+              type: integer
+            trusts:
+              type: integer
+            executors:
+              type: integer
+            guardians:
+              type: integer
+            wishes:
+              type: integer
+            documents:
+              type: integer
+            attestations:
+              type: integer
+            proxyAuthorisations:
+              type: integer
+            dealerInterests:
+              type: integer
+            nonprobateTransfers:
+              type: integer
+
+    ExportJsonRequest:
+      type: object
+      properties:
+        includeExtensions:
+          type: array
+          description: List of extension identifiers to include in the export
+          items:
+            type: string
+        conformanceLevel:
+          type: integer
+          enum: [1, 2, 3]
+          description: Minimum conformance level required for export
+
+    ExportPdfRequest:
+      type: object
+      required:
+        - template
+      properties:
+        template:
+          type: string
+          enum:
+            - full
+            - summary
+            - professional
+          description: PDF template to use for rendering
+        includeExtensions:
+          type: array
+          description: List of extension identifiers to include in the PDF
+          items:
+            type: string
+        recipientName:
+          type: string
+          description: Name of the person receiving the PDF (used in the document header)
+
+    CompanionLink:
+      type: object
+      required:
+        - companionEstateId
+      properties:
+        companionEstateId:
+          type: string
+          format: uuid
+          description: UUID of the estate to link as a companion (e.g. a spouse's estate)
+
+    EstateSummary:
+      type: object
+      required:
+        - estateId
+        - status
+        - jurisdiction
+        - entityCounts
+        - conformanceLevel
+        - lastModifiedAt
+      properties:
+        estateId:
+          type: string
+          format: uuid
+          description: Unique identifier for the estate
+        status:
+          type: string
+          enum:
+            - draft
+            - active
+            - locked
+            - archived
+          description: Current lifecycle status of the estate
+        jurisdiction:
+          $ref: './openapi.yaml#/components/schemas/Jurisdiction'
+        entityCounts:
+          type: object
+          description: Count of each entity type present in the estate
+          properties:
+            persons:
+              type: integer
+            relationships:
+              type: integer
+            kinships:
+              type: integer
+            properties:
+              type: integer
+            assets:
+              type: integer
+            liabilities:
+              type: integer
+            bequests:
+              type: integer
+            trusts:
+              type: integer
+            executors:
+              type: integer
+            guardians:
+              type: integer
+            wishes:
+              type: integer
+            documents:
+              type: integer
+            attestations:
+              type: integer
+            proxyAuthorisations:
+              type: integer
+            dealerInterests:
+              type: integer
+            nonprobateTransfers:
+              type: integer
+        totalEstimatedValue:
+          $ref: './openapi.yaml#/components/schemas/Money'
+        totalLiabilities:
+          $ref: './openapi.yaml#/components/schemas/Money'
+        netEstimatedValue:
+          $ref: './openapi.yaml#/components/schemas/Money'
+        conformanceLevel:
+          type: integer
+          enum: [0, 1, 2, 3]
+          description: |
+            Current conformance level:
+            0 = Not validated, 1 = Schema Valid,
+            2 = Referentially Intact, 3 = Jurisdiction Complete
+        completeness:
+          type: object
+          description: Key completeness indicators for the estate
+          properties:
+            hasWill:
+              type: boolean
+            hasExecutor:
+              type: boolean
+            hasGuardian:
+              type: boolean
+            hasAttestation:
+              type: boolean
+            allBequestsHaveBeneficiary:
+              type: boolean
+        complexityIndicators:
+          type: object
+          description: Indicators used to assess estate complexity
+          properties:
+            jurisdictionCount:
+              type: integer
+              description: Number of distinct jurisdictions involved
+            hasTrusts:
+              type: boolean
+            hasForcedHeirship:
+              type: boolean
+            hasNonprobateTransfers:
+              type: boolean
+            hasCrossJurisdictionAssets:
+              type: boolean
+        lastModifiedAt:
+          type: string
+          format: date
+          description: Date the estate was last modified (ISO 8601)
+
+  headers:
+    ETag:
+      description: |
+        Entity tag for optimistic concurrency control.
+        Supply this value in the If-Match header on subsequent PATCH requests.
+      schema:
+        type: string
+        example: '"a3f4b2c1"'
+
+  responses:
+    NotFound:
+      description: The requested resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: NOT_FOUND
+              message: The requested resource was not found
+
+    ValidationError:
+      description: The request body failed schema validation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: VALIDATION_ERROR
+              message: Request body does not conform to the INHERIT Estate schema
+              details:
+                violations:
+                  - path: /estateId
+                    message: must be a valid UUID
+
+    Conflict:
+      description: The request conflicts with the current state of the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: CONFLICT
+              message: A resource with this identifier already exists
+
+    ReferentialIntegrityError:
+      description: The operation would violate referential integrity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: REFERENTIAL_INTEGRITY_ERROR
+              message: Cannot delete — other entities reference this resource
+              details:
+                referencedBy:
+                  - entityType: Bequest
+                    entityId: 550e8400-e29b-41d4-a716-446655440000

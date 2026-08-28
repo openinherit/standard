@@ -1,0 +1,572 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "schemaVersion": "6.4.2",
+  "exportedAt": "2026-04-12T23:00:00Z",
+  "generator": {
+    "name": "Claude Code — AI Will Extraction",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "e1000002-0000-4000-a000-000000000001",
+    "testatorPersonId": "a1000002-0000-4000-a000-000000000001",
+    "testatorPersonIdDisplay": "Mark James Richardson",
+    "status": "confirmed",
+    "willType": "secular",
+    "primaryInstrument": "will",
+    "revocationClause": true,
+    "defaultSuccessionRegime": {
+      "governingLaw": {
+        "jurisdiction": {
+          "country": "GB",
+          "subdivision": "GB-ENG",
+          "legalSystems": [
+            "common_law"
+          ],
+          "name": "England"
+        },
+        "legalTradition": "common_law",
+        "statute": "Wills Act 1837"
+      },
+      "determinedBy": "domicile",
+      "binding": true,
+      "notes": "Mark is domiciled in England. His testate estate is governed by the Wills Act 1837. England and Wales has full testamentary freedom — no forced heirship."
+    },
+    "attestation": {
+      "id": "aa000002-0000-4000-a000-000000000001",
+      "attestationDate": "2024-03-14T00:00:00Z",
+      "attestationType": "written_signed",
+      "method": "in_person",
+      "witnesses": [
+        {
+          "personId": "a1000002-0000-4000-a000-000000000005",
+          "name": "Sarah Jane Cooper",
+          "address": "14 Cotham Hill, Cotham, Bristol BS6 6LA",
+          "occupation": "Neighbour"
+        },
+        {
+          "personId": "a1000002-0000-4000-a000-000000000006",
+          "name": "Dr. Rajesh Patel",
+          "address": "3 Redland Park, Redland, Bristol BS6 6SA",
+          "occupation": "Colleague"
+        }
+      ],
+      "witnessPersonIds": [
+        "a1000002-0000-4000-a000-000000000005",
+        "a1000002-0000-4000-a000-000000000006"
+      ],
+      "testatorSignedInPresenceOfWitnesses": true,
+      "witnessesSignedInPresenceOfTestator": true,
+      "witnessConflictCheck": true,
+      "witnessConflictCheckScope": "english_law",
+      "pageCount": 5,
+      "allPagesSigned": true,
+      "notes": "Executed on Thursday 14 March 2024. 5 pages, each signed by testator and both witnesses. Pursuant to the Wills Act 1837 s.9."
+    },
+    "validityStatus": [
+      {
+        "conditionType": "unmarried",
+        "description": "Will revoked on marriage under Wills Act 1837 s.18",
+        "status": "satisfied",
+        "statute": "Wills Act 1837 s.18"
+      }
+    ],
+    "administrationPhases": [
+      { "priority": 1, "category": "funeral_expenses" },
+      { "priority": 2, "category": "testamentary_expenses" },
+      { "priority": 3, "category": "unsecured_debts" },
+      { "priority": 4, "category": "distribution" }
+    ],
+    "executorPowers": [
+      {
+        "powerType": "statutory_default",
+        "statute": "Trustee Act 2000",
+        "description": "General powers of investment, delegation, and management conferred by the Trustee Act 2000.",
+        "clauseReference": "5"
+      },
+      {
+        "powerType": "sale_and_conversion",
+        "description": "Power to sell, call in, and convert any of my estate assets into money at such time and in such manner as my Executor or Trustee thinks fit.",
+        "clauseReference": "5"
+      },
+      {
+        "powerType": "appropriation",
+        "statute": "Administration of Estates Act 1925 s.41",
+        "description": "Power to appropriate any part of my estate in or towards satisfaction of any legacy or share without requiring the consent of the beneficiaries.",
+        "clauseReference": "5"
+      },
+      {
+        "powerType": "insurance",
+        "description": "Power to insure any of my estate assets against loss or damage to the full value thereof and to pay the premiums out of the income or capital of my estate.",
+        "clauseReference": "5"
+      }
+    ],
+    "statutoryExclusions": [
+      {
+        "statute": "Apportionment Act 1870",
+        "sections": "ss.2-4",
+        "effect": "Income arising from estate assets shall not be apportioned between capital and income. All income accruing on or after death belongs entirely to the income beneficiary.",
+        "clauseReference": "7"
+      }
+    ],
+    "notes": "Medium-complexity English will. Single testator, two siblings as beneficiaries, charitable bequest to Médecins Sans Frontières, freehold property at 42 Birch Lane, Bishopston, Bristol.",
+    "createdAt": "2024-03-14T00:00:00Z",
+    "lastModifiedAt": "2026-04-12T23:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England"
+    }
+  },
+  "people": [
+    {
+      "id": "a1000002-0000-4000-a000-000000000001",
+      "givenName": "Mark",
+      "additionalName": "James",
+      "familyName": "Richardson",
+      "gender": "male",
+      "roles": [
+        "testator"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "42 Birch Lane",
+          "addressLocality": "Bishopston",
+          "addressRegion": "Bristol",
+          "postalCode": "BS7 8NQ",
+          "addressCountry": "GB"
+        }
+      }
+    },
+    {
+      "id": "a1000002-0000-4000-a000-000000000002",
+      "givenName": "Thomas",
+      "additionalName": "Andrew",
+      "familyName": "Henderson",
+      "gender": "male",
+      "roles": [
+        "executor"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "8 Cabot Close",
+          "addressLocality": "Clifton",
+          "addressRegion": "Bristol",
+          "postalCode": "BS8 3LP",
+          "addressCountry": "GB"
+        }
+      },
+      "notes": "Relationship to Mark not stated in the will. Appointed primary executor and trustee (clause 2)."
+    },
+    {
+      "id": "a1000002-0000-4000-a000-000000000003",
+      "givenName": "Eleanor",
+      "additionalName": "Rose",
+      "familyName": "Brightwell",
+      "gender": "female",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "17 Pembroke Road",
+          "addressLocality": "Henleaze",
+          "addressRegion": "Bristol",
+          "postalCode": "BS9 4HA",
+          "addressCountry": "GB"
+        }
+      },
+      "notes": "Mark's sister. Different surname — likely married. Substitute executor (clause 2) and beneficiary (clauses 4.1, 6)."
+    },
+    {
+      "id": "a1000002-0000-4000-a000-000000000004",
+      "givenName": "James",
+      "additionalName": "David",
+      "familyName": "Richardson",
+      "gender": "male",
+      "roles": [
+        "beneficiary"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "9 Marine Parade",
+          "addressLocality": "Weston-super-Mare",
+          "postalCode": "BS23 1AL",
+          "addressCountry": "GB"
+        }
+      },
+      "notes": "Mark's brother. Beneficiary of 50% residuary estate (clause 6)."
+    },
+    {
+      "id": "a1000002-0000-4000-a000-000000000005",
+      "givenName": "Sarah",
+      "additionalName": "Jane",
+      "familyName": "Cooper",
+      "gender": "female",
+      "roles": [],
+      "contact": {
+        "address": {
+          "streetAddress": "14 Cotham Hill",
+          "addressLocality": "Cotham",
+          "addressRegion": "Bristol",
+          "postalCode": "BS6 6LA",
+          "addressCountry": "GB"
+        }
+      },
+      "notes": "Witness. Described as a neighbour."
+    },
+    {
+      "id": "a1000002-0000-4000-a000-000000000006",
+      "givenName": "Rajesh",
+      "familyName": "Patel",
+      "titles": [
+        {
+          "title": "Dr",
+          "type": "academic"
+        }
+      ],
+      "gender": "male",
+      "roles": [],
+      "contact": {
+        "address": {
+          "streetAddress": "3 Redland Park",
+          "addressLocality": "Redland",
+          "addressRegion": "Bristol",
+          "postalCode": "BS6 6SA",
+          "addressCountry": "GB"
+        }
+      },
+      "notes": "Witness. Described as a colleague. Academic/professional honorific: Dr."
+    }
+  ],
+  "kinships": [
+    {
+      "id": "ca000002-0000-4000-a000-000000000001",
+      "kinshipType": "sibling",
+      "fromPersonId": "a1000002-0000-4000-a000-000000000001",
+      "fromPersonIdDisplay": "Mark James Richardson",
+      "toPersonId": "a1000002-0000-4000-a000-000000000003",
+      "toPersonIdDisplay": "Eleanor Rose Brightwell",
+      "legalStatus": "recognised",
+      "notes": "Mark and Eleanor are siblings. Eleanor has a different surname (Brightwell), consistent with marriage. Will clauses refer to Eleanor as 'my sister'."
+    },
+    {
+      "id": "ca000002-0000-4000-a000-000000000002",
+      "kinshipType": "sibling",
+      "fromPersonId": "a1000002-0000-4000-a000-000000000001",
+      "fromPersonIdDisplay": "Mark James Richardson",
+      "toPersonId": "a1000002-0000-4000-a000-000000000004",
+      "toPersonIdDisplay": "James David Richardson",
+      "legalStatus": "recognised",
+      "notes": "Mark and James are siblings. Same surname. Will clause 6 refers to James as 'my brother'."
+    }
+  ],
+  "relationships": [],
+  "properties": [
+    {
+      "id": "da000002-0000-4000-a000-000000000001",
+      "name": "42 Birch Lane, Bishopston, Bristol BS7 8NQ",
+      "propertyType": "detached",
+      "tenureType": "ownership",
+      "ownershipType": "sole",
+      "isPrimaryResidence": true,
+      "address": {
+        "streetAddress": "42 Birch Lane",
+        "addressLocality": "Bishopston",
+        "addressRegion": "Bristol",
+        "postalCode": "BS7 8NQ",
+        "addressCountry": "GB"
+      },
+      "notes": "Freehold property. Included in residuary estate (clause 6). Mentioned by address in the residuary clause."
+    }
+  ],
+  "assets": [
+    {
+      "id": "5a000002-0000-4000-a000-000000000001",
+      "name": "Omega Seamaster wristwatch (ref 2220.80.00, circa 1967)",
+      "category": "jewellery_watches",
+      "identifiers": [
+        {
+          "system": "urn:omega:reference",
+          "type": "product_reference",
+          "value": "2220.80.00"
+        }
+      ],
+      "significance": {
+        "type": "family_heirloom",
+        "description": "Omega Seamaster wristwatch, reference 2220.80.00, circa 1967 — a family heirloom passed through the Richardson family.",
+        "restrictionOnDisposal": {
+          "exists": false
+        }
+      },
+      "notes": "Will clause 4.1: specific bequest to sister Eleanor Rose Brightwell. Testator expresses the wish that she keep it as a family heirloom (precatory, non-binding)."
+    },
+    {
+      "id": "5a000002-0000-4000-a000-000000000002",
+      "name": "Nationwide Building Society ISA (sort code 07-01-16, account ending 4829)",
+      "category": "financial",
+      "subcategory": "ISA",
+      "identifiers": [
+        {
+          "system": "urn:gb:sort-code",
+          "type": "sort_code",
+          "value": "07-01-16"
+        },
+        {
+          "system": "urn:nationwide:account",
+          "type": "bank_account",
+          "value": "****4829"
+        }
+      ],
+      "notes": "Will clause 6: included in residuary estate. Mentioned in the residuary clause for clarity."
+    }
+  ],
+  "assetCollections": [],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "b1000002-0000-4000-a000-000000000001",
+      "bequestType": "specific",
+      "beneficiaryId": "a1000002-0000-4000-a000-000000000003",
+      "beneficiaryIdDisplay": "Eleanor Rose Brightwell",
+      "assetIds": [
+        "5a000002-0000-4000-a000-000000000001"
+      ],
+      "description": "Will clause 4.1: my Omega Seamaster wristwatch (reference 2220.80.00, circa 1967) to my sister Eleanor Rose Brightwell absolutely.",
+      "priority": 1,
+      "clauseReference": "4.1",
+      "conditions": [
+        {
+          "conditionType": "survival_period",
+          "description": "Must survive me by 28 days",
+          "survivalDays": 28,
+          "failureConsequence": "lapse_to_residue"
+        }
+      ],
+      "precatoryWishes": [
+        {
+          "wish": "I express the wish that she keep it as a family heirloom",
+          "binding": false,
+          "clauseReference": "4.1"
+        }
+      ]
+    },
+    {
+      "id": "b1000002-0000-4000-a000-000000000002",
+      "bequestType": "pecuniary",
+      "beneficiaryOrganisation": {
+        "name": "Médecins Sans Frontières",
+        "type": "charity",
+        "registrationNumber": "1026588"
+      },
+      "amount": {
+        "amount": 500000,
+        "currency": "GBP"
+      },
+      "description": "Will clause 4.2: £5,000 to Médecins Sans Frontières (charity number 1026588) for their general charitable purposes.",
+      "priority": 2,
+      "clauseReference": "4.2",
+      "conditions": [
+        {
+          "conditionType": "survival_period",
+          "description": "Must survive me by 28 days",
+          "survivalDays": 28,
+          "failureConsequence": "lapse_to_residue"
+        }
+      ],
+      "charityPurposeRestriction": "General charitable purposes of Médecins Sans Frontières.",
+      "executorDirections": [
+        {
+          "directive": "The receipt of the authorised officer of Médecins Sans Frontières shall be a sufficient discharge to my Executor.",
+          "binding": true,
+          "clauseReference": "4.2"
+        }
+      ]
+    },
+    {
+      "id": "b1000002-0000-4000-a000-000000000003",
+      "bequestType": "residuary",
+      "beneficiaryId": "a1000002-0000-4000-a000-000000000003",
+      "beneficiaryIdDisplay": "Eleanor Rose Brightwell",
+      "sharePercentage": 50,
+      "description": "Will clause 6: 50% of the residuary estate to my sister Eleanor Rose Brightwell absolutely.",
+      "priority": 3,
+      "clauseReference": "6",
+      "conditions": [
+        {
+          "conditionType": "survival_period",
+          "description": "Must survive me by 28 days",
+          "survivalDays": 28,
+          "failureConsequence": "lapse_to_residue"
+        }
+      ],
+      "mentionedPropertyIds": [
+        "da000002-0000-4000-a000-000000000001"
+      ],
+      "mentionedAssetIds": [
+        "5a000002-0000-4000-a000-000000000002"
+      ]
+    },
+    {
+      "id": "b1000002-0000-4000-a000-000000000004",
+      "bequestType": "residuary",
+      "beneficiaryId": "a1000002-0000-4000-a000-000000000004",
+      "beneficiaryIdDisplay": "James David Richardson",
+      "sharePercentage": 50,
+      "description": "Will clause 6: 50% of the residuary estate to my brother James David Richardson absolutely.",
+      "priority": 4,
+      "clauseReference": "6",
+      "conditions": [
+        {
+          "conditionType": "survival_period",
+          "description": "Must survive me by 28 days",
+          "survivalDays": 28,
+          "failureConsequence": "lapse_to_residue"
+        }
+      ],
+      "mentionedPropertyIds": [
+        "da000002-0000-4000-a000-000000000001"
+      ],
+      "mentionedAssetIds": [
+        "5a000002-0000-4000-a000-000000000002"
+      ]
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "ea000002-0000-4000-a000-000000000001",
+      "personId": "a1000002-0000-4000-a000-000000000002",
+      "personIdDisplay": "Thomas Andrew Henderson",
+      "role": "primary",
+      "notes": "Will clause 2: Thomas Andrew Henderson appointed sole Executor and Trustee."
+    },
+    {
+      "id": "ea000002-0000-4000-a000-000000000002",
+      "personId": "a1000002-0000-4000-a000-000000000003",
+      "personIdDisplay": "Eleanor Rose Brightwell",
+      "role": "substitute",
+      "conflictsOfInterest": [
+        {
+          "conflictType": "beneficiary",
+          "relatedPersonId": "a1000002-0000-4000-a000-000000000003",
+          "disclosed": true,
+          "notes": "Eleanor is both substitute executor and beneficiary (50% residuary + Omega Seamaster). Conflict disclosed by appointment in the will."
+        }
+      ],
+      "notes": "Will clause 2: Eleanor Rose Brightwell appointed substitute Executor and Trustee in the event Thomas is unable or unwilling to act."
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [
+    {
+      "id": "d1000002-0000-4000-a000-000000000001",
+      "type": "will",
+      "title": "Last Will and Testament of Mark James Richardson",
+      "fileFormat": "pdf",
+      "createdAt": "2024-03-14T00:00:00Z",
+      "notes": "Executed on Thursday 14 March 2024. Witnessed by Sarah Jane Cooper (neighbour, 14 Cotham Hill, Cotham, Bristol BS6 6LA) and Dr. Rajesh Patel (colleague, 3 Redland Park, Redland, Bristol BS6 6SA). 5 pages, each signed by testator and both witnesses. Pursuant to the Wills Act 1837.",
+      "clauses": [
+        {
+          "id": "c1000002-0000-4000-a000-000000000001",
+          "clauseNumber": 1,
+          "title": "Revocation",
+          "content": "Revokes all former Wills, Codicils, and other Testamentary dispositions."
+        },
+        {
+          "id": "c1000002-0000-4000-a000-000000000002",
+          "clauseNumber": 2,
+          "title": "Appointment of Executor and Trustee",
+          "content": "Primary: Thomas Andrew Henderson. Substitute: Eleanor Rose Brightwell (sister).",
+          "relatedEntityIds": [
+            "ea000002-0000-4000-a000-000000000001",
+            "ea000002-0000-4000-a000-000000000002"
+          ]
+        },
+        {
+          "id": "c1000002-0000-4000-a000-000000000003",
+          "clauseNumber": 3,
+          "title": "Funeral and Burial Wishes",
+          "content": "Funeral arrangements left to the discretion of the executor."
+        },
+        {
+          "id": "c1000002-0000-4000-a000-000000000004",
+          "clauseNumber": 4,
+          "title": "Specific and Pecuniary Bequests",
+          "content": "4.1: Omega Seamaster wristwatch to Eleanor. 4.2: £5,000 to Médecins Sans Frontières (charity number 1026588).",
+          "relatedEntityIds": [
+            "b1000002-0000-4000-a000-000000000001",
+            "b1000002-0000-4000-a000-000000000002"
+          ]
+        },
+        {
+          "id": "c1000002-0000-4000-a000-000000000005",
+          "clauseNumber": 5,
+          "title": "Executor Powers",
+          "content": "Statutory powers under the Trustee Act 2000, plus express powers of sale and conversion, appropriation, and insurance.",
+          "relatedEntityIds": []
+        },
+        {
+          "id": "c1000002-0000-4000-a000-000000000006",
+          "clauseNumber": 6,
+          "title": "Residuary Estate",
+          "content": "All rest and residue in equal shares (50/50) to sister Eleanor Rose Brightwell and brother James David Richardson absolutely.",
+          "relatedEntityIds": [
+            "b1000002-0000-4000-a000-000000000003",
+            "b1000002-0000-4000-a000-000000000004"
+          ]
+        },
+        {
+          "id": "c1000002-0000-4000-a000-000000000007",
+          "clauseNumber": 7,
+          "title": "Statutory Exclusions",
+          "content": "The provisions of the Apportionment Act 1870 ss.2-4 shall not apply to my estate."
+        },
+        {
+          "id": "c1000002-0000-4000-a000-000000000008",
+          "clauseNumber": 8,
+          "title": "Survivorship and General Provisions",
+          "content": "28-day survivorship clause. Any bequest to a beneficiary who does not survive me by 28 days shall lapse and fall into the residuary estate."
+        }
+      ]
+    }
+  ],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "organisations": [
+    {
+      "id": "0a000002-0000-4000-a000-000000000001",
+      "name": "Médecins Sans Frontières",
+      "organisationType": "charity",
+      "jurisdiction": "GB",
+      "estateRoles": [
+        "beneficiary"
+      ],
+      "registrations": [
+        {
+          "body": "ccew",
+          "number": "1026588",
+          "status": "active",
+          "jurisdiction": "GB-ENG"
+        }
+      ],
+      "notes": "Charity Commission for England and Wales registered charity number 1026588. Pecuniary bequest of £5,000 (clause 4.2)."
+    }
+  ],
+  "spaces": [],
+  "insurancePolicies": [],
+  "pets": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "extensions": [],
+  "conformance": {
+    "level": "level_2",
+    "validatedAt": "2026-04-12T23:00:00Z",
+    "validatedBy": "Claude Code — AI Will Extraction",
+    "schemaVersion": "6.4.2"
+  }
+}

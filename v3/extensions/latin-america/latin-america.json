@@ -1,0 +1,401 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/latin-america/latin-america.json",
+  "title": "Latin America Extension",
+  "description": "Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions.",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "BR",
+    "AR",
+    "MX",
+    "CO",
+    "CL",
+    "PE",
+    "EC",
+    "UY",
+    "PY"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "civil_law"
+  ],
+  "dataProvenance": "Brazilian Civil Code (legítima), Argentine Civil and Commercial Code, Colombian Civil Code",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "type": "object",
+  "$defs": {
+    "BrazilianSuccession": {
+      "type": "object",
+      "properties": {
+        "legitimaFraction": {
+          "type": "string",
+          "maxLength": 255,
+          "pattern": "^[0-9]+/[0-9]+$",
+          "default": "1/2"
+        },
+        "necessaryHeirs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "personId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "category": {
+                "type": "string",
+                "enum": [
+                  "descendant",
+                  "ascendant",
+                  "spouse"
+                ]
+              }
+            },
+            "required": [
+              "personId",
+              "category"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 50
+        },
+        "meacaoHerancaSplit": {
+          "type": "boolean",
+          "$comment": "community property split before succession"
+        },
+        "stableUnionRights": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "ArgentineSuccession": {
+      "type": "object",
+      "properties": {
+        "legitimaDescendants": {
+          "type": "string",
+          "maxLength": 255,
+          "pattern": "^[0-9]+/[0-9]+$"
+        },
+        "legitimaAscendants": {
+          "type": "string",
+          "maxLength": 255,
+          "pattern": "^[0-9]+/[0-9]+$"
+        },
+        "porcionDisponible": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "collation": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "ColombianSuccession": {
+      "type": "object",
+      "properties": {
+        "system": {
+          "type": "string",
+          "enum": [
+            "fourths"
+          ]
+        },
+        "legitimaRigurosa": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "cuartaDeMejoras": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "cuartaDeLibreDisposicion": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "forcedHeirs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "personId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "relationship": {
+                "type": "string",
+                "maxLength": 255
+              }
+            },
+            "required": [
+              "personId"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 50
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "VenezuelanSuccession": {
+      "type": "object",
+      "properties": {
+        "legitimaFraction": {
+          "type": "string",
+          "maxLength": 255,
+          "pattern": "^[0-9]+/[0-9]+$"
+        },
+        "applicableLaw": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "MexicanSuccession": {
+      "description": "Mexican succession under Federal Civil Code — no forced heirship but alimentos obligations",
+      "type": "object",
+      "properties": {
+        "alimentosObligations": {
+          "type": "boolean",
+          "description": "Dependant maintenance that cannot be defeated by will"
+        },
+        "testamentaryWill": {
+          "type": "boolean"
+        },
+        "intestacyOrder": {
+          "type": "string",
+          "enum": [
+            "descendants",
+            "spouse",
+            "ascendants",
+            "collaterals",
+            "concubine",
+            "state"
+          ]
+        },
+        "stateCode": {
+          "type": "string",
+          "maxLength": 10,
+          "description": "Mexican state code — civil law varies by state"
+        },
+        "publicTestament": {
+          "type": "boolean",
+          "description": "Most common will form, executed before a notary"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "ChileanSuccession": {
+      "description": "Chilean succession under Código Civil — mitad legitimaria, cuarta de mejoras, cuarta de libre disposición",
+      "type": "object",
+      "properties": {
+        "mitadLegitimaria": {
+          "type": "string",
+          "maxLength": 20,
+          "pattern": "^[0-9]+/[0-9]+$",
+          "description": "50% forced heirs"
+        },
+        "cuartaDeMejoras": {
+          "type": "string",
+          "maxLength": 20,
+          "pattern": "^[0-9]+/[0-9]+$",
+          "description": "25% improvement share — descendants, spouse, or ascendants"
+        },
+        "cuartaDeLibreDisposicion": {
+          "type": "string",
+          "maxLength": 20,
+          "pattern": "^[0-9]+/[0-9]+$",
+          "description": "25% freely disposable"
+        },
+        "mejoraDesignees": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "personId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "relationship": {
+                "type": "string",
+                "maxLength": 100
+              }
+            },
+            "required": [
+              "personId"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 20
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "NotarialSuccession": {
+      "description": "Extrajudicial settlement before a notary — faster alternative to court proceedings, common in Brazil and Chile",
+      "type": "object",
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+        "allHeirsConsent": {
+          "type": "boolean",
+          "description": "All heirs must be adult and consenting for extrajudicial settlement"
+        },
+        "notaryReference": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "ForcedHeirshipPattern": {
+      "description": "General forced heirship pattern for civil law jurisdictions — covers Peru, Ecuador, Paraguay, Uruguay, and others",
+      "type": "object",
+      "properties": {
+        "legitimaFraction": {
+          "type": "string",
+          "maxLength": 20,
+          "pattern": "^[0-9]+/[0-9]+$"
+        },
+        "forcedHeirCategories": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "descendants",
+              "ascendants",
+              "spouse"
+            ]
+          },
+          "maxItems": 10
+        },
+        "freeDisposalFraction": {
+          "type": "string",
+          "maxLength": 20,
+          "pattern": "^[0-9]+/[0-9]+$"
+        },
+        "mejoraAvailable": {
+          "type": "boolean",
+          "description": "Whether an improvement share exists"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "country": {
+      "description": "ISO 3166-1 alpha-2 country code identifying which Latin American jurisdiction's succession rules apply",
+      "type": "string",
+      "enum": [
+        "BR",
+        "AR",
+        "CO",
+        "VE",
+        "MX",
+        "CL",
+        "PE"
+      ]
+    },
+    "brazilianSuccession": {
+      "$ref": "#/$defs/BrazilianSuccession"
+    },
+    "argentineSuccession": {
+      "$ref": "#/$defs/ArgentineSuccession"
+    },
+    "colombianSuccession": {
+      "$ref": "#/$defs/ColombianSuccession"
+    },
+    "venezuelanSuccession": {
+      "$ref": "#/$defs/VenezuelanSuccession"
+    },
+    "mexicanSuccession": {
+      "description": "Mexican succession under Federal Civil Code — no forced heirship but alimentos obligations",
+      "$ref": "#/$defs/MexicanSuccession"
+    },
+    "chileanSuccession": {
+      "description": "Chilean succession under Código Civil — mitad legitimaria, cuarta de mejoras, cuarta de libre disposición",
+      "$ref": "#/$defs/ChileanSuccession"
+    },
+    "notarialSuccession": {
+      "description": "Extrajudicial settlement before a notary — faster alternative to court proceedings, common in Brazil and Chile",
+      "$ref": "#/$defs/NotarialSuccession"
+    },
+    "forcedHeirshipPattern": {
+      "description": "General forced heirship pattern for civil law jurisdictions — covers Peru, Ecuador, Paraguay, Uruguay, and others",
+      "$ref": "#/$defs/ForcedHeirshipPattern"
+    },
+    "legislativeChanges": {
+      "description": "Tracked changes to Latin American succession legislation",
+      "type": "array",
+      "items": {
+        "$ref": "../../common/temporal-rule.json"
+      },
+      "maxItems": 50
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "country"
+  ],
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

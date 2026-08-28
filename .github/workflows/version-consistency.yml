@@ -1,0 +1,43 @@
+name: Version Consistency
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Verify workspace package versions match root
+        run: |
+          ROOT_VERSION=$(node -p "require('./package.json').version")
+          FAILED=false
+
+          for PKG_FILE in packages/schema/package.json packages/sdk/package.json packages/conformance/package.json; do
+            if [ -f "$PKG_FILE" ]; then
+              PKG_VERSION=$(node -p "require('./$PKG_FILE').version")
+              echo "$PKG_FILE: $PKG_VERSION"
+              if [ "$PKG_VERSION" != "$ROOT_VERSION" ]; then
+                echo "::error::$PKG_FILE is at $PKG_VERSION but root is at $ROOT_VERSION"
+                FAILED=true
+              fi
+            fi
+          done
+
+          if [ "$FAILED" = "true" ]; then
+            exit 1
+          fi
+          echo "All workspace packages match root: $ROOT_VERSION"
+
+      - name: Verify CHANGELOG.md has a section for the current version
+        run: |
+          PKG_VERSION=$(node -p "require('./package.json').version")
+
+          if ! grep -q "## \[$PKG_VERSION\]" CHANGELOG.md; then
+            echo "::error::CHANGELOG.md has no section for [$PKG_VERSION]. Add one before releasing."
+            exit 1
+          fi
+
+          echo "CHANGELOG.md has a [$PKG_VERSION] section"

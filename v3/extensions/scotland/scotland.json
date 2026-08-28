@@ -1,0 +1,591 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/scotland/scotland.json",
+  "title": "Scotland Extension",
+  "description": "Scottish succession law — prior rights, legal rights, confirmation, cohabitation claims under Family Law (Scotland) Act 2006, intestacy (Succession (Scotland) Act 1964 as amended 2024), heritable/moveable classification, executry, survivorship destinations, crofting succession, LBTT",
+  "$comment": "Scotland does NOT distinguish whole blood from half blood at any level. Half-siblings inherit equally with full siblings. This is a key difference from England & Wales. The core bloodDegree property is not relevant for Scottish intestacy.",
+  "maturity": "candidate",
+  "dataProvenance": "Succession (Scotland) Act 1964, Trusts and Succession (Scotland) Act 2024, Family Law (Scotland) Act 2006, Crofters (Scotland) Act 1993, Requirements of Writing (Scotland) Act 1995, Land and Buildings Transaction Tax (Scotland) Act 2013, Confirmation of Executors (Scotland) Act 1858",
+  "type": "object",
+  "properties": {
+    "priorRights": {
+      "description": "Prior rights of the surviving spouse/civil partner under Succession (Scotland) Act 1964 ss.8-9",
+      "type": "object",
+      "properties": {
+        "dwellinghouseRight": {
+          "$ref": "../../common/temporal-rule.json",
+          "description": "Right to dwellinghouse (s.8) — value threshold is a temporal rule"
+        },
+        "furnitureRight": {
+          "$ref": "../../common/temporal-rule.json",
+          "description": "Right to furniture and plenishings (s.8) — value threshold"
+        },
+        "financialProvision": {
+          "$ref": "../../common/temporal-rule.json",
+          "description": "Right to financial provision (s.9) — value threshold"
+        }
+      },
+      "additionalProperties": false
+    },
+    "legalRights": {
+      "description": "Legal rights (jus relictae/jus relicti for spouse, legitim for children) — fixed fractions of moveable estate that cannot be defeated by will",
+      "type": "object",
+      "properties": {
+        "jusRelictae": {
+          "description": "Surviving spouse share of moveable estate (1/3 with children, 1/2 without)",
+          "type": "string",
+          "maxLength": 10
+        },
+        "legitim": {
+          "description": "Children share of moveable estate (1/3 with surviving spouse, 1/2 without)",
+          "type": "string",
+          "maxLength": 10
+        },
+        "deadsPart": {
+          "description": "Remaining moveable estate after legal rights — free to dispose by will",
+          "type": "string",
+          "maxLength": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "confirmation": {
+      "description": "Scottish equivalent of probate — confirmation is granted by the Sheriff Court",
+      "type": "object",
+      "properties": {
+        "sheriffCourt": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "Which Sheriff Court has jurisdiction"
+        },
+        "confirmationType": {
+          "enum": [
+            "confirmation",
+            "small_estate_certificate",
+            "eik_confirmation"
+          ],
+          "description": "Type of confirmation process"
+        },
+        "inventoryValue": {
+          "$ref": "../../common/money.json",
+          "description": "Total value of estate for inventory purposes"
+        },
+        "smallEstateThreshold": {
+          "$ref": "../../common/temporal-rule.json",
+          "description": "Threshold below which simplified procedure applies"
+        }
+      },
+      "additionalProperties": false
+    },
+    "cohabitationClaim": {
+      "description": "Claims by cohabitants under Family Law (Scotland) Act 2006 s.29",
+      "type": "object",
+      "properties": {
+        "eligible": {
+          "type": "boolean",
+          "description": "Whether a cohabitant claim is likely"
+        },
+        "cohabitantPersonId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Reference to the cohabitant in the people array",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "cohabitationDuration": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Duration of cohabitation (relevant to claim strength)"
+        },
+        "claimDeadline": {
+          "type": "string",
+          "format": "date",
+          "description": "Deadline from date of death to raise action",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "cohabitationStartDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "cohabitationEndDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "claimDeadlineVersion": {
+          "type": "string",
+          "enum": ["pre_2024_six_months", "post_2024_twelve_months"]
+        },
+        "externalBenefits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "amount": {
+                "$ref": "../../common/money.json"
+              }
+            },
+            "additionalProperties": false
+          },
+          "maxItems": 20
+        },
+        "courtOrderType": {
+          "type": "string",
+          "enum": ["capital_sum", "property_transfer", "none", "pending"]
+        },
+        "awardAmount": {
+          "$ref": "../../common/money.json"
+        },
+        "courtReference": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false
+    },
+    "forcedHeirship": {
+      "description": "Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights.",
+      "type": "object",
+      "properties": {
+        "legalRightsDefeated": {
+          "type": "boolean",
+          "description": "Whether the will attempts to defeat legal rights"
+        },
+        "discharged": {
+          "type": "boolean",
+          "description": "Whether children have formally discharged their legal rights"
+        },
+        "dischargeDetails": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "additionalProperties": false
+    },
+    "legislativeChanges": {
+      "description": "Tracked changes to Scottish succession legislation",
+      "type": "array",
+      "items": {
+        "$ref": "../../common/temporal-rule.json"
+      }
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "intestacy": {
+      "description": "Intestacy calculation under Succession (Scotland) Act 1964 as amended by Trusts and Succession (Scotland) Act 2024",
+      "type": "object",
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "partial": {
+          "type": "boolean",
+          "description": "Whether this is partial intestacy (will exists but doesn't cover all estate)"
+        },
+        "rulesVersion": {
+          "type": "string",
+          "enum": ["pre_2024", "post_2024"],
+          "description": "Which ranking order applies (post_2024 for deaths on or after 1 May 2024)"
+        },
+        "priorRightsClaimed": {
+          "type": "object",
+          "properties": {
+            "dwellinghouseValue": {
+              "$ref": "../../common/money.json"
+            },
+            "dwellinghouseCapped": {
+              "type": "boolean"
+            },
+            "furnitureValue": {
+              "$ref": "../../common/money.json"
+            },
+            "financialProvision": {
+              "$ref": "../../common/money.json"
+            },
+            "financialProvisionRate": {
+              "type": "string",
+              "enum": ["with_children", "without_children"]
+            }
+          },
+          "additionalProperties": false
+        },
+        "legalRightsClaimed": {
+          "type": "object",
+          "properties": {
+            "jusRelictaeAmount": {
+              "$ref": "../../common/money.json"
+            },
+            "legitimAmount": {
+              "$ref": "../../common/money.json"
+            },
+            "legitimPerChild": {
+              "$ref": "../../common/money.json"
+            },
+            "numberOfEligibleChildren": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "netMoveableEstate": {
+          "$ref": "../../common/money.json"
+        },
+        "freeEstate": {
+          "$ref": "../../common/money.json"
+        },
+        "freeEstateDistribution": {
+          "$comment": "Mapping of Scottish intestacy ranks to core kinship types: Rank 1: children (parent_child_*). Rank 2: parents and siblings equally (parent_child_*, sibling, half_sibling). Rank 3: surviving spouse (if no rank 1 or 2 — spouse gets prior rights regardless but free estate only if no descendants/siblings/parents). Rank 4: uncles/aunts (uncle_aunt). Rank 5: grandparents (grandparent_grandchild). Rank 6: Crown (Crown Office/King's and Lord Treasurer's Remembrancer)",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "personId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "rank": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "share": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "amount": {
+                "$ref": "../../common/money.json"
+              }
+            },
+            "required": ["personId"],
+            "additionalProperties": false
+          },
+          "maxItems": 50
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "heritableMoveableClassifications": {
+      "description": "Classification of estate items as heritable or moveable under Scots law — legal rights apply only to moveables",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "entityType": {
+            "type": "string",
+            "enum": ["property", "asset"]
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "classification": {
+            "type": "string",
+            "enum": ["heritable", "moveable"]
+          },
+          "basis": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "overridden": {
+            "type": "boolean"
+          }
+        },
+        "required": ["entityType", "entityId", "classification"],
+        "additionalProperties": false
+      },
+      "maxItems": 500
+    },
+    "totalHeritableValue": {
+      "$ref": "../../common/money.json",
+      "description": "Sum of all heritable items"
+    },
+    "totalMoveableValue": {
+      "$ref": "../../common/money.json",
+      "description": "Sum of all moveable items"
+    },
+    "executryAppointments": {
+      "description": "Scottish-specific executor appointment details — nominate (by will), dative (by court), creditor (by creditor petition)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "executorId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "appointmentType": {
+            "type": "string",
+            "enum": ["executor_nominate", "executor_dative", "executor_creditor"]
+          },
+          "bondOfCaution": {
+            "type": "object",
+            "properties": {
+              "required": {
+                "type": "boolean"
+              },
+              "obtained": {
+                "type": "boolean"
+              },
+              "provider": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "amount": {
+                "$ref": "../../common/money.json"
+              },
+              "reference": {
+                "type": "string",
+                "maxLength": 255
+              }
+            },
+            "additionalProperties": false
+          },
+          "appointedBy": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "courtPetitionDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          }
+        },
+        "required": ["executorId", "appointmentType"],
+        "additionalProperties": false
+      },
+      "maxItems": 20
+    },
+    "survivorshipDestinations": {
+      "description": "Properties with survivorship destinations ('to A and B and the survivor') — pass outside the estate, overriding any will",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "destinationType": {
+            "type": "string",
+            "enum": ["survivorship", "pro_indiviso"]
+          },
+          "survivorPersonIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+            },
+            "maxItems": 10
+          },
+          "passesOutsideEstate": {
+            "type": "boolean"
+          },
+          "evacuated": {
+            "type": "boolean"
+          },
+          "evacuationMethod": {
+            "type": "string",
+            "enum": ["agreement", "divorce_automatic", "court_order"]
+          },
+          "evacuationDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "titleReference": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": ["propertyId", "destinationType"],
+        "additionalProperties": false
+      },
+      "maxItems": 50
+    },
+    "croftingSuccession": {
+      "description": "Crofting succession under Crofters (Scotland) Act 1993 — special rules for crofting tenancies",
+      "type": "object",
+      "properties": {
+        "hasCroft": {
+          "type": "boolean"
+        },
+        "crofts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "propertyId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "croftingRegisterNumber": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "tenureType": {
+                "type": "string",
+                "enum": ["tenant", "owner_occupier", "absentee"]
+              },
+              "landlordName": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "successionRoute": {
+                "type": "string",
+                "enum": ["bequest", "intestate_transfer", "not_yet_determined"]
+              },
+              "legateePersonId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              },
+              "legateeNotifiedLandlord": {
+                "type": "boolean"
+              },
+              "legateeNotifiedCommission": {
+                "type": "boolean"
+              },
+              "notificationDeadline": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "notificationDate": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "landlordObjection": {
+                "type": "boolean"
+              },
+              "commissionDecision": {
+                "type": "string",
+                "enum": ["pending", "approved", "refused"]
+              },
+              "agriculturalPropertyRelief": {
+                "type": "boolean"
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 2000
+              }
+            },
+            "required": ["propertyId", "tenureType"],
+            "additionalProperties": false
+          },
+          "maxItems": 20
+        }
+      },
+      "additionalProperties": false
+    },
+    "willFormalities": {
+      "description": "Scottish will formalities under Requirements of Writing (Scotland) Act 1995",
+      "type": "object",
+      "properties": {
+        "documentId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "executionType": {
+          "type": "string",
+          "enum": ["attested", "holograph", "notarial"]
+        },
+        "witnessCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "probative": {
+          "type": "boolean"
+        },
+        "notarialExecutorName": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notarialExecutorRole": {
+          "type": "string",
+          "enum": ["solicitor", "advocate", "justice_of_peace", "sheriff_clerk"]
+        },
+        "marriageRevokes": {
+          "type": "boolean",
+          "description": "Always false in Scotland — marriage does not revoke a will"
+        },
+        "registeredWithRegisterOfDeeds": {
+          "type": "boolean"
+        },
+        "registerReference": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "lbttExemption": {
+      "description": "LBTT succession exemption under LBTT(S) Act 2013 — estate transfers are exempt, but inherited dwellings affect ADS",
+      "type": "object",
+      "properties": {
+        "exempt": {
+          "type": "boolean"
+        },
+        "adsImplication": {
+          "type": "boolean",
+          "description": "Whether inherited dwellings create Additional Dwelling Supplement exposure"
+        },
+        "adsAffectedPersonIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "maxItems": 50
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

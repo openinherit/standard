@@ -1,0 +1,49 @@
+name: Secret scan (gitleaks)
+
+# Non-bypassable CI secret scan. Uses the gitleaks CLI directly rather than
+# gitleaks-action, which requires a paid licence for organisation repositories.
+#
+# Two modes:
+#   * pull_request  -> INCREMENTAL: scans only the commits the PR adds.
+#   * workflow_dispatch / schedule -> FULL HISTORY audit over every commit.
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC — weekly full-history audit
+
+permissions:
+  contents: read
+
+jobs:
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # full history — needed for the range + the audit
+
+      - name: Install gitleaks (CLI)
+        env:
+          GITLEAKS_VERSION: "8.18.4"
+        run: |
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            | tar -xz gitleaks
+          sudo install gitleaks /usr/local/bin/gitleaks
+          gitleaks version
+
+      - name: Scan
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "$EVENT" = "pull_request" ]; then
+            echo "Incremental scan of the PR range: ${BASE_SHA}..${HEAD_SHA}"
+            gitleaks detect --source . --redact --no-banner \
+              --log-opts="${BASE_SHA}..${HEAD_SHA}"
+          else
+            echo "Full-history audit (every reachable commit)"
+            gitleaks detect --source . --redact --no-banner
+          fi

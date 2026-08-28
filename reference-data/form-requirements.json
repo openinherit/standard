@@ -1,0 +1,1260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/reference-data/form-requirements.json",
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal or tax advice. Tax laws change frequently — always verify with current legislation and qualified professionals. Data current as of March 2026.",
+  "title": "Tax & Probate Form Requirements",
+  "description": "Required tax returns, probate applications, and associated forms by jurisdiction, including thresholds that determine when each form is required.",
+  "lastUpdated": "2026-03-28",
+  "_metadata": {
+    "lastVerified": "2026-04-06",
+    "source": "HMCTS probate forms, IRAS Singapore forms, Ontario court forms",
+    "jurisdiction": "multi",
+    "disclaimer": "This data is provided for interoperability purposes. It does not constitute legal, tax, or financial advice. Users must verify independently before relying on these figures for official purposes.",
+    "deprecationPattern": "Individual entries within this file may carry deprecated: true, deprecatedAt, deprecatedReason, and supersededBy fields. Deprecated entries are retained for historical reference and audit trail purposes. Applications should filter to non-deprecated entries for current data.",
+    "deprecated": false,
+    "deprecatedAt": null,
+    "deprecatedReason": null,
+    "supersededBy": null
+  },
+  "jurisdictions": {
+    "GB": {
+      "name": "United Kingdom",
+      "forms": [
+        {
+          "formId": "IHT400",
+          "label": "Inheritance Tax Account",
+          "purpose": "Full IHT return required when the estate does not qualify as an excepted estate, or when IHT is payable.",
+          "requiredWhen": [
+            "Estate exceeds the nil rate band (£325,000) and does not qualify as excepted",
+            "IHT is payable",
+            "Certain reliefs (BPR, APR) are being claimed on amounts that take the gross estate above the excepted estate limits",
+            "Estate includes foreign assets exceeding £100,000",
+            "Specified transfers (gifts with reservation, etc.) exceed £250,000"
+          ],
+          "deadline": "12 months from the end of the month of death (but tax is due 6 months from the end of the month of death)",
+          "filedWith": "HMRC",
+          "supplementaryForms": [
+            {
+              "formId": "IHT401",
+              "purpose": "Domicile outside the UK"
+            },
+            {
+              "formId": "IHT402",
+              "purpose": "Claim to transfer unused nil rate band"
+            },
+            {
+              "formId": "IHT403",
+              "purpose": "Gifts and other transfers of value"
+            },
+            {
+              "formId": "IHT404",
+              "purpose": "Jointly owned assets"
+            },
+            {
+              "formId": "IHT405",
+              "purpose": "Houses, land, buildings, and interests in land"
+            },
+            {
+              "formId": "IHT406",
+              "purpose": "Bank and building society accounts"
+            },
+            {
+              "formId": "IHT407",
+              "purpose": "Household and personal goods"
+            },
+            {
+              "formId": "IHT408",
+              "purpose": "Household and personal goods donated to charity"
+            },
+            {
+              "formId": "IHT409",
+              "purpose": "Pensions"
+            },
+            {
+              "formId": "IHT410",
+              "purpose": "Life assurance and annuities"
+            },
+            {
+              "formId": "IHT411",
+              "purpose": "Listed stocks and shares"
+            },
+            {
+              "formId": "IHT412",
+              "purpose": "Unlisted stocks, shares, and control holdings"
+            },
+            {
+              "formId": "IHT413",
+              "purpose": "Business and partnership interests and assets"
+            },
+            {
+              "formId": "IHT414",
+              "purpose": "Agricultural relief"
+            },
+            {
+              "formId": "IHT415",
+              "purpose": "Interest in another estate"
+            },
+            {
+              "formId": "IHT416",
+              "purpose": "Debts due to the estate"
+            },
+            {
+              "formId": "IHT417",
+              "purpose": "Foreign assets"
+            },
+            {
+              "formId": "IHT418",
+              "purpose": "Assets held in trust"
+            },
+            {
+              "formId": "IHT419",
+              "purpose": "Debts owed by the deceased"
+            },
+            {
+              "formId": "IHT420",
+              "purpose": "National Heritage assets — conditional exemption"
+            },
+            {
+              "formId": "IHT421",
+              "purpose": "Probate summary"
+            },
+            {
+              "formId": "IHT430",
+              "purpose": "Reduced rate of IHT (charity)"
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "IHT205",
+          "label": "Return of Estate Information (Excepted Estates — deaths before 1 January 2022)",
+          "purpose": "Simplified return for excepted estates where no IHT is payable. Replaced by the new excepted estate process for deaths on or after 1 January 2022.",
+          "status": "replaced",
+          "replacedBy": "Online excepted estate reporting via the probate application (from 1 January 2022, most excepted estates no longer need a separate IHT form)",
+          "requiredWhen": [
+            "Death occurred before 1 January 2022",
+            "Estate qualifies as excepted (gross value under IHT threshold or exempt/excepted by regulations)"
+          ],
+          "filedWith": "HMRC (via HM Courts & Tribunals Service)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "IHT217",
+          "label": "Claim to Transfer Unused Nil Rate Band (Excepted Estates)",
+          "purpose": "Used alongside IHT205 to claim the transfer of unused nil rate band from a predeceased spouse/civil partner, for excepted estates.",
+          "status": "replaced",
+          "replacedBy": "Integrated into probate application process for deaths on or after 1 January 2022",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "PA1P",
+          "label": "Probate Application (with a will — England & Wales)",
+          "purpose": "Application for a Grant of Probate where the deceased left a valid will. Now typically submitted online via the HMCTS probate service.",
+          "requiredWhen": [
+            "Deceased left a valid will",
+            "Estate includes assets requiring a Grant of Probate to release (property, bank accounts above small estate thresholds, etc.)"
+          ],
+          "filedWith": "HM Courts & Tribunals Service (Probate Registry)",
+          "onlineService": "https://www.gov.uk/applying-for-probate",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "PA1A",
+          "label": "Probate Application (without a will — England & Wales)",
+          "purpose": "Application for a Grant of Letters of Administration where the deceased died intestate (without a valid will).",
+          "requiredWhen": [
+            "Deceased died without a valid will (intestate)",
+            "Estate requires a Grant of Letters of Administration"
+          ],
+          "filedWith": "HM Courts & Tribunals Service (Probate Registry)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "C1",
+          "label": "Confirmation Application (Scotland)",
+          "purpose": "Application for Confirmation (Scottish equivalent of probate). Includes inventory of the estate.",
+          "filedWith": "Sheriff Court",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "NIPF7",
+          "label": "Probate Application (Northern Ireland)",
+          "purpose": "Application for Grant of Probate or Letters of Administration in Northern Ireland.",
+          "filedWith": "Probate Office, Royal Courts of Justice, Belfast",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Inheritance Tax Act 1984; The Non-Contentious Probate Rules 1987; HMRC guidance IHT400 notes",
+      "regulatoryBody": "HM Revenue & Customs; HM Courts & Tribunals Service"
+    },
+    "US": {
+      "name": "United States",
+      "forms": [
+        {
+          "formId": "Form 706",
+          "label": "United States Estate (and Generation-Skipping Transfer) Tax Return",
+          "purpose": "Federal estate tax return. Required for US citizens and residents whose gross estate plus adjusted taxable gifts exceeds the basic exclusion amount.",
+          "requiredWhen": [
+            "Gross estate plus adjusted taxable gifts exceeds $13,610,000 (2024)",
+            "Even if no tax is due — required to elect portability of the unused exclusion to the surviving spouse"
+          ],
+          "deadline": "9 months from date of death (6-month extension available via Form 4768)",
+          "filedWith": "Internal Revenue Service",
+          "supplementaryForms": [
+            {
+              "formId": "Form 706-NA",
+              "purpose": "Estate tax return for non-resident aliens (estates exceeding $60,000)"
+            },
+            {
+              "formId": "Form 4768",
+              "purpose": "Application for extension of time to file Form 706 and/or pay estate tax"
+            },
+            {
+              "formId": "Form 706-A",
+              "purpose": "Recapture of special use valuation (§ 2032A)"
+            },
+            {
+              "formId": "Form 706-QDT",
+              "purpose": "Qualified Domestic Trust (QDOT) estate tax return"
+            },
+            {
+              "formId": "Form 706-GS(D)",
+              "purpose": "Generation-skipping transfer tax return for distributions"
+            },
+            {
+              "formId": "Form 706-GS(T)",
+              "purpose": "Generation-skipping transfer tax return for terminations"
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Form 709",
+          "label": "United States Gift (and Generation-Skipping Transfer) Tax Return",
+          "purpose": "Required for gifts exceeding the annual exclusion ($18,000 per recipient in 2024), gift-splitting elections, or gifts of future interests.",
+          "requiredWhen": [
+            "Gifts to any one person exceed the annual exclusion",
+            "Gift-splitting election with spouse",
+            "Gifts of future interests (regardless of amount)",
+            "Gifts to a non-citizen spouse exceeding $185,000 (2024)"
+          ],
+          "deadline": "15 April of the year following the gift (extensions available)",
+          "filedWith": "Internal Revenue Service",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Form 1041",
+          "label": "US Income Tax Return for Estates and Trusts",
+          "purpose": "Income tax return for the estate as a separate taxable entity during the period of administration.",
+          "requiredWhen": [
+            "Estate has gross income of $600 or more during the tax year",
+            "Any beneficiary is a non-resident alien"
+          ],
+          "filedWith": "Internal Revenue Service",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "State probate filings",
+          "label": "State-Level Probate Applications",
+          "purpose": "Each state has its own probate court system and filing requirements. Common filings include petition for probate, inventory and appraisement, and accounting.",
+          "examples": [
+            {
+              "state": "California",
+              "form": "DE-111 (Petition for Probate)",
+              "threshold": "Estates over $184,500 require formal probate"
+            },
+            {
+              "state": "New York",
+              "form": "Probate Petition (Surrogate's Court)",
+              "threshold": "Estates over $50,000 in personal property or any real property"
+            },
+            {
+              "state": "Texas",
+              "form": "Application to Probate Will (Probate Court)",
+              "threshold": "No minimum — but small estates under $75,000 may use affidavit procedure"
+            },
+            {
+              "state": "Florida",
+              "form": "Petition for Administration (Circuit Court)",
+              "threshold": "Summary administration available for estates under $75,000 or if decedent died more than 2 years ago"
+            }
+          ],
+          "note": "Many states offer simplified procedures for small estates (variously called small estate affidavits, summary administration, or transfer-on-death provisions).",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "State estate/inheritance tax returns",
+          "label": "State Estate or Inheritance Tax Returns",
+          "purpose": "States with their own estate or inheritance taxes require separate state returns.",
+          "examples": [
+            {
+              "state": "Massachusetts",
+              "form": "Form M-706",
+              "threshold": "Estates exceeding $1,000,000"
+            },
+            {
+              "state": "New York",
+              "form": "Form ET-706",
+              "threshold": "Estates exceeding $6,940,000 (2024)"
+            },
+            {
+              "state": "Oregon",
+              "form": "Form OR-706",
+              "threshold": "Estates exceeding $1,000,000"
+            },
+            {
+              "state": "New Jersey",
+              "form": "Form IT-R (Inheritance Tax)",
+              "threshold": "Transfers to non-exempt beneficiaries"
+            },
+            {
+              "state": "Pennsylvania",
+              "form": "REV-1500 (Inheritance Tax Return)",
+              "threshold": "All estates — no minimum threshold"
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Internal Revenue Code; IRS Instructions for Form 706; state-specific probate codes and tax statutes",
+      "regulatoryBody": "Internal Revenue Service (IRS); state probate courts and tax authorities"
+    },
+    "AU": {
+      "name": "Australia",
+      "forms": [
+        {
+          "formId": "Probate application",
+          "label": "Application for Grant of Probate / Letters of Administration",
+          "purpose": "Application to the Supreme Court of the relevant state or territory for authority to administer the estate.",
+          "requiredWhen": [
+            "Estate includes real property",
+            "Financial institutions require a grant before releasing funds (threshold varies by institution, typically $50,000–$100,000)"
+          ],
+          "note": "Each state and territory has its own forms and procedures. Many states have moved to online applications.",
+          "examples": [
+            {
+              "state": "New South Wales",
+              "form": "Online application via NSW Online Registry",
+              "court": "Supreme Court of NSW"
+            },
+            {
+              "state": "Victoria",
+              "form": "Application for Grant (Supreme Court)",
+              "court": "Supreme Court of Victoria"
+            },
+            {
+              "state": "Queensland",
+              "form": "Form 105 (Application for Grant)",
+              "court": "Supreme Court of Queensland"
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Final tax return",
+          "label": "Deceased's Final Income Tax Return",
+          "purpose": "Income tax return for the period from 1 July to date of death. Filed by the executor/administrator.",
+          "deadline": "By the regular lodgement date for the income year in which death occurred",
+          "filedWith": "Australian Taxation Office (ATO)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Trust tax return",
+          "label": "Trust Tax Return for the Deceased Estate",
+          "purpose": "If the estate earns income during the administration period, a trust tax return must be filed.",
+          "requiredWhen": [
+            "Estate earns income during administration (interest, rent, dividends, etc.)"
+          ],
+          "filedWith": "Australian Taxation Office (ATO)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "State and territory Supreme Court rules; Income Tax Assessment Act 1997 (Cth)",
+      "regulatoryBody": "State/territory Supreme Courts; Australian Taxation Office (ATO)"
+    },
+    "CA": {
+      "name": "Canada",
+      "forms": [
+        {
+          "formId": "T1 Final Return",
+          "label": "Final Income Tax Return (T1)",
+          "purpose": "Income tax return for the period from 1 January to date of death. Reports all income including deemed dispositions.",
+          "deadline": "Later of 6 months after death or 30 April of the following year",
+          "filedWith": "Canada Revenue Agency (CRA)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "T3 Trust Return",
+          "label": "T3 Trust Income Tax and Information Return",
+          "purpose": "Filed for the estate if it earns income during the period of administration.",
+          "filedWith": "Canada Revenue Agency (CRA)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Probate application",
+          "label": "Application for Certificate of Appointment of Estate Trustee (Ontario) / Grant of Probate (other provinces)",
+          "purpose": "Court application for authority to administer the estate. Name and process varies by province.",
+          "requiredWhen": [
+            "Estate includes real property (in most provinces)",
+            "Financial institutions require a grant (typically for accounts exceeding $25,000–$50,000)"
+          ],
+          "note": "Probate fees (estate administration tax) vary by province. Ontario charges $5 per $1,000 on the first $50,000 and $15 per $1,000 thereafter. British Columbia uses a graduated scale. Quebec uses a notarized will process that may avoid probate.",
+          "examples": [
+            {
+              "province": "Ontario",
+              "form": "Form 74.4/74.5 (Superior Court of Justice)"
+            },
+            {
+              "province": "British Columbia",
+              "form": "Form P2 (Supreme Court of BC)"
+            },
+            {
+              "province": "Alberta",
+              "form": "Grant of Probate application (Court of King's Bench)"
+            },
+            {
+              "province": "Quebec",
+              "note": "Notarial wills do not require probate. Holograph and witnessed wills require verification (homologation) by the Superior Court."
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Income Tax Act (R.S.C., 1985, c. 1 (5th Supp.)); provincial Estate Administration Acts and Rules of Court",
+      "regulatoryBody": "Canada Revenue Agency (CRA); provincial Superior Courts"
+    },
+    "FR": {
+      "name": "France",
+      "forms": [
+        {
+          "formId": "Déclaration de succession",
+          "label": "Déclaration de succession (Succession Declaration)",
+          "purpose": "Mandatory declaration of the estate's assets and liabilities for succession tax purposes.",
+          "requiredWhen": [
+            "Always required unless the estate passes entirely to the surviving spouse/PACS partner and the gross value is below €50,000",
+            "Threshold for other heirs: required when the gross value exceeds €3,000 (€10,000 for direct heirs with no prior gifts)"
+          ],
+          "deadline": "6 months from date of death (12 months if death occurred outside metropolitan France)",
+          "filedWith": "Service des impôts des particuliers (local tax office)",
+          "forms": [
+            {
+              "formId": "2705",
+              "purpose": "Main succession declaration"
+            },
+            {
+              "formId": "2705-S",
+              "purpose": "Supplementary declaration"
+            },
+            {
+              "formId": "2709",
+              "purpose": "Declaration of real property"
+            }
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Acte de notoriété",
+          "label": "Acte de notoriété (Certificate of Heirship)",
+          "purpose": "Notarial deed establishing who the heirs are and their respective shares. Required to access bank accounts and transfer property.",
+          "requiredWhen": [
+            "Always required in practice for any estate of substance",
+            "Banks require it to release funds"
+          ],
+          "preparedBy": "Notaire (notary)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Code général des impôts, Articles 641, 800; Code civil, Articles 730-1 to 730-5",
+      "regulatoryBody": "Direction générale des finances publiques (DGFiP)"
+    },
+    "DE": {
+      "name": "Germany",
+      "forms": [
+        {
+          "formId": "Erbschaftsteuererklärung",
+          "label": "Erbschaftsteuererklärung (Inheritance Tax Return)",
+          "purpose": "Inheritance tax return required when requested by the tax office (Finanzamt) or when the inherited amount exceeds the tax-free allowance.",
+          "requiredWhen": [
+            "Inheritance exceeds the personal tax-free allowance",
+            "Requested by the Finanzamt",
+            "Business property relief is claimed"
+          ],
+          "deadline": "3 months from notification by the Finanzamt (Finanzamt sets the specific deadline)",
+          "filedWith": "Erbschaftsteuerfinanzamt (specialist inheritance tax office)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Erbschein",
+          "label": "Erbschein (Certificate of Inheritance)",
+          "purpose": "Court certificate confirming the heir(s) and their shares. Required to access bank accounts and transfer property where no notarial will or contract of inheritance exists.",
+          "requiredWhen": [
+            "No notarial will (öffentliches Testament) or contract of inheritance (Erbvertrag) exists",
+            "Banks or land registry require proof of heirship"
+          ],
+          "filedWith": "Nachlassgericht (probate court — a division of the Amtsgericht)",
+          "note": "Where a notarial will exists, the probate court issues a Testamentseröffnungsprotokoll (will opening protocol) which banks typically accept in lieu of an Erbschein.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Anzeige nach § 30 ErbStG",
+          "label": "Notification of Inheritance",
+          "purpose": "Every heir must notify the local tax office of the inheritance within 3 months. This is separate from the tax return.",
+          "deadline": "3 months from knowledge of the inheritance",
+          "filedWith": "Finanzamt",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Erbschaftsteuer- und Schenkungsteuergesetz (ErbStG), §§ 30–31; Bürgerliches Gesetzbuch (BGB), §§ 2353–2370",
+      "regulatoryBody": "Finanzämter (tax offices); Nachlassgerichte (probate courts)"
+    },
+    "IN": {
+      "name": "India",
+      "forms": [
+        {
+          "formId": "Succession Certificate",
+          "label": "Succession Certificate (Indian Succession Act, s. 372)",
+          "purpose": "Court certificate establishing the right of the petitioner to inherit debts and securities of the deceased.",
+          "requiredWhen": [
+            "Required to transfer financial assets (shares, bank deposits, securities) of the deceased",
+            "No valid will exists, or the will is not registered"
+          ],
+          "filedWith": "District Court with jurisdiction over the deceased's domicile",
+          "note": "Not required for property passing under a registered will with a named executor.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Legal Heir Certificate",
+          "label": "Legal Heir Certificate",
+          "purpose": "Certificate establishing legal heirs for purposes of claiming provident fund, insurance, pension, and other employment benefits.",
+          "filedWith": "Tehsildar/Revenue authority or Municipal Corporation",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Probate",
+          "label": "Probate of Will",
+          "purpose": "Court certification of the validity of a will and appointment of the executor. Mandatory in certain jurisdictions (Mumbai, Kolkata, Chennai, and the former presidency towns) under the Indian Succession Act.",
+          "requiredWhen": [
+            "Will of a Hindu, Buddhist, Sikh, or Jain in Mumbai, Kolkata, or Chennai (compulsory probate jurisdictions)",
+            "All wills by Indian Christians, Jews, and Parsis anywhere in India"
+          ],
+          "filedWith": "High Court or District Court",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Final ITR",
+          "label": "Income Tax Return of the Deceased",
+          "purpose": "Final income tax return for the period up to date of death, filed by the legal representative.",
+          "filedWith": "Income Tax Department",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Indian Succession Act 1925; Hindu Succession Act 1956; Income Tax Act 1961",
+      "regulatoryBody": "District and High Courts; Income Tax Department"
+    },
+    "JP": {
+      "name": "Japan",
+      "forms": [
+        {
+          "formId": "Sōzokuzei Shinkokusho",
+          "label": "相続税申告書 (Inheritance Tax Return)",
+          "purpose": "Required when the total value of the estate exceeds the basic deduction (¥30,000,000 + ¥6,000,000 × number of statutory heirs).",
+          "requiredWhen": [
+            "Estate value exceeds basic deduction",
+            "Claiming spouse tax credit or small-scale residential land reduction (must file even if no tax is due)"
+          ],
+          "deadline": "10 months from the date the heir became aware of the death",
+          "filedWith": "Tax office (zeimusho) with jurisdiction over the deceased's domicile",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Jun-kakutei Shinkoku",
+          "label": "準確定申告 (Quasi-Final Income Tax Return)",
+          "purpose": "Income tax return for the deceased for the period from 1 January to date of death.",
+          "deadline": "4 months from the date the heir became aware of the death",
+          "filedWith": "Tax office (zeimusho)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Isan Bunkatsu Kyōgisho",
+          "label": "遺産分割協議書 (Estate Division Agreement)",
+          "purpose": "Written agreement among all statutory heirs on the division of the estate. Required for property registration and may be required by financial institutions.",
+          "requiredWhen": [
+            "Estate is to be divided differently from statutory shares",
+            "Required for real property transfer registration",
+            "Banks require it to release funds"
+          ],
+          "note": "All heirs must sign and affix their registered personal seal (jitsu-in). Each heir's certificate of seal registration (inkan shōmeisho) must be attached.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Sōzokuzei-hō (相続税法); Shotokuzei-hō (所得税法); Minpō (民法), Articles 906–914",
+      "regulatoryBody": "National Tax Agency (国税庁); Legal Affairs Bureau (法務局)"
+    },
+    "SG": {
+      "name": "Singapore",
+      "forms": [
+        {
+          "formId": "OS_PROBATE",
+          "label": "Originating Summons for Grant of Probate",
+          "purpose": "Application for Grant of Probate where deceased left a valid will. Filed in the Family Justice Courts.",
+          "requiredWhen": [
+            "Deceased left a valid will",
+            "Estate includes assets requiring a Grant of Probate to release"
+          ],
+          "filedWith": "Family Justice Courts",
+          "filingMethod": "eLitigation system",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.willType",
+            "estate.jurisdiction",
+            "person[].givenName, familyName, roles",
+            "executor[].personId",
+            "asset[].id, name, category",
+            "valuation[].assetId, valuedAmount"
+          ],
+          "notes": "Muslim estates are administered under AMLA (Administration of Muslim Law Act), not civil probate. CPF nominations pass outside the estate.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "OS_ADMIN",
+          "label": "Originating Summons for Letters of Administration",
+          "purpose": "Application for Letters of Administration where deceased died intestate. Distribution governed by Intestate Succession Act (ISA) for non-Muslims.",
+          "requiredWhen": [
+            "Deceased died without a valid will",
+            "Estate includes assets requiring Letters of Administration"
+          ],
+          "filedWith": "Family Justice Courts",
+          "filingMethod": "eLitigation system",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.jurisdiction",
+            "person[].givenName, familyName, roles",
+            "kinship[].relationship",
+            "asset[].id, name, category",
+            "liability[].liabilityType, amount"
+          ],
+          "notes": "Administration bond required. ISA distribution: spouse gets 50% if children exist, 100% if only parents exist. Muslim estates distributed per faraid rules via Syariah Court.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "SCHEDULE_ASSETS",
+          "label": "Schedule of Assets and Liabilities",
+          "purpose": "Itemised list of all estate assets and liabilities filed with the probate application. Singapore has no inheritance tax — this is for probate valuation only.",
+          "requiredWhen": [
+            "Filed with every probate or administration application"
+          ],
+          "filedWith": "Family Justice Courts",
+          "inheritFieldMappings": [
+            "asset[].id, name, category, subcategory",
+            "property[].id, name, address",
+            "valuation[].assetId, valuedAmount, valuationDate",
+            "liability[].id, liabilityType, amount"
+          ],
+          "notes": "CPF (Central Provident Fund) balances are distributed per CPF nomination, not the will. HDB flat ownership has special rules for public housing. Estate duty was abolished in Singapore in 2008.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Probate and Administration Act (Cap 251); Intestate Succession Act (Cap 146); Administration of Muslim Law Act (Cap 3); Central Provident Fund Act (Cap 36)",
+      "regulatoryBody": "Family Justice Courts; Central Provident Fund Board; Syariah Court (Muslim estates)"
+    },
+    "IE": {
+      "name": "Ireland",
+      "forms": [
+        {
+          "formId": "Probate application",
+          "label": "Application for Grant of Probate / Letters of Administration",
+          "purpose": "Application to the Probate Office or District Probate Registry for authority to administer the estate.",
+          "requiredWhen": [
+            "Estate includes real property",
+            "Financial institutions require a grant (typically for accounts over €25,000)"
+          ],
+          "filedWith": "Probate Office (High Court) or District Probate Registry",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "IT38",
+          "label": "Capital Acquisitions Tax Return (Form IT38)",
+          "purpose": "Self-assessment return for CAT on gifts and inheritances. Required when the taxable value exceeds 80% of the relevant group threshold.",
+          "requiredWhen": [
+            "Taxable value of gift/inheritance exceeds 80% of the relevant group threshold",
+            "Any CAT is payable",
+            "Claiming agricultural or business relief"
+          ],
+          "deadline": "31 October of the year following the valuation date (or extended deadline if filing via ROS — Revenue Online Service)",
+          "filedWith": "Revenue Commissioners",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Inland Revenue Affidavit (CA24)",
+          "label": "Inland Revenue Affidavit (Form CA24)",
+          "purpose": "Sworn statement of the deceased's assets and liabilities, filed as part of the probate application. Used to assess estate duty / CAT.",
+          "filedWith": "Revenue Commissioners (via the Probate Office)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Form 21 (final tax return)",
+          "label": "Income Tax Return of the Deceased (Form 11/12)",
+          "purpose": "Final income tax return for the period up to date of death.",
+          "filedWith": "Revenue Commissioners",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Succession Act 1965; Capital Acquisitions Tax Consolidation Act 2003; Taxes Consolidation Act 1997",
+      "regulatoryBody": "Revenue Commissioners; Probate Office (Courts Service)"
+    },
+    "NZ": {
+      "name": "New Zealand",
+      "forms": [
+        {
+          "formId": "Probate application",
+          "label": "Application for Probate / Letters of Administration",
+          "purpose": "Application to the High Court for authority to administer the estate.",
+          "requiredWhen": [
+            "Estate includes real property",
+            "Financial institutions require a grant (thresholds vary, typically NZ$15,000–$30,000)"
+          ],
+          "filedWith": "High Court of New Zealand",
+          "note": "Online applications are available via the Courts of New Zealand website.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Summary Administration",
+          "label": "Election to Administer (Summary Administration)",
+          "purpose": "Simplified procedure for small estates. Administrator files an election instead of applying for full probate.",
+          "requiredWhen": [
+            "Gross estate does not exceed $15,000"
+          ],
+          "filedWith": "Public Trust or filed with relevant asset holders",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "IR3",
+          "label": "Individual Income Tax Return (IR3) — Deceased",
+          "purpose": "Final income tax return for the deceased for the period up to date of death.",
+          "filedWith": "Inland Revenue (Te Tari Taake)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Estate IR6",
+          "label": "Estate or Trust Income Tax Return (IR6)",
+          "purpose": "Income tax return for the estate if it earns income during the administration period.",
+          "filedWith": "Inland Revenue (Te Tari Taake)",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Administration Act 1969; High Court Rules 2016; Income Tax Act 2007",
+      "regulatoryBody": "High Court of New Zealand; Inland Revenue (Te Tari Taake)"
+    },
+    "CA-ON": {
+      "name": "Canada — Ontario",
+      "forms": [
+        {
+          "formId": "Form74A",
+          "label": "Application for Certificate of Appointment of Estate Trustee",
+          "purpose": "Main probate application — consolidated from 43 forms in August 2025 (O. Reg. 72/25). Used for both testate (with will) and intestate (without will) applications.",
+          "requiredWhen": [
+            "Deceased left a valid will and estate requires Certificate of Appointment",
+            "Deceased died intestate and estate requires administration"
+          ],
+          "filedWith": "Ontario Superior Court of Justice",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.willType",
+            "estate.jurisdiction",
+            "estate.totalEstimatedValue",
+            "person[].givenName, familyName, roles",
+            "executor[].personId",
+            "asset[].id, name, category",
+            "property[].id, name, address",
+            "liability[].id, liabilityType, amount",
+            "valuation[].assetId, valuedAmount"
+          ],
+          "notes": "Replaces old Forms 74.4, 74.4.1, 74.5 as of August 2025. Ontario Estate Administration Tax (probate fees): 0 up to $50K, $15 per $1,000 over $50K.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Form74.1A",
+          "label": "Small Estate Certificate",
+          "purpose": "Simplified process for estates valued at $150,000 or less.",
+          "requiredWhen": [
+            "Gross estate does not exceed $150,000"
+          ],
+          "filedWith": "Ontario Superior Court of Justice",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.totalEstimatedValue",
+            "person[].givenName, familyName, roles",
+            "executor[].personId"
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "ESTATE_INFO_RETURN",
+          "label": "Ontario Estate Information Return",
+          "purpose": "Filed with the Ministry of Finance for estate administration tax audit purposes. Must be filed within 180 days of receiving the Certificate of Appointment.",
+          "requiredWhen": [
+            "Certificate of Appointment has been issued"
+          ],
+          "deadline": "180 calendar days from issuance of Certificate of Appointment",
+          "filedWith": "Ontario Ministry of Finance",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.totalEstimatedValue",
+            "asset[].id, name, category",
+            "property[].id, name, address",
+            "valuation[].assetId, valuedAmount",
+            "liability[].id, liabilityType, amount"
+          ],
+          "notes": "Canada has no inheritance tax. Estate Administration Tax is calculated on gross estate value: 0 up to $50K, $15 per $1,000 over $50K (1.5% effective rate).",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "T1_FINAL",
+          "label": "T1 Final Income Tax Return (Federal)",
+          "purpose": "Final income tax return for the deceased. Canada treats death as a deemed disposition of all capital property at fair market value.",
+          "requiredWhen": [
+            "Deceased had income in the year of death",
+            "Deemed disposition of capital property applies"
+          ],
+          "deadline": "Later of: 6 months after date of death, or April 30 of the following year",
+          "filedWith": "Canada Revenue Agency (CRA)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "asset[].id, name, category",
+            "valuation[].assetId, valuedAmount, valuationDate"
+          ],
+          "notes": "Federal return — applies to all provinces. Optional returns also available (Rights or Things, Partner/Proprietor). CGT on deemed disposition is the main tax event on death in Canada.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Succession Law Reform Act (Ontario); Estates Act (Ontario); O. Reg. 72/25 (2025 form consolidation); Income Tax Act (Canada); Family Law Act (Ontario)",
+      "regulatoryBody": "Ontario Superior Court of Justice; Canada Revenue Agency; Ontario Ministry of Finance"
+    },
+    "CA-QC": {
+      "name": "Canada — Quebec",
+      "forms": [
+        {
+          "formId": "VERIFICATION",
+          "label": "Verification (Probation) of Will",
+          "purpose": "Court or notarial verification that a holographic or witnessed will is valid. Notarial wills do NOT require verification — the notary's authentication is sufficient.",
+          "requiredWhen": [
+            "Deceased left a holographic will (handwritten)",
+            "Deceased left a witnessed will (not notarial)"
+          ],
+          "filedWith": "Superior Court of Quebec or a Quebec notary",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.willType",
+            "document[].type, dateExecuted",
+            "attestation.witnessPersonIds",
+            "person[].givenName, familyName, roles"
+          ],
+          "notes": "Quebec has three forms of will: notarial (no verification needed, kept by notary), holographic (entirely handwritten, verification required), and witnessed (2 witnesses, verification required). Notarial wills are the most common and cost-effective — no probate fees.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "REGISTER_SEARCH",
+          "label": "Search of Register of Testamentary Dispositions",
+          "purpose": "Confirm no later will exists. Both the Chambre des notaires du Quebec and the Barreau du Quebec maintain registers.",
+          "requiredWhen": [
+            "Before distributing any estate"
+          ],
+          "filedWith": "Chambre des notaires du Quebec; Barreau du Quebec",
+          "notes": "Both registers must be searched. The Chambre des notaires register covers notarial wills; the Barreau register covers wills deposited with advocates.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "INVENTORY",
+          "label": "Inventory of Succession Property",
+          "purpose": "Liquidator's inventory of all estate assets and liabilities. Required before any distribution. Must include family patrimony and matrimonial regime assessment.",
+          "requiredWhen": [
+            "Liquidator must prepare before distributing the estate"
+          ],
+          "filedWith": "Not filed centrally — prepared by the liquidator and made available to heirs",
+          "inheritFieldMappings": [
+            "asset[].id, name, category, subcategory",
+            "property[].id, name, address",
+            "valuation[].assetId, valuedAmount",
+            "liability[].id, liabilityType, amount",
+            "estate.totalEstimatedValue"
+          ],
+          "notes": "Quebec terminology: executor = liquidator (liquidateur). Before succession distribution, the family patrimony must be partitioned and the matrimonial/civil union regime must be liquidated. Heirs must formally accept or renounce the succession — this affects liability for debts.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "T1_FINAL",
+          "label": "T1 Final Income Tax Return (Federal)",
+          "purpose": "Same as CA-ON — federal return applies to all provinces.",
+          "filedWith": "Canada Revenue Agency (CRA)",
+          "notes": "See CA-ON for details. Quebec also requires a provincial TP-1 return filed with Revenu Quebec.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "TP1_FINAL",
+          "label": "TP-1 Final Provincial Income Tax Return (Quebec)",
+          "purpose": "Quebec provincial income tax return for the deceased. Quebec is the only province that collects its own income tax separately from the federal system.",
+          "filedWith": "Revenu Quebec",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath"
+          ],
+          "notes": "Quebec is unique in Canada — it has its own provincial tax administration separate from CRA.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Civil Code of Quebec (Book III — Successions); Code of Civil Procedure (Quebec); Taxation Act (Quebec)",
+      "regulatoryBody": "Superior Court of Quebec; Chambre des notaires du Quebec; Barreau du Quebec; Revenu Quebec"
+    },
+    "AU-NSW": {
+      "name": "Australia — New South Wales",
+      "forms": [
+        {
+          "formId": "Form109",
+          "label": "Summons for Probate",
+          "purpose": "Application for Grant of Probate where deceased left a valid will. Filed in the Supreme Court of NSW, Probate Division.",
+          "requiredWhen": [
+            "Deceased left a valid will",
+            "Estate includes assets requiring a Grant of Probate"
+          ],
+          "filedWith": "Supreme Court of New South Wales (Probate Division)",
+          "filingMethod": "NSW Online Registry (onlineregistry.lawlink.nsw.gov.au)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.willType",
+            "estate.jurisdiction",
+            "estate.totalEstimatedValue",
+            "person[].givenName, familyName, roles",
+            "executor[].personId",
+            "document[].type, dateExecuted"
+          ],
+          "notes": "Mandatory 14-day online notice period via probate.nsw.gov.au before application can proceed. Original will must be filed with the court.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Form110",
+          "label": "Summons for Administration",
+          "purpose": "Application for Letters of Administration where deceased died intestate.",
+          "requiredWhen": [
+            "Deceased died without a valid will",
+            "Estate requires Letters of Administration"
+          ],
+          "filedWith": "Supreme Court of New South Wales (Probate Division)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.jurisdiction",
+            "person[].givenName, familyName, roles",
+            "kinship[].relationship"
+          ],
+          "notes": "Affidavit of next of kin / family tree required. Administration bond may be required. Consent needed from persons with equal or higher entitlement.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Form107",
+          "label": "Inventory of Property (Schedule J)",
+          "purpose": "Itemised schedule of all estate assets and liabilities at date of death. Australia has no inheritance tax — this is for probate valuation only.",
+          "requiredWhen": [
+            "Filed with every probate or administration application"
+          ],
+          "filedWith": "Supreme Court of New South Wales",
+          "inheritFieldMappings": [
+            "asset[].id, name, category, subcategory",
+            "property[].id, name, address, titleReference",
+            "valuation[].assetId, valuedAmount, valuationDate",
+            "liability[].id, liabilityType, amount",
+            "estate.totalEstimatedValue"
+          ],
+          "notes": "Includes real property (with Lot/DP title reference), bank accounts (BSB, account number), shares (ASX code), superannuation (passes outside estate via binding death benefit nomination), motor vehicles, personal effects, and all liabilities.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "Form111",
+          "label": "Affidavit of Executor",
+          "purpose": "Executor's sworn statement verifying all details of the deceased, the will, and the estate.",
+          "filedWith": "Supreme Court of New South Wales",
+          "inheritFieldMappings": [
+            "executor[].personId",
+            "person[].givenName, familyName, address, occupation",
+            "estate.testatorPersonId",
+            "document[].type, dateExecuted, pages",
+            "attestation.witnessPersonIds"
+          ],
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "ATO_FINAL",
+          "label": "Final Income Tax Return (ATO)",
+          "purpose": "Final income tax return for the deceased for the period from 1 July to date of death. Australia has no inheritance tax — CGT is deferred to beneficiary disposal via rollover relief.",
+          "filedWith": "Australian Taxation Office (ATO)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath"
+          ],
+          "notes": "Federal death duties abolished 1979, NSW state death duties abolished 1982. CGT rollover: pre-20 Sep 1985 assets pass CGT-free; post-1985 assets — CGT deferred until beneficiary sells.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Succession Act 2006 (NSW); Supreme Court Rules 1970 Part 78; Practice Note SC Eq 7; Income Tax Assessment Act 1997 (Cth)",
+      "regulatoryBody": "Supreme Court of New South Wales (Probate Division); Australian Taxation Office"
+    },
+    "IN-MH": {
+      "name": "India — Maharashtra",
+      "forms": [
+        {
+          "formId": "PETITION_PROBATE",
+          "label": "Petition for Probate (Section 276, Indian Succession Act 1925)",
+          "purpose": "Establish executor's right to administer the estate where deceased left a valid will. No pre-printed form — petition is drafted per statutory requirements.",
+          "requiredWhen": [
+            "Deceased left a valid will",
+            "Probate is sought (no longer mandatory after Dec 2025 repeal of s.213, but strongly advisable)"
+          ],
+          "filedWith": "Bombay High Court (Original Side) for Mumbai; District Court for rest of Maharashtra",
+          "filingMethod": "E-filing via hcservices.ecourts.gov.in (Bombay HC Original Side)",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.willType",
+            "estate.jurisdiction",
+            "person[].givenName, familyName, roles, religion",
+            "executor[].personId",
+            "attestation.witnessPersonIds",
+            "asset[].id, name, category",
+            "property[].id, name, address",
+            "valuation[].assetId, valuedAmount",
+            "liability[].id, liabilityType, amount",
+            "kinship[].relationship"
+          ],
+          "notes": "Section 213 (mandatory probate in Mumbai/Kolkata/Chennai) was deleted by the Repealing and Amending Act 2025 (Presidential assent 20 Dec 2025). Probate is now optional but advisable — banks and housing societies may still request it in practice. Religion determines applicable succession law: Hindu/Buddhist/Sikh/Jain intestacy → Hindu Succession Act 1956; Christian/Parsi → Indian Succession Act 1925; Muslim → Shariat personal law (will limited to 1/3 of estate). Attesting witness affidavit required. Citation published in newspaper (30 days). Consent affidavits from heirs recommended.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "PETITION_LOA",
+          "label": "Petition for Letters of Administration (Section 278, Indian Succession Act 1925)",
+          "purpose": "Appoint administrator for intestate estate. Applicant must demonstrate entitlement per the applicable succession law.",
+          "requiredWhen": [
+            "Deceased died without a valid will",
+            "Estate requires formal administration"
+          ],
+          "filedWith": "Bombay High Court (Original Side) for Mumbai; District Court for rest of Maharashtra",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "estate.jurisdiction",
+            "person[].givenName, familyName, roles, religion",
+            "kinship[].relationship",
+            "asset[].id, name, category",
+            "property[].id, name, address",
+            "valuation[].assetId, valuedAmount",
+            "liability[].id, liabilityType, amount"
+          ],
+          "notes": "Administration bond required (double the estimated estate value with sureties). Application cannot be made until 14 days after death. Notice served on all next of kin. Hindu Succession Act Class I heirs (simultaneous, equal shares): son, daughter, widow, mother, son/daughter of predeceased child, widow of predeceased son. 2005 Amendment: daughters have equal coparcenary rights in HUF property.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        },
+        {
+          "formId": "PETITION_SC",
+          "label": "Petition for Succession Certificate (Section 372, Indian Succession Act 1925)",
+          "purpose": "Establish heir's right to specific debts and securities of the deceased. Covers movable assets only — does NOT cover immovable property.",
+          "requiredWhen": [
+            "Deceased died intestate",
+            "Need to claim bank accounts, shares, mutual funds, insurance, government securities",
+            "Financial institutions require proof of succession"
+          ],
+          "filedWith": "District Court having jurisdiction",
+          "inheritFieldMappings": [
+            "estate.testatorPersonId",
+            "estate.administration.dateOfDeath",
+            "person[].givenName, familyName, roles",
+            "kinship[].relationship",
+            "asset[].id, name, category (filtered to financial/movable)",
+            "valuation[].assetId, valuedAmount"
+          ],
+          "notes": "Must itemise specific debts and securities sought. Does not cover immovable property (land, buildings) — for those, use Letters of Administration or mutation order. No administration bond required. Court fees per Maharashtra Court Fees Act: up to Rs 50K = Rs 25 flat; Rs 50K–2L = 4%; above Rs 2L = 7.5%; maximum Rs 75,000.",
+          "deprecated": false,
+          "deprecatedAt": null,
+          "deprecatedReason": null,
+          "supersededBy": null
+        }
+      ],
+      "source": "Indian Succession Act 1925 (Part IX, ss.213, 276, 278, 372); Hindu Succession Act 1956; Muslim Personal Law (Shariat) Application Act 1937; Repealing and Amending Act 2025; Maharashtra Court Fees Act 1959 (Schedule I, Article 10)",
+      "regulatoryBody": "Bombay High Court; District Courts of Maharashtra; Bar Council of Maharashtra and Goa"
+    }
+  }
+}

@@ -1,0 +1,324 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-03-27T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "e155d2b5-db67-4831-a715-5a80b9f063a7",
+    "testatorPersonId": "4099cd95-b5bc-4c6e-b9ee-9c9a38cf71c3",
+    "status": "confirmed",
+    "forcedHeirship": {
+      "applies": true,
+      "reservedPortion": 50,
+      "disposableQuota": 50,
+      "claimNature": "cash_claim",
+      "calculationBasis": "per_child_sliding",
+      "applicableTo": "children_and_spouse",
+      "effectiveDate": "2019-07-01",
+      "reformVersion": "2018 Civil Code reform (Act No. 72 of 2018)",
+      "notes": "Iryubun is one-half of the statutory intestate share for each heir. Hanako's iryubun = 1/2 × 1/2 = 1/4 of estate. Ichirō's iryubun = 1/2 × 1/2 = 1/4. Since 2019, the claim is monetary — heirs cannot demand co-ownership of specific assets."
+    },
+    "defaultSuccessionRegime": {
+      "governingLaw": {
+        "jurisdiction": {
+          "country": "JP"
+        },
+        "legalTradition": "civil_law",
+        "statute": "Civil Code (民法)",
+        "section": "Book V Succession (Articles 882–1044)"
+      },
+      "determinedBy": "nationality",
+      "binding": true,
+      "notes": "Japanese law applies to succession of Japanese nationals regardless of asset location (Act on General Rules for Application of Laws, Art. 36)."
+    },
+    "notes": "Japanese succession is governed by the Civil Code (民法). A will (遺言) can be holographic (自筆証書遺言/jihi shosho), notarised (公正証書遺言/kōsei shosho), or sealed (秘密証書遺言). The 2018 reform simplified holographic wills and converted iryubun to a cash claim.",
+    "createdAt": "2026-02-01T00:00:00Z",
+    "lastModifiedAt": "2026-03-27T00:00:00Z",
+    "domicile": {
+      "country": "JP",
+      "legalSystems": [
+        "civil_law"
+      ],
+      "name": "Japan"
+    }
+  },
+  "people": [
+    {
+      "id": "4099cd95-b5bc-4c6e-b9ee-9c9a38cf71c3",
+      "givenName": "Tarō",
+      "familyName": "Tanaka",
+      "phoneticReading": {
+        "givenName": "たろう",
+        "familyName": "たなか"
+      },
+      "dateOfBirth": "1960-03-15",
+      "roles": [
+        "testator"
+      ],
+      "language": "ja",
+      "contact": {
+        "address": {
+          "addressCountry": "JP",
+          "addressRegion": "Tokyo",
+          "addressLocality": "Minato-ku",
+          "streetAddress": "Akasaka 1-2-3",
+          "postalCode": "107-0052",
+          "addressOrder": "japanese"
+        }
+      }
+    },
+    {
+      "id": "8d7712c4-22d7-4b89-bda8-bb503b05c4b8",
+      "givenName": "Hanako",
+      "familyName": "Tanaka",
+      "phoneticReading": {
+        "givenName": "はなこ",
+        "familyName": "たなか"
+      },
+      "dateOfBirth": "1963-07-22",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ],
+      "language": "ja"
+    },
+    {
+      "id": "0858b76c-a6e0-4b63-8ba0-732b2cb71915",
+      "givenName": "Ichirō",
+      "familyName": "Tanaka",
+      "phoneticReading": {
+        "givenName": "いちろう",
+        "familyName": "たなか"
+      },
+      "dateOfBirth": "1990-11-05",
+      "roles": [
+        "beneficiary"
+      ],
+      "language": "ja"
+    }
+  ],
+  "kinships": [
+    {
+      "id": "00943e0d-e570-402d-b871-66860890d7ec",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "4099cd95-b5bc-4c6e-b9ee-9c9a38cf71c3",
+      "toPersonId": "0858b76c-a6e0-4b63-8ba0-732b2cb71915"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "d251676a-0ab3-49d5-985f-ca0444731ca0",
+      "type": "marriage_civil",
+      "partners": [
+        {
+          "personId": "4099cd95-b5bc-4c6e-b9ee-9c9a38cf71c3",
+          "ordinal": 1
+        },
+        {
+          "personId": "8d7712c4-22d7-4b89-bda8-bb503b05c4b8",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "JP"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "6182ed18-77dd-4f96-8014-f3a6e98c81d6",
+      "name": "Akasaka Residence, Minato-ku",
+      "propertyType": "apartment",
+      "tenureType": "ownership",
+      "isPrimaryResidence": true,
+      "ownershipType": "sole",
+      "estimatedValue": {
+        "amount": 85000000,
+        "currency": "JPY"
+      },
+      "address": {
+        "addressCountry": "JP",
+        "addressRegion": "Tokyo",
+        "addressLocality": "Minato-ku",
+        "streetAddress": "Akasaka 1-2-3",
+        "postalCode": "107-0052",
+        "addressOrder": "japanese"
+      },
+      "notes": "JPY has ISO 4217 exponent 0 — the amount field IS the face value. 85,000,000 JPY = amount 85000000."
+    }
+  ],
+  "assets": [
+    {
+      "id": "51000006-0000-4000-a000-000000000001",
+      "name": "Katana (family heirloom, Edo period)",
+      "category": "collectibles",
+      "subcategory": "antique_weapon",
+      "estimatedValue": {
+        "amount": 3500000,
+        "currency": "JPY"
+      },
+      "culturalDisposition": {
+        "sacredStatus": "ritually_significant",
+        "culturalSignificance": "family_heirloom",
+        "bequeathable": true,
+        "disposalRestrictions": [
+          {
+            "authority": "Prefectural Public Safety Commission (都道府県公安委員会)",
+            "authorityType": "government",
+            "requirement": "Japanese swords require a Jūhō Tōroku-shō (銃砲刀剣類登録証) — a Firearms and Sword Registration Certificate. Transfer of ownership must be reported to the prefectural commission within 20 days.",
+            "jurisdiction": {
+              "country": "JP"
+            }
+          }
+        ],
+        "exportRestrictions": [
+          {
+            "jurisdiction": {
+              "country": "JP"
+            },
+            "restrictionType": "cultural_property",
+            "authority": "Agency for Cultural Affairs (文化庁)",
+            "licenceRequired": true,
+            "notes": "Under the Act on Protection of Cultural Properties (文化財保護法), swords classified as Important Art Objects (重要美術品) or Important Cultural Properties (重要文化財) may not be exported. Unclassified swords require an export inspection by the Agency for Cultural Affairs, which takes approximately 2-4 weeks."
+          }
+        ]
+      },
+      "notes": "Edo period katana (circa 1780). Registered under the Firearms and Swords Control Act. Current Jūhō Tōroku-shō number: TK-2024-07891. JPY has ISO 4217 exponent 0 — the amount field IS the face value."
+    }
+  ],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "ef3fd481-774f-4a2f-bc2c-eabc22e82669",
+      "bequestType": "specific",
+      "beneficiaryId": "8d7712c4-22d7-4b89-bda8-bb503b05c4b8",
+      "description": "I give my apartment at Akasaka 1-2-3, Minato-ku, Tokyo to my wife Hanako."
+    },
+    {
+      "id": "364fe360-7022-4be5-83a7-68fae81eb198",
+      "bequestType": "residuary",
+      "beneficiaryId": "8d7712c4-22d7-4b89-bda8-bb503b05c4b8",
+      "description": "I give the residue of my estate to my wife Hanako."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "c0a06a9e-fd8e-4058-9a0e-ba8df5c17ba6",
+      "personId": "8d7712c4-22d7-4b89-bda8-bb503b05c4b8",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-03-28T12:00:00Z",
+    "validatedBy": "INHERIT Examples",
+    "schemaVersion": "6.3.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "events": [
+      {
+        "id": "c8b08e68-a3c4-454f-bd03-b38a1dacd50f",
+        "eventType": "death_registered",
+        "occurredAt": "2026-02-01T10:00:00+09:00",
+        "trigger": "institutional_action",
+        "description": "Death of Tanaka Tarō registered at the Minato-ku ward office. Jūminhyō (住民票) cancelled and death recorded in the koseki (戸籍) at the family register office.",
+        "affectedEntityIds": [
+          "e155d2b5-db67-4831-a715-5a80b9f063a7"
+        ],
+        "affectedEntityTypes": [
+          "estate"
+        ],
+        "actor": {
+          "name": "Minato-ku Ward Office (港区役所)",
+          "type": "court",
+          "jurisdiction": {
+            "country": "JP"
+          }
+        }
+      },
+      {
+        "id": "84b48b7f-0ea6-4714-ab9f-c6fde651266c",
+        "eventType": "x-inherit-tax-filing-deadline",
+        "occurredAt": "2026-12-01T23:59:59+09:00",
+        "trigger": "calendar_deadline",
+        "description": "Inheritance tax return (相続税申告書) due within 10 months of death. Deadline: 1 December 2026. Filing at the tax office (税務署) with jurisdiction over the deceased's last domicile.",
+        "affectedEntityIds": [
+          "e155d2b5-db67-4831-a715-5a80b9f063a7"
+        ],
+        "affectedEntityTypes": [
+          "estate"
+        ],
+        "actor": {
+          "name": "Azabu Tax Office (麻布税務署)",
+          "type": "tax_authority",
+          "jurisdiction": {
+            "country": "JP"
+          }
+        },
+        "metadata": {
+          "deadlineType": "inheritance_tax_return",
+          "monthsFromDeath": "10",
+          "statute": "Inheritance Tax Act (相続税法) Article 27"
+        }
+      },
+      {
+        "id": "51848725-1a40-4553-9e7e-6cff67495984",
+        "eventType": "asset_valued",
+        "occurredAt": "2026-03-15T14:00:00+09:00",
+        "trigger": "executor_action",
+        "description": "Katana appraised by the Japanese Sword Museum (刀剣博物館) for inheritance tax purposes. Valuation: JPY 3,500,000.",
+        "affectedEntityIds": [
+          "51000006-0000-4000-a000-000000000001"
+        ],
+        "affectedEntityTypes": [
+          "asset"
+        ],
+        "actor": {
+          "name": "Japanese Sword Museum (刀剣博物館)",
+          "type": "valuer",
+          "jurisdiction": {
+            "country": "JP"
+          }
+        },
+        "metadata": {
+          "valuationAmount": "3500000",
+          "valuationCurrency": "JPY"
+        }
+      }
+    ],
+    "completeness": {
+      "score": 0,
+      "maxScore": 100,
+      "checklist": [],
+      "jurisdiction": "JP",
+      "estateStatus": "confirmed"
+    },
+    "taxPosition": {
+      "jurisdiction": "JP",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 0,
+        "currency": "JPY"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    },
+    "recommendedActions": []
+  }
+}

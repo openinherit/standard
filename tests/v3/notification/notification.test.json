@@ -1,0 +1,264 @@
+{
+  "target": "../../../v3/notification.json",
+  "tests": [
+    {
+      "description": "valid \u2014 minimal notification",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 fully populated notification",
+      "data": {
+        "id": "9de9eb2b-a81b-414f-94b8-46937b4549c9",
+        "notificationType": "executor_appointed",
+        "recipientType": "person",
+        "recipientId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "channel": "post",
+        "sentAt": "2026-03-30T10:00:00Z",
+        "status": "delivered",
+        "templateId": "TMPL-EXEC-001",
+        "notes": "Sent by recorded delivery",
+        "provenance": {
+          "aiProvenance": {
+            "model": "claude",
+            "confidence": 95
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 x-inherit- extension notification type",
+      "data": {
+        "id": "f5d4b281-50fe-48f4-9221-307e5c0c213e",
+        "notificationType": "x-inherit-sharia-reminder",
+        "recipientType": "organisation",
+        "recipientId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing required sentAt",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 unknown channel",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "telegram",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 unevaluated property",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z",
+        "badField": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required id",
+      "data": {
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required notificationType",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required recipientType",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required recipientId",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required channel",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 channel as number (wrong type)",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": 42,
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 sentAt as number (wrong type)",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email",
+        "sentAt": 1711800000
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 id not a valid UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 sentAt not a valid date-time format",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email",
+        "sentAt": "30/03/2026 10:00"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 recipientId not a valid UUID",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "invalid-recipient-id",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 notificationType not in enum and not x-inherit- prefixed",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "carrier_pigeon_dispatched",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 recipientType not in enum",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "robot",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 recipientIdDisplay exceeds maxLength 255",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "recipientIdDisplay": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 templateId exceeds maxLength 100",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z",
+        "templateId": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 notes exceeds maxLength 2000",
+      "data": {
+        "id": "36f3f9c0-6990-4bba-a32e-c527406b546c",
+        "notificationType": "beneficiary_notified",
+        "recipientType": "person",
+        "recipientId": "d73880dc-c616-4724-ad29-79364bad1719",
+        "channel": "email",
+        "sentAt": "2026-03-30T10:00:00Z",
+        "notes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    }
+  ]
+}

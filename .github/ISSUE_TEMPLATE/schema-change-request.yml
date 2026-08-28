@@ -1,0 +1,45 @@
+name: Schema Change Request
+description: Propose a change to an existing INHERIT schema
+labels: ["schema-proposal"]
+body:
+  - type: input
+    id: schema
+    attributes:
+      label: Which schema?
+      description: The schema file you want to change
+      placeholder: e.g. v1/person.json
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Proposed change
+      description: What do you want to change? Include the JSON Schema diff if possible.
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this change needed? What problem does it solve?
+    validations:
+      required: true
+  - type: dropdown
+    id: backwards
+    attributes:
+      label: Backwards compatibility
+      description: Does this change break existing valid documents?
+      options:
+        - "No — additive only (new optional field, new enum value)"
+        - "Yes — existing documents may become invalid"
+        - "Unsure — need help assessing"
+    validations:
+      required: true
+  - type: textarea
+    id: extensions
+    attributes:
+      label: Affected extensions
+      description: Which jurisdiction extensions might be affected by this change?
+      placeholder: e.g. uk-england-wales, islamic-succession, none
+    validations:
+      required: false

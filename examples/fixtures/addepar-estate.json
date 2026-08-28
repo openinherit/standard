@@ -1,0 +1,398 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-04-02T09:45:00Z",
+  "generator": {
+    "name": "Addepar Wealth Platform",
+    "version": "3.1.0",
+    "url": "https://www.addepar.com"
+  },
+  "estate": {
+    "id": "30000001-0000-4000-a000-000000000001",
+    "testatorPersonId": "30000001-0000-4000-a000-000000000010",
+    "status": "confirmed",
+    "notes": "High-net-worth estate exported from Addepar. Client has a diversified portfolio across equities, fixed income, property funds, and cash deposits. Two trusts with complex beneficiary structures. All valuations as at 31 March 2026.",
+    "createdAt": "2023-09-01T08:00:00Z",
+    "lastModifiedAt": "2026-04-02T09:45:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    }
+  },
+  "people": [
+    {
+      "id": "30000001-0000-4000-a000-000000000010",
+      "givenName": "Alexander",
+      "familyName": "Cavendish",
+      "dateOfBirth": "1958-12-07",
+      "roles": [
+        "testator"
+      ],
+      "contact": {
+        "email": "a.cavendish@example.com",
+        "address": {
+          "streetAddress": "Flat 12, Eaton Square",
+          "addressLocality": "London",
+          "addressRegion": "Greater London",
+          "postalCode": "SW1W 9DD",
+          "addressCountry": "GB"
+        }
+      }
+    },
+    {
+      "id": "30000001-0000-4000-a000-000000000011",
+      "givenName": "Helena",
+      "familyName": "Cavendish",
+      "dateOfBirth": "1962-04-19",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ]
+    },
+    {
+      "id": "30000001-0000-4000-a000-000000000012",
+      "givenName": "Frederick",
+      "familyName": "Cavendish",
+      "dateOfBirth": "1988-06-21",
+      "roles": [
+        "beneficiary"
+      ]
+    },
+    {
+      "id": "30000001-0000-4000-a000-000000000013",
+      "givenName": "Arabella",
+      "familyName": "Cavendish",
+      "dateOfBirth": "1991-02-14",
+      "roles": [
+        "beneficiary"
+      ]
+    },
+    {
+      "id": "30000001-0000-4000-a000-000000000014",
+      "givenName": "Charlotte",
+      "familyName": "Cavendish",
+      "dateOfBirth": "2018-08-30",
+      "roles": [
+        "beneficiary"
+      ],
+      "notes": "Grandchild — daughter of Frederick. Beneficiary of accumulation and maintenance trust."
+    }
+  ],
+  "kinships": [
+    {
+      "id": "30000001-0000-4000-b000-000000000001",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "30000001-0000-4000-a000-000000000010",
+      "toPersonId": "30000001-0000-4000-a000-000000000012"
+    },
+    {
+      "id": "30000001-0000-4000-b000-000000000002",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "30000001-0000-4000-a000-000000000010",
+      "toPersonId": "30000001-0000-4000-a000-000000000013"
+    },
+    {
+      "id": "30000001-0000-4000-b000-000000000003",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "30000001-0000-4000-a000-000000000012",
+      "toPersonId": "30000001-0000-4000-a000-000000000014"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "30000001-0000-4000-c000-000000000001",
+      "type": "marriage_civil",
+      "partners": [
+        {
+          "personId": "30000001-0000-4000-a000-000000000010",
+          "ordinal": 1
+        },
+        {
+          "personId": "30000001-0000-4000-a000-000000000011",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "30000001-0000-4000-d000-000000000001",
+      "name": "Flat 12, Eaton Square, London",
+      "propertyType": "apartment",
+      "address": {
+        "streetAddress": "Flat 12, Eaton Square",
+        "addressLocality": "London",
+        "addressRegion": "Greater London",
+        "postalCode": "SW1W 9DD",
+        "addressCountry": "GB"
+      },
+      "estimatedValue": {
+        "amount": 450000000,
+        "currency": "GBP"
+      },
+      "tenureType": "lease",
+      "ownershipPercentage": 100,
+      "notes": "Belgravia apartment. 150-year lease from 1998. Annual ground rent £1,200."
+    }
+  ],
+  "assets": [
+    {
+      "id": "30000001-0000-4000-e000-000000000001",
+      "name": "Rathbones Discretionary Portfolio",
+      "category": "financial",
+      "subcategory": "discretionary portfolio",
+      "estimatedValue": {
+        "amount": 320000000,
+        "currency": "GBP"
+      },
+      "notes": "Discretionary managed portfolio — 60% equities, 25% fixed income, 15% alternatives. Rathbones Investment Management."
+    },
+    {
+      "id": "30000001-0000-4000-e000-000000000002",
+      "name": "Vanguard UK Government Bond Index Fund",
+      "category": "financial",
+      "subcategory": "bond fund",
+      "estimatedValue": {
+        "amount": 75000000,
+        "currency": "GBP"
+      },
+      "notes": "UK gilt index tracker. Held for capital preservation."
+    },
+    {
+      "id": "30000001-0000-4000-e000-000000000003",
+      "name": "COIF Charities Property Fund",
+      "category": "financial",
+      "subcategory": "property fund",
+      "estimatedValue": {
+        "amount": 50000000,
+        "currency": "GBP"
+      },
+      "notes": "CCLA property fund units. UK commercial property exposure. Quarterly dealing."
+    },
+    {
+      "id": "30000001-0000-4000-e000-000000000004",
+      "name": "Coutts Cash Deposit Account",
+      "category": "financial",
+      "subcategory": "cash deposit",
+      "estimatedValue": {
+        "amount": 25000000,
+        "currency": "GBP"
+      },
+      "notes": "Coutts & Co cash deposit. Liquidity reserve."
+    },
+    {
+      "id": "30000001-0000-4000-e000-000000000005",
+      "name": "HSBC Global Equity Fund",
+      "category": "financial",
+      "subcategory": "equity fund",
+      "estimatedValue": {
+        "amount": 18000000,
+        "currency": "GBP"
+      },
+      "notes": "Global equities — large-cap growth orientation."
+    }
+  ],
+  "trusts": [
+    {
+      "id": "30000001-0000-4000-f000-000000000001",
+      "name": "Cavendish Family Discretionary Trust",
+      "trustType": "discretionary",
+      "isTestamentary": false,
+      "creationType": "inter_vivos_irrevocable",
+      "createdAt": "2015-03-20T10:00:00Z",
+      "revocability": "irrevocable",
+      "settlor": "30000001-0000-4000-a000-000000000010",
+      "trustees": [
+        {
+          "personId": "30000001-0000-4000-a000-000000000011",
+          "role": "trustee"
+        }
+      ],
+      "beneficiaries": [
+        {
+          "personId": "30000001-0000-4000-a000-000000000012",
+          "interestType": "discretionary"
+        },
+        {
+          "personId": "30000001-0000-4000-a000-000000000013",
+          "interestType": "discretionary"
+        },
+        {
+          "classDefinition": "All grandchildren of Alexander Cavendish",
+          "interestType": "discretionary"
+        }
+      ],
+      "trustPeriod": "125 years from 20 March 2015",
+      "governingLaw": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      },
+      "notes": "Inter vivos discretionary trust settled in 2015. Trustees have full discretion over income and capital distributions to any member of the beneficiary class."
+    },
+    {
+      "id": "30000001-0000-4000-f000-000000000002",
+      "name": "Charlotte Cavendish A&M Trust",
+      "trustType": "accumulation_and_maintenance",
+      "isTestamentary": false,
+      "creationType": "inter_vivos_irrevocable",
+      "createdAt": "2019-01-10T10:00:00Z",
+      "revocability": "irrevocable",
+      "settlor": "30000001-0000-4000-a000-000000000010",
+      "vestingAge": 25,
+      "trustees": [
+        {
+          "personId": "30000001-0000-4000-a000-000000000011",
+          "role": "trustee"
+        },
+        {
+          "personId": "30000001-0000-4000-a000-000000000012",
+          "role": "trustee"
+        }
+      ],
+      "beneficiaries": [
+        {
+          "personId": "30000001-0000-4000-a000-000000000014",
+          "interestType": "both"
+        }
+      ],
+      "vestingConditions": [
+        "Charlotte must attain the age of 25 years"
+      ],
+      "governingLaw": {
+        "country": "GB",
+        "subdivision": "GB-ENG"
+      },
+      "notes": "Accumulation and maintenance trust for Charlotte. Income accumulated until age 25, at which point the trust vests absolutely. Funded with £250,000 at inception."
+    }
+  ],
+  "valuations": [
+    {
+      "id": "30000001-0000-4000-8000-000000000001",
+      "entityType": "asset",
+      "entityId": "30000001-0000-4000-e000-000000000001",
+      "valuedAmount": {
+        "amount": 320000000,
+        "currency": "GBP"
+      },
+      "valuationDate": "2026-03-31",
+      "provider": "Rathbones Investment Management",
+      "providerType": "professional_valuer",
+      "valuationPurpose": "current_estimate",
+      "confidence": "high",
+      "notes": "Quarter-end valuation from Rathbones. Audited portfolio statement."
+    },
+    {
+      "id": "30000001-0000-4000-8000-000000000002",
+      "entityType": "asset",
+      "entityId": "30000001-0000-4000-e000-000000000003",
+      "valuedAmount": {
+        "amount": 48500000,
+        "currency": "GBP"
+      },
+      "valuationDate": "2026-03-31",
+      "provider": "CCLA Investment Management",
+      "providerType": "professional_valuer",
+      "valuationPurpose": "current_estimate",
+      "confidence": "medium",
+      "notes": "COIF property fund NAV. Quarterly dealing — actual disposal value may differ due to redemption notice period."
+    },
+    {
+      "id": "30000001-0000-4000-8000-000000000003",
+      "entityType": "property",
+      "entityId": "30000001-0000-4000-d000-000000000001",
+      "valuedAmount": {
+        "amount": 460000000,
+        "currency": "GBP"
+      },
+      "valuationDate": "2026-01-15",
+      "provider": "Savills",
+      "providerType": "professional_valuer",
+      "valuationPurpose": "current_estimate",
+      "confidence": "high",
+      "notes": "Full inspection valuation by Savills. Prime Belgravia — strong comparable evidence."
+    },
+    {
+      "id": "30000001-0000-4000-8000-000000000004",
+      "entityType": "asset",
+      "entityId": "30000001-0000-4000-e000-000000000004",
+      "valuedAmount": {
+        "amount": 25000000,
+        "currency": "GBP"
+      },
+      "valuationDate": "2026-03-31",
+      "provider": "Coutts & Co",
+      "providerType": "other",
+      "valuationPurpose": "current_estimate",
+      "confidence": "high",
+      "notes": "Cash deposit — face value. No valuation uncertainty."
+    }
+  ],
+  "documents": [
+    {
+      "id": "30000001-0000-4000-9000-000000000001",
+      "type": "will",
+      "title": "Last Will and Testament of Alexander Cavendish",
+      "fileFormat": "pdf",
+      "createdAt": "2023-11-15T10:00:00Z",
+      "notes": "Will executed 15 November 2023. Reviewed and confirmed by Withers LLP."
+    }
+  ],
+  "executors": [
+    {
+      "id": "30000001-0000-4000-7000-000000000001",
+      "personId": "30000001-0000-4000-a000-000000000011",
+      "role": "primary",
+      "isProfessional": false
+    },
+    {
+      "id": "30000001-0000-4000-7000-000000000002",
+      "organisationId": "30000001-0000-4000-6000-000000000002",
+      "role": "secondary",
+      "isProfessional": true,
+      "firmName": "Withers LLP"
+    }
+  ],
+  "bequests": [],
+  "liabilities": [],
+  "guardians": [],
+  "wishes": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "organisations": [
+    {
+      "id": "30000001-0000-4000-6000-000000000001",
+      "name": "Addepar Inc",
+      "organisationType": "financial_institution",
+      "estateRoles": [
+        "asset_holder"
+      ],
+      "notes": "Wealth management platform providing portfolio aggregation and reporting."
+    },
+    {
+      "id": "30000001-0000-4000-6000-000000000002",
+      "name": "Withers LLP",
+      "organisationType": "legal_firm",
+      "estateRoles": [
+        "executor",
+        "will_writer"
+      ],
+      "notes": "International law firm. Professional co-executor and estate advisers."
+    }
+  ],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-04-02T09:45:00Z",
+    "validatedBy": "Addepar Wealth Platform",
+    "schemaVersion": "6.3.0"
+  }
+}

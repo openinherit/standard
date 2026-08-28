@@ -1,0 +1,421 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json",
+  "$comment": "This extension implements succession rules derived from Islamic law as codified in specific jurisdictions. The extension name references the legal tradition, not the personal religious beliefs of any individual. A person of any faith (or none) may be subject to these rules depending on their jurisdiction of domicile. Extension type values: x-inherit-nikah-nama (document), x-inherit-waqfiyyah (document), x-inherit-waqf (trust), x-inherit-wasiyya (bequest), x-inherit-sadaqah-jariyah (bequest), x-inherit-halachic-yerusha is NOT from this extension.",
+  "title": "Islamic Succession Extension",
+  "description": "Faraid (Islamic inheritance) rules: heir classification, fixed shares, residuary (asaba), awl/radd adjustments, wasiyya limits, iddah periods, waqf details, and priority debts including mahr.",
+  "maturity": "draft",
+  "extensionType": "tradition",
+  "applicableJurisdictions": [
+    "SG",
+    "MY",
+    "ID",
+    "AE",
+    "SA",
+    "PK",
+    "BD",
+    "GB",
+    "US",
+    "AU",
+    "CA"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "islamic_law"
+  ],
+  "dataProvenance": "Quranic inheritance verses (Surah An-Nisa 4:11-12), classical fiqh (Hanafi, Shafi'i, Maliki, Hanbali schools)",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "compatibleWith": [
+    "singapore-malaysia",
+    "uk-england-wales",
+    "us-estate",
+    "canada",
+    "australia-nz"
+  ],
+  "type": "object",
+  "$defs": {
+    "HeirClassification": {
+      "type": "object",
+      "properties": {
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "heirClass": {
+          "type": "string",
+          "$comment": "son: ibn. daughter: bint. father: ab. mother: umm. grandfather: jadd sahih (true/paternal grandfather). grandmother: jaddah sahihah. brother_full: akh shaqiq. brother_paternal: akh li-ab (consanguine). brother_maternal: akh li-umm (uterine). sister_full: ukht shaqiqah. sister_paternal: ukht li-ab. sister_maternal: ukht li-umm. husband: zawj. wife: zawja. son_of_son: ibn al-ibn. daughter_of_son: bint al-ibn. uncle_paternal: amm shaqiq (full paternal uncle, asaba rank 9). uncle_paternal_half: amm li-ab (consanguine paternal uncle, asaba rank 10). nephew_brother_full: ibn al-akh al-shaqiq (son of full brother, asaba rank 7). nephew_brother_paternal: ibn al-akh li-ab (son of consanguine brother, asaba rank 8). cousin_paternal_full: ibn amm shaqiq (son of full paternal uncle, asaba rank 11). cousin_paternal_half: ibn amm li-ab (son of consanguine paternal uncle, asaba rank 12). Full asaba hierarchy: 1-son, 2-son's son, 3-father, 4-true grandfather, 5-full brother, 6-consanguine brother, 7-son of full brother, 8-son of consanguine brother, 9-full paternal uncle, 10-consanguine paternal uncle, 11-son of full paternal uncle, 12-son of consanguine paternal uncle, 13-15 ascending paternal uncles. Maternal uncle (khal), paternal aunt (amma), maternal aunt (khala) are dhawu al-arham — model with core uncle_aunt kinship type + lineage property, not as heirClass values. Under Jafari (Shia) law, maternal uncle/aunt are Class 3 heirs with equal standing.",
+          "enum": [
+            "son",
+            "daughter",
+            "father",
+            "mother",
+            "grandfather",
+            "grandmother",
+            "brother_full",
+            "brother_paternal",
+            "brother_maternal",
+            "sister_full",
+            "sister_paternal",
+            "sister_maternal",
+            "husband",
+            "wife",
+            "son_of_son",
+            "daughter_of_son",
+            "uncle_paternal",
+            "uncle_paternal_half",
+            "nephew_brother_full",
+            "nephew_brother_paternal",
+            "cousin_paternal_full",
+            "cousin_paternal_half"
+          ]
+        },
+        "fixedShareFraction": {
+          "type": "string",
+          "maxLength": 255,
+          "pattern": "^[0-9]+/[0-9]+$",
+          "$comment": "Quranic fixed share as a fraction, e.g. 1/6, 1/8, 2/3."
+        },
+        "residuaryClass": {
+          "type": "string",
+          "enum": [
+            "asaba_by_self",
+            "asaba_with_other",
+            "asaba_through_other",
+            "none"
+          ]
+        },
+        "blocked": {
+          "type": "boolean"
+        },
+        "blockedBy": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "$comment": "personId of the heir who blocks this heir."
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "asabaRank": {
+          "description": "Position in the residuary (asaba) heir hierarchy, 1-15. Rank 1 (son) completely excludes all lower ranks. Only applicable when residuaryClass is asaba_by_self",
+          "$comment": "1: son. 2: son's son (however far down). 3: father. 4: true grandfather (however far up). 5: full brother. 6: consanguine brother. 7: son of full brother. 8: son of consanguine brother. 9: full paternal uncle. 10: consanguine paternal uncle. 11: son of full paternal uncle. 12: son of consanguine paternal uncle. 13-15: ascending paternal uncles and their sons",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 15
+        }
+      },
+      "required": [
+        "personId",
+        "heirClass"
+      ],
+      "additionalProperties": false
+    },
+    "WasiyyaRules": {
+      "type": "object",
+      "properties": {
+        "maxPortion": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "$comment": "Maximum bequeathable percentage of estate (typically 33.33%)."
+        },
+        "toNonHeirsOnly": {
+          "type": "boolean",
+          "$comment": "Whether wasiyya is restricted to non-heirs only."
+        },
+        "requiresHeirConsent": {
+          "type": "boolean",
+          "$comment": "Whether bequests exceeding the limit or to heirs require heir consent."
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "IddahPeriod": {
+      "type": "object",
+      "properties": {
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "periodType": {
+          "type": "string",
+          "enum": [
+            "divorce",
+            "death",
+            "pregnancy"
+          ]
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "endDate": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "personId",
+        "periodType",
+        "startDate"
+      ],
+      "additionalProperties": false
+    },
+    "WaqfDetail": {
+      "type": "object",
+      "properties": {
+        "waqfId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "$comment": "Reference to Trust.id for the waqf entity."
+        },
+        "waqfType": {
+          "type": "string",
+          "enum": [
+            "ahli",
+            "khairi",
+            "mushtarak"
+          ]
+        },
+        "dedicationDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "waqfId",
+        "waqfType"
+      ],
+      "additionalProperties": false
+    },
+    "PriorityDebt": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "mahr",
+            "kafan",
+            "funeral_costs",
+            "tax",
+            "debts_of_deceased"
+          ]
+        },
+        "amount": {
+          "$ref": "../../common/money.json"
+        },
+        "creditorPersonId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "description",
+        "type",
+        "amount"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "school": {
+      "type": "string",
+      "enum": [
+        "hanafi",
+        "shafii",
+        "maliki",
+        "hanbali",
+        "jafari",
+        "ibadi",
+        "zahiri"
+      ],
+      "$comment": "Islamic school of jurisprudence (madhab) governing succession."
+    },
+    "faraidApplies": {
+      "type": "boolean",
+      "$comment": "Whether faraid (compulsory Islamic inheritance) applies to this estate."
+    },
+    "heirClassifications": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/HeirClassification"
+      },
+      "maxItems": 50
+    },
+    "awlApplied": {
+      "type": "boolean",
+      "$comment": "Whether awl (proportional reduction) was applied when fixed shares exceed the estate."
+    },
+    "raddApplied": {
+      "type": "boolean",
+      "$comment": "Whether radd (proportional increase) was applied when fixed shares are less than the estate."
+    },
+    "wasiyyaRules": {
+      "$ref": "#/$defs/WasiyyaRules"
+    },
+    "iddahPeriods": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/IddahPeriod"
+      },
+      "maxItems": 50
+    },
+    "waqfDetails": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/WaqfDetail"
+      },
+      "maxItems": 50
+    },
+    "priorityDebts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PriorityDebt"
+      },
+      "maxItems": 50
+    },
+    "hijriDates": {
+      "type": "object",
+      "properties": {
+        "deathDateHijri": {
+          "type": "string",
+          "maxLength": 255,
+          "$comment": "Hijri date of death, e.g. 1446-07-15."
+        },
+        "willDateHijri": {
+          "type": "string",
+          "maxLength": 255,
+          "$comment": "Hijri date of the will, if applicable."
+        }
+      },
+      "additionalProperties": false
+    },
+    "islamicFormalities": {
+      "type": "object",
+      "properties": {
+        "shariaCourtReference": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "muftiFatwReference": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "certifiedByScholar": {
+          "type": "boolean"
+        },
+        "scholarName": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "mahr": {
+      "description": "Mahr — the Islamic marriage gift obligation. A debt owed by the deceased to the surviving spouse. Takes priority over other debts and succession distribution",
+      "$comment": "Al Rayan Bank-requested: mahr is a significant financial obligation in Islamic estate administration. Already modellable via priorityDebts with type=mahr, but a dedicated field enables direct access and richer metadata",
+      "type": "object",
+      "properties": {
+        "amount": {
+          "description": "Mahr amount in minor currency units",
+          "$ref": "../../common/money.json"
+        },
+        "agreed": {
+          "description": "Whether the mahr amount was agreed and documented",
+          "type": "boolean"
+        },
+        "paidInFull": {
+          "description": "Whether the mahr has been paid in full during the marriage",
+          "type": "boolean"
+        },
+        "outstandingAmount": {
+          "description": "Outstanding (unpaid) mahr amount in minor currency units",
+          "$ref": "../../common/money.json"
+        },
+        "creditorPersonId": {
+          "description": "Reference to the Person.id of the spouse to whom the mahr is owed",
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "documentRef": {
+          "description": "Reference to the nikah contract or other document recording the mahr",
+          "type": "string",
+          "maxLength": 500
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "school"
+  ],
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "$comment": "Test fixture exercising all fields of the africa-customary extension",
+  "ethnicGroup": "Zulu",
+  "customaryRules": [
+    {
+      "ethnicGroup": "Zulu",
+      "successionSystem": "patrilineal_primogeniture",
+      "widowInheritanceRight": "statutory_override",
+      "daughterInheritanceRight": "Equal share with sons per Reform Act 11 of 2009",
+      "constitutionalOverride": true,
+      "caseReference": "Bhe v Magistrate Khayelitsha 2005 (1) SA 580 (CC)"
+    },
+    {
+      "ethnicGroup": "Akan",
+      "successionSystem": "matrilineal",
+      "widowInheritanceRight": "usufruct_only",
+      "daughterInheritanceRight": "Inherits through maternal line per Akan customary law",
+      "constitutionalOverride": false,
+      "caseReference": "Mensah v Mensah [2012] GHSC 12"
+    }
+  ],
+  "familyCouncilDecisions": [
+    {
+      "decisionDate": "2025-12-10",
+      "decisionType": "Appointment of customary heir",
+      "decidedBy": "Senior male elders of the Ndlovu family",
+      "participants": [
+        "aa112233-4455-4667-8899-aabbccddeeff",
+        "bb223344-5566-4778-99aa-bbccddeeff00",
+        "cc334455-6677-4889-aabb-ccddeeff0011"
+      ],
+      "chairPersonId": "aa112233-4455-4667-8899-aabbccddeeff",
+      "outcome": "Eldest son appointed as customary heir with obligation to maintain the homestead",
+      "constitutionalChallengeOutcome": "not_challenged",
+      "challengeable": true
+    },
+    {
+      "decisionDate": "2026-01-15",
+      "decisionType": "Distribution of livestock and household effects",
+      "decidedBy": "Extended family council including maternal uncle",
+      "participants": [
+        "dd445566-7788-4990-aabb-ccddeeff0022",
+        "ee556677-8899-4aa1-bbcc-ddeeff003344"
+      ],
+      "chairPersonId": "dd445566-7788-4990-aabb-ccddeeff0022",
+      "outcome": "Livestock divided equally among sons; household effects allocated to surviving widow",
+      "constitutionalChallengeOutcome": "upheld",
+      "challengeable": false
+    }
+  ],
+  "communalPropertyDetails": [
+    {
+      "propertyId": "11aa22bb-33cc-4dd5-ee66-ff7788990011",
+      "communityName": "Ndlovu Clan Trust",
+      "tenureType": "Communal land under Ingonyama Trust",
+      "notes": "Land allocated by the traditional authority; no individual title deed exists. Permission to occupy (PTO) held by the deceased."
+    },
+    {
+      "propertyId": "22bb33cc-44dd-4ee5-ff66-007788991122",
+      "communityName": "Mkhize Community",
+      "tenureType": "Permission to occupy under KwaZulu-Natal traditional authority",
+      "notes": "Grazing land allocated for communal use; not individually heritable under customary law"
+    }
+  ],
+  "widowRights": [
+    {
+      "personId": "ff667788-99aa-4bb1-ccdd-eeff00112233",
+      "customaryRight": "Right to remain in the homestead and use household property",
+      "statutoryRight": "Full intestate inheritance right per Reform Act 11 of 2009",
+      "widowRitesRequired": true,
+      "widowRitesCompleted": true,
+      "ritesDescription": "Traditional mourning period of one year observed, including wearing of mourning attire (inzilo) and cleansing ceremony (ukugeza)",
+      "ritesCompletionDate": "2026-11-01",
+      "notes": "Surviving first wife; customary and statutory rights both apply. Constitutional Court has upheld statutory protection."
+    },
+    {
+      "personId": "00778899-aabb-4cc1-ddee-ff0011223344",
+      "customaryRight": "Usufructuary right over household allocated to her by the family council",
+      "statutoryRight": "Intestate share as surviving spouse under Intestate Succession Act",
+      "widowRitesRequired": true,
+      "widowRitesCompleted": false,
+      "ritesDescription": "Traditional mourning rites pending; family council to confirm date",
+      "ritesCompletionDate": "2027-01-15",
+      "notes": "Surviving second wife in a customary marriage registered under the Recognition of Customary Marriages Act 120 of 1998"
+    }
+  ],
+  "lobolaDetails": {
+    "totalAgreed": {
+      "amount": 12000000,
+      "currency": "ZAR"
+    },
+    "paidToDate": {
+      "amount": 8000000,
+      "currency": "ZAR"
+    },
+    "includesLivestock": true,
+    "livestockDetails": "10 head of cattle delivered to the bride's family at Nongoma kraal; 4 cattle still outstanding",
+    "notes": "Lobola negotiations concluded in 2010. Outstanding balance of R40,000 and 4 cattle to be settled from the estate before distribution."
+  },
+  "landTenureDetails": [
+    {
+      "propertyId": "33cc44dd-55ee-4ff6-0011-223344556677",
+      "tenureType": "Communal tenure under Ingonyama Trust Board",
+      "communityAuthority": "Inkosi Mthembu, Traditional Authority of KwaNongoma",
+      "notes": "Homestead site allocated by the traditional council in 1995; no formal title deed"
+    },
+    {
+      "propertyId": "44dd55ee-66ff-4001-1122-334455667788",
+      "tenureType": "Freehold title converted from PTO",
+      "communityAuthority": "eThekwini Metropolitan Municipality",
+      "notes": "Former communal land converted to individual freehold under the Upgrading of Land Tenure Rights Act 112 of 1991"
+    }
+  ],
+  "constitutionalChallenges": [
+    {
+      "description": "Challenge to the principle of male primogeniture in customary succession as violating the right to equality under section 9 of the Constitution",
+      "caseReference": "Bhe v Magistrate Khayelitsha 2005 (1) SA 580 (CC)",
+      "outcome": "struck_down",
+      "notes": "Constitutional Court declared the rule of male primogeniture in customary law of succession unconstitutional"
+    },
+    {
+      "description": "Challenge to exclusion of extra-marital children from customary inheritance",
+      "caseReference": "Mthembu v Letsela 2000 (3) SA 867 (SCA)",
+      "outcome": "pending",
+      "notes": "Appeal pending before the Supreme Court of Appeal; interim order grants maintenance from the estate"
+    }
+  ],
+  "notes": "Estate of a Zulu man domiciled in KwaZulu-Natal, South Africa. Two customary marriages registered under the Recognition of Customary Marriages Act. The Reform of Customary Law of Succession Act 11 of 2009 applies, overriding male primogeniture. Communal land held under the Ingonyama Trust.",
+  "x-inherit-traditional-authority": {
+    "value": "KwaNongoma Traditional Council, under Inkosi Mthembu"
+  },
+  "x-inherit-customary-marriage-certificate": {
+    "value": "Marriage certificate registered at Nongoma Magistrate's Court, reference CM/2010/0342"
+  }
+}

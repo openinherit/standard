@@ -1,0 +1,360 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/japan/japan.json",
+  "title": "Japan Extension",
+  "description": "Japanese succession law — koseki records, iryubun (reserved share) claims, yōshi (adoption), spousal residence right (2019 reform), isan bunkatsu (estate division), saishi succession, local will formalities.",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "JP"
+  ],
+  "inheritVersion": ">=2.0.0 <3.0.0",
+  "legalSystems": [
+    "civil_law"
+  ],
+  "dataProvenance": "Japanese Civil Code (民法), Family Register Act (戸籍法), 2019 spousal residence right reform",
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "type": "object",
+  "$defs": {
+    "KosekiRecord": {
+      "type": "object",
+      "properties": {
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "honseki": {
+          "type": "string",
+          "maxLength": 255,
+          "$comment": "Registered domicile (本籍)."
+        },
+        "kosekiHead": {
+          "type": "string",
+          "maxLength": 255,
+          "$comment": "Name of the head of the koseki."
+        },
+        "kosekiReference": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "registrationType": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "personId"
+      ],
+      "additionalProperties": false
+    },
+    "IryubunClaim": {
+      "type": "object",
+      "properties": {
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "relationship": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "relationshipCategory": {
+          "description": "Relationship category determining iryubun (reserved share) eligibility under the Japanese Civil Code",
+          "type": "string",
+          "$comment": "spouse: always entitled to iryubun. child: entitled (including adopted). lineal_ascendant: parents/grandparents — entitled only when no children exist. sibling: siblings have NO iryubun right (common misconception). Included in enum for explicit exclusion documentation. Reserved share fractions: Spouse + children: spouse 1/4, each child 1/4 / n. Spouse + lineal ascendants: spouse 1/3, ascendants 1/6. Spouse only: 1/2. Children only: 1/2 equally. Lineal ascendants only: 1/3. Siblings: no reserved share",
+          "enum": [
+            "spouse",
+            "child",
+            "lineal_ascendant",
+            "sibling"
+          ]
+        },
+        "reservedFraction": {
+          "type": "string",
+          "maxLength": 255,
+          "pattern": "^[0-9]+/[0-9]+$",
+          "$comment": "e.g. '1/2' for spouse, '1/4' for child when both exist."
+        },
+        "targetAssetIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "maxItems": 50,
+          "uniqueItems": true
+        },
+        "targetPropertyIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "maxItems": 50,
+          "uniqueItems": true
+        },
+        "claimFiled": {
+          "type": "boolean"
+        },
+        "claimOutcome": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "upheld",
+            "dismissed",
+            "settled",
+            "waived"
+          ]
+        }
+      },
+      "required": [
+        "personId"
+      ],
+      "additionalProperties": false
+    },
+    "YoshiAdoption": {
+      "$comment": "Mapping to core kinship schema: futsu_yoshi (ordinary adoption) = parent_child_adopted + legalBasis: customary_adoption. Biological parent_child_biological kinships remain valid. inheritanceScope: both_families signals dual inheritance. tokubetsu_yoshi (special adoption) = parent_child_adopted + legalBasis: adoption_order. Biological ties severed. inheritanceScope: adoptive_only. Mukoyoshi (son-in-law adoption) is futsu_yoshi + a marriage relationship — no special kinship type needed",
+      "type": "object",
+      "properties": {
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "adoptionType": {
+          "type": "string",
+          "enum": [
+            "futsu_yoshi",
+            "tokubetsu_yoshi"
+          ],
+          "$comment": "futsu_yoshi = regular adoption (maintains ties to biological family). tokubetsu_yoshi = special adoption (severs biological ties)."
+        },
+        "adoptionDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "inheritanceScope": {
+          "type": "string",
+          "enum": [
+            "both_families",
+            "adoptive_only",
+            "biological_only"
+          ]
+        }
+      },
+      "required": [
+        "personId",
+        "adoptionType"
+      ],
+      "additionalProperties": false
+    },
+    "SpousesResidenceRight": {
+      "type": "object",
+      "$comment": "2019 Civil Code reform — spousal right to continue living in the marital home.",
+      "properties": {
+        "propertyId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "spousePersonId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "rightType": {
+          "type": "string",
+          "enum": [
+            "short_term",
+            "long_term"
+          ],
+          "$comment": "short_term = 6 months minimum. long_term = lifetime or fixed period."
+        },
+        "duration": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "actuarialValue": {
+          "$ref": "../../common/money.json"
+        },
+        "registeredAtLegalAffairsBureau": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "propertyId",
+        "spousePersonId",
+        "rightType"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "kosekiRecords": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/KosekiRecord"
+      },
+      "maxItems": 50
+    },
+    "iryubunClaims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/IryubunClaim"
+      },
+      "maxItems": 50
+    },
+    "yoshiAdoptions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/YoshiAdoption"
+      },
+      "maxItems": 50
+    },
+    "spousesResidenceRight": {
+      "$ref": "#/$defs/SpousesResidenceRight"
+    },
+    "saishiSuccessor": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "$comment": "Custodial succession to ancestral rites (祭祀承継) — family graves, Buddhist altar (butsudan), genealogy records. NOT inheritance of property. Not modelled as a kinship type. The designated successor may be any person, not necessarily an heir"
+    },
+    "localWillFormality": {
+      "type": "string",
+      "enum": [
+        "jihi_shosho",
+        "kosei_shosho",
+        "himitsusho"
+      ],
+      "$comment": "jihi_shosho = holographic (自筆証書). kosei_shosho = notarised (公正証書). himitsusho = secret will (秘密証書)."
+    },
+    "inkanVerified": {
+      "type": "boolean",
+      "$comment": "Whether the registered inkan (seal) was verified at the Legal Affairs Bureau."
+    },
+    "isanBunkatsu": {
+      "type": "object",
+      "$comment": "Estate division agreement (遺産分割協議). Requires unanimous heir consent.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "voluntary",
+            "court_mediated",
+            "court_adjudicated"
+          ]
+        },
+        "agreed": {
+          "type": "boolean"
+        },
+        "agreementDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "allHeirsConsented": {
+          "type": "boolean"
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "maxItems": 50,
+          "uniqueItems": true
+        },
+        "registeredAt": {
+          "type": "string",
+          "maxLength": 255,
+          "$comment": "Legal Affairs Bureau registration."
+        },
+        "registrationDate": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "courtReference": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "documentRef": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "legislativeChanges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "enacted",
+              "royal_assent",
+              "bill_stage",
+              "consultation",
+              "announced"
+            ]
+          },
+          "effectiveDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "description",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 50
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

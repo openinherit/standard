@@ -1,0 +1,48 @@
+{
+  "name": "Ireland",
+  "id": "https://openinherit.org/v3/extensions/ireland/extension.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "candidate",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "IE"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "islamic-succession",
+    "jewish-succession"
+  ],
+  "legalSystems": [
+    "common_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-04-04",
+  "dataProvenance": "Succession Act 1965, Capital Acquisitions Tax Consolidation Act 2003, Status of Children Act 1987",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Irish succession law — spouse legal right share, Section 117 moral duty, CAT thresholds, probate process.",
+  "conformanceRules": [
+    {
+      "id": "ie-001",
+      "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
+      "description": "Spouse legal right share must be assessed for Irish estates",
+      "check": "exists",
+      "path": "x-inherit-ireland.spouseLegalRightShare",
+      "severity": "warning"
+    }
+  ],
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-04-04",
+  "successionCoverage": "partial",
+  "taxCoverage": "outline",
+  "keyFeatures": "Legal right share, CAT thresholds, Probate Office requirements, dwelling house exemption, expanded distributionOrder (nephews_nieces, grandparents, uncles_aunts, first_cousins)",
+  "legalTradition": "Common law",
+  "seeking": "Irish probate practitioner",
+  "tier": "core"
+}

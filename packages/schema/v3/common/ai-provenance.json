@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/ai-provenance.json",
+  "title": "AiProvenance",
+  "description": "Records which AI model produced a piece of data and whether a human has verified it. Basic provenance is in INHERIT core; implementation-specific detail (exact model version, pipeline, reasoning, cost) should use x-inherit-* extension properties",
+  "$comment": "Hybrid model: core fields cover model family, confidence, and human review. Implementations extend via x-inherit-* properties for operational detail.",
+  "type": "object",
+  "properties": {
+    "model": {
+      "description": "AI model family that generated this data",
+      "$comment": "claude: Anthropic Claude. gpt: OpenAI GPT. gemini: Google Gemini. grok: xAI Grok. llama: Meta LLaMA. mistral: Mistral AI. other: any other AI model family. Use x-inherit- prefix for specific model versions or proprietary models.",
+      "examples": [ "claude", "gpt", "gemini" ],
+      "anyOf": [
+        {
+          "enum": [
+            "claude",
+            "gpt",
+            "gemini",
+            "grok",
+            "llama",
+            "mistral",
+            "other"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-inherit-.+"
+        }
+      ]
+    },
+    "confidence": {
+      "description": "Confidence score 0–100 indicating how certain the AI is about the generated data",
+      "examples": [ 92, 75, 50 ],
+      "type": "integer",
+      "maximum": 100,
+      "minimum": 0
+    },
+    "generatedAt": {
+      "description": "When the AI produced this data",
+      "examples": [ "2026-03-30T14:00:00Z" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "humanReviewed": {
+      "description": "Whether a human has verified this AI-generated data",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "reviewedBy": {
+      "description": "Person ID or role of the reviewer who verified this data",
+      "examples": [
+        "James Davies",
+        "Legal review team",
+        "Estate administrator"
+      ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "reviewedAt": {
+      "description": "When the human review occurred",
+      "examples": [ "2026-03-30T16:00:00Z" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "additionalProperties": false
+}

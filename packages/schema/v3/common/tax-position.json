@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/tax-position.json",
+  "title": "TaxPosition",
+  "description": "An estimated tax position for an estate in a specific jurisdiction, including gross and net values, available exemptions, and estimated liability",
+  "$comment": "Reusable tax position summary. Producers calculate the estimated tax liability for a given jurisdiction, accounting for exemptions and lifetime transfers. This is always an estimate — the disclaimer field is required to make that clear.",
+  "type": "object",
+  "required": [
+    "jurisdiction",
+    "calculatedAt",
+    "grossEstateValue",
+    "disclaimer"
+  ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "jurisdiction": {
+      "description": "ISO 3166-1 alpha-2 country code or ISO 3166-2 subdivision code identifying the tax jurisdiction",
+      "examples": [ "GB", "US", "GB-SCT", "DE", "AU-NSW" ],
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "calculatedAt": {
+      "description": "ISO 8601 date-time when this tax position was computed",
+      "examples": [ "2026-03-28T14:30:00Z" ],
+      "readOnly": true,
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "grossEstateValue": {
+      "description": "Total gross value of the estate before deducting liabilities, in minor currency units",
+      "$ref": "money.json"
+    },
+    "netEstateValue": {
+      "description": "Net estate value after deducting liabilities, in minor currency units",
+      "$ref": "money.json"
+    },
+    "lifetimeTransfersInLookback": {
+      "description": "Total value of lifetime transfers (gifts, settlements) made within the lookback period, in minor currency units",
+      "$ref": "money.json"
+    },
+    "lookbackPeriod": {
+      "description": "The lookback period for lifetime transfers in this jurisdiction, expressed as a human-readable duration",
+      "examples": [ "7 years", "5 years", "3 years" ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "availableExemptions": {
+      "description": "Tax exemptions and reliefs that may reduce the taxable estate. Each entry describes one exemption, its value, and whether it has been applied",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "name" ],
+        "properties": {
+          "name": {
+            "description": "The name of the exemption or relief",
+            "examples": [
+              "Nil-rate band",
+              "Residence nil-rate band",
+              "Spouse exemption",
+              "Agricultural property relief",
+              "Business property relief",
+              "Unified credit"
+            ],
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "amount": {
+            "description": "The monetary value of this exemption, in minor currency units",
+            "$ref": "money.json"
+          },
+          "applied": {
+            "description": "Whether this exemption has been applied in the current calculation",
+            "examples": [ true, false ],
+            "type": "boolean"
+          },
+          "notes": {
+            "description": "Additional context about eligibility, conditions, or partial application of this exemption",
+            "examples": [
+              "Tapered due to estate value exceeding £2m",
+              "Transferred nil-rate band from predeceased spouse"
+            ],
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "taxableEstate": {
+      "description": "The estate value subject to tax after applying exemptions, in minor currency units",
+      "$ref": "money.json"
+    },
+    "estimatedLiability": {
+      "description": "The estimated tax due, in minor currency units. This is an estimate and should not be treated as a final liability",
+      "$ref": "money.json"
+    },
+    "effectiveRate": {
+      "description": "The effective tax rate as a percentage of the gross estate value",
+      "examples": [ 0, 16.4, 40 ],
+      "type": "number",
+      "maximum": 100,
+      "minimum": 0
+    },
+    "warnings": {
+      "description": "Data gaps, simplifying assumptions, or other caveats that may affect the accuracy of this estimate",
+      "examples": [
+        [
+          "No valuation on file for 2 properties — using purchase price",
+          "Lifetime transfers may be incomplete — only gifts over £3,000 recorded"
+        ]
+      ],
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      }
+    },
+    "disclaimer": {
+      "description": "A mandatory disclaimer stating that this is an estimate and not professional tax advice",
+      "examples": [
+        "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+      ],
+      "type": "string",
+      "maxLength": 2000,
+      "minLength": 1
+    },
+    "charitableReliefApplicable": {
+      "description": "Whether the estate qualifies for a reduced tax rate due to charitable giving (e.g. UK 36% IHT rate when 10%+ left to charity)",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "charitableReliefPercentage": {
+      "description": "The reduced tax rate applicable when charitable relief qualifies, as a percentage",
+      "examples": [ 36 ],
+      "type": "number",
+      "maximum": 100,
+      "minimum": 0
+    },
+    "charitableReliefBasis": {
+      "description": "The basis for qualifying for charitable tax relief",
+      "examples": [
+        "10%+ of net estate to registered charities per IHT Act 1984 Schedule 1A"
+      ],
+      "type": "string",
+      "maxLength": 500
+    },
+    "charitableReliefJurisdiction": {
+      "description": "ISO 3166 code of the jurisdiction whose charitable relief rules apply",
+      "examples": [ "GB", "US" ],
+      "type": "string",
+      "maxLength": 255
+    },
+    "charitableGiftsTotal": {
+      "description": "Total value of all charitable gifts in this estate, in minor currency units",
+      "$ref": "money.json"
+    },
+    "charitableGiftsAsPercentage": {
+      "description": "Charitable gifts as a percentage of the net estate value",
+      "examples": [ 12.5, 10 ],
+      "type": "number",
+      "maximum": 100,
+      "minimum": 0
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

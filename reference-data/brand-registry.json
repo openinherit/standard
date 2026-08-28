@@ -1,0 +1,102 @@
+{
+  "_disclaimer": "Brand names and Wikidata Q-numbers for common estate asset brands. Not exhaustive — implementations should accept any brand name. Q-numbers enable structured data lookups via the Wikidata API.",
+  "_wikidataApiExample": "https://www.wikidata.org/wiki/Special:EntityData/Q62288.json",
+  "_sparqlEndpoint": "https://query.wikidata.org/sparql",
+  "lastUpdated": "2026-03-29",
+  "brands": {
+    "jewellery_watches": [
+      { "name": "Rolex", "wikidataId": "Q62288" },
+      { "name": "Omega", "wikidataId": "Q659027" },
+      { "name": "Cartier", "wikidataId": "Q538587" },
+      { "name": "Patek Philippe", "wikidataId": "Q659096" },
+      { "name": "Audemars Piguet", "wikidataId": "Q667425" },
+      { "name": "Breitling", "wikidataId": "Q665740" },
+      { "name": "TAG Heuer", "wikidataId": "Q645984" },
+      { "name": "Longines", "wikidataId": "Q603698" },
+      { "name": "Tissot", "wikidataId": "Q659530" },
+      { "name": "Seiko", "wikidataId": "Q3247512" },
+      { "name": "Tiffany & Co.", "wikidataId": "Q1066858" },
+      { "name": "Bulgari", "wikidataId": "Q752515" },
+      { "name": "Van Cleef & Arpels", "wikidataId": "Q2708181" },
+      { "name": "Chopard", "wikidataId": "Q670112" },
+      { "name": "Jaeger-LeCoultre", "wikidataId": "Q378698" },
+      { "name": "IWC Schaffhausen", "wikidataId": "Q662902" },
+      { "name": "Tudor", "wikidataId": "Q3541852" },
+      { "name": "Vacheron Constantin", "wikidataId": "Q62341" },
+      { "name": "Piaget", "wikidataId": "Q658961" }
+    ],
+    "collectibles": [
+      { "name": "Hornby", "wikidataId": "Q164484", "subcategory": "model_railways" },
+      { "name": "Bachmann", "wikidataId": "Q1988550", "subcategory": "model_railways" },
+      { "name": "Dapol", "wikidataId": "Q5221788", "subcategory": "model_railways" },
+      { "name": "Heljan", "wikidataId": "Q5706316", "subcategory": "model_railways" },
+      { "name": "Hattons", "wikidataId": "Q85765904", "subcategory": "model_railways" },
+      { "name": "Tri-ang", "wikidataId": "Q6553620", "subcategory": "model_railways", "note": "Wikidata entity is Lines Bros (parent company)" },
+      { "name": "Stanley Gibbons", "wikidataId": "Q1938876", "subcategory": "stamps" },
+      { "name": "Royal Mint", "wikidataId": "Q951830", "subcategory": "coins" },
+      { "name": "Perth Mint", "wikidataId": "Q917524", "subcategory": "coins" },
+      { "name": "United States Mint", "wikidataId": "Q1141049", "subcategory": "coins" }
+    ],
+    "antiques": [
+      { "name": "Royal Doulton", "wikidataId": "Q2057955" },
+      { "name": "Wedgwood", "wikidataId": "Q595544" },
+      { "name": "Lladró", "wikidataId": "Q285006" },
+      { "name": "Meissen", "wikidataId": "Q822407" },
+      { "name": "Royal Copenhagen", "wikidataId": "Q1440151" },
+      { "name": "Clarice Cliff", "wikidataId": "Q2975593", "note": "Wikidata entity is the artist/designer" },
+      { "name": "Sèvres", "wikidataId": "Q653307" }
+    ],
+    "musical_instruments": [
+      { "name": "Steinway & Sons", "wikidataId": "Q156391" },
+      { "name": "Bösendorfer", "wikidataId": "Q664799" },
+      { "name": "Yamaha", "wikidataId": "Q188454" },
+      { "name": "Gibson", "wikidataId": "Q210278" },
+      { "name": "Fender", "wikidataId": "Q175391" },
+      { "name": "C. F. Martin & Company", "wikidataId": "Q1022479" },
+      { "name": "Stradivarius", "wikidataId": "Q1068162", "note": "Refers to instruments by the Stradivari family" },
+      { "name": "Selmer", "wikidataId": "Q1850648" }
+    ],
+    "wine_spirits": [
+      { "name": "Château Lafite Rothschild", "wikidataId": "Q1090558" },
+      { "name": "Château Margaux", "wikidataId": "Q1063236" },
+      { "name": "Château Mouton Rothschild", "wikidataId": "Q1061469" },
+      { "name": "Domaine de la Romanée-Conti", "wikidataId": "Q2142623" },
+      { "name": "The Macallan", "wikidataId": "Q982891" },
+      { "name": "Glenfiddich", "wikidataId": "Q911587" },
+      { "name": "Hennessy", "wikidataId": "Q1229287" },
+      { "name": "Rémy Martin", "wikidataId": "Q697958" }
+    ],
+    "clothing_textiles": [
+      { "name": "Hermès", "wikidataId": "Q843887" },
+      { "name": "Louis Vuitton", "wikidataId": "Q191485" },
+      { "name": "Chanel", "wikidataId": "Q218115" },
+      { "name": "Gucci", "wikidataId": "Q178516" },
+      { "name": "Burberry", "wikidataId": "Q390107" },
+      { "name": "Prada", "wikidataId": "Q193136" }
+    ],
+    "firearms_sporting": [
+      { "name": "Purdey", "wikidataId": "Q877460" },
+      { "name": "Holland & Holland", "wikidataId": "Q3398859" },
+      { "name": "Beretta", "wikidataId": "Q324782" },
+      { "name": "Browning Arms Company", "wikidataId": "Q991188" }
+    ],
+    "vehicle": [
+      { "name": "Rolls-Royce", "wikidataId": "Q234803" },
+      { "name": "Bentley", "wikidataId": "Q27224" },
+      { "name": "Ferrari", "wikidataId": "Q27586" },
+      { "name": "Porsche", "wikidataId": "Q40993" },
+      { "name": "Aston Martin", "wikidataId": "Q27074" },
+      { "name": "Jaguar", "wikidataId": "Q30055" },
+      { "name": "Mercedes-Benz", "wikidataId": "Q36008" },
+      { "name": "BMW", "wikidataId": "Q26678" },
+      { "name": "Land Rover", "wikidataId": "Q26777551" },
+      { "name": "Morgan", "wikidataId": "Q1165625" }
+    ],
+    "digital": [
+      { "name": "Apple", "wikidataId": "Q312" },
+      { "name": "Google", "wikidataId": "Q95" },
+      { "name": "Microsoft", "wikidataId": "Q2283" },
+      { "name": "Meta", "wikidataId": "Q380" }
+    ]
+  }
+}

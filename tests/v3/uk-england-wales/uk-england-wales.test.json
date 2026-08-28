@@ -1,0 +1,138 @@
+{
+  "target": "../../../v3/extensions/uk-england-wales/uk-england-wales.json",
+  "tests": [
+    {
+      "description": "valid — empty (no required fields)",
+      "data": {
+        "transferableNilRateBand": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — nilRateBand as temporal rule",
+      "data": {
+        "nilRateBand": {
+          "value": {
+            "amount": 32500000,
+            "currency": "GBP"
+          },
+          "effectiveFrom": "2024-04-06",
+          "status": "enacted"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — with IHT rate",
+      "data": {
+        "inheritanceTaxRate": {
+          "value": 40,
+          "effectiveFrom": "2024-04-06",
+          "status": "enacted"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — cohabitant rights",
+      "data": {
+        "nilRateBand": {
+          "value": {
+            "amount": 32500000,
+            "currency": "GBP"
+          },
+          "effectiveFrom": "2024-04-06",
+          "status": "enacted"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — unknown root property",
+      "data": {
+        "nilRateBand": {
+          "value": {
+            "amount": 32500000,
+            "currency": "GBP"
+          },
+          "effectiveFrom": "2024-04-06",
+          "status": "enacted"
+        },
+        "scottishPriorRights": {}
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — legislative changes array",
+      "data": {
+        "legislativeChanges": [
+          {
+            "description": "IHT nil-rate band frozen until 2028",
+            "status": "enacted",
+            "effectiveDate": "2024-04-06"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — intestacyHierarchy with 9 AEA s.46 tiers",
+      "data": {
+        "intestacyHierarchy": [
+          { "tier": 1, "relationshipCategory": "spouse", "bloodRequirement": "not_applicable" },
+          { "tier": 2, "relationshipCategory": "children_and_issue", "bloodRequirement": "not_applicable" },
+          { "tier": 3, "relationshipCategory": "parents", "bloodRequirement": "not_applicable" },
+          { "tier": 4, "relationshipCategory": "siblings_whole", "bloodRequirement": "whole" },
+          { "tier": 5, "relationshipCategory": "siblings_half", "bloodRequirement": "half" },
+          { "tier": 6, "relationshipCategory": "grandparents", "bloodRequirement": "not_applicable" },
+          { "tier": 7, "relationshipCategory": "uncles_aunts_whole", "bloodRequirement": "whole" },
+          { "tier": 8, "relationshipCategory": "uncles_aunts_half", "bloodRequirement": "half" },
+          { "tier": 9, "relationshipCategory": "crown", "bloodRequirement": "not_applicable" }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — statutoryLegacy with amount and SI reference",
+      "data": {
+        "statutoryLegacy": {
+          "amount": { "amount": 32200000, "currency": "GBP" },
+          "effectiveFrom": "2023-07-26",
+          "statutoryInstrument": "SI 2023/877"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — intestacyHierarchy relationshipCategory 'cousin' not in E&W hierarchy",
+      "data": {
+        "intestacyHierarchy": [
+          { "tier": 1, "relationshipCategory": "cousin" }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — marriageRevocation (Wills Act 1837 s.18)",
+      "data": {
+        "marriageRevocation": {
+          "revokesPriorWill": true,
+          "statute": "Wills Act 1837 s.18",
+          "statuteUrl": "https://www.legislation.gov.uk/ukpga/Will4and1Vict/7/26/section/18",
+          "contemplationException": true,
+          "contemplationRule": "A will made in expectation of a particular marriage survives that marriage if the will expressly identifies the intended spouse (s.18(3)-(4))."
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — marriageRevocation missing required revokesPriorWill",
+      "data": {
+        "marriageRevocation": {
+          "statute": "Wills Act 1837 s.18"
+        }
+      },
+      "valid": false
+    }
+  ]
+}

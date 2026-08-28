@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/visibility.json",
+  "title": "Visibility",
+  "description": "Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records",
+  "$comment": "testator_only = only the testator can see this record. proxy_visible = testator and their authorised proxies. companion_visible = testator, proxies, and companions (e.g. spouse). executor_visible = visible to named executors as well. beneficiary_visible = visible to named beneficiaries. all_parties = no restriction, visible to all parties with estate access.",
+  "examples": [ "testator_only", "executor_visible", "all_parties" ],
+  "default": "all_parties",
+  "enum": [
+    "testator_only",
+    "proxy_visible",
+    "companion_visible",
+    "executor_visible",
+    "beneficiary_visible",
+    "all_parties"
+  ]
+}

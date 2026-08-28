@@ -1,0 +1,359 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/attestation.json",
+  "title": "Attestation",
+  "description": "A first-class attestation entity recording will execution formalities. Each attestation has its own identity — supports tracking multiple attestation events independently (original will, codicils, re-execution after marriage). Reused by estate, codicils, trusts, extensions. Supports written (E&W Wills Act s.9), oral (Islamic/customary), seal-based (Japanese inkan), kinyan-based (Jewish)",
+  "type": "object",
+  "required": [ "id" ],
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  },
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this attestation within the INHERIT document",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "attestationDate": {
+      "description": "Date and time the document was executed. Use T00:00:00Z for date-only precision. Time precision recommended for video-witnessed, RON, or electronically signed documents",
+      "examples": [ "2023-08-22T00:00:00Z", "2023-08-22T14:30:00+08:00" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|[+-]\\d{2}:\\d{2})$",
+      "format": "date-time"
+    },
+    "witnessPersonIds": {
+      "description": "Person IDs of the witnesses. Most jurisdictions require at least two witnesses. Some (e.g. holographic wills) require none",
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+        "format": "uuid"
+      }
+    },
+    "witnesses": {
+      "description": "Detailed witness information as recorded on the will. Witnesses are often not estate participants — their names and addresses appear on the document but they may not be in the people array. Coexists with witnessPersonIds for backward compatibility",
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [ "name" ],
+        "properties": {
+          "personId": {
+            "description": "Reference to a person in the people array, if this witness is also an estate participant",
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "format": "uuid"
+          },
+          "name": {
+            "description": "Full name of the witness as recorded on the will",
+            "type": "string",
+            "maxLength": 255
+          },
+          "address": {
+            "description": "Address of the witness at the time of execution, as recorded on the will",
+            "type": "string",
+            "maxLength": 500
+          },
+          "occupation": {
+            "description": "Occupation of the witness as recorded on the will",
+            "type": "string",
+            "maxLength": 255
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "method": {
+      "description": "The method by which the will or document was executed",
+      "$comment": "in_person: traditional in-person execution and witnessing. video: execution witnessed via video link (permitted during COVID in some jurisdictions, now permanent in some). remote: remote execution via electronic means. none: no formal execution method (e.g. nuncupative/oral wills). kinyan_sudar: a legally valid attestation method in jurisdictions that recognise halachic legal instruments — Jewish acquisition by symbolic exchange of a cloth, used to formalise wills in batei din (Israel: binding; UK/US: recognised as contractual formality in secular courts). kinyan_agav: a legally valid attestation method under halachic law — Jewish acquisition 'on the back of' land transfer, ancillary to a property transaction. seal_based: a legally valid attestation method in East Asian jurisdictions — sealed with a personal seal, carrying legal force equivalent to a signature in China, Korea, and Japan. inkan_registered: a legally valid attestation method under Japanese Civil Code Art. 969 — Japanese registered seal (jitsuin) verified against a seal registration certificate (inkan toroku shomeisho) issued by the municipal government. Required for notarised wills (kōsei shōsho igon) in Japan.",
+      "examples": [ "in_person", "video", "inkan_registered" ],
+      "enum": [
+        "in_person",
+        "video",
+        "remote",
+        "none",
+        "kinyan_sudar",
+        "kinyan_agav",
+        "seal_based",
+        "inkan_registered"
+      ]
+    },
+    "attestationType": {
+      "description": "The form of attestation used",
+      "$comment": "written_signed: traditional written will signed by the testator. oral_witnessed: oral (nuncupative) will witnessed by the required number of witnesses — valid in Islamic law and some customary systems. oral_community: oral will witnessed by the community — common in African customary law. seal_based: will authenticated by personal seal rather than signature — Japanese, Korean, and historical Chinese practice.",
+      "examples": [ "written_signed", "oral_witnessed" ],
+      "enum": [
+        "written_signed",
+        "oral_witnessed",
+        "oral_community",
+        "seal_based"
+      ]
+    },
+    "solicitorSupervised": {
+      "description": "Whether a solicitor or legal professional supervised the execution. Reduces (but does not eliminate) the risk of challenges",
+      "examples": [ true, false ],
+      "type": "boolean"
+    },
+    "testatorSignedInPresenceOfWitnesses": {
+      "description": "Whether the testator signed (or acknowledged their signature) in the presence of both witnesses simultaneously. Required under the Wills Act 1837 s.9(c)",
+      "$comment": "Wills Act 1837 s.9(c).",
+      "examples": [ true ],
+      "type": "boolean"
+    },
+    "witnessesSignedInPresenceOfTestator": {
+      "description": "Whether each witness signed in the presence of the testator. Required under the Wills Act 1837 s.9(d)",
+      "$comment": "Wills Act 1837 s.9(d).",
+      "examples": [ true ],
+      "type": "boolean"
+    },
+    "witnessConflictCheck": {
+      "description": "Whether a conflict check was performed to ensure no witness is a beneficiary. Under English law, a beneficiary-witness loses their gift (Wills Act 1837 s.15)",
+      "examples": [ true ],
+      "type": "boolean"
+    },
+    "witnessConflictCheckScope": {
+      "description": "The legal standard applied when checking for witness conflicts",
+      "$comment": "english_law: check under English Wills Act 1837 s.15 — beneficiary-witness forfeits gift. halachic_broad: broader Jewish law disqualifications — relatives, women (Orthodox), Sabbath violators, minors. shariah_standard: Islamic witness requirements — typically two male Muslims (or one male and two females). civil_law_standard: civil law notarised will witness requirements. customary_oral: oral will witness requirements under customary law. community_testimony: community-based attestation where formal witness rules do not apply.",
+      "examples": [ "english_law", "shariah_standard" ],
+      "enum": [
+        "english_law",
+        "halachic_broad",
+        "shariah_standard",
+        "civil_law_standard",
+        "customary_oral",
+        "community_testimony"
+      ]
+    },
+    "notes": {
+      "description": "Additional notes on attestation — unusual circumstances, concerns about formalities, or cultural context",
+      "examples": [
+        "Testator unable to sign — made a mark in the presence of witnesses and a solicitor",
+        "Inkan verified against Shinjuku Ward seal registration"
+      ],
+      "type": "string",
+      "maxLength": 2000
+    },
+    "executionType": {
+      "description": "Whether the will was executed physically, electronically, or via a combination of both",
+      "$comment": "Florida F.S. 732.521, Nevada NRS 133.085, UEWA 2019",
+      "enum": [ "physical", "electronic", "hybrid" ]
+    },
+    "qualifiedCustodianOrganisationId": {
+      "description": "FK to organisation — Florida qualified custodian (F.S. 732.524)",
+      "type": "string",
+      "format": "uuid"
+    },
+    "qualifiedCustodianOrganisationIdDisplay": {
+      "description": "Human-readable display name for the referenced qualified custodian organisation",
+      "type": "string",
+      "maxLength": 255
+    },
+    "custodianSystemName": {
+      "description": "Name of the e-will storage platform",
+      "type": "string",
+      "maxLength": 255
+    },
+    "authoritativeCopyHolder": {
+      "description": "Name or identifier of the entity holding the authoritative copy of the electronic will",
+      "$comment": "Nevada NRS 133.085 — authoritative copy",
+      "type": "string",
+      "maxLength": 255
+    },
+    "tamperEvidenceMethod": {
+      "description": "e.g. SHA-256, blockchain notarisation",
+      "type": "string",
+      "maxLength": 255
+    },
+    "tamperEvidenceValue": {
+      "description": "The hash or signature value",
+      "type": "string",
+      "maxLength": 1000
+    },
+    "ronSessionId": {
+      "description": "Remote Online Notarisation session identifier",
+      "type": "string",
+      "maxLength": 255
+    },
+    "ronPlatform": {
+      "description": "RON platform, e.g. Notarize, DocVerify",
+      "type": "string",
+      "maxLength": 255
+    },
+    "ronRecordingContentUrl": {
+      "description": "URL of the uninterrupted audio-video recording of the RON session",
+      "$comment": "Florida F.S. 117.265 — uninterrupted audio-video recording. schema.org contentUrl",
+      "type": "string",
+      "format": "uri"
+    },
+    "ronRecordingRetentionYears": {
+      "description": "Number of years the RON recording must be retained",
+      "$comment": "Florida: minimum 10 years",
+      "type": "integer",
+      "minimum": 0
+    },
+    "identityVerificationMethod": {
+      "description": "Method used to verify the identity of the principal during remote online notarisation",
+      "$comment": "Florida F.S. 117.245 — evidence of identity",
+      "enum": [
+        "government_id",
+        "credential_analysis",
+        "knowledge_based_authentication",
+        "biometric",
+        "personal_knowledge"
+      ]
+    },
+    "authenticationCharacteristic": {
+      "description": "Description of the biological aspect or physical act used to authenticate the testator's electronic signature",
+      "$comment": "Nevada NRS 133.085 — biological aspect or physical act",
+      "type": "string",
+      "maxLength": 500
+    },
+    "selfProvingAffidavit": {
+      "description": "Whether a self-proving affidavit was executed alongside the will, allowing probate without live witness testimony",
+      "$comment": "Florida F.S. 732.503",
+      "type": "boolean"
+    },
+    "videoRecordingContentUrl": {
+      "description": "Link to the video witnessing recording",
+      "type": "string",
+      "format": "uri"
+    },
+    "videoRecordingMediaType": {
+      "description": "MIME type, e.g. video/mp4",
+      "type": "string",
+      "maxLength": 100
+    },
+    "videoRecordingDuration": {
+      "description": "Duration of the video witnessing recording in ISO 8601 duration format",
+      "type": "string",
+      "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$"
+    },
+    "videoUninterrupted": {
+      "description": "Whether the video recording was uninterrupted and unedited throughout the execution",
+      "$comment": "Florida F.S. 117.265 — must be uninterrupted and unedited",
+      "type": "boolean"
+    },
+    "videoPlatform": {
+      "description": "Name of the video platform used for witnessing, e.g. Zoom, Microsoft Teams",
+      "type": "string",
+      "maxLength": 255
+    },
+    "videoParticipantPersonIds": {
+      "description": "Person IDs of all participants in the video witnessing session",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "videoLive": {
+      "description": "Whether the video was live (not pre-recorded)",
+      "type": "boolean"
+    },
+    "videoJurisdictionValidFrom": {
+      "description": "Date from which video witnessing became legally valid in the relevant jurisdiction",
+      "type": "string",
+      "format": "date"
+    },
+    "videoJurisdictionValidUntil": {
+      "description": "End of validity period — null means still valid. W3C VC validUntil",
+      "type": "string",
+      "format": "date"
+    },
+    "videoDeclaration": {
+      "description": "A person recording themselves declaring the will is correct — distinct from witnessing",
+      "type": "object",
+      "required": [ "declarantPersonId", "declarationType" ],
+      "properties": {
+        "declarantPersonId": {
+          "description": "Person making the declaration",
+          "type": "string",
+          "format": "uuid"
+        },
+        "declarantPersonIdDisplay": {
+          "description": "Human-readable display name for the referenced declarant person",
+          "type": "string",
+          "maxLength": 255
+        },
+        "declarationType": {
+          "enum": [
+            "testamentary_intent",
+            "codicil_confirmation",
+            "capacity_demonstration",
+            "other"
+          ]
+        },
+        "contentUrl": {
+          "description": "Link to the video recording (schema.org contentUrl)",
+          "type": "string",
+          "format": "uri"
+        },
+        "recordingMediaType": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "recordingDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "recordingDuration": {
+          "type": "string",
+          "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$"
+        },
+        "transcript": {
+          "description": "Text transcript of what was said",
+          "type": "string",
+          "maxLength": 5000
+        },
+        "transcriptVerified": {
+          "type": "boolean"
+        },
+        "legalWeight": {
+          "enum": [ "evidential", "supplementary", "non_binding", "unknown" ]
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "provenance": {
+      "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
+      "$ref": "common/provenance.json"
+    },
+    "pageCount": {
+      "description": "Total number of pages in the executed document",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 999
+    },
+    "pagesSignedByTestator": {
+      "description": "Number of pages signed by the testator",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999
+    },
+    "pagesSignedByWitnesses": {
+      "description": "Number of pages signed by the witnesses",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999
+    },
+    "allPagesSigned": {
+      "description": "Whether all pages have been signed by the testator and all witnesses",
+      "type": "boolean"
+    }
+  },
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

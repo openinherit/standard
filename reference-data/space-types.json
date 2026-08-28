@@ -1,0 +1,1009 @@
+{
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal, tax, or regulatory advice. Always verify with current legislation and qualified professionals.",
+  "$schema": "https://openinherit.org/reference-data/space-types-schema.json",
+  "version": "1.0.0",
+  "lastUpdated": "2026-03-30",
+  "description": "Space types for use with space.json. Every enum value in space.json has a corresponding entry here with display metadata, categorisation, and locale/urgency guidance for implementation UIs.",
+  "types": [
+    {
+      "id": "living_room",
+      "label": "Living room",
+      "aliases": ["lounge", "sitting room", "front room", "reception room"],
+      "category": "living",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "The main living space. Check for valuable ornaments, artwork, electronics, and furniture. Look in display cabinets, sideboards, and behind cushions for jewellery or small valuables."
+    },
+    {
+      "id": "dining_room",
+      "label": "Dining room",
+      "aliases": ["dining area"],
+      "category": "living",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check the sideboard and display cabinets for silverware, china, and crystal. Dining room furniture can be valuable — note the make and condition of the table and chairs."
+    },
+    {
+      "id": "kitchen",
+      "label": "Kitchen",
+      "aliases": [],
+      "category": "living",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check drawers for important documents or cash. Note high-value appliances (range cookers, American-style fridges). Look for valuable cookware — copper pans and cast iron can be worth cataloguing."
+    },
+    {
+      "id": "kitchen_diner",
+      "label": "Kitchen/diner",
+      "aliases": ["open plan kitchen", "kitchen dining room"],
+      "category": "living",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Combined kitchen and dining space. Check all cabinets and drawers for documents, cash, and valuables, as well as appliances and dining furniture."
+    },
+    {
+      "id": "breakfast_room",
+      "label": "Breakfast room",
+      "aliases": [],
+      "category": "living",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Often contains informal dining furniture and personal effects. Check any storage furniture for documents or small valuables."
+    },
+    {
+      "id": "family_room",
+      "label": "Family room",
+      "aliases": ["playroom", "TV room"],
+      "category": "living",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check for electronics, gaming equipment, and collectibles. Look inside storage units and ottomans for personal belongings."
+    },
+    {
+      "id": "sitting_room",
+      "label": "Sitting room",
+      "aliases": ["reception room"],
+      "category": "living",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Often a more formal room — check for valuable ornaments, artwork, and antique furniture. Display cabinets may contain collectable items."
+    },
+    {
+      "id": "drawing_room",
+      "label": "Drawing room",
+      "aliases": ["withdrawing room", "reception room"],
+      "category": "living",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Typically the most formal reception room. Likely to contain antique furniture, fine art, and silverware. Catalogue all items carefully."
+    },
+    {
+      "id": "conservatory",
+      "label": "Conservatory",
+      "aliases": ["sun room", "garden room extension"],
+      "category": "living",
+      "tier": 1,
+      "locales": ["GB", "IE"],
+      "urgencyFlag": false,
+      "promptText": "Note the construction and condition. Check for garden furniture, plants of value, and any stored items. Temperature extremes may affect stored items."
+    },
+    {
+      "id": "sunroom",
+      "label": "Sun room",
+      "aliases": ["solarium"],
+      "category": "living",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check for furniture, plants of value, and any stored personal effects. Note the condition of the structure."
+    },
+    {
+      "id": "snug",
+      "label": "Snug",
+      "aliases": ["den", "cosy room"],
+      "category": "living",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Smaller informal living space, often with bookshelves. Check for collectibles, books of value, and personal mementos stored here."
+    },
+    {
+      "id": "bedroom",
+      "label": "Bedroom",
+      "aliases": ["master bedroom", "principal bedroom"],
+      "category": "bedroom",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check bedside tables, wardrobes, and drawers carefully — jewellery, cash, and important documents are frequently found here. Note the bed and bedroom furniture."
+    },
+    {
+      "id": "guest_bedroom",
+      "label": "Guest bedroom",
+      "aliases": ["spare bedroom", "visitors room"],
+      "category": "bedroom",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check all storage including the wardrobe and bedside table. Guest rooms are sometimes used to store valuables or documents out of habit."
+    },
+    {
+      "id": "nursery",
+      "label": "Nursery",
+      "aliases": ["baby's room", "child's room", "kids room"],
+      "category": "bedroom",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note furniture and any items that may belong to other family members. Check for toys or items of collector value."
+    },
+    {
+      "id": "spare_room",
+      "label": "Spare room",
+      "aliases": ["box room", "second bedroom"],
+      "category": "bedroom",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Spare rooms are often used for storage — check thoroughly for documents, valuables, and personal effects that may have been placed here over time."
+    },
+    {
+      "id": "dressing_room",
+      "label": "Dressing room",
+      "aliases": ["walk-in wardrobe room"],
+      "category": "bedroom",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check all wardrobes, drawers, and shelving for jewellery, watches, and clothing of value. Designer garments and accessories can be significant assets."
+    },
+    {
+      "id": "bathroom",
+      "label": "Bathroom",
+      "aliases": ["family bathroom", "main bathroom"],
+      "category": "bathroom",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check the cabinet for prescription medications requiring disposal. Note any valuable fixtures. Jewellery is sometimes left here — check shelves and windowsills."
+    },
+    {
+      "id": "en_suite",
+      "label": "En suite",
+      "aliases": ["ensuite bathroom", "master bathroom"],
+      "category": "bathroom",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check the cabinet for prescription medications. Jewellery may have been left on shelves or the sink surround. Note condition of fixtures and fittings."
+    },
+    {
+      "id": "shower_room",
+      "label": "Shower room",
+      "aliases": [],
+      "category": "bathroom",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check for prescription medications and personal effects. Note the condition of the shower enclosure and fittings."
+    },
+    {
+      "id": "wet_room",
+      "label": "Wet room",
+      "aliases": [],
+      "category": "bathroom",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Specialist bathroom installation — note the condition and specification. Check for any stored personal effects."
+    },
+    {
+      "id": "cloakroom",
+      "label": "Cloakroom",
+      "aliases": ["downstairs toilet", "guest WC"],
+      "category": "bathroom",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Small downstairs WC. Check any storage for personal items and note the condition of fittings."
+    },
+    {
+      "id": "wc",
+      "label": "WC",
+      "aliases": ["toilet", "lavatory", "loo"],
+      "category": "bathroom",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check for any stored personal effects. Note condition of fixtures."
+    },
+    {
+      "id": "hallway",
+      "label": "Hallway",
+      "aliases": ["hall", "entrance hall"],
+      "category": "circulation",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check the hall table, coat cupboard, and any storage for keys, documents, and personal effects. Note artwork on walls and any furniture of value."
+    },
+    {
+      "id": "entrance_hall",
+      "label": "Entrance hall",
+      "aliases": ["foyer", "vestibule"],
+      "category": "circulation",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check all storage furniture and coat cupboards. Artwork, mirrors, and hall furniture can be of significant value."
+    },
+    {
+      "id": "landing",
+      "label": "Landing",
+      "aliases": ["upper hall"],
+      "category": "circulation",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note any artwork, display furniture, or storage cupboards. Linen cupboards on landings often contain household textiles."
+    },
+    {
+      "id": "corridor",
+      "label": "Corridor",
+      "aliases": ["passage", "passageway"],
+      "category": "circulation",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check for artwork, display shelves, and any storage areas. Note condition of flooring and fixtures."
+    },
+    {
+      "id": "porch",
+      "label": "Porch",
+      "aliases": ["entrance porch", "storm porch"],
+      "category": "circulation",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check for keys and any stored items. Note the condition of the structure and whether it is enclosed."
+    },
+    {
+      "id": "vestibule",
+      "label": "Vestibule",
+      "aliases": ["inner porch", "lobby"],
+      "category": "circulation",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Small entrance lobby between the outer and inner doors. Check for any stored items, keys, or documents."
+    },
+    {
+      "id": "study",
+      "label": "Study",
+      "aliases": ["office", "den"],
+      "category": "work",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Critical space for estate administration. Search thoroughly for wills, financial documents, bank statements, insurance policies, and share certificates. Check all drawers, filing cabinets, and bookshelves."
+    },
+    {
+      "id": "home_office",
+      "label": "Home office",
+      "aliases": ["office", "work room"],
+      "category": "work",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Critical space for estate administration. Look for financial records, contracts, tax returns, pension documents, and business papers. Check all drawers and filing systems. Note computer and office equipment."
+    },
+    {
+      "id": "library",
+      "label": "Library",
+      "aliases": ["book room"],
+      "category": "work",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Books can be of significant value — first editions, signed copies, or specialist collections. Check for documents filed amongst books and behind shelving. Note any valuable artwork."
+    },
+    {
+      "id": "workshop",
+      "label": "Workshop",
+      "aliases": ["workroom", "hobby room"],
+      "category": "work",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note all tools and equipment, which can be valuable in aggregate. Check for cash or documents stored here. Assess condition of workbenches and specialist equipment."
+    },
+    {
+      "id": "studio",
+      "label": "Studio",
+      "aliases": ["artist's studio", "recording studio"],
+      "category": "work",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note all equipment and any artwork or creative works — these may be significant assets. Check for materials and supplies of value. Unfinished works may require specialist valuation."
+    },
+    {
+      "id": "music_room",
+      "label": "Music room",
+      "aliases": ["practice room"],
+      "category": "work",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Musical instruments can be of very high value — arrange specialist valuation for any instruments, particularly stringed instruments and pianos. Note audio equipment and sheet music collections."
+    },
+    {
+      "id": "craft_room",
+      "label": "Craft room",
+      "aliases": ["sewing room", "hobby room"],
+      "category": "work",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note sewing machines, crafting equipment, and any stored materials. Specialist equipment can be valuable. Check for cash or documents stored here."
+    },
+    {
+      "id": "art_studio",
+      "label": "Art studio",
+      "aliases": ["artist's studio", "painting room"],
+      "category": "work",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "All artwork — including works in progress — may be significant assets. Note paintings, sculptures, and materials. Arrange specialist valuation. Check for sketchbooks and portfolios."
+    },
+    {
+      "id": "games_room",
+      "label": "Games room",
+      "aliases": ["billiard room", "pool room", "recreation room"],
+      "category": "leisure",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note all gaming equipment, including pool tables, table tennis, and arcade machines, which can be valuable. Check for collectible games and any electronics."
+    },
+    {
+      "id": "home_cinema",
+      "label": "Home cinema",
+      "aliases": ["media room", "screening room"],
+      "category": "leisure",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "AV equipment including projectors, screens, and audio systems can be of high value. Note all equipment and any seating of value. Check for a physical media collection."
+    },
+    {
+      "id": "gym",
+      "label": "Gym",
+      "aliases": ["home gym", "exercise room", "fitness room"],
+      "category": "leisure",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note all exercise equipment — treadmills, weights, and machines can be valuable. Check for any supplements or personal effects stored here."
+    },
+    {
+      "id": "utility_room",
+      "label": "Utility room",
+      "aliases": ["utility", "back room"],
+      "category": "utility",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note the washing machine, tumble dryer, and any other appliances. Check shelving and cupboards for stored items. Locate and note the water stop-cock if present here."
+    },
+    {
+      "id": "laundry_room",
+      "label": "Laundry room",
+      "aliases": ["laundry"],
+      "category": "utility",
+      "tier": 3,
+      "locales": ["US", "CA", "AU"],
+      "urgencyFlag": false,
+      "promptText": "Note appliances including washer, dryer, and any integrated ironing or folding equipment. Check shelving for stored items."
+    },
+    {
+      "id": "boot_room",
+      "label": "Boot room",
+      "aliases": ["mud room", "back hall"],
+      "category": "utility",
+      "tier": 3,
+      "locales": ["GB", "IE"],
+      "urgencyFlag": false,
+      "promptText": "Check for stored outdoor equipment, specialist clothing, and any items hung or stored here. May contain keys to outbuildings."
+    },
+    {
+      "id": "pantry",
+      "label": "Pantry",
+      "aliases": ["store room", "larder room"],
+      "category": "utility",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check all shelving and storage. Note any valuable kitchen equipment or supplies stored here. Pantries sometimes contain cash or documents out of habit."
+    },
+    {
+      "id": "larder",
+      "label": "Larder",
+      "aliases": ["cold store", "walk-in larder"],
+      "category": "utility",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check all shelving. Note any preserved foods, specialist equipment, or items of value stored here."
+    },
+    {
+      "id": "airing_cupboard",
+      "label": "Airing cupboard",
+      "aliases": ["hot press"],
+      "category": "utility",
+      "tier": 3,
+      "locales": ["GB", "IE"],
+      "urgencyFlag": false,
+      "promptText": "A common hiding place for documents and cash. Check behind and underneath stored linen carefully. Note the hot water cylinder or tank."
+    },
+    {
+      "id": "boiler_room",
+      "label": "Boiler room",
+      "aliases": ["plant room", "boiler cupboard"],
+      "category": "utility",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note the boiler and any associated equipment. Check for documents relating to service history or warranties stored nearby. Ensure utilities are properly managed."
+    },
+    {
+      "id": "loft",
+      "label": "Loft",
+      "aliases": ["roof space", "attic"],
+      "category": "storage",
+      "tier": 1,
+      "locales": ["GB", "IE"],
+      "urgencyFlag": false,
+      "promptText": "Lofts frequently contain decades of accumulated belongings, documents, and valuables. Allow significant time to search thoroughly. Look for antiques, artwork, and documents in boxes and cases."
+    },
+    {
+      "id": "attic",
+      "label": "Attic",
+      "aliases": ["loft", "roof space"],
+      "category": "storage",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Attics frequently contain decades of accumulated belongings, documents, and valuables. Allow significant time to search thoroughly. Look for antiques, artwork, and documents in boxes and cases."
+    },
+    {
+      "id": "basement",
+      "label": "Basement",
+      "aliases": ["lower ground floor", "cellar"],
+      "category": "storage",
+      "tier": 2,
+      "locales": ["US", "CA"],
+      "urgencyFlag": false,
+      "promptText": "Basements may contain significant stored assets, workshop equipment, or valuables. Search all areas carefully, including under stairs and in any false walls or hidden compartments."
+    },
+    {
+      "id": "cellar",
+      "label": "Cellar",
+      "aliases": ["wine cellar", "undercroft"],
+      "category": "storage",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check for stored wine (which can be very valuable), canned goods, and any other stored items. Look for documents or cash that may have been placed here for safekeeping."
+    },
+    {
+      "id": "wine_cellar",
+      "label": "Wine cellar",
+      "aliases": ["wine store", "wine room"],
+      "category": "storage",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Wine collections can be extremely valuable. Arrange specialist valuation — do not disturb the storage conditions. Document all bottles and bins as accurately as possible."
+    },
+    {
+      "id": "walk_in_wardrobe",
+      "label": "Walk-in wardrobe",
+      "aliases": ["dressing room", "walk-in closet"],
+      "category": "storage",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check all shelving and storage carefully for jewellery, watches, and valuables. Designer clothing and accessories can be significant assets. Look on high shelves and in hat boxes."
+    },
+    {
+      "id": "storage_room",
+      "label": "Storage room",
+      "aliases": ["store room", "junk room"],
+      "category": "storage",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Search thoroughly — storage rooms accumulate a wide range of items over time, including documents, valuables, and antiques. Allow sufficient time."
+    },
+    {
+      "id": "cupboard_under_stairs",
+      "label": "Cupboard under stairs",
+      "aliases": ["under-stairs storage", "understair cupboard"],
+      "category": "storage",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check thoroughly — this space often contains tools, documents, and miscellaneous items. Cash and small valuables are sometimes hidden here."
+    },
+    {
+      "id": "box_room",
+      "label": "Box room",
+      "aliases": ["junk room", "small bedroom"],
+      "category": "storage",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Search all boxes and stored items carefully. Box rooms accumulate documents, collectibles, and personal effects over many years."
+    },
+    {
+      "id": "garage",
+      "label": "Garage",
+      "aliases": ["single garage"],
+      "category": "outbuilding",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note any vehicles, tools, and equipment. Check shelving and workbenches for documents, valuables, and cash. Vehicles must be included in the estate inventory — check the log book."
+    },
+    {
+      "id": "double_garage",
+      "label": "Double garage",
+      "aliases": ["two-car garage"],
+      "category": "outbuilding",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note all vehicles, tools, and equipment. Check all shelving and storage areas. Vehicles must be included in the estate inventory — check log books for all vehicles."
+    },
+    {
+      "id": "carport",
+      "label": "Carport",
+      "aliases": ["covered parking"],
+      "category": "outbuilding",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note any vehicles and equipment stored here. Vehicles must be included in the estate inventory."
+    },
+    {
+      "id": "shed",
+      "label": "Shed",
+      "aliases": ["garden shed", "tool shed"],
+      "category": "outbuilding",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check for garden tools, equipment, and any valuables stored here. Specialist tools and gardening equipment can be of significant value. Look on shelves and in boxes."
+    },
+    {
+      "id": "greenhouse",
+      "label": "Greenhouse",
+      "aliases": ["glasshouse", "hothouse"],
+      "category": "outbuilding",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note the structure and condition. Check for specialist horticultural equipment and any valuable plants. Growing equipment can be of value."
+    },
+    {
+      "id": "summerhouse",
+      "label": "Summerhouse",
+      "aliases": ["garden house", "pavilion"],
+      "category": "outbuilding",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check for garden furniture, personal effects, and any stored items. Summerhouses are sometimes used for storage of documents or valuables."
+    },
+    {
+      "id": "garden_room",
+      "label": "Garden room",
+      "aliases": ["garden office", "garden studio"],
+      "category": "outbuilding",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Garden rooms used as offices may contain documents, equipment, and valuables. Check all storage and note any office or creative equipment."
+    },
+    {
+      "id": "outbuilding",
+      "label": "Outbuilding",
+      "aliases": ["outhouse", "external building"],
+      "category": "outbuilding",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Search all areas of this outbuilding carefully. The contents and use will vary — document what you find including any equipment, stored items, or valuables."
+    },
+    {
+      "id": "barn",
+      "label": "Barn",
+      "aliases": ["agricultural building"],
+      "category": "outbuilding",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Barns can contain significant assets including agricultural equipment, vehicles, and stored items. Search thoroughly. Specialist agricultural valuations may be required."
+    },
+    {
+      "id": "annex",
+      "label": "Annex",
+      "aliases": ["annexe", "granny flat", "self-contained unit"],
+      "category": "outbuilding",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Treat as a separate dwelling — check all rooms thoroughly for documents, valuables, and personal effects. Note whether it is self-contained and whether anyone currently occupies it."
+    },
+    {
+      "id": "stable",
+      "label": "Stable",
+      "aliases": ["stables", "horse box"],
+      "category": "outbuilding",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note any horses, tack, and equestrian equipment — all are assets requiring specialist valuation. Check for documents relating to the animals and any stored equipment."
+    },
+    {
+      "id": "front_garden",
+      "label": "Front garden",
+      "aliases": ["front yard", "front lawn"],
+      "category": "outdoor",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note the condition and any significant planting, statuary, or outdoor furniture. Note boundary structures including gates, walls, and fencing."
+    },
+    {
+      "id": "rear_garden",
+      "label": "Rear garden",
+      "aliases": ["back garden", "back yard", "back lawn"],
+      "category": "outdoor",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note all outdoor furniture, ornaments, statuary, and significant planting. Garden furniture and large planters can be of value. Note boundary structures and any outbuildings."
+    },
+    {
+      "id": "side_garden",
+      "label": "Side garden",
+      "aliases": ["side passage", "side yard"],
+      "category": "outdoor",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note any stored items, structures, or planting of value. Check for stored equipment or garden items."
+    },
+    {
+      "id": "patio",
+      "label": "Patio",
+      "aliases": ["paved area", "terrace"],
+      "category": "outdoor",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note outdoor furniture, barbecue equipment, and any statuary or ornaments. Garden furniture sets can be of significant value."
+    },
+    {
+      "id": "terrace",
+      "label": "Terrace",
+      "aliases": ["raised patio", "deck"],
+      "category": "outdoor",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note outdoor furniture, planters, and any items stored here. Note the structure and condition of the terrace itself."
+    },
+    {
+      "id": "balcony",
+      "label": "Balcony",
+      "aliases": ["Juliet balcony"],
+      "category": "outdoor",
+      "tier": 1,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note outdoor furniture and any planters of value. Check for any items stored on the balcony."
+    },
+    {
+      "id": "roof_terrace",
+      "label": "Roof terrace",
+      "aliases": ["rooftop terrace", "roof garden"],
+      "category": "outdoor",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note outdoor furniture, planters, and any equipment such as hot tubs. These installations can be of very high value. Note the condition of the terrace structure."
+    },
+    {
+      "id": "driveway",
+      "label": "Driveway",
+      "aliases": ["forecourt", "hardstanding"],
+      "category": "outdoor",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note any vehicles — all must be included in the estate inventory. Check log books and note the condition and registration of each vehicle."
+    },
+    {
+      "id": "courtyard",
+      "label": "Courtyard",
+      "aliases": ["inner courtyard", "walled garden"],
+      "category": "outdoor",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note furniture, statuary, and planting of value. Check any outbuildings or storage areas within the courtyard."
+    },
+    {
+      "id": "yard",
+      "label": "Yard",
+      "aliases": ["back yard", "service yard"],
+      "category": "outdoor",
+      "tier": 2,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note any stored items, equipment, or vehicles. Yards can contain tools and materials of value."
+    },
+    {
+      "id": "swimming_pool",
+      "label": "Swimming pool",
+      "aliases": ["pool", "outdoor pool", "indoor pool"],
+      "category": "outdoor",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note the pool and all associated equipment including pumps, filters, and heating. Swimming pool equipment can be of high value. Ensure the pool is made safe during the estate administration period."
+    },
+    {
+      "id": "prayer_room",
+      "label": "Prayer room",
+      "aliases": ["oratory", "chapel"],
+      "category": "cultural",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Religious items may have significant personal, cultural, or monetary value. Handle with care and consult family members before cataloguing or disposing of any items."
+    },
+    {
+      "id": "puja_room",
+      "label": "Puja room",
+      "aliases": ["pooja room", "mandir", "prayer room"],
+      "category": "cultural",
+      "tier": 3,
+      "locales": ["IN"],
+      "urgencyFlag": false,
+      "promptText": "The Hindu place of worship within the home. Religious items, murtis, and offerings may have personal and monetary value. Consult family members before moving or cataloguing any items."
+    },
+    {
+      "id": "butsudan_room",
+      "label": "Butsudan room",
+      "aliases": ["Buddhist altar room"],
+      "category": "cultural",
+      "tier": 3,
+      "locales": ["JP"],
+      "urgencyFlag": false,
+      "promptText": "Contains the Buddhist household altar (butsudan). The altar and associated items may have significant monetary and cultural value. Consult family members before cataloguing."
+    },
+    {
+      "id": "tatami_room",
+      "label": "Tatami room",
+      "aliases": ["washitsu", "Japanese room"],
+      "category": "cultural",
+      "tier": 3,
+      "locales": ["JP"],
+      "urgencyFlag": false,
+      "promptText": "Traditional Japanese room with tatami flooring. Note any stored items including bedding (futon), furniture, and decorative items. Tatami mats and traditional items may have value."
+    },
+    {
+      "id": "genkan",
+      "label": "Genkan",
+      "aliases": ["entrance area", "shoe area"],
+      "category": "cultural",
+      "tier": 3,
+      "locales": ["JP"],
+      "urgencyFlag": false,
+      "promptText": "Japanese entrance area where shoes are removed. Check the shoe cabinet (getabako) and any storage for personal items."
+    },
+    {
+      "id": "majlis",
+      "label": "Majlis",
+      "aliases": ["reception room", "sitting room"],
+      "category": "cultural",
+      "tier": 3,
+      "locales": ["AE"],
+      "urgencyFlag": false,
+      "promptText": "Traditional Arab reception room for receiving guests. Likely to contain furnishings of value including carpets, cushions, and decorative items. Catalogue all items carefully."
+    },
+    {
+      "id": "helpers_room",
+      "label": "Helper's room",
+      "aliases": ["maid's room", "domestic helper's room", "servant's room"],
+      "category": "cultural",
+      "tier": 3,
+      "locales": ["SG", "HK", "AE"],
+      "urgencyFlag": false,
+      "promptText": "Room occupied by a domestic helper. Handle sensitively — the occupant may need time to make alternative arrangements. Check for any estate assets stored here."
+    },
+    {
+      "id": "gurdwara_room",
+      "label": "Gurdwara room",
+      "aliases": ["prayer room", "Sikh prayer room"],
+      "category": "cultural",
+      "tier": 3,
+      "locales": ["IN", "GB"],
+      "urgencyFlag": false,
+      "promptText": "Sikh place of worship within the home. Religious items including the Guru Granth Sahib and associated items must be handled with great care and respect. Consult family members before cataloguing."
+    },
+    {
+      "id": "meditation_room",
+      "label": "Meditation room",
+      "aliases": ["mindfulness room", "yoga room"],
+      "category": "cultural",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Check for any stored items, equipment, or items of value. Religious or spiritual items should be handled sensitively and in consultation with family members."
+    },
+    {
+      "id": "gun_room",
+      "label": "Gun room",
+      "aliases": ["armoury", "firearms room"],
+      "category": "specialist",
+      "tier": 3,
+      "locales": ["GB"],
+      "urgencyFlag": true,
+      "promptText": "Firearms require immediate attention after a death. The executor must secure all firearms and notify the police within 24 hours. Do not move or handle firearms without following the correct legal procedures. All licences must be checked."
+    },
+    {
+      "id": "safe_room",
+      "label": "Safe room",
+      "aliases": ["panic room", "security room"],
+      "category": "specialist",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": true,
+      "promptText": "May contain firearms, valuables, or sensitive documents. Secure access immediately. Check for safes, weapons, documents, and high-value items. Arrange specialist access if the room is locked."
+    },
+    {
+      "id": "safe",
+      "label": "Safe",
+      "aliases": ["wall safe", "floor safe", "freestanding safe"],
+      "category": "specialist",
+      "tier": 3,
+      "locales": [],
+      "urgencyFlag": true,
+      "promptText": "Safes may contain wills, valuables, or important documents. Locate the combination or key immediately. If access cannot be gained, arrange for a locksmith — do not attempt to force entry."
+    },
+    {
+      "id": "self_storage",
+      "label": "Self-storage unit",
+      "aliases": ["storage unit", "lock-up"],
+      "category": "offsite",
+      "tier": 4,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Locate the contract, access keys or codes, and unit reference number. Contact the storage company to arrange access. Check whether rent is in arrears — this may affect access. Allow significant time to catalogue contents."
+    },
+    {
+      "id": "safe_deposit_box",
+      "label": "Safe deposit box",
+      "aliases": ["safety deposit box", "bank vault box"],
+      "category": "offsite",
+      "tier": 4,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Contact the bank holding the safe deposit box with the death certificate. Access will require probate authority in most cases. The box may contain a will, jewellery, share certificates, or other important documents."
+    },
+    {
+      "id": "workplace",
+      "label": "Workplace",
+      "aliases": ["office", "place of work", "business premises"],
+      "category": "offsite",
+      "tier": 4,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Contact the employer or, if self-employed, arrange access to business premises. Retrieve personal effects and any assets belonging to the estate. Ensure business assets are properly distinguished from personal assets."
+    },
+    {
+      "id": "relatives_house",
+      "label": "Relative's house",
+      "aliases": ["family member's home"],
+      "category": "offsite",
+      "tier": 4,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Items stored at a relative's home may form part of the estate. Arrange with the relative to catalogue and retrieve estate assets. Establish whether any items were on loan or gifted."
+    },
+    {
+      "id": "holiday_home",
+      "label": "Holiday home",
+      "aliases": ["second home", "holiday cottage", "vacation home"],
+      "category": "offsite",
+      "tier": 4,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "The holiday home is a significant asset. Arrange to visit as soon as possible to secure it and catalogue contents. Check for a local keyholder. Note mortgage, rental, and insurance arrangements."
+    },
+    {
+      "id": "vehicle_car",
+      "label": "Vehicle — car",
+      "aliases": ["car", "motor vehicle"],
+      "category": "offsite",
+      "tier": 4,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note the make, model, registration, and condition. Obtain the V5C logbook. Arrange insurance for the period of estate administration. Check the glove box and boot for documents or valuables."
+    },
+    {
+      "id": "vehicle_boat",
+      "label": "Vehicle — boat",
+      "aliases": ["boat", "yacht", "vessel"],
+      "category": "offsite",
+      "tier": 4,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note the vessel name, type, registration, and where it is moored or stored. Check marina or storage contracts. Boats can be significant assets requiring specialist valuation. Ensure it is properly insured during administration."
+    },
+    {
+      "id": "vehicle_caravan",
+      "label": "Vehicle — caravan",
+      "aliases": ["caravan", "motorhome", "campervan"],
+      "category": "offsite",
+      "tier": 4,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Note the make, model, and registration. Check the contents — caravans and motorhomes often contain valuables and personal effects. Note where it is stored and check any storage contracts."
+    },
+    {
+      "id": "allotment",
+      "label": "Allotment",
+      "aliases": ["plot", "allotment garden"],
+      "category": "offsite",
+      "tier": 4,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Contact the allotment association or local council to discuss the plot. Check for any stored tools or a shed on the plot. The tenancy will need to be surrendered or transferred."
+    },
+    {
+      "id": "digital_storage",
+      "label": "Digital storage",
+      "aliases": ["cloud storage", "online storage", "digital assets"],
+      "category": "offsite",
+      "tier": 4,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Digital assets including cloud storage accounts, photo libraries, and digital files can have significant sentimental and monetary value. Locate login credentials and check the deceased's devices and password manager."
+    },
+    {
+      "id": "other",
+      "label": "Other",
+      "aliases": [],
+      "category": "other",
+      "tier": 4,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Space type not covered by the standard categories. Add a note to describe this space and what it contains."
+    }
+  ]
+}

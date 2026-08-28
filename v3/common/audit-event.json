@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/common/audit-event.json",
+  "title": "Audit Event",
+  "description": "A single audit event recording who changed what, when, and why. Designed for enterprise audit trail requirements, probate court compliance, and GDPR-compatible personal data handling",
+  "type": "object",
+  "required": [ "action", "performedAt" ],
+  "properties": {
+    "action": {
+      "description": "What type of action was performed",
+      "$comment": "created: entity or document was created. modified: entity was changed. deleted: entity was removed. accessed: entity was read (for access logging). exported: document was exported. validated: document was validated. version_created: a new document version was created.",
+      "enum": [
+        "created",
+        "modified",
+        "deleted",
+        "accessed",
+        "exported",
+        "validated",
+        "version_created",
+        "granted",
+        "revoked",
+        "challenged"
+      ]
+    },
+    "performedAt": {
+      "description": "When the action occurred",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+      "format": "date-time"
+    },
+    "agentPersonId": {
+      "description": "Reference to the Person.id who performed the action. Uses a UUID reference rather than a display name for GDPR data minimisation — resolve the name at display time, not storage time",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "agentDescription": {
+      "description": "Human-readable description of who performed the action. Use only when a person ID is not available (e.g. system actions, external agents)",
+      "type": "string",
+      "maxLength": 255
+    },
+    "entityType": {
+      "description": "The type of INHERIT entity that was affected",
+      "type": "string",
+      "maxLength": 100
+    },
+    "entityId": {
+      "description": "The ID of the entity that was affected",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
+    "detail": {
+      "description": "What specifically was done. Should be specific enough for an auditor to understand without seeing the before/after data",
+      "type": "string",
+      "maxLength": 2000
+    },
+    "previousValue": {
+      "description": "The value before the change, if applicable. For field-level audit trails",
+      "type": "string",
+      "maxLength": 5000
+    },
+    "newValue": {
+      "description": "The value after the change, if applicable",
+      "type": "string",
+      "maxLength": 5000
+    },
+    "redacted": {
+      "description": "Whether this audit entry has been redacted for GDPR compliance. When true, the agentPersonId and detail fields may have been cleared but the structural record of the action is preserved",
+      "type": "boolean"
+    },
+    "evidenceUrl": {
+      "description": "Link to supporting evidence (court order, signed document, etc.)",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9+.-]*://",
+      "format": "uri",
+      "maxLength": 2048
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,135 @@
+{
+  "target": "../../../v3/asset-categories/financial.json",
+  "tests": [
+    {
+      "description": "valid — empty (all fields optional)",
+      "data": {},
+      "valid": true
+    },
+    {
+      "description": "valid — shareholding with company details",
+      "data": {
+        "shareholding": {
+          "companyName": "Barclays PLC",
+          "shareClass": "ordinary",
+          "numberOfShares": 500
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — pension details",
+      "data": {
+        "pension": {
+          "schemeType": "defined_contribution",
+          "provider": "Aviva"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — debt receivable",
+      "data": {
+        "debtReceivable": {
+          "debtorName": "John Smith",
+          "originalAmount": {
+            "amount": 500000,
+            "currency": "GBP"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — pension with SIPP scheme type",
+      "data": {
+        "pension": {
+          "schemeType": "sipp",
+          "provider": "Hargreaves Lansdown",
+          "deathBenefitType": "lump_sum",
+          "crystallised": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — insurance policy (term life in trust)",
+      "data": {
+        "insurancePolicy": {
+          "policyType": "term_life",
+          "provider": "Legal & General",
+          "writtenInTrust": true,
+          "premiumFrequency": "monthly"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — co-ownership as tenants in common",
+      "data": {
+        "coOwnership": {
+          "ownershipType": "tenants_in_common",
+          "ownershipPercentage": 33.33
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — pension schemeType not in enum",
+      "data": {
+        "pension": {
+          "schemeType": "crypto_pension"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — insurancePolicy policyType not in enum",
+      "data": {
+        "insurancePolicy": {
+          "policyType": "pet_insurance"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — pension deathBenefitType not in enum",
+      "data": {
+        "pension": {
+          "schemeType": "defined_contribution",
+          "deathBenefitType": "transfer_to_pot"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — shareholding numberOfShares below minimum (must be >= 1)",
+      "data": {
+        "shareholding": {
+          "companyName": "Acme Ltd",
+          "numberOfShares": 0
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — pensionType not in enum and not x-inherit prefixed",
+      "data": {
+        "pension": {
+          "pensionType": "superfund"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — insurancePolicy with additional property",
+      "data": {
+        "insurancePolicy": {
+          "policyType": "whole_life",
+          "badProp": "not allowed"
+        }
+      },
+      "valid": false
+    }
+  ]
+}

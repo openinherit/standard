@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "INHERIT Funeral Provider Registry — Phase 1 (UK)",
+  "description": "Reference data for UK funeral providers, services, and cost ranges. Phase 1 covers major providers and membership bodies",
+  "_metadata": {
+    "lastVerified": "2026-04-06",
+    "source": "Trade body directories (NAFD, SAIF)",
+    "jurisdiction": "GB",
+    "disclaimer": "This data is provided for interoperability purposes. It does not constitute legal, tax, or financial advice. Users must verify independently before relying on these figures for official purposes.",
+    "deprecationPattern": "Individual entries within this file may carry deprecated: true, deprecatedAt, deprecatedReason, and supersededBy fields. Deprecated entries are retained for historical reference and audit trail purposes. Applications should filter to non-deprecated entries for current data.",
+    "deprecated": false,
+    "deprecatedAt": null,
+    "deprecatedReason": null,
+    "supersededBy": null
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "name",
+      "services"
+    ],
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "location": {
+        "type": "string"
+      },
+      "services": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "burial",
+            "cremation",
+            "green_burial",
+            "sea_burial",
+            "repatriation",
+            "direct_cremation"
+          ]
+        }
+      },
+      "specialisations": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "averageCostRange": {
+        "type": "object",
+        "properties": {
+          "low": {
+            "type": "integer"
+          },
+          "high": {
+            "type": "integer"
+          },
+          "currency": {
+            "type": "string"
+          }
+        }
+      },
+      "membershipBodies": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "nafd",
+            "saif",
+            "biei",
+            "other"
+          ]
+        }
+      }
+    }
+  }
+}

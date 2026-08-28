@@ -1,0 +1,520 @@
+{
+  "target": "../../../v3/insurance-policy.json",
+  "tests": [
+    {
+      "description": "valid \u2014 minimal insurance policy (required fields only)",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 fully populated life insurance policy",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "policyNumber": "LG-LIFE-2020-789",
+        "coverAmount": {
+          "amount": 50000000,
+          "currency": "GBP"
+        },
+        "premiumAmount": {
+          "amount": 5000,
+          "currency": "GBP"
+        },
+        "premiumFrequency": "monthly",
+        "renewalDate": "2027-01-01",
+        "deathBenefit": {
+          "amount": {
+            "amount": 50000000,
+            "currency": "GBP"
+          },
+          "nomineePersonId": "d73880dc-c616-4724-ad29-79364bad1719",
+          "nominationCurrent": true,
+          "benefitType": "lump_sum"
+        },
+        "writtenInTrust": true,
+        "trustDetails": {
+          "trusteePersonId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+          "trustName": "Davies Family Life Policy Trust"
+        },
+        "policyConditions": [
+          {
+            "condition": "2-year suicide exclusion clause",
+            "expiryDate": "2026-06-01",
+            "impact": "Claim void if death by suicide within 2 years"
+          }
+        ],
+        "notes": "Policy written in trust \u2014 proceeds bypass probate",
+        "provenance": {
+          "confidence": 0.93,
+          "source": "import",
+          "importSourceId": "src-clio-001",
+          "aiProvenance": {
+            "model": "claude",
+            "confidence": 88,
+            "generatedAt": "2026-03-30T14:00:00Z",
+            "humanReviewed": true,
+            "reviewedBy": "James Davies",
+            "reviewedAt": "2026-03-30T16:00:00Z"
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 x-inherit- extension policy type",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": "x-inherit-takaful",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 home insurance with maturity date",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcdf",
+        "policyType": "home",
+        "providerOrganisationId": "868f2f78-647c-4754-b330-94c8e5a4a9ee",
+        "policyNumber": "HX-HOME-2024-001",
+        "coverAmount": {
+          "amount": 35000000,
+          "currency": "GBP"
+        },
+        "premiumFrequency": "annual",
+        "renewalDate": "2027-03-15"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 policy with claim status",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abce0",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "claimStatus": "pending"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 policy with death benefit to organisation",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abce1",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "deathBenefit": {
+          "nomineeOrganisationId": "c629a8db-bef2-43f1-91ac-036514c360e3",
+          "benefitType": "lump_sum"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 x-inherit- extension property allowed",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abce2",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "x-inherit-tt-pipeline": {
+          "value": "enrichment-v3"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 missing required id",
+      "data": {
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required policyType",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 missing required providerOrganisationId",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": "life"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 unknown policyType value",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": "magic",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 unknown additional property",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "unknownField": "should fail"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 non-camelCase property name",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "BadName": "should fail"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 insurance policy with full depositorProtection (FSCS)",
+      "data": {
+        "id": "b0ddb83a-db98-4537-ba67-9f78e5afe686",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "policyNumber": "POL-2024-123456",
+        "depositorProtection": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "scheme": "fscs",
+          "protected": true,
+          "protectionLimit": 8500000,
+          "claimProcessUrl": "https://www.fscs.org.uk/how-we-work/claims/"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 depositorProtection with unknown property",
+      "data": {
+        "id": "b672d3ea-b9b4-48a9-a256-3c617d9a2154",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "policyNumber": "POL-2024-654321",
+        "depositorProtection": {
+          "retrievedAt": "2026-03-31T10:00:00Z",
+          "scheme": "fscs",
+          "unknownField": "should fail"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 insurance policy with expanded claimStatus",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": "life",
+        "providerOrganisationId": "a0000001-0000-0000-0000-000000000001",
+        "claimStatus": "claim_submitted",
+        "nominationLifecycle": {
+          "nominationStatus": "active",
+          "verifiedAt": "2026-03-01T10:00:00Z",
+          "lastUpdated": "2026-01-15T09:00:00Z"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 insurance policy with beneficiaryVerificationStatus",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcdf",
+        "policyType": "life",
+        "providerOrganisationId": "a0000001-0000-0000-0000-000000000001",
+        "deathBenefit": {
+          "amount": {
+            "amount": 50000000,
+            "currency": "GBP"
+          },
+          "nomineePersonId": "b0000001-0000-0000-0000-000000000001",
+          "beneficiaryVerificationStatus": "identity_confirmed"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 claimStatus not in enum",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abce0",
+        "policyType": "life",
+        "providerOrganisationId": "a0000001-0000-0000-0000-000000000001",
+        "claimStatus": "under_investigation"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 insurance policy with externalPolicyRef and display name",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abce1",
+        "policyType": "life",
+        "providerOrganisationId": "a0000001-0000-0000-0000-000000000001",
+        "providerOrganisationIdDisplay": "Legal & General",
+        "externalPolicyRef": "https://fhir.example.org/Coverage/pol-12345"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 with nominationLifecycle",
+      "data": {
+        "id": "d0000001-0000-4000-a000-000000000090",
+        "policyNumber": "NL-TEST-001",
+        "providerOrganisationId": "e0000001-0000-4000-a000-000000000090",
+        "policyType": "life",
+        "nominationLifecycle": {
+          "nominationStatus": "active",
+          "verifiedAt": "2026-03-01T10:00:00Z",
+          "lastUpdated": "2026-03-01T10:00:00Z"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid \u2014 deathBenefit with beneficiaryVerificationStatus",
+      "data": {
+        "id": "d0000001-0000-4000-a000-000000000091",
+        "policyNumber": "BVS-TEST-001",
+        "providerOrganisationId": "e0000001-0000-4000-a000-000000000091",
+        "policyType": "life",
+        "deathBenefit": {
+          "beneficiaryVerificationStatus": "entitlement_confirmed"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 beneficiaryVerificationStatus not in enum",
+      "data": {
+        "id": "d0000001-0000-4000-a000-000000000092",
+        "policyNumber": "BVS-TEST-002",
+        "providerOrganisationId": "e0000001-0000-4000-a000-000000000092",
+        "policyType": "life",
+        "deathBenefit": {
+          "beneficiaryVerificationStatus": "fully_verified"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "valid \u2014 insurance policy with externalPolicyRef",
+      "data": {
+        "id": "d0000001-0000-4000-a000-000000000093",
+        "policyNumber": "EPR-TEST-001",
+        "providerOrganisationId": "e0000001-0000-4000-a000-000000000093",
+        "policyType": "life",
+        "externalPolicyRef": "https://fhir.example.org/Coverage/67890"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 policyType is number (must be string)",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": 42,
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 providerOrganisationId is number (must be UUID string)",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": "life",
+        "providerOrganisationId": 12345
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 id is not a UUID",
+      "data": {
+        "id": "not-a-uuid",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 renewalDate is not ISO date format",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "renewalDate": "01/01/2027"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid \u2014 premiumFrequency not in enum",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "premiumFrequency": "hourly"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — health insurance with single_premium frequency",
+      "data": {
+        "id": "aa000001-0000-4000-a000-000000000001",
+        "policyType": "health",
+        "providerOrganisationId": "a0000001-0000-4000-a000-000000000001",
+        "premiumFrequency": "single_premium"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — motor insurance with paid_up frequency and active claimStatus",
+      "data": {
+        "id": "aa000002-0000-4000-a000-000000000002",
+        "policyType": "motor",
+        "providerOrganisationId": "a0000001-0000-4000-a000-000000000001",
+        "premiumFrequency": "paid_up",
+        "claimStatus": "active"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — travel insurance with other frequency and claim_approved claimStatus",
+      "data": {
+        "id": "aa000003-0000-4000-a000-000000000003",
+        "policyType": "travel",
+        "providerOrganisationId": "a0000001-0000-4000-a000-000000000001",
+        "premiumFrequency": "other",
+        "claimStatus": "claim_approved"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — pet insurance with claim_paid claimStatus and income benefitType",
+      "data": {
+        "id": "aa000004-0000-4000-a000-000000000004",
+        "policyType": "pet",
+        "providerOrganisationId": "a0000001-0000-4000-a000-000000000001",
+        "claimStatus": "claim_paid",
+        "deathBenefit": {
+          "benefitType": "income"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — professional_indemnity with claim_disputed claimStatus and pension benefitType",
+      "data": {
+        "id": "aa000005-0000-4000-a000-000000000005",
+        "policyType": "professional_indemnity",
+        "providerOrganisationId": "a0000001-0000-4000-a000-000000000001",
+        "claimStatus": "claim_disputed",
+        "deathBenefit": {
+          "benefitType": "pension"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — other policyType with approved claimStatus and discretionary benefitType",
+      "data": {
+        "id": "aa000006-0000-4000-a000-000000000006",
+        "policyType": "other",
+        "providerOrganisationId": "a0000001-0000-4000-a000-000000000001",
+        "claimStatus": "approved",
+        "deathBenefit": {
+          "benefitType": "discretionary"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — life insurance with paid claimStatus and unverified beneficiaryVerificationStatus",
+      "data": {
+        "id": "aa000007-0000-4000-a000-000000000007",
+        "policyType": "life",
+        "providerOrganisationId": "a0000001-0000-4000-a000-000000000001",
+        "claimStatus": "paid",
+        "deathBenefit": {
+          "beneficiaryVerificationStatus": "unverified"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — life insurance with declined claimStatus",
+      "data": {
+        "id": "aa000008-0000-4000-a000-000000000008",
+        "policyType": "life",
+        "providerOrganisationId": "a0000001-0000-4000-a000-000000000001",
+        "claimStatus": "declined"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — nominationLifecycle with revoked status",
+      "data": {
+        "id": "aa000009-0000-4000-a000-000000000009",
+        "policyType": "life",
+        "providerOrganisationId": "a0000001-0000-4000-a000-000000000001",
+        "nominationLifecycle": {
+          "nominationStatus": "revoked",
+          "lastUpdated": "2026-01-10T09:00:00Z"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — nominationLifecycle with superseded status and supersedesNominationId",
+      "data": {
+        "id": "aa000010-0000-4000-a000-000000000010",
+        "policyType": "life",
+        "providerOrganisationId": "a0000001-0000-4000-a000-000000000001",
+        "nominationLifecycle": {
+          "nominationStatus": "superseded",
+          "supersedesNominationId": "NOM-2024-001"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — nominationLifecycle with expired status",
+      "data": {
+        "id": "aa000011-0000-4000-a000-000000000011",
+        "policyType": "life",
+        "providerOrganisationId": "a0000001-0000-4000-a000-000000000001",
+        "nominationLifecycle": {
+          "nominationStatus": "expired"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — nominationLifecycle with disputed status",
+      "data": {
+        "id": "aa000012-0000-4000-a000-000000000012",
+        "policyType": "life",
+        "providerOrganisationId": "a0000001-0000-4000-a000-000000000001",
+        "nominationLifecycle": {
+          "nominationStatus": "disputed"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid \u2014 notes exceeds maxLength 2000",
+      "data": {
+        "id": "f1234567-89ab-4cde-8012-3456789abcde",
+        "policyType": "life",
+        "providerOrganisationId": "096ced35-8695-4942-a309-ffe6b5a4a881",
+        "notes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "valid": false
+    }
+  ]
+}

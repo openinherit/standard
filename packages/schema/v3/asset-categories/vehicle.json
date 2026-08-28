@@ -1,0 +1,375 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/asset-categories/vehicle.json",
+  "title": "Vehicle Asset Properties",
+  "description": "Category-specific properties for vehicles: cars, motorcycles, boats, caravans, classic vehicles",
+  "$comment": "This schema is composed with asset.json via allOf+if/then. Do NOT use additionalProperties:false here — it would reject core asset fields.",
+  "type": "object",
+  "properties": {
+    "vehicle": {
+      "description": "Structured vehicle data — identity, registration, and estate administration tracking. Present when category is 'vehicle'. Maps to schema:Vehicle in JSON-LD",
+      "type": "object",
+      "properties": {
+        "registrationNumber": {
+          "description": "Vehicle registration number (number plate). Primary UK identifier. Format varies by jurisdiction",
+          "examples": [ "AB12 CDE", "S123 ABC", "A1" ],
+          "type": "string",
+          "maxLength": 20
+        },
+        "vin": {
+          "description": "17-character Vehicle Identification Number. International standard, globally unique per vehicle",
+          "examples": [ "WBANE53516CK72834" ],
+          "type": "string",
+          "pattern": "^[A-HJ-NPR-Z0-9]{17}$"
+        },
+        "make": {
+          "description": "Vehicle manufacturer. Use the DVLA-registered name where available",
+          "examples": [ "BMW", "TRIUMPH", "JAGUAR", "HONDA" ],
+          "type": "string",
+          "maxLength": 100
+        },
+        "model": {
+          "description": "Vehicle model name. DVLA VES API does not return this — must come from user input or VIN decode",
+          "examples": [
+            "M3 Competition",
+            "Bonneville T120",
+            "E-Type Series 1 FHC"
+          ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "variant": {
+          "description": "Trim level, edition, or variant",
+          "examples": [ "Competition", "Black Edition", "SE", "Sport" ],
+          "type": "string",
+          "maxLength": 255
+        },
+        "yearOfManufacture": {
+          "description": "Four-digit year of manufacture",
+          "type": "integer",
+          "maximum": 2100,
+          "minimum": 1886
+        },
+        "dateOfFirstRegistration": {
+          "description": "Date of first registration in the UK (or equivalent jurisdiction)",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "colour": {
+          "description": "DVLA-registered colour",
+          "examples": [ "BLACK", "SILVER", "BRITISH RACING GREEN" ],
+          "type": "string",
+          "maxLength": 50
+        },
+        "fuelType": {
+          "description": "Fuel type as reported by DVLA",
+          "anyOf": [
+            {
+              "enum": [
+                "petrol",
+                "diesel",
+                "electric",
+                "hybrid_petrol",
+                "hybrid_diesel",
+                "lpg",
+                "other"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "engineCapacity": {
+          "description": "Engine capacity in cubic centimetres (cc). Zero for electric vehicles",
+          "type": "integer",
+          "maximum": 20000,
+          "minimum": 0
+        },
+        "co2Emissions": {
+          "description": "CO2 emissions in grams per kilometre",
+          "type": "integer",
+          "minimum": 0
+        },
+        "vehicleType": {
+          "description": "Type of vehicle",
+          "$comment": "car: standard passenger car. motorcycle: two-wheeled motorcycle. van: light commercial vehicle. motorhome: campervan or motorhome. trike: three-wheeled vehicle. sidecar_outfit: motorcycle with sidecar. other: any type not listed",
+          "anyOf": [
+            {
+              "enum": [
+                "car",
+                "motorcycle",
+                "van",
+                "motorhome",
+                "trike",
+                "sidecar_outfit",
+                "other"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "isClassic": {
+          "description": "Whether the vehicle is considered a classic or historic vehicle. In the UK, vehicles manufactured before 1 January 1977 are exempt from vehicle excise duty. Classic vehicles may need specialist valuation (Hagerty, auction houses) rather than standard guides",
+          "type": "boolean"
+        },
+        "keeperStatus": {
+          "description": "Whether the deceased was the registered keeper of this vehicle",
+          "anyOf": [
+            {
+              "enum": [
+                "registered_keeper",
+                "not_registered_keeper",
+                "unknown"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "v5cStatus": {
+          "description": "Status of the V5C registration document (logbook)",
+          "$comment": "held: the estate has the V5C. missing: the V5C cannot be found — apply for a replacement using V62. applied_for: a replacement has been applied for. with_dvla: the V5C is currently with DVLA (e.g. during a transfer)",
+          "anyOf": [
+            {
+              "enum": [ "held", "missing", "applied_for", "with_dvla" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "financeType": {
+          "description": "Type of finance arrangement on the vehicle. If HP or PCP, the vehicle is owned by the finance company, not the estate",
+          "$comment": "none: no finance — vehicle is owned outright. hp: hire purchase — finance company owns until final payment. pcp: personal contract purchase — finance company owns, balloon payment to retain. lease: personal or business lease — must be returned. loan: unsecured loan used to buy — vehicle is owned, loan is a separate liability. unknown: finance status not yet checked",
+          "anyOf": [
+            {
+              "enum": [ "none", "hp", "pcp", "lease", "loan", "unknown" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "sornDeclared": {
+          "description": "Whether a Statutory Off Road Notification (SORN) is currently in effect",
+          "type": "boolean"
+        },
+        "deathActions": {
+          "description": "Tracks which estate administration steps have been completed for this vehicle",
+          "type": "object",
+          "properties": {
+            "dvlaNotified": {
+              "description": "Whether DVLA has been notified of the keeper's death",
+              "type": "boolean"
+            },
+            "dvlaNotifiedAt": {
+              "description": "When DVLA was notified",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            },
+            "insurerNotified": {
+              "description": "Whether the vehicle insurer has been notified",
+              "type": "boolean"
+            },
+            "insurerNotifiedAt": {
+              "description": "When the insurer was notified",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            },
+            "financeCompanyNotified": {
+              "description": "Whether the finance company has been notified (if applicable)",
+              "type": "boolean"
+            },
+            "financeSettled": {
+              "description": "Whether the finance has been settled or the vehicle returned",
+              "type": "boolean"
+            },
+            "taxRefundClaimed": {
+              "description": "Whether a refund has been claimed for remaining full months of vehicle tax",
+              "type": "boolean"
+            },
+            "intendedDisposal": {
+              "description": "What the executor intends to do with the vehicle",
+              "anyOf": [
+                {
+                  "enum": [
+                    "transfer_to_beneficiary",
+                    "sell",
+                    "scrap",
+                    "sorn_and_store",
+                    "undecided"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^x-inherit-.+",
+                  "maxLength": 100
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "vehicleCheck": {
+      "description": "Live vehicle check data from DVLA VES, DVSA MOT History, and HPI/finance check APIs. Point-in-time snapshot at retrievedAt",
+      "type": "object",
+      "required": [ "retrievedAt" ],
+      "properties": {
+        "retrievedAt": {
+          "description": "When this check data was fetched",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+          "format": "date-time"
+        },
+        "motExpiry": {
+          "description": "Current MOT expiry date",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "motStatus": {
+          "description": "Current MOT status",
+          "anyOf": [
+            {
+              "enum": [ "valid", "expired", "no_mot_required", "sorn" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "lastMileage": {
+          "description": "Mileage at last MOT test",
+          "type": "integer",
+          "minimum": 0
+        },
+        "lastMileageDate": {
+          "description": "Date of the last MOT mileage reading",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "advisoryCount": {
+          "description": "Number of advisory items at last MOT",
+          "type": "integer",
+          "minimum": 0
+        },
+        "failureCount": {
+          "description": "Number of failure items at last MOT",
+          "type": "integer",
+          "minimum": 0
+        },
+        "taxStatus": {
+          "description": "DVLA vehicle tax status",
+          "anyOf": [
+            {
+              "enum": [
+                "taxed",
+                "untaxed",
+                "sorn",
+                "not_taxed_for_on_road_use"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "taxDueDate": {
+          "description": "When vehicle tax expires",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "insuranceStatus": {
+          "description": "Whether the vehicle appears insured on the Motor Insurance Database",
+          "anyOf": [
+            {
+              "enum": [ "insured", "not_insured", "unknown" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "financeOutstanding": {
+          "description": "Whether there is outstanding finance on the vehicle",
+          "type": "boolean"
+        },
+        "financeSettlementAmount": {
+          "description": "Finance settlement figure in minor units (pennies). The amount needed to clear the finance and take ownership",
+          "type": "integer",
+          "minimum": 0
+        },
+        "writeOffCategory": {
+          "description": "Insurance write-off category, if applicable",
+          "$comment": "A: scrap only, must be crushed, zero value. B: body must be crushed, parts can be salvaged. S: structural damage, repairable (formerly Cat C). N: non-structural damage, repairable (formerly Cat D). none: not written off",
+          "anyOf": [
+            {
+              "enum": [ "A", "B", "S", "N", "none" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "stolenStatus": {
+          "description": "Whether the vehicle is reported stolen",
+          "anyOf": [
+            {
+              "enum": [ "clear", "reported_stolen", "unknown" ]
+            },
+            {
+              "type": "string",
+              "pattern": "^x-inherit-.+",
+              "maxLength": 100
+            }
+          ]
+        },
+        "previousKeepers": {
+          "description": "Number of previous registered keepers",
+          "type": "integer",
+          "minimum": 0
+        },
+        "plateChanges": {
+          "description": "Number of registration plate changes in the vehicle's history",
+          "type": "integer",
+          "minimum": 0
+        },
+        "mileageAnomaly": {
+          "description": "Whether MOT mileage readings show a discrepancy (clocking indicator)",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

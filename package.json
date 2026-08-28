@@ -34,7 +34,7 @@
     "@hey-api/openapi-ts": "latest",
     "@hyperjump/json-schema": "^1.17.5",
     "@redocly/cli": "latest",
-    "@sourcemeta/jsonschema": "14.19.0",
+    "@sourcemeta/jsonschema": "16.8.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "husky": "^9.1.7"
@@ -58,6 +58,6 @@
     }
   },
   "dependencies": {
-    "@sourcemeta/blaze": "0.0.2"
+    "@sourcemeta/blaze": "16.8.0"
   }
 }

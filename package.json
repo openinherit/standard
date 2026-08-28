@@ -35,7 +35,7 @@
     "@hyperjump/json-schema": "^1.17.5",
     "@redocly/cli": "latest",
     "@sourcemeta/jsonschema": "14.19.0",
-    "ajv": "^8.17.1",
+    "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "husky": "^9.1.7"
   },

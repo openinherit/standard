@@ -685,7 +685,7 @@
     },
     "referentialIntegrity": {
       "description": "Machine-readable cross-reference integrity constraints. Defined in the schema, not in individual documents. Validators read these rules and check that every referenced ID exists in the target array",
-      "$comment": "These constraints define Level 2 (Referentially Intact) conformance. Multi-target semantics: when a field has multiple non-required constraints, the validator groups by field path — valid if ANY constraint in the group matches. applicationState fields are NOT covered.",
+      "$comment": "These constraints define Level 2 (Referentially Intact) conformance. Multi-target semantics: when a field has multiple non-required constraints of the SAME kind, the validator groups by field path AND kind — valid if ANY constraint in that group matches. Grouping by field alone would let an existence constraint satisfy an acyclic one on the same field. A constraint whose kind the validator does not recognise MUST be reported as INHERIT_CONSTRAINT_UNKNOWN, never skipped. applicationState fields are NOT covered.",
       "default": [
         {
           "field": "estate.testatorPersonId",
@@ -798,6 +798,24 @@
           "required": false,
           "code": "INHERIT_REF_BROKEN",
           "errorMessage": "Space propertyId references a property that does not exist"
+        },
+        {
+          "field": "assets[].containedInAssetId",
+          "references": "assets[].id",
+          "kind": "acyclic",
+          "maxDepth": 16,
+          "required": false,
+          "code": "INHERIT_CONTAINMENT_CYCLE",
+          "errorMessage": "Asset containment chain loops or exceeds the depth guard"
+        },
+        {
+          "field": "spaces[].containedInSpaceId",
+          "references": "spaces[].id",
+          "kind": "acyclic",
+          "maxDepth": 16,
+          "required": false,
+          "code": "INHERIT_CONTAINMENT_CYCLE",
+          "errorMessage": "Space containment chain loops or exceeds the depth guard"
         },
         {
           "field": "proxyAuthorisations[].agentPersonId",
@@ -1474,6 +1492,19 @@
         "required": {
           "description": "If true, a broken reference is always an error. If false, the field may reference multiple target arrays (grouped by field path)",
           "type": "boolean"
+        },
+        "kind": {
+          "description": "The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops",
+          "$comment": "A validator encountering an unrecognised kind MUST fail with INHERIT_CONSTRAINT_UNKNOWN rather than skipping the constraint. A skipped constraint is a gate that reports green, which is the failure mode this keyword exists to avoid. Note also that the multi-target grouping described on referentialIntegrity groups by field AND kind: an acyclic row is never satisfied by an existence row on the same field",
+          "enum": [ "existence", "acyclic" ],
+          "default": "existence"
+        },
+        "maxDepth": {
+          "description": "For kind 'acyclic': the maximum number of hops a containment chain may have before it is rejected as unreasonably deep. A chain longer than this fails with INHERIT_DEPTH_EXCEEDED even if it is acyclic",
+          "$comment": "16 is the default for containment. It is not a legal limit; it is a guard against a pathological or generated chain. House -> loft -> trunk -> box -> tin is 5",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
         },
         "code": {
           "description": "Machine-readable error code from the INHERIT error vocabulary",

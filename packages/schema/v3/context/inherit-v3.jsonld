@@ -171,6 +171,7 @@
       "@context": {
         "@type": "schema:Place",
         "name": "schema:name",
+        "containedInSpaceId": { "@id": "schema:containedInPlace", "@type": "@id" },
         "containedInPlace": "schema:containedInPlace"
       }
     },

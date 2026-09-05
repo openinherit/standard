@@ -61,7 +61,7 @@ function checkConstraint(doc, constraint) {
 }
 
 /**
- * Run all 21 integrity constraints against a document.
+ * Run all 24 integrity constraints against a document.
  * Returns an array of { constraint, broken } for any failures.
  */
 function checkAllConstraints(doc) {
@@ -299,7 +299,7 @@ test('Level 2 valid — conformance declaration present and correct', () => {
   assertEmpty(errors, 'Conformance declaration errors');
 });
 
-test('Level 2 valid — all 21 integrity constraints pass', () => {
+test('Level 2 valid — all 24 integrity constraints pass', () => {
   const failures = checkAllConstraints(level2ValidDoc);
   if (failures.length > 0) {
     const details = failures.map(f => `${f.field}: ${f.broken.join(', ')}`).join('; ');
@@ -307,8 +307,8 @@ test('Level 2 valid — all 21 integrity constraints pass', () => {
   }
 });
 
-test('Level 2 valid — constraint count is 21', () => {
-  assertEqual(constraints.length, 21, 'Constraint count');
+test('Level 2 valid — constraint count is 24', () => {
+  assertEqual(constraints.length, 24, 'Constraint count');
 });
 
 // --- Level 2 with broken references ---

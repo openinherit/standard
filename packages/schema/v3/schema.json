@@ -779,6 +779,27 @@
           "errorMessage": "Asset assetCollectionId references a collection that does not exist"
         },
         {
+          "field": "assets[].containedInAssetId",
+          "references": "assets[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Asset containedInAssetId references an asset that does not exist"
+        },
+        {
+          "field": "spaces[].containedInSpaceId",
+          "references": "spaces[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Space containedInSpaceId references a space that does not exist"
+        },
+        {
+          "field": "spaces[].propertyId",
+          "references": "properties[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Space propertyId references a property that does not exist"
+        },
+        {
           "field": "proxyAuthorisations[].agentPersonId",
           "references": "people[].id",
           "required": true,

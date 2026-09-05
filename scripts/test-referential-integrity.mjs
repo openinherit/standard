@@ -380,6 +380,35 @@ test('trusts[].petId — broken ref detected', () => {
   if (broken.length === 0) throw new Error('Should have found broken trust petId ref');
 });
 
+// === Containment (ICP-0057) — every containment link must resolve ===
+
+test('assets[].containedInAssetId — broken ref detected', () => {
+  const doc = JSON.parse(JSON.stringify(validDoc));
+  doc.assets[0].containedInAssetId = 'bb009999-0000-4000-a000-000000000999';
+  const c = constraints.find(c => c.field === 'assets[].containedInAssetId' && (c.kind ?? 'existence') === 'existence');
+  if (!c) throw new Error('No existence constraint declared for assets[].containedInAssetId');
+  const broken = checkConstraint(doc, c);
+  if (broken.length === 0) throw new Error('Should have found broken containedInAssetId ref');
+});
+
+test('spaces[].containedInSpaceId — broken ref detected', () => {
+  const doc = JSON.parse(JSON.stringify(validDoc));
+  doc.spaces[0].containedInSpaceId = 'ss009999-0000-4000-a000-000000000999';
+  const c = constraints.find(c => c.field === 'spaces[].containedInSpaceId' && (c.kind ?? 'existence') === 'existence');
+  if (!c) throw new Error('No existence constraint declared for spaces[].containedInSpaceId');
+  const broken = checkConstraint(doc, c);
+  if (broken.length === 0) throw new Error('Should have found broken containedInSpaceId ref');
+});
+
+test('spaces[].propertyId — broken ref detected', () => {
+  const doc = JSON.parse(JSON.stringify(validDoc));
+  doc.spaces[0].propertyId = 'pp009999-0000-4000-a000-000000000999';
+  const c = constraints.find(c => c.field === 'spaces[].propertyId' && (c.kind ?? 'existence') === 'existence');
+  if (!c) throw new Error('No existence constraint declared for spaces[].propertyId');
+  const broken = checkConstraint(doc, c);
+  if (broken.length === 0) throw new Error('Should have found broken space propertyId ref');
+});
+
 console.log('\n' + '═'.repeat(50));
 console.log(`Cross-reference tests: ${passed} passed, ${failed} failed, ${passed + failed} total`);
 console.log('═'.repeat(50));

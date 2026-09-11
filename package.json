@@ -4,6 +4,7 @@
   "private": true,
   "description": "INHERIT — open estate data interchange standard",
   "type": "module",
+  "packageManager": "pnpm@10.34.5",
   "scripts": {
     "prepare": "husky || bash scripts/setup-hooks.sh",
     "validate": "node scripts/validate-schemas.mjs",

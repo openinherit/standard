@@ -394,7 +394,7 @@ For technical questions about the INHERIT standard, schema documentation, or int
 
 - **Website:** [openinherit.org](https://openinherit.org)
 - **GitHub:** [github.com/openinherit/standard](https://github.com/openinherit/standard)
-- **Discussions:** [github.com/openinherit/standard/discussions](https://github.com/openinherit/standard/discussions)
+- **Issues:** [github.com/openinherit/standard/issues](https://github.com/openinherit/standard/issues)
 
 ---
 

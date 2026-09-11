@@ -512,3 +512,8 @@ print(f"Rate limit: {ebay['rateLimitNotes']}")
 - **Format:** Compact JSON for interchange (no pretty-printing). Pretty JSON for debugging only
 - **Field ordering:** Not semantically significant (JSON objects are unordered), but stable ordering (e.g. sorted keys) improves diff quality and caching
 - **Null handling:** See the INHERIT Null Policy in schema.json `$comment`
+
+## See Also
+
+- [Item Capture](item-capture.md) — the three capture behaviours (photo-first, bulk, detailed)
+  mapped onto `asset.json`, and how to express partial capture state without a new extension key.

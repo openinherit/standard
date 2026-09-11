@@ -4,6 +4,7 @@
 
 ## Quick start
 - AI Integration Guide: docs/implement/ai-guide.md
+- Item Capture Guide: docs/implement/item-capture.md
 - Examples: examples/ (TypeScript, Python, Go code + 34 JSON fixtures)
 - Schemas: v3/ (all JSON Schema 2020-12 files with rich descriptions)
 - OpenAPI: openapi/openapi-bundled.yaml (fully dereferenced)

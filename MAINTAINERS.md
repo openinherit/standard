@@ -34,4 +34,4 @@ For urgent matters (security, legal, partnership enquiries):
 |-------|---------|
 | Security vulnerabilities | security@openinherit.org |
 | Partnership enquiries | hello@openinherit.org |
-| General questions | [Open an issue](https://github.com/openinherit/standard/issues) |
+| General questions | [Open a discussion](https://github.com/openinherit/standard/discussions) |

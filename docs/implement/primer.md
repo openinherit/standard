@@ -360,4 +360,4 @@ This produces typed interfaces and API client stubs in `generated/typescript/`.
 
 ## Contributing
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for how to report bugs, propose schema changes, or author extensions.
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) for how to report bugs, propose schema changes, or author extensions.

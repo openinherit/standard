@@ -10,6 +10,12 @@ source: "docs/wills/README.md"
 
 # INHERIT Test Wills Collection
 
+> **The persona documents themselves are not in this repository.** This file is an
+> archived snapshot of a pre-restructure README, kept for the catalogue below. The
+> eleven test-will documents it described were not carried into the curated public
+> repository on 28 August 2026, so the names are listed as plain text rather than
+> as links that cannot resolve.
+
 ## Purpose
 
 This folder contains realistic mock wills designed to stress-test the INHERIT open estate data standard. Each will targets specific schema capabilities and is crafted to expose modelling gaps. They are used in three ways:
@@ -24,17 +30,17 @@ These are demonstration documents. They do not constitute valid legal instrument
 
 | Will | Jurisdiction | Complexity | What it tests |
 |------|-------------|------------|---------------|
-| [Katrina Tan Wei Lin](katrina-tan-singapore.md) | Singapore | Simple | Aunt-niece kinship (uncle_aunt), sibling bequests, CPF exclusion, Buddhist funeral wishes, jade bangle provenance, 30-day survivorship. The will that originally exposed INHERIT's kinship deficiencies and triggered the v6.3.0 redesign. |
-| [Mark James Richardson](mark-richardson-england.md) | England & Wales | Medium | Executor powers (Trustee Act 2000), statutory exclusion (Apportionment Act 1870), precatory wishes ("keep as family heirloom"), residuary split with mentioned assets, charitable bequest with discharge instruction, 28-day survivorship. The will that found the final 3 gaps. |
-| [Fatima binte Abdul Rahman](fatima-al-rashid-singapore.md) | Singapore (AMLA) | Complex | Islamic faraid + wasiyyah one-third limit, Syariah Court Inheritance Certificate, CPF sub-account nominations, HDB joint tenancy, non-Muslim beneficiary under faraid, dual-court process, mahr debt, waqf endowment. |
-| [Pierre Dubois](pierre-dubois-france-england.md) | France + England | Complex | Cross-border forced heirship (reserve hereditaire vs testamentary freedom), lex situs for French immovable property, Brussels IV Regulation choice of law, dual wills strategy, governingJurisdictions. |
-| [Gloria Helmsley-Winters](gloria-helmsley-winters-new-york.md) | New York, USA | Complex | $8M pet trust, explicit disinheritance of grandchildren, massive charitable trust, judicial variation of bequests, conflictsOfInterest (executor as beneficiary). |
-| [Henry Burt III](henry-burt-iii-michigan.md) | Michigan, USA | Extreme | Multi-generational perpetuity trust, generation-skipping across 4 generations, distribution triggered by death of last grandchild, trust duration modelling, GST classification. |
-| [Chen Wei Agricultural Trust](chen-wei-agricultural-taiwan.md) | Taiwan + England | Complex | Agricultural property relief (APR), organic farming conditions on inheritance, environmental compliance conditions, cross-border agricultural estate, conditional trust distributions tied to land use. |
-| [Maria Santos de la Cruz](maria-santos-manila.md) | Philippines + USA | Complex | Forced heirship (legitime under Philippine Civil Code), US property subject to different rules, charitable remainder trust (CRUT), generation-skipping trust for grandchildren, multiple jurisdictions with conflicting succession rules. |
-| [Tommy & Sarah Bancroft](bancroft-mutual-will-australia.md) | Australia (NSW) | Complex | Mutual wills with binding promise not to revoke, blended family (step-children from prior marriages), Aboriginal land with customary succession rights, family provision claims from excluded adult children, superannuation nominations. |
-| [Ananya Sharma](ananya-sharma-mumbai.md) | India (Hindu Succession Act) | Complex | Hindu undivided family (HUF) property, coparcenary rights post-2005 Amendment (daughter equality), Parsi succession rules for mixed-faith marriage, stridhan assets, multi-state Indian property with different state amendments. |
-| [George Okafor](george-okafor-lagos-london.md) | Nigeria + England | Complex | Dual legal system (Igbo customary law + English common law), eldest son custodial rights under customary law vs testamentary freedom, London property subject to English law, Lagos property subject to customary succession, parallelSuccessionConflicts modelling. |
+| Katrina Tan Wei Lin | Singapore | Simple | Aunt-niece kinship (uncle_aunt), sibling bequests, CPF exclusion, Buddhist funeral wishes, jade bangle provenance, 30-day survivorship. The will that originally exposed INHERIT's kinship deficiencies and triggered the v6.3.0 redesign. |
+| Mark James Richardson | England & Wales | Medium | Executor powers (Trustee Act 2000), statutory exclusion (Apportionment Act 1870), precatory wishes ("keep as family heirloom"), residuary split with mentioned assets, charitable bequest with discharge instruction, 28-day survivorship. The will that found the final 3 gaps. |
+| Fatima binte Abdul Rahman | Singapore (AMLA) | Complex | Islamic faraid + wasiyyah one-third limit, Syariah Court Inheritance Certificate, CPF sub-account nominations, HDB joint tenancy, non-Muslim beneficiary under faraid, dual-court process, mahr debt, waqf endowment. |
+| Pierre Dubois | France + England | Complex | Cross-border forced heirship (reserve hereditaire vs testamentary freedom), lex situs for French immovable property, Brussels IV Regulation choice of law, dual wills strategy, governingJurisdictions. |
+| Gloria Helmsley-Winters | New York, USA | Complex | $8M pet trust, explicit disinheritance of grandchildren, massive charitable trust, judicial variation of bequests, conflictsOfInterest (executor as beneficiary). |
+| Henry Burt III | Michigan, USA | Extreme | Multi-generational perpetuity trust, generation-skipping across 4 generations, distribution triggered by death of last grandchild, trust duration modelling, GST classification. |
+| Chen Wei Agricultural Trust | Taiwan + England | Complex | Agricultural property relief (APR), organic farming conditions on inheritance, environmental compliance conditions, cross-border agricultural estate, conditional trust distributions tied to land use. |
+| Maria Santos de la Cruz | Philippines + USA | Complex | Forced heirship (legitime under Philippine Civil Code), US property subject to different rules, charitable remainder trust (CRUT), generation-skipping trust for grandchildren, multiple jurisdictions with conflicting succession rules. |
+| Tommy & Sarah Bancroft | Australia (NSW) | Complex | Mutual wills with binding promise not to revoke, blended family (step-children from prior marriages), Aboriginal land with customary succession rights, family provision claims from excluded adult children, superannuation nominations. |
+| Ananya Sharma | India (Hindu Succession Act) | Complex | Hindu undivided family (HUF) property, coparcenary rights post-2005 Amendment (daughter equality), Parsi succession rules for mixed-faith marriage, stridhan assets, multi-state Indian property with different state amendments. |
+| George Okafor | Nigeria + England | Complex | Dual legal system (Igbo customary law + English common law), eldest son custodial rights under customary law vs testamentary freedom, London property subject to English law, Lagos property subject to customary succession, parallelSuccessionConflicts modelling. |
 
 ## How to use
 

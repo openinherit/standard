@@ -577,9 +577,9 @@ The following Addepar concepts have no direct INHERIT equivalent and are **out o
 ## 10. Further Reading
 
 - [Addepar API Documentation](https://developers.addepar.com)
-- [INHERIT person.json schema](/v3/person.json)
-- [INHERIT trust.json schema](/v3/trust.json)
-- [INHERIT organisation.json schema](/v3/organisation.json)
-- [INHERIT asset.json schema](/v3/asset.json)
-- [INHERIT valuation.json schema](/v3/valuation.json)
-- [INHERIT Extension Guide](/docs/implement/extension-guide.md)
+- [INHERIT person.json schema](../../../v3/person.json)
+- [INHERIT trust.json schema](../../../v3/trust.json)
+- [INHERIT organisation.json schema](../../../v3/organisation.json)
+- [INHERIT asset.json schema](../../../v3/asset.json)
+- [INHERIT valuation.json schema](../../../v3/valuation.json)
+- [INHERIT Extension Guide](../../implement/extension-guide.md)

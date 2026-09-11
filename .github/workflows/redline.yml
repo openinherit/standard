@@ -1,7 +1,42 @@
 name: Publication redline
 
-# Non-bypassable CI backstop for the local pre-commit hook (--no-verify-able).
-# Exit 0 = clean, 1 = hits, 2 = cannot answer (all non-zero fail the job).
+# ⛔ THE GATE THAT MAKES workspace CLAUDE.md §0 REAL. This repository is
+# PUBLIC and has no mirror step (TT-1604 D4): every commit that lands here is
+# published the moment it lands, and publication cannot be undone.
+#
+# Exit 0 = clean · 1 = hits · 2 = CANNOT ANSWER. All non-zero fail the job, so
+# exit 2 is never read as "no hits". It backstops .husky/pre-commit, which is a
+# local convenience and is --no-verify-able.
+#
+# ⭐ WHAT ENFORCES THIS, NAMED SO THE CLAIM CAN BE CHECKED. Until Friday 11
+# September 2026 this comment read "Non-bypassable CI backstop" while `main`
+# carried ZERO rules (TT-1669): a red redline merged exactly as easily as a
+# green one. The words were true of the intent and false of the configuration,
+# and nothing could tell the difference. What makes them true now:
+#
+#   repository ruleset "main-protection", on ~DEFAULT_BRANCH
+#     · required_status_checks  → `redline` and `gitleaks` must be green
+#     · pull_request            → no direct pushes to main; it must be a PR
+#     · non_fast_forward, deletion → main cannot be rewritten or deleted
+#     · bypass_actors: []       → deliberately EMPTY, org admins included
+#
+# Verify in one command, and trust it over this comment:
+#
+#   gh api repos/openinherit/standard/rules/branches/main --jq '[.[].type]'
+#
+# An empty result means this file is lying again. That is not hypothetical:
+# `code-ll`'s ruleset reads as active, with a correctly-named check and an empty
+# bypass list, but its `include` list is empty — so it has matched nothing since
+# 14 April and 382 PRs merged past it. Nothing went red, because a gate that
+# matches nothing is silent.
+#
+# ⚠️ THE ONE HONEST LIMIT. `bypass_actors` is empty, but a repository admin can
+# still disable the ruleset. That is deliberate: disabling it is a visible act
+# that leaves an audit entry, whereas a standing bypass actor is invisible. It
+# is also why the `push:` trigger below is kept — on any path that reaches main
+# without a PR, this job is a DETECTOR that reports after the content is already
+# public, not a gate. Both are wanted. They are not the same thing, and this
+# comment no longer conflates them.
 
 on:
   push:

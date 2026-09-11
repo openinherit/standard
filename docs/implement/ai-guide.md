@@ -75,7 +75,7 @@ The smallest valid INHERIT document requires:
 }
 ```
 
-See [`examples/fixtures/minimal-estate.json`](../examples/fixtures/minimal-estate.json) for the canonical fixture.
+See [`examples/fixtures/minimal-estate.json`](../../examples/fixtures/minimal-estate.json) for the canonical fixture.
 
 ### Entity Relationships
 
@@ -168,7 +168,7 @@ if (validate && !validate(doc)) {
 }
 ```
 
-See [`examples/validate-document.ts`](../examples/validate-document.ts) for a complete runnable example.
+See [`examples/validate-document.ts`](../../examples/validate-document.ts) for a complete runnable example.
 
 ### JSON Schema Keyword Reference
 
@@ -332,7 +332,7 @@ After the LLM returns extracted entities, assemble a valid INHERIT document:
    ```
 6. **Validate** the assembled document against the schema (see [Validation Patterns](#validation-patterns))
 
-See [`examples/extract-entities.ts`](../examples/extract-entities.ts) (TypeScript) and [`examples/python/extract_entities.py`](../examples/python/extract_entities.py) (Python) for complete runnable examples. Both include AI provenance tracking.
+See [`examples/extract-entities.ts`](../../examples/extract-entities.ts) (TypeScript) and [`examples/python/extract_entities.py`](../../examples/python/extract_entities.py) (Python) for complete runnable examples. Both include AI provenance tracking.
 
 ### Model Recommendations
 

@@ -133,7 +133,7 @@ INHERIT's scope values are more granular than a typical OAuth scope string but c
 If you are implementing delegation credential acceptance:
 
 1. **Accept INHERIT documents** as supporting evidence alongside delegation credentials. The credential proves delegation authority; the INHERIT document provides the estate context.
-2. **Map your platform's account data** to INHERIT schemas using the relevant [platform integration guide](platforms/). This enables structured data release to authorised delegates.
+2. **Map your platform's account data** to INHERIT schemas using the relevant [platform integration guide](../integrations/README.md). This enables structured data release to authorised delegates.
 3. **Populate `credentialRef`** on the INHERIT proxy authorisation when issuing or receiving a delegation credential. This creates a bidirectional link between the estate record and the delegation proof.
 
 ### For estate platforms building INHERIT support

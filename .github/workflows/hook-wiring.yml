@@ -1,0 +1,76 @@
+name: Hook wiring
+
+# A GATE ON THE GATE.
+#
+# Measured Friday 11 September 2026 in a working checkout of this repository:
+# `core.hooksPath` was `.husky/_`, that directory did not exist, husky was not
+# installed, and there was no `.git/hooks/pre-commit`. Git was looking for hooks
+# in a missing directory and finding none — so `.husky/pre-commit`, which runs
+# the secret guard, the publication redline and the v3 sync, had never executed
+# on a single commit. The hook file was correct the whole time. The mechanism
+# that invokes it was never provisioned, and nothing noticed.
+#
+# ⛔ WHAT THIS JOB CANNOT DO. CI runs on a fresh clone, so it cannot inspect a
+# contributor's local `core.hooksPath`. That is local config and untrackable; no
+# repository can enforce its own hooks. This job does not pretend otherwise.
+#
+# ⭐ WHAT IT CAN DO is keep the WIRING honest — that the hook exists, is
+# executable, still calls the redline, still fails on a non-zero exit, and that
+# `prepare` reaches the husky-independent fallback. Plus one end-to-end
+# red-proof: in a throwaway clone it seeds a real category-3 path and asserts a
+# real `git commit` is refused. That last assertion is the one that would have
+# caught the original failure, and it is why this job exists rather than a
+# comment asking someone to check.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # Weekly, because the failure mode is silence: the wiring can be correct in
+  # the repo for months while no one commits through it.
+  schedule:
+    - cron: "40 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wiring:
+    runs-on: ubuntu-latest
+    # Seconds of work. The cap is here to stop a hung runner, not to bound it.
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # The red-proof clones this checkout and commits inside the clone, so
+          # it needs real history rather than a shallow graft.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Assert the hook wiring is intact, and red-prove it
+        run: bash scripts/test-hook-wiring.sh
+
+      - name: What a failure here means
+        if: failure()
+        run: |
+          echo "The pre-commit wiring is broken, or the gate no longer refuses."
+          echo ""
+          echo "Assertions 1-8 are structural: the hook file, its executable bit,"
+          echo "the redline call, the '|| exit 1' guard, the chained secret guard,"
+          echo "the setup script, and package.json's prepare fallback."
+          echo ""
+          echo "Assertion 9 is the end-to-end red-proof: a category-3 path is"
+          echo "staged in a throwaway clone and the commit MUST be refused. If"
+          echo "only 9 failed, the hook is present but inert — which is exactly"
+          echo "the state this job was written to make visible."
+          echo ""
+          echo "Reminder: a local hook is a convenience and is --no-verify-able."
+          echo "redline.yml is the backstop that is not bypassable."

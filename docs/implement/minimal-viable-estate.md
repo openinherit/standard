@@ -123,6 +123,6 @@ The fixture tells a coherent story: Jane Thompson appoints her husband David as 
 
 - **Level 1 conformance** requires a valid schema-conformant document with testator identity and domicile. Both MVE Level 0 and Level 1 meet this threshold.
 - **Level 2 conformance** additionally requires executor appointment, at least one asset, and a bequest. MVE Level 1 achieves Level 2 conformance once a `conformance` block is declared.
-- Conformance declarations are optional in the document structure but required for interoperability with conformance-aware tools such as the [INHERIT Conformance Kit](../../sdk/conformance/).
+- Conformance declarations are optional in the document structure but required for interoperability with conformance-aware tools such as the [INHERIT Conformance Kit](../../packages/conformance/README.md).
 
 The ladder is not prescriptive — implementers may choose to skip levels or merge them. The purpose is to make it clear that **any level of INHERIT adoption is better than none**, and that a Level 0 document is a genuine contribution to the open estate data ecosystem.

@@ -1,5 +1,34 @@
 name: Check links
 
+# ⭐ WHY THIS JOB HAD NEVER BEEN GREEN, AND WHAT CHANGED.
+#
+# Measured Friday 11 September 2026: every run of this workflow in the
+# repo's history had failed, and it had run only on pull requests --
+# never once on main. Its 14 errors were two different things wearing
+# one colour:
+#
+#   403 x6   npmjs.com x3 · developer.ebay.com · www.clio.com
+#            · www.discogs.com
+#   404 x8   five genuinely dangling links, all of them on main
+#
+# The 403s were re-probed with a real browser user-agent and still
+# returned 403: that is WAF / datacentre-IP blocking, not a broken link.
+# ⛔ A 403 means "the probe was refused", never "the target is
+# missing" -- treating it as a failure is the same category error as
+# reading a cannot-answer as a clean result. And because those six never
+# go green, the job was permanently red, so nobody read it, so the five
+# real 404s stayed invisible from the day this repository was published.
+# The noise hid the signal.
+#
+# ⇒ The bot-blocking hosts are now excluded BY HOST, deliberately not
+# by accepting 403 globally -- a real 403 somewhere else should still
+# fail.
+#
+# ⚠️ Link rot needs no commit. A remote page can move while this
+# repository sits untouched, and the `paths:` filters below only fire
+# when a .md file changes -- so they can never catch it. The weekly
+# schedule is what does.
+
 on:
   push:
     branches: [main]
@@ -10,6 +39,11 @@ on:
     paths:
       - '**.md'
       - '.github/workflows/check-links.yml'
+  # Link rot happens with no commit at all, so the paths filters above
+  # cannot catch it. Monday mornings, before anyone relies on a link.
+  schedule:
+    - cron: "50 6 * * 1"
+  workflow_dispatch:
 
 jobs:
   check-links:
@@ -27,6 +61,10 @@ jobs:
             --exclude 'https://ntfy\.sh/'
             --exclude 'mailto:'
             --exclude 'https://www\.openinherit\.org'
+            --exclude 'https://(www\.)?npmjs\.com/'
+            --exclude 'https://developer\.ebay\.com'
+            --exclude 'https://(www\.)?clio\.com'
+            --exclude 'https://(www\.)?discogs\.com'
             --max-retries 3
             --timeout 30
             '**/*.md'

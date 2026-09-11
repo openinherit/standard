@@ -77,7 +77,7 @@ Combine everything into the INHERIT document structure with all 21 entity arrays
 
 ### Step 5: Validate
 
-Run the document through Level 1 (schema) and Level 2 (referential integrity) validation. See the [error guide](./error-guide.md) for help with any failures. The [`validate-document.ts`](../examples/validate-document.ts) example provides a ready-made validator.
+Run the document through Level 1 (schema) and Level 2 (referential integrity) validation. See the [error guide](./error-guide.md) for help with any failures. The [`validate-document.ts`](../../examples/validate-document.ts) example provides a ready-made validator.
 
 ---
 

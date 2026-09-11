@@ -6,7 +6,7 @@ This complements the [conformance levels](conformance-levels.md) documentation b
 
 ## Why Conformance Declarations Matter
 
-The INHERIT [governance model](../GOVERNANCE.md) requires **two independent implementations at Level 2** before a schema can be promoted from `draft` to `stable`. Conformance declarations provide the evidence trail for this process:
+The INHERIT [governance model](../../GOVERNANCE.md) requires **two independent implementations at Level 2** before a schema can be promoted from `draft` to `stable`. Conformance declarations provide the evidence trail for this process:
 
 1. An implementation runs its conformance test suite
 2. It generates a conformance declaration (a JSON document)
@@ -181,7 +181,7 @@ When a schema is proposed for promotion from `draft` to `stable`:
    - Valid against the conformance declaration schema
    - From genuinely independent implementations (different organisations or codebases)
    - Current (the `inheritVersion` matches the version being promoted)
-4. If both declarations are verified, the promotion vote can proceed per the [governance process](../GOVERNANCE.md)
+4. If both declarations are verified, the promotion vote can proceed per the [governance process](../../GOVERNANCE.md)
 
 ### What Counts as Independent?
 

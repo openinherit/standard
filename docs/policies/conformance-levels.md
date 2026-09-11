@@ -87,4 +87,4 @@ A document at Level 2 with Level 3 warnings is perfectly usable — it just mean
 
 ## Two Implementations Before Stable
 
-No schema reaches `stable` maturity until at least two independent implementations pass Level 2 conformance. See the [Maturity Model](maturity-model.md) for details.
+No schema reaches `stable` maturity until at least two independent implementations pass Level 2 conformance. See the [Maturity Model](../releases/maturity-model.md) for details.

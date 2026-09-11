@@ -4,7 +4,6 @@ version: "1.0"
 status: tracked
 date: 2026-04-12T01:30:00Z
 lastmod: 2026-04-14T00:00:00Z
-github_issue: https://github.com/openinherit/standard/issues/42
 author: "Rich Davies"
 source: "docs/proposals/kinship-enrichment-tier-3.md"
 ---

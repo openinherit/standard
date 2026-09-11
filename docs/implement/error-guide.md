@@ -10,7 +10,7 @@ source: "docs/implement/error-guide.md"
 
 # Error Guide
 
-A developer-friendly reference for every validation error INHERIT can produce, organised by [conformance level](./conformance-levels.md). Each entry shows the AJV error message, what it means, and how to fix it.
+A developer-friendly reference for every validation error INHERIT can produce, organised by [conformance level](../policies/conformance-levels.md). Each entry shows the AJV error message, what it means, and how to fix it.
 
 ---
 
@@ -566,7 +566,7 @@ const person = {
 };
 ```
 
-**Debugging tip:** check [Enum Reference](./enum-reference.md) for the complete list of allowed values for every enum field. INHERIT uses British English spelling throughout (e.g. `jewellery`, not `jewelry`).
+**Debugging tip:** check [Enum Reference](../releases/enum-reference.md) for the complete list of allowed values for every enum field. INHERIT uses British English spelling throughout (e.g. `jewellery`, not `jewelry`).
 
 ---
 
@@ -576,4 +576,4 @@ const person = {
 - [Understanding unevaluatedProperties](https://www.learnjsonschema.com/2020-12/unevaluated/unevaluatedproperties/) — used on every INHERIT entity to reject unknown fields
 - [Understanding conditional validation (if/then/else)](https://www.learnjsonschema.com/2020-12/applicator/if/) — how INHERIT expresses conditional requirements
 - [Understanding $ref (cross-schema references)](https://www.learnjsonschema.com/2020-12/core/ref/) — how INHERIT schemas reference shared definitions
-- [INHERIT validation example](../examples/validate-document.ts) — working TypeScript code that implements Level 1 + Level 2 validation
+- [INHERIT validation example](../../examples/validate-document.ts) — working TypeScript code that implements Level 1 + Level 2 validation

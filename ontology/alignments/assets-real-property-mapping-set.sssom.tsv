@@ -1,0 +1,52 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_lra_2002: https://www.legislation.gov.uk/ukpga/2002/9/
+#   uk_lrr_2003: https://www.legislation.gov.uk/uksi/2003/1417/
+#   uk_lpa_1925: https://www.legislation.gov.uk/ukpga/Geo5/15-16/20/
+#   uk_clra_2002: https://www.legislation.gov.uk/ukpga/2002/15/
+#   uk_ihta_1984: https://www.legislation.gov.uk/ukpga/1984/51/
+#   uk_tlata_1996: https://www.legislation.gov.uk/ukpga/1996/47/
+#   scot_lrsa_2012: https://www.legislation.gov.uk/asp/2012/5/
+#   scot_aftsa_2000: https://www.legislation.gov.uk/asp/2000/5/
+#   scot_llsa_2012: https://www.legislation.gov.uk/asp/2012/9/
+#   ch_zgb: https://www.fedlex.admin.ch/eli/cc/24/233_245_233/en
+#   ch_iprg: https://www.fedlex.admin.ch/eli/cc/1988/1776_1776_1776/en
+#   in_hsa_1956: https://www.indiacode.nic.in/handle/123456789/1656
+#   in_waqfs_act_1995: https://www.indiacode.nic.in/handle/123456789/2014
+#   sg_amla_1966: https://sso.agc.gov.sg/Act/AMLA1966
+#   il_lra_1969: https://main.knesset.gov.il/EN/About/Lexicon/pages/landlaw.aspx
+#   uk_w_common_law: https://openinherit.org/sources/uk_w_common_law/
+#   faith_pillars_islamic: https://openinherit.org/sources/faith_pillars_islamic/
+#   faith_pillars_hindu: https://openinherit.org/sources/faith_pillars_hindu/
+#   faith_pillars_jewish: https://openinherit.org/sources/faith_pillars_jewish/
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   prov: http://www.w3.org/ns/prov#
+#   bfo: http://purl.obolibrary.org/obo/BFO_
+#   xsd: http://www.w3.org/2001/XMLSchema#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/sssom/q-042-assets-real-property
+# mapping_set_version: '1.0'
+# mapping_set_title: Assets.RealProperty sub-class universal classifier mapping_set (Q-042/Q-A2 xi-plus-star) - FIRST sub-class under Q-003 9-class taxonomy; LinkML is_a inheritance entry
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: Q-042 (Q-A2) ξ.+ ★ Assets.RealProperty sub-class mapping_set Day-1; 18 rows bridging tenure types + ownership shapes + registration regimes across UK&W + Scotland + Switzerland + faith-tradition real-property substrates
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:RealProperty	RealProperty sub-class	skos:exactMatch	bfo:0000040	material entity (INHERITED from Asset; real-property specialisation)	semapv:LexicalMatching	0.95
+inherit:tenure_type.freehold	freehold	skos:exactMatch	uk_lpa_1925:s.1(1)(a)	LPA 1925 s.1(1)(a) Fee Simple Absolute in Possession — UK&W canonical freehold legal estate	semapv:ManualMappingCuration	0.95
+inherit:tenure_type.leasehold	leasehold	skos:exactMatch	uk_lpa_1925:s.1(1)(b)	LPA 1925 s.1(1)(b) Term of Years Absolute — UK&W canonical leasehold legal estate	semapv:ManualMappingCuration	0.95
+inherit:tenure_type.commonhold	commonhold	skos:exactMatch	uk_clra_2002:	Commonhold and Leasehold Reform Act 2002 — UK&W commonhold-of-unit-plus-association-membership tenure form	semapv:ManualMappingCuration	0.92
+inherit:tenure_type.scottish-ownership-post-2004	scottish-ownership-post-2004	skos:exactMatch	scot_aftsa_2000:	Abolition of Feudal Tenure etc (Scotland) Act 2000 (commenced 28 Nov 2004) — successor regime to dominium utile/directum; ownership-of-land canonical post-feudal	semapv:ManualMappingCuration	0.92
+inherit:tenure_type.swiss-vollein-eigentum	swiss-vollein-eigentum	skos:exactMatch	ch_zgb:Art.646	Swiss ZGB Art 646 Alleineigentum — sole-ownership-of-immovable-property	semapv:ManualMappingCuration	0.92
+inherit:tenure_type.swiss-stockwerk-eigentum	swiss-stockwerk-eigentum	skos:exactMatch	ch_zgb:Art.712a	Swiss ZGB Art 712a-712t Stockwerkeigentum — condominium-ownership with unit + common parts co-ownership	semapv:ManualMappingCuration	0.92
+inherit:tenure_type.waqf-mawquf-real-property	waqf-mawquf-real-property	skos:closeMatch	faith_pillars_islamic:waqf_khayri_real_property	Faith-tradition Islamic waqf khayri real-property corpus — classical Hanafi fiqh + Quran 2:215 + Hadith jurisprudence; charitable-trust-real-property inalienable	semapv:ManualMappingCuration	0.78
+inherit:ownership_shape.joint-tenancy-with-right-of-survivorship	joint-tenancy-with-right-of-survivorship	skos:exactMatch	uk_lpa_1925:s.36	LPA 1925 s.36 joint tenancy — equal undivided shares + right of survivorship (ius accrescendi); IHT-significant per IHTA 1984 s.171A	semapv:ManualMappingCuration	0.95
+inherit:ownership_shape.tenancy-in-common	tenancy-in-common	skos:exactMatch	uk_lpa_1925:s.34	LPA 1925 s.34 tenancy in common — distinct undivided shares; passes via succession on death; RNRB IHTA 1984 ss.39-42 applies	semapv:ManualMappingCuration	0.95
+inherit:ownership_shape.swiss-miteigentum	swiss-miteigentum	skos:exactMatch	ch_zgb:Art.646	Swiss ZGB Art 646-651 Miteigentum — co-ownership by alienable quotas	semapv:ManualMappingCuration	0.92
+inherit:ownership_shape.swiss-gesamteigentum	swiss-gesamteigentum	skos:exactMatch	ch_zgb:Art.652	Swiss ZGB Art 652-654 Gesamteigentum — collective ownership without individual alienable quota (e.g. Erbengemeinschaft inheritance community)	semapv:ManualMappingCuration	0.90
+inherit:registration_status.registered	registered	skos:exactMatch	uk_lra_2002:s.6	LRA 2002 s.6-15 + LRR 2003 — UK&W HM Land Registry register-of-title regime; title_number REQ for registered estates	semapv:ManualMappingCuration	0.95
+inherit:registration_status.unregistered	unregistered	skos:closeMatch	uk_w_common_law:deeds_based_title	UK&W pre-LRA 2002 deeds-based title via root-of-title chain (15-year minimum); LRA 2002 s.4 compulsory triggers progressively reducing unregistered estate count	semapv:ManualMappingCuration	0.85
+inherit:title_number	title_number	skos:exactMatch	uk_lra_2002:s.59	LRA 2002 s.59 title-number assignment + LRR 2003 numbering convention (e.g. NGL/MX/SY/CB/BK area-prefixes)	semapv:ManualMappingCuration	0.92
+inherit:address_or_location	address_or_location (Switzerland cadastral)	skos:closeMatch	ch_zgb:Art.944	ZGB Art 944 Grundbuch cadastral parcel reference + canton + commune (Gemeinde) — Swiss canonical real-property location reference	semapv:ManualMappingCuration	0.88
+inherit:RealProperty.hindu-mitakshara	RealProperty + hindu-mitakshara coparcener-property	skos:closeMatch	in_hsa_1956:s.6	HSA 1956 s.6 amended 2005 — Mitakshara coparcener-property of HUF; daughter-coparcener post-9-September-2005	semapv:ManualMappingCuration	0.82
+inherit:RealProperty.singapore-muslim-waqf	RealProperty + singapore-muslim-waqf	skos:closeMatch	sg_amla_1966:s.58	AMLA 1966 ss.58-63 — MUIS Singapore Islamic Religious Council waqf real-property administration statutory regime	semapv:ManualMappingCuration	0.88

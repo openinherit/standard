@@ -1,0 +1,31 @@
+{
+  "rule_name": "InsolventEstateAbatement",
+  "rule_source_path": "catala/probate/InsolventEstateAbatement.catala_en",
+  "rule_authored_under": "TT-527",
+  "applicable_classes": ["inherit_probate:ProbateAdministration"],
+  "applicable_scope": "Abate",
+  "catala_typecheck": "PASS (verified 2026-07-06, Catala 1.2.0, clerk-build project with ComputedOrNeedsHuman contract module)",
+  "clerk_test_sanity_check": "PASS — 2026-07-06 — 2/2 in-file #[test] scopes GREEN (TestPariPassuComputed: abated_payments = [$18,000; $18,000; $24,000], verdict Computed; TestPreferentialNeedsHuman: verdict NeedsHuman); ALL TESTS PASSED via clerk test",
+  "gov_oracle_per_creditor_check": "GREEN expected — asserted externally by code-inherit-test-suite/scripts/oracle_verify.py against tests/oracles/insolvent-estate-abatement.oracle.json (per_heir result_kind, list_field abated_payments), including a wrong_split negative case",
+  "expected_mopsa_c_verdict": "NOT RUN — no mopsa-c bridge script exists in this repo; deferred (the bridge lives in code-inherit-test-suite/scripts/catala-mopsa-bridge.py)",
+  "expected_rule_body_alarms": "N/A — not evaluated in this repo",
+  "per_fixture_expected_outcomes": [
+    {
+      "fixture_id": "T-Q036-insolvent-pari-passu-60pct",
+      "expected_verdict_arm": "Computed",
+      "expected_abated_payments": ["18000", "18000", "24000"],
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-Q036-solvent-paid-in-full",
+      "expected_verdict_arm": "Computed",
+      "expected_abated_payments": ["30000", "40000"],
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-Q036-preferential-needs-human",
+      "expected_verdict_arm": "NeedsHuman",
+      "clerk_test_pass": true
+    }
+  ]
+}

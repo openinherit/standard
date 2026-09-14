@@ -1,0 +1,45 @@
+{
+  "rule_name": "InsolventEstateAbatement",
+  "scope": "Abate",
+  "positive": [
+    {
+      "fixture_id": "T-Q036-insolvent-pari-passu-60pct",
+      "input": {
+        "available_assets": "60000",
+        "creditor_claims": [30000, 30000, 40000],
+        "has_preferential_or_secured": false
+      },
+      "expected_output": {
+        "verdict_arm": "Computed",
+        "abated_payments": ["18000", "18000", "24000"]
+      },
+      "decidability_claim": "pari passu ratio 0.6 (assets 60000 / claims 100000); Insolvency Act 1986 s.328(3) applied to a deceased insolvent estate by SI 1986/1999"
+    },
+    {
+      "fixture_id": "T-Q036-solvent-paid-in-full",
+      "input": {
+        "available_assets": "100000",
+        "creditor_claims": [30000, 40000],
+        "has_preferential_or_secured": false
+      },
+      "expected_output": {
+        "verdict_arm": "Computed",
+        "abated_payments": ["30000", "40000"]
+      },
+      "decidability_claim": "solvent: ratio 1.0, no abatement, all claims paid in full"
+    }
+  ],
+  "negative": [
+    {
+      "fixture_id": "T-Q036-preferential-needs-human",
+      "input": {
+        "available_assets": "60000",
+        "creditor_claims": [30000, 30000, 40000],
+        "has_preferential_or_secured": true
+      },
+      "expected_output": { "verdict_arm": "NeedsHuman" },
+      "decidability_claim": "preferential/secured ranking (Insolvency Act 1986 s.328(1) + Schedule 6) ranks ahead of the pari passu rank and is out of MVP scope -> NeedsHuman"
+    }
+  ],
+  "edge": []
+}

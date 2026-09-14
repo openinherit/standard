@@ -1,0 +1,71 @@
+{
+  "$comment": "Catala rule test inputs for CatInheritanceCharge per ICP-0017 (TT-682). Ireland Capital Acquisitions Tax charge, CATCA 2003. Scope returns ComputedOrNeedsHuman.Verdict (money), not a bespoke verdict enum, so expected_output records the arm + (for Computed) the amount. Mirrors the oracle cases authored for the code-inherit-test-suite T032 gov-oracle follow-up (tests/oracles/ie-cat-charge.oracle.json) — figures live-sourced revenue.ie 2026-07-02.",
+  "rule_name": "CatInheritanceCharge",
+  "scope": "Charge",
+  "positive": [
+    {
+      "fixture_id": "T-tt682-cat-001-groupA-500k-no-priors",
+      "input": {
+        "taxable_benefit": "500000",
+        "prior_same_group_benefits": "0",
+        "cat_group": "GroupA",
+        "spouse_or_civil_partner": false,
+        "relief_claimed": false
+      },
+      "expected_output": { "verdict_arm": "Computed", "amount": "33000" },
+      "decidability_claim": "DECIDABLE; (€500,000 - €400,000 Group A threshold) x 33% = €33,000; CATCA 2003 Sch 2 Pt 1 + 33% rate."
+    },
+    {
+      "fixture_id": "T-tt682-cat-002-groupB-30k-inside-threshold",
+      "input": {
+        "taxable_benefit": "30000",
+        "prior_same_group_benefits": "0",
+        "cat_group": "GroupB",
+        "spouse_or_civil_partner": false,
+        "relief_claimed": false
+      },
+      "expected_output": { "verdict_arm": "Computed", "amount": "0" },
+      "decidability_claim": "DECIDABLE; €30,000 benefit is inside the €40,000 Group B threshold — no tax due."
+    },
+    {
+      "fixture_id": "T-tt682-cat-003-groupA-aggregation",
+      "input": {
+        "taxable_benefit": "300000",
+        "prior_same_group_benefits": "200000",
+        "cat_group": "GroupA",
+        "spouse_or_civil_partner": false,
+        "relief_claimed": false
+      },
+      "expected_output": { "verdict_arm": "Computed", "amount": "33000" },
+      "decidability_claim": "DECIDABLE; available threshold after aggregation = €400,000 - €200,000 = €200,000; excess = €300,000 - €200,000 = €100,000; x 33% = €33,000 (CATCA 2003 Sch 2 para 3, aggregation since 5 Dec 1991)."
+    }
+  ],
+  "negative": [
+    {
+      "fixture_id": "T-tt682-cat-004-spouse-exempt",
+      "input": {
+        "taxable_benefit": "9000000",
+        "prior_same_group_benefits": "0",
+        "cat_group": "GroupA",
+        "spouse_or_civil_partner": true,
+        "relief_claimed": false
+      },
+      "expected_output": { "verdict_arm": "Computed", "amount": "0" },
+      "decidability_claim": "DECIDABLE; spouse/civil partner transfers are fully exempt regardless of value (CATCA 2003 s.70/s.71) — the exemption takes precedence over the relief-claimed check."
+    }
+  ],
+  "edge": [
+    {
+      "fixture_id": "T-tt682-cat-005-relief-routes-to-human",
+      "input": {
+        "taxable_benefit": "500000",
+        "prior_same_group_benefits": "0",
+        "cat_group": "GroupA",
+        "spouse_or_civil_partner": false,
+        "relief_claimed": true
+      },
+      "expected_output": { "verdict_arm": "NeedsHuman" },
+      "decidability_claim": "NOT DECIDABLE BY RULE; a claimed dwelling-house (s.86) / agricultural (s.89) / business (s.92) relief needs human adjudication of the relief's qualifying conditions before a figure can be computed."
+    }
+  ]
+}

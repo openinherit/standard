@@ -1,0 +1,45 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+#   dcat: http://www.w3.org/ns/dcat#
+#   dcterms: http://purl.org/dc/terms/
+#   bfo: http://purl.obolibrary.org/obo/BFO_
+#   iao: http://purl.obolibrary.org/obo/IAO_
+#   prov: http://www.w3.org/ns/prov#
+#   uk_lc_da: https://www.lawcom.gov.uk/project/digital-assets/
+#   uk_aa_v_pu: https://www.bailii.org/ew/cases/EWHC/Comm/2019/3556.html
+#   uk_ttv_vdl: https://www.bailii.org/ew/cases/EWCA/Civ/2023/83.html
+#   eu_mica: https://eur-lex.europa.eu/eli/reg/2023/1114/
+#   ch_dlt: https://www.fedlex.admin.ch/eli/oc/2021/33/
+#   uk_hmrc_cm: https://www.gov.uk/hmrc-internal-manuals/cryptoassets-manual
+#   iso_4217: https://www.iso.org/iso-4217-currency-codes.html
+#   eip_2981: https://eips.ethereum.org/EIPS/eip-2981
+#   caip_2: https://chainagnostic.org/CAIPs/caip-2
+#   aaoifi: https://aaoifi.com/standard/sharia-standards/
+# mapping_set_id: https://openinherit.org/mappings/assets/cryptocurrency-or-digital-asset/v1.0
+# mapping_set_version: '1.0'
+# mapping_set_title: Cryptocurrency or Digital Asset (Q-044 A-204) ↔ BFO+SKOS alignment + cross-jurisdictional substrate
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence	comment
+inherit:DigitalAsset	DigitalAsset (abstract)	skos:broadMatch	bfo:0000031	BFO generically dependent continuant	semapv:ManualMappingCuration	0.95	Abstract base; concrete BFO per leaf
+inherit:FungibleDigitalAsset	FungibleDigitalAsset leaf	skos:exactMatch	bfo:0000040	BFO material entity (collective)	semapv:ManualMappingCuration	0.95	Fungible tokens as interchangeable units of value per Law Commission DA 2023 §4.42
+inherit:NonFungibleDigitalAsset	NonFungibleDigitalAsset leaf	skos:exactMatch	bfo:0000031	BFO generically dependent continuant	semapv:ManualMappingCuration	0.95	Non-fungible tokens unique per token_id; metadata may be off-chain
+inherit:DigitalAsset	DigitalAsset	skos:closeMatch	uk_lc_da:third_category_personal_property	Law Commission Digital Assets 2023 third category	semapv:LiteralBasedMatching	0.92	Anchors DigitalAsset class to UK third-category personal property recognition
+inherit:DigitalAsset	DigitalAsset	skos:closeMatch	uk_aa_v_pu:crypto_as_property	AA v Persons Unknown 2019 crypto-as-property	semapv:LiteralBasedMatching	0.94	UK High Court recognition substrate
+inherit:custody_model	custody_model slot	skos:exactMatch	inherit:CustodyModelScheme	CustodyModelScheme SKOS	semapv:ManualMappingCuration	1.00	LinkML range alignment
+inherit:CustodyModelScheme	CustodyModelScheme 4-value	skos:closeMatch	uk_lc_da:custody_control_framework	Law Commission DA 2023 §6.62 custody-control framework	semapv:LiteralBasedMatching	0.90	4-case partition aligns with LC framework
+inherit:recovery_mechanism	recovery_mechanism slot	skos:exactMatch	inherit:RecoveryMechanismScheme	RecoveryMechanismScheme SKOS	semapv:ManualMappingCuration	1.00	LinkML range alignment
+inherit:RecoveryMechanismScheme	RecoveryMechanismScheme 4-value	skos:closeMatch	uk_lc_da:recovery_mechanism_inheritance_gap	Law Commission DA 2023 §6.97-6.104	semapv:LiteralBasedMatching	0.85	Recovery-mechanism inheritance gap framework
+inherit:fungible_token_type	fungible_token_type slot	skos:exactMatch	inherit:FungibleTokenTypeScheme	FungibleTokenTypeScheme SKOS	semapv:ManualMappingCuration	1.00	LinkML range alignment
+inherit:FungibleTokenTypeScheme	FungibleTokenTypeScheme	skos:relatedMatch	eu_mica:art_3_1_5	MiCA Art 3(1)(5) crypto-asset definition	semapv:LiteralBasedMatching	0.88	cryptocurrency permissible-value aligns with MiCA crypto-asset
+inherit:FungibleTokenTypeScheme	FungibleTokenTypeScheme	skos:relatedMatch	eu_mica:art_3_1_6	MiCA Art 3(1)(6) asset-referenced token	semapv:LiteralBasedMatching	0.88	stablecoin permissible-value aligns with ART token
+inherit:FungibleTokenTypeScheme	FungibleTokenTypeScheme	skos:relatedMatch	eu_mica:art_3_1_7	MiCA Art 3(1)(7) e-money token	semapv:LiteralBasedMatching	0.88	stablecoin permissible-value also covers EMT
+inherit:non_fungible_token_type	non_fungible_token_type slot	skos:exactMatch	inherit:NonFungibleTokenTypeScheme	NonFungibleTokenTypeScheme SKOS	semapv:ManualMappingCuration	1.00	LinkML range alignment
+inherit:NonFungibleTokenTypeScheme	NonFungibleTokenTypeScheme	skos:relatedMatch	ch_dlt:or_art_973d_register_rights	Swiss DLT Act 2021 OR Art 973d register-rights	semapv:LiteralBasedMatching	0.87	tokenized-security covers DLT-uncertificated securities
+inherit:royalty_basis_points	royalty_basis_points slot	skos:exactMatch	eip_2981:royaltyInfo	EIP-2981 royaltyInfo	semapv:LiteralBasedMatching	0.92	Per EIP-2981 §2 royalty in basis points
+inherit:network	network slot	skos:relatedMatch	caip_2:chain_id	CAIP-2 Chain Agnostic ID	semapv:LiteralBasedMatching	0.85	Partial taxonomy under CAIP-2
+inherit:current_valuation	current_valuation slot	skos:closeMatch	uk_hmrc_cm:CRYPTO22150	HMRC Cryptoasset Manual CRYPTO22150	semapv:LiteralBasedMatching	0.88	UK&W valuation guidance for crypto IHT
+inherit:custody_model	custody_model slot	skos:closeMatch	aaoifi:sharia_standard_17	AAOIFI Sharia Standard 17	semapv:LiteralBasedMatching	0.82	Custodian-only model preferred for Sharia-compliant holdings

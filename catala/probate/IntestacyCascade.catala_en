@@ -1,0 +1,398 @@
+> Module IntestacyCascade
+> Using ComputedOrNeedsHuman
+
+SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
+SPDX-License-Identifier: Apache-2.0
+
+# IntestacyCascade — AEA 1925 s.46 cascade + LPA 1925 s.184 / AEA 1925 s.46(2A) commorientes
+
+The full intestacy distribution cascade on death without a valid will (Administration
+of Estates Act 1925 s.46, as amended, most recently by the Inheritance and Trustees'
+Powers Act 2014) plus the survivorship gate that decides who is treated as having
+survived the intestate for the purposes of that cascade (Law of Property Act 1925
+s.184 general commorientes presumption; AEA 1925 s.46(2A) spouse-specific 28-day
+survival period, which displaces s.184 for the intestate's spouse or civil partner).
+
+Legal correctness is asserted **outside this file** by the T032 per-heir gov-oracle
+harness (TT-463 pattern): `code-inherit-test-suite/scripts/oracle_verify.py` runs the
+`Distribute` scope, reads `per_member_amounts`, expands each element by the matching
+`member_counts` integer into the per-heir multiset, and compares it against
+`tests/oracles/intestacy-cascade-aea1925.oracle.json` — including a committed
+`wrong_split` negative fixture that must turn the harness RED if a right-sum/
+wrong-split answer ever matched. This file therefore carries the division law, not
+its own per-heir assertions.
+
+(Prose note: a line must not begin with the reserved `>` directive prefix, so any
+statutory quotation is kept inline.)
+
+**Both scopes live in this one module** because clerk 1.2.0 does not resolve
+cross-module `output of Mod.Scope` calls (TT-478 finding) — only intra-module
+`output of Scope` does. `Distribute` does not itself call `Survivorship`; it takes
+the survival outcome as a **boolean** input, `spouse_survives_statutory_period`,
+because the T032 per-heir harness can only render boolean/list/money case inputs (an
+integer `days_survived` would emit an unrenderable `$28` literal). The day-based
+28-day arithmetic is therefore isolated in `Survivorship` and proven separately by
+the in-file `#[test]` scopes below.
+
+**G6 certification floor (TT-427/TT-1079).** Every `Distribute` input is a
+characterisation judgement (who is a spouse, who counts as issue, what the estate is
+worth — see `registry/governance-layers.yaml`, all L3), so each is declared with the
+matching `ComputedOrNeedsHuman.Certified<Type>` enum, not a bare scalar. A caller must
+certify each characterisation or the scope routes `NeedsHuman` — `uncertified_inputs`
+below is the typed gate; the `_v` internals unwrap certified values and are only
+meaningful under `not uncertified_inputs` (every output is guarded). `Survivorship`
+stays bare-scalar: it returns no Verdict — its conclusion re-enters this boundary as
+the certified `spouse_survives_statutory_period`.
+
+## Survivorship — LPA 1925 s.184 / AEA 1925 s.46(2A)
+
+Verbatim, LPA 1925 s.184: "In all cases where ... two or more persons have died in
+circumstances rendering it uncertain which of them survived the other or others,
+such deaths shall (subject to any order of the court), for all purposes affecting
+the title to property, be presumed to have occurred in order of seniority, and
+accordingly the younger shall be deemed to have survived the elder." Verbatim, AEA
+1925 s.46(2A): "Where the intestate's spouse or civil partner survived the intestate
+but died before the end of the period of 28 days beginning with the day on which the
+intestate died, this section shall have effect as respects the intestate as if the
+spouse or civil partner had not survived the intestate." The 28-day rule applies to
+the intestate's spouse or civil partner regardless of whether the order of the two
+deaths was itself uncertain, and displaces the s.184 seniority presumption for that
+spouse. `days_survived` is the number of clear days the claimant survived the
+intestate; the boundary is `>= 28` because the period is 28 days beginning with the
+day of death.
+
+```catala
+declaration scope Survivorship:
+  input is_spouse_of_intestate content boolean
+  input days_survived content integer
+  input order_uncertain content boolean
+  input claimant_is_elder content boolean
+  input actually_survived content boolean
+  context survival_period_days content integer
+  output treated_as_surviving content boolean
+
+scope Survivorship:
+  definition survival_period_days equals 28
+  definition treated_as_surviving equals
+    if is_spouse_of_intestate then
+      # AEA 1925 s.46(2A): the intestate's spouse/civil partner is treated as
+      # having survived the intestate only if they in fact survive by the
+      # statutory 28-day period. This displaces the s.184 presumption for the
+      # spouse, whether or not the order of the two deaths was itself uncertain.
+      days_survived >= survival_period_days
+    else
+      # LPA 1925 s.184: where the order of two deaths is uncertain, the elder
+      # is presumed to have died first, so the elder does NOT survive and the
+      # younger does. Where the order is certain, actual survival governs
+      # (even survival by under a day counts).
+      if order_uncertain then (not claimant_is_elder)
+      else actually_survived
+```
+
+## Distribute — the s.46 cascade
+
+Statutory class order (AEA 1925 s.46(1), current in-force text, verified against
+legislation.gov.uk on `sourced_at` in the oracle): **(i)** spouse/civil partner —
+Table Case (1) no issue: spouse takes the whole residuary estate absolutely (post
+Inheritance and Trustees' Powers Act 2014, parents/siblings no longer share); Table
+Case (2) has issue: (A) spouse takes personal chattels absolutely, (B) the residuary
+estate other than chattels is charged with the fixed net sum (the statutory legacy)
+plus interest to the spouse, (C) subject to (B) the remaining residuary estate other
+than chattels is held as to one half for the spouse absolutely and the other half on
+the s.47 statutory trusts for the issue; **(ii)** issue but no spouse: the whole
+residuary estate on the s.47 statutory trusts for the issue; **(iii)** no spouse, no
+issue, both parents: the father and mother in equal shares absolutely; **(iv)** no
+spouse, no issue, one parent: that parent absolutely (not exercised by a distinct
+oracle case — it is the two-code-path degenerate of the s.46(1)(v) "winning class"
+mechanism used for siblings/grandparents/uncles-aunts below, and is out of MVP
+oracle scope per the Global Constraints); **(v)** no spouse, no issue, no parent: in
+order — First, whole-blood siblings (s.47 statutory trusts); Secondly, half-blood
+siblings (s.47 statutory trusts); Thirdly, grandparents in equal shares; Fourthly,
+whole-blood uncles/aunts (s.47 statutory trusts); Fifthly, half-blood uncles/aunts
+(s.47 statutory trusts); **(vi)** default: Crown / Duchy of Lancaster / Duke of
+Cornwall as bona vacantia — discretionary Treasury Solicitor territory, routed to
+`NeedsHuman`, never computed as a split.
+
+The statutory legacy (fixed net sum) and the 28-day survival period are `context`
+parameters with overridable literal defaults (ICP-A1 discipline): `statutory_legacy`
+defaults to £322,000, confirmed as the amount in force from 26 July 2023 by SI
+2023/758 (the Administration of Estates Act 1925 (Fixed Net Sum) Order 2023, raising
+it from £270,000); `survival_period_days` (on `Survivorship` above) defaults to 28.
+
+MVP scope boundary: `net_estate` is the residuary estate available for distribution
+after debts and funeral expenses; `chattels_value` is the personal chattels, which
+the spouse takes on top when the spouse takes under (i), and which fold into the
+distributable fund whenever the spouse does not take (chattels are a distinct
+statutory category ONLY under s.46(1)(i)(A), which applies solely where a spouse
+survives — s.46(1)(ii)-(vi) direct "the residuary estate" with no separate chattels
+carve-out). No RNRB/IHT interaction (`IhtDeathCharge` owns taxation, this scope owns
+distribution). The statutory legacy's interest (s.46(1)(i)(B) — the fixed net sum
+carries interest from death until payment/appropriation) is out of MVP scope: the
+split is computed as at the date of death, no interest accrual. No partial
+intestacy, no s.33 express-trust interplay, no minority-contingency accumulation —
+those route to `NeedsHuman`. The fixed net sum is clamped to the estate: where
+`net_estate` is smaller than `statutory_legacy`, the spouse cannot receive more than
+exists, so the spouse takes the whole (smaller) estate and the issue take nothing
+(the statute does not explicitly spell out this case, but it follows directly from
+s.46(1)(i)(B) charging the fixed net sum "against" a residuary estate that cannot pay
+more than it holds).
+
+```catala
+declaration scope Distribute:
+  input net_estate content ComputedOrNeedsHuman.CertifiedMoney
+  input chattels_value content ComputedOrNeedsHuman.CertifiedMoney
+  input spouse_present content ComputedOrNeedsHuman.CertifiedBool
+  input spouse_survives_statutory_period content ComputedOrNeedsHuman.CertifiedBool
+  input has_issue content ComputedOrNeedsHuman.CertifiedBool
+  input issue_branch_sizes content ComputedOrNeedsHuman.CertifiedIntegerList
+  input winning_class_branch_sizes content ComputedOrNeedsHuman.CertifiedIntegerList
+  input winning_class_per_stirpes content ComputedOrNeedsHuman.CertifiedBool
+  input winning_class_is_crown content ComputedOrNeedsHuman.CertifiedBool
+  input member_counts content ComputedOrNeedsHuman.CertifiedIntegerList
+  context statutory_legacy content money
+  internal uncertified_inputs content boolean
+  internal net_estate_v content money
+  internal chattels_value_v content money
+  internal spouse_present_v content boolean
+  internal spouse_survives_statutory_period_v content boolean
+  internal has_issue_v content boolean
+  internal issue_branch_sizes_v content list of integer
+  internal winning_class_branch_sizes_v content list of integer
+  internal winning_class_per_stirpes_v content boolean
+  internal winning_class_is_crown_v content boolean
+  internal spouse_survives content boolean
+  internal effective_legacy content money
+  internal residue content money
+  internal no_eligible_relative content boolean
+  internal needs_human content boolean
+  internal distributable_no_spouse content money
+  output per_member_amounts content list of money
+  output total_distributed content money
+  output verdict content ComputedOrNeedsHuman.Verdict
+
+scope Distribute:
+  definition statutory_legacy equals $322,000
+  # G6 typed gate: ANY uncertified characterisation routes the whole scope to
+  # NeedsHuman (member_counts included — it has no _v because no definition
+  # below reads it; it exists for the per-heir harness).
+  definition uncertified_inputs equals
+    (match net_estate with pattern -- ComputedOrNeedsHuman.CertifiedMoney.Certified content v: false -- ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised: true)
+    or (match chattels_value with pattern -- ComputedOrNeedsHuman.CertifiedMoney.Certified content v: false -- ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised: true)
+    or (match spouse_present with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: false -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: true)
+    or (match spouse_survives_statutory_period with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: false -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: true)
+    or (match has_issue with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: false -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: true)
+    or (match issue_branch_sizes with pattern -- ComputedOrNeedsHuman.CertifiedIntegerList.Certified content v: false -- ComputedOrNeedsHuman.CertifiedIntegerList.NotCharacterised: true)
+    or (match winning_class_branch_sizes with pattern -- ComputedOrNeedsHuman.CertifiedIntegerList.Certified content v: false -- ComputedOrNeedsHuman.CertifiedIntegerList.NotCharacterised: true)
+    or (match winning_class_per_stirpes with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: false -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: true)
+    or (match winning_class_is_crown with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: false -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: true)
+    or (match member_counts with pattern -- ComputedOrNeedsHuman.CertifiedIntegerList.Certified content v: false -- ComputedOrNeedsHuman.CertifiedIntegerList.NotCharacterised: true)
+  # certified-value extractions — the NotCharacterised fallbacks are DEAD CODE:
+  # every consumer definition is guarded by uncertified_inputs above
+  definition net_estate_v equals
+    match net_estate with pattern -- ComputedOrNeedsHuman.CertifiedMoney.Certified content v: v -- ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised: $0
+  definition chattels_value_v equals
+    match chattels_value with pattern -- ComputedOrNeedsHuman.CertifiedMoney.Certified content v: v -- ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised: $0
+  definition spouse_present_v equals
+    match spouse_present with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: v -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: false
+  definition spouse_survives_statutory_period_v equals
+    match spouse_survives_statutory_period with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: v -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: false
+  definition has_issue_v equals
+    match has_issue with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: v -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: false
+  definition issue_branch_sizes_v equals
+    match issue_branch_sizes with pattern -- ComputedOrNeedsHuman.CertifiedIntegerList.Certified content v: v -- ComputedOrNeedsHuman.CertifiedIntegerList.NotCharacterised: []
+  definition winning_class_branch_sizes_v equals
+    match winning_class_branch_sizes with pattern -- ComputedOrNeedsHuman.CertifiedIntegerList.Certified content v: v -- ComputedOrNeedsHuman.CertifiedIntegerList.NotCharacterised: []
+  definition winning_class_per_stirpes_v equals
+    match winning_class_per_stirpes with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: v -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: false
+  definition winning_class_is_crown_v equals
+    match winning_class_is_crown with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: v -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: false
+  definition spouse_survives equals spouse_present_v and spouse_survives_statutory_period_v
+  # the fixed net sum cannot exceed the estate that exists to pay it
+  definition effective_legacy equals
+    if net_estate_v < statutory_legacy then net_estate_v else statutory_legacy
+  definition residue equals
+    if net_estate_v - statutory_legacy > $0 then net_estate_v - statutory_legacy else $0
+  # chattels are only a distinct category under s.46(1)(i)(A) (spouse takes);
+  # otherwise they remain part of "the residuary estate" passed to the class
+  definition distributable_no_spouse equals net_estate_v + chattels_value_v
+  # no computable taker: Crown/bona vacantia (s.46(1)(vi)) OR no eligible
+  # relative in any class (empty winning class with no spouse and no issue)
+  definition no_eligible_relative equals
+    (not spouse_survives) and (not has_issue_v) and (number of winning_class_branch_sizes_v = 0)
+  definition needs_human equals winning_class_is_crown_v or no_eligible_relative
+  definition per_member_amounts equals
+    if uncertified_inputs or needs_human then []
+    else if spouse_survives and has_issue_v then
+      # s.46(1)(i) Table Case (2): (A) chattels + (B) clamped fixed net sum to
+      # the spouse; (C) the remaining residue split half spouse absolutely /
+      # half to the issue on the s.47 statutory trusts (per stirpes)
+      (let issue_fund equals residue * 0.5 in
+       let n equals number of issue_branch_sizes_v in
+       let branch_share equals (if n > 0 then issue_fund * (1.0 / (decimal of n)) else $0) in
+       [chattels_value_v + effective_legacy + residue * 0.5]
+         ++ (map each b among issue_branch_sizes_v to (branch_share * (1.0 / (decimal of b)))))
+    else if spouse_survives and (not has_issue_v) then
+      # s.46(1)(i) Table Case (1): no issue, spouse takes the whole estate
+      [chattels_value_v + net_estate_v]
+    else if has_issue_v then
+      # s.46(1)(ii): issue but no spouse, whole (chattels-inclusive) estate
+      # on the s.47 statutory trusts per stirpes
+      (let n equals number of issue_branch_sizes_v in
+       let branch_share equals distributable_no_spouse * (1.0 / (decimal of n)) in
+       map each b among issue_branch_sizes_v to (branch_share * (1.0 / (decimal of b))))
+    else
+      # s.46(1)(iii)-(v): no spouse, no issue — the winning class (parents /
+      # whole-blood siblings / half-blood siblings / grandparents / uncles-
+      # aunts) takes the whole estate, per stirpes or equally per the flag.
+      # winning_class is non-empty here (empty routed to needs_human above).
+      (let n equals number of winning_class_branch_sizes_v in
+       let branch_share equals distributable_no_spouse * (1.0 / (decimal of n)) in
+       if winning_class_per_stirpes_v
+       then map each b among winning_class_branch_sizes_v to (branch_share * (1.0 / (decimal of b)))
+       else map each b among winning_class_branch_sizes_v to branch_share)
+  # NOT `sum money of per_member_amounts`: that list holds the PER-MEMBER
+  # (already-divided) share for each branch, so naively summing it undercounts
+  # any branch with more than one member (e.g. a predeceased sibling's two
+  # children) — it would add one member's share instead of the whole branch's.
+  # Each arm below reconstructs the true total from the pre-division amounts,
+  # which conserve by construction regardless of branch membership.
+  definition total_distributed equals
+    if uncertified_inputs or needs_human then $0
+    else if spouse_survives and has_issue_v then chattels_value_v + effective_legacy + residue
+    else if spouse_survives and (not has_issue_v) then chattels_value_v + net_estate_v
+    else distributable_no_spouse
+  definition verdict equals
+    if uncertified_inputs then NeedsHuman
+    else if needs_human then NeedsHuman
+    else Computed content total_distributed
+```
+
+## In-file tests — the day-based boundary and the NeedsHuman branch
+
+The per-heir harness cannot render an integer `days_survived`, so the 28/27-day
+boundary is proven here instead; likewise `NeedsHuman` carries no split for the
+harness to assert, so it is proven here too.
+
+```catala
+#[test]
+declaration scope TestSurvivorship28:
+  output result content boolean
+
+scope TestSurvivorship28:
+  definition result equals
+    (output of Survivorship with {
+      -- is_spouse_of_intestate: true
+      -- days_survived: 28
+      -- order_uncertain: false
+      -- claimant_is_elder: false
+      -- actually_survived: true
+    }).treated_as_surviving
+  assertion result = true
+
+#[test]
+declaration scope TestSurvivorship27:
+  output result content boolean
+
+scope TestSurvivorship27:
+  definition result equals
+    (output of Survivorship with {
+      -- is_spouse_of_intestate: true
+      -- days_survived: 27
+      -- order_uncertain: false
+      -- claimant_is_elder: false
+      -- actually_survived: true
+    }).treated_as_surviving
+  assertion result = false
+
+#[test]
+declaration scope TestSurvivorshipS184:
+  output result content boolean
+
+scope TestSurvivorshipS184:
+  definition result equals
+    (output of Survivorship with {
+      -- is_spouse_of_intestate: false
+      -- days_survived: 0
+      -- order_uncertain: true
+      -- claimant_is_elder: true
+      -- actually_survived: false
+    }).treated_as_surviving
+  assertion result = false
+
+#[test]
+declaration scope TestCrownNeedsHuman:
+  output is_needs_human content boolean
+  output member_count content integer
+
+scope TestCrownNeedsHuman:
+  definition is_needs_human equals
+    match (output of Distribute with {
+      -- net_estate: ComputedOrNeedsHuman.CertifiedMoney.Certified content $100,000
+      -- chattels_value: ComputedOrNeedsHuman.CertifiedMoney.Certified content $0
+      -- spouse_present: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- spouse_survives_statutory_period: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- has_issue: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- issue_branch_sizes: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content []
+      -- winning_class_branch_sizes: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content []
+      -- winning_class_per_stirpes: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- winning_class_is_crown: ComputedOrNeedsHuman.CertifiedBool.Certified content true
+      -- member_counts: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content []
+    }).verdict with pattern
+    -- Computed content m: false
+    -- NeedsHuman: true
+  definition member_count equals
+    number of (output of Distribute with {
+      -- net_estate: ComputedOrNeedsHuman.CertifiedMoney.Certified content $100,000
+      -- chattels_value: ComputedOrNeedsHuman.CertifiedMoney.Certified content $0
+      -- spouse_present: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- spouse_survives_statutory_period: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- has_issue: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- issue_branch_sizes: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content []
+      -- winning_class_branch_sizes: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content []
+      -- winning_class_per_stirpes: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- winning_class_is_crown: ComputedOrNeedsHuman.CertifiedBool.Certified content true
+      -- member_counts: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content []
+    }).per_member_amounts
+  assertion is_needs_human = true
+  assertion member_count = 0
+
+#[test]
+declaration scope TestUncertifiedRoutesNeedsHuman:
+  output routed content boolean
+  output member_count content integer
+
+scope TestUncertifiedRoutesNeedsHuman:
+  # G6 (TT-1079): ONE uncertified characterisation (here the estate valuation)
+  # routes the whole cascade to NeedsHuman — no number is reachable, and the
+  # sibling outputs are neutral ([] / $0), never a meaning-bearing figure.
+  definition routed equals
+    match (output of Distribute with {
+      -- net_estate: ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised
+      -- chattels_value: ComputedOrNeedsHuman.CertifiedMoney.Certified content $0
+      -- spouse_present: ComputedOrNeedsHuman.CertifiedBool.Certified content true
+      -- spouse_survives_statutory_period: ComputedOrNeedsHuman.CertifiedBool.Certified content true
+      -- has_issue: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- issue_branch_sizes: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content []
+      -- winning_class_branch_sizes: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content []
+      -- winning_class_per_stirpes: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- winning_class_is_crown: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- member_counts: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content []
+    }).verdict with pattern
+    -- Computed content m: false
+    -- NeedsHuman: true
+  definition member_count equals
+    number of (output of Distribute with {
+      -- net_estate: ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised
+      -- chattels_value: ComputedOrNeedsHuman.CertifiedMoney.Certified content $0
+      -- spouse_present: ComputedOrNeedsHuman.CertifiedBool.Certified content true
+      -- spouse_survives_statutory_period: ComputedOrNeedsHuman.CertifiedBool.Certified content true
+      -- has_issue: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- issue_branch_sizes: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content []
+      -- winning_class_branch_sizes: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content []
+      -- winning_class_per_stirpes: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- winning_class_is_crown: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+      -- member_counts: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content []
+    }).per_member_amounts
+  assertion routed = true
+  assertion member_count = 0
+```

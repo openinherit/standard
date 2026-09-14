@@ -1,0 +1,34 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   switzerland_zgb: https://openinherit.org/legal-substrate/switzerland-zgb/
+#   muslim_faraid: https://openinherit.org/legal-substrate/muslim-faraid/
+#   bfo: http://purl.obolibrary.org/obo/BFO_
+#   prov: http://www.w3.org/ns/prov#
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/probate-administration-account-q036-iota-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: Probate.AdministrationAccount universal classifier mapping_set (Q-036 iota-eta-star) - PROBATE-MODULE SUBSTANTIVE CLOSE AT 7/8
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-036 iota-eta-star universal AccountTypeScheme 4 values + AccountStatusScheme 3 values + due_diligence_compliance_check_passed boolean to UK&W AEA 1925 ss.25-26 + AEA 1971 s.9 + TA 1925 s.26 + Re Tankard [1942] Ch.69 Uthwatt J + Scotland Trusts (Scotland) Act 1921 + 2024 + Switzerland ZGB Art 596-607 Erbteilung + cross-module-primitive Q-CM-1 AssetTransferEvent + Q-035 AssentToBeneficiary. Inherits substrate via L2 from Q-033 + Q-035 + Q-032 + Q-029 + Q-CM-1.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:interim-account	interim-account	skos:exactMatch	uk_w_common_law:aea_1925_s25_pr_account_duty	UK&W AEA 1925 s.25 (as amended by AEA 1971 s.9) — PR duty to render account of administration	semapv:ManualMappingCuration	0.99
+inherit:final-account	final-account	skos:exactMatch	uk_w_common_law:aea_1925_s25_final_account_at_close	UK&W AEA 1925 s.25 final account at administration close; triggers Q-033 administration-closed transition	semapv:ManualMappingCuration	0.99
+inherit:final-account	final-account	skos:closeMatch	scots_law:trusts_scotland_1921_1924_2024_final_account	Scotland Trusts (Scotland) Act 1921 + Confirmation 1924 + T&S(S)A 2024 final account requirements	semapv:ManualMappingCuration	0.92
+inherit:final-account	final-account	skos:closeMatch	switzerland_zgb:art_596_607_erbteilung_partition_account	Switzerland ZGB Art 596-607 Erbteilung partition-account; partition deferred if debts unsettled per Art 610 III	semapv:ManualMappingCuration	0.88
+inherit:residuary-account	residuary-account	skos:exactMatch	uk_w_common_law:aea_1925_s46_residuary_distribution	UK&W AEA 1925 s.46 residuary distribution per intestacy or will residuary clause; residuary-account sub-form	semapv:ManualMappingCuration	0.95
+inherit:estate-distribution-account	estate-distribution-account	skos:closeMatch	uk_w_common_law:partner_firm_distribution_account_format	UK&W partner-firm-specific distribution-account format; not statute-required; partner-firm-DD readability	semapv:ManualMappingCuration	0.85
+inherit:draft	draft	skos:exactMatch	uk_w_common_law:account_status_draft	UK&W account status draft (pre-submission to beneficiaries/court/HMRC)	semapv:ManualMappingCuration	0.99
+inherit:submitted	submitted	skos:exactMatch	uk_w_common_law:account_status_submitted	UK&W account status submitted to beneficiaries (typical) or court/HMRC (specific cases)	semapv:ManualMappingCuration	0.99
+inherit:approved	approved	skos:exactMatch	uk_w_common_law:account_status_approved	UK&W account status approved by beneficiaries or court; triggers Q-033 administration-closed transition for final-account	semapv:ManualMappingCuration	0.99
+inherit:due_diligence_compliance_check_passed	due_diligence_compliance_check_passed	skos:exactMatch	uk_w_common_law:re_tankard_1942_uthwatt_due_diligence_doctrine	UK&W Re Tankard [1942] Ch.69 (Uthwatt J at 72-74) — PR duty to pay debts with due diligence having regard to assets in hand properly applicable for that purpose; NOT strict 1-year deadline (P&K §21-12 to 21-14)	semapv:ManualMappingCuration	0.99
+inherit:due_diligence_compliance_check_passed	due_diligence_compliance_check_passed	skos:exactMatch	uk_w_common_law:aea_1925_s25_pr_duty_due_diligence	UK&W AEA 1925 s.25 PR duty (as amended by AEA 1971 s.9); P&K §21-12 fn.41	semapv:ManualMappingCuration	0.95
+inherit:due_diligence_compliance_check_passed	due_diligence_compliance_check_passed	skos:closeMatch	uk_w_common_law:ta_1925_s26_pr_protection_after_advertising	UK&W Trustee Act 1925 s.26 (with s.27 advertising) — PR protection after due-diligence-compliance; P&K §21-15 to 21-18; cross-link Q-033 substrate	semapv:ManualMappingCuration	0.95
+inherit:AdministrationAccount	AdministrationAccount	skos:closeMatch	inherit:ProbateAdministration_administration_closed_transition	Q-033 ProbateAdministration SM administration-closed transition payload; AdministrationAccount is the artifact that triggers/proves the closed state	semapv:ManualMappingCuration	0.95
+inherit:AdministrationAccount	AdministrationAccount	skos:closeMatch	inherit:AssetTransferEvent_aggregation	Q-CM-1 AssetTransferEvent records aggregated into account.transfers_recorded; accounting view over the transfer chain	semapv:ManualMappingCuration	0.92
+inherit:CreditorNotice	CreditorNotice	skos:exactMatch	uk_w_common_law:ta_1925_s27_creditor_notice	UK&W Trustee Act 1925 s.27 statutory advertisement / creditor notice published (Gazette + newspaper where land); TT-801 claims-intake	semapv:ManualMappingCuration	0.95
+inherit:CreditorClaim	CreditorClaim	skos:closeMatch	uk_w_common_law:ta_1925_s27_creditor_claim	UK&W Trustee Act 1925 s.27 creditor claim asserted against the estate; adjudicated by the PR; TT-801	semapv:ManualMappingCuration	0.90

@@ -1,0 +1,37 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   switzerland_zgb: https://openinherit.org/legal-substrate/switzerland-zgb/
+#   muslim_faraid: https://openinherit.org/legal-substrate/muslim-faraid/
+#   bfo: http://purl.obolibrary.org/obo/BFO_
+#   prov: http://www.w3.org/ns/prov#
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/probate-assent-to-beneficiary-q035-theta-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: Probate.AssentToBeneficiary universal classifier mapping_set (Q-035 theta-eta-star) - FIRST SUBSTANTIVE Q UNDER v3.17 + L2 SUBSTRATE-SWEEP INHERITANCE DISCIPLINE
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-035 theta-eta-star universal AssentTypeScheme 5 values + AssentSubjectAssetTypeScheme 6 values + AssentFormScheme 3 values + IhtClearanceStatusScheme 4 values to UK&W AEA 1925 ss.36+40+41 + Land Registration Act 2002 + Re King's Will Trusts [1964] + Attenborough v Solomon [1913] + Re Edwards' WT [1982] + Scotland Conveyancing (Scotland) Act 1924 docquet + Switzerland ZGB Art 596-607 Erbteilung + cross-module-primitive Q-CM-1 AssetTransferEvent. Inherits substrate via L2 from Q-CM-1 + Q-033 + Q-032 + Q-031 + Q-029.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:vesting-assent	vesting-assent	skos:exactMatch	uk_w_common_law:aea_1925_s36_vesting_assent_legal_estate	UK&W AEA 1925 s.36 vesting assent for legal estate in land; MUST be in writing per s.36(4) per Re King's Will Trusts [1964] Ch.542	semapv:ManualMappingCuration	0.99
+inherit:vesting-assent	vesting-assent	skos:exactMatch	uk_w_common_law:re_kings_will_trusts_1964_writing_for_land	UK&W Re King's Will Trusts [1964] Ch.542 — canonical authority for writing requirement on land assents per Parry & Kerridge §23-43 fn.110	semapv:ManualMappingCuration	0.99
+inherit:vesting-assent	vesting-assent	skos:closeMatch	uk_w_common_law:lra_2002_s4_registration_assent	UK&W Land Registration Act 2002 s.4 — assent of registered freehold land must be registered; supplements AEA 1925 s.36	semapv:ManualMappingCuration	0.95
+inherit:form-of-assent	form-of-assent	skos:exactMatch	uk_w_common_law:aea_1925_s40_chattels_general_assent	UK&W AEA 1925 s.40 form of assent for chattels and general legacies	semapv:ManualMappingCuration	0.99
+inherit:form-of-assent	form-of-assent	skos:closeMatch	uk_w_common_law:attenborough_v_solomon_1913_ac_76_effect_of_assent	UK&W Attenborough v Solomon [1913] AC 76 per Lord Haldane at p.82 — assent activates the gift; canonical effect-of-assent authority	semapv:ManualMappingCuration	0.99
+inherit:pr-procedural-assent	pr-procedural-assent	skos:exactMatch	uk_w_common_law:aea_1925_s41_pr_procedural_assent	UK&W AEA 1925 s.41 PR procedural assent / appropriation procedure; consent-of-beneficiary required	semapv:ManualMappingCuration	0.99
+inherit:scotland-docquet	scotland-docquet	skos:closeMatch	scots_law:conveyancing_scotland_1924_docquet	Scotland Conveyancing (Scotland) Act 1924 docquet system — heritable property docquet endorsement on confirmation; closeMatch (NOT exactMatch) to UK&W assent	semapv:ManualMappingCuration	0.90
+inherit:swiss-erbteilung-partition	swiss-erbteilung-partition	skos:closeMatch	switzerland_zgb:art_596_607_erbteilung	Switzerland ZGB Art 596-607 Erbteilung partition; closeMatch to UK&W assent; lex situs immovables / lex domicilii movables	semapv:ManualMappingCuration	0.85
+inherit:written	written	skos:exactMatch	uk_w_common_law:aea_1925_s36_4_writing_requirement	UK&W AEA 1925 s.36(4) writing requirement for assents to land	semapv:ManualMappingCuration	0.99
+inherit:oral-express	oral-express	skos:exactMatch	uk_w_common_law:doe_d_sturges_v_tatchell_1832_oral_assent	UK&W Doe d. Sturges v Tatchell (1832) 3 B. & Ad. 675 — canonical authority for oral assent on pure personalty	semapv:ManualMappingCuration	0.95
+inherit:implied-from-conduct	implied-from-conduct	skos:closeMatch	uk_w_common_law:wise_v_whitburn_1924_1_ch_460_implied_assent	UK&W Wise v Whitburn [1924] 1 Ch 460 — implied-from-conduct assent recognised	semapv:ManualMappingCuration	0.95
+inherit:implied-from-conduct	implied-from-conduct	skos:closeMatch	uk_w_common_law:re_edwards_wt_1982_ch_30_implied_equitable_vesting	UK&W Re Edwards' WT [1982] Ch 30 — implied-from-conduct assent valid for EQUITABLE interest only on land; legal estate still requires written assent	semapv:ManualMappingCuration	0.95
+inherit:pending-iht421-not-yet-issued	pending-iht421-not-yet-issued	skos:exactMatch	uk_w_common_law:hmrc_iht421_pending	UK&W HMRC IHT421 clearance pending; residue distribution BLOCKED per IHTA 1984	semapv:ManualMappingCuration	0.99
+inherit:cleared-iht421-issued	cleared-iht421-issued	skos:exactMatch	uk_w_common_law:hmrc_iht421_issued	UK&W HMRC IHT421 clearance issued; residue distribution permitted	semapv:ManualMappingCuration	0.99
+inherit:realty-uk-w	realty-uk-w	skos:exactMatch	uk_w_common_law:realty_legal_estate_land	UK&W realty / legal estate in land; triggers s.36(4) writing requirement + LRA 2002 registration	semapv:ManualMappingCuration	0.99
+inherit:chattel-uk-w	chattel-uk-w	skos:exactMatch	uk_w_common_law:personalty_chattels	UK&W pure personalty / chattels per AEA 1925 s.40	semapv:ManualMappingCuration	0.99
+inherit:heritable-scotland	heritable-scotland	skos:exactMatch	scots_law:heritable_property	Scotland heritable property; lex situs governs; docquet form	semapv:ManualMappingCuration	0.99
+inherit:moveable-scotland	moveable-scotland	skos:exactMatch	scots_law:moveable_property_legal_rights	Scotland moveable property; legal-rights distinction (jus relictae / jus relicti / legitim); lex domicilii	semapv:ManualMappingCuration	0.99
+inherit:AssentToBeneficiary	AssentToBeneficiary	skos:closeMatch	inherit:AssetTransferEvent_assent	Q-CM-1 AssetTransferEvent with transfer_mechanism=assent + transfer_trigger=probate-assets-distributed; canonical cross-module-primitive composition	semapv:ManualMappingCuration	0.99

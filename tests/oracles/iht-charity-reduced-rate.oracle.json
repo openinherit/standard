@@ -1,0 +1,63 @@
+{
+  "_doc": "T032 LEGAL gov-oracle (TT-478 / ICP-0002 / TT-658). Each case asserts the Catala-computed reduced-rate IHT charge equals the AUTHORITATIVE HMRC figure cited inline. oracle_verify.py runs the scope with `inputs` and requires the Computed-arm money to equal `expected_money_gbp`; a wrong rule literal turns the harness RED. Legal model (IHTA 1984 Sch 1A, single general component, NRB-only baseline, NO RNRB): baseline = estate_value - available NRB (IHTM45009 Step 2 deducts the NRB and is 'not increased by any RNRB'); donated amount = charitable_gift_amount (Sch1A Para 4); 36% applies iff donated >= 10% of baseline ('at least', IHTM45002 / Sch1A Para 2(2)); the charitable gift is IHT-exempt (s.23) so taxable = estate_value - charitable_gift_amount - NRB, then x rate. Figures live-sourced from gov.uk / the HMRC IHT Manual on `sourced_at` and must be re-verified against the live pages if edited (HALT fork 2: never assert a tax figure from memory).",
+  "rule": {
+    "repo": "code-inherit-standard",
+    "rule_file": "catala/transfer/IhtCharityReducedRate.catala_en",
+    "module": "IhtCharityReducedRate",
+    "scope": "Charge",
+    "result_field": "verdict",
+    "depends_modules": ["catala/contract/ComputedOrNeedsHuman.catala_en"]
+  },
+  "covers": ["IhtCharityReducedRate.Charge"],
+  "statute": "IHTA 1984 Schedule 1A (reduced rate of tax where 10% of net estate left to charity: Para 2(2) charitable-giving condition, Para 4 donated amount, Para 5 baseline amount); s.7 + Sch 1 (rates); s.23 (charity exemption)",
+  "sourced_at": "2026-07-03",
+  "synthetic_cases_note": "Cases marked \"synthetic\": true are mechanical boundary probes for TT-863's mutation-adequacy harness, not published HMRC/gov.uk worked examples — their expected figures are derived directly from the rule's own statutory formula (same IHTA 1984 Sch 1A basis as the other 4 cases) and confirmed by running the real clerk/catala toolchain, never asserted from memory.",
+  "cases": [
+    {
+      "label": "above-10pct-36",
+      "inputs": { "estate_value": "1000000", "charitable_gift_amount": "70000" },
+      "expected_money_gbp": "217800",
+      "citation_url": "https://www.gov.uk/inheritance-tax/gifts-to-charity",
+      "citation_quote": "The estate can pay Inheritance Tax at a reduced rate of 36% on some assets if you leave 10% or more of the 'net value' to charity in your will.",
+      "note": "baseline = 1,000,000 - 325,000 (available NRB; IHTM45009 Step 2 — RNRB excluded) = 675,000; 10% of baseline = 67,500; donated 70,000 >= 67,500 -> 36% (IHTM45002, Sch1A Para 2(2)). taxable = 1,000,000 - 70,000 (charity-exempt, s.23) - 325,000 = 605,000; 605,000 x 36% = 217,800."
+    },
+    {
+      "label": "below-10pct-40",
+      "inputs": { "estate_value": "1000000", "charitable_gift_amount": "50000" },
+      "expected_money_gbp": "250000",
+      "citation_url": "https://www.gov.uk/inheritance-tax",
+      "citation_quote": "The standard Inheritance Tax rate is 40%. It's only charged on the part of your estate that's above the threshold.",
+      "note": "baseline = 1,000,000 - 325,000 = 675,000; 10% = 67,500; donated 50,000 < 67,500 -> standard 40%. taxable = 1,000,000 - 50,000 - 325,000 = 625,000; x 40% = 250,000. Proves the <10% path stays at 40% (no verdict flip)."
+    },
+    {
+      "label": "exactly-10pct-boundary-36",
+      "inputs": { "estate_value": "1000000", "charitable_gift_amount": "67500" },
+      "expected_money_gbp": "218700",
+      "citation_url": "https://www.gov.uk/hmrc-internal-manuals/inheritance-tax-manual/ihtm45002",
+      "citation_quote": "In order to qualify for the lower rate; the donated amount must be at least 10% of the baseline amount.",
+      "note": "donated 67,500 == 10% of baseline (675,000) -> qualifies ('at least' = >=). taxable = 1,000,000 - 67,500 - 325,000 = 607,500; x 36% = 218,700. Boundary case pins the >= (not >) comparator."
+    },
+    {
+      "label": "no-charity-40-unchanged",
+      "inputs": { "estate_value": "500000", "charitable_gift_amount": "0" },
+      "expected_money_gbp": "70000",
+      "citation_url": "https://www.gov.uk/inheritance-tax",
+      "citation_quote": "Your estate is worth £500,000 and your tax-free threshold is £325,000. The Inheritance Tax charged will be 40% of £175,000 (£500,000 minus £325,000).",
+      "note": "zero-charity path stays 40% and matches the existing IHT worked example (£70,000): taxable = 500,000 - 0 - 325,000 = 175,000; x 40% = 70,000 — proves no verdict flip vs IhtDeathCharge for the no-charity case."
+    },
+    {
+      "label": "below-nrb-boundary-probe",
+      "inputs": { "estate_value": "200000", "charitable_gift_amount": "0" },
+      "expected_money_gbp": "0",
+      "synthetic": true,
+      "note": "TT-863 mutation-adequacy boundary probe (NOT a cited HMRC worked example — see synthetic_cases_note). estate_value < NRB: both floor guards fire (baseline=$0, taxable=$0), so tax=$0 regardless of rate. Closes the taxable-else-literal-flip mutant (taxable's else-$0 -> $1 would make tax=$1*rate != $0). Empirically verified against the real clerk/catala toolchain during design (docs/superpowers/specs/2026-07-11-tt-863-catala-mutation-adequacy-engine-design.md §7a)."
+    },
+    {
+      "label": "above-nrb-by-one-pound-boundary-probe",
+      "inputs": { "estate_value": "325001", "charitable_gift_amount": "0" },
+      "expected_money_gbp": "0.40",
+      "synthetic": true,
+      "note": "TT-863 mutation-adequacy boundary probe (NOT a cited HMRC worked example). estate_value is exactly £1 above the NRB — the only whole-pound value that distinguishes a '> $0' guard from a '> $1' mutant (the harness's flip is always +£1). baseline=taxable=$1 (both guards true, then-branch), meets_ten_percent = (0 >= 0.10) = false -> rate=40%, tax = $1*0.40 = $0.40. Closes the baseline-comparator-flip and taxable-comparator-flip mutants (either flip switches the guard to false, dropping the affected value to $0, changing the final tax). Empirically verified against the real clerk/catala toolchain during design (§7a)."
+    }
+  ]
+}

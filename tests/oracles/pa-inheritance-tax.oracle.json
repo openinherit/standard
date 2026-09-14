@@ -1,0 +1,88 @@
+{
+  "_doc": "T032 LEGAL gov-oracle (TT-478 / TT-717). Pennsylvania inheritance tax charge (72 P.S. § 9116(a)), beneficiary-side (rate keyed to the beneficiary's relationship). Each case asserts the Catala-computed tax equals the AUTHORITATIVE figure live-sourced from revenue.pa.gov on `sourced_at` — never from memory. scripts/oracle_verify.py runs PaInheritanceTaxCharge.Charge with `inputs` and requires the Computed-arm money to equal `expected_money` (USD). There is no threshold — PA tax is charged from the first dollar. NeedsHuman cases (deduction_or_exemption_claimed) are covered by the standard's own *.test-fixtures.json, not here.",
+  "rule": {
+    "repo": "code-inherit-standard",
+    "rule_file": "catala/transfer/PaInheritanceTaxCharge.catala_en",
+    "module": "PaInheritanceTaxCharge",
+    "scope": "Charge",
+    "result_field": "verdict",
+    "depends_modules": ["catala/contract/ComputedOrNeedsHuman.catala_en"]
+  },
+  "statute": "72 P.S. § 9116(a) — Pennsylvania inheritance tax rates by relationship (0% spouse / parent-from-child-≤21; 4.5% lineal; 12% sibling; 15% collateral)",
+  "currency": "USD",
+  "sourced_at": "2026-07-02",
+  "cases": [
+    {
+      "label": "lineal-100k",
+      "inputs": {
+        "taxable_value": "100000",
+        "beneficiary_class": { "enum": "LinealHeir" },
+        "deduction_or_exemption_claimed": false
+      },
+      "expected_money": "4500",
+      "citation_url": "https://www.pa.gov/agencies/revenue/resources/tax-types-and-information/inheritance-tax.html",
+      "citation_quote": "4.5 percent on transfers to direct descendants and lineal heirs;",
+      "note": "$100,000 × 4.5% = $4,500 (72 P.S. § 9116(a))."
+    },
+    {
+      "label": "sibling-100k",
+      "inputs": {
+        "taxable_value": "100000",
+        "beneficiary_class": { "enum": "Sibling" },
+        "deduction_or_exemption_claimed": false
+      },
+      "expected_money": "12000",
+      "citation_url": "https://www.pa.gov/agencies/revenue/resources/tax-types-and-information/inheritance-tax.html",
+      "citation_quote": "12 percent on transfers to siblings; and",
+      "note": "$100,000 × 12% = $12,000 (72 P.S. § 9116(a))."
+    },
+    {
+      "label": "collateral-100k",
+      "inputs": {
+        "taxable_value": "100000",
+        "beneficiary_class": { "enum": "Collateral" },
+        "deduction_or_exemption_claimed": false
+      },
+      "expected_money": "15000",
+      "citation_url": "https://www.pa.gov/agencies/revenue/resources/tax-types-and-information/inheritance-tax.html",
+      "citation_quote": "15 percent on transfers to other heirs, except charitable organizations, exempt institutions and government entities exempt from tax.",
+      "note": "$100,000 × 15% = $15,000 (72 P.S. § 9116(a))."
+    },
+    {
+      "label": "surviving-spouse-exempt",
+      "inputs": {
+        "taxable_value": "100000",
+        "beneficiary_class": { "enum": "SurvivingSpouse" },
+        "deduction_or_exemption_claimed": false
+      },
+      "expected_money": "0",
+      "citation_url": "https://www.pa.gov/agencies/revenue/resources/tax-types-and-information/inheritance-tax.html",
+      "citation_quote": "0 percent on transfers to a surviving spouse or to a parent from a child aged 21 or younger;",
+      "note": "0% structural exemption for a surviving spouse (not a zero-valued rate)."
+    },
+    {
+      "label": "child-under-21-to-parent-exempt",
+      "inputs": {
+        "taxable_value": "100000",
+        "beneficiary_class": { "enum": "ChildUnder21ToParent" },
+        "deduction_or_exemption_claimed": false
+      },
+      "expected_money": "0",
+      "citation_url": "https://www.pa.gov/agencies/revenue/resources/tax-types-and-information/inheritance-tax.html",
+      "citation_quote": "0 percent on transfers to a surviving spouse or to a parent from a child aged 21 or younger;",
+      "note": "0% on a transfer to a parent from a child aged 21 or younger."
+    },
+    {
+      "label": "exempt-charity-or-government",
+      "inputs": {
+        "taxable_value": "100000",
+        "beneficiary_class": { "enum": "ExemptCharityOrGovernment" },
+        "deduction_or_exemption_claimed": false
+      },
+      "expected_money": "0",
+      "citation_url": "https://www.pa.gov/agencies/revenue/resources/tax-types-and-information/inheritance-tax.html",
+      "citation_quote": "15 percent on transfers to other heirs, except charitable organizations, exempt institutions and government entities exempt from tax.",
+      "note": "Charitable organisations / exempt institutions / government entities are exempt (Computed $0)."
+    }
+  ]
+}

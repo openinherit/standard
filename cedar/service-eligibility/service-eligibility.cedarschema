@@ -1,0 +1,27 @@
+// SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
+// SPDX-License-Identifier: Apache-2.0
+// Cedar schema — INHERIT v2 service-eligibility domain (TT-626).
+// SEPARATE Cedar concern from policies/estate.cedarschema (disclosure/authz ReBAC).
+// Models WHICH professional-category may OFFER WHICH service-type in WHICH jurisdiction.
+// (These entities are honestly counted by generate_registry.py's rglob over *.cedarschema.)
+entity Professional {
+  category: String,
+};
+entity ServiceRequest {
+  serviceType: String,
+  jurisdiction: String,
+  // TT-624 capability-flag context attributes (optional). Enforcement modes —
+  // quoteMode:     "professional-authored" | "typical-range" | "platform-computed"
+  // proximityMode: "user-sort" | "filter" | "opaque-routing"
+  // Posture->mode mapping: linkml/parameters/parameters.yaml
+  // (QuoteEstimationPostureScheme / ProximityMatchingPostureScheme) + README.
+  // symcc strict validation requires the guard form
+  //   (if resource has X then [...].contains(resource.X) else true)
+  // — the `!(resource has X) || ...` form is UnsafeOptionalAttributeAccess.
+  quoteMode?: String,
+  proximityMode?: String,
+};
+action OfferService appliesTo {
+  principal: [Professional],
+  resource: [ServiceRequest],
+};

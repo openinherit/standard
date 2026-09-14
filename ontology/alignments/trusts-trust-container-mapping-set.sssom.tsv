@@ -1,0 +1,38 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   switzerland_zgb: https://openinherit.org/legal-substrate/switzerland-zgb/
+#   hague_conv_1985: https://openinherit.org/legal-substrate/hague-convention-1985-trusts/
+#   muslim_waqf: https://openinherit.org/legal-substrate/muslim-waqf/
+#   hindu_huf: https://openinherit.org/legal-substrate/hindu-huf/
+#   bfo: http://purl.obolibrary.org/obo/BFO_
+#   prov: http://www.w3.org/ns/prov#
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/trusts-trust-container-q037-kappa-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: Trusts.Trust container universal classifier mapping_set (Q-037/Q-T1 kappa-eta-star) - TRUSTS-MODULE ENTRY
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-037/Q-T1 kappa-eta-star universal TrustTypeScheme 7 values + TrustCreationBasisScheme 5 values + TrustGoverningLawScheme 6 values + three_certainties_check_passed boolean to UK&W (Trustee Act 2000 + TA 1925 + Hudson Equity and Trusts §3 Three Certainties + Knight v Knight 1840 + Saunders v Vautier 1841) + Scotland (Trusts (Scotland) Act 1921 + T&S(S)A 2024) + Switzerland (Hague Convention 1985 on Trusts + Switzerland ratification 2007 foreign-trust-recognition-only + ZGB Art 488 fideicommissary-substitution) + Hindu HUF coparcener + Muslim waqf charitable trust-analog. THIRD substantive Q under v3.17; THIRD L2 inheritance application; SIXTH cascade-Q file under v3.16.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:express	express	skos:exactMatch	uk_w_common_law:hudson_equity_trusts_part_2_express_trusts	UK&W express trust per Hudson Equity and Trusts Part 2 + Trustee Act 2000	semapv:ManualMappingCuration	0.99
+inherit:resulting	resulting	skos:exactMatch	uk_w_common_law:hudson_equity_trusts_ch11_resulting_trusts	UK&W resulting trust per Hudson Chapter 11	semapv:ManualMappingCuration	0.99
+inherit:constructive	constructive	skos:exactMatch	uk_w_common_law:hudson_equity_trusts_ch12_13_constructive_trusts	UK&W constructive trust per Hudson Chapters 12-13	semapv:ManualMappingCuration	0.99
+inherit:bare	bare	skos:exactMatch	uk_w_common_law:hudson_3_5_6_bare_trust	UK&W bare trust per Hudson §3.5.6 + Saunders v Vautier (1841) 4 Beav 115 — beneficiary entitled to call for the trust property	semapv:ManualMappingCuration	0.99
+inherit:discretionary	discretionary	skos:exactMatch	uk_w_common_law:hudson_3_5_4_discretionary_trust	UK&W discretionary trust per Hudson §3.5.4 — trustees have discretion over class of beneficiaries	semapv:ManualMappingCuration	0.99
+inherit:interest-in-possession	interest-in-possession	skos:exactMatch	uk_w_common_law:ihta_1984_interest_in_possession_trust	UK&W IPDI trust per IHTA 1984 + HMRC FA 2006 distinction pre/post-2006	semapv:ManualMappingCuration	0.95
+inherit:accumulation-and-maintenance	accumulation-and-maintenance	skos:exactMatch	uk_w_common_law:fa_2006_a_and_m_trust_regime	UK&W A&M trust per Finance Act 2006 changes; pre-22-March-2006 vs post-2006 distinction	semapv:ManualMappingCuration	0.95
+inherit:declaration-of-trust	declaration-of-trust	skos:exactMatch	uk_w_common_law:declaration_of_trust_inter_vivos	UK&W express declaration of trust inter vivos; written for land per LP(MP)A 1989 s.2	semapv:ManualMappingCuration	0.99
+inherit:will-testamentary	will-testamentary	skos:exactMatch	uk_w_common_law:testamentary_trust_via_will	UK&W testamentary trust created via valid will (Q-026.2 Will cross-link)	semapv:ManualMappingCuration	0.99
+inherit:statutory	statutory	skos:exactMatch	uk_w_common_law:ta_1925_ss31_32_statutory_trusts_minors	UK&W statutory trusts for minors per Trustee Act 1925 ss.31-32	semapv:ManualMappingCuration	0.99
+inherit:uk-w-trustee-act-2000	uk-w-trustee-act-2000	skos:exactMatch	uk_w_common_law:trustee_act_2000_modernised_framework	UK&W Trustee Act 2000 modernised framework + TA 1925 ss.31-32 still operative	semapv:ManualMappingCuration	0.99
+inherit:scotland-trusts-scotland-1921-2024	scotland-trusts-scotland-1921-2024	skos:exactMatch	scots_law:trusts_scotland_1921_plus_2024	Scotland Trusts (Scotland) Act 1921 + T&S(S)A 2024 amendments	semapv:ManualMappingCuration	0.99
+inherit:switzerland-hague-1985-foreign-recognition-only	switzerland-hague-1985-foreign-recognition-only	skos:closeMatch	switzerland_zgb:hague_1985_ratification_2007_foreign_recognition	Switzerland Hague Convention 1985 ratification 2007 — NO NATIVE TRUST LAW; foreign-trust-recognition only; Swiss-situs trust property recognised but trust must be governed by foreign law	semapv:ManualMappingCuration	0.95
+inherit:switzerland-hague-1985-foreign-recognition-only	switzerland-hague-1985-foreign-recognition-only	skos:closeMatch	switzerland_zgb:art_488_fideicommissary_substitution	Switzerland ZGB Art 488 fideicommissary substitution — civil-law analog to trust; imperfect mapping	semapv:ManualMappingCuration	0.80
+inherit:hindu-huf-coparcener-analog	hindu-huf-coparcener-analog	skos:closeMatch	hindu_huf:hsa_1956_2005_huf_coparcener_birthright	Hindu HUF coparcener system per HSA 1956 + 2005 Amendment; trust-analog with birthright co-ownership; daughters equal post-2005	semapv:ManualMappingCuration	0.85
+inherit:waqf-islamic-charitable-analog	waqf-islamic-charitable-analog	skos:closeMatch	muslim_waqf:quranic_classical_fiqh_charitable_perpetual	Muslim waqf Islamic charitable trust per Quranic + classical fiqh substrate; charitable purpose; perpetual; v6.6 Israel waqf_ruling enum precedent	semapv:ManualMappingCuration	0.85
+inherit:three_certainties_check_passed	three_certainties_check_passed	skos:exactMatch	uk_w_common_law:hudson_3_three_certainties_doctrine	UK&W Three Certainties doctrine canonical authority per Hudson Equity and Trusts §3.1.1; intention + subject-matter + objects required for valid express trust	semapv:ManualMappingCuration	0.99
+inherit:three_certainties_check_passed	three_certainties_check_passed	skos:exactMatch	uk_w_common_law:knight_v_knight_1840_three_certainties_origin	UK&W Knight v Knight (1840) 3 Beav 148 — origin of Three Certainties doctrine	semapv:ManualMappingCuration	0.99

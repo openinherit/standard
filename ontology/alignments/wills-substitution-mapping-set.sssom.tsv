@@ -1,0 +1,52 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   switzerland_zgb: https://openinherit.org/legal-substrate/switzerland-zgb/
+#   muslim_faraid: https://openinherit.org/legal-substrate/muslim-faraid/
+#   hindu_succession: https://openinherit.org/legal-substrate/hindu-succession/
+#   jewish_halacha: https://openinherit.org/legal-substrate/jewish-halacha/
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/wills-substitution-q028-nu-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: Wills.SubstitutionClause universal classifier mapping_set (Q-028 nu-eta-star)
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-028 nu-eta-star universal SubstitutionMechanismScheme + SubstitutionFailureModeScheme to three Phase-1 jurisdictions (UK England-Wales common-law + Scotland T-and-S-S-A 2024 + Switzerland ZGB Erbrecht) plus three faith pillars (Muslim faraid + Hindu HSA 1956 + Jewish halacha). Authored Sunday 17 May 2026 BST.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:simple-substitution	simple-substitution	skos:exactMatch	uk_w_common_law:gift_over	gift-over (common-law)	semapv:ManualMappingCuration	0.95
+inherit:simple-substitution	simple-substitution	skos:exactMatch	scots_law:conditional_institution	conditional institution (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:simple-substitution	simple-substitution	skos:exactMatch	switzerland_zgb:ersatzerbe_487	Ersatzerbe ZGB Art 487	semapv:ManualMappingCuration	0.95
+inherit:fideicommissary-substitution	fideicommissary-substitution	skos:closeMatch	uk_w_common_law:life_estate_remainder	life estate and remainder (common-law)	semapv:ManualMappingCuration	0.85
+inherit:fideicommissary-substitution	fideicommissary-substitution	skos:closeMatch	scots_law:liferent_and_fee	liferent and fee (Scots law)	semapv:ManualMappingCuration	0.85
+inherit:fideicommissary-substitution	fideicommissary-substitution	skos:exactMatch	switzerland_zgb:nacherbeinsetzung_491	Nacherbeinsetzung ZGB Art 491 (Vorerbe-Nacherbe 488-492)	semapv:ManualMappingCuration	0.95
+inherit:conditional-substitution	conditional-substitution	skos:exactMatch	uk_w_common_law:conditional_gift	conditional gift (common-law)	semapv:ManualMappingCuration	0.95
+inherit:conditional-substitution	conditional-substitution	skos:exactMatch	scots_law:conditional_legacy	conditional legacy (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:conditional-substitution	conditional-substitution	skos:exactMatch	switzerland_zgb:bedingte_ersetzung	bedingte Ersetzung (Swiss conditional substitution)	semapv:ManualMappingCuration	0.95
+inherit:per-stirpes-substitution	per-stirpes-substitution	skos:exactMatch	uk_w_common_law:wills_act_1837_s33_anti_lapse	Wills Act 1837 s.33 anti-lapse + s.33A 2014 amendment	semapv:ManualMappingCuration	0.95
+inherit:per-stirpes-substitution	per-stirpes-substitution	skos:exactMatch	scots_law:conditio_si_sine_liberis_decesserit	conditio si sine liberis decesserit (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:per-stirpes-substitution	per-stirpes-substitution	skos:exactMatch	switzerland_zgb:droit_representation_par_souche	droit de représentation par souche (Swiss law)	semapv:ManualMappingCuration	0.90
+inherit:per-stirpes-substitution	per-stirpes-substitution	skos:exactMatch	hindu_succession:hsa_1956_s5_orphaned_grandchild	HSA 1956 s.5 orphaned-grandchild representational succession	semapv:ManualMappingCuration	0.95
+inherit:per-stirpes-substitution	per-stirpes-substitution	skos:closeMatch	muslim_faraid:quran_4_11_12_forced_substitution	Quran 4:11-12 faraid forced-substitution to next-class	semapv:ManualMappingCuration	0.75
+inherit:per-stirpes-substitution	per-stirpes-substitution	skos:closeMatch	jewish_halacha:bekhor_substitution_bava_batra	bekhor substitution rules (Bava Batra; limited halachic-strict pillar)	semapv:ManualMappingCuration	0.70
+inherit:destination-over	destination-over	skos:exactMatch	scots_law:destination_over	destination-over (Scots law peculiarity)	semapv:ManualMappingCuration	0.95
+inherit:substitute-also-predeceased	substitute-also-predeceased	skos:exactMatch	uk_w_common_law:recursive_lapse	recursive lapse (common-law)	semapv:ManualMappingCuration	0.95
+inherit:substitute-also-predeceased	substitute-also-predeceased	skos:exactMatch	scots_law:recursive_lapse_scots	recursive lapse (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:substitute-also-predeceased	substitute-also-predeceased	skos:exactMatch	switzerland_zgb:rekursiver_wegfall	rekursiver Wegfall (Swiss recursive lapse)	semapv:ManualMappingCuration	0.90
+inherit:substitute-ineligible	substitute-ineligible	skos:exactMatch	uk_w_common_law:forfeiture_act_1982	Forfeiture Act 1982 + capacity defect + disclaimer	semapv:ManualMappingCuration	0.95
+inherit:substitute-ineligible	substitute-ineligible	skos:exactMatch	scots_law:unworthy_heir_scots	unworthy heir + disclaimer (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:substitute-ineligible	substitute-ineligible	skos:exactMatch	switzerland_zgb:erbunwuerdig_540	Erbunwürdig ZGB Art 540	semapv:ManualMappingCuration	0.95
+inherit:substitution-condition-failed	substitution-condition-failed	skos:exactMatch	uk_w_common_law:condition_failed_common_law	condition failed (common-law)	semapv:ManualMappingCuration	0.95
+inherit:substitution-condition-failed	substitution-condition-failed	skos:exactMatch	scots_law:condition_failed_scots	condition failed (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:substitution-condition-failed	substitution-condition-failed	skos:exactMatch	switzerland_zgb:bedingung_nicht_eingetreten	Bedingung nicht eingetreten (Swiss condition not met)	semapv:ManualMappingCuration	0.95
+inherit:forced-heirship-override	forced-heirship-override	skos:exactMatch	uk_w_common_law:ifpa_1975_override	IFPA 1975 dependants override post-hoc	semapv:ManualMappingCuration	0.90
+inherit:forced-heirship-override	forced-heirship-override	skos:exactMatch	scots_law:legitim_jus_relictae_override	legitim + jus relictae override per T&S(S)A 2024	semapv:ManualMappingCuration	0.95
+inherit:forced-heirship-override	forced-heirship-override	skos:exactMatch	switzerland_zgb:pflichtteil_470_override	Pflichtteil ZGB Art 470+ override 2023 Erbrechtsrevision	semapv:ManualMappingCuration	0.95
+inherit:forced-heirship-override	forced-heirship-override	skos:exactMatch	muslim_faraid:faraid_forced_override	faraid forced-substitution override per Quran 4:11-12	semapv:ManualMappingCuration	0.95
+inherit:forced-heirship-override	forced-heirship-override	skos:exactMatch	hindu_succession:huf_coparcener_entitlement	HUF coparcener entitlement per HSA 1956 + 2005 Amendment	semapv:ManualMappingCuration	0.90
+inherit:forced-heirship-override	forced-heirship-override	skos:closeMatch	jewish_halacha:bekhor_override	bekhor entitlement override per Bava Batra	semapv:ManualMappingCuration	0.75
+inherit:anti-lapse-vs-disclaimer-conflict	anti-lapse-vs-disclaimer-conflict	skos:exactMatch	uk_w_common_law:s142_iht_1984_deed_of_variation	s.142 IHTA 1984 deed-of-variation vs s.33 anti-lapse determinacy gap	semapv:ManualMappingCuration	0.90
+inherit:anti-lapse-vs-disclaimer-conflict	anti-lapse-vs-disclaimer-conflict	skos:closeMatch	scots_law:disclaimer_vs_conditio_scots	disclaimer vs conditio si sine liberis determinacy gap	semapv:ManualMappingCuration	0.85
+inherit:anti-lapse-vs-disclaimer-conflict	anti-lapse-vs-disclaimer-conflict	skos:closeMatch	switzerland_zgb:ausschlagung_vs_ersatzerbe	Ausschlagung (disclaimer) vs Ersatzerbe determinacy gap	semapv:ManualMappingCuration	0.85

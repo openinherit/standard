@@ -1,0 +1,33 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   muslim_waqf: https://openinherit.org/legal-substrate/muslim-waqf/
+#   hindu_huf: https://openinherit.org/legal-substrate/hindu-huf/
+#   bfo: http://purl.obolibrary.org/obo/BFO_
+#   prov: http://www.w3.org/ns/prov#
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/trusts-trust-distribution-q040-nu-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: Trusts.TrustDistribution universal classifier mapping_set (Q-040/Q-T4 nu-eta-star) - FOURTH foundational Trusts-module class + TRUSTS-MODULE SUBSTANTIVE CLOSE AT 4/3-5 + THIRD downstream Q-CM-1 composer
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-040/Q-T4 nu-eta-star universal DistributionKindScheme 5 + discretion_exercised boolean + advancement_per_ta_1925_s32 boolean + composition_constraint with Q-CM-1 to UK&W (Hudson Equity and Trusts §10 trustee discretion + Trustee Act 2000 ss.1-5 + TA 1925 ss.31-32 + Inheritance and Trustees Powers Act 2014 + Re Hastings-Bass [1975] Ch 25 + Pitt v Holt [2013] UKSC 26 Supreme Court restatement + Schmidt v Rosewood [2003] UKPC 26 + IRC v Broadway Cottages [1955] Ch 20 + McPhail v Doulton [1971] AC 424 + Saunders v Vautier (1841) 4 Beav 115) + Scotland (Trusts Scotland 1921+2024 s.20 distributions) + Hindu HUF coparcener distribution + Muslim waqf mawqufun-alayhi distribution + composes Q-CM-1 + composes Q-039. SIXTH substantive Q under v3.17; SIXTH L2 inheritance; NINTH cascade-Q file under v3.16; THIRD Q under MQ-009 ε+δ; THIRD downstream Q-CM-1 composer; TRUSTS MODULE SUBSTANTIVELY CLOSED at 4/3-5.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:fixed-share	fixed-share	skos:exactMatch	uk_w_common_law:irc_v_broadway_cottages_1955_complete_list_distribution	UK&W IRC v Broadway Cottages [1955] Ch 20 — complete-list test for fixed-trust distribution (cross-link Q-039 interest_kind=fixed-share)	semapv:ManualMappingCuration	0.99
+inherit:discretionary	discretionary	skos:exactMatch	uk_w_common_law:mcphail_v_doulton_1971_discretionary_distribution	UK&W McPhail v Doulton [1971] AC 424 (House of Lords) — is-or-is-not test for discretionary-trust distribution + Hudson §10 trustee-must-actually-exercise-discretion	semapv:ManualMappingCuration	0.99
+inherit:advancement	advancement	skos:exactMatch	uk_w_common_law:ta_1925_s32_advancement_capital_for_benefit	UK&W Trustee Act 1925 s.32 — advancement power; capital for benefit of beneficiary; subject to amount-not-exceeding-beneficial-entitlement	semapv:ManualMappingCuration	0.99
+inherit:advancement	advancement	skos:closeMatch	uk_w_common_law:itpa_2014_advancement_default_50_to_100	UK&W Inheritance and Trustees Powers Act 2014 — AMENDED s.32 default 50% → 100% post-2014-10-01 (substrate-correcting DELTA #2)	semapv:ManualMappingCuration	0.99
+inherit:final-trust-vesting	final-trust-vesting	skos:exactMatch	uk_w_common_law:saunders_v_vautier_1841_bare_trust_call	UK&W Saunders v Vautier (1841) 4 Beav 115 — sui-juris + absolutely-entitled beneficiary right-to-call OR trust-period-expiry remainder-vesting	semapv:ManualMappingCuration	0.99
+inherit:interim-income	interim-income	skos:exactMatch	uk_w_common_law:ta_1925_s31_maintenance_for_minors_income	UK&W Trustee Act 1925 s.31 — maintenance power; income (not capital) for minor beneficiaries; default subject to contrary intention	semapv:ManualMappingCuration	0.99
+inherit:TrustDistribution	TrustDistribution	skos:closeMatch	uk_w_common_law:pitt_v_holt_2013_hastings_bass_narrowed	UK&W Pitt v Holt [2013] UKSC 26 Supreme Court restatement — NARROWED Re Hastings-Bass [1975] to breach-of-fiduciary-duty cases only (substrate-correcting DELTA #1; Phase-1.5+ task-39 candidate scoped to breach-of-duty)	semapv:ManualMappingCuration	0.97
+inherit:TrustDistribution	TrustDistribution	skos:closeMatch	uk_w_common_law:re_hastings_bass_1975_trustee_mistake_doctrine	UK&W Re Hastings-Bass [1975] Ch 25 (CA) — original trustee-mistake-rectification doctrine; significantly narrowed by Pitt v Holt 2013	semapv:ManualMappingCuration	0.92
+inherit:TrustDistribution	TrustDistribution	skos:closeMatch	uk_w_common_law:schmidt_v_rosewood_2003_disclosure_distribution_record	UK&W Schmidt v Rosewood [2003] UKPC 26 Lord Walker — beneficiary information rights for discretionary-class extends to distribution records (cross-link Q-039 task-37)	semapv:ManualMappingCuration	0.93
+inherit:discretion_exercised	discretion_exercised	skos:exactMatch	uk_w_common_law:hudson_10_trustee_discretion_canonical	UK&W Hudson Equity and Trusts §10 trustee discretion canonical UK&W; reviewable for Wednesbury unreasonableness	semapv:ManualMappingCuration	0.99
+inherit:asset_transfer_event	asset_transfer_event	skos:exactMatch	inherit:asset_transfer_event_trust_distribution_composition	Q-CM-1 AssetTransferEvent composition_constraint enforces transfer_mechanism=trust-distribution AND transfer_trigger=trust-vesting; THIRD direct downstream composer Day-1 pattern-transfer from Q-035	semapv:ManualMappingCuration	0.99
+inherit:TrustDistribution	TrustDistribution	skos:closeMatch	scots_law:trusts_scotland_1921_and_2024_s20_distributions	Scotland Trusts (Scotland) Act 1921 + Trusts and Succession (Scotland) Act 2024 s.20 — trust distribution provisions; trustee discretion regime	semapv:ManualMappingCuration	0.93
+inherit:TrustDistribution	TrustDistribution	skos:closeMatch	muslim_waqf:mawqufun_alayhi_distribution_analog	Muslim waqf mawqufun-alayhi distribution analog cross-link Q-024.1 faith-pillar; WaqfDistributionCheck Phase-1.5+ wave-1 Catala rule	semapv:ManualMappingCuration	0.80
+inherit:TrustDistribution	TrustDistribution	skos:closeMatch	hindu_huf:coparcener_distribution_birthright_analog	Hindu HUF coparcener distribution analog cross-link Q-024.1; HSA 1956 + 2005 birthright co-owner distribution	semapv:ManualMappingCuration	0.80
+inherit:advancement_per_ta_1925_s32	advancement_per_ta_1925_s32	skos:exactMatch	uk_w_common_law:ta_1925_s32_amended_by_itpa_2014_branching	UK&W TA 1925 s.32 advancement boolean — AdvancementPowerCheck Catala rule branches on trust_creation_date for ITPA-2014 default-quantum (50% pre vs 100% post-2014-10-01)	semapv:ManualMappingCuration	0.99

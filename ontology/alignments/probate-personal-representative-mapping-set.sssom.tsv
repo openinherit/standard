@@ -1,0 +1,37 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   switzerland_zgb: https://openinherit.org/legal-substrate/switzerland-zgb/
+#   muslim_faraid: https://openinherit.org/legal-substrate/muslim-faraid/
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/probate-personal-representative-q032-epsilon-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: Probate.PersonalRepresentative universal classifier mapping_set (Q-032 epsilon-eta-star)
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-032 epsilon-eta-star universal AppointmentBasisScheme 5 values + AcceptanceStatusScheme 4 values + RemovalBasisScheme 4 values to UK&W AEA 1925 + NCPR 1987 + SCA 1981 + AJA 1985 + Scotland Confirmation 1858 + T&S(S)A 2024 + Switzerland ZGB Art 517-518 + Quran 4:11-12 classical fiqh wasi cross-school. Authored Sunday 18 May 2026 BST.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:named-in-will	named-in-will	skos:exactMatch	uk_w_common_law:aea_1925_s7_executor_will_derived	UK&W AEA 1925 s.7 executor derives authority from testator nomination (will-derived per Parry & Kerridge §18.17)	semapv:ManualMappingCuration	0.95
+inherit:named-in-will	named-in-will	skos:closeMatch	scots_law:executor_nominate	Scotland executor_nominate per Confirmation 1858 (will-derived appointment)	semapv:ManualMappingCuration	0.95
+inherit:named-in-will	named-in-will	skos:closeMatch	switzerland_zgb:willensvollstrecker_testator_appointment	Switzerland Willensvollstrecker by testator appointment per ZGB Art 517 (Künzle Berner Kommentar 3rd ed.)	semapv:ManualMappingCuration	0.90
+inherit:named-in-will	named-in-will	skos:closeMatch	muslim_faraid:wasi_named_in_wasiyya	Islamic wasi (executor) named in wasiyya (Quran 4:11-12); Hanafi/Maliki trustworthy/truthful qualification; Shafi'i just qualification	semapv:ManualMappingCuration	0.85
+inherit:court-appointed-per-intestacy-priority	court-appointed-per-intestacy-priority	skos:exactMatch	uk_w_common_law:aea_1925_s46_intestacy_priority	UK&W AEA 1925 s.46 intestacy priority order (spouse/civil-partner → issue → parents → siblings → relatives → Crown)	semapv:ManualMappingCuration	0.95
+inherit:court-appointed-per-intestacy-priority	court-appointed-per-intestacy-priority	skos:closeMatch	scots_law:executor_dative_intestate	Scotland executor_dative for intestate cases (Succession Scotland 1964 s.9 prior rights)	semapv:ManualMappingCuration	0.90
+inherit:court-appointed-creditor-petition	court-appointed-creditor-petition	skos:exactMatch	uk_w_common_law:creditors_grant	UK&W creditor's grant where heirs decline / cannot act	semapv:ManualMappingCuration	0.95
+inherit:court-appointed-creditor-petition	court-appointed-creditor-petition	skos:closeMatch	scots_law:executor_creditor	Scotland executor_creditor per Confirmation 1858 (Sheriff Court appoints creditor as executor)	semapv:ManualMappingCuration	0.90
+inherit:public-trustee-default	public-trustee-default	skos:exactMatch	uk_w_common_law:aea_1925_s9_public_trustee	UK&W AEA 1925 s.9 Public Trustee default pre-grant vesting invariant (Parry & Kerridge §18.17-18 relation-back doctrine)	semapv:ManualMappingCuration	0.95
+inherit:judicial-administrator	judicial-administrator	skos:exactMatch	switzerland_zgb:erbschaftsverwalter	Switzerland Erbschaftsverwalter per ZGB Art 521+ (judicial administration where no Willensvollstrecker or court intervention required; Künzle Berner Kommentar 3rd ed.)	semapv:ManualMappingCuration	0.95
+inherit:judicial-administrator	judicial-administrator	skos:closeMatch	switzerland_zgb:willensvollstrecker_art_517_518	Switzerland Willensvollstrecker per ZGB Art 517-518 (testator-appointed executor with judicial supervision; Federal Court BGE 77-II-122)	semapv:ManualMappingCuration	0.85
+inherit:accepted	accepted	skos:exactMatch	uk_w_common_law:ncpr_rule_37_acceptance	UK&W NCPR 1987 Rule 37 acceptance vs renunciation discipline (acceptance instantiates ExecutorRole per Q-008 R.δ)	semapv:ManualMappingCuration	0.95
+inherit:renounced	renounced	skos:exactMatch	uk_w_common_law:ncpr_rule_37_renunciation	UK&W NCPR 1987 Rule 37 renunciation (per capacity; retraction with registrar leave; exceptional after grant to lower degree)	semapv:ManualMappingCuration	0.95
+inherit:renounced	renounced	skos:closeMatch	muslim_faraid:wasi_declines_appointment	Islamic wasi declines appointment (classical fiqh permits refusal; not bound to accept)	semapv:ManualMappingCuration	0.85
+inherit:removed	removed	skos:closeMatch	uk_w_common_law:aja_1985_s50_removal	UK&W Administration of Justice Act 1985 s.50 post-grant removal (Re Goodman 2013 / Re Wilson 2016 doctrinal grounds; misconduct / inability / loss-of-confidence)	semapv:ManualMappingCuration	0.95
+inherit:passed-over-pre-grant	passed-over-pre-grant	skos:exactMatch	uk_w_common_law:sca_1981_s116_passing_over	UK&W Senior Courts Act 1981 s.116 passing-over jurisdiction (pre-grant; before grant of representation issued)	semapv:ManualMappingCuration	0.95
+inherit:replaced-post-grant	replaced-post-grant	skos:exactMatch	uk_w_common_law:aja_1985_s50_substitution	UK&W Administration of Justice Act 1985 s.50 post-grant replacement (High Court appoints new executor; SCA 1981 s.50 citation is INCORRECT — AJA 1985 is the authority)	semapv:ManualMappingCuration	0.95
+inherit:disqualified-per-statute	disqualified-per-statute	skos:exactMatch	scots_law:tssa_2024_s8_executor_disqualification	Scotland T&S(S)A 2024 s.8 — prosecution/conviction for murder or culpable homicide disqualifies executor (in force 26 June 2024; Q-031 retrospective citation correction s.80→s.8 Phase-1.5+ richard-task)	semapv:ManualMappingCuration	0.95
+inherit:disqualified-per-statute	disqualified-per-statute	skos:closeMatch	switzerland_zgb:zgb_art_521_executor_dismissal	Switzerland ZGB Art 521 court dismissal for serious mismanagement / lack of capacity (Künzle Berner Kommentar 3rd ed. §51)	semapv:ManualMappingCuration	0.85
+inherit:agreed-resignation	agreed-resignation	skos:exactMatch	uk_w_common_law:consensual_resignation	UK&W consensual resignation by agreement with co-PRs and beneficiaries (out-of-court; non-contested)	semapv:ManualMappingCuration	0.90
+inherit:agreed-resignation	agreed-resignation	skos:closeMatch	scots_law:executor_resignation_with_consent	Scotland executor resignation with consent of beneficiaries (T&S(S)A 2024 s.8 framework + general trust law)	semapv:ManualMappingCuration	0.85

@@ -1,0 +1,46 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   switzerland_zgb: https://openinherit.org/legal-substrate/switzerland-zgb/
+#   muslim_faraid: https://openinherit.org/legal-substrate/muslim-faraid/
+#   hindu_succession: https://openinherit.org/legal-substrate/hindu-succession/
+#   jewish_halacha: https://openinherit.org/legal-substrate/jewish-halacha/
+#   bfo: http://purl.obolibrary.org/obo/BFO_
+#   prov: http://www.w3.org/ns/prov#
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/transfer-asset-transfer-event-q-cm-1-eta-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: "Transfer.AssetTransferEvent canonical primitive cross-module universal classifier mapping_set (Q-CM-1 eta-eta-star)"
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: "SSSOM mapping_set bridging Q-CM-1 eta-eta-star universal TransferMechanismScheme 8 values + TransferTriggerScheme 6 values + TransferStateScheme 4 values + TransferActorScheme 5 values + TransferFailureModeScheme 4 values to UK&W AEA 1925 + IHTA 1984 s.142 + Trustee Act 2000 + Scotland docquet Conveyancing 1924 + Trusts Scotland 1921 + Switzerland ZGB Art 596-607 + Hindu HSA 1956+2005 + Muslim Quran 4:11-12+4:176 faraid classical fiqh wasi cross-school + BFO process semantics + PROV-O activity attribution. Authored Sunday 18 May 2026 BST under v3.16 lock-cascade-discipline; first cross-module-primitive Q per MQ-007 A-124 interleaving discipline."
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:assent	assent	skos:exactMatch	uk_w_common_law:aea_1925_ss36_40_41_assent	UK&W AEA 1925 ss.36 (vesting assent) + 40 (form of assent) + 41 (assent of personal representative) — PR transfers legal title to beneficiary via written assent	semapv:ManualMappingCuration	0.95
+inherit:assent	assent	skos:closeMatch	scots_law:docquet_conveyancing_1924	Scotland docquet system per Conveyancing (Scotland) Act 1924 — executry-attorney transfers heritable property via docquet (analogous but not identical to assent; heritable/moveable distinction load-bearing)	semapv:ManualMappingCuration	0.85
+inherit:deed-of-variation	deed-of-variation	skos:exactMatch	uk_w_common_law:ihta_1984_s142_deed_of_variation	UK&W IHTA 1984 s.142 deed-of-variation — within 2 years of death + written + signed by all variators + not-for-consideration + reading-back-for-IHT-purposes (NOT other taxes)	semapv:ManualMappingCuration	0.95
+inherit:deed-of-variation	deed-of-variation	skos:closeMatch	scots_law:scotland_deed_of_variation_t_s_s_a_2024	Scotland deed-of-variation per T&S(S)A 2024 — analogous regime with Scotland-specific procedural variations	semapv:ManualMappingCuration	0.85
+inherit:trust-distribution	trust-distribution	skos:exactMatch	uk_w_common_law:trustee_act_2000_distribution	UK&W Trustee Act 2000 trust distribution — trustee transfers asset to beneficiary per trust deed terms; distinct from AEA 1925 PR assent	semapv:ManualMappingCuration	0.95
+inherit:trust-distribution	trust-distribution	skos:closeMatch	scots_law:trusts_scotland_1921_distribution	Scotland Trusts (Scotland) Act 1921 trust distribution — analogous Scots-law regime + 2024 amendment	semapv:ManualMappingCuration	0.90
+inherit:trust-distribution	trust-distribution	skos:closeMatch	switzerland_zgb:zgb_art_596_607_erbteilung_partition	Switzerland Erbteilung partition per ZGB Art 596-607 — heir-community partitioning estate (analogous to trust distribution in functional terms)	semapv:ManualMappingCuration	0.80
+inherit:inter-vivos-gift	inter-vivos-gift	skos:exactMatch	uk_w_common_law:lifetime_gift_pet_7_year_clawback	UK&W lifetime gift = Potentially Exempt Transfer (PET); 7-year clawback if donor dies within 7 years per IHTA 1984 s.3A	semapv:ManualMappingCuration	0.95
+inherit:inter-vivos-gift	inter-vivos-gift	skos:closeMatch	switzerland_zgb:schenkung_lifetime_gift_clawback	Switzerland Schenkung (lifetime gift) — Pflichtteil clawback rules per ZGB Art 527 (5-year clawback to forced heirs)	semapv:ManualMappingCuration	0.85
+inherit:sale	sale	skos:exactMatch	uk_w_common_law:arms_length_sale_market_value	UK&W arms-length sale at market value — typically by PR during administration to realise estate for distribution	semapv:ManualMappingCuration	0.95
+inherit:partner-firm-escrow-release	partner-firm-escrow-release	skos:exactMatch	uk_w_common_law:commerce_module_escrow_partner_firm_sdk	Commerce module partner-firm SDK consumer transfer — escrow release triggered by partner-firm-defined conditions; Phase-1.5+ Commerce module substrate	semapv:ManualMappingCuration	0.90
+inherit:faraid-share	faraid-share	skos:exactMatch	muslim_faraid:quran_4_11_12_faraid_fixed_shares	Muslim Quran 4:11-12 faraid distribution — fixed shares per classical fiqh; Hanafi/Shafi'i/Maliki/Hanbali Sunni + Jafari Shia variations	semapv:ManualMappingCuration	0.95
+inherit:faraid-share	faraid-share	skos:closeMatch	muslim_faraid:quran_4_176_kalalah_no_parents_children	Muslim Quran 4:176 kalalah verse — additional substrate for cases without parents or children; complements 4:11-12	semapv:ManualMappingCuration	0.90
+inherit:hsa-coparcener-share	hsa-coparcener-share	skos:exactMatch	hindu_succession:hsa_1956_2005_coparcener_share	Hindu HSA 1956 + 2005 Amendment coparcener share — Mitakshara (by birth) or Dayabhaga (by death); daughters entitled equally post-2005 Amendment	semapv:ManualMappingCuration	0.95
+inherit:probate-assets-distributed	probate-assets-distributed	skos:exactMatch	uk_w_common_law:q_033_probate_administration_assets_distributed_transition	Q-033 ProbateAdministration SM `assets-distributed` transition fired; cross-link via originating_event_reference FK to ProbateAdministration.transitions[]	semapv:ManualMappingCuration	0.95
+inherit:trust-vesting	trust-vesting	skos:exactMatch	uk_w_common_law:trust_vesting_event_a_m_ipdi_termination	UK&W trust vesting event (A&M beneficiary age 25; IPDI termination; discretionary distribution decision); Trustee Act 2000 framework	semapv:ManualMappingCuration	0.95
+inherit:cross-border-recognition	cross-border-recognition	skos:exactMatch	uk_w_common_law:eu_sr_650_2012_hague_1961_wills_act_1963_swiss_iprg	Cross-border recognition under EU SR 650/2012 / Hague Convention 1961 / Wills Act 1963 / Swiss IPRG — Q-030 WillRecognition cross-link	semapv:ManualMappingCuration	0.95
+inherit:s142-variation-execution	s142-variation-execution	skos:exactMatch	uk_w_common_law:ihta_1984_s142_2_year_window_execution	IHTA 1984 s.142 deed-of-variation executed within 2-year window from date of death	semapv:ManualMappingCuration	0.95
+inherit:planned	planned	skos:closeMatch	bfo:0000015_process_planned_phase	BFO:0000015 process — planned phase (documented intent; not yet executed)	semapv:ManualMappingCuration	0.85
+inherit:executed	executed	skos:closeMatch	bfo:0000015_process_executed_phase	BFO:0000015 process — executed phase (legal title passed; PROV-O Activity completed per prov:endedAtTime)	semapv:ManualMappingCuration	0.85
+inherit:reversed	reversed	skos:exactMatch	uk_w_common_law:s142_variation_supersession_or_hmrc_challenge_upheld	Reversed state — IHTA 1984 s.142 variation supersedes original distribution OR HMRC challenge upheld; TERMINAL from executed	semapv:ManualMappingCuration	0.95
+inherit:failed	failed	skos:exactMatch	uk_w_common_law:transfer_failed_terminal_state	Failed state — transfer attempt failed (title-defect / forced-heirship / fraud / clawback); TERMINAL from planned	semapv:ManualMappingCuration	0.95
+inherit:personal-representative	personal-representative	skos:exactMatch	uk_w_common_law:q_032_pr_role_bearer_executor_administrator	Q-032 ε.η Personal Representative (executor or administrator); cross-link Q-008 R.δ BFO role-bearer hierarchy	semapv:ManualMappingCuration	0.95
+inherit:trustee	trustee	skos:exactMatch	uk_w_common_law:q_008_r_delta_trustee_role_bearer	Q-008 R.δ A-152 TrusteeRole BFO role-bearer; actor for trust-distribution mechanism	semapv:ManualMappingCuration	0.95
+inherit:clawback-applied	clawback-applied	skos:exactMatch	uk_w_common_law:ihta_1984_pet_7_year_clawback_or_ia_1986_s339	Clawback applied — 7-year IHT PET clawback per IHTA 1984 s.3A OR insolvency clawback per IA 1986 s.339 transactions at undervalue	semapv:ManualMappingCuration	0.95
+inherit:forced-heirship-conflict	forced-heirship-conflict	skos:closeMatch	muslim_faraid:forced_heirship_overlay_scheme_q_029	Q-029 ForcedHeirshipOverlayScheme conflict — UK IFPA 1975 + Scotland legal rights + Swiss Pflichtteil + Muslim faraid + Hindu HUF + Jewish halachic; transfer aborted if forced-heirship rules violated	semapv:ManualMappingCuration	0.90

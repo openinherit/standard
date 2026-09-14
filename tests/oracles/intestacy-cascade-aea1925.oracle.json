@@ -1,0 +1,179 @@
+{
+  "_doc": "T032 per-heir intestacy oracle (TT-531). Asserts the per-HEIR allocation of the AEA 1925 s.46 cascade + s.46(2A) spouse-survival gate, not just the conserved total — closing the C1 gameable-conservation hole (TT-455 §6): a wrong split with the right total AND right heir-count would pass a sum/length check. scripts/oracle_verify.py runs catala/probate/IntestacyCascade.catala_en (scope Distribute), reads per_member_amounts, expands each element by the matching member_counts integer into the per-heir multiset, and compares (collections.Counter) to expected_per_heir_gbp. spouse_survives_statutory_period is a BOOLEAN (the harness cannot render integer/date inputs); the 28-day arithmetic itself is proven by in-file #[test] scopes on Survivorship in the same module. WARNING — INVERTED CASE: a case with \"expect\": \"wrong_split\" carries a DELIBERATELY WRONG expected_per_heir_gbp (right total, right count, wrong split). It is NOT the correct answer; the harness PASSES that case iff it detects the split differs. All statutory citations below were LIVE-VERIFIED against legislation.gov.uk on sourced_at (AEA 1925 s.46 as amended, in force text; s.47; LPA 1925 s.184; SI 2023/758): the fixed net sum is confirmed at GBP 322,000 effective 26 July 2023 (SI 2023/758, made under s.46(1)(i) Table Case (2)(B) / Schedule 1A, raised from GBP 270,000 from 6 February 2020); the 28-day spouse-survival gate is confirmed verbatim in s.46(2A); the half-residue split is confirmed in s.46(1)(i) Table Case (2)(C); the no-spouse-issue rung is confirmed as s.46(1)(ii); the both-parents-equal rung is confirmed as s.46(1)(iii) (was flagged candidate pre-verification); the whole-blood-siblings rung is confirmed as the First class under s.46(1)(v) (was flagged candidate pre-verification); the Crown/bona-vacantia default is s.46(1)(vi). No longer (candidate) — see per-case citation for the exact verified sub-paragraph.",
+  "rule": {
+    "repo": "code-inherit-standard",
+    "rule_file": "catala/probate/IntestacyCascade.catala_en",
+    "module": "IntestacyCascade",
+    "scope": "Distribute",
+    "result_kind": "per_heir",
+    "list_field": "per_member_amounts",
+    "repeat_by": "member_counts",
+    "depends_modules": ["catala/contract/ComputedOrNeedsHuman.catala_en"]
+  },
+  "statute": "Administration of Estates Act 1925 s.46 (as amended, most recently by the Inheritance and Trustees' Powers Act 2014) + s.47 (statutory trusts) + s.46(2A) (spouse 28-day survival); Law of Property Act 1925 s.184 (commorientes); SI 2023/758 (Administration of Estates Act 1925 (Fixed Net Sum) Order 2023)",
+  "sourced_at": "2026-07-06",
+  "cases": [
+    {
+      "label": "spouse-plus-issue-half-residue",
+      "inputs": {
+        "net_estate": "700000",
+        "chattels_value": "0",
+        "spouse_present": true,
+        "spouse_survives_statutory_period": true,
+        "has_issue": true,
+        "issue_branch_sizes": [1, 1],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1, 1]
+      },
+      "expected_per_heir_gbp": [511000, 94500, 94500],
+      "expect": "match",
+      "citation": "AEA 1925 s.46(1)(i) Table Case (2): (A) spouse takes personal chattels absolutely; (B) residuary estate (other than chattels) charged with the fixed net sum (GBP 322,000 per SI 2023/758, in force from 26 July 2023) + interest, to the spouse; (C) subject to (B), the residuary estate other than chattels is held as to one half for the spouse absolutely and the other half on the s.47 statutory trusts for the issue. residue = 700,000 - 322,000 = 378,000; spouse = 322,000 + 189,000 = 511,000; issue half = 189,000 over two single-child branches = 94,500 each; total = 700,000. Verified verbatim against legislation.gov.uk on sourced_at."
+    },
+    {
+      "label": "spouse-no-issue-takes-all",
+      "inputs": {
+        "net_estate": "500000",
+        "chattels_value": "20000",
+        "spouse_present": true,
+        "spouse_survives_statutory_period": true,
+        "has_issue": false,
+        "issue_branch_sizes": [],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1]
+      },
+      "expected_per_heir_gbp": [520000],
+      "expect": "match",
+      "citation": "AEA 1925 s.46(1)(i) Table Case (1): 'If the intestate leaves no issue: the residuary estate shall be held in trust for the surviving spouse or civil partner absolutely' — post-ITPA-2014, parents/siblings no longer share when there is no issue. chattels 20,000 + net 500,000 = 520,000. Verified verbatim against legislation.gov.uk on sourced_at."
+    },
+    {
+      "label": "no-spouse-issue-per-stirpes",
+      "inputs": {
+        "net_estate": "900000",
+        "chattels_value": "0",
+        "spouse_present": false,
+        "spouse_survives_statutory_period": false,
+        "has_issue": true,
+        "issue_branch_sizes": [1, 1, 2],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1, 2]
+      },
+      "expected_per_heir_gbp": [300000, 300000, 150000, 150000],
+      "expect": "match",
+      "citation": "AEA 1925 s.46(1)(ii): 'If the intestate leaves issue but no spouse or civil partner, the residuary estate ... shall be held on the statutory trusts for the issue of the intestate' + s.47 per-stirpes division. 900,000 over branches [1;1;2] -> branch share 300,000; predeceased branch of two grandchildren splits 150,000 each. Mirrors the proven PerStirpes oracle. Verified verbatim against legislation.gov.uk on sourced_at."
+    },
+    {
+      "label": "no-spouse-parents-equal",
+      "inputs": {
+        "net_estate": "400000",
+        "chattels_value": "0",
+        "spouse_present": false,
+        "spouse_survives_statutory_period": false,
+        "has_issue": false,
+        "issue_branch_sizes": [],
+        "winning_class_branch_sizes": [1, 1],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1]
+      },
+      "expected_per_heir_gbp": [200000, 200000],
+      "expect": "match",
+      "citation": "AEA 1925 s.46(1)(iii): 'If the intestate leaves no spouse or civil partner and no issue but both parents ... the residuary estate ... shall be held in trust for the father and mother in equal shares absolutely' — confirmed exact sub-paragraph letter (iii) against legislation.gov.uk on sourced_at (previously flagged candidate pre-verification). 400,000 / 2 = 200,000 each."
+    },
+    {
+      "label": "no-spouse-whole-blood-siblings-per-stirpes",
+      "inputs": {
+        "net_estate": "300000",
+        "chattels_value": "0",
+        "spouse_present": false,
+        "spouse_survives_statutory_period": false,
+        "has_issue": false,
+        "issue_branch_sizes": [],
+        "winning_class_branch_sizes": [1, 1, 1],
+        "winning_class_per_stirpes": true,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1, 1]
+      },
+      "expected_per_heir_gbp": [100000, 100000, 100000],
+      "expect": "match",
+      "citation": "AEA 1925 s.46(1)(v), First class: no spouse, no issue, no parent -> 'First, on the statutory trusts for the brothers and sisters of the whole blood of the intestate' — confirmed exact sub-paragraph letter (v) against legislation.gov.uk on sourced_at (previously flagged candidate pre-verification). 300,000 over three living siblings = 100,000 each."
+    },
+    {
+      "label": "commorientes-spouse-fails-28-days",
+      "inputs": {
+        "net_estate": "700000",
+        "chattels_value": "0",
+        "spouse_present": true,
+        "spouse_survives_statutory_period": false,
+        "has_issue": true,
+        "issue_branch_sizes": [1, 1],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1]
+      },
+      "expected_per_heir_gbp": [350000, 350000],
+      "expect": "match",
+      "citation": "AEA 1925 s.46(2A), verbatim: 'Where the intestate's spouse or civil partner survived the intestate but died before the end of the period of 28 days beginning with the day on which the intestate died, this section shall have effect as respects the intestate as if the spouse or civil partner had not survived the intestate.' The spouse failed the 28-day period (Survivorship returned false — proven by the in-file #[test] for days_survived=27), so the estate is distributed as if there were no spouse (s.46(1)(ii)): issue take the WHOLE 700,000 per stirpes over two single-child branches = 350,000 each. Verified verbatim against legislation.gov.uk on sourced_at."
+    },
+    {
+      "label": "small-estate-spouse-takes-all-issue-zero",
+      "inputs": {
+        "net_estate": "200000",
+        "chattels_value": "0",
+        "spouse_present": true,
+        "spouse_survives_statutory_period": true,
+        "has_issue": true,
+        "issue_branch_sizes": [1, 1],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1, 1]
+      },
+      "expected_per_heir_gbp": [200000, 0, 0],
+      "expect": "match",
+      "citation": "Practical operation of AEA 1925 s.46(1)(i) Table Case (2)(B): the fixed net sum (GBP 322,000) is charged against the residuary estate, which cannot exceed the estate that exists. net_estate 200,000 < statutory legacy 322,000, so residue = max(0, 200,000 - 322,000) = 0 and the spouse takes chattels + min(322,000, 200,000) + 0 = 200,000 (the whole small estate); the two children take 0 each under Case (2)(C) (no residue remains to split). Total conserved = 200,000. Proves the legacy does not over-distribute beyond the estate."
+    },
+    {
+      "label": "no-spouse-chattels-folded",
+      "inputs": {
+        "net_estate": "300000",
+        "chattels_value": "60000",
+        "spouse_present": false,
+        "spouse_survives_statutory_period": false,
+        "has_issue": true,
+        "issue_branch_sizes": [1, 1],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1]
+      },
+      "expected_per_heir_gbp": [180000, 180000],
+      "expect": "match",
+      "citation": "AEA 1925 s.46(1)(ii): personal chattels are carved out as a distinct category ONLY under s.46(1)(i)(A), which applies solely where a spouse survives. Where s.46(1)(ii) applies (no surviving spouse), 'the residuary estate' passed to the issue carries no chattels carve-out, so chattels remain part of the fund. fund = net 300,000 + chattels 60,000 = 360,000 over two single-child branches per stirpes (s.47) = 180,000 each. Total conserved = 360,000. Proves chattels are NOT dropped when the spouse does not take."
+    },
+    {
+      "label": "wrong-split-spouse-plus-issue-conserving",
+      "inputs": {
+        "net_estate": "700000",
+        "chattels_value": "0",
+        "spouse_present": true,
+        "spouse_survives_statutory_period": true,
+        "has_issue": true,
+        "issue_branch_sizes": [1, 1],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1, 1]
+      },
+      "expected_per_heir_gbp": [511000, 100000, 89000],
+      "expect": "wrong_split",
+      "note": "DELIBERATELY WRONG (not the correct answer). Right total (700,000) AND right heir-count (3) but the two children's split is 100,000/89,000 instead of the correct 94,500/94,500. The harness MUST detect the split differs — this is the C1 gameable-conservation case. LOCKED anti-hack armor (TT-531 addendum): do NOT edit these values, weaken, skip, or delete this case to reach green; a wrong computation that matches it turns the gate RED."
+    }
+  ]
+}

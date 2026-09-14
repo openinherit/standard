@@ -1,0 +1,35 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   muslim_waqf: https://openinherit.org/legal-substrate/muslim-waqf/
+#   hindu_huf: https://openinherit.org/legal-substrate/hindu-huf/
+#   bfo: http://purl.obolibrary.org/obo/BFO_
+#   prov: http://www.w3.org/ns/prov#
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/trusts-beneficial-interest-q039-mu-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: Trusts.BeneficialInterest universal classifier mapping_set (Q-039/Q-T3 mu-eta-star) - THIRD foundational Trusts-module class
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-039/Q-T3 mu-eta-star universal BeneficialInterestKindScheme 7 + InterestVestingStatusScheme 3 + certainty_of_objects_check_passed boolean + certainty_test_type to UK&W (Hudson Equity and Trusts §3.5 + McPhail v Doulton [1971] AC 424 + Re Gulbenkian [1968] Ch 126 + IRC v Broadway Cottages [1955] Ch 20 + Saunders v Vautier (1841) 4 Beav 115 + Charitable Trusts Act 2011 + cy-près + Schmidt v Rosewood [2003] UKPC 26) + Scotland (Trusts Scotland 1921+2024) + Hindu HUF coparcener + Muslim waqf mawqufun-alayhi. FIFTH substantive Q under v3.17; FIFTH L2 inheritance; EIGHTH cascade-Q file under v3.16; SECOND Q under MQ-009 ε+δ conventions.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:fixed-share	fixed-share	skos:exactMatch	uk_w_common_law:irc_v_broadway_cottages_1955_complete_list_test	UK&W IRC v Broadway Cottages [1955] Ch 20 — complete-list test for fixed-trust certainty of objects	semapv:ManualMappingCuration	0.99
+inherit:discretionary-class	discretionary-class	skos:exactMatch	uk_w_common_law:mcphail_v_doulton_1971_is_or_is_not_test	UK&W McPhail v Doulton [1971] AC 424 (House of Lords) — is-or-is-not test for discretionary-trust certainty of objects	semapv:ManualMappingCuration	0.99
+inherit:discretionary-class	discretionary-class	skos:closeMatch	uk_w_common_law:re_gulbenkian_1968_predecessor_case	UK&W Re Gulbenkian [1968] Ch 126 — predecessor case shaping is-or-is-not test	semapv:ManualMappingCuration	0.95
+inherit:future-person	future-person	skos:exactMatch	uk_w_common_law:class_clear_test_unborn_beneficiaries	UK&W class-clear test for future-person/unborn beneficiaries; Hudson §3.5	semapv:ManualMappingCuration	0.95
+inherit:bare-trust-call	bare-trust-call	skos:exactMatch	uk_w_common_law:saunders_v_vautier_1841_beneficiary_right_to_call	UK&W Saunders v Vautier (1841) 4 Beav 115 — sui-juris + absolutely-entitled beneficiary entitled to call for trust property	semapv:ManualMappingCuration	0.99
+inherit:life-interest	life-interest	skos:exactMatch	uk_w_common_law:ihta_1984_ipdi_interest_in_possession	UK&W IPDI (Interest-in-Possession Disclosable Interest) per IHTA 1984 + FA 2006 pre/post-22-March-2006 distinction	semapv:ManualMappingCuration	0.99
+inherit:remainder	remainder	skos:exactMatch	uk_w_common_law:remainderman_after_life_tenant	UK&W remainderman interest after life-tenant; contingent on life-tenant's death	semapv:ManualMappingCuration	0.99
+inherit:charitable-purpose	charitable-purpose	skos:exactMatch	uk_w_common_law:charitable_trusts_act_2011_cy_pres	UK&W Charitable Trusts Act 2011 + cy-près doctrine; charitable purpose + public benefit	semapv:ManualMappingCuration	0.99
+inherit:vested	vested	skos:exactMatch	uk_w_common_law:vested_interest_presently_enjoyed	UK&W vested interest — presently enjoyed or guaranteed	semapv:ManualMappingCuration	0.99
+inherit:contingent	contingent	skos:exactMatch	uk_w_common_law:contingent_interest_condition_precedent	UK&W contingent interest — subject to condition precedent (e.g., attaining age 25)	semapv:ManualMappingCuration	0.99
+inherit:defeasible	defeasible	skos:exactMatch	uk_w_common_law:defeasible_interest_condition_subsequent	UK&W defeasible interest — vested but liable to divestment on condition subsequent	semapv:ManualMappingCuration	0.99
+inherit:certainty_of_objects_check_passed	certainty_of_objects_check_passed	skos:exactMatch	uk_w_common_law:hudson_3_5_certainty_objects_canonical	UK&W Hudson Equity and Trusts §3.5 certainty-of-objects doctrine canonical UK&W; trust will be VOID if false	semapv:ManualMappingCuration	0.99
+inherit:certainty_test_type	certainty_test_type	skos:exactMatch	uk_w_common_law:hudson_3_5_2_3_5_6_multiple_tests_per_trust_type	UK&W Hudson §3.5.2-§3.5.6 — trust/power TYPE drives certainty TEST applied (substrate-correcting DELTA #1)	semapv:ManualMappingCuration	0.99
+inherit:BeneficialInterest	BeneficialInterest	skos:closeMatch	uk_w_common_law:schmidt_v_rosewood_2003_information_rights	UK&W Schmidt v Rosewood [2003] UKPC 26 Lord Walker — beneficiary information rights extend to discretionary trusts (substrate-correcting DELTA #2; Phase-1.5+ structured-information-rights uplift)	semapv:ManualMappingCuration	0.95
+inherit:BeneficialInterest	BeneficialInterest	skos:closeMatch	muslim_waqf:mawqufun_alayhi_waqf_beneficiary_analog	Muslim waqf mawqufun-alayhi beneficiary analog cross-link Q-024.1 faith-pillar; classical fiqh + Quranic substrate	semapv:ManualMappingCuration	0.80
+inherit:BeneficialInterest	BeneficialInterest	skos:closeMatch	hindu_huf:huf_coparcener_birthright_beneficial_interest_analog	Hindu HUF coparcener beneficial interest analog cross-link Q-024.1; HSA 1956 + 2005 birthright co-ownership	semapv:ManualMappingCuration	0.80
+inherit:BeneficialInterest	BeneficialInterest	skos:closeMatch	inherit:AssetTransferEvent_to_owner_target	Q-CM-1 AssetTransferEvent to-owner typical target for trust-distribution transfers; future Q-T4 TrustDistribution composer cross-link	semapv:ManualMappingCuration	0.92

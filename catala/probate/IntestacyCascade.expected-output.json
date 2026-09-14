@@ -1,0 +1,68 @@
+{
+  "$comment": "Expected-output baseline for IntestacyCascade per TT-531. Mirrors the CatInheritanceCharge/TT-682 precedent: no Mopsa-c PROVEN-VIA-BRIDGE claim (no mopsa-c bridge script exists in this repo). What IS verified and recorded here: (1) catala typecheck (clean, via the ComputedOrNeedsHuman clerk-build composition); (2) the 4 in-file #[test] scopes (Survivorship 28/27-day boundary, LPA 1925 s.184 elder-presumption, Crown/NeedsHuman routing) ALL PASSED under clerk 1.2.0; (3) a dedicated ad-hoc #[test] driver asserting `verdict`'s total_distributed for all 9 fixtures below ALL PASSED (this driver caught a genuine total_distributed conservation bug pre-commit — see git history — where summing per_member_amounts directly undercounted any branch with >1 member; fixed by reconstructing the total from the pre-division amounts); (4) the per-heir allocation itself (per_member_amounts) is asserted by the T032 gov-oracle harness at code-inherit-test-suite/tests/oracles/intestacy-cascade-aea1925.oracle.json, run via oracle_verify.py, GATE PASSED across all 9 per-heir cases including the wrong_split anti-hack case.",
+  "rule_name": "IntestacyCascade",
+  "rule_source_path": "code-inherit-standard/catala/probate/IntestacyCascade.catala_en",
+  "rule_authored_under_tt531": true,
+  "applicable_classes": ["inherit_probate:Estate"],
+  "applicable_scope": "Invoked once per intestate estate to determine the AEA 1925 s.46 cascade distribution; Survivorship is invoked once per claimant (spouse or other relative) to determine whether they are treated as having survived the intestate for the purposes of that cascade.",
+  "catala_typecheck": "PASS (verified 2026-07-06 via a throwaway clerk-build project containing ComputedOrNeedsHuman.catala_en + this file)",
+  "clerk_test_sanity_check": "PASS — 2026-07-06 — the 4 committed in-file #[test] scopes (TestSurvivorship28, TestSurvivorship27, TestSurvivorshipS184, TestCrownNeedsHuman) AND a dedicated ad-hoc #[test] driver over exactly the 9 fixture cases below (asserting `verdict`'s total_distributed) ALL PASSED under clerk 1.2.0 — 5/5 test scopes, ALL TESTS PASSED.",
+  "gov_oracle_per_heir_check": "GREEN — 2026-07-06 — `python3 scripts/oracle_verify.py --oracle tests/oracles/intestacy-cascade-aea1925.oracle.json --standard ../code-inherit-standard` from code-inherit-test-suite: GATE PASSED, all 8 match cases 'multiset equal', wrong_split case 'split correctly caught as differing'.",
+  "expected_mopsa_c_verdict": "NOT RUN — no mopsa-c bridge script exists in this repo; deferred (Phase-1.5+ fast-follow if the doctrine is extended to this scope).",
+  "expected_rule_body_alarms": "N/A — not evaluated (see expected_mopsa_c_verdict)",
+  "per_fixture_expected_outcomes": [
+    {
+      "fixture_id": "T-tt531-intestacy-001-spouse-plus-issue-half-residue",
+      "expected_verdict_arm": "Computed",
+      "expected_total_distributed": "700000",
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-002-spouse-no-issue-takes-all",
+      "expected_verdict_arm": "Computed",
+      "expected_total_distributed": "520000",
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-003-no-spouse-issue-per-stirpes",
+      "expected_verdict_arm": "Computed",
+      "expected_total_distributed": "900000",
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-004-no-spouse-parents-equal",
+      "expected_verdict_arm": "Computed",
+      "expected_total_distributed": "400000",
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-005-no-spouse-whole-blood-siblings-per-stirpes",
+      "expected_verdict_arm": "Computed",
+      "expected_total_distributed": "300000",
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-006-commorientes-spouse-fails-28-days",
+      "expected_verdict_arm": "Computed",
+      "expected_total_distributed": "700000",
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-007-small-estate-spouse-takes-all-issue-zero",
+      "expected_verdict_arm": "Computed",
+      "expected_total_distributed": "200000",
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-008-no-spouse-chattels-folded",
+      "expected_verdict_arm": "Computed",
+      "expected_total_distributed": "360000",
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-009-crown-bona-vacantia-needs-human",
+      "expected_verdict_arm": "NeedsHuman",
+      "clerk_test_pass": true
+    }
+  ]
+}

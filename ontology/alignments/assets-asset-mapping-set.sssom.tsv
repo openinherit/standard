@@ -1,0 +1,48 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_lra_2002: https://www.legislation.gov.uk/ukpga/2002/9/
+#   uk_aea_1925: https://www.legislation.gov.uk/ukpga/Geo5/15-16/23/
+#   uk_ihta_1984: https://www.legislation.gov.uk/ukpga/1984/51/
+#   uk_ca_2006: https://www.legislation.gov.uk/ukpga/2006/46/
+#   uk_pa_1977: https://www.legislation.gov.uk/ukpga/1977/37/
+#   uk_cdpa_1988: https://www.legislation.gov.uk/ukpga/1988/48/
+#   uk_tma_1994: https://www.legislation.gov.uk/ukpga/1994/26/
+#   uk_w_common_law: https://openinherit.org/sources/uk_w_common_law/
+#   scot_lrsa_2012: https://www.legislation.gov.uk/asp/2012/5/
+#   ch_zgb: https://www.fedlex.admin.ch/eli/cc/24/233_245_233/en
+#   ch_iprg: https://www.fedlex.admin.ch/eli/cc/1988/1776_1776_1776/en
+#   in_hsa_1956: https://www.indiacode.nic.in/handle/123456789/1656
+#   eu_sr_650_2012: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A32012R0650
+#   hague_trust_1985: https://www.hcch.net/en/instruments/conventions/full-text/?cid=59
+#   faith_pillars_islamic: https://openinherit.org/sources/faith_pillars_islamic/
+#   faith_pillars_hindu: https://openinherit.org/sources/faith_pillars_hindu/
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   prov: http://www.w3.org/ns/prov#
+#   bfo: http://purl.obolibrary.org/obo/BFO_
+#   xsd: http://www.w3.org/2001/XMLSchema#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+#   schema: https://schema.org/
+# mapping_set_id: https://openinherit.org/sssom/q-041-assets-asset
+# mapping_set_version: '1.0'
+# mapping_set_title: Assets.Asset universal classifier mapping_set (Q-041/Q-A1 xi-eta-star) - FIRST foundational Assets-module class + 4th downstream Q-CM-1 cascade member in PAYLOAD sense
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: Q-041 (Q-A1) ξ.η★ Assets.Asset class mapping_set Day-1 (substrate-corrected per MQ-014 TIER-1 cleanup 2026-05-19); 15 rows bridging asset-class 9 values + Asset class slots + composition_constraint with Q-CM-1 + faith-tradition-pillar variants
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:Asset	Asset class (canonical)	skos:exactMatch	bfo:0000040	material entity	semapv:LexicalMatching	0.95
+inherit:asset_class.real-property	real-property	skos:exactMatch	uk_lra_2002:	Land Registration Act 2002 — UK&W Land Registry HM register; lex situs mandatory	semapv:ManualMappingCuration	0.92
+inherit:asset_class.real-property	real-property	skos:closeMatch	scot_lrsa_2012:	Land Registration etc (Scotland) Act 2012 — Sasines + LR register parallel to UK&W	semapv:ManualMappingCuration	0.90
+inherit:asset_class.real-property	real-property	skos:closeMatch	ch_zgb:	Swiss ZGB Sachenrecht §§641-729 ownership + §§680-694 servitudes	semapv:ManualMappingCuration	0.85
+inherit:asset_class.chattel-personal	chattel-personal	skos:closeMatch	uk_aea_1925:s.41	AEA 1925 s.41 personal-chattels-by-assent default-transfer-mechanism for probate	semapv:ManualMappingCuration	0.85
+inherit:asset_class.financial-investment	financial-investment	skos:exactMatch	uk_ca_2006:s.541	Companies Act 2006 s.541 shares as personal property; foundational	semapv:ManualMappingCuration	0.92
+inherit:asset_class.intellectual-property	intellectual-property	skos:broadMatch	uk_pa_1977:	Patents Act 1977 (patents-only subset; CDPA 1988 + TMA 1994 cover copyrights + trademarks)	semapv:ManualMappingCuration	0.88
+inherit:asset_class.cryptocurrency-or-digital-asset	cryptocurrency-or-digital-asset	skos:relatedMatch	uk_w_common_law:aa_v_persons_unknown_2019_ewhc_3556_comm_crypto_as_property	AA v Persons Unknown [2019] EWHC 3556 (Comm) — crypto-as-property; Law Commission Digital Assets 2023 third-category personal property	semapv:ManualMappingCuration	0.70
+inherit:jurisdiction_of_situs	jurisdiction_of_situs	skos:exactMatch	ch_iprg:Art.99	Swiss IPRG Art 99 immovable-situs rule	semapv:ManualMappingCuration	0.95
+inherit:current_valuation	current_valuation	skos:exactMatch	uk_ihta_1984:s.160	IHTA 1984 s.160 market-value definition (canonical HMRC IHT400 valuation reference)	semapv:ManualMappingCuration	0.95
+inherit:title_owner	title_owner polymorphic FK	skos:exactMatch	inherit:to_owner	AssetTransferEvent.to_owner — AssetTransferTracingCheck enforces Asset.title_owner = latest AssetTransferEvent.to_owner where to_assets includes Asset URI	semapv:LexicalMatching	0.95
+inherit:estate_fk	estate_fk back-reference	skos:exactMatch	inherit:Estate.estate_property	Estate.estate_property — NULLABLE back-reference; cardinality inverse on Estate side (Q-029 β.η A-181)	semapv:ManualMappingCuration	0.95
+inherit:trust_fk	trust_fk back-reference	skos:exactMatch	inherit:Trust.trust_property	Trust.trust_property — NULLABLE back-reference; cardinality inverse on Trust side (Q-037 κ.η A-187)	semapv:ManualMappingCuration	0.95
+inherit:faith_tradition_pillar.muslim-hanafi	muslim-hanafi faith-pillar	skos:closeMatch	faith_pillars_islamic:waqf_mawquf_corpus_property	waqf mawquf corpus-property — Quran 2:215 + Hadith waqf jurisprudence; distinct from mawqufun-alayhi beneficiary-class per Q-040 contrast	semapv:ManualMappingCuration	0.80
+inherit:faith_tradition_pillar.hindu-mitakshara	hindu-mitakshara faith-pillar	skos:closeMatch	in_hsa_1956:	Hindu Succession Act 1956 + 2005 amendment — HUF coparcener-property joint-ownership-by-birth	semapv:ManualMappingCuration	0.85
+inherit:RegistrationRecord	RegistrationRecord (official registry entry)	skos:closeMatch	schema:RegisterAction	RegisterAction (schema.org)	semapv:ManualMappingCuration	0.90

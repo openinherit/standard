@@ -1,0 +1,46 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   switzerland_zgb: https://openinherit.org/legal-substrate/switzerland-zgb/
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/wills-bequest-q027-zeta-eta-prime
+# mapping_set_version: '1.0'
+# mapping_set_title: Wills.Bequest universal classifier mapping_set (Q-027 zeta-eta-prime)
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-027 zeta-eta-prime universal TransferMechanismBaseScheme + TransferMechanismQualifierScheme + BequestFailureModeScheme to three Phase-1 jurisdictions (UK England-Wales common-law + Scotland T-and-S-S-A 2024 + Switzerland CC-CO 484+). Authored Sunday 17 May 2026 BST.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:specific-asset-transfer	specific-asset-transfer	skos:exactMatch	uk_w_common_law:specific_bequest	specific bequest (Wills Act 1837 common-law)	semapv:ManualMappingCuration	0.95
+inherit:specific-asset-transfer	specific-asset-transfer	skos:exactMatch	scots_law:special_legacy	special legacy (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:specific-asset-transfer	specific-asset-transfer	skos:exactMatch	switzerland_zgb:vermaechtnis_specific_484	Vermächtnis-specific (ZGB Art 484)	semapv:ManualMappingCuration	0.90
+inherit:pecuniary-sum-transfer	pecuniary-sum-transfer	skos:exactMatch	uk_w_common_law:pecuniary_bequest	pecuniary/general bequest	semapv:ManualMappingCuration	0.95
+inherit:pecuniary-sum-transfer	pecuniary-sum-transfer	skos:exactMatch	scots_law:general_legacy	general legacy	semapv:ManualMappingCuration	0.95
+inherit:pecuniary-sum-transfer	pecuniary-sum-transfer	skos:closeMatch	switzerland_zgb:vermaechtnis_monetary_484	Vermächtnis monetary (ZGB Art 484)	semapv:ManualMappingCuration	0.85
+inherit:proportional-fund-transfer	proportional-fund-transfer	skos:exactMatch	uk_w_common_law:demonstrative_bequest	demonstrative bequest	semapv:ManualMappingCuration	0.90
+inherit:proportional-fund-transfer	proportional-fund-transfer	skos:narrowMatch	scots_law:general_legacy_charged	general legacy charged on specific fund	semapv:ManualMappingCuration	0.70
+inherit:proportional-fund-transfer	proportional-fund-transfer	skos:closeMatch	switzerland_zgb:vermaechtnis_charged_484	Vermächtnis charged on specific fund	semapv:ManualMappingCuration	0.75
+inherit:proportional-residue-transfer	proportional-residue-transfer	skos:exactMatch	uk_w_common_law:residuary_bequest	residuary bequest	semapv:ManualMappingCuration	0.95
+inherit:proportional-residue-transfer	proportional-residue-transfer	skos:exactMatch	scots_law:residue	residue (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:proportional-residue-transfer	proportional-residue-transfer	skos:closeMatch	switzerland_zgb:erbeinsetzung_proportional_483	Erbeinsetzung proportional share	semapv:ManualMappingCuration	0.75
+inherit:procurement-obligation	procurement-obligation	skos:exactMatch	switzerland_zgb:verschaffungsvermaechtnis	Verschaffungsvermächtnis (Swiss procurement bequest)	semapv:ManualMappingCuration	0.95
+inherit:procurement-obligation	procurement-obligation	skos:relatedMatch	uk_w_common_law:obligation_to_acquire	rare common-law equivalent (testator directs heirs to acquire and transfer)	semapv:ManualMappingCuration	0.60
+inherit:choice-allocation	choice-allocation	skos:exactMatch	switzerland_zgb:wahlvermaechtnis	Wahlvermächtnis (Swiss choice bequest)	semapv:ManualMappingCuration	0.95
+inherit:choice-allocation	choice-allocation	skos:relatedMatch	uk_w_common_law:alternative_bequest	rare common-law alternative bequest	semapv:ManualMappingCuration	0.65
+inherit:conditional	conditional	skos:exactMatch	uk_w_common_law:conditional_bequest	conditional bequest (any common-law)	semapv:ManualMappingCuration	0.95
+inherit:conditional	conditional	skos:exactMatch	scots_law:conditional_legacy	conditional legacy	semapv:ManualMappingCuration	0.95
+inherit:conditional	conditional	skos:exactMatch	switzerland_zgb:bedingtes_vermaechtnis	bedingtes Vermächtnis (Swiss conditional bequest)	semapv:ManualMappingCuration	0.95
+inherit:charge-on-heir	charge-on-heir	skos:exactMatch	switzerland_zgb:auflage_482	Auflage (ZGB Art 482)	semapv:ManualMappingCuration	0.95
+inherit:charge-on-heir	charge-on-heir	skos:relatedMatch	uk_w_common_law:charge_on_legacy	common-law charge attached to bequest	semapv:ManualMappingCuration	0.70
+inherit:subject-unavailable-at-death	subject-unavailable-at-death	skos:exactMatch	uk_w_common_law:ademption	ademption doctrine	semapv:ManualMappingCuration	0.95
+inherit:subject-unavailable-at-death	subject-unavailable-at-death	skos:exactMatch	switzerland_zgb:caducite_par_perte	caducité par perte de l'objet	semapv:ManualMappingCuration	0.95
+inherit:beneficiary-predeceased-no-substitute	beneficiary-predeceased-no-substitute	skos:exactMatch	uk_w_common_law:lapse_s33	lapse (Wills Act 1837 s.33 anti-lapse exception)	semapv:ManualMappingCuration	0.95
+inherit:beneficiary-predeceased-no-substitute	beneficiary-predeceased-no-substitute	skos:exactMatch	scots_law:lapse_scotland	lapse (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:beneficiary-predeceased-no-substitute	beneficiary-predeceased-no-substitute	skos:exactMatch	switzerland_zgb:caducite_par_predeces	caducité par prédécès	semapv:ManualMappingCuration	0.95
+inherit:estate-insufficient	estate-insufficient	skos:exactMatch	uk_w_common_law:abatement	abatement doctrine	semapv:ManualMappingCuration	0.95
+inherit:estate-insufficient	estate-insufficient	skos:exactMatch	switzerland_zgb:reduction_civil_law	réduction (civil-law)	semapv:ManualMappingCuration	0.95
+inherit:jurisdiction-legal-rights-override	jurisdiction-legal-rights-override	skos:exactMatch	scots_law:legal_rights_tssa_2024	Scotland T&S(S)A 2024 spousal legal rights	semapv:ManualMappingCuration	0.95
+inherit:jurisdiction-legal-rights-override	jurisdiction-legal-rights-override	skos:exactMatch	switzerland_zgb:pflichtteil_470	Swiss Pflichtteil (ZGB Art 470+)	semapv:ManualMappingCuration	0.95
+inherit:jurisdiction-legal-rights-override	jurisdiction-legal-rights-override	skos:exactMatch	uk_w_common_law:family_provision_act_1975	E&W Inheritance (Provision for Family and Dependants) Act 1975	semapv:ManualMappingCuration	0.90

@@ -1,0 +1,37 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   switzerland_zgb: https://openinherit.org/legal-substrate/switzerland-zgb/
+#   eu_succession: https://openinherit.org/legal-substrate/eu-succession/
+#   hague_1961: https://openinherit.org/legal-substrate/hague-1961/
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/probate-will-recognition-q030-gamma-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: Probate.WillRecognition universal classifier mapping_set (Q-030 gamma-eta-star)
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-030 gamma-eta-star universal RecognitionBasisScheme + ConflictOfLawsMethodScheme to UK Wills Act 1963 s.1 + Hague Convention 1961 Art 1 + EU SR 650/2012 Art 21+22 + Swiss IPRG Art 89-96. Authored Sunday 17 May 2026 BST.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:by-place-of-execution	by-place-of-execution	skos:exactMatch	uk_w_common_law:wills_act_1963_s1_a	Wills Act 1963 s.1(a) law of territory where executed	semapv:ManualMappingCuration	0.95
+inherit:by-place-of-execution	by-place-of-execution	skos:exactMatch	hague_1961:art_1_a	Hague Convention 1961 Art 1(a) place where testator made disposition	semapv:ManualMappingCuration	0.95
+inherit:by-nationality-at-execution-or-death	by-nationality-at-execution-or-death	skos:exactMatch	uk_w_common_law:wills_act_1963_s1_d	Wills Act 1963 s.1(d) testator's nationality at execution or death	semapv:ManualMappingCuration	0.95
+inherit:by-nationality-at-execution-or-death	by-nationality-at-execution-or-death	skos:exactMatch	hague_1961:art_1_b	Hague Convention 1961 Art 1(b) nationality at execution or death	semapv:ManualMappingCuration	0.95
+inherit:by-domicile-at-execution	by-domicile-at-execution	skos:exactMatch	uk_w_common_law:wills_act_1963_s1_b	Wills Act 1963 s.1(b) law of testator's domicile at execution	semapv:ManualMappingCuration	0.95
+inherit:by-domicile-at-execution	by-domicile-at-execution	skos:closeMatch	hague_1961:art_1_c_partial	Hague Convention 1961 Art 1(c) partial — domicile at execution branch	semapv:ManualMappingCuration	0.85
+inherit:by-domicile-at-death	by-domicile-at-death	skos:exactMatch	uk_w_common_law:wills_act_1963_s1_c	Wills Act 1963 s.1(c) law of testator's domicile at death	semapv:ManualMappingCuration	0.95
+inherit:by-domicile-at-death	by-domicile-at-death	skos:exactMatch	switzerland_zgb:iprg_art_90_last_domicile	Swiss IPRG Art 90 last-domicile principle	semapv:ManualMappingCuration	0.90
+inherit:by-habitual-residence-at-execution-or-death	by-habitual-residence-at-execution-or-death	skos:exactMatch	hague_1961:art_1_d	Hague Convention 1961 Art 1(d) habitual residence at execution or death	semapv:ManualMappingCuration	0.95
+inherit:by-habitual-residence-at-execution-or-death	by-habitual-residence-at-execution-or-death	skos:exactMatch	eu_succession:sr_650_2012_art_21	EU SR 650/2012 Art 21 habitual residence default applicable law	semapv:ManualMappingCuration	0.95
+inherit:by-situs-immovables	by-situs-immovables	skos:exactMatch	hague_1961:art_1_e	Hague Convention 1961 Art 1(e) lex situs for immovables	semapv:ManualMappingCuration	0.95
+inherit:by-situs-immovables	by-situs-immovables	skos:exactMatch	uk_w_common_law:wills_act_1963_s1_e	Wills Act 1963 s.1(e) lex situs for immovables only	semapv:ManualMappingCuration	0.95
+inherit:by-eu-sr-650-2012-art-22-election	by-eu-sr-650-2012-art-22-election	skos:exactMatch	eu_succession:sr_650_2012_art_22_choice_of_law_election	EU SR 650/2012 Art 22 explicit choice-of-law election	semapv:ManualMappingCuration	0.95
+inherit:by-common-law-comity	by-common-law-comity	skos:exactMatch	uk_w_common_law:common_law_comity_recognition	UK&W common-law comity recognition of foreign-validly-executed Wills	semapv:ManualMappingCuration	0.90
+inherit:by-civil-law-renvoi	by-civil-law-renvoi	skos:exactMatch	switzerland_zgb:iprg_art_91_renvoi	Swiss IPRG Art 91 renvoi mechanism	semapv:ManualMappingCuration	0.90
+inherit:universalist	universalist	skos:exactMatch	eu_succession:sr_650_2012_universalist_principle	EU SR 650/2012 universalist principle (single law for entire estate)	semapv:ManualMappingCuration	0.95
+inherit:universalist	universalist	skos:exactMatch	switzerland_zgb:iprg_universalist_movables_default	Swiss IPRG universalist principle for movables (last-domicile default)	semapv:ManualMappingCuration	0.90
+inherit:scissionist	scissionist	skos:exactMatch	uk_w_common_law:common_law_scissionist_immovables	UK&W common-law scissionist tradition (movables vs immovables split)	semapv:ManualMappingCuration	0.95
+inherit:scissionist	scissionist	skos:exactMatch	switzerland_zgb:iprg_art_91_scissionist_immovables_abroad	Swiss IPRG Art 91 scissionist for immovables abroad	semapv:ManualMappingCuration	0.90
+inherit:mixed	mixed	skos:closeMatch	uk_w_common_law:mixed_method_per_asset_class	Mixed method — per-asset-class classification	semapv:ManualMappingCuration	0.75

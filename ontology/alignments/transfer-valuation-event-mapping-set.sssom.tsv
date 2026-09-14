@@ -1,0 +1,43 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_law: https://www.legislation.gov.uk/
+#   hmrc: https://www.gov.uk/hmrc-internal-manuals/inheritance-tax-manual/
+#   rics: https://www.rics.org/uk/red-book/
+#   ifrs: https://www.ifrs.org/issued-standards/
+#   ias: https://www.ifrs.org/issued-standards/ias/
+#   cmns: https://www.omg.org/spec/Commons/
+#   fibo: https://spec.edmcouncil.org/fibo/
+#   bfo: http://purl.obolibrary.org/obo/BFO_
+#   iao: http://purl.obolibrary.org/obo/IAO_
+#   prov: http://www.w3.org/ns/prov#
+#   che_law: https://www.fedlex.admin.ch/eli/cc/
+#   sg_law: https://sso.agc.gov.sg/Act/
+#   in_law: https://www.indiacode.nic.in/
+#   il_law: https://www.nevo.co.il/law_word/
+#   aaoifi: https://aaoifi.com/
+#   orcid: https://orcid.org/
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+# mapping_set_id: https://inherit.standard/v2/sssom/q-cm-2-valuation-event
+# mapping_set_version: '1.0'
+# mapping_set_title: Q-CM-2 ValuationEvent canonical primitive — SSSOM mapping_set
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: Cross-jurisdictional SSSOM bridging for ValuationEvent + 3 NEW SKOS classifier schemes (Methodology + Purpose + Qualification). Bridges UK statute (IHTA 1984 s.160 + TCGA 1992 + AEA 1925 + Companies Act 2006), accounting standards (IFRS 13 + FRS 102), RICS Red Book Global Standards 2022, Swiss cantonal valuation regime (ZGB §641), and faith-tradition variants (Hanafi waqf + Hindu sapinda + Halachic ketuba + Israeli Family Court).
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence	comment
+inherit:ValuationEvent	ValuationEvent	skos:exactMatch	bfo:0000015	process	semapv:LexicalMatching	0.99	BFO 0000015 process; ValuationEvent is_a measurement process (point-in-time valuation event)
+inherit:market-value	market-value	skos:exactMatch	uk_law:ukpga/1984/51/section/160	IHTA 1984 s.160	semapv:ManualMappingCuration	0.99	UK statutory definition of market value for IHT — willing buyer/willing seller arm's-length
+inherit:market-value	market-value	skos:closeMatch	rics:RBGS_2022_VPS4	RICS Red Book Global Standards 2022 VPS 4	semapv:ManualMappingCuration	0.93	RICS canonical definition aligns with IHTA s.160; minor procedural differences
+inherit:fair-value	fair-value	skos:exactMatch	ifrs:IFRS_13	IFRS 13 Fair Value Measurement	semapv:ManualMappingCuration	0.99	International accounting standard; Level-1/2/3 input hierarchy applies
+inherit:fair-value	fair-value	skos:closeMatch	uk_law:ukpga/2006/46/section/396	Companies Act 2006 s.396 (FRS 102 §11.27)	semapv:ManualMappingCuration	0.93	UK accounting equivalent; same definition
+inherit:forced-sale-value	forced-sale-value	skos:closeMatch	hmrc:IHTM09703	HMRC IHTM09703 quick-realisation	semapv:ManualMappingCuration	0.93	IHTA s.160 sub-case — distress-sale qualifier on market-value
+inherit:historical-cost	historical-cost	skos:exactMatch	ias:IAS_39	IAS 39 Financial Instruments	semapv:ManualMappingCuration	0.99	Pre-IFRS 9 historical-cost basis; CGT base-cost convention
+inherit:replacement-cost	replacement-cost	skos:closeMatch	aaoifi:ShariahStandard_60	AAOIFI Shariah Standard 60 (Waqf)	semapv:ManualMappingCuration	0.93	Shariah-compliant valuation for waqf endowment management; avoids riba-prone DCF
+inherit:inheritance-tax	inheritance-tax	skos:exactMatch	uk_law:ukpga/1984/51	IHTA 1984	semapv:ManualMappingCuration	0.99	UK IHT statutory base; HMRC IHT400 form-anchored
+inherit:capital-gains-tax	capital-gains-tax	skos:exactMatch	uk_law:ukpga/1992/12/section/272	TCGA 1992 s.272	semapv:ManualMappingCuration	0.99	UK CGT statutory valuation basis
+inherit:probate-administration	probate-administration	skos:exactMatch	uk_law:ukpga/1925/23/section/25	AEA 1925 s.25	semapv:ManualMappingCuration	0.99	UK&W PR statutory inventory duty; Scotland equivalent S(S)A 2024
+inherit:rics-mrics-frics	RICS chartered valuer	skos:exactMatch	rics:RBGS_2022	RICS Red Book Global Standards 2022	semapv:ManualMappingCuration	0.99	MRICS / FRICS credentialled valuer
+inherit:hmrc-shares-and-assets-valuation	HMRC SAV	skos:closeMatch	hmrc:SAV_unit	HMRC Shares and Assets Valuation unit	semapv:ManualMappingCuration	0.93	UK statutory valuer for unquoted businesses + non-RICS asset classes
+inherit:swiss-cantonal-amtliche-verkehrswerte	Swiss cantonal official-value	skos:closeMatch	che_law:210/article/641	ZGB §641 + cantonal Liegenschaftsschätzung	semapv:ManualMappingCuration	0.93	Swiss real-property statutory valuation; cantonal variants (Zürich + Bern + Geneva)
+inherit:accounting-financial-reporting	accounting-financial-reporting	skos:closeMatch	uk_law:ukpga/2006/46	Companies Act 2006	semapv:ManualMappingCuration	0.93	UK statutory financial-reporting basis; FRS 102 implementation
+inherit:agreed-value	agreed-value	skos:closeMatch	in_law:HSA_1956	Hindu Succession Act 1956 (sapinda partition)	semapv:ManualMappingCuration	0.93	Hindu family settlement agreed-value pattern; classical Mitakshara school

@@ -1,0 +1,43 @@
+version = 1
+SPDX-PackageName = "INHERIT standard"
+SPDX-PackageSupplier = "Testate Technologies Ltd <hello@testate.tech>"
+SPDX-PackageDownloadLocation = "https://github.com/openinherit/standard"
+
+# Why this file exists.
+#
+# The statute-derived content harvested under TT-1508 arrives from a repository
+# whose licence assertion was carried by ITS REUSE.toml, not by its files:
+# `catala/**` and `ontology/**` were globbed as LicenseRef-TT-Pre-Public-Release,
+# and of 186 files under catala/ exactly ONE carried an inline SPDX header.
+#
+# A REUSE.toml does not travel on a file copy. Without this file, 34 of the 52
+# harvested files would sit in a public Apache-2.0 repository carrying no licence
+# statement at all — which is a different defect from a file *denying* it has a
+# licence, and one that a grep for `LicenseRef-` cannot see, because there is no
+# header to find.
+#
+# Files whose format permits a comment carry an inline Apache-2.0 header and do
+# not rely on this file. The globs below exist for the formats that cannot:
+#
+#   *.json  — no comment syntax exists in JSON. 16 oracle / fixture /
+#             expected-output files.
+#   *.tsv   — SSSOM's leading `#` block is NOT a comment: it is the mapping-set
+#             METADATA, parsed as YAML by the validator. A `# SPDX-...` line
+#             would inject a non-SSSOM slot into every mapping set, so stamping
+#             here would corrupt the artefact rather than annotate it.
+#
+# precedence is deliberately "closest": unlike the source repository, this tree
+# holds no planning prose quoting example SPDX headers in code fences, so an
+# in-file header is always the file's own and should win.
+
+[[annotations]]
+path = [
+  "catala/**/*.test-fixtures.json",
+  "catala/**/*.expected-output.json",
+  "tests/oracles/*.oracle.json",
+  "tests/cedar/service-eligibility/*.json",
+  "ontology/alignments/*.sssom.tsv",
+]
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 Testate Technologies Ltd"
+SPDX-License-Identifier = "Apache-2.0"

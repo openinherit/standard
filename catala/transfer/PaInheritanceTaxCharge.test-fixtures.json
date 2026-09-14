@@ -1,0 +1,61 @@
+{
+  "$comment": "Catala rule test inputs for PaInheritanceTaxCharge per ICP-0017 (TT-682). Pennsylvania inheritance tax charge, 72 P.S. § 9116(a). Scope returns ComputedOrNeedsHuman.Verdict (money), not a bespoke verdict enum, so expected_output records the arm + (for Computed) the amount. Mirrors the oracle cases authored for the code-inherit-test-suite T032 gov-oracle follow-up (tests/oracles/pa-inheritance-tax.oracle.json) — figures live-sourced revenue.pa.gov / 20 Pa.C.S. § 3121 2026-07-02.",
+  "rule_name": "PaInheritanceTaxCharge",
+  "scope": "Charge",
+  "positive": [
+    {
+      "fixture_id": "T-tt682-pa-001-lineal-100k",
+      "input": {
+        "taxable_value": "100000",
+        "beneficiary_class": "LinealHeir",
+        "deduction_or_exemption_claimed": false
+      },
+      "expected_output": { "verdict_arm": "Computed", "amount": "4500" },
+      "decidability_claim": "DECIDABLE; $100,000 x 4.5% = $4,500 (72 P.S. § 9116(a), direct descendants and lineal heirs)."
+    },
+    {
+      "fixture_id": "T-tt682-pa-002-sibling-100k",
+      "input": {
+        "taxable_value": "100000",
+        "beneficiary_class": "Sibling",
+        "deduction_or_exemption_claimed": false
+      },
+      "expected_output": { "verdict_arm": "Computed", "amount": "12000" },
+      "decidability_claim": "DECIDABLE; $100,000 x 12% = $12,000 (72 P.S. § 9116(a), siblings)."
+    },
+    {
+      "fixture_id": "T-tt682-pa-003-collateral-100k",
+      "input": {
+        "taxable_value": "100000",
+        "beneficiary_class": "Collateral",
+        "deduction_or_exemption_claimed": false
+      },
+      "expected_output": { "verdict_arm": "Computed", "amount": "15000" },
+      "decidability_claim": "DECIDABLE; $100,000 x 15% = $15,000 (72 P.S. § 9116(a), other heirs)."
+    }
+  ],
+  "negative": [
+    {
+      "fixture_id": "T-tt682-pa-004-spouse-exempt",
+      "input": {
+        "taxable_value": "100000",
+        "beneficiary_class": "SurvivingSpouse",
+        "deduction_or_exemption_claimed": false
+      },
+      "expected_output": { "verdict_arm": "Computed", "amount": "0" },
+      "decidability_claim": "DECIDABLE; 0% on transfers to a surviving spouse (72 P.S. § 9116(a)) — structural exemption, not a zero-valued rate."
+    }
+  ],
+  "edge": [
+    {
+      "fixture_id": "T-tt682-pa-005-deduction-routes-to-human",
+      "input": {
+        "taxable_value": "100000",
+        "beneficiary_class": "LinealHeir",
+        "deduction_or_exemption_claimed": true
+      },
+      "expected_output": { "verdict_arm": "NeedsHuman" },
+      "decidability_claim": "NOT DECIDABLE BY RULE; a claimed family exemption (20 Pa.C.S. § 3121) or § 9111 exemption needs human adjudication of eligibility before a figure can be computed."
+    }
+  ]
+}

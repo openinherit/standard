@@ -1,0 +1,30 @@
+{
+  "_doc": "T032 per-heir allocation oracle (TT-463). Asserts the per-HEIR allocation of a per-stirpes distribution, not just the conserved total — closing the C1 gameable-conservation hole (TT-455 §6): a wrong split with the right total AND right heir-count would pass a sum/length check. scripts/oracle_verify.py runs catala/probate/PerStirpes.catala_en, expands per_member_amounts per branch into the per-heir multiset, and compares it (collections.Counter) to expected_per_heir_gbp. WARNING — INVERTED CASE: a case with \"expect\": \"wrong_split\" carries a DELIBERATELY WRONG expected_per_heir_gbp (right total, right count, wrong split). It is NOT the correct answer; the harness PASSES that case iff it correctly detects the split differs (and FAILS — gate RED — if the wrong split somehow matched, proving the teeth are non-vacuous). Per-stirpes shares are statutory arithmetic (AEA 1925 s.46-s.47), not an external published figure — the oracle cites the statute, not a gov.uk worked example.",
+  "rule": {
+    "repo": "code-inherit-standard",
+    "rule_file": "catala/probate/PerStirpes.catala_en",
+    "module": "PerStirpes",
+    "scope": "Distribute",
+    "result_kind": "per_heir",
+    "list_field": "per_member_amounts",
+    "repeat_by": "branch_sizes"
+  },
+  "statute": "Administration of Estates Act 1925 s.46–s.47 (statutory trusts / per stirpes)",
+  "sourced_at": "2026-06-19",
+  "cases": [
+    {
+      "label": "match-900k-perstirpes",
+      "inputs": { "estate": "900000", "branch_sizes": [1, 1, 2] },
+      "expected_per_heir_gbp": [300000, 300000, 150000, 150000],
+      "expect": "match",
+      "citation": "AEA 1925 s.47 statutory trusts: the estate is divided equally among branches (stirpes); a predeceased child's branch share (£300,000) is divided among that child's two children (£150,000 each) per stirpes."
+    },
+    {
+      "label": "wrong-split-900k-conserving",
+      "inputs": { "estate": "900000", "branch_sizes": [1, 1, 2] },
+      "expected_per_heir_gbp": [300000, 300000, 200000, 100000],
+      "expect": "wrong_split",
+      "note": "DELIBERATELY WRONG (not the correct answer). Right total (£900,000) AND right heir-count (4) but the two grandchildren split is £200,000/£100,000 instead of the correct £150,000/£150,000. The harness MUST detect that the split differs — this is the C1 gameable-conservation case, reusing the exact wrong split TT-456/N4 caught declaratively (Rich's TT-459 comment fixed the values at £200k/£100k)."
+    }
+  ]
+}

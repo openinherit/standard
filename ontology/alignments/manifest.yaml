@@ -1,0 +1,114 @@
+# SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
+# SPDX-License-Identifier: Apache-2.0
+# Row-count manifest for ontology/alignments/*.sssom.tsv — TT-367, gate G-05 (sssom-py-validate).
+#
+# Machine-verified by scripts/validate_sssom.py (`make sssom-validate`): each file's actual
+# data-row count MUST equal the `rows` value here. Do NOT hand-edit a count to match a
+# documented/expected number — the count is derived from the file, not the other way round.
+#
+# `mode`: harvested  = lifted row-for-row from the frozen spike TSV (prefix-rewrite only).
+#         normalised = column-reorder / re-serialisation applied (see notes).
+version: "1.0"
+mapping_sets:
+  transfer-asset-transfer-event-mapping-set.sssom.tsv:
+    rows: 26
+    primitive: Transfer.AssetTransferEvent
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-18-q-cm-1-asset-transfer-event-mvp/transfer-asset-transfer-event-mapping-set.sssom.tsv
+  wills-bequest-mapping-set.sssom.tsv:
+    rows: 31
+    primitive: Wills.Bequest
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-17-q027-wills-bequest-mvp/wills-bequest-mapping-set.sssom.tsv
+  wills-substitution-mapping-set.sssom.tsv:
+    rows: 34
+    primitive: Wills.SubstitutionClause
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-17-q028-substitution-clause-mvp/wills-substitution-mapping-set.sssom.tsv
+  probate-estate-mapping-set.sssom.tsv:
+    rows: 21
+    primitive: Probate.Estate
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-17-q029-probate-estate-mvp/probate-estate-mapping-set.sssom.tsv
+  probate-will-recognition-mapping-set.sssom.tsv:
+    rows: 20
+    primitive: Probate.WillRecognition
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-17-q030-will-recognition-mvp/probate-will-recognition-mapping-set.sssom.tsv
+  probate-grant-of-representation-mapping-set.sssom.tsv:
+    rows: 22
+    primitive: Probate.GrantOfRepresentation
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-18-q031-grant-of-representation-mvp/probate-grant-of-representation-mapping-set.sssom.tsv
+  probate-personal-representative-mapping-set.sssom.tsv:
+    rows: 21
+    primitive: Probate.PersonalRepresentative
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-18-q032-personal-representative-mvp/probate-personal-representative-mapping-set.sssom.tsv
+  probate-administration-mapping-set.sssom.tsv:
+    rows: 25
+    primitive: Probate.ProbateAdministration
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-18-q033-probate-administration-mvp/probate-administration-mapping-set.sssom.tsv
+  probate-assent-to-beneficiary-mapping-set.sssom.tsv:
+    rows: 19
+    primitive: Probate.AssentToBeneficiary
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-18-q035-assent-to-beneficiary-mvp/probate-assent-to-beneficiary-mapping-set.sssom.tsv
+  probate-administration-account-mapping-set.sssom.tsv:
+    rows: 16
+    primitive: Probate.AdministrationAccount
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-18-q036-administration-account-mvp/probate-administration-account-mapping-set.sssom.tsv
+  trusts-trust-container-mapping-set.sssom.tsv:
+    rows: 18
+    primitive: Trusts.Trust
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-18-q037-trusts-trust-container-mvp/trusts-trust-container-mapping-set.sssom.tsv
+  trusts-trustee-mapping-set.sssom.tsv:
+    rows: 15
+    primitive: Trusts.Trustee
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-18-q038-trusts-trustee-role-bearer-mvp/trusts-trustee-mapping-set.sssom.tsv
+  trusts-beneficial-interest-mapping-set.sssom.tsv:
+    rows: 17
+    primitive: Trusts.BeneficialInterest
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-18-q039-trusts-beneficial-interest-mvp/trusts-beneficial-interest-mapping-set.sssom.tsv
+  trusts-trust-distribution-mapping-set.sssom.tsv:
+    rows: 15
+    primitive: Trusts.TrustDistribution
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-18-q040-trusts-trust-distribution-mvp/trusts-trust-distribution-mapping-set.sssom.tsv
+  assets-asset-mapping-set.sssom.tsv:
+    rows: 16
+    primitive: Assets.Asset
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-19-q041-assets-asset-mvp/assets-asset-mapping-set.sssom.tsv
+  assets-real-property-mapping-set.sssom.tsv:
+    rows: 18
+    primitive: Assets.RealProperty
+    mode: harvested
+    source: docs/superpowers/specs/spike-references/2026-05-19-q042-assets-real-property/real-property-mapping-set.sssom.tsv
+  transfer-valuation-event-mapping-set.sssom.tsv:
+    rows: 16
+    primitive: Transfer.ValuationEvent
+    mode: normalised
+    note: >-
+      Columns reordered from the spike's (subject_id, predicate_id, object_id,
+      mapping_justification, confidence, subject_label, object_label, comment) order to the
+      canonical 7 + comment. Predicate column was already clean SKOS; row-preserving.
+    source: docs/superpowers/specs/spike-references/2026-05-19-q043-transfer-valuation-event/valuation-event-mapping-set.sssom.tsv
+  assets-cryptocurrency-or-digital-asset-mapping-set.sssom.tsv:
+    rows: 19
+    primitive: Assets.DigitalAsset
+    mode: normalised
+    note: >-
+      Re-serialised: the spike file's metadata block was UNPREFIXED (no leading '#') and its
+      columns were in the valuation-style order. Fixed both, collapsed inherit_assets/inherit_core
+      to inherit. The raw spike has 23 data rows; 4 carry GENUINE non-SKOS predicates
+      (dcterms:relation, prov:wasInfluencedBy, 2x dcat:relation) which the per-primitive SKOS
+      predicate policy forbids — they are relationship/dataset annotations belonging to the
+      deferred Layer-2 catalog (A-131), so they are NOT harvested here (19 SKOS rows retained).
+      Flagged for coordinator review (TT-367 PR).
+    source: docs/superpowers/specs/2026-04-29-multi-phase-audit/spike-references/2026-05-20-q044-cryptocurrency-or-digital-asset/cryptocurrency-or-digital-asset-mapping-set.sssom.tsv

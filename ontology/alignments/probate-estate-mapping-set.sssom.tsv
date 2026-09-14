@@ -1,0 +1,36 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   switzerland_zgb: https://openinherit.org/legal-substrate/switzerland-zgb/
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/probate-estate-q029-beta-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: Probate.Estate universal classifier mapping_set (Q-029 beta-eta-star)
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-029 beta-eta-star universal EstateAdministrationPhaseScheme + TestacyStatusScheme to three Phase-1 jurisdictions (UK England-Wales AEA 1925 + Scotland Succession Act 1964 + Switzerland ZGB Erbrecht Art 537-640). Authored Sunday 17 May 2026 BST.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:pre-grant	pre-grant	skos:exactMatch	uk_w_common_law:pre_grant_executor_period	pre-grant executor period (AEA 1925; estate vests s.1)	semapv:ManualMappingCuration	0.95
+inherit:pre-grant	pre-grant	skos:exactMatch	scots_law:pre_confirmation_period	pre-confirmation period (Confirmation of Executors Scotland Act 1858)	semapv:ManualMappingCuration	0.95
+inherit:pre-grant	pre-grant	skos:exactMatch	switzerland_zgb:pre_erbschein_period	pre-Erbschein period (ZGB Art 537+)	semapv:ManualMappingCuration	0.95
+inherit:post-grant	post-grant	skos:exactMatch	uk_w_common_law:grant_of_probate_period	Grant of Probate / Letters of Administration issued (HMCTS)	semapv:ManualMappingCuration	0.95
+inherit:post-grant	post-grant	skos:exactMatch	scots_law:confirmation_period	Confirmation by Sheriff Court (Scotland)	semapv:ManualMappingCuration	0.95
+inherit:post-grant	post-grant	skos:exactMatch	switzerland_zgb:erbschein_issued	Erbschein issued by cantonal authority	semapv:ManualMappingCuration	0.95
+inherit:distribution	distribution	skos:exactMatch	uk_w_common_law:administration_period	administration period — PR collecting assets + paying debts	semapv:ManualMappingCuration	0.95
+inherit:distribution	distribution	skos:exactMatch	scots_law:administration_period_scots	administration period (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:distribution	distribution	skos:exactMatch	switzerland_zgb:erbteilung_612	Erbteilung — partition of estate among co-heirs (ZGB Art 612)	semapv:ManualMappingCuration	0.95
+inherit:closed	closed	skos:exactMatch	uk_w_common_law:estate_closed	estate closed — final accounts approved + PR discharged	semapv:ManualMappingCuration	0.95
+inherit:closed	closed	skos:exactMatch	scots_law:estate_closed_scots	estate closed (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:closed	closed	skos:exactMatch	switzerland_zgb:estate_closed_zgb	estate closed (Swiss law)	semapv:ManualMappingCuration	0.95
+inherit:testate	testate	skos:exactMatch	uk_w_common_law:testate_aea_1925	testate (valid Will exists; AEA 1925)	semapv:ManualMappingCuration	0.95
+inherit:testate	testate	skos:exactMatch	scots_law:testate_scots	testate (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:testate	testate	skos:exactMatch	switzerland_zgb:testamentarisch_481	testamentarische Erbfolge (ZGB Art 481)	semapv:ManualMappingCuration	0.95
+inherit:intestate	intestate	skos:exactMatch	uk_w_common_law:intestate_aea_s46	intestate per AEA 1925 s.46 statutory rules	semapv:ManualMappingCuration	0.95
+inherit:intestate	intestate	skos:exactMatch	scots_law:intestate_succession_act_1964	intestate per Succession Scotland Act 1964	semapv:ManualMappingCuration	0.95
+inherit:intestate	intestate	skos:exactMatch	switzerland_zgb:gesetzlich_457_466	gesetzliche Erbfolge (ZGB Art 457-466)	semapv:ManualMappingCuration	0.95
+inherit:partial-intestate	partial-intestate	skos:exactMatch	uk_w_common_law:partial_intestate	partial-intestate — Will partial-disposition + residue per s.46	semapv:ManualMappingCuration	0.95
+inherit:partial-intestate	partial-intestate	skos:exactMatch	scots_law:partial_intestate_scots	partial-intestate (Scots law)	semapv:ManualMappingCuration	0.95
+inherit:partial-intestate	partial-intestate	skos:exactMatch	switzerland_zgb:teilweise_gesetzlich	teilweise gesetzliche Erbfolge (Swiss partial intestacy)	semapv:ManualMappingCuration	0.95

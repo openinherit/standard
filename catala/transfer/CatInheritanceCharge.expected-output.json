@@ -1,0 +1,43 @@
+{
+  "$comment": "Expected-output baseline for CatInheritanceCharge per ICP-0017 (TT-682). Unlike the PETClawbackCheck / QSRChainCheck twins in this directory, this file does NOT claim a Mopsa-c PROVEN-VIA-BRIDGE verdict — no mopsa-c bridge script exists in this repo (grepped 2026-07-02: no Makefile/script references), so that claim would be unverified. What IS verified and recorded here: catala typecheck (clean, via the ComputedOrNeedsHuman clerk-build composition) and a clerk-test sanity-check driver run over exactly these fixture cases.",
+  "rule_name": "CatInheritanceCharge",
+  "rule_source_path": "code-inherit-standard/catala/transfer/CatInheritanceCharge.catala_en",
+  "rule_authored_under_tt682": true,
+  "applicable_classes": ["inherit_transfer:AssetTransferEvent"],
+  "applicable_scope": "Invoked per beneficiary x taxable benefit under an Irish inheritance (beneficiary-side incidence, CATCA 2003 s.45) — NOT once per estate. Caller supplies cat_group from a kinship->group mapping (out of scope here) and prior_same_group_benefits from lifetime aggregation since 5 December 1991.",
+  "catala_typecheck": "PASS (verified 2026-07-02 via a throwaway clerk-build project containing ComputedOrNeedsHuman.catala_en + this file)",
+  "clerk_test_sanity_check": "PASS — 2026-07-02 — a #[test] driver scope over exactly the 5 fixture cases below asserted the arm AND (for Computed) the amount; ALL TESTS PASSED under clerk 1.2.0.",
+  "expected_mopsa_c_verdict": "NOT RUN — no mopsa-c bridge script exists in this repo; deferred (Phase-1.5+ fast-follow if the doctrine is extended to beneficiary-side scopes).",
+  "expected_rule_body_alarms": "N/A — not evaluated (see expected_mopsa_c_verdict)",
+  "per_fixture_expected_outcomes": [
+    {
+      "fixture_id": "T-tt682-cat-001-groupA-500k-no-priors",
+      "expected_verdict_arm": "Computed",
+      "expected_amount": "33000",
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-tt682-cat-002-groupB-30k-inside-threshold",
+      "expected_verdict_arm": "Computed",
+      "expected_amount": "0",
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-tt682-cat-003-groupA-aggregation",
+      "expected_verdict_arm": "Computed",
+      "expected_amount": "33000",
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-tt682-cat-004-spouse-exempt",
+      "expected_verdict_arm": "Computed",
+      "expected_amount": "0",
+      "clerk_test_pass": true
+    },
+    {
+      "fixture_id": "T-tt682-cat-005-relief-routes-to-human",
+      "expected_verdict_arm": "NeedsHuman",
+      "clerk_test_pass": true
+    }
+  ]
+}

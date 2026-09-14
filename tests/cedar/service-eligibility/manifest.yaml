@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
+# SPDX-License-Identifier: Apache-2.0
+# TT-626 Cedar service-eligibility analysis manifest. Adding a jurisdiction = add a
+# checks[] row (P in the standard) + its forbidden_oracle (Q here). No harness change.
+schema: cedar/service-eligibility/service-eligibility.cedarschema # standard-relative
+principal_type: Professional
+action: 'Action::"OfferService"'
+resource_type: ServiceRequest
+checks:
+  - jurisdiction: "E&W"
+    policy: cedar/service-eligibility/ew.cedar # standard-relative (P)
+    forbidden_oracle: tests/cedar/service-eligibility/ew.forbidden.cedar # test-suite-relative (Q)
+selftest:
+  leaky_policy: tests/cedar/service-eligibility/ew.LEAKY.cedar # must be DOES-NOT-HOLD vs its oracle
+  forbidden_oracle: tests/cedar/service-eligibility/ew.forbidden.cedar

@@ -1,0 +1,132 @@
+> Module CatInheritanceCharge
+> Using ComputedOrNeedsHuman
+
+SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
+SPDX-License-Identifier: Apache-2.0
+
+# CatInheritanceCharge — Ireland Capital Acquisitions Tax charge (CATCA 2003)
+
+The Capital Acquisitions Tax (CAT) charge on one beneficiary's taxable benefit under an
+inheritance, per the Capital Acquisitions Tax Consolidation Act 2003 (CATCA 2003). Unlike UK
+Inheritance Tax (`IhtDeathCharge.catala_en`), CAT is **beneficiary-side**: the accountable
+person is the successor/donee (CATCA 2003 s.45), and the charge is computed per (beneficiary x
+benefit), not once on the aggregate estate. A beneficiary-side scope therefore takes one
+invocation per beneficiary's benefit, in contrast to `IhtDeathCharge`'s single estate-aggregate
+invocation — the incidence axis this contrast motivates is machine-readable in the jurisdiction
+parameter layer (`linkml/parameters/parameters.yaml` `TaxIncidenceEnum`), not in Catala.
+
+The scope returns the `ComputedOrNeedsHuman.Verdict` contract (doctrine §1a; Constitution
+Principle XIII): a definite legal figure travels in the `Computed` arm.
+
+Legal-correctness is asserted **outside this file** by the T032 gov-oracle harness (TT-478):
+`code-inherit-test-suite/scripts/oracle_verify.py` runs this scope and checks the computed
+figure against the published revenue.ie figure cited in
+`tests/oracles/ie-cat-charge.oracle.json`. This file therefore carries the law, not its own
+assertions.
+
+(Prose note: a line must not begin with the reserved `>` directive prefix, so any statutory
+quotation is kept inline.)
+
+Statutory figures (current values; live-sourced revenue.ie 2026-07-02 — Budget 2026 confirmed
+no change to CAT thresholds):
+
+- Group A threshold (parent to child) = €400,000
+- Group B threshold (e.g. sibling, niece/nephew, grandchild) = €40,000
+- Group C threshold (all other relationships) = €20,000
+- rate = 33% on the taxable value above the relevant group threshold
+- lifetime aggregation of same-group benefits received since 5 December 1991 (CATCA 2003 Sch 2
+  para 3) — `prior_same_group_benefits` is a required input because omitting it computes the
+  wrong tax
+- spouse/civil partner transfers are fully exempt (CATCA 2003 s.70/s.71)
+
+Group **classification** from kinship (which threshold a beneficiary falls under) is
+out-of-scope here — supplied by the caller/projection; CATCA 2003 Sch 2 Pt 1 edge cases (e.g. a
+minor child of a predeceased child) are `NeedsHuman` territory in Phase-alpha. Dwelling-house
+relief (s.86), agricultural relief (s.89), and business relief (s.92) are not computed by this
+rule — a relief claim routes to `NeedsHuman` (`relief_claimed`).
+
+The group thresholds and the rate are `context` parameters (ICP-A1) whose authoritative values
+live in the jurisdiction parameter layer; the literals below are the overridable defaults.
+
+G6 certification floor (TT-427/TT-1079): every input is a characterisation judgement
+(`registry/governance-layers.yaml`, all L3 — the benefit valuations, the CAT-group
+kinship classification, spousehood, and the relief claim), so each arrives as a
+`Certified<Type> | NotCharacterised` enum; any uncertified input routes `NeedsHuman`
+via the `uncertified_inputs` gate. `CertifiedCatGroup` is declared HERE (not in the
+shared contract module) because `CatGroup` is this module's own classification enum
+and the contract module cannot import rule modules — the rule-local twin the contract
+module's certification-floor note describes.
+
+```catala
+declaration enumeration CatGroup:
+  -- GroupA
+  -- GroupB
+  -- GroupC
+
+declaration enumeration CertifiedCatGroup:
+  -- Certified content CatGroup
+  -- NotCharacterised
+
+declaration scope Charge:
+  input taxable_benefit content ComputedOrNeedsHuman.CertifiedMoney
+  input prior_same_group_benefits content ComputedOrNeedsHuman.CertifiedMoney
+  input cat_group content CertifiedCatGroup
+  input spouse_or_civil_partner content ComputedOrNeedsHuman.CertifiedBool
+  input relief_claimed content ComputedOrNeedsHuman.CertifiedBool
+  context group_a_threshold content money
+  context group_b_threshold content money
+  context group_c_threshold content money
+  context cat_rate content decimal
+  internal uncertified_inputs content boolean
+  internal taxable_benefit_v content money
+  internal prior_same_group_benefits_v content money
+  internal cat_group_v content CatGroup
+  internal spouse_or_civil_partner_v content boolean
+  internal relief_claimed_v content boolean
+  internal threshold content money
+  internal available_threshold content money
+  internal taxable_excess content money
+  internal tax content money
+  output verdict content ComputedOrNeedsHuman.Verdict
+
+scope Charge:
+  definition group_a_threshold equals $400,000
+  definition group_b_threshold equals $40,000
+  definition group_c_threshold equals $20,000
+  definition cat_rate equals 0.33
+  definition uncertified_inputs equals
+    (match taxable_benefit with pattern -- ComputedOrNeedsHuman.CertifiedMoney.Certified content v: false -- ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised: true)
+    or (match prior_same_group_benefits with pattern -- ComputedOrNeedsHuman.CertifiedMoney.Certified content v: false -- ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised: true)
+    or (match cat_group with pattern -- CertifiedCatGroup.Certified content v: false -- CertifiedCatGroup.NotCharacterised: true)
+    or (match spouse_or_civil_partner with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: false -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: true)
+    or (match relief_claimed with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: false -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: true)
+  # certified-value extractions — fallbacks are dead code (verdict routes first)
+  definition taxable_benefit_v equals
+    match taxable_benefit with pattern -- ComputedOrNeedsHuman.CertifiedMoney.Certified content v: v -- ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised: $0
+  definition prior_same_group_benefits_v equals
+    match prior_same_group_benefits with pattern -- ComputedOrNeedsHuman.CertifiedMoney.Certified content v: v -- ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised: $0
+  definition cat_group_v equals
+    match cat_group with pattern -- CertifiedCatGroup.Certified content v: v -- CertifiedCatGroup.NotCharacterised: GroupC
+  definition spouse_or_civil_partner_v equals
+    match spouse_or_civil_partner with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: v -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: false
+  definition relief_claimed_v equals
+    match relief_claimed with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: v -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: false
+  definition threshold equals
+    match cat_group_v with pattern
+    -- GroupA: group_a_threshold
+    -- GroupB: group_b_threshold
+    -- GroupC: group_c_threshold
+  definition available_threshold equals
+    if threshold > prior_same_group_benefits_v
+    then threshold - prior_same_group_benefits_v
+    else $0
+  definition taxable_excess equals
+    if taxable_benefit_v > available_threshold
+    then taxable_benefit_v - available_threshold
+    else $0
+  definition tax equals taxable_excess * cat_rate
+  definition verdict equals
+    if uncertified_inputs then NeedsHuman
+    else if spouse_or_civil_partner_v then Computed content $0
+    else (if relief_claimed_v then NeedsHuman else Computed content tax)
+```

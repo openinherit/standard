@@ -1,0 +1,39 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   switzerland_zgb: https://openinherit.org/legal-substrate/switzerland-zgb/
+#   eu_succession: https://openinherit.org/legal-substrate/eu-succession/
+#   t60_primitive: https://openinherit.org/schemas/cross-module/
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/probate-grant-of-representation-q031-delta-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: Probate.GrantOfRepresentation universal classifier mapping_set (Q-031 delta-eta-star)
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-031 delta-eta-star universal UniversalGrantTypeScheme + SubmissionChannelScheme to UK&W localGrantTypes 5 values + Scotland Confirmation 3 values + Switzerland Erbschein + EU SR 650/2012 European Certificate of Succession Article 67 + T60 JurisdictionalSubmission primitive subclass mappings. Authored Sunday 18 May 2026 BST.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:testate-grant-with-executor	testate-grant-with-executor	skos:exactMatch	uk_w_common_law:grant_of_probate	UK&W grant_of_probate (Senior Courts Act 1981 Part VI; testate; named executor proves the will)	semapv:ManualMappingCuration	0.95
+inherit:testate-grant-with-executor	testate-grant-with-executor	skos:closeMatch	scots_law:confirmation_with_executor_nominate	Scotland confirmation with executor_nominate (Confirmation of Executors Scotland 1858; will-derived executor authority)	semapv:ManualMappingCuration	0.90
+inherit:testate-grant-with-executor	testate-grant-with-executor	skos:closeMatch	switzerland_zgb:erbschein_for_testate	Switzerland Erbschein for testate cases (ZGB Art 559 + cantonal procedure)	semapv:ManualMappingCuration	0.85
+inherit:administration-with-will-annexed	administration-with-will-annexed	skos:exactMatch	uk_w_common_law:letters_of_administration_with_will_annexed	UK&W letters_of_administration_with_will_annexed (will exists but executor renounces / predeceases / unable)	semapv:ManualMappingCuration	0.95
+inherit:administration-with-will-annexed	administration-with-will-annexed	skos:closeMatch	scots_law:confirmation_with_executor_dative_testate	Scotland confirmation with executor_dative for testate cases (Sheriff Court appoints administrator; bond of caution required)	semapv:ManualMappingCuration	0.90
+inherit:intestate-administration	intestate-administration	skos:exactMatch	uk_w_common_law:letters_of_administration	UK&W letters_of_administration (no will; AEA 1925 s.9 Public Trustee pre-grant vesting)	semapv:ManualMappingCuration	0.95
+inherit:intestate-administration	intestate-administration	skos:closeMatch	scots_law:confirmation_with_executor_dative_intestate	Scotland confirmation with executor_dative for intestate cases (Succession Scotland 1964)	semapv:ManualMappingCuration	0.90
+inherit:intestate-administration	intestate-administration	skos:closeMatch	switzerland_zgb:erbschein_for_intestate	Switzerland Erbschein for intestate cases (ZGB Art 457-466 three-parentele rules)	semapv:ManualMappingCuration	0.85
+inherit:limited-grant	limited-grant	skos:exactMatch	uk_w_common_law:limited_grant	UK&W limited_grant (limited in scope — specific assets / foreign property excluded / temporary administration)	semapv:ManualMappingCuration	0.95
+inherit:supplementary-or-de-bonis-non	supplementary-or-de-bonis-non	skos:exactMatch	uk_w_common_law:de_bonis_non	UK&W de_bonis_non (grant for unadministered estate when original executor dies)	semapv:ManualMappingCuration	0.95
+inherit:supplementary-or-de-bonis-non	supplementary-or-de-bonis-non	skos:closeMatch	scots_law:eik_confirmation	Scotland eik_confirmation (Scots-specific supplementary confirmation when assets discovered post-confirmation)	semapv:ManualMappingCuration	0.85
+inherit:supplementary-or-de-bonis-non	supplementary-or-de-bonis-non	skos:relatedMatch	scots_law:small_estate_certificate	Scotland small_estate_certificate (≤£36,000 simplified procedure; conceptually adjacent though strictly different category per Spice 2025)	semapv:ManualMappingCuration	0.65
+inherit:testate-grant-with-executor	testate-grant-with-executor	skos:closeMatch	eu_succession:ecs_art_67_issued	EU SR 650/2012 Article 67 European Certificate of Succession issued (Member State competent authority; Art 4 habitual-residence jurisdiction)	semapv:ManualMappingCuration	0.80
+inherit:intestate-administration	intestate-administration	skos:closeMatch	eu_succession:ecs_art_67_intestate	EU SR 650/2012 Article 67 ECS for intestate succession	semapv:ManualMappingCuration	0.80
+inherit:ApiSubmission	ApiSubmission	skos:exactMatch	t60_primitive:api_submission	T60 JurisdictionalSubmission#ApiSubmission subclass (OAuth + idempotency-key + machine ack; HMRC MTD VAT pattern; no current probate-grant API exists)	semapv:ManualMappingCuration	0.95
+inherit:PortalUploadSubmission	PortalUploadSubmission	skos:exactMatch	t60_primitive:portal_upload_submission	T60 JurisdictionalSubmission#PortalUploadSubmission subclass (portal-URL + login-state + PDF payload; UK&W MyHMCTS mandatory post-2 Nov 2020)	semapv:ManualMappingCuration	0.95
+inherit:EmailAttachmentSubmission	EmailAttachmentSubmission	skos:exactMatch	t60_primitive:email_attachment_submission	T60 JurisdictionalSubmission#EmailAttachmentSubmission subclass (email-route + attachment-set + delivery-evidence; Swiss cantonal Erbschein typical)	semapv:ManualMappingCuration	0.95
+inherit:PaperSubmission	PaperSubmission	skos:exactMatch	t60_primitive:paper_submission	T60 JurisdictionalSubmission#PaperSubmission subclass (post / in-person submission; UK&W PA1P/PA1A citizen route + Scotland Form C1)	semapv:ManualMappingCuration	0.95
+inherit:PortalUploadSubmission	PortalUploadSubmission	skos:closeMatch	uk_w_common_law:myhmcts_portal	UK&W MyHMCTS portal mandatory for solicitor grant applications since 2 Nov 2020 (digital statement of truth)	semapv:ManualMappingCuration	0.90
+inherit:PaperSubmission	PaperSubmission	skos:closeMatch	scots_law:form_c1_inventory	Scotland Form C1 inventory paper submission to Sheriff Court (no portal yet)	semapv:ManualMappingCuration	0.90
+inherit:EmailAttachmentSubmission	EmailAttachmentSubmission	skos:closeMatch	switzerland_zgb:cantonal_email_route	Switzerland cantonal authority email submission (varies by canton; ZH Bezirksgericht / SG Notariat / etc.)	semapv:ManualMappingCuration	0.85
+inherit:testate-grant-with-executor	testate-grant-with-executor	skos:closeMatch	eu_succession:ecs_art_62_member_state_recognition	EU SR 650/2012 Article 62 ECS automatic recognition across Member States (issued in one MS recognised in all per P-10 Berenbrok b-fold distinction issued-vs-recognised)	semapv:ManualMappingCuration	0.80

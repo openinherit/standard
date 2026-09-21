@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@sourcemeta/blaze':
-        specifier: 16.10.0
-        version: 16.10.0
+        specifier: 16.11.0
+        version: 16.11.0
     devDependencies:
       '@hey-api/client-fetch':
         specifier: latest
@@ -27,10 +27,10 @@ importers:
         version: 1.17.5(@hyperjump/browser@1.3.1)
       '@redocly/cli':
         specifier: latest
-        version: 2.52.0
+        version: 2.53.3
       '@sourcemeta/jsonschema':
-        specifier: 16.10.0
-        version: 16.10.0
+        specifier: 16.11.0
+        version: 16.11.0
       ajv:
         specifier: ^8.17.1
         version: 8.18.0
@@ -290,8 +290,8 @@ packages:
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
     engines: {node: '>=8'}
 
-  '@redocly/cli@2.52.0':
-    resolution: {integrity: sha512-VUZFUwVu2vteAgUOX04QbgGZ9+QMP6UoonaSHQ7asAfaKbYBcw6QFrqA6FrDXg1ycN73Ou07Hb8RQWTnRndxtg==}
+  '@redocly/cli@2.53.3':
+    resolution: {integrity: sha512-hzNAWzHCOZ05vwRx0ehTxNeJaxxizjGV505eKtfs9MR/8ieD/8lYhAK4GF5FaqRRwOEpLO0PvzQwBSKYXmxhRA==}
     engines: {node: '>=22.12.0 || >=20.19.0 <21.0.0', npm: '>=10'}
     hasBin: true
 
@@ -433,12 +433,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@sourcemeta/blaze@16.10.0':
-    resolution: {integrity: sha512-nm9g82oW10xgeY/mWxMY/Jmar9Hg19TbxAPORyIl+/X0Cu0KPt8WqcxjrwgYwef5h277SGcqM6tB1TaeWO1qRQ==}
+  '@sourcemeta/blaze@16.11.0':
+    resolution: {integrity: sha512-3pnL0rXI2y5o7EOlbp2dQKZyTXAUZyiejfkGpGr6RiPjOmSlff39qjE0b4I16zTIjTQPgMsci3RwwImAAE6TRw==}
     engines: {node: '>=21.7'}
 
-  '@sourcemeta/jsonschema@16.10.0':
-    resolution: {integrity: sha512-bwyHl27VzuVeiFtRhFewoZRYJOGZOg32t8Z+3jJh5TBaFFZNDFHQfRorkcVyKDRl7mR4pJPA8HWL5Fh507uD3A==}
+  '@sourcemeta/jsonschema@16.11.0':
+    resolution: {integrity: sha512-wNPjOWimzbjL1+8bIi/Jl7NCXJnLjN5CTwO2ZXr53oirwiXIY6/8E/ovlTOVon5Ut5YzrPVgGLrrWKGDwP+gTQ==}
     engines: {node: '>=16'}
     cpu: [x64, arm64]
     os: [darwin, linux, win32]
@@ -682,8 +682,8 @@ packages:
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
 
-  nanoid@3.3.18:
-    resolution: {integrity: sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==}
+  nanoid@3.3.19:
+    resolution: {integrity: sha512-Y2tUNy4ouw6tq5oDSKeQYGOyhkUBhNOcGV/02KC+6kd9eDGqdZd++mjMiIDilrBYvjEnCYvVtsuHCuP+okSfug==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -1058,7 +1058,7 @@ snapshots:
 
   '@lukeed/ms@2.0.2': {}
 
-  '@redocly/cli@2.52.0': {}
+  '@redocly/cli@2.53.3': {}
 
   '@rollup/rollup-android-arm-eabi@4.60.1':
     optional: true
@@ -1135,9 +1135,9 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.60.1':
     optional: true
 
-  '@sourcemeta/blaze@16.10.0': {}
+  '@sourcemeta/blaze@16.11.0': {}
 
-  '@sourcemeta/jsonschema@16.10.0': {}
+  '@sourcemeta/jsonschema@16.11.0': {}
 
   '@types/estree@1.0.8': {}
 
@@ -1350,7 +1350,7 @@ snapshots:
       object-assign: 4.1.1
       thenify-all: 1.6.0
 
-  nanoid@3.3.18:
+  nanoid@3.3.19:
     optional: true
 
   object-assign@4.1.1: {}
@@ -1399,7 +1399,7 @@ snapshots:
 
   postcss@8.4.49:
     dependencies:
-      nanoid: 3.3.18
+      nanoid: 3.3.19
       picocolors: 1.1.1
       source-map-js: 1.2.1
     optional: true

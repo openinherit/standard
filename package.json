@@ -24,6 +24,7 @@
     "build:sdk": "pnpm --filter @openinherit/sdk run build",
     "clean": "pnpm --filter @openinherit/sdk run clean",
     "validate:examples": "bash scripts/validate-examples.sh",
+    "test:cross-border": "node scripts/test-cross-border-fixture.mjs",
     "validate:refs": "node scripts/validate-refs.mjs",
     "graph:data": "node scripts/generate-graph-data.mjs",
     "contract-test": "bash scripts/contract-test.sh",

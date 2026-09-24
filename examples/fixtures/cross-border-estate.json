@@ -1,0 +1,227 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-09-24T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "5f2a6c41-9d3b-4e27-8a16-0c7b4e93d152",
+    "testatorPersonId": "c84b1e7a-2f60-4d95-b3c8-71ae0f5d6b24",
+    "status": "confirmed",
+    "createdAt": "2026-01-15T09:00:00Z",
+    "lastModifiedAt": "2026-09-24T00:00:00Z",
+    "domicile": {
+      "country": "IE",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "Republic of Ireland"
+    },
+    "defaultSuccessionRegime": {
+      "governingLaw": {
+        "jurisdiction": {
+          "country": "IE"
+        },
+        "legalTradition": "common_law",
+        "statute": "Succession Act 1965"
+      },
+      "determinedBy": "domicile",
+      "binding": true,
+      "notes": "Irish conflict rules are scissionist: moveables devolve under the law of the domicile at death, immoveables under the lex situs. Each foreign item below therefore carries its own successionRegime rather than inheriting this one."
+    },
+    "governingJurisdictions": [
+      {
+        "jurisdiction": {
+          "country": "IE"
+        },
+        "scope": "default",
+        "statute": "Succession Act 1965"
+      },
+      {
+        "jurisdiction": {
+          "country": "ES"
+        },
+        "scope": "specific_assets",
+        "propertyIds": [
+          "a1d9f4c8-6b02-4e73-9f51-2c8de70b3a46"
+        ]
+      },
+      {
+        "jurisdiction": {
+          "country": "AE"
+        },
+        "scope": "specific_assets",
+        "assetIds": [
+          "b7e3c015-84af-4d62-a930-5ef1c246b8d7"
+        ]
+      },
+      {
+        "jurisdiction": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "scope": "specific_assets",
+        "assetIds": [
+          "d2c8a591-3f47-4b08-96ed-1a5b7c0e4f83"
+        ]
+      }
+    ],
+    "ancillaryProbate": [
+      {
+        "jurisdiction": {
+          "country": "ES"
+        },
+        "status": "not_started",
+        "notes": "A Spanish grant is needed to transfer title to the Valencia apartment; the Irish grant does not run to Spanish land."
+      },
+      {
+        "jurisdiction": {
+          "country": "AE"
+        },
+        "status": "not_started",
+        "notes": "UAE recognition of the shareholding is sought locally; a DIFC-registered will covers the shares."
+      },
+      {
+        "jurisdiction": {
+          "country": "GB",
+          "subdivision": "GB-ENG"
+        },
+        "status": "not_started",
+        "notes": "The pension provider is expected to accept the Irish grant resealed in England and Wales."
+      }
+    ],
+    "notes": "Illustrative example, not legal advice. It exists to demonstrate that an estate with assets in several jurisdictions can record, for each thing, WHICH law reaches it and WHY — the connecting factor — rather than only where the thing is."
+  },
+  "people": [
+    {
+      "id": "c84b1e7a-2f60-4d95-b3c8-71ae0f5d6b24",
+      "givenName": "Niamh",
+      "familyName": "Brennan",
+      "dateOfBirth": "1957-06-12",
+      "roles": [
+        "testator"
+      ],
+      "contact": {
+        "address": {
+          "streetAddress": "22 Merrion Square",
+          "addressLocality": "Dublin",
+          "addressRegion": "Leinster",
+          "postalCode": "D02 XY45",
+          "addressCountry": "IE"
+        }
+      }
+    }
+  ],
+  "kinships": [],
+  "relationships": [],
+  "properties": [
+    {
+      "id": "a1d9f4c8-6b02-4e73-9f51-2c8de70b3a46",
+      "name": "Apartment, Carrer de la Pau, Valencia",
+      "propertyType": "apartment",
+      "tenureType": "ownership",
+      "mobilityType": "immoveable",
+      "estimatedValue": {
+        "amount": 31000000,
+        "currency": "EUR"
+      },
+      "applicableLaw": {
+        "country": "ES"
+      },
+      "successionRegime": {
+        "governingLaw": {
+          "jurisdiction": {
+            "country": "ES"
+          },
+          "legalTradition": "civil_law",
+          "statute": "Código Civil"
+        },
+        "determinedBy": "situs",
+        "binding": true,
+        "notes": "An immoveable, so the Irish forum applies the lex situs. Note the divergence a Spanish court would see: Spain applies Regulation (EU) 650/2012, which refers the whole succession to the law of the deceased's habitual residence. Ireland does not participate in that Regulation. The two fora can therefore reach the same asset by different routes, which is why the connecting factor is recorded rather than inferred."
+      },
+      "address": {
+        "streetAddress": "Carrer de la Pau 14, 3B",
+        "addressLocality": "Valencia",
+        "addressRegion": "Comunidad Valenciana",
+        "postalCode": "46003",
+        "addressCountry": "ES"
+      }
+    }
+  ],
+  "assets": [
+    {
+      "id": "b7e3c015-84af-4d62-a930-5ef1c246b8d7",
+      "name": "Shareholding in Brennan Trading FZ-LLC",
+      "category": "business",
+      "mobilityType": "moveable",
+      "estimatedValue": {
+        "amount": 145000000,
+        "currency": "AED"
+      },
+      "applicableLaw": {
+        "country": "IE"
+      },
+      "successionRegime": {
+        "governingLaw": {
+          "jurisdiction": {
+            "country": "IE"
+          },
+          "legalTradition": "common_law",
+          "statute": "Succession Act 1965"
+        },
+        "determinedBy": "nationality",
+        "binding": true,
+        "notes": "Shares in a UAE company. UAE civil personal status law refers succession of a non-Muslim foreigner to the law of their nationality, and the testator is an Irish national — so the connecting factor here is nationality, not situs and not domicile, even though domicile and nationality happen to point at the same legal system in this estate. Recording the factor is what makes that coincidence visible instead of hidden."
+      }
+    },
+    {
+      "id": "d2c8a591-3f47-4b08-96ed-1a5b7c0e4f83",
+      "name": "Personal pension, Fairhaven Pensions plc",
+      "category": "financial",
+      "subcategory": "pension",
+      "mobilityType": "moveable",
+      "estimatedValue": {
+        "amount": 42000000,
+        "currency": "GBP"
+      },
+      "applicableLaw": {
+        "country": "IE"
+      },
+      "successionRegime": {
+        "governingLaw": {
+          "jurisdiction": {
+            "country": "IE"
+          },
+          "legalTradition": "common_law",
+          "statute": "Succession Act 1965"
+        },
+        "determinedBy": "domicile",
+        "binding": true,
+        "notes": "A moveable situated in England, reached by IRISH law because the testator was domiciled in Ireland at death. This is the case the estate-level situs map alone cannot express: the asset is in one jurisdiction and the law that governs it is another's."
+      }
+    }
+  ],
+  "liabilities": [],
+  "bequests": [],
+  "trusts": [],
+  "executors": [],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-09-24T00:00:00Z",
+    "validatedBy": "INHERIT Examples",
+    "schemaVersion": "6.3.0"
+  }
+}

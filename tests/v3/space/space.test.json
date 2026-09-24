@@ -1140,6 +1140,36 @@
         "name": "Live-in helper's room"
       },
       "valid": true
+    },
+    {
+      "description": "valid — a Space nested inside another Space (TT-1313 AC2; loft inside a house)",
+      "data": {
+        "id": "5a6b7c8d-9e0f-4a1b-8c2d-3e4f5a6b7c8d",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "loft",
+        "containedInSpaceId": "0c69fcae-ce4e-4283-8b3b-21b8f7afbd96"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — containedInSpaceId may be null (a top-level Space in a Property)",
+      "data": {
+        "id": "6b7c8d9e-0f1a-4b2c-8d3e-4f5a6b7c8d9e",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "living_room",
+        "containedInSpaceId": null
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — containedInSpaceId must be a UUID, not free text",
+      "data": {
+        "id": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "loft",
+        "containedInSpaceId": "the loft"
+      },
+      "valid": false
     }
   ]
 }

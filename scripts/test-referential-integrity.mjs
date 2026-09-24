@@ -56,6 +56,58 @@ function checkConstraint(doc, constraint) {
   return broken;
 }
 
+/**
+ * kind 'acyclic' — following the reference repeatedly must terminate.
+ * Reports INHERIT_CONTAINMENT_CYCLE for a loop and INHERIT_DEPTH_EXCEEDED for a
+ * chain longer than maxDepth. A dangling reference is NOT reported here: the
+ * existence constraint on the same field owns that, and double-reporting one
+ * defect under two codes tells a consumer nothing extra.
+ *
+ * O(n·depth) with a fresh seen-set per node. That is fine for conformance
+ * documents and is not a production validator.
+ */
+function checkAcyclic(doc, constraint) {
+  const [arrayPath, refField] = constraint.field.split('[].');
+  const nodes = resolvePath(doc, `${arrayPath}[]`);
+  const byId = new Map(nodes.map(n => [String(n.id), n]));
+  const maxDepth = constraint.maxDepth ?? 16;
+  const failures = [];
+
+  for (const start of nodes) {
+    const seen = new Set();
+    let current = start;
+    let depth = 0;
+    while (current?.[refField] !== undefined && current?.[refField] !== null) {
+      const nextId = String(current[refField]);
+      // nextId === start.id catches the self-cycle, which a plain seen-set misses
+      // on the first hop.
+      if (seen.has(nextId) || nextId === String(start.id)) {
+        failures.push({ id: start.id, code: 'INHERIT_CONTAINMENT_CYCLE' });
+        break;
+      }
+      if (++depth > maxDepth) {
+        failures.push({ id: start.id, code: 'INHERIT_DEPTH_EXCEEDED' });
+        break;
+      }
+      seen.add(nextId);
+      current = byId.get(nextId);
+      if (current === undefined) break; // dangling — the existence constraint owns this
+    }
+  }
+  return failures;
+}
+
+/**
+ * Dispatch on constraint kind. An unrecognised kind is a hard error: a silently
+ * skipped constraint is a gate that reports green.
+ */
+function checkAny(doc, constraint) {
+  const kind = constraint.kind ?? 'existence';
+  if (kind === 'existence') return checkConstraint(doc, constraint);
+  if (kind === 'acyclic') return checkAcyclic(doc, constraint);
+  throw new Error(`INHERIT_CONSTRAINT_UNKNOWN: ${kind} on ${constraint.field}`);
+}
+
 // === Test documents ===
 
 // Valid document — all references resolve
@@ -162,20 +214,24 @@ console.log('=== Category 1: Cross-Reference Integrity Tests ===\n');
 
 console.log('Valid document (all refs resolve):');
 
-// Group constraints by field for multi-target testing
+// Group constraints by field AND kind for multi-target testing. Grouping by field
+// alone would let an existence constraint satisfy an acyclic one on the same field.
 const fieldGroups = {};
 for (const c of constraints) {
-  if (!fieldGroups[c.field]) fieldGroups[c.field] = [];
-  fieldGroups[c.field].push(c);
+  const key = `${c.field}|${c.kind ?? 'existence'}`;
+  if (!fieldGroups[key]) fieldGroups[key] = [];
+  fieldGroups[key].push(c);
 }
 
-for (const [field, group] of Object.entries(fieldGroups)) {
+for (const [key, group] of Object.entries(fieldGroups)) {
+  const field = group[0].field;
+  const kind = group[0].kind ?? 'existence';
   if (group.length === 1) {
     // Single target — must pass
-    test(`${field} → ${group[0].references}`, () => {
-      const broken = checkConstraint(validDoc, group[0]);
+    test(`${field} → ${group[0].references}${kind === 'existence' ? '' : ` (${kind})`}`, () => {
+      const broken = checkAny(validDoc, group[0]);
       if (broken.length > 0) {
-        throw new Error(`Found ${broken.length} broken refs: ${broken.join(', ')}`);
+        throw new Error(`Found ${broken.length} broken refs: ${JSON.stringify(broken)}`);
       }
     });
   } else {
@@ -379,6 +435,256 @@ test('trusts[].petId — broken ref detected', () => {
   const broken = checkConstraint(doc, c);
   if (broken.length === 0) throw new Error('Should have found broken trust petId ref');
 });
+
+// === Containment (ICP-0057) — every containment link must resolve ===
+
+test('assets[].containedInAssetId — broken ref detected', () => {
+  const doc = JSON.parse(JSON.stringify(validDoc));
+  doc.assets[0].containedInAssetId = 'bb009999-0000-4000-a000-000000000999';
+  const c = constraints.find(c => c.field === 'assets[].containedInAssetId' && (c.kind ?? 'existence') === 'existence');
+  if (!c) throw new Error('No existence constraint declared for assets[].containedInAssetId');
+  const broken = checkConstraint(doc, c);
+  if (broken.length === 0) throw new Error('Should have found broken containedInAssetId ref');
+});
+
+test('spaces[].containedInSpaceId — broken ref detected', () => {
+  const doc = JSON.parse(JSON.stringify(validDoc));
+  doc.spaces[0].containedInSpaceId = 'ss009999-0000-4000-a000-000000000999';
+  const c = constraints.find(c => c.field === 'spaces[].containedInSpaceId' && (c.kind ?? 'existence') === 'existence');
+  if (!c) throw new Error('No existence constraint declared for spaces[].containedInSpaceId');
+  const broken = checkConstraint(doc, c);
+  if (broken.length === 0) throw new Error('Should have found broken containedInSpaceId ref');
+});
+
+test('spaces[].propertyId — broken ref detected', () => {
+  const doc = JSON.parse(JSON.stringify(validDoc));
+  doc.spaces[0].propertyId = 'pp009999-0000-4000-a000-000000000999';
+  const c = constraints.find(c => c.field === 'spaces[].propertyId' && (c.kind ?? 'existence') === 'existence');
+  if (!c) throw new Error('No existence constraint declared for spaces[].propertyId');
+  const broken = checkConstraint(doc, c);
+  if (broken.length === 0) throw new Error('Should have found broken space propertyId ref');
+});
+
+// === Containment (ICP-0057) — the chain must terminate and must not loop ===
+
+const SP_A = 'ss00000a-0000-4000-a000-00000000000a';
+const SP_B = 'ss00000b-0000-4000-a000-00000000000b';
+const SP_C = 'ss00000c-0000-4000-a000-00000000000c';
+const AS_A = 'bb00000a-0000-4000-a000-00000000000a';
+const AS_B = 'bb00000b-0000-4000-a000-00000000000b';
+
+function acyclicConstraint(field) {
+  const c = constraints.find(c => c.field === field && c.kind === 'acyclic');
+  if (!c) throw new Error(`No acyclic constraint declared for ${field}`);
+  return c;
+}
+
+function expectCycle(description, field, doc) {
+  test(description, () => {
+    const failures = checkAcyclic(doc, acyclicConstraint(field));
+    if (failures.length === 0) throw new Error('Should have detected a containment cycle');
+    if (!failures.every(f => f.code === 'INHERIT_CONTAINMENT_CYCLE')) {
+      throw new Error(`Wrong code: ${JSON.stringify(failures)}`);
+    }
+  });
+}
+
+function expectAcyclicOk(description, field, doc) {
+  test(description, () => {
+    const failures = checkAcyclic(doc, acyclicConstraint(field));
+    if (failures.length > 0) {
+      throw new Error(`A legal chain was rejected: ${JSON.stringify(failures)}`);
+    }
+  });
+}
+
+expectCycle('self-cycle on the asset axis', 'assets[].containedInAssetId',
+  { assets: [{ id: AS_A, containedInAssetId: AS_A }] });
+
+expectCycle('2-cycle on the asset axis', 'assets[].containedInAssetId',
+  { assets: [{ id: AS_A, containedInAssetId: AS_B }, { id: AS_B, containedInAssetId: AS_A }] });
+
+expectCycle('3-cycle on the space axis', 'spaces[].containedInSpaceId',
+  { spaces: [{ id: SP_A, containedInSpaceId: SP_B }, { id: SP_B, containedInSpaceId: SP_C }, { id: SP_C, containedInSpaceId: SP_A }] });
+
+// The false-positive guard. A detector that rejects every chain passes all three
+// cycle tests above, so without this case the gate could forbid the feature it exists
+// to enable.
+expectAcyclicOk('a legal 3-deep chain is allowed', 'spaces[].containedInSpaceId',
+  { spaces: [{ id: SP_A, containedInSpaceId: SP_B }, { id: SP_B, containedInSpaceId: SP_C }, { id: SP_C }] });
+
+expectAcyclicOk('a dangling reference is left to the existence constraint, not double-reported',
+  'spaces[].containedInSpaceId',
+  { spaces: [{ id: SP_A, containedInSpaceId: 'ss009999-0000-4000-a000-000000000999' }] });
+
+test('a chain longer than maxDepth is rejected as too deep', () => {
+  const c = acyclicConstraint('spaces[].containedInSpaceId');
+  const depth = (c.maxDepth ?? 16) + 4;
+  const spaces = [];
+  for (let i = 0; i < depth; i++) {
+    const id = `ss0000${String(i).padStart(2, '0')}-0000-4000-a000-000000000000`;
+    const next = i + 1 < depth ? `ss0000${String(i + 1).padStart(2, '0')}-0000-4000-a000-000000000000` : undefined;
+    spaces.push(next ? { id, containedInSpaceId: next } : { id });
+  }
+  const failures = checkAcyclic({ spaces }, c);
+  if (!failures.some(f => f.code === 'INHERIT_DEPTH_EXCEEDED')) {
+    throw new Error(`Expected INHERIT_DEPTH_EXCEEDED, got ${JSON.stringify(failures)}`);
+  }
+});
+
+test('an unrecognised constraint kind is a hard error, never a silent skip', () => {
+  let threw = false;
+  try {
+    checkAny({ spaces: [] }, { field: 'spaces[].containedInSpaceId', references: 'spaces[].id', kind: 'invented' });
+  } catch (e) {
+    threw = /INHERIT_CONSTRAINT_UNKNOWN/.test(e.message);
+  }
+  if (!threw) throw new Error('An unknown kind was skipped — a skipped constraint is a gate reporting green');
+});
+
+test('the acyclic row is not satisfiable by its existence sibling (grouping is by field AND kind)', () => {
+  for (const field of ['spaces[].containedInSpaceId', 'assets[].containedInAssetId']) {
+    const kinds = constraints.filter(c => c.field === field).map(c => c.kind ?? 'existence').sort();
+    assertEqual(kinds, ['acyclic', 'existence'], `kinds declared on ${field}`);
+  }
+  // Two rows may legitimately share a (field, kind) key — that is multi-target
+  // semantics, e.g. bequests[].sourceAssetId -> assets[].id | properties[].id. What
+  // must never repeat is the full triple, and an acyclic row must never land in the
+  // same group as an existence row on the same field.
+  const triples = constraints.map(c => `${c.field}|${c.kind ?? 'existence'}|${c.references}`);
+  if (new Set(triples).size !== triples.length) {
+    throw new Error('duplicate (field, kind, references) triple in the constraint set');
+  }
+  const groupKey = c => `${c.field}|${c.kind ?? 'existence'}`;
+  for (const field of ['spaces[].containedInSpaceId', 'assets[].containedInAssetId']) {
+    const rows = constraints.filter(c => c.field === field);
+    if (new Set(rows.map(groupKey)).size !== 2) {
+      throw new Error(`${field}: existence and acyclic rows collapsed into one group`);
+    }
+  }
+});
+
+// === Category 3: the positive document fixture ===
+//
+// Everything above this line is synthetic or negative. The synthetic validDoc
+// carries a single space with neither propertyId nor containedInSpaceId, so the
+// auto-generated positive rows for those two fields pass on ZERO values — a
+// validator that rejected every containment chain ever written would still be
+// green here. TT-1313 D1 and D2 ask for the positive case on a REAL example
+// document: Asset -> Space -> Space -> Property, resolving and terminating.
+//
+// The fixture is a tracked example, so `pnpm run validate:examples` schema-checks
+// the same bytes this suite reference-checks. Neither half is sufficient alone:
+// validate:examples never follows a reference, and this suite never applies a
+// JSON Schema.
+console.log('\nPositive document fixture (examples/fixtures/spatial-containment.json):');
+
+const CONTAINMENT_FIXTURE = 'examples/fixtures/spatial-containment.json';
+let containmentDoc = null;
+try {
+  containmentDoc = JSON.parse(readFileSync(resolve(ROOT, CONTAINMENT_FIXTURE), 'utf8'));
+} catch (e) {
+  containmentDoc = { __loadError: e.message };
+}
+
+function requireContainmentDoc() {
+  if (containmentDoc?.__loadError) {
+    throw new Error(`${CONTAINMENT_FIXTURE} could not be read: ${containmentDoc.__loadError}`);
+  }
+  return containmentDoc;
+}
+
+test('every integrity constraint holds on the containment fixture', () => {
+  const doc = requireContainmentDoc();
+  const violations = [];
+  for (const c of constraints) {
+    const kind = c.kind ?? 'existence';
+    const result = checkAny(doc, c);
+    if (result.length === 0) continue;
+    // Multi-target existence rows are satisfied if ANY sibling row resolves the
+    // value, so a single-row miss is only a violation when no sibling covers it.
+    if (kind === 'existence') {
+      const siblings = constraints.filter(s => s.field === c.field && (s.kind ?? 'existence') === 'existence');
+      const unresolved = result.filter(val => !siblings.some(s =>
+        new Set(resolvePath(doc, s.references).map(String)).has(String(val))));
+      if (unresolved.length === 0) continue;
+      violations.push(`${c.field} (${kind}): ${JSON.stringify(unresolved)}`);
+    } else {
+      violations.push(`${c.field} (${kind}): ${JSON.stringify(result)}`);
+    }
+  }
+  if (violations.length > 0) {
+    throw new Error(`fixture violates ${violations.length} constraint(s): ${violations.join('; ')}`);
+  }
+});
+
+test('spaces[].propertyId is exercised on the fixture, not vacuous (D1)', () => {
+  const doc = requireContainmentDoc();
+  const values = resolvePath(doc, 'spaces[].propertyId');
+  if (values.length < 3) {
+    throw new Error(`expected every space in the chain to name its property, got ${values.length} value(s)`);
+  }
+  const propertyIds = new Set(resolvePath(doc, 'properties[].id').map(String));
+  for (const v of values) {
+    if (!propertyIds.has(String(v))) throw new Error(`spaces[].propertyId ${v} does not resolve`);
+  }
+});
+
+test('spaces[].containedInSpaceId is exercised on the fixture, not vacuous (D2)', () => {
+  const doc = requireContainmentDoc();
+  const values = resolvePath(doc, 'spaces[].containedInSpaceId');
+  if (values.length < 2) {
+    throw new Error(`a 3-deep chain needs 2 containment links, got ${values.length}`);
+  }
+});
+
+test('the fixture chain is 3 deep and terminates inside maxDepth (D2)', () => {
+  const doc = requireContainmentDoc();
+  const c = acyclicConstraint('spaces[].containedInSpaceId');
+  const byId = new Map(doc.spaces.map(s => [String(s.id), s]));
+  const leaves = doc.spaces.filter(s => !doc.spaces.some(o => String(o.containedInSpaceId) === String(s.id)));
+  if (leaves.length !== 1) throw new Error(`expected exactly one deepest space, got ${leaves.length}`);
+  let node = leaves[0];
+  let hops = 0;
+  while (node?.containedInSpaceId !== undefined && node?.containedInSpaceId !== null) {
+    node = byId.get(String(node.containedInSpaceId));
+    if (node === undefined) throw new Error('the chain leaves the document');
+    if (++hops > (c.maxDepth ?? 16)) throw new Error('the chain does not terminate inside maxDepth');
+  }
+  assertEqual(hops, 2, 'hops from the deepest space to the root space (3 spaces => 2 hops)');
+  if (checkAcyclic(doc, c).length !== 0) throw new Error('the fixture chain is reported cyclic');
+});
+
+test('an asset reaches its property by walking the space chain (D1)', () => {
+  const doc = requireContainmentDoc();
+  const byId = new Map(doc.spaces.map(s => [String(s.id), s]));
+  const propertyIds = new Set(resolvePath(doc, 'properties[].id').map(String));
+  const housed = doc.assets.filter(a => a.spaceId !== undefined && a.spaceId !== null);
+  if (housed.length === 0) throw new Error('no asset in the fixture names a space');
+  for (const asset of housed) {
+    let node = byId.get(String(asset.spaceId));
+    if (node === undefined) throw new Error(`assets[].spaceId ${asset.spaceId} does not resolve`);
+    let depth = 0;
+    while (node.containedInSpaceId !== undefined && node.containedInSpaceId !== null) {
+      node = byId.get(String(node.containedInSpaceId));
+      if (node === undefined) throw new Error('the walk leaves the document');
+      if (++depth > 16) throw new Error('the walk does not terminate');
+    }
+    if (!propertyIds.has(String(node.propertyId))) {
+      throw new Error(`the root space of asset ${asset.id} names no resolvable property`);
+    }
+  }
+  // The point of the walk: the deepest asset is more than one hop from its property.
+  const deepest = housed.map(a => {
+    let n = byId.get(String(a.spaceId)), d = 0;
+    while (n.containedInSpaceId) { n = byId.get(String(n.containedInSpaceId)); d++; }
+    return d;
+  });
+  if (Math.max(...deepest) < 2) {
+    throw new Error('no asset sits more than one space-hop from its property — the chain is not exercised');
+  }
+});
+
 
 console.log('\n' + '═'.repeat(50));
 console.log(`Cross-reference tests: ${passed} passed, ${failed} failed, ${passed + failed} total`);

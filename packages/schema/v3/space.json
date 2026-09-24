@@ -21,6 +21,13 @@
       "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
       "format": "uuid"
     },
+    "containedInSpaceId": {
+      "description": "Reference to another Space.id that physically contains this space — a loft inside a house, a shelving bay inside a storage room. Enables the recursive Property → Space → Space → item chain a room-by-room listing walk produces. Absent or null means this space sits directly in the Property",
+      "$comment": "The space-axis sibling of Asset.containedInAssetId. Use this axis for FIXED structure that is not itself an estate asset (a loft, a cellar, an outbuilding); use Asset.containedInAssetId for MOVABLE containers that are themselves assets (a safe, a trunk, a toolbox). A loft is not a bequeathable asset, so it cannot be modelled on the asset axis. The chain must be acyclic and every link must resolve — see schema.json referentialIntegrity, constraint kind 'acyclic'. Maps to schema:containedInPlace in JSON-LD; the JSON-LD context declared that term for the spaces node before this property existed",
+      "type": [ "string", "null" ],
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "format": "uuid"
+    },
     "spaceType": {
       "description": "The type of space. Use x-inherit- prefix for cultural or jurisdiction-specific space types not covered by the core enum",
       "$comment": "Core enum covers common residential spaces across UK, North America, and Asia. Cultural spaces (prayer_room, puja_room, tatami_room, majlis, genkan, helpers_room) are in the core enum because they appear in INHERIT's target jurisdictions. Off-site locations (self_storage, safe_deposit_box, workplace) are included because they are common locations for estate assets. portable: item travels with the owner between locations (watches, jewellery). Not fixed to a single address.",

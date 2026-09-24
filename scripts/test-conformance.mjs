@@ -61,19 +61,63 @@ function checkConstraint(doc, constraint) {
 }
 
 /**
- * Run all 21 integrity constraints against a document.
+ * kind 'acyclic' — following the reference repeatedly must terminate. Reports
+ * INHERIT_CONTAINMENT_CYCLE for a loop and INHERIT_DEPTH_EXCEEDED for a chain longer
+ * than maxDepth. A dangling reference is left to the existence constraint on the same
+ * field.
+ */
+function checkAcyclic(doc, constraint) {
+  const [arrayPath, refField] = constraint.field.split('[].');
+  const nodes = resolvePath(doc, `${arrayPath}[]`);
+  const byId = new Map(nodes.map(n => [String(n.id), n]));
+  const maxDepth = constraint.maxDepth ?? 16;
+  const broken = [];
+
+  for (const start of nodes) {
+    const seen = new Set();
+    let current = start;
+    let depth = 0;
+    while (current?.[refField] !== undefined && current?.[refField] !== null) {
+      const nextId = String(current[refField]);
+      if (seen.has(nextId) || nextId === String(start.id)) { broken.push(start.id); break; }
+      if (++depth > maxDepth) { broken.push(start.id); break; }
+      seen.add(nextId);
+      current = byId.get(nextId);
+      if (current === undefined) break;
+    }
+  }
+  return broken;
+}
+
+/**
+ * Run all 26 integrity constraints against a document.
  * Returns an array of { constraint, broken } for any failures.
  */
 function checkAllConstraints(doc) {
-  // Group constraints by field for multi-target semantics
+  // Group constraints by field AND kind for multi-target semantics. Grouping by field
+  // alone would let an existence constraint satisfy an acyclic one on the same field.
   const fieldGroups = {};
   for (const c of constraints) {
-    if (!fieldGroups[c.field]) fieldGroups[c.field] = [];
-    fieldGroups[c.field].push(c);
+    const key = `${c.field}|${c.kind ?? 'existence'}`;
+    if (!fieldGroups[key]) fieldGroups[key] = [];
+    fieldGroups[key].push(c);
   }
 
   const failures = [];
-  for (const [field, group] of Object.entries(fieldGroups)) {
+  for (const group of Object.values(fieldGroups)) {
+    const field = group[0].field;
+    const kind = group[0].kind ?? 'existence';
+    if (kind !== 'existence' && kind !== 'acyclic') {
+      // A skipped constraint is a gate that reports green.
+      throw new Error(`INHERIT_CONSTRAINT_UNKNOWN: ${kind} on ${field}`);
+    }
+    if (kind === 'acyclic') {
+      for (const c of group) {
+        const broken = checkAcyclic(doc, c);
+        if (broken.length > 0) failures.push({ field, broken, constraint: c });
+      }
+      continue;
+    }
     if (group.length === 1) {
       const broken = checkConstraint(doc, group[0]);
       if (broken.length > 0) {
@@ -299,7 +343,7 @@ test('Level 2 valid — conformance declaration present and correct', () => {
   assertEmpty(errors, 'Conformance declaration errors');
 });
 
-test('Level 2 valid — all 21 integrity constraints pass', () => {
+test('Level 2 valid — all 26 integrity constraints pass', () => {
   const failures = checkAllConstraints(level2ValidDoc);
   if (failures.length > 0) {
     const details = failures.map(f => `${f.field}: ${f.broken.join(', ')}`).join('; ');
@@ -307,8 +351,35 @@ test('Level 2 valid — all 21 integrity constraints pass', () => {
   }
 });
 
-test('Level 2 valid — constraint count is 21', () => {
-  assertEqual(constraints.length, 21, 'Constraint count');
+test('Level 2 valid — constraint count is 26', () => {
+  assertEqual(constraints.length, 26, 'Constraint count');
+});
+
+// ICP-0057 — a containment cycle whose every link resolves is still a Level 2 failure.
+// This is the grouping trap: if checkAllConstraints groups by field alone, the acyclic
+// row lands in a group with its existence sibling and is satisfied by it.
+test('Level 2 broken — a containment cycle whose links all resolve is flagged', () => {
+  const doc = cloneDoc(level2ValidDoc);
+  doc.spaces = [
+    { id: 'ss00000a-0000-4000-a000-00000000000a', containedInSpaceId: 'ss00000b-0000-4000-a000-00000000000b' },
+    { id: 'ss00000b-0000-4000-a000-00000000000b', containedInSpaceId: 'ss00000a-0000-4000-a000-00000000000a' }
+  ];
+  doc.assets.forEach(a => { delete a.spaceId; });
+  const failures = checkAllConstraints(doc);
+  if (!failures.some(f => f.constraint.code === 'INHERIT_CONTAINMENT_CYCLE')) {
+    throw new Error(`A resolving 2-cycle was not flagged: ${JSON.stringify(failures)}`);
+  }
+});
+
+test('Level 2 valid — a legal containment chain is NOT flagged', () => {
+  const doc = cloneDoc(level2ValidDoc);
+  doc.spaces = [
+    { id: 'ss00000a-0000-4000-a000-00000000000a', containedInSpaceId: 'ss00000b-0000-4000-a000-00000000000b' },
+    { id: 'ss00000b-0000-4000-a000-00000000000b' }
+  ];
+  doc.assets.forEach(a => { delete a.spaceId; });
+  const failures = checkAllConstraints(doc);
+  if (failures.length > 0) throw new Error(`A legal chain was flagged: ${JSON.stringify(failures)}`);
 });
 
 // --- Level 2 with broken references ---

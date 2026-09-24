@@ -1,0 +1,116 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.6.0",
+  "exportedAt": "2026-09-24T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "0c2f6e4b-9d31-4a77-b0e2-5a8c1f3d7e60",
+    "testatorPersonId": "3a7b1c58-6e42-4f09-9d13-8c5e2a4b7f11",
+    "status": "planning",
+    "createdAt": "2026-09-24T00:00:00Z",
+    "lastModifiedAt": "2026-09-24T00:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    }
+  },
+  "people": [
+    {
+      "id": "3a7b1c58-6e42-4f09-9d13-8c5e2a4b7f11",
+      "givenName": "Eleanor",
+      "familyName": "Whitcombe",
+      "roles": [
+        "testator"
+      ]
+    }
+  ],
+  "organisations": [],
+  "kinships": [],
+  "relationships": [],
+  "properties": [
+    {
+      "id": "5f9d0a21-4c76-4b38-8e15-2d6a9b4c0e83",
+      "name": "Oakfield House, Ludlow",
+      "propertyType": "detached",
+      "tenureType": "ownership",
+      "isPrimaryResidence": true,
+      "ownershipType": "sole",
+      "address": {
+        "streetAddress": "14 Oakfield Road",
+        "addressLocality": "Ludlow",
+        "addressRegion": "Shropshire",
+        "postalCode": "SY8 1BQ",
+        "addressCountry": "GB"
+      }
+    }
+  ],
+  "spaces": [
+    {
+      "id": "a4e81f30-7b52-4c69-9a0d-3e7f1b6c8d94",
+      "propertyId": "5f9d0a21-4c76-4b38-8e15-2d6a9b4c0e83",
+      "spaceType": "outbuilding",
+      "name": "The coach house",
+      "floor": "ground",
+      "notes": "Detached brick outbuilding at the end of the drive. Root of the containment chain — it sits directly in the property, so containedInSpaceId is absent."
+    },
+    {
+      "id": "b6c93d47-2f81-4e50-a7b3-9d1e4a8c2f65",
+      "propertyId": "5f9d0a21-4c76-4b38-8e15-2d6a9b4c0e83",
+      "containedInSpaceId": "a4e81f30-7b52-4c69-9a0d-3e7f1b6c8d94",
+      "spaceType": "loft",
+      "name": "The coach-house loft",
+      "floor": "attic",
+      "notes": "Reached by the fixed ladder against the north wall. Boarded over the eastern half only."
+    },
+    {
+      "id": "c8f04b19-5a63-4d72-b491-6e2c7f0a3d58",
+      "propertyId": "5f9d0a21-4c76-4b38-8e15-2d6a9b4c0e83",
+      "containedInSpaceId": "b6c93d47-2f81-4e50-a7b3-9d1e4a8c2f65",
+      "spaceType": "storage_room",
+      "name": "The boarded store, north end of the coach-house loft",
+      "floor": "attic",
+      "notes": "Partitioned store behind the loft hatch. Deepest space in the chain — three spaces, two containment hops, and the walk terminates at the coach house."
+    }
+  ],
+  "assets": [
+    {
+      "id": "d1a75e26-8c34-4f91-a6b0-7f3d5c9e1b42",
+      "name": "Great-grandmother's steamer trunk and its contents",
+      "category": "antiques",
+      "propertyId": "5f9d0a21-4c76-4b38-8e15-2d6a9b4c0e83",
+      "spaceId": "c8f04b19-5a63-4d72-b491-6e2c7f0a3d58",
+      "description": "A movable container, so it is modelled as an Asset rather than as a fourth Space — the space axis carries fixed structure (coach house, loft, store), the asset axis carries movable containers. It sits two space-hops from the property, which is the reach this fixture exists to prove.",
+      "estimatedValue": {
+        "amount": 120000,
+        "currency": "GBP"
+      }
+    }
+  ],
+  "liabilities": [],
+  "bequests": [],
+  "trusts": [],
+  "executors": [],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_2",
+    "validatedAt": "2026-09-24T00:00:00Z",
+    "validatedBy": "INHERIT Examples",
+    "schemaVersion": "6.6.0"
+  }
+}

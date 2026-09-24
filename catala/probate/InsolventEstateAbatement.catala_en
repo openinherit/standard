@@ -1,0 +1,134 @@
+> Module InsolventEstateAbatement
+> Using ComputedOrNeedsHuman
+
+SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
+SPDX-License-Identifier: Apache-2.0
+
+# InsolventEstateAbatement — pari passu abatement of an insolvent estate's debts
+
+Where a deceased person's estate is insolvent (the debts exceed the assets available
+to pay them), the estate is administered under the insolvency regime: the Administration
+of Insolvent Estates of Deceased Persons Order 1986 (SI 1986/1999) applies the Insolvency
+Act 1986 to the administration of a deceased insolvent estate. Insolvency Act 1986 s.328(3)
+states that debts of the same rank "rank equally between themselves, and shall be paid in
+full unless the assets are insufficient for meeting them, in which case they abate in equal
+proportions between themselves" — the pari passu principle. This scope computes that equal-
+proportion abatement across a single rank of unsecured creditors: each creditor receives its
+claim multiplied by the ratio of available assets to total claims (capped at payment in full
+when the estate is solvent).
+
+Legal correctness is asserted outside this file by the T032 per-heir gov-oracle harness
+(TT-478 pattern): code-inherit-test-suite/scripts/oracle_verify.py runs the Abate scope, reads
+the per-creditor list per_member field abated_payments, and compares it against
+tests/oracles/insolvent-estate-abatement.oracle.json — including a wrong_split negative case
+that must turn the harness RED if a right-total/wrong-split answer ever matched. This file
+therefore carries the abatement law, not its own per-creditor assertions; the NeedsHuman branch
+(which the per-heir harness cannot assert) is proven by the in-file test scope below.
+
+(Prose note: a line must not begin with the reserved directive prefix, so any statutory
+quotation is kept inline.)
+
+MVP scope boundary — single unsecured rank only. creditor_claims is the list of same-rank
+unsecured claims, each a whole-GBP integer (lifted to money in-rule so the per-heir harness,
+which renders a list only as bare integers, can supply it). available_assets is the fund
+available to that rank after any higher-ranking claims. Secured and preferential creditors
+(Insolvency Act 1986 s.328(1) + Schedule 6) rank AHEAD of the pari passu rank and are out of
+MVP scope: where has_preferential_or_secured is set, the split is not computable from these
+inputs alone and the scope returns NeedsHuman. Interest on the debts (s.328(4)-(5)) and the
+statutory order of application of assets for a SOLVENT estate (AEA 1925 s.34(3), Part II
+Schedule 1) are out of MVP scope.
+
+G6 certification floor (TT-427/TT-1079): every input is a characterisation judgement
+(`registry/governance-layers.yaml`, all L3 — claim validity, asset valuation, debt-rank
+classification), so each arrives as a `ComputedOrNeedsHuman.Certified<Type>` enum; any
+uncertified input routes `NeedsHuman` via the `uncertified_inputs` gate before a split is
+reachable, and the `_v` extraction fallbacks are dead code guarded by that gate.
+
+```catala
+declaration scope Abate:
+  input available_assets content ComputedOrNeedsHuman.CertifiedMoney
+  input creditor_claims content ComputedOrNeedsHuman.CertifiedIntegerList
+  input has_preferential_or_secured content ComputedOrNeedsHuman.CertifiedBool
+  internal uncertified_inputs content boolean
+  internal available_assets_v content money
+  internal creditor_claims_v content list of integer
+  internal has_preferential_or_secured_v content boolean
+  internal claim_amounts content list of money
+  internal total_claims content money
+  internal is_insolvent content boolean
+  internal abatement_ratio content decimal
+  output abated_payments content list of money
+  output verdict content ComputedOrNeedsHuman.Verdict
+
+scope Abate:
+  definition uncertified_inputs equals
+    (match available_assets with pattern -- ComputedOrNeedsHuman.CertifiedMoney.Certified content v: false -- ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised: true)
+    or (match creditor_claims with pattern -- ComputedOrNeedsHuman.CertifiedIntegerList.Certified content v: false -- ComputedOrNeedsHuman.CertifiedIntegerList.NotCharacterised: true)
+    or (match has_preferential_or_secured with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: false -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: true)
+  definition available_assets_v equals
+    match available_assets with pattern -- ComputedOrNeedsHuman.CertifiedMoney.Certified content v: v -- ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised: $0
+  definition creditor_claims_v equals
+    match creditor_claims with pattern -- ComputedOrNeedsHuman.CertifiedIntegerList.Certified content v: v -- ComputedOrNeedsHuman.CertifiedIntegerList.NotCharacterised: []
+  definition has_preferential_or_secured_v equals
+    match has_preferential_or_secured with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: v -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: false
+  # lift each whole-GBP integer claim to money
+  definition claim_amounts equals
+    map each c among creditor_claims_v to ($1 * (decimal of c))
+  definition total_claims equals sum money of claim_amounts
+  definition is_insolvent equals total_claims > available_assets_v
+  # pari passu ratio: assets/total when insolvent, else full payment (1.0)
+  definition abatement_ratio equals
+    if is_insolvent then available_assets_v / total_claims else 1.0
+  definition abated_payments equals
+    if uncertified_inputs then []
+    else map each m among claim_amounts to (m * abatement_ratio)
+  definition verdict equals
+    if uncertified_inputs then NeedsHuman
+    else if has_preferential_or_secured_v then NeedsHuman
+    else Computed content (sum money of abated_payments)
+```
+
+## In-file tests — the Computed pari-passu split and the NeedsHuman branch
+
+The per-heir harness asserts the Computed split externally but cannot render the NeedsHuman
+branch (it carries no per-creditor list); both arms are proven here.
+
+```catala
+#[test]
+declaration scope TestPariPassuComputed:
+  output payments content list of money
+  output is_computed content boolean
+
+scope TestPariPassuComputed:
+  definition payments equals
+    (output of Abate with {
+      -- available_assets: ComputedOrNeedsHuman.CertifiedMoney.Certified content $60,000
+      -- creditor_claims: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content [30000; 30000; 40000]
+      -- has_preferential_or_secured: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+    }).abated_payments
+  definition is_computed equals
+    match (output of Abate with {
+      -- available_assets: ComputedOrNeedsHuman.CertifiedMoney.Certified content $60,000
+      -- creditor_claims: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content [30000; 30000; 40000]
+      -- has_preferential_or_secured: ComputedOrNeedsHuman.CertifiedBool.Certified content false
+    }).verdict with pattern
+    -- Computed content m: true
+    -- NeedsHuman: false
+  assertion is_computed = true
+  assertion payments = [$18,000; $18,000; $24,000]
+
+#[test]
+declaration scope TestPreferentialNeedsHuman:
+  output is_needs_human content boolean
+
+scope TestPreferentialNeedsHuman:
+  definition is_needs_human equals
+    match (output of Abate with {
+      -- available_assets: ComputedOrNeedsHuman.CertifiedMoney.Certified content $60,000
+      -- creditor_claims: ComputedOrNeedsHuman.CertifiedIntegerList.Certified content [30000; 30000; 40000]
+      -- has_preferential_or_secured: ComputedOrNeedsHuman.CertifiedBool.Certified content true
+    }).verdict with pattern
+    -- Computed content m: false
+    -- NeedsHuman: true
+  assertion is_needs_human = true
+```

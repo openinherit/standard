@@ -559,7 +559,7 @@ Title data is relevant to estate administration for:
 ### Requirements
 
 - **Price Paid Data:** free, open data, no API key
-- **Title Register:** account at [gov.uk/search-property-information](https://www.gov.uk/search-property-information), per-title fees apply
+- **Title Register:** account at [gov.uk/search-property-information-land-registry](https://www.gov.uk/search-property-information-land-registry), per-title fees apply
 - **Linked Data API:** free, no authentication, rate-limited
 
 ---

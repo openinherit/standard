@@ -1,0 +1,39 @@
+{
+  "_doc": "T032 per-creditor pari-passu abatement oracle (TT-527). Asserts the per-CREDITOR abatement of an insolvent estate's same-rank unsecured debts, not just the conserved total — closing the gameable-conservation hole: a wrong split with the right total AND right creditor-count would pass a sum/length check. scripts/oracle_verify.py runs catala/probate/InsolventEstateAbatement.catala_en (scope Abate), reads abated_payments, and compares it (collections.Counter) to expected_per_heir_gbp. WARNING — INVERTED CASE: a case with \"expect\": \"wrong_split\" carries a DELIBERATELY WRONG expected_per_heir_gbp (right total, right count, wrong split). It is NOT the correct answer; the harness PASSES that case iff it correctly detects the split differs (and FAILS — gate RED — if the wrong split somehow matched, proving the teeth are non-vacuous). Pari-passu abatement is statutory arithmetic (Insolvency Act 1986 s.328(3) applied to a deceased insolvent estate by SI 1986/1999), not an external published figure — the oracle cites the statute, not a gov.uk worked example.",
+  "rule": {
+    "repo": "code-inherit-standard",
+    "rule_file": "catala/probate/InsolventEstateAbatement.catala_en",
+    "module": "InsolventEstateAbatement",
+    "scope": "Abate",
+    "result_kind": "per_heir",
+    "list_field": "abated_payments",
+    "repeat_by": null,
+    "depends_modules": ["catala/contract/ComputedOrNeedsHuman.catala_en"]
+  },
+  "statute": "Insolvency Act 1986 s.328(3) (pari passu abatement of same-rank debts), applied to a deceased insolvent estate by the Administration of Insolvent Estates of Deceased Persons Order 1986 (SI 1986/1999)",
+  "sourced_at": "2026-07-06",
+  "cases": [
+    {
+      "label": "insolvent-pari-passu-60pct",
+      "inputs": {
+        "available_assets": "60000",
+        "creditor_claims": [30000, 30000, 40000],
+        "has_preferential_or_secured": false
+      },
+      "expected_per_heir_gbp": [18000, 18000, 24000],
+      "expect": "match",
+      "citation": "IA 1986 s.328(3): where assets are insufficient, same-rank debts abate in equal proportions. Assets £60,000 / claims £100,000 = ratio 0.6, so each claim is paid 60%: £30k→£18k, £30k→£18k, £40k→£24k (sum £60,000 = the whole available fund)."
+    },
+    {
+      "label": "wrong-split-60k-conserving",
+      "inputs": {
+        "available_assets": "60000",
+        "creditor_claims": [30000, 30000, 40000],
+        "has_preferential_or_secured": false
+      },
+      "expected_per_heir_gbp": [20000, 20000, 20000],
+      "expect": "wrong_split",
+      "note": "DELIBERATELY WRONG (not the correct answer). Right total (£60,000) AND right creditor-count (3) but an equal £20k/£20k/£20k split instead of the correct pari-passu £18k/£18k/£24k. The harness MUST detect that the split differs — proving the abatement is proportional to claim size, not a naive equal division."
+    }
+  ]
+}

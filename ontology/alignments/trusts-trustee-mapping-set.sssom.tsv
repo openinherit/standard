@@ -1,0 +1,33 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   muslim_waqf: https://openinherit.org/legal-substrate/muslim-waqf/
+#   hindu_huf: https://openinherit.org/legal-substrate/hindu-huf/
+#   bfo: http://purl.obolibrary.org/obo/BFO_
+#   prov: http://www.w3.org/ns/prov#
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/trusts-trustee-q038-lambda-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: Trusts.Trustee role-bearer expansion mapping_set (Q-038/Q-T2 lambda-eta-star) - FOURTH substantive Q under v3.17; FIRST under MQ-009 conventions
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-038/Q-T2 lambda-eta-star universal TrusteeAppointmentBasisScheme 5 + TrusteeKindScheme 5 + TrusteeRetirementBasisScheme 4 + REUSE AcceptanceStatusScheme 4 + statutory_duty_of_care_applies boolean to UK&W (Trustee Act 2000 ss.1-5 statutory duty of care + ss.11-23 delegation + TA 1925 ss.36-43 appointment/retirement + Public Trustee Act 1906 + Hudson §8 §9.2 canonical + Armitage v Nurse 1998) + Scotland (Trusts Scotland 1921 + T&S(S)A 2024 bond of caution) + Muslim mutawalli + Hindu HUF karta trustee analogs. FOURTH substantive Q under v3.17; FOURTH L2 inheritance; SEVENTH cascade-Q file under v3.16; FIRST substantive Q under MQ-009 ε+δ conventions.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:named-in-trust-deed	named-in-trust-deed	skos:exactMatch	uk_w_common_law:trustee_named_in_declaration_trust	UK&W trustee named in declaration of trust per TA 1925 s.39	semapv:ManualMappingCuration	0.99
+inherit:named-in-will	named-in-will	skos:exactMatch	uk_w_common_law:testamentary_trustee_named_in_will	UK&W testamentary trustee named in will per Q-026.2 Will cross-link	semapv:ManualMappingCuration	0.99
+inherit:court-appointment	court-appointment	skos:exactMatch	uk_w_common_law:ta_1925_s41_court_appoint_trustee	UK&W Trustee Act 1925 s.41 court appointment + s.42 separation of trust property	semapv:ManualMappingCuration	0.99
+inherit:retirement-replacement	retirement-replacement	skos:exactMatch	uk_w_common_law:ta_1925_ss36_37_43_replacement_trustee	UK&W TA 1925 ss.36+37+43 replacement trustee procedure	semapv:ManualMappingCuration	0.99
+inherit:public-trustee-default	public-trustee-default	skos:exactMatch	uk_w_common_law:public_trustee_act_1906	UK&W Public Trustee Act 1906; statutory default-of-last-resort	semapv:ManualMappingCuration	0.99
+inherit:lay-trustee	lay-trustee	skos:exactMatch	uk_w_common_law:lay_trustee_standard_duty_care	UK&W lay (non-professional) trustee; standard duty of care per TA 2000 s.1; Hudson §9.2	semapv:ManualMappingCuration	0.99
+inherit:professional-trustee	professional-trustee	skos:exactMatch	uk_w_common_law:ta_2000_s1_1_b_higher_duty_care_professional	UK&W professional trustee per TA 2000 s.1(1)(b) HIGHER duty of care; remuneration per ss.28-29	semapv:ManualMappingCuration	0.99
+inherit:corporate-trustee	corporate-trustee	skos:exactMatch	uk_w_common_law:corporate_trustee_higher_duty_care	UK&W corporate trustee (trust co; bank trustee dept; charity trustee corp) HIGHER duty of care per TA 2000 s.1	semapv:ManualMappingCuration	0.99
+inherit:public-trustee	public-trustee	skos:exactMatch	uk_w_common_law:public_trustee_act_1906_office	UK&W Public Trustee statutory office per Public Trustee Act 1906	semapv:ManualMappingCuration	0.99
+inherit:managing-trustee	managing-trustee	skos:closeMatch	scots_law:managing_trustee_distinct_custodian_trustee	Scotland managing-trustee distinct from custodian-trustee per T&S(S)A 2024 contexts	semapv:ManualMappingCuration	0.85
+inherit:resignation	resignation	skos:exactMatch	uk_w_common_law:ta_1925_s39_resignation_trustee	UK&W TA 1925 s.39 trustee resignation procedure	semapv:ManualMappingCuration	0.99
+inherit:court-removal	court-removal	skos:exactMatch	uk_w_common_law:ta_1925_s41_court_remove_trustee_breach	UK&W TA 1925 s.41 court removal of trustee on breach of trust grounds	semapv:ManualMappingCuration	0.99
+inherit:statutory_duty_of_care_applies	statutory_duty_of_care_applies	skos:exactMatch	uk_w_common_law:ta_2000_s1_statutory_duty_of_care	UK&W Trustee Act 2000 s.1 statutory duty of care (canonical) applies to 6 categories per Schedule 1; Hudson §9.2	semapv:ManualMappingCuration	0.99
+inherit:statutory_duty_of_care_applies	statutory_duty_of_care_applies	skos:closeMatch	uk_w_common_law:armitage_v_nurse_1998_ch_241_exclusion_by_deed	UK&W Armitage v Nurse [1998] Ch 241 — duty of care can be excluded by trust deed; load-bearing for boolean false-cases	semapv:ManualMappingCuration	0.95
+inherit:Trustee	Trustee	skos:closeMatch	muslim_waqf:mutawalli_islamic_trustee_analog	Muslim mutawalli waqf trustee analog cross-link Q-024.1 faith-pillar; classical fiqh + Quranic substrate	semapv:ManualMappingCuration	0.80

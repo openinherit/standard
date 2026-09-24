@@ -1,0 +1,43 @@
+# curie_map:
+#   inherit: https://openinherit.org/schemas/
+#   uk_w_common_law: https://openinherit.org/legal-substrate/uk-eng-wales/
+#   scots_law: https://openinherit.org/legal-substrate/scotland/
+#   switzerland_zgb: https://openinherit.org/legal-substrate/switzerland-zgb/
+#   muslim_faraid: https://openinherit.org/legal-substrate/muslim-faraid/
+#   bfo: http://purl.obolibrary.org/obo/BFO_
+#   prov: http://www.w3.org/ns/prov#
+#   skos: http://www.w3.org/2004/02/skos/core#
+#   semapv: https://w3id.org/semapv/vocab/
+#   orcid: https://orcid.org/
+# mapping_set_id: https://openinherit.org/mappings/probate-administration-q033-zeta-eta
+# mapping_set_version: '1.0'
+# mapping_set_title: Probate.ProbateAdministration state-machine universal classifier mapping_set (Q-033 zeta-eta-star)
+# license: https://creativecommons.org/publicdomain/zero/1.0/
+# creator_id: https://openinherit.org
+# mapping_set_description: SSSOM mapping_set bridging Q-033 zeta-eta-star universal AdministrationPhaseScheme 4 states + AdministrationTransitionTypeScheme 8 events + AdministrationBlockerKindScheme 6 blockers + AdministrationActorScheme 5 actors to UK&W AEA 1925 + Trustee Act 1925 s.27 + Scotland Succession 1964 + T&S(S)A 2024 + Switzerland ZGB Art 596-610 Erbteilung + BFO process semantics + PROV-O temporal anchoring + Quran 4:11-12 wasi cross-school administrative duties. Authored Sunday 18 May 2026 BST under v3.16 lock-cascade-discipline.
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence
+inherit:pre-grant	pre-grant	skos:exactMatch	uk_w_common_law:aea_1925_s9_public_trustee_pre_grant	UK&W AEA 1925 s.9 Public Trustee pre-grant default vesting invariant per Parry & Kerridge §18.17-18 relation-back doctrine	semapv:ManualMappingCuration	0.95
+inherit:pre-grant	pre-grant	skos:closeMatch	bfo:0000015_process_pre_grant_span	BFO:0000015 process — pre-grant phase as occurrent process span; ends at process_boundary grant-issued	semapv:ManualMappingCuration	0.85
+inherit:post-grant	post-grant	skos:exactMatch	uk_w_common_law:post_grant_collection_phase	UK&W post-grant collection-of-assets + payment-of-debts + TA 1925 s.27 creditor-notice phase	semapv:ManualMappingCuration	0.95
+inherit:post-grant	post-grant	skos:closeMatch	switzerland_zgb:post_erbschein_collection_phase	Switzerland post-Erbschein collection phase per ZGB Art 596 prior to Erbteilung partition	semapv:ManualMappingCuration	0.85
+inherit:distribution	distribution	skos:exactMatch	uk_w_common_law:aea_1925_s44_post_executors_year_distribution	UK&W AEA 1925 s.44 distribution phase post-executor's year (1 year from death; Re Tankard 1942 doctrine for pecuniary-legacy interest)	semapv:ManualMappingCuration	0.95
+inherit:distribution	distribution	skos:closeMatch	switzerland_zgb:art_596_607_erbteilung_partition	Switzerland Erbteilung partition phase per ZGB Art 596-607; heir-community responsibility	semapv:ManualMappingCuration	0.90
+inherit:closed	closed	skos:exactMatch	uk_w_common_law:final_account_pr_discharged	UK&W estate administration closed; PR discharged from active role per AEA 1925 ss.25-26	semapv:ManualMappingCuration	0.95
+inherit:grant-issued	grant-issued	skos:exactMatch	uk_w_common_law:grant_of_representation_issued	UK&W grant of representation issued by Probate Registry per Q-031 GrantOfRepresentation.grant_date	semapv:ManualMappingCuration	0.95
+inherit:grant-issued	grant-issued	skos:closeMatch	bfo:0000035_process_boundary_grant_issuance	BFO:0000035 process_boundary — temporal instant marking pre-grant → post-grant transition	semapv:ManualMappingCuration	0.85
+inherit:creditor-notice-published	creditor-notice-published	skos:exactMatch	uk_w_common_law:ta_1925_s27_creditor_notice	UK&W Trustee Act 1925 s.27 creditor-notice published in London Gazette + local newspaper; CITATION-CORRECTION — NOT AEA 1925 s.27 (commonly conflated)	semapv:ManualMappingCuration	0.95
+inherit:s27-period-expired	s27-period-expired	skos:exactMatch	uk_w_common_law:ta_1925_s27_2_month_one_day_period	UK&W TA 1925 s.27 2-month-one-day notice period elapsed; PR protected against unknown creditors per statutory limitation	semapv:ManualMappingCuration	0.95
+inherit:iht421-clearance	iht421-clearance	skos:exactMatch	uk_w_common_law:hmrc_iht421_clearance	UK&W HMRC IHT421 clearance received; precondition for grant in IHT-liable estates per Q-031 iht_filing_status enum	semapv:ManualMappingCuration	0.95
+inherit:executors-year-elapsed	executors-year-elapsed	skos:exactMatch	uk_w_common_law:aea_1925_s44_executors_year	UK&W AEA 1925 s.44 executor's year — PR not bound to distribute before 1 year from death; pecuniary-legacy interest accrues thereafter per Re Tankard 1942	semapv:ManualMappingCuration	0.95
+inherit:assets-distributed	assets-distributed	skos:exactMatch	uk_w_common_law:aea_1925_ss36_40_41_assents	UK&W AEA 1925 ss.36+40+41 estate residue distributed to beneficiaries via assents	semapv:ManualMappingCuration	0.95
+inherit:assets-distributed	assets-distributed	skos:closeMatch	switzerland_zgb:erbteilung_execution	Switzerland Erbteilung execution per ZGB Art 607-610 — heir-community distributes; debt settled-before-partition per Art 610 III	semapv:ManualMappingCuration	0.90
+inherit:final-account-approved	final-account-approved	skos:exactMatch	uk_w_common_law:aea_1925_ss25_26_statutory_accounts	UK&W AEA 1925 ss.25-26 statutory accounts presented to beneficiaries + approved	semapv:ManualMappingCuration	0.95
+inherit:final-account-approved	final-account-approved	skos:closeMatch	scots_law:trusts_scotland_1921_accounts	Scotland Trusts (Scotland) Act 1921 trustee accounts regime — analogous statutory accounting duty	semapv:ManualMappingCuration	0.85
+inherit:caveat	caveat	skos:exactMatch	uk_w_common_law:sca_1981_s108_caveat	UK&W Senior Courts Act 1981 s.108 caveat lodged at probate registry; cross-link Q-031 caveat_status enum	semapv:ManualMappingCuration	0.95
+inherit:swiss-waiting-period	swiss-waiting-period	skos:exactMatch	switzerland_zgb:art_559_3_month_waiting_period	Switzerland ZGB Art 559 3-month statutory waiting period; cross-link Q-031 swiss_3_month_waiting_period_elapsed boolean	semapv:ManualMappingCuration	0.95
+inherit:ecs-dispute	ecs-dispute	skos:exactMatch	uk_w_common_law:cjeu_c187_23_ecs_dispute_blocking	CJEU C-187/23 23-Jan-2025 — ECS cannot issue when succession is subject to dispute; cross-link Q-031 ecs_dispute_status enum	semapv:ManualMappingCuration	0.95
+inherit:personal-representative	personal-representative	skos:exactMatch	uk_w_common_law:q_008_r_delta_executor_administrator_role	Q-008 R.δ A-152 BFO ExecutorRole + AdministratorRole subclasses of FiduciaryRole; cross-link Q-032 PR record	semapv:ManualMappingCuration	0.95
+inherit:court	court	skos:closeMatch	uk_w_common_law:probate_registry_or_sheriff_court	UK&W Probate Registry / Scotland Sheriff Court / Switzerland Cantonal Notariat or Bezirksgericht	semapv:ManualMappingCuration	0.90
+inherit:hmrc	hmrc	skos:exactMatch	uk_w_common_law:hmrc_trust_and_estate_team	UK&W HMRC Trust+Estate team; issues IHT421 + adjudicates IHT disputes	semapv:ManualMappingCuration	0.95
+inherit:beneficiary	beneficiary	skos:closeMatch	muslim_faraid:wasi_distributes_per_quran_4_11_12	Islamic wasi as beneficiary actor with administrative duty to distribute per Quran 4:11-12 shares; cross-school discipline (Hanafi/Maliki/Shafi'i/Hanbali/Jafari)	semapv:ManualMappingCuration	0.80
+inherit:PostDeathVariation	PostDeathVariation	skos:closeMatch	uk_w_common_law:ihta_1984_s142_variation_or_disclaimer	UK&W IHTA 1984 s.142 deed of variation / disclaimer of inheritance; TT-802 post-death instrument altering the deceased's dispositions	semapv:ManualMappingCuration	0.90

@@ -4,7 +4,6 @@ version: "0.2"
 status: tracked
 date: 2026-04-14T00:00:00+08:00
 lastmod: 2026-04-14T00:00:00+08:00
-github_issue: https://github.com/openinherit/standard/issues/41
 author: "Rich Davies"
 source: "docs/proposals/2026-04-14-executed-estate-distribution.md"
 ---
@@ -149,4 +148,4 @@ fired when the spouse failed survivorship.
 
 ## Status
 
-Draft. RFC after the APIdays Singapore 2026 talk (2026-04-15). Tracked at [openinherit/standard#41](https://github.com/openinherit/standard/issues/41).
+Draft. RFC after the APIdays Singapore 2026 talk (2026-04-15). Tracked as `openinherit/standard#41` in the pre-republish repository; that issue number did not survive the fresh-history republish of 28 August 2026.

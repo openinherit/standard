@@ -162,7 +162,7 @@ If a client sends JSONC (JSON with comments) or JSON5, the server must return `4
 
 The INHERIT schemas contain one non-standard annotation: `x-lint-exclude`. This is a [Sourcemeta CLI](https://github.com/sourcemeta/jsonschema) lint directive that suppresses specific lint rules on individual properties. It is present on the `@context` and `@type` JSON-LD properties to suppress the `simple_properties_identifiers` rule (which flags property names starting with `@`).
 
-This annotation has **no effect on validation**. It is not a JSON Schema keyword and is ignored by all validators. However, validators running in strict mode (notably Ajv) may reject schemas containing unknown keywords. See the [Getting Started guide](/docs/getting-started/) for workarounds.
+This annotation has **no effect on validation**. It is not a JSON Schema keyword and is ignored by all validators. However, validators running in strict mode (notably Ajv) may reject schemas containing unknown keywords. See the [INHERIT Primer](../implement/primer.md) for workarounds.
 
 Future versions may move this annotation to an external lint configuration file if the Sourcemeta CLI adds support for per-schema rule exclusions in config files.
 

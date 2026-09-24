@@ -1,0 +1,39 @@
+{
+  "_doc": "T032 LEGAL gov-oracle (TT-478). Each case asserts that the Catala-computed IHT death charge equals the AUTHORITATIVE published gov.uk figure cited inline — not just a structurally-valid shape. scripts/oracle_verify.py runs the rule's scope with `inputs` and requires the Computed-arm money to equal `expected_money_gbp`; a mismatch (e.g. a wrong rule literal) turns the harness RED. Figures sourced from gov.uk on `sourced_at` and must be re-verified against the live page if edited (HALT fork 2: never assert a tax figure from memory).",
+  "rule": {
+    "repo": "code-inherit-standard",
+    "rule_file": "catala/transfer/IhtDeathCharge.catala_en",
+    "module": "IhtDeathCharge",
+    "scope": "Charge",
+    "result_field": "verdict",
+    "depends_modules": ["catala/contract/ComputedOrNeedsHuman.catala_en"]
+  },
+  "statute": "IHTA 1984 s.7 + Schedule 1 (death-charge rate); s.8D–s.8E (residence nil-rate band, FA 2015)",
+  "sourced_at": "2026-06-19",
+  "cases": [
+    {
+      "label": "v1-no-home-500k",
+      "inputs": { "estate_value": "500000", "home_to_descendants": false, "home_value": "0" },
+      "expected_money_gbp": "70000",
+      "citation_url": "https://www.gov.uk/inheritance-tax",
+      "citation_quote": "Your estate is worth £500,000 and your tax-free threshold is £325,000. The Inheritance Tax charged will be 40% of £175,000 (£500,000 minus £325,000).",
+      "note": "£175,000 × 40% = £70,000 — the verbatim gov.uk worked example."
+    },
+    {
+      "label": "v2-home-to-descendants-500k",
+      "inputs": { "estate_value": "500000", "home_to_descendants": true, "home_value": "200000" },
+      "expected_money_gbp": "0",
+      "citation_url": "https://www.gov.uk/inheritance-tax/passing-on-home",
+      "citation_quote": "If you own your home (or a share in it) your tax-free threshold can increase to £500,000 if: you leave it to your children (including adopted, foster or stepchildren) or grandchildren",
+      "note": "Threshold £325,000 + RNRB min(£200,000, £175,000) = £500,000; estate £500,000 ≤ £500,000 → £0. Quote refreshed 2026-07-11 (TT-883) after gov.uk reworded the passing-on-home page; no-substance determination: £500,000 threshold + closely-inherited-by-descendants eligibility unchanged (FA 2015 s.8D–8E), only wording restructured."
+    },
+    {
+      "label": "v3-taper-2_1m",
+      "inputs": { "estate_value": "2100000", "home_to_descendants": true, "home_value": "400000" },
+      "expected_money_gbp": "660000",
+      "citation_url": "https://www.gov.uk/guidance/inheritance-tax-residence-nil-rate-band",
+      "citation_quote": "The residence nil rate band will reduce by £1 for every £2 that the estate is worth more than the £2 million taper threshold.",
+      "note": "Estate £2.1m exceeds £2m by £100k → RNRB taper −£50k → RNRB £125k; threshold £450k; (£2,100,000 − £450,000) × 40% = £660,000."
+    }
+  ]
+}

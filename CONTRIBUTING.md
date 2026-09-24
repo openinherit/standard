@@ -51,18 +51,38 @@ All contributions to INHERIT are voluntary. Contributing does not create an empl
 
 INHERIT uses automated guardrails to keep derived files in sync with the source schemas.
 
-### Pre-commit hook
+### Pre-commit hooks
 
-When you commit changes to files in `v3/`, a Husky pre-commit hook automatically:
+The repository ships tracked hooks in `.husky/pre-commit`. They run three
+things, in order:
 
-1. Syncs `v3/` to `packages/schema/v3/` (the npm package content)
-2. Copies `extensions-registry.json` to `packages/schema/` if it changed
-3. Regenerates `dist/inherit-v3-bundled.json`
-4. Stages all resulting changes
+1. **Secret and build-artefact guard** (`.githooks/pre-commit`) — refuses
+   staged build output, editor config and hardcoded credentials.
+2. **Publication content check** (`scripts/check-publication-redline.py
+   --staged`) — this repository is public, so it refuses internal-only files
+   by path and flags local-machine paths in file contents.
+3. **`v3/` schema sync** — when anything under `v3/` is staged, derived files
+   are regenerated and staged with it.
 
-You don't need to remember these steps — they happen automatically. If you're curious about what the hook does, see `.husky/pre-commit`.
+**Enable them once, per clone:**
 
-The hook only runs when `v3/` files are staged. Non-schema commits (documentation, website, etc.) are unaffected.
+```bash
+npm install            # `prepare` wires the hooks for you
+# or, without node:
+bash scripts/setup-hooks.sh
+```
+
+Check at any time with `bash scripts/setup-hooks.sh --check`.
+
+> **Why you have to enable them.** `core.hooksPath` is *local* git config. Git
+> does not let a repository configure hooks for a clone it has never seen, so no
+> project can make this automatic for you. If the step is skipped, the hooks are
+> silent — they do not warn, they simply never run.
+>
+> **That is why CI, not the hook, is the guarantee.** A local hook is also
+> `--no-verify`-able. `.github/workflows/redline.yml` runs the same publication
+> check on every push and pull request and cannot be bypassed. The hook exists
+> to tell you in one second what CI would tell you in two minutes.
 
 ### CI staleness check
 

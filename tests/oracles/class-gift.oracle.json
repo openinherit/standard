@@ -1,0 +1,29 @@
+{
+  "_doc": "T032 per-heir allocation oracle (TT-463), class-gift shape. Equal division of a fund among a class of beneficiaries — the flat no-repeat_by case (per_member_amounts is already one amount per heir, so no per-branch expansion). Proves the per_heir harness path generalises beyond the per-stirpes repeat_by shape. WARNING — INVERTED CASE: a case with \"expect\": \"wrong_split\" carries a DELIBERATELY WRONG expected_per_heir_gbp (right total, right count, wrong split); it is NOT the correct answer. The harness PASSES that case iff it correctly detects the split differs, and goes RED if the wrong split somehow matched (non-vacuous teeth). Equal-division shares are general-law arithmetic (fund / n); the oracle is the division rule itself, not an external published figure.",
+  "rule": {
+    "repo": "code-inherit-standard",
+    "rule_file": "catala/probate/ClassGift.catala_en",
+    "module": "ClassGift",
+    "scope": "Distribute",
+    "result_kind": "per_heir",
+    "list_field": "per_member_amounts"
+  },
+  "statute": "General law: a class gift in equal shares divides the fund equally among the members of the class.",
+  "sourced_at": "2026-06-19",
+  "cases": [
+    {
+      "label": "match-100k-four-members",
+      "inputs": { "fund": "100000", "members": [1, 1, 1, 1] },
+      "expected_per_heir_gbp": [25000, 25000, 25000, 25000],
+      "expect": "match",
+      "citation": "Equal division: £100,000 / 4 = £25,000 each."
+    },
+    {
+      "label": "wrong-split-100k-conserving",
+      "inputs": { "fund": "100000", "members": [1, 1, 1, 1] },
+      "expected_per_heir_gbp": [40000, 20000, 20000, 20000],
+      "expect": "wrong_split",
+      "note": "DELIBERATELY WRONG (not the correct answer). Right total (£100,000) AND right heir-count (4) but the split is £40,000/£20,000/£20,000/£20,000 instead of the correct £25,000 each. The harness MUST detect that the split differs — the class-gift analogue of the C1 gameable-conservation case."
+    }
+  ]
+}

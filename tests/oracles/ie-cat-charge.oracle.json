@@ -1,0 +1,86 @@
+{
+  "_doc": "T032 LEGAL gov-oracle (TT-478 / TT-717). Ireland Capital Acquisitions Tax charge (CATCA 2003), beneficiary-side. Each case asserts the Catala-computed CAT equals the AUTHORITATIVE figure live-sourced from revenue.ie on `sourced_at` — never from memory (HALT fork 2). scripts/oracle_verify.py runs CatInheritanceCharge.Charge with `inputs` and requires the Computed-arm money to equal `expected_money` (EUR). Group classification from kinship is out-of-scope for the rule (supplied by the caller); each case fixes `cat_group` directly. NeedsHuman cases (relief_claimed) are covered by the standard's own *.test-fixtures.json, not here (the scalar harness asserts the Computed arm).",
+  "rule": {
+    "repo": "code-inherit-standard",
+    "rule_file": "catala/transfer/CatInheritanceCharge.catala_en",
+    "module": "CatInheritanceCharge",
+    "scope": "Charge",
+    "result_field": "verdict",
+    "depends_modules": ["catala/contract/ComputedOrNeedsHuman.catala_en"]
+  },
+  "statute": "Capital Acquisitions Tax Consolidation Act 2003 (CATCA 2003): Sch 2 (group thresholds + aggregation since 5 December 1991); rate 33%; s.70/s.71 (spouse/civil-partner exemption)",
+  "currency": "EUR",
+  "sourced_at": "2026-07-02",
+  "cases": [
+    {
+      "label": "groupA-above-threshold-500k",
+      "inputs": {
+        "taxable_benefit": "500000",
+        "prior_same_group_benefits": "0",
+        "cat_group": { "enum": "GroupA" },
+        "spouse_or_civil_partner": false,
+        "relief_claimed": false
+      },
+      "expected_money": "33000",
+      "citation_url": "https://www.revenue.ie/en/gains-gifts-and-inheritance/gift-and-inheritance-tax-cat/how-do-you-calculate-cat.aspx",
+      "citation_quote": "If Eric has used up his entire available threshold, the tax on €100,000 at 33% is €33,000.",
+      "note": "Group A threshold €400,000 (revenue.ie cat-thresholds.aspx, on/after 2 Oct 2024); rate 33% (cat-rates.aspx). Taxable excess €500,000 − €400,000 = €100,000 × 33% = €33,000 (the verbatim revenue.ie worked-example figure)."
+    },
+    {
+      "label": "groupB-inside-threshold-30k",
+      "inputs": {
+        "taxable_benefit": "30000",
+        "prior_same_group_benefits": "0",
+        "cat_group": { "enum": "GroupB" },
+        "spouse_or_civil_partner": false,
+        "relief_claimed": false
+      },
+      "expected_money": "0",
+      "citation_url": "https://www.revenue.ie/en/gains-gifts-and-inheritance/cat-thresholds-rates-and-aggregation-rules/cat-thresholds.aspx",
+      "citation_quote": "You only pay tax on the value of a gift or inheritance above the tax-free group threshold amount.",
+      "note": "Group B threshold €40,000; benefit €30,000 is below threshold → taxable excess €0 → CAT €0 (Computed €0, distinct from the spouse exemption)."
+    },
+    {
+      "label": "groupB-aggregation-14k-excess",
+      "inputs": {
+        "taxable_benefit": "20000",
+        "prior_same_group_benefits": "34000",
+        "cat_group": { "enum": "GroupB" },
+        "spouse_or_civil_partner": false,
+        "relief_claimed": false
+      },
+      "expected_money": "4620",
+      "citation_url": "https://www.revenue.ie/en/gains-gifts-and-inheritance/cat-thresholds-rates-and-aggregation-rules/cat-thresholds.aspx",
+      "citation_quote": "Value of property €20,000; Value of prior benefits in Group B €34,000; Less Group B threshold €40,000; Taxable excess €14,000; Tax due @ 33% €4,620.",
+      "note": "revenue.ie Example 4 (1 March 2025): available threshold €40,000 − €34,000 prior = €6,000; taxable excess €20,000 − €6,000 = €14,000; × 33% = €4,620 (verbatim revenue.ie table, re-confirmed live 2026-07-02). Exercises CATCA 2003 Sch 2 para 3 aggregation."
+    },
+    {
+      "label": "groupC-above-threshold-50k",
+      "inputs": {
+        "taxable_benefit": "50000",
+        "prior_same_group_benefits": "0",
+        "cat_group": { "enum": "GroupC" },
+        "spouse_or_civil_partner": false,
+        "relief_claimed": false
+      },
+      "expected_money": "9900",
+      "citation_url": "https://www.revenue.ie/en/gains-gifts-and-inheritance/cat-thresholds-rates-and-aggregation-rules/cat-thresholds.aspx",
+      "citation_quote": "On or after 2 October 2024 | Group A €400,000 | Group B €40,000 | Group C €20,000",
+      "note": "Group C threshold €20,000; taxable excess €50,000 − €20,000 = €30,000 × 33% = €9,900."
+    },
+    {
+      "label": "spouse-exempt",
+      "inputs": {
+        "taxable_benefit": "500000",
+        "prior_same_group_benefits": "0",
+        "cat_group": { "enum": "GroupA" },
+        "spouse_or_civil_partner": true,
+        "relief_claimed": false
+      },
+      "expected_money": "0",
+      "citation_url": "https://www.revenue.ie/en/gains-gifts-and-inheritance/cat-thresholds-rates-and-aggregation-rules/cat-groups.aspx",
+      "citation_quote": "Gifts and inheritances taken by a spouse or civil partner are exempt from CAT.",
+      "note": "CATCA 2003 s.70/s.71 — spouse/civil-partner transfers fully exempt; the exemption takes precedence (Computed €0 regardless of value)."
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+> Module ComputedOrNeedsHuman
+
+SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
+SPDX-License-Identifier: Apache-2.0
+
+# ComputedOrNeedsHuman — the ② Catala Boundary Principle return contract (N5)
+
+This module declares the **single, canonical, non-droppable return contract** that the ②
+Catala Boundary Principle requires every law-computing rule to return — *"Every rule returns a
+non-droppable sum type `Computed<scalar> | NeedsHuman` (omit an arm ⇒ compile error)"*
+(doctrine §1a v0.7; Constitution Principle XIII v1.11.0; locked TT-455).
+
+(Prose note: lines in a Catala literate file must not begin with `>` — that prefix is reserved for
+`> Module` / `> Using` directives — so quotations here are kept inline.)
+
+**Why it is a module, not a copy-pasted enum.** Catala enumerations are *nominal per module* — two
+files each declaring their own `Verdict` are different, incompatible types. Declaring the contract
+once here and importing it (`> Using ComputedOrNeedsHuman`) makes every consumer share the *same*
+type, so the route-to-human gate is a single source of truth, not a convention that can drift. The
+later host consumers (the standard's T037, the SDK's T038, the app's T039) project this contract
+across the seam; this module is its Catala-side origin.
+
+**Why `money` (not a generic).** `Computed<scalar>` in the doctrine is shorthand — Catala has no
+generics (and no strings, TT-443). The contract is therefore *monomorphic per scalar*: this module
+pins the `money` variant, which the foundational legal-charge rules need. `decimal` / `date`
+variants, when those rules land, are the same shape monomorphised (their own arms / modules).
+
+**Non-droppability is enforced by the type system, not by us.** Any scope that `match`-es a `Verdict`
+must handle BOTH arms or `catala typecheck` refuses to compile it ("The constructor NeedsHuman …
+is missing from this pattern matching"). That compile error — proven by the committed broken twin
+and the `make catala-contract-check` gate — is what makes ② *enforceable, not emergent*: the SOTA
+finding (TT-455 §1) is that frontier LLMs will not self-abstain, so the gate must be a typed
+structural constraint, never a model instruction.
+
+```catala-metadata
+declaration enumeration Verdict:
+  # The law computed a definite scalar answer (here: money).
+  -- Computed content money
+  # The input could not be characterised with certainty — route to a human.
+  # A bare arm by design: it carries no value, it is a first-class OUTCOME,
+  # never a silent default.
+  -- NeedsHuman
+```
+
+## The certification floor — `Certified<Type> | NotCharacterised` (G6, TT-427/TT-1079)
+
+Every **L3 (characterisation-judgement)** input of a `Verdict`-returning rule is declared with
+one of the monomorphic certification enums below (the G6 gap-detector's C3 typed floor,
+`registry/governance-layers.yaml` carries the L3 classification). Catala exhaustiveness then
+*forces* every consumer scope to handle `NotCharacterised`; the `scripts/g6/check_certification_arm.py`
+lint asserts that arm yields `NeedsHuman`, never a scalar. A caller can no longer feed a bare
+guess into a law-computing rule — it must either *certify* the characterisation (a signed,
+attributable act) or receive `NeedsHuman`.
+
+**Monomorphic per scalar family, deliberately** — Catala has no generics (the same reason
+`Verdict` pins `money` above). One enum per scalar family the L3 inputs use; a rule-local
+classification enum (e.g. `CatGroup`) gets its `Certified<X>` twin declared in the rule's own
+module, because this contract module cannot import rule modules. Adding a new L3 scalar type
+later means adding one enum here.
+
+**Construction/matching is fully qualified** — the shared `Certified`/`NotCharacterised`
+constructor names are ambiguous across these enums, so every use site writes
+`ComputedOrNeedsHuman.CertifiedMoney.Certified content $x` /
+`-- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: …` (verified: the unqualified form is
+a compile error, "This constructor name is ambiguous"). The verbosity is load-bearing: it makes
+every certification site mechanically grep-able by the G6 lints.
+
+```catala-metadata
+declaration enumeration CertifiedBool:
+  # A human-certified boolean characterisation (spousehood, issue, routing flags).
+  -- Certified content boolean
+  -- NotCharacterised
+
+declaration enumeration CertifiedMoney:
+  # A human-certified money characterisation (valuations, estate/gift amounts).
+  -- Certified content money
+  -- NotCharacterised
+
+declaration enumeration CertifiedIntegerList:
+  # A human-certified integer-list characterisation (per-stirpes branch/member
+  # structure — WHO counts as a member IS the characterisation).
+  -- Certified content list of integer
+  -- NotCharacterised
+```

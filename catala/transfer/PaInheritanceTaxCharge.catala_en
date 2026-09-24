@@ -1,0 +1,110 @@
+> Module PaInheritanceTaxCharge
+> Using ComputedOrNeedsHuman
+
+SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
+SPDX-License-Identifier: Apache-2.0
+
+# PaInheritanceTaxCharge — Pennsylvania inheritance tax charge (72 P.S. § 9116)
+
+The Pennsylvania inheritance tax charge on one beneficiary's share of a decedent's estate,
+per 72 P.S. § 9116(a). Like Ireland CAT and unlike UK Inheritance Tax, this is
+**beneficiary-side**: the rate is keyed to the beneficiary's relationship to the decedent, so
+the scope takes one invocation per (beneficiary x share) — the incidence nuance is that the
+rate is recipient-keyed even though the estate's personal representative files the return
+(REV-1500) and remits the tax; the machine-readable incidence axis lives in the jurisdiction
+parameter layer (`linkml/parameters/parameters.yaml` `TaxIncidenceEnum`), not in Catala.
+
+The scope returns the `ComputedOrNeedsHuman.Verdict` contract (doctrine §1a; Constitution
+Principle XIII): a definite legal figure travels in the `Computed` arm.
+
+Legal-correctness is asserted **outside this file** by the T032 gov-oracle harness (TT-478):
+`code-inherit-test-suite/scripts/oracle_verify.py` runs this scope and checks the computed
+figure against the published revenue.pa.gov figure cited in
+`tests/oracles/pa-inheritance-tax.oracle.json`. This file therefore carries the law, not its
+own assertions.
+
+(Prose note: a line must not begin with the reserved `>` directive prefix, so any statutory
+quotation is kept inline.)
+
+Statutory rates (current values; live-sourced revenue.pa.gov 2026-07-02, 72 P.S. § 9116(a)):
+
+- 0% on transfers to a surviving spouse, or to a parent from a child aged 21 or younger
+- 4.5% on transfers to direct descendants and lineal heirs
+- 12% on transfers to siblings
+- 15% on transfers to other heirs (except charitable organisations, exempt institutions, and
+  government entities exempt from tax)
+
+There is **no threshold** — PA inheritance tax is charged from the first dollar of the taxable
+share (unlike Ireland CAT's group thresholds). The family exemption (20 Pa.C.S. § 3121, $3,500)
+and § 9111 exemptions are not computed by this rule — a claimed deduction or exemption routes
+to `NeedsHuman` (`deduction_or_exemption_claimed`); so does the 5% prepayment discount for
+payment within three months of death, which reduces the amount due rather than the rate.
+
+The per-class rates are `context` parameters (ICP-A1) whose authoritative values live in the
+jurisdiction parameter layer; the literals below are the overridable defaults. The 0% classes
+are structural (not merely a zero-valued context parameter) because they are exemptions in
+their own right, not a rate that happens to be zero.
+
+G6 certification floor (TT-427/TT-1079): every input is a characterisation judgement
+(`registry/governance-layers.yaml`, all L3 — the share valuation, the beneficiary-class
+relationship classification, and the deduction/exemption claim), so each arrives as a
+`Certified<Type> | NotCharacterised` enum; any uncertified input routes `NeedsHuman`
+via the `uncertified_inputs` gate. `CertifiedPaBeneficiaryClass` is declared HERE (the
+rule-local twin of this module's own classification enum — the shared contract module
+cannot import rule modules).
+
+```catala
+declaration enumeration PaBeneficiaryClass:
+  -- SurvivingSpouse
+  -- ChildUnder21ToParent
+  -- LinealHeir
+  -- Sibling
+  -- Collateral
+  -- ExemptCharityOrGovernment
+
+declaration enumeration CertifiedPaBeneficiaryClass:
+  -- Certified content PaBeneficiaryClass
+  -- NotCharacterised
+
+declaration scope Charge:
+  input taxable_value content ComputedOrNeedsHuman.CertifiedMoney
+  input beneficiary_class content CertifiedPaBeneficiaryClass
+  input deduction_or_exemption_claimed content ComputedOrNeedsHuman.CertifiedBool
+  context rate_lineal content decimal
+  context rate_sibling content decimal
+  context rate_collateral content decimal
+  internal uncertified_inputs content boolean
+  internal taxable_value_v content money
+  internal beneficiary_class_v content PaBeneficiaryClass
+  internal deduction_or_exemption_claimed_v content boolean
+  output verdict content ComputedOrNeedsHuman.Verdict
+
+scope Charge:
+  definition rate_lineal equals 0.045
+  definition rate_sibling equals 0.12
+  definition rate_collateral equals 0.15
+  definition uncertified_inputs equals
+    (match taxable_value with pattern -- ComputedOrNeedsHuman.CertifiedMoney.Certified content v: false -- ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised: true)
+    or (match beneficiary_class with pattern -- CertifiedPaBeneficiaryClass.Certified content v: false -- CertifiedPaBeneficiaryClass.NotCharacterised: true)
+    or (match deduction_or_exemption_claimed with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: false -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: true)
+  # certified-value extractions — fallbacks are dead code (verdict routes first)
+  definition taxable_value_v equals
+    match taxable_value with pattern -- ComputedOrNeedsHuman.CertifiedMoney.Certified content v: v -- ComputedOrNeedsHuman.CertifiedMoney.NotCharacterised: $0
+  definition beneficiary_class_v equals
+    match beneficiary_class with pattern -- CertifiedPaBeneficiaryClass.Certified content v: v -- CertifiedPaBeneficiaryClass.NotCharacterised: Collateral
+  definition deduction_or_exemption_claimed_v equals
+    match deduction_or_exemption_claimed with pattern -- ComputedOrNeedsHuman.CertifiedBool.Certified content v: v -- ComputedOrNeedsHuman.CertifiedBool.NotCharacterised: false
+  definition verdict equals
+    if uncertified_inputs then
+      NeedsHuman
+    else if deduction_or_exemption_claimed_v then
+      NeedsHuman
+    else
+      match beneficiary_class_v with pattern
+      -- SurvivingSpouse: Computed content $0
+      -- ChildUnder21ToParent: Computed content $0
+      -- ExemptCharityOrGovernment: Computed content $0
+      -- LinealHeir: Computed content (taxable_value_v * rate_lineal)
+      -- Sibling: Computed content (taxable_value_v * rate_sibling)
+      -- Collateral: Computed content (taxable_value_v * rate_collateral)
+```

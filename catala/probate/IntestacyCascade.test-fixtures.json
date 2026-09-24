@@ -1,0 +1,195 @@
+{
+  "$comment": "Catala rule test inputs for IntestacyCascade per TT-531. AEA 1925 s.46 intestacy cascade + s.46(2A)/LPA 1925 s.184 commorientes. Scope Distribute returns ComputedOrNeedsHuman.Verdict (money) PLUS a per-member money list (per_member_amounts) — the per-heir allocation authority lives in code-inherit-test-suite/tests/oracles/intestacy-cascade-aea1925.oracle.json (T032 per-heir gov-oracle harness, TT-463 pattern), which these fixtures mirror 1:1 (same inputs, same expected per-member split). This twin is a human-readable record, NOT gate-exercised (no Makefile target consumes *.test-fixtures.json, mirroring the CatInheritanceCharge/TT-682 precedent). The oracle's locked wrong_split anti-hack negative case is deliberately NOT mirrored here — it is not a real answer and its home is the oracle file alone.",
+  "rule_name": "IntestacyCascade",
+  "scope": "Distribute",
+  "positive": [
+    {
+      "fixture_id": "T-tt531-intestacy-001-spouse-plus-issue-half-residue",
+      "input": {
+        "net_estate": "700000",
+        "chattels_value": "0",
+        "spouse_present": true,
+        "spouse_survives_statutory_period": true,
+        "has_issue": true,
+        "issue_branch_sizes": [1, 1],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1, 1]
+      },
+      "expected_output": {
+        "verdict_arm": "Computed",
+        "total_distributed": "700000",
+        "per_member_amounts": ["511000", "94500", "94500"]
+      },
+      "decidability_claim": "DECIDABLE; AEA 1925 s.46(1)(i) Table Case (2): spouse takes chattels (£0) + fixed net sum (£322,000) + half residue (£189,000) = £511,000; issue take the other half (£189,000) per stirpes over two single-child branches = £94,500 each."
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-002-spouse-no-issue-takes-all",
+      "input": {
+        "net_estate": "500000",
+        "chattels_value": "20000",
+        "spouse_present": true,
+        "spouse_survives_statutory_period": true,
+        "has_issue": false,
+        "issue_branch_sizes": [],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1]
+      },
+      "expected_output": {
+        "verdict_arm": "Computed",
+        "total_distributed": "520000",
+        "per_member_amounts": ["520000"]
+      },
+      "decidability_claim": "DECIDABLE; AEA 1925 s.46(1)(i) Table Case (1): no issue -> spouse takes the whole estate absolutely (post-ITPA-2014). £20,000 chattels + £500,000 = £520,000."
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-003-no-spouse-issue-per-stirpes",
+      "input": {
+        "net_estate": "900000",
+        "chattels_value": "0",
+        "spouse_present": false,
+        "spouse_survives_statutory_period": false,
+        "has_issue": true,
+        "issue_branch_sizes": [1, 1, 2],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1, 2]
+      },
+      "expected_output": {
+        "verdict_arm": "Computed",
+        "total_distributed": "900000",
+        "per_member_amounts": ["300000", "300000", "150000"]
+      },
+      "decidability_claim": "DECIDABLE; AEA 1925 s.46(1)(ii) + s.47: issue but no spouse, whole estate on the statutory trusts per stirpes. £900,000 over branches [1;1;2] -> £300,000/branch; the two-grandchild branch splits £150,000 each."
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-004-no-spouse-parents-equal",
+      "input": {
+        "net_estate": "400000",
+        "chattels_value": "0",
+        "spouse_present": false,
+        "spouse_survives_statutory_period": false,
+        "has_issue": false,
+        "issue_branch_sizes": [],
+        "winning_class_branch_sizes": [1, 1],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1]
+      },
+      "expected_output": {
+        "verdict_arm": "Computed",
+        "total_distributed": "400000",
+        "per_member_amounts": ["200000", "200000"]
+      },
+      "decidability_claim": "DECIDABLE; AEA 1925 s.46(1)(iii): no spouse, no issue, both parents -> father and mother in equal shares absolutely. £400,000 / 2 = £200,000 each."
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-005-no-spouse-whole-blood-siblings-per-stirpes",
+      "input": {
+        "net_estate": "300000",
+        "chattels_value": "0",
+        "spouse_present": false,
+        "spouse_survives_statutory_period": false,
+        "has_issue": false,
+        "issue_branch_sizes": [],
+        "winning_class_branch_sizes": [1, 1, 1],
+        "winning_class_per_stirpes": true,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1, 1]
+      },
+      "expected_output": {
+        "verdict_arm": "Computed",
+        "total_distributed": "300000",
+        "per_member_amounts": ["100000", "100000", "100000"]
+      },
+      "decidability_claim": "DECIDABLE; AEA 1925 s.46(1)(v) First class: no spouse, no issue, no parent -> whole-blood siblings on the statutory trusts. £300,000 over three living siblings = £100,000 each."
+    }
+  ],
+  "negative": [],
+  "edge": [
+    {
+      "fixture_id": "T-tt531-intestacy-006-commorientes-spouse-fails-28-days",
+      "input": {
+        "net_estate": "700000",
+        "chattels_value": "0",
+        "spouse_present": true,
+        "spouse_survives_statutory_period": false,
+        "has_issue": true,
+        "issue_branch_sizes": [1, 1],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1]
+      },
+      "expected_output": {
+        "verdict_arm": "Computed",
+        "total_distributed": "700000",
+        "per_member_amounts": ["350000", "350000"]
+      },
+      "decidability_claim": "DECIDABLE; AEA 1925 s.46(2A): spouse survived but died within the 28-day period, so treated as not having survived -> distributed as if there were no spouse (s.46(1)(ii)). £700,000 per stirpes over two single-child branches = £350,000 each. The 27/28-day boundary itself is proven by the in-file #[test] scopes on Survivorship, not by this fixture (which only exercises the boolean flip)."
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-007-small-estate-spouse-takes-all-issue-zero",
+      "input": {
+        "net_estate": "200000",
+        "chattels_value": "0",
+        "spouse_present": true,
+        "spouse_survives_statutory_period": true,
+        "has_issue": true,
+        "issue_branch_sizes": [1, 1],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1]
+      },
+      "expected_output": {
+        "verdict_arm": "Computed",
+        "total_distributed": "200000",
+        "per_member_amounts": ["200000", "0"]
+      },
+      "decidability_claim": "DECIDABLE; the £322,000 fixed net sum clamps to the £200,000 estate — spouse takes the whole (smaller) estate, issue take nothing. Proves the legacy does not over-distribute beyond the estate."
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-008-no-spouse-chattels-folded",
+      "input": {
+        "net_estate": "300000",
+        "chattels_value": "60000",
+        "spouse_present": false,
+        "spouse_survives_statutory_period": false,
+        "has_issue": true,
+        "issue_branch_sizes": [1, 1],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": false,
+        "member_counts": [1, 1]
+      },
+      "expected_output": {
+        "verdict_arm": "Computed",
+        "total_distributed": "360000",
+        "per_member_amounts": ["180000", "180000"]
+      },
+      "decidability_claim": "DECIDABLE; chattels are a distinct category only under s.46(1)(i)(A) (spouse takes); with no spouse, chattels remain part of the residuary estate. £300,000 + £60,000 = £360,000 over two single-child branches = £180,000 each."
+    },
+    {
+      "fixture_id": "T-tt531-intestacy-009-crown-bona-vacantia-needs-human",
+      "input": {
+        "net_estate": "100000",
+        "chattels_value": "0",
+        "spouse_present": false,
+        "spouse_survives_statutory_period": false,
+        "has_issue": false,
+        "issue_branch_sizes": [],
+        "winning_class_branch_sizes": [],
+        "winning_class_per_stirpes": false,
+        "winning_class_is_crown": true,
+        "member_counts": []
+      },
+      "expected_output": { "verdict_arm": "NeedsHuman" },
+      "decidability_claim": "NOT DECIDABLE BY RULE; AEA 1925 s.46(1)(vi) default: Crown/Duchy of Lancaster/Duke of Cornwall bona vacantia — discretionary Treasury Solicitor territory, never a computed split."
+    }
+  ]
+}

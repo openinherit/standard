@@ -564,6 +564,128 @@ test('the acyclic row is not satisfiable by its existence sibling (grouping is b
   }
 });
 
+// === Category 3: the positive document fixture ===
+//
+// Everything above this line is synthetic or negative. The synthetic validDoc
+// carries a single space with neither propertyId nor containedInSpaceId, so the
+// auto-generated positive rows for those two fields pass on ZERO values — a
+// validator that rejected every containment chain ever written would still be
+// green here. TT-1313 D1 and D2 ask for the positive case on a REAL example
+// document: Asset -> Space -> Space -> Property, resolving and terminating.
+//
+// The fixture is a tracked example, so `pnpm run validate:examples` schema-checks
+// the same bytes this suite reference-checks. Neither half is sufficient alone:
+// validate:examples never follows a reference, and this suite never applies a
+// JSON Schema.
+console.log('\nPositive document fixture (examples/fixtures/spatial-containment.json):');
+
+const CONTAINMENT_FIXTURE = 'examples/fixtures/spatial-containment.json';
+let containmentDoc = null;
+try {
+  containmentDoc = JSON.parse(readFileSync(resolve(ROOT, CONTAINMENT_FIXTURE), 'utf8'));
+} catch (e) {
+  containmentDoc = { __loadError: e.message };
+}
+
+function requireContainmentDoc() {
+  if (containmentDoc?.__loadError) {
+    throw new Error(`${CONTAINMENT_FIXTURE} could not be read: ${containmentDoc.__loadError}`);
+  }
+  return containmentDoc;
+}
+
+test('every integrity constraint holds on the containment fixture', () => {
+  const doc = requireContainmentDoc();
+  const violations = [];
+  for (const c of constraints) {
+    const kind = c.kind ?? 'existence';
+    const result = checkAny(doc, c);
+    if (result.length === 0) continue;
+    // Multi-target existence rows are satisfied if ANY sibling row resolves the
+    // value, so a single-row miss is only a violation when no sibling covers it.
+    if (kind === 'existence') {
+      const siblings = constraints.filter(s => s.field === c.field && (s.kind ?? 'existence') === 'existence');
+      const unresolved = result.filter(val => !siblings.some(s =>
+        new Set(resolvePath(doc, s.references).map(String)).has(String(val))));
+      if (unresolved.length === 0) continue;
+      violations.push(`${c.field} (${kind}): ${JSON.stringify(unresolved)}`);
+    } else {
+      violations.push(`${c.field} (${kind}): ${JSON.stringify(result)}`);
+    }
+  }
+  if (violations.length > 0) {
+    throw new Error(`fixture violates ${violations.length} constraint(s): ${violations.join('; ')}`);
+  }
+});
+
+test('spaces[].propertyId is exercised on the fixture, not vacuous (D1)', () => {
+  const doc = requireContainmentDoc();
+  const values = resolvePath(doc, 'spaces[].propertyId');
+  if (values.length < 3) {
+    throw new Error(`expected every space in the chain to name its property, got ${values.length} value(s)`);
+  }
+  const propertyIds = new Set(resolvePath(doc, 'properties[].id').map(String));
+  for (const v of values) {
+    if (!propertyIds.has(String(v))) throw new Error(`spaces[].propertyId ${v} does not resolve`);
+  }
+});
+
+test('spaces[].containedInSpaceId is exercised on the fixture, not vacuous (D2)', () => {
+  const doc = requireContainmentDoc();
+  const values = resolvePath(doc, 'spaces[].containedInSpaceId');
+  if (values.length < 2) {
+    throw new Error(`a 3-deep chain needs 2 containment links, got ${values.length}`);
+  }
+});
+
+test('the fixture chain is 3 deep and terminates inside maxDepth (D2)', () => {
+  const doc = requireContainmentDoc();
+  const c = acyclicConstraint('spaces[].containedInSpaceId');
+  const byId = new Map(doc.spaces.map(s => [String(s.id), s]));
+  const leaves = doc.spaces.filter(s => !doc.spaces.some(o => String(o.containedInSpaceId) === String(s.id)));
+  if (leaves.length !== 1) throw new Error(`expected exactly one deepest space, got ${leaves.length}`);
+  let node = leaves[0];
+  let hops = 0;
+  while (node?.containedInSpaceId !== undefined && node?.containedInSpaceId !== null) {
+    node = byId.get(String(node.containedInSpaceId));
+    if (node === undefined) throw new Error('the chain leaves the document');
+    if (++hops > (c.maxDepth ?? 16)) throw new Error('the chain does not terminate inside maxDepth');
+  }
+  assertEqual(hops, 2, 'hops from the deepest space to the root space (3 spaces => 2 hops)');
+  if (checkAcyclic(doc, c).length !== 0) throw new Error('the fixture chain is reported cyclic');
+});
+
+test('an asset reaches its property by walking the space chain (D1)', () => {
+  const doc = requireContainmentDoc();
+  const byId = new Map(doc.spaces.map(s => [String(s.id), s]));
+  const propertyIds = new Set(resolvePath(doc, 'properties[].id').map(String));
+  const housed = doc.assets.filter(a => a.spaceId !== undefined && a.spaceId !== null);
+  if (housed.length === 0) throw new Error('no asset in the fixture names a space');
+  for (const asset of housed) {
+    let node = byId.get(String(asset.spaceId));
+    if (node === undefined) throw new Error(`assets[].spaceId ${asset.spaceId} does not resolve`);
+    let depth = 0;
+    while (node.containedInSpaceId !== undefined && node.containedInSpaceId !== null) {
+      node = byId.get(String(node.containedInSpaceId));
+      if (node === undefined) throw new Error('the walk leaves the document');
+      if (++depth > 16) throw new Error('the walk does not terminate');
+    }
+    if (!propertyIds.has(String(node.propertyId))) {
+      throw new Error(`the root space of asset ${asset.id} names no resolvable property`);
+    }
+  }
+  // The point of the walk: the deepest asset is more than one hop from its property.
+  const deepest = housed.map(a => {
+    let n = byId.get(String(a.spaceId)), d = 0;
+    while (n.containedInSpaceId) { n = byId.get(String(n.containedInSpaceId)); d++; }
+    return d;
+  });
+  if (Math.max(...deepest) < 2) {
+    throw new Error('no asset sits more than one space-hop from its property — the chain is not exercised');
+  }
+});
+
+
 console.log('\n' + '═'.repeat(50));
 console.log(`Cross-reference tests: ${passed} passed, ${failed} failed, ${passed + failed} total`);
 console.log('═'.repeat(50));

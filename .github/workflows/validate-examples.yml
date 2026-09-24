@@ -8,11 +8,13 @@ on:
       - 'v3/**'
       - 'examples/fixtures/**'
       - 'examples/wills/**'
+      - 'scripts/test-cross-border-fixture.mjs'
   pull_request:
     paths:
       - 'v3/**'
       - 'examples/fixtures/**'
       - 'examples/wills/**'
+      - 'scripts/test-cross-border-fixture.mjs'
 
 jobs:
   validate:
@@ -36,3 +38,6 @@ jobs:
 
       - name: Validate example fixtures
         run: pnpm run validate:examples
+
+      - name: Cross-border fixture expresses connecting factors
+        run: pnpm run test:cross-border

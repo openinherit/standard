@@ -3541,6 +3541,305 @@
         ]
       },
       "valid": true
+    },
+    {
+      "description": "valid — cross-border coordination map: IE domicile, one default scope plus three specific_assets scopes (ES, AE, GB-ENG)",
+      "data": {
+        "id": "e1455001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2026-01-15T09:00:00Z",
+        "lastModifiedAt": "2026-01-15T09:00:00Z",
+        "domicile": {
+          "country": "IE",
+          "legalSystems": [
+            "common_law"
+          ],
+          "name": "Republic of Ireland"
+        },
+        "defaultSuccessionRegime": {
+          "governingLaw": {
+            "jurisdiction": {
+              "country": "IE"
+            },
+            "legalTradition": "common_law",
+            "statute": "Succession Act 1965"
+          },
+          "determinedBy": "domicile",
+          "binding": true
+        },
+        "governingJurisdictions": [
+          {
+            "jurisdiction": {
+              "country": "IE"
+            },
+            "scope": "default",
+            "statute": "Succession Act 1965"
+          },
+          {
+            "jurisdiction": {
+              "country": "ES"
+            },
+            "scope": "specific_assets",
+            "propertyIds": [
+              "b1455002-0000-0000-0000-000000000002"
+            ]
+          },
+          {
+            "jurisdiction": {
+              "country": "AE"
+            },
+            "scope": "specific_assets",
+            "assetIds": [
+              "c1455003-0000-0000-0000-000000000003"
+            ]
+          },
+          {
+            "jurisdiction": {
+              "country": "GB",
+              "subdivision": "GB-ENG"
+            },
+            "scope": "specific_assets",
+            "assetIds": [
+              "d1455004-0000-0000-0000-000000000004"
+            ]
+          }
+        ],
+        "ancillaryProbate": [
+          {
+            "jurisdiction": {
+              "country": "ES"
+            },
+            "status": "not_started"
+          },
+          {
+            "jurisdiction": {
+              "country": "AE"
+            },
+            "status": "not_started"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — governingJurisdictions item missing required scope",
+      "data": {
+        "id": "e1455001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2026-01-15T09:00:00Z",
+        "lastModifiedAt": "2026-01-15T09:00:00Z",
+        "domicile": {
+          "country": "IE",
+          "legalSystems": [
+            "common_law"
+          ],
+          "name": "Republic of Ireland"
+        },
+        "governingJurisdictions": [
+          {
+            "jurisdiction": {
+              "country": "ES"
+            }
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — governingJurisdictions scope not in enum",
+      "data": {
+        "id": "e1455001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2026-01-15T09:00:00Z",
+        "lastModifiedAt": "2026-01-15T09:00:00Z",
+        "domicile": {
+          "country": "IE",
+          "legalSystems": [
+            "common_law"
+          ],
+          "name": "Republic of Ireland"
+        },
+        "governingJurisdictions": [
+          {
+            "jurisdiction": {
+              "country": "ES"
+            },
+            "scope": "some_assets"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — governingJurisdictions item missing required jurisdiction",
+      "data": {
+        "id": "e1455001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2026-01-15T09:00:00Z",
+        "lastModifiedAt": "2026-01-15T09:00:00Z",
+        "domicile": {
+          "country": "IE",
+          "legalSystems": [
+            "common_law"
+          ],
+          "name": "Republic of Ireland"
+        },
+        "governingJurisdictions": [
+          {
+            "scope": "default"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — governingJurisdictions assetIds item is not a UUID",
+      "data": {
+        "id": "e1455001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2026-01-15T09:00:00Z",
+        "lastModifiedAt": "2026-01-15T09:00:00Z",
+        "domicile": {
+          "country": "IE",
+          "legalSystems": [
+            "common_law"
+          ],
+          "name": "Republic of Ireland"
+        },
+        "governingJurisdictions": [
+          {
+            "jurisdiction": {
+              "country": "AE"
+            },
+            "scope": "specific_assets",
+            "assetIds": [
+              "dubai-company"
+            ]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — governingJurisdictions jurisdiction country is a name, not ISO 3166-1 alpha-2",
+      "data": {
+        "id": "e1455001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2026-01-15T09:00:00Z",
+        "lastModifiedAt": "2026-01-15T09:00:00Z",
+        "domicile": {
+          "country": "IE",
+          "legalSystems": [
+            "common_law"
+          ],
+          "name": "Republic of Ireland"
+        },
+        "governingJurisdictions": [
+          {
+            "jurisdiction": {
+              "country": "Spain"
+            },
+            "scope": "specific_assets"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — governingJurisdictions subdivision not in ISO 3166-2 form",
+      "data": {
+        "id": "e1455001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2026-01-15T09:00:00Z",
+        "lastModifiedAt": "2026-01-15T09:00:00Z",
+        "domicile": {
+          "country": "IE",
+          "legalSystems": [
+            "common_law"
+          ],
+          "name": "Republic of Ireland"
+        },
+        "governingJurisdictions": [
+          {
+            "jurisdiction": {
+              "country": "GB",
+              "subdivision": "england-and-wales"
+            },
+            "scope": "specific_assets"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — defaultSuccessionRegime determinedBy not in the connecting-factor enum",
+      "data": {
+        "id": "e1455001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2026-01-15T09:00:00Z",
+        "lastModifiedAt": "2026-01-15T09:00:00Z",
+        "domicile": {
+          "country": "IE",
+          "legalSystems": [
+            "common_law"
+          ],
+          "name": "Republic of Ireland"
+        },
+        "defaultSuccessionRegime": {
+          "governingLaw": {
+            "jurisdiction": {
+              "country": "ES"
+            }
+          },
+          "determinedBy": "birthplace"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — domicile country is a name, not ISO 3166-1 alpha-2",
+      "data": {
+        "id": "e1455001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2026-01-15T09:00:00Z",
+        "lastModifiedAt": "2026-01-15T09:00:00Z",
+        "domicile": {
+          "country": "Spain"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — ancillaryProbate item missing required jurisdiction",
+      "data": {
+        "id": "e1455001-0000-0000-0000-000000000001",
+        "testatorPersonId": "a0000001-0000-0000-0000-000000000001",
+        "status": "confirmed",
+        "createdAt": "2026-01-15T09:00:00Z",
+        "lastModifiedAt": "2026-01-15T09:00:00Z",
+        "domicile": {
+          "country": "IE",
+          "legalSystems": [
+            "common_law"
+          ],
+          "name": "Republic of Ireland"
+        },
+        "ancillaryProbate": [
+          {
+            "status": "not_started"
+          }
+        ]
+      },
+      "valid": false
     }
   ]
 }

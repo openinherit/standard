@@ -14,6 +14,9 @@ import { readdirSync, readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
 const REPO_SLUG = "github.com/openinherit/standard";
+// Anchored on a boundary: openinherit/standard-archived contains the slug as a
+// substring and is NOT this repository.
+const REPO_URL_RE = /github\.com\/openinherit\/standard(?:\.git)?(?:[\/#?]|$)/;
 const WORKFLOW_DIR = ".github/workflows";
 const PACKAGES_DIR = "packages";
 
@@ -100,7 +103,7 @@ if (publishWorkflow) {
 // ---- A3: provenance preconditions on every package -------------------------
 for (const pkg of packages) {
   const url = pkg.repository && pkg.repository.url;
-  if (!url || !url.includes(REPO_SLUG)) {
+  if (!url || !REPO_URL_RE.test(url)) {
     fail(
       "A3",
       `${pkg.manifest} repository.url is ${JSON.stringify(url)} -- npm provenance requires it to ` +

@@ -10,6 +10,7 @@
  * - executor.personId must exist in people[].id
  * - kinship.personId1 must exist in people[].id
  * - valuation.entityId must exist in assets[].id, properties[].id, or assetCollections[].id
+ * - asset.propertyId must exist in properties[].id
  *
  * Usage: node scripts/validate-refs.mjs <inherit-document.json>
  *
@@ -187,10 +188,11 @@ if (doc.estate) {
   checkRef('documents', i, 'entityId', d.entityId, [allEntityIds], 'all entities');
 });
 
-// Assets — collection and space references
+// Assets — collection, space and property references
 (doc.assets || []).forEach((a, i) => {
   checkRef('assets', i, 'assetCollectionId', a.assetCollectionId, [collectionIds], 'assetCollections');
   checkRef('assets', i, 'spaceId', a.spaceId, [spaceIds], 'spaces');
+  checkRef('assets', i, 'propertyId', a.propertyId, [propertyIds], 'properties');
   if (a.splitFrom) {
     const splitSets = a.splitFrom.entityType === 'asset_collection' ? [collectionIds] : [assetIds];
     const splitNames = a.splitFrom.entityType === 'asset_collection' ? 'assetCollections' : 'assets';

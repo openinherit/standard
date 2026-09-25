@@ -1,0 +1,28 @@
+# TT-1671 D2b — reference-data/space-types.json must stay in lockstep with the
+# spaceType enum in v3/space.json.
+#
+# ⚠️ WHAT THIS CHECK IS NOT. scripts/validate-schemas.mjs excludes reference-data/
+# from this repo's own schema validation (SKIP_DIRS), and this workflow does not
+# change that. It asserts lockstep with the enum and the presence of the agreed
+# open field set per entry; it does NOT assert that space-types.json is internally
+# valid against a schema. A green tick here is narrower than "the reference data
+# is correct".
+name: Space Types Lockstep
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lockstep:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: spaceType enum vs reference-data/space-types.json
+        run: |
+          python3 scripts/check-space-types-lockstep.py \
+            --tree . --policy scripts/data/space-types-policy.txt
+          echo "Space types lockstep: OK"

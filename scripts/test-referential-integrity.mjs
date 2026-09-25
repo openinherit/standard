@@ -686,6 +686,94 @@ test('an asset reaches its property by walking the space chain (D1)', () => {
 });
 
 
+// === The declared list and the shipped validator must agree (TT-1517) ===
+//
+// schema.json's referentialIntegrity default is the normative list of
+// cross-reference constraints. scripts/validate-refs.mjs is the only thing
+// that enforces them on a real document. Nothing checked that the second
+// covered the first, and it did not: assets[].propertyId was declared here
+// and unimplemented there, so a document could carry an asset pointing at a
+// property that is not in it and pass Level 2 in silence.
+
+const VALIDATOR_SRC = readFileSync(resolve(ROOT, 'scripts/validate-refs.mjs'), 'utf8');
+
+// Constraints the validator deliberately covers by another mechanism than a
+// per-field checkRef call. Each needs a reason, not just an entry.
+const NOT_BY_CHECKREF = new Map([
+  ['assets[].containedInAssetId', 'walked by the acyclic containment check, not a flat reference check'],
+  ['spaces[].containedInSpaceId', 'walked by the acyclic containment check, not a flat reference check'],
+]);
+
+// ⛔ KNOWN DIVERGENCES — a ratcheting floor, not a permission.
+//
+// Each of these is declared in schema.json and NOT enforced on a real
+// document. They are recorded here so the list is visible and cannot grow
+// silently; this test fails on any divergence that is not named below, so a
+// new one cannot be added without deleting a line from this file. Every
+// entry is a defect that wants fixing; none of them is a design decision.
+//
+// ⚠️ The first two groups are worse than "unimplemented": validate-refs.mjs
+// DOES have a checkRef for them, spelled with a field name that does not
+// exist in the entity's schema, so the check runs and can never fire.
+const KNOWN_DIVERGENCES = new Map([
+  ['guardians[].personId', 'validate-refs.mjs checks guardianPersonId / childPersonIds; guardian.json declares personId / childPersonId — the checks can never fire'],
+  ['kinships[].fromPersonId', 'validate-refs.mjs checks personId1 / personId2; kinship.json declares fromPersonId / toPersonId — the checks can never fire'],
+  ['kinships[].toPersonId', 'as above'],
+  ['relationships[].person1Id', 'neither name exists: relationship.json models parties as partners[], so the declared constraint itself is wrong'],
+  ['relationships[].person2Id', 'as above'],
+  ['pets[].petCareArrangement.trustId', 'declared, real field, no check implemented'],
+  ['pets[].petCareArrangement.bequestId', 'declared, real field, no check implemented'],
+  ['pets[].petCareArrangement.nominatedCarerPersonId', 'declared, real field, no check implemented'],
+  ['trusts[].petId', 'declared, real field, no check implemented'],
+]);
+
+function checkRefCallExists(field) {
+  // field is "entities[].fieldName" — validate-refs.mjs spells that
+  // checkRef('entities', i, 'fieldName', ...)
+  const m = field.match(/^([A-Za-z]+)\[\]\.(.+)$/);
+  if (!m) return null;
+  const [, entity, name] = m;
+  const needle = new RegExp(`checkRef\\(\\s*'${entity}'\\s*,[^,]+,\\s*'${name.replace(/\./g, "\\.")}'`);
+  return needle.test(VALIDATOR_SRC);
+}
+
+test('every declared referentialIntegrity constraint is implemented in validate-refs.mjs', () => {
+  const missing = [];
+  for (const c of constraints) {
+    if (!c.field) continue;
+    if (NOT_BY_CHECKREF.has(c.field)) continue;
+    const found = checkRefCallExists(c.field);
+    if (found === null) continue; // not an entities[].field shape; nothing to look for
+    if (!found && !KNOWN_DIVERGENCES.has(c.field)) missing.push(c.field);
+  }
+  if (missing.length > 0) {
+    throw new Error(
+      `declared in schema.json but not enforced by validate-refs.mjs: ${missing.join(', ')}. ` +
+      'Implement the rule, or add it to KNOWN_DIVERGENCES with the reason.'
+    );
+  }
+});
+
+test('the known-divergence list does not outlive the divergences it records', () => {
+  const stale = [...KNOWN_DIVERGENCES.keys()].filter(f => checkRefCallExists(f) === true);
+  if (stale.length > 0) {
+    throw new Error(
+      `now enforced, so remove from KNOWN_DIVERGENCES: ${stale.join(', ')}`
+    );
+  }
+});
+
+test('assets[].propertyId and spaces[].propertyId are both enforced, not just declared', () => {
+  for (const field of ['assets[].propertyId', 'spaces[].propertyId']) {
+    if (!constraints.some(c => c.field === field)) {
+      throw new Error(`${field} is no longer declared in schema.json`);
+    }
+    if (!checkRefCallExists(field)) {
+      throw new Error(`${field} is declared but validate-refs.mjs has no checkRef for it`);
+    }
+  }
+});
+
 console.log('\n' + '═'.repeat(50));
 console.log(`Cross-reference tests: ${passed} passed, ${failed} failed, ${passed + failed} total`);
 console.log('═'.repeat(50));

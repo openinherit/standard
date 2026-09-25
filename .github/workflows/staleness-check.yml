@@ -55,6 +55,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
+      - name: Check bundled schema is current
+        run: |
+          if [ ! -f dist/inherit-v3-bundled.json ]; then
+            echo "::warning::dist/inherit-v3-bundled.json is missing. Run 'pnpm bundle' locally."
+          else
+            echo "Bundled schema: present ($(wc -c < dist/inherit-v3-bundled.json) bytes)"
+          fi
+
       - name: Check vendored bundled schemas are current
         run: |
           # Runs after "Check schema formatting", which puts the sourcemeta
@@ -70,7 +78,20 @@ jobs:
                    packages/sdk-java/src/main/resources \
                    packages/sdk-csharp/OpenInherit.Sdk/Schemas; do
             for B in inherit-v3-bundled.json catalogue-v3-bundled.json; do
-              if ! diff -q "dist/$B" "$M/$B" >/dev/null 2>&1; then
+              # Compare parsed JSON, not bytes. The bundler is installed from
+              # the latest upstream release, so a purely cosmetic formatting
+              # change there must not red an unrelated pull request — only a
+              # difference in what the schema SAYS should.
+              if ! node -e '
+                const fs = require("fs");
+                const norm = (o) => Array.isArray(o) ? o.map(norm)
+                  : (o && typeof o === "object")
+                    ? Object.fromEntries(Object.keys(o).sort().map(k => [k, norm(o[k])]))
+                    : o;
+                const a = norm(JSON.parse(fs.readFileSync(process.argv[1], "utf8")));
+                const b = norm(JSON.parse(fs.readFileSync(process.argv[2], "utf8")));
+                process.exit(JSON.stringify(a) === JSON.stringify(b) ? 0 : 1);
+              ' "dist/$B" "$M/$B" 2>/dev/null; then
                 echo "::error::$M/$B is stale. Run 'pnpm bundle' and 'pnpm bundle:catalogue', then copy dist/$B over it."
                 FAILED=true
               fi
@@ -78,11 +99,3 @@ jobs:
           done
           if [ "$FAILED" = "true" ]; then exit 1; fi
           echo "Vendored bundled schemas: OK"
-
-      - name: Check bundled schema is current
-        run: |
-          if [ ! -f dist/inherit-v3-bundled.json ]; then
-            echo "::warning::dist/inherit-v3-bundled.json is missing. Run 'pnpm bundle' locally."
-          else
-            echo "Bundled schema: present ($(wc -c < dist/inherit-v3-bundled.json) bytes)"
-          fi

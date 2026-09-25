@@ -34,8 +34,35 @@ def obj_props(schema: dict[str, Any]) -> Set[str]:
 
 
 def required_set(schema: dict[str, Any]) -> Set[str]:
-    req = schema.get("required", [])
-    return {r for r in req if isinstance(r, str)} if isinstance(req, list) else set()
+    """Every property this schema can demand, unconditionally or conditionally.
+
+    A requirement expressed as `allOf: [{if: ..., then: {required: [...]}}]`
+    is still a requirement — for the documents the `if` selects. Reading only
+    the top-level `required` would let a newly-imposed requirement move into
+    that shape and pass this check unseen, which is the opposite of what a
+    breaking-change gate is for.
+    """
+    found: Set[str] = set()
+
+    def walk(node: Any) -> None:
+        if isinstance(node, list):
+            for item in node:
+                walk(item)
+            return
+        if not isinstance(node, dict):
+            return
+        req = node.get("required", [])
+        if isinstance(req, list):
+            found.update(r for r in req if isinstance(r, str))
+        for keyword in ("allOf", "anyOf", "oneOf"):
+            walk(node.get(keyword))
+        for keyword in ("then", "else"):
+            walk(node.get(keyword))
+        # `if` is a selector, not a demand: what it requires is the condition
+        # under which `then` applies, so it is deliberately not walked.
+
+    walk(schema)
+    return found
 
 
 def check_file(old_path: Path, new_path: Path) -> list[str]:

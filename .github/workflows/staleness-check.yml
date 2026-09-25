@@ -62,16 +62,19 @@ jobs:
           # the bundle command is read straight out of package.json — one home
           # for the resolve list.
           mkdir -p dist
+          sh -c "$(node -p "require('./package.json').scripts['bundle']")"
           sh -c "$(node -p "require('./package.json').scripts['bundle:catalogue']")"
           FAILED=false
           for M in packages/cli/schemas packages/conformance/schemas packages/sdk-go/schemas \
                    packages/sdk-python/openinherit/schemas \
                    packages/sdk-java/src/main/resources \
                    packages/sdk-csharp/OpenInherit.Sdk/Schemas; do
-            if ! diff -q dist/catalogue-v3-bundled.json "$M/catalogue-v3-bundled.json" >/dev/null 2>&1; then
-              echo "::error::$M/catalogue-v3-bundled.json is stale. Run 'pnpm bundle:catalogue' and copy dist/catalogue-v3-bundled.json over it."
-              FAILED=true
-            fi
+            for B in inherit-v3-bundled.json catalogue-v3-bundled.json; do
+              if ! diff -q "dist/$B" "$M/$B" >/dev/null 2>&1; then
+                echo "::error::$M/$B is stale. Run 'pnpm bundle' and 'pnpm bundle:catalogue', then copy dist/$B over it."
+                FAILED=true
+              fi
+            done
           done
           if [ "$FAILED" = "true" ]; then exit 1; fi
           echo "Vendored bundled schemas: OK"

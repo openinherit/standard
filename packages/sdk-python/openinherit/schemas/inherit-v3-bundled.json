@@ -942,7 +942,7 @@
     },
     "referentialIntegrity": {
       "description": "Machine-readable cross-reference integrity constraints. Defined in the schema, not in individual documents. Validators read these rules and check that every referenced ID exists in the target array",
-      "$comment": "These constraints define Level 2 (Referentially Intact) conformance. Multi-target semantics: when a field has multiple non-required constraints, the validator groups by field path — valid if ANY constraint in the group matches. applicationState fields are NOT covered.",
+      "$comment": "These constraints define Level 2 (Referentially Intact) conformance. Multi-target semantics: when a field has multiple non-required constraints of the SAME kind, the validator groups by field path AND kind — valid if ANY constraint in that group matches. Grouping by field alone would let an existence constraint satisfy an acyclic one on the same field. A constraint whose kind the validator does not recognise MUST be reported as INHERIT_CONSTRAINT_UNKNOWN, never skipped. applicationState fields are NOT covered.",
       "default": [
         {
           "field": "estate.testatorPersonId",
@@ -1034,6 +1034,45 @@
           "required": false,
           "code": "INHERIT_REF_BROKEN",
           "errorMessage": "Asset assetCollectionId references a collection that does not exist"
+        },
+        {
+          "field": "assets[].containedInAssetId",
+          "references": "assets[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Asset containedInAssetId references an asset that does not exist"
+        },
+        {
+          "field": "spaces[].containedInSpaceId",
+          "references": "spaces[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Space containedInSpaceId references a space that does not exist"
+        },
+        {
+          "field": "spaces[].propertyId",
+          "references": "properties[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Space propertyId references a property that does not exist"
+        },
+        {
+          "field": "assets[].containedInAssetId",
+          "references": "assets[].id",
+          "kind": "acyclic",
+          "maxDepth": 16,
+          "required": false,
+          "code": "INHERIT_CONTAINMENT_CYCLE",
+          "errorMessage": "Asset containment chain loops or exceeds the depth guard"
+        },
+        {
+          "field": "spaces[].containedInSpaceId",
+          "references": "spaces[].id",
+          "kind": "acyclic",
+          "maxDepth": 16,
+          "required": false,
+          "code": "INHERIT_CONTAINMENT_CYCLE",
+          "errorMessage": "Space containment chain loops or exceeds the depth guard"
         },
         {
           "field": "proxyAuthorisations[].agentPersonId",
@@ -1453,6 +1492,19 @@
         "required": {
           "description": "If true, a broken reference is always an error. If false, the field may reference multiple target arrays (grouped by field path)",
           "type": "boolean"
+        },
+        "kind": {
+          "description": "The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops",
+          "$comment": "A validator encountering an unrecognised kind MUST fail with INHERIT_CONSTRAINT_UNKNOWN rather than skipping the constraint. A skipped constraint is a gate that reports green, which is the failure mode this keyword exists to avoid. Note also that the multi-target grouping described on referentialIntegrity groups by field AND kind: an acyclic row is never satisfied by an existence row on the same field",
+          "default": "existence",
+          "enum": [ "existence", "acyclic" ]
+        },
+        "maxDepth": {
+          "description": "For kind 'acyclic': the maximum number of hops a containment chain may have before it is rejected as unreasonably deep. A chain longer than this fails with INHERIT_DEPTH_EXCEEDED even if it is acyclic",
+          "$comment": "16 is the default for containment. It is not a legal limit; it is a guard against a pathological or generated chain. House -> loft -> trunk -> box -> tin is 5",
+          "type": "integer",
+          "maximum": 64,
+          "minimum": 1
         },
         "code": {
           "description": "Machine-readable error code from the INHERIT error vocabulary",
@@ -1918,6 +1970,41 @@
               "maxLength": 100
             }
           }
+        },
+        "marriageRevocation": {
+          "description": "Whether and how marriage revokes a prior will. For England & Wales, see s.18 Wills Act 1837 and the contemplation-of-marriage exception in s.18(3)–(4).",
+          "type": "object",
+          "required": [ "revokesPriorWill", "statute" ],
+          "properties": {
+            "revokesPriorWill": {
+              "description": "Whether a marriage (after execution of the will) automatically revokes the will.",
+              "type": "boolean"
+            },
+            "statute": {
+              "description": "Citation of the primary statute governing revocation-by-marriage.",
+              "type": "string",
+              "maxLength": 255
+            },
+            "statuteUrl": {
+              "type": "string",
+              "format": "uri",
+              "maxLength": 500
+            },
+            "contemplationException": {
+              "description": "Whether a will made in contemplation of a specific marriage survives that marriage.",
+              "type": "boolean"
+            },
+            "contemplationRule": {
+              "description": "Plain-English description of the contemplation-of-marriage rule.",
+              "type": "string",
+              "maxLength": 2000
+            },
+            "notes": {
+              "type": "string",
+              "maxLength": 2000
+            }
+          },
+          "additionalProperties": false
         }
       },
       "patternProperties": {
@@ -4980,6 +5067,37 @@
         "notes": {
           "type": "string",
           "maxLength": 2000
+        },
+        "marriageRevocation": {
+          "description": "Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia.",
+          "type": "object",
+          "required": [ "revokesPriorWill", "statute" ],
+          "properties": {
+            "revokesPriorWill": {
+              "type": "boolean"
+            },
+            "statute": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "statuteUrl": {
+              "type": "string",
+              "format": "uri",
+              "maxLength": 500
+            },
+            "contemplationException": {
+              "type": "boolean"
+            },
+            "contemplationRule": {
+              "type": "string",
+              "maxLength": 2000
+            },
+            "notes": {
+              "type": "string",
+              "maxLength": 2000
+            }
+          },
+          "additionalProperties": false
         }
       },
       "patternProperties": {
@@ -8368,6 +8486,37 @@
         "notes": {
           "type": "string",
           "maxLength": 2000
+        },
+        "marriageRevocation": {
+          "description": "Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs.",
+          "type": "object",
+          "required": [ "revokesPriorWill", "statute" ],
+          "properties": {
+            "revokesPriorWill": {
+              "type": "boolean"
+            },
+            "statute": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "statuteUrl": {
+              "type": "string",
+              "format": "uri",
+              "maxLength": 500
+            },
+            "contemplationException": {
+              "type": "boolean"
+            },
+            "contemplationRule": {
+              "type": "string",
+              "maxLength": 2000
+            },
+            "notes": {
+              "type": "string",
+              "maxLength": 2000
+            }
+          },
+          "additionalProperties": false
         }
       },
       "patternProperties": {
@@ -19408,6 +19557,18 @@
         "dependantType": {
           "description": "The type of dependant this guardian is appointed for. Extends guardian beyond minors to cover adult dependants",
           "enum": [ "minor", "adult_with_disability", "adult_with_incapacity" ]
+        },
+        "guardianshipModel": {
+          "description": "The cultural or legal model of guardianship. Differs across legal traditions — individual appointment (common law), family council (West African), collective care (South Asian extended family), court-appointed (civil law)",
+          "enum": [
+            "individual",
+            "family_council",
+            "collective",
+            "extended_family",
+            "rotating",
+            "court_appointed",
+            "custom"
+          ]
         }
       },
       "patternProperties": {
@@ -24415,7 +24576,37 @@
       "title": "Space",
       "description": "A distinguishable space within or associated with a property — rooms, outbuildings, storage areas, and outdoor zones where assets may be located. Maps to schema:Place in JSON-LD",
       "type": "object",
-      "required": [ "id", "propertyId", "spaceType" ],
+      "allOf": [
+        {
+          "$comment": "propertyId is required for every space that is inside a property. The eleven off-site spaceTypes below are, by the definitions in spaceType's own $comment, not inside one — a portable space travels with the owner between locations, a safe deposit box is at the bank. Requiring them to name a property forced a catalogue to invent one. The inner required on spaceType is load-bearing: without it a document carrying no spaceType at all would satisfy the if vacuously and escape the propertyId requirement",
+          "if": {
+            "required": [ "spaceType" ],
+            "properties": {
+              "spaceType": {
+                "not": {
+                  "enum": [
+                    "self_storage",
+                    "safe_deposit_box",
+                    "workplace",
+                    "relatives_house",
+                    "holiday_home",
+                    "vehicle_car",
+                    "vehicle_boat",
+                    "vehicle_caravan",
+                    "allotment",
+                    "digital_storage",
+                    "portable"
+                  ]
+                }
+              }
+            }
+          },
+          "then": {
+            "required": [ "propertyId" ]
+          }
+        }
+      ],
+      "required": [ "id", "spaceType" ],
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
@@ -24429,6 +24620,13 @@
         "propertyId": {
           "description": "Reference to the Property.id that contains or is associated with this space",
           "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "containedInSpaceId": {
+          "description": "Reference to another Space.id that physically contains this space — a loft inside a house, a shelving bay inside a storage room. Enables the recursive Property → Space → Space → item chain a room-by-room listing walk produces. Absent or null means this space sits directly in the Property",
+          "$comment": "The space-axis sibling of Asset.containedInAssetId. Use this axis for FIXED structure that is not itself an estate asset (a loft, a cellar, an outbuilding); use Asset.containedInAssetId for MOVABLE containers that are themselves assets (a safe, a trunk, a toolbox). A loft is not a bequeathable asset, so it cannot be modelled on the asset axis. The chain must be acyclic and every link must resolve — see schema.json referentialIntegrity, constraint kind 'acyclic'. Maps to schema:containedInPlace in JSON-LD; the JSON-LD context declared that term for the spaces node before this property existed",
+          "type": [ "string", "null" ],
           "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
           "format": "uuid"
         },

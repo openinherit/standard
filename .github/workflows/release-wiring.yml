@@ -1,0 +1,20 @@
+name: Release Wiring
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      # No install step: the check is dependency-free on purpose, so it still
+      # runs when the lockfile is what broke.
+      - name: The repository can release what it promises to release
+        run: node scripts/check-release-wiring.mjs

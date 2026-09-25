@@ -28,15 +28,23 @@
 # this very file, so a pin that forbids it would contradict the verdict it
 # sits under. The published shape they recorded is in git — 3ff5f29a.
 #
-# ⛔ NO `exclusions:` LINE IS SET, so the gate is RED on openinherit/standard
-# right now: `portable` is in the spaceType enum and has no reference-data
-# entry. That red is TT-1671 D2a, unclosed. It closes ONE of two ways and the
-# choice is Josh's, not a session's (plan Task 5):
-#   remedy 1 — author a `portable` row, or
-#   remedy 2 — narrow reference-data/space-types.json's coverage claim and add
-#              `exclusions: portable` here.
-# Measured against openinherit/standard 90d4f0d on 2026-09-25: 101 enum
-# values, 100 entries, all 8 keys present on all 100.
+# ── D2a IS ANSWERED. REMEDY 1. ─────────────────────────────────
+# Josh, 2026-09-25 21:07 UTC, coordinator decision record 557, option (a):
+#   "Author the `portable` row." Ten of the eleven off-site spaceTypes already
+#   carried entries in an identical shape, so excluding this one would have
+#   carved out a single value while every sibling stayed in.
+#
+# NO `exclusions:` LINE IS SET, and after remedy 1 that is correct rather than
+# an omission: coverage is complete, so there is nothing to exclude. The gate
+# is GREEN at 101/101. reference-data/space-types.json:6 -- "Every enum value
+# in space.json has a corresponding entry here" -- is now TRUE as published.
+#
+# ⛔ An `exclusions:` line added here would re-open D2a, which is answered.
+# Do not add one to silence a future red: a new enum value with no entry is
+# the gate working, and the remedy is the row, not the carve-out.
+#
+# Measured against openinherit/standard 02a9889 on 2026-09-25, BEFORE the row:
+# 101 enum values, 100 entries, all 8 keys present on all 100. After: 101/101.
 verdict: V-OPEN
 decided-by: coordinator-decision:535
 open-fields: id,label,aliases,category,tier,locales,urgencyFlag,promptText

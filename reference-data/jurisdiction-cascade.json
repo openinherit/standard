@@ -1,0 +1,1005 @@
+{
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal or tax advice. It declares TERRITORIAL containment between jurisdiction tokens and the per-axis resolution order over it. It never adjudicates legal precedence between extensions - see docs/implement/extension-composition.md.",
+  "version": "1.0.0",
+  "description": "Declared jurisdiction containment and per-axis resolution. The standard keys succession law and death taxation at different granularities; this file declares how a consumer crosses that gap, or refuses. A null resolvesTo ALWAYS carries a reason: a declared refusal and an unfilled hole must never look the same. Enforced by scripts/check-jurisdiction-cascade.py.",
+  "axes": {
+    "succession": {
+      "source": "reference-data/jurisdiction-profiles.json",
+      "description": "Succession law. Resolution up a containment edge is OFF by default: there is no UK-wide, EU-wide or US-federal succession law to resolve to."
+    },
+    "tax": {
+      "source": "reference-data/tax-rates.json, reference-data/tax-thresholds.json",
+      "description": "Death and inheritance taxation. Resolution up a containment edge is permitted only where an edge declares it."
+    }
+  },
+  "jurisdictions": {
+    "AE": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "AR": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "AT": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "AU": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "Carries its own death-tax rows and is contained by no wider fiscal territory."
+        }
+      }
+    },
+    "BD": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "BE": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "BG": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "BR": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "CA": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "Carries its own death-tax rows and is contained by no wider fiscal territory."
+        }
+      }
+    },
+    "CH": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "CL": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "CN": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "CO": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "CY": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "CZ": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "DE": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "Carries its own death-tax rows and is contained by no wider fiscal territory."
+        }
+      }
+    },
+    "DK": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "EE": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "ES": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "FI": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "FR": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "Carries its own death-tax rows and is contained by no wider fiscal territory."
+        }
+      }
+    },
+    "GB": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "The United Kingdom is not one succession jurisdiction and ships no succession profile row. Resolve by domicile to GB-EAW (or its GB-ENG key), GB-SCT or GB-NIR; there is nothing to resolve UPWARD to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "GB is itself the fiscal territory for inheritance tax; it carries the tax rows."
+        }
+      }
+    },
+    "GB-EAW": {
+      "kind": "union",
+      "constituents": [
+        "GB-ENG",
+        "GB-WLS"
+      ],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "GB-EAW IS the succession jurisdiction (one jurisdiction spanning England and Wales, Senior Courts Act 1981 s.61); its constituents have no separate succession law to resolve to."
+        },
+        "tax": {
+          "resolvesTo": "GB",
+          "reason": "Inheritance tax is a single fiscal territory across the whole United Kingdom (IHTA 1984); the UK's separate succession jurisdictions share one death-tax regime, so a UK subdivision key resolves to the GB tax rows.",
+          "authority": "Inheritance Tax Act 1984 ss.1-6 — a single charge to inheritance tax across the whole United Kingdom"
+        }
+      }
+    },
+    "GB-ENG": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "England's succession law is not inherited from a UK-wide law - no UK-wide succession statute exists. Note the standard keys the England & Wales jurisdiction as GB-ENG today; GB-EAW names that union without re-keying it."
+        },
+        "tax": {
+          "resolvesTo": "GB",
+          "reason": "Inheritance tax is a single fiscal territory across the whole United Kingdom (IHTA 1984); the UK's separate succession jurisdictions share one death-tax regime, so a UK subdivision key resolves to the GB tax rows.",
+          "authority": "Inheritance Tax Act 1984 ss.1-6 — a single charge to inheritance tax across the whole United Kingdom"
+        }
+      }
+    },
+    "GB-SCT": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Scots succession law is distinct (Succession (Scotland) Act 1964, legal rights over moveables) and there is no UK-wide succession law to resolve to."
+        },
+        "tax": {
+          "resolvesTo": "GB",
+          "reason": "Inheritance tax is a single fiscal territory across the whole United Kingdom (IHTA 1984); the UK's separate succession jurisdictions share one death-tax regime, so a UK subdivision key resolves to the GB tax rows.",
+          "authority": "Inheritance Tax Act 1984 ss.1-6 — a single charge to inheritance tax across the whole United Kingdom"
+        }
+      }
+    },
+    "GB-WLS": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Wales is a constituent of the England & Wales succession jurisdiction (GB-EAW) and has no separate succession law of its own to resolve to. It ships no succession profile row, which is why the union has to be declared rather than inferred from the extension's token list."
+        },
+        "tax": {
+          "resolvesTo": "GB",
+          "reason": "Inheritance tax is a single fiscal territory across the whole United Kingdom (IHTA 1984); the UK's separate succession jurisdictions share one death-tax regime, so a UK subdivision key resolves to the GB tax rows.",
+          "authority": "Inheritance Tax Act 1984 ss.1-6 — a single charge to inheritance tax across the whole United Kingdom"
+        }
+      }
+    },
+    "GH": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "GR": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "HK": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "HR": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "HU": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "ID": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "IE": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "Carries its own death-tax rows and is contained by no wider fiscal territory."
+        }
+      }
+    },
+    "IL": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "IN": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "Carries its own death-tax rows and is contained by no wider fiscal territory."
+        }
+      }
+    },
+    "IT": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "JP": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "Carries its own death-tax rows and is contained by no wider fiscal territory."
+        }
+      }
+    },
+    "KE": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "KR": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "LK": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "LT": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "LU": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "LV": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "MT": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "MX": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "MY": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "NG": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "NL": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "NP": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "NZ": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "Carries its own death-tax rows and is contained by no wider fiscal territory."
+        }
+      }
+    },
+    "PE": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "PK": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "PL": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "PT": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "RO": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "SA": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "SE": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "SG": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "Carries its own death-tax rows and is contained by no wider fiscal territory."
+        }
+      }
+    },
+    "SI": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "SK": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "TH": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "TW": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "TZ": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "UG": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Named in extensions-registry.json but the standard ships no succession profile row for it. Absence of a row is not a licence to resolve upward: no containing succession jurisdiction is declared, so resolution is refused."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "US": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "US succession law is a state matter; the US profile row carries the federal layer and the common features, not a law that states inherit from."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "The US tax rows carry the FEDERAL estate tax only. State-level estate and inheritance taxes are declared by state extensions and are never resolved from this row."
+        }
+      }
+    },
+    "US-CA": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "US succession law is a state matter; there is no federal succession law to resolve to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence. US states levy their own estate and inheritance taxes alongside the federal estate tax, so resolving a state key up to the federal US rows would silently assert that the federal figures are the whole answer. cf. 72 P.S. s.9116 (Pennsylvania inheritance tax). A state's death-tax position must be declared, not inherited."
+        }
+      }
+    },
+    "US-NY": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "US succession law is a state matter; there is no federal succession law to resolve to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence. US states levy their own estate and inheritance taxes alongside the federal estate tax, so resolving a state key up to the federal US rows would silently assert that the federal figures are the whole answer. cf. 72 P.S. s.9116 (Pennsylvania inheritance tax). A state's death-tax position must be declared, not inherited."
+        }
+      }
+    },
+    "US-TX": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "US succession law is a state matter; there is no federal succession law to resolve to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence. US states levy their own estate and inheritance taxes alongside the federal estate tax, so resolving a state key up to the federal US rows would silently assert that the federal figures are the whole answer. cf. 72 P.S. s.9116 (Pennsylvania inheritance tax). A state's death-tax position must be declared, not inherited."
+        }
+      }
+    },
+    "VN": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    },
+    "ZA": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "A sovereign succession jurisdiction with its own profile row; no containing succession jurisdiction is declared, so there is nothing to resolve upward to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence: the standard ships no death-tax figures for this jurisdiction and it is contained by no declared fiscal territory, so resolving upward would invent a rate rather than find one."
+        }
+      }
+    }
+  },
+  "exclusions": {}
+}

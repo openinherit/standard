@@ -9,12 +9,18 @@ on:
       - 'examples/fixtures/**'
       - 'examples/wills/**'
       - 'scripts/test-cross-border-fixture.mjs'
+      - 'reference-data/jurisdiction-*.json'
+      - 'extensions-registry.json'
+      - 'scripts/check-jurisdiction-cascade.py'
   pull_request:
     paths:
       - 'v3/**'
       - 'examples/fixtures/**'
       - 'examples/wills/**'
       - 'scripts/test-cross-border-fixture.mjs'
+      - 'reference-data/jurisdiction-*.json'
+      - 'extensions-registry.json'
+      - 'scripts/check-jurisdiction-cascade.py'
 
 jobs:
   validate:
@@ -41,3 +47,9 @@ jobs:
 
       - name: Cross-border fixture expresses connecting factors
         run: pnpm run test:cross-border
+
+      - name: Jurisdiction cascade is declared, not truncated
+        run: pnpm run test:cascade
+
+      - name: The cascade gate can still go red
+        run: bash scripts/test-check-jurisdiction-cascade.sh

@@ -6,6 +6,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- `properties` array on `catalogue.json` — a catalogue document can now carry the properties its
+  spaces belong to, so `spaces[].propertyId` resolves inside the document. Previously a
+  catalogue-only document could not record which room an item was in: omitting `propertyId`
+  failed Level 1 validation, and supplying one left a reference that resolved to nothing.
+  Additive — every existing document remains valid. `property.json` requires only `id` and
+  `name`, so an address costs two fields.
+
+### Changed
+
+- `space.propertyId` is now required only where a space is inside a property. Eleven `spaceType`
+  values are, by the definitions in `spaceType`'s own comment, not inside one — `portable`,
+  `self_storage`, `safe_deposit_box`, `workplace`, `relatives_house`, `holiday_home`,
+  `vehicle_car`, `vehicle_boat`, `vehicle_caravan`, `allotment` and `digital_storage`. The schema
+  described `portable` as *"not fixed to a single address"* and then required it to name one.
+  `x-inherit-` extension space types are not exempt. Purely relaxing: no document that validated
+  before fails now, and all 117 existing `space.json` test assertions keep their verdict.
+
+### Fixed
+
+- Referential integrity now checks `assets[].propertyId`. `asset.json` has always declared the
+  field; the validator checked the other references that resolve against `properties[]` and not
+  this one.
+- Catalogue documents are no longer excluded from the example and referential-integrity runs,
+  and are validated against `catalogue.json` rather than `schema.json`. The conformance catalogue
+  fixture is now checked in the mandatory block rather than skipped.
+- The vendored `inherit-v3-bundled.json` and `catalogue-v3-bundled.json` copies in the six SDK
+  packages are regenerated — they were stale since before 6.5.0 — and are now gated against
+  drift by `staleness-check.yml`.
+
 ## [6.6.0] — 2026-04-14
 
 ## [6.5.0] — 2026-04-14

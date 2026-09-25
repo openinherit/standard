@@ -4,7 +4,37 @@
   "title": "Space",
   "description": "A distinguishable space within or associated with a property — rooms, outbuildings, storage areas, and outdoor zones where assets may be located. Maps to schema:Place in JSON-LD",
   "type": "object",
-  "required": [ "id", "propertyId", "spaceType" ],
+  "required": [ "id", "spaceType" ],
+  "allOf": [
+    {
+      "$comment": "propertyId is required for every space that is inside a property. The eleven off-site spaceTypes below are, by the definitions in spaceType's own $comment, not inside one — a portable space travels with the owner between locations, a safe deposit box is at the bank. Requiring them to name a property forced a catalogue to invent one. The inner required on spaceType is load-bearing: without it a document carrying no spaceType at all would satisfy the if vacuously and escape the propertyId requirement",
+      "if": {
+        "properties": {
+          "spaceType": {
+            "not": {
+              "enum": [
+                "self_storage",
+                "safe_deposit_box",
+                "workplace",
+                "relatives_house",
+                "holiday_home",
+                "vehicle_car",
+                "vehicle_boat",
+                "vehicle_caravan",
+                "allotment",
+                "digital_storage",
+                "portable"
+              ]
+            }
+          }
+        },
+        "required": [ "spaceType" ]
+      },
+      "then": {
+        "required": [ "propertyId" ]
+      }
+    }
+  ],
   "propertyNames": {
     "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
   },

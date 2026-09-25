@@ -164,14 +164,15 @@
       "valid": true
     },
     {
-      "description": "valid — catalogue with organisations and spaces",
+      "description": "valid — catalogue with organisations, properties and spaces (the room resolves inside the document)",
       "data": {
         "$schema": "https://openinherit.org/v3/catalogue.json",
         "assets": [
           {
             "id": "33104a0a-ddb0-4358-9ce3-08a189f88e7e",
             "name": "Victorian writing desk",
-            "category": "property_contents"
+            "category": "property_contents",
+            "spaceId": "7ae33446-3738-4ff7-8038-6ef24932ab5f"
           }
         ],
         "organisations": [
@@ -181,11 +182,39 @@
             "organisationType": "dealer"
           }
         ],
+        "properties": [
+          {
+            "id": "fe89ca51-af10-4ec4-a495-75c930d6de01",
+            "name": "42 Acacia Avenue"
+          }
+        ],
         "spaces": [
           {
             "id": "7ae33446-3738-4ff7-8038-6ef24932ab5f",
             "propertyId": "fe89ca51-af10-4ec4-a495-75c930d6de01",
             "spaceType": "study"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — catalogue with a portable space and no properties (a space that is not inside a property)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [
+          {
+            "id": "5f3a1c72-9b6e-4d18-a2c4-7e0b9d3f6a51",
+            "name": "Grandmother's locket",
+            "category": "collectibles",
+            "spaceId": "9c1d4e7a-2b58-4f36-8a90-1d2e3f4a5b6c"
+          }
+        ],
+        "spaces": [
+          {
+            "id": "9c1d4e7a-2b58-4f36-8a90-1d2e3f4a5b6c",
+            "spaceType": "portable",
+            "name": "On my person"
           }
         ]
       },

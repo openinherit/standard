@@ -117,6 +117,14 @@
         "$ref": "organisation.json"
       }
     },
+    "properties": {
+      "description": "Properties whose spaces appear in this catalogue. A catalogue is not an estate document, so a property here need carry no more than an id and a name — enough for spaces[].propertyId to resolve inside the document and for a room to be attributed to an address",
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "property.json"
+      }
+    },
     "spaces": {
       "description": "Physical storage locations for items in this catalogue. Each asset can reference a space via spaceId. Critical for collectors with items across multiple properties or countries — affects probate jurisdiction and dealer collection logistics",
       "type": "array",

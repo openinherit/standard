@@ -1170,6 +1170,59 @@
         "containedInSpaceId": "the loft"
       },
       "valid": false
+    },
+    {
+      "description": "valid — portable space with no propertyId (not fixed to a single address)",
+      "data": {
+        "id": "b7f2c9e1-4a3d-4c8e-9f1a-2b3c4d5e6f70",
+        "spaceType": "portable",
+        "name": "On my person"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — safe deposit box with no propertyId (off-site location)",
+      "data": {
+        "id": "c8a3d0f2-5b4e-4d9f-8a2b-3c4d5e6f7081",
+        "spaceType": "safe_deposit_box",
+        "name": "Box 114, Chancery Lane"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — portable space that still names a property (back-compatible)",
+      "data": {
+        "id": "e0d5f2b4-7d6a-4b1c-9c4e-5f6a7b8c9d02",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",
+        "spaceType": "portable",
+        "name": "The travelling watch roll"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — x-inherit- space type still requires propertyId (extensions are not off-site)",
+      "data": {
+        "id": "d9b4e1a3-6c5f-4e0a-9b3c-4d5e6f708192",
+        "spaceType": "x-inherit-bomb-shelter"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — a space with no spaceType at all is still invalid (the conditional does not exempt it)",
+      "data": {
+        "id": "f1e6a3c5-8e7b-4c2d-9d5f-6a7b8c9d0e13",
+        "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — an off-site space may omit propertyId but not carry an unevaluated property",
+      "data": {
+        "id": "a2f7b4d6-9f8c-4d3e-8e6a-7b8c9d0e1f24",
+        "spaceType": "portable",
+        "bogusField": "x"
+      },
+      "valid": false
     }
   ]
 }

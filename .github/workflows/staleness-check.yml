@@ -55,6 +55,27 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
+      - name: Check vendored bundled schemas are current
+        run: |
+          # Runs after "Check schema formatting", which puts the sourcemeta
+          # jsonschema binary on PATH. pnpm is not set up in this workflow, so
+          # the bundle command is read straight out of package.json — one home
+          # for the resolve list.
+          mkdir -p dist
+          sh -c "$(node -p "require('./package.json').scripts['bundle:catalogue']")"
+          FAILED=false
+          for M in packages/cli/schemas packages/conformance/schemas packages/sdk-go/schemas \
+                   packages/sdk-python/openinherit/schemas \
+                   packages/sdk-java/src/main/resources \
+                   packages/sdk-csharp/OpenInherit.Sdk/Schemas; do
+            if ! diff -q dist/catalogue-v3-bundled.json "$M/catalogue-v3-bundled.json" >/dev/null 2>&1; then
+              echo "::error::$M/catalogue-v3-bundled.json is stale. Run 'pnpm bundle:catalogue' and copy dist/catalogue-v3-bundled.json over it."
+              FAILED=true
+            fi
+          done
+          if [ "$FAILED" = "true" ]; then exit 1; fi
+          echo "Vendored bundled schemas: OK"
+
       - name: Check bundled schema is current
         run: |
           if [ ! -f dist/inherit-v3-bundled.json ]; then

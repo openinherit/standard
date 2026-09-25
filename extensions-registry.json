@@ -19,7 +19,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/uk-england-wales/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "comprehensive"
+      "taxCoverage": "comprehensive",
+      "jurisdictionRelation": "constitutes"
     },
     {
       "id": "https://openinherit.org/v3/extensions/us-estate/us-estate.json",
@@ -37,7 +38,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/us-estate/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "comprehensive"
+      "taxCoverage": "comprehensive",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/australia-nz/australia-nz.json",
@@ -56,7 +58,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/australia-nz/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "partial"
+      "taxCoverage": "partial",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/brazil/brazil.json",
@@ -65,7 +68,7 @@
       "maturity": "candidate",
       "seeking": "",
       "legalTradition": "Civil law",
-      "keyFeatures": "Leg\u00edtima (forced heirship 50%), mea\u00e7\u00e3o (spousal share), ITCMD state tax, invent\u00e1rio/arrolamento",
+      "keyFeatures": "Legítima (forced heirship 50%), meação (spousal share), ITCMD state tax, inventário/arrolamento",
       "legalReviewStatus": "self_verified",
       "extensionType": "geographic",
       "applicableJurisdictions": [
@@ -74,7 +77,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/brazil/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "partial"
+      "taxCoverage": "partial",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/eu-succession/eu-succession.json",
@@ -117,7 +121,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/eu-succession/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "partial"
+      "taxCoverage": "partial",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/israel/israel.json",
@@ -135,7 +140,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/israel/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "partial"
+      "taxCoverage": "partial",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/japan/japan.json",
@@ -153,7 +159,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/japan/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "partial"
+      "taxCoverage": "partial",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/scotland/scotland.json",
@@ -171,7 +178,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/scotland/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "partial"
+      "taxCoverage": "partial",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/africa-customary/africa-customary.json",
@@ -194,7 +202,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/africa-customary/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/hindu-succession/hindu-succession.json",
@@ -220,7 +229,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/hindu-succession/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json",
@@ -248,7 +258,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/islamic-succession/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json",
@@ -271,7 +282,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/jewish-succession/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/canada/canada.json",
@@ -289,7 +301,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/canada/",
       "successionCoverage": "partial",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/hong-kong/hong-kong.json",
@@ -307,7 +320,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/hong-kong/",
       "successionCoverage": "partial",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/india/india.json",
@@ -325,7 +339,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/india/",
       "successionCoverage": "partial",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/ireland/ireland.json",
@@ -343,7 +358,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/ireland/",
       "successionCoverage": "partial",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/latin-america/latin-america.json",
@@ -352,7 +368,7 @@
       "maturity": "draft",
       "seeking": "Argentina, Colombia, Venezuela practitioners",
       "legalTradition": "Civil law",
-      "keyFeatures": "Forced heirship (leg\u00edtima), mejora (improvement share), notarial succession, country-specific variation",
+      "keyFeatures": "Forced heirship (legítima), mejora (improvement share), notarial succession, country-specific variation",
       "legalReviewStatus": "self_verified",
       "extensionType": "geographic",
       "applicableJurisdictions": [
@@ -366,7 +382,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/latin-america/",
       "successionCoverage": "partial",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/prc-china/prc-china.json",
@@ -384,7 +401,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/prc-china/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json",
@@ -403,7 +421,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/singapore-malaysia/",
       "successionCoverage": "comprehensive",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/switzerland/switzerland.json",
@@ -421,7 +440,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/switzerland/",
       "successionCoverage": "partial",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     },
     {
       "id": "https://openinherit.org/v3/extensions/uae/uae.json",
@@ -439,7 +459,8 @@
       "repo": "openinherit/standard",
       "path": "v3/extensions/uae/",
       "successionCoverage": "partial",
-      "taxCoverage": "outline"
+      "taxCoverage": "outline",
+      "jurisdictionRelation": "applies-within"
     }
   ]
 }

@@ -21,3 +21,12 @@ jobs:
 
       - name: Run test suite
         run: pnpm test
+
+      # Level 2 — referential integrity. Nothing in CI ran this until now, so
+      # every cross-reference rule in scripts/validate-refs.mjs was advisory:
+      # deleting one left the build green.
+      - name: Referential-integrity rules match the declared constraints
+        run: pnpm run test:refs
+
+      - name: Referential integrity across every fixture
+        run: pnpm run validate:refs:all

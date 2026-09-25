@@ -13,8 +13,8 @@
 #   6. Verifies everything matches
 #
 # The publish.yml workflow (triggered by the tag) handles:
-#   - npm publish of @openinherit/schema and @openinherit/sdk
-#   - repository_dispatch to openinherit.org (website submodule update)
+#   - npm publish of @openinherit/schema, @openinherit/sdk and @openinherit/conformance
+#   - repository_dispatch to the website repository, which rebuilds openinherit.org
 #
 # Prerequisites:
 #   - gh CLI authenticated

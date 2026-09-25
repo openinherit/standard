@@ -129,7 +129,7 @@ if (publishWorkflow) {
 // ---- A5: the prose promise must be backed by machinery ---------------------
 const PROMISES = [
   ["scripts/release.sh", /triggers\s+npm\s+publish\s+via\s+CI|publish\.yml\s+workflow/i],
-  ["CONTRIBUTING.md", /tag\s+triggers\s+CI\s+to\s+publish/i],
+  ["CONTRIBUTING.md", /git\s+tag\s+triggers/i],
 ];
 for (const [path, pattern] of PROMISES) {
   if (!existsSync(path)) continue;

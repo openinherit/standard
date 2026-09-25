@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Publishing workflow. A version tag now builds and publishes `@openinherit/schema`,
+  `@openinherit/sdk` and `@openinherit/conformance` to npm from this repository, with
+  provenance attestations. The packages were previously released from elsewhere, so tagging
+  here did nothing while `scripts/release.sh` and `CONTRIBUTING.md` both said it would.
+- `pnpm run check:release-wiring` — a dependency-free check, run in CI on every push, that
+  the publishing workflow exists and fires on a version tag, that every publishable workspace
+  package has a publish step, and that each package's `repository` field still satisfies npm
+  provenance. Adding a fourth package without wiring it now fails the build.
 - `properties` array on `catalogue.json` — a catalogue document can now carry the properties its
   spaces belong to, so `spaces[].propertyId` resolves inside the document. Previously a
   catalogue-only document could not record which room an item was in: omitting `propertyId`

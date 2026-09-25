@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Validate referential integrity (Level 2) on all estate fixtures.
+# Validate referential integrity (Level 2) on all estate and catalogue fixtures.
 # Runs node scripts/validate-refs.mjs on every JSON fixture that is
-# a valid root INHERIT document (not extension fixtures, not catalogues,
-# not plain text, not intentionally broken references).
+# a valid root INHERIT document (not extension fixtures, not plain text,
+# not intentionally broken references).
+#
+# Catalogue documents are NOT skipped. They were, and the effect was that
+# spaces[].propertyId — a reference that can only resolve against a
+# properties[] array — was never checked in the one document type where it
+# is hardest to satisfy.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-SKIP="broken-references.json catalogue-only.json sample-will-text.txt"
+SKIP="broken-references.json sample-will-text.txt"
 SKIP_PREFIX="extension-"
 
 PASSED=0
@@ -87,6 +92,19 @@ for fixture in "$ROOT_DIR"/packages/conformance/estate/valid/*.json; do
     echo "FAIL"
     FAILED=$((FAILED + 1))
     ERRORS="$ERRORS\n  FAIL: $filename"
+  fi
+done
+
+for fixture in "$ROOT_DIR"/packages/conformance/catalogue/valid/*.json; do
+  filename=$(basename "$fixture")
+  echo -n "  $filename (catalogue) ... "
+  if node "$ROOT_DIR/scripts/validate-refs.mjs" "$fixture" >/dev/null 2>&1; then
+    echo "PASS"
+    PASSED=$((PASSED + 1))
+  else
+    echo "FAIL"
+    FAILED=$((FAILED + 1))
+    ERRORS="$ERRORS\n  FAIL: $filename (catalogue)"
   fi
 done
 

@@ -996,6 +996,16 @@
       "promptText": "Digital assets including cloud storage accounts, photo libraries, and digital files can have significant sentimental and monetary value. Locate login credentials and check the deceased's devices and password manager."
     },
     {
+      "id": "portable",
+      "label": "Portable items",
+      "aliases": ["on the person", "carried items", "worn items"],
+      "category": "offsite",
+      "tier": 4,
+      "locales": [],
+      "urgencyFlag": false,
+      "promptText": "Items that travel with the owner rather than staying at one address — watches, jewellery, and personal effects. Check whether they were on the person at the time of death: a hospital, care home, or coroner may be holding them pending release to the executor. There is no single address to search, so record where each item is recovered."
+    },
+    {
       "id": "other",
       "label": "Other",
       "aliases": [],

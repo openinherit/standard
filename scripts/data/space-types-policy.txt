@@ -1,0 +1,50 @@
+# space-types-policy — the machine-readable form of TT-1671's D0 verdict.
+#
+# ⚠️ VENDORED COPY. Source of truth: testatetech/docs-strategy at
+# scripts/data/space-types-policy.txt. Edit there and re-copy.
+#
+# ⛔ DO NOT EDIT verdict: TO MAKE A RED GATE GREEN. A verdict other than
+# UNANSWERED requires a decided-by: line citing a lookup-able decision record —
+# a Linear comment URL carrying #comment-<id>, or coordinator-decision:<n>.
+# The gate REFUSES a verdict without one, and REFUSES free text (tests T9,
+# T22b, T22c).
+#
+# ── D0 IS ANSWERED. V-OPEN. ──────────────────────────────────────────────
+# Josh, 2026-09-25 15:13 UTC, coordinator decision record 535, option (a):
+#   "V-OPEN — promptText, tier and urgencyFlag stay legitimate open-standard
+#    vocabulary."
+# ⚠️ An earlier record, 523, answered the same question at 13:16 UTC, before the
+# measured brief existed. 535 re-put it with the brief attached and is the later,
+# informed answer: 535 governs, and the verdict must not be re-derived from 523.
+#
+# V-OPEN ratifies the WHOLE file as open standard vocabulary, so open-fields
+# lists all EIGHT keys — including `label` and `locales`, which are named in
+# none of the three verdict shapes TT-1671's body offers and would otherwise
+# have been left for a later session to guess. (Plan Task 5's example header
+# omitted `locales`; that omission is not the verdict.)
+#
+# The UNANSWERED freeze pins (frozen-entry-count / frozen-fields / frozen-ids)
+# are DELETED rather than left inert: D2a's remedy is an additive change to
+# this very file, so a pin that forbids it would contradict the verdict it
+# sits under. The published shape they recorded is in git — 3ff5f29a.
+#
+# ── D2a IS ANSWERED. REMEDY 1. ─────────────────────────────────
+# Josh, 2026-09-25 21:07 UTC, coordinator decision record 557, option (a):
+#   "Author the `portable` row." Ten of the eleven off-site spaceTypes already
+#   carried entries in an identical shape, so excluding this one would have
+#   carved out a single value while every sibling stayed in.
+#
+# NO `exclusions:` LINE IS SET, and after remedy 1 that is correct rather than
+# an omission: coverage is complete, so there is nothing to exclude. The gate
+# is GREEN at 101/101. reference-data/space-types.json:6 -- "Every enum value
+# in space.json has a corresponding entry here" -- is now TRUE as published.
+#
+# ⛔ An `exclusions:` line added here would re-open D2a, which is answered.
+# Do not add one to silence a future red: a new enum value with no entry is
+# the gate working, and the remedy is the row, not the carve-out.
+#
+# Measured against openinherit/standard 02a9889 on 2026-09-25, BEFORE the row:
+# 101 enum values, 100 entries, all 8 keys present on all 100. After: 101/101.
+verdict: V-OPEN
+decided-by: coordinator-decision:535
+open-fields: id,label,aliases,category,tier,locales,urgencyFlag,promptText

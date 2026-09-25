@@ -90,7 +90,11 @@ A CI workflow verifies that derived files are in sync on every push to `main` an
 
 ### Release process
 
-Version releases use `scripts/release.sh`, which handles version bumping, changelog updates, tagging, and GitHub Release creation. The git tag triggers CI to publish `@openinherit/schema` and `@openinherit/sdk` to npm, and to rebuild www.openinherit.org.
+Version releases use `scripts/release.sh`, which handles version bumping, changelog updates, tagging, and GitHub Release creation. The git tag triggers `.github/workflows/publish.yml`, which publishes all three packages — `@openinherit/schema`, `@openinherit/sdk` and `@openinherit/conformance` — to npm with provenance attestations, and then asks the website to rebuild.
+
+Publishing needs an `NPM_TOKEN` repository secret with publish rights on the `@openinherit` scope; the workflow refuses to start without it rather than failing part-way through. `WWW_DISPATCH_TOKEN` is optional — without it the website notification is skipped, not failed.
+
+`pnpm run check:release-wiring` asserts that this paragraph is still true: that a tag-triggered publishing workflow exists, that every publishable package is wired into it, and that each package still meets npm provenance's preconditions. It runs in CI on every push, so the promise and the machinery cannot drift apart again.
 
 ```bash
 ./scripts/release.sh 6.1.0

@@ -29,7 +29,8 @@
     "graph:data": "node scripts/generate-graph-data.mjs",
     "contract-test": "bash scripts/contract-test.sh",
     "validate:refs:all": "bash scripts/validate-refs-all.sh",
-    "compat": "echo 'Usage: python3 scripts/check-schema-compat.py <old-v3-dir> <new-v3-dir>'"
+    "compat": "echo 'Usage: python3 scripts/check-schema-compat.py <old-v3-dir> <new-v3-dir>'",
+    "check:release-wiring": "node scripts/check-release-wiring.mjs"
   },
   "devDependencies": {
     "@hey-api/client-fetch": "latest",

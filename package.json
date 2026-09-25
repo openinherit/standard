@@ -27,6 +27,7 @@
     "test:cross-border": "node scripts/test-cross-border-fixture.mjs",
     "test:cascade": "python3 scripts/check-jurisdiction-cascade.py --tree . --min-tokens 69",
     "validate:refs": "node scripts/validate-refs.mjs",
+    "test:refs": "node scripts/test-referential-integrity.mjs",
     "graph:data": "node scripts/generate-graph-data.mjs",
     "contract-test": "bash scripts/contract-test.sh",
     "validate:refs:all": "bash scripts/validate-refs-all.sh",

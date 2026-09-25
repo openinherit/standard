@@ -13,7 +13,11 @@ import { join } from 'node:path';
 const FIXTURES_DIR = 'examples/fixtures';
 const SCHEMA = 'v3/schema.json';
 
-// Files that should be skipped — known-invalid, non-JSON, or extension-only fixtures
+// Files that should be skipped — known-invalid, non-JSON, or extension-only fixtures.
+// catalogue-only.json is not skipped because it is untested: it is a catalogue
+// document, so it validates against v3/catalogue.json rather than the root
+// schema this script uses. scripts/validate-examples.sh has the catalogue arm
+// that covers it, and scripts/validate-refs-all.sh covers it at Level 2.
 const SKIP_FILES = new Set([
   'broken-references.json',
   'catalogue-only.json',

@@ -1,8 +1,5 @@
 # space-types-policy — the machine-readable form of TT-1671's D0 verdict.
 #
-# ⚠️ VENDORED COPY. Source of truth: testatetech/docs-strategy at
-# scripts/data/space-types-policy.txt. Edit there and re-copy.
-#
 # ⛔ DO NOT EDIT verdict: TO MAKE A RED GATE GREEN. A verdict other than
 # UNANSWERED requires a decided-by: line citing a lookup-able decision record —
 # a Linear comment URL carrying #comment-<id>, or coordinator-decision:<n>.
@@ -45,6 +42,43 @@
 #
 # Measured against openinherit/standard 02a9889 on 2026-09-25, BEFORE the row:
 # 101 enum values, 100 entries, all 8 keys present on all 100. After: 101/101.
-verdict: V-OPEN
-decided-by: coordinator-decision:535
-open-fields: id,label,aliases,category,tier,locales,urgencyFlag,promptText
+#
+# ── D0 RE-ANSWERED, 28 September 2026. V-SPLIT SUPERSEDES V-OPEN. ────────
+# Josh, coordinator decision record 588:
+#   "Regardless of previous decisions I have made I want to make sure we are
+#    staying true to any decisions Rich has made previously."
+#
+# The 25 September V-OPEN verdict (record 535) is WITHDRAWN. It is preserved
+# above rather than deleted, per the dated-layer discipline: it was a real
+# decision, taken on a real brief, and the record should show a verdict that
+# was reversed rather than one that never existed.
+#
+# ⛔ WHAT V-OPEN MISSED, and it was not a close call. Rich's 28 July moat
+# boundary (brand-architecture.md §1.10 item 7) splits the asset-listing core
+# -- "its vocabulary open, its elicitation experience proprietary" -- and his
+# own worked case 5, in the three-launch design §2, spells out what the
+# elicitation experience is:
+#
+#     "flow, ORDERING, PROMPTS, progress mechanics, the NUDGES that get an
+#      ordinary person to finish listing 200 possessions"
+#
+# tier is the ordering. promptText is the prompts. urgencyFlag is the nudge.
+# All three, named by Rich, published in an Apache-2.0 repo.
+#
+# ⛔ AND THE LEAN-APACHE DEFAULT DOES NOT RESCUE IT. §2's callout keeps that
+# default in force -- "where they disagree, or where either is uncertain,
+# lean Apache wins" -- but it breaks UNCERTAINTY, and worked case 5 leaves
+# none: it names these three things, in these words, as the proprietary half
+# of this exact split.
+#
+# Removal rather than an amendment to the rule because the standard has not
+# been publicly utilised yet (Josh, 28 September). Apache distribution is
+# one-way: this stops future copies, not any already taken, and the window in
+# which removal is still the cheaper answer is open now and will not reopen.
+#
+# The three fields are not lost -- they are the elicitation experience and
+# belong with it, in the proprietary engine, not in the published vocabulary.
+verdict: V-SPLIT
+decided-by: coordinator-decision:588
+open-fields: id,label,aliases,category,locales
+commercial-fields: tier,urgencyFlag,promptText

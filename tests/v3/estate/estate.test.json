@@ -3840,6 +3840,33 @@
         ]
       },
       "valid": false
+    },
+    {
+      "description": "valid — estate carrying netEstateEquity",
+      "data": {
+        "id": "e57a7e00-0001-4000-a000-000000000001",
+        "testatorPersonId": "e57a7e00-0002-4000-a000-000000000002",
+        "status": "planning",
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "domicile": { "country": "GB" },
+        "totalEstimatedValue": { "amount": 50000000, "currency": "GBP" },
+        "netEstateEquity": { "amount": 29500000, "currency": "GBP" }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — netEstateEquity is a bare integer not a Money object",
+      "data": {
+        "id": "e57a7e00-0003-4000-a000-000000000003",
+        "testatorPersonId": "e57a7e00-0002-4000-a000-000000000002",
+        "status": "planning",
+        "createdAt": "2025-01-01T09:00:00Z",
+        "lastModifiedAt": "2025-01-01T09:00:00Z",
+        "domicile": { "country": "GB" },
+        "netEstateEquity": 29500000
+      },
+      "valid": false
     }
   ]
 }

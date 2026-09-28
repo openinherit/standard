@@ -133,6 +133,22 @@
       "description": "Estimated total value of the estate before liabilities. In minor currency units",
       "$ref": "common/money.json"
     },
+    "netEstateEquity": {
+      "description": "Total value of the estate after netting secured charges against the assets they charge and subtracting unsecured liabilities, in minor currency units. The after-liabilities counterpart to totalEstimatedValue. A convenience denormalisation: the authoritative figure is derived, not stored",
+      "$comment": "Derivation: netEstateEquity = SUM(asset.netEquity over all assets) - SUM(liability.amount over every liability with no securedAgainst). Secured liabilities are excluded from the second sum because they have already been netted at asset level by asset.netEquity — counting them again would double-subtract. Producers MUST keep this consistent with the assets and liabilities arrays. Consumers SHOULD derive it themselves when those arrays are present. scripts/validate-net-equity.mjs enforces this arithmetic",
+      "allOf": [
+        {
+          "$ref": "common/money.json"
+        },
+        {
+          "properties": {
+            "amount": {
+              "minimum": 0
+            }
+          }
+        }
+      ]
+    },
     "attestation": {
       "description": "Will execution formalities — witnesses, signing method, and compliance checks",
       "$ref": "attestation.json"

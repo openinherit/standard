@@ -135,7 +135,7 @@
     },
     "netEstateEquity": {
       "description": "Total value of the estate after netting secured charges against the assets they charge and subtracting unsecured liabilities, in minor currency units. The after-liabilities counterpart to totalEstimatedValue. A convenience denormalisation: the authoritative figure is derived, not stored",
-      "$comment": "Derivation: netEstateEquity = SUM(asset.netEquity over all assets) - SUM(liability.amount over every liability with no securedAgainst). Secured liabilities are excluded from the second sum because they have already been netted at asset level by asset.netEquity — counting them again would double-subtract. Producers MUST keep this consistent with the assets and liabilities arrays. Consumers SHOULD derive it themselves when those arrays are present. scripts/validate-net-equity.mjs enforces this arithmetic",
+      "$comment": "Derivation: netEstateEquity = SUM(asset.netEquity over all assets) + SUM(property.netEquity over all properties) - SUM(liability.amount over every liability with no securedAgainst). Properties are summed alongside assets because a mortgage — the paradigm secured liability — is charged against a property, so omitting them would leave the commonest charge unnetted. Secured liabilities are excluded from the final sum because they have already been netted at entity level by netEquity — counting them again would double-subtract. Producers MUST keep this consistent with the assets and liabilities arrays. Consumers SHOULD derive it themselves when those arrays are present. scripts/validate-net-equity.mjs enforces this arithmetic",
       "allOf": [
         {
           "$ref": "common/money.json"

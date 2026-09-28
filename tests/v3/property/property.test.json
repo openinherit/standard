@@ -1080,6 +1080,30 @@
         }
       },
       "valid": true
+    },
+    {
+      "description": "valid — property carrying netEquity and inNegativeEquity",
+      "data": {
+        "id": "b70b0000-0001-4000-a000-000000000001",
+        "name": "12 Elm Row",
+        "propertyType": "detached",
+        "estimatedValue": { "amount": 50000000, "currency": "GBP" },
+        "mortgageOutstanding": { "amount": 20000000, "currency": "GBP" },
+        "netEquity": { "amount": 29550000, "currency": "GBP" },
+        "inNegativeEquity": false
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — netEquity with a negative amount",
+      "data": {
+        "id": "b70b0000-0002-4000-a000-000000000002",
+        "name": "12 Elm Row",
+        "propertyType": "detached",
+        "estimatedValue": { "amount": 50000000, "currency": "GBP" },
+        "netEquity": { "amount": -5000, "currency": "GBP" }
+      },
+      "valid": false
     }
   ]
 }

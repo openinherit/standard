@@ -9,6 +9,8 @@ on:
       - 'examples/fixtures/**'
       - 'examples/wills/**'
       - 'scripts/test-cross-border-fixture.mjs'
+      - 'scripts/validate-refs.mjs'
+      - 'scripts/validate-net-equity.mjs'
       - 'reference-data/jurisdiction-*.json'
       - 'extensions-registry.json'
       - 'scripts/check-jurisdiction-cascade.py'
@@ -18,6 +20,8 @@ on:
       - 'examples/fixtures/**'
       - 'examples/wills/**'
       - 'scripts/test-cross-border-fixture.mjs'
+      - 'scripts/validate-refs.mjs'
+      - 'scripts/validate-net-equity.mjs'
       - 'reference-data/jurisdiction-*.json'
       - 'extensions-registry.json'
       - 'scripts/check-jurisdiction-cascade.py'
@@ -44,6 +48,25 @@ jobs:
 
       - name: Validate example fixtures
         run: pnpm run validate:examples
+
+      - name: Referential integrity — Space/Liability round-trip fixture
+        run: node scripts/validate-refs.mjs examples/fixtures/spaces-and-liabilities-estate.json
+
+      - name: Net equity — derivation matches the stored figures
+        run: node scripts/validate-net-equity.mjs examples/fixtures/spaces-and-liabilities-estate.json
+
+      # A checker that has silently stopped checking passes every positive test
+      # it has. net-equity-mismatch.json is deliberately wrong and structurally
+      # valid; asserting it STILL fails is what stops validate-net-equity.mjs
+      # decaying into a no-op, and it is the only step that would catch someone
+      # "correcting" that fixture's number.
+      - name: Net equity — the negative probe must still bite
+        run: |
+          if node scripts/validate-net-equity.mjs examples/fixtures/net-equity-mismatch.json; then
+            echo "::error::net-equity-mismatch.json validated — the net-equity check has stopped biting"
+            exit 1
+          fi
+          echo "Negative probe correctly rejected"
 
       - name: Cross-border fixture expresses connecting factors
         run: pnpm run test:cross-border

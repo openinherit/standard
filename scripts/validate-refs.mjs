@@ -209,6 +209,15 @@ if (doc.estate) {
   }
 });
 
+// Liabilities — the asset or property a secured debt is charged against.
+// Multi-target: securedAgainst is documented as "Property.id or Asset.id", and a
+// mortgage — the paradigm secured liability — points at a property, so a
+// single-target rule would reject the commonest case in the standard.
+(doc.liabilities || []).forEach((l, i) => {
+  checkRef('liabilities', i, 'securedAgainst', l.securedAgainst,
+           [assetIds, propertyIds], 'assets/properties');
+});
+
 // Spaces — property references
 (doc.spaces || []).forEach((s, i) => {
   checkRef('spaces', i, 'propertyId', s.propertyId, [propertyIds], 'properties');

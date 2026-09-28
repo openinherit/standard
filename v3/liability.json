@@ -18,7 +18,7 @@
     },
     "liabilityType": {
       "description": "The category of liability. Cultural and religious obligations are included because they are priority debts in their respective legal systems",
-      "$comment": "mortgage: secured loan against property. personal_loan: unsecured personal borrowing. credit_card: credit card balance. overdraft: bank overdraft. student_loan: education loan (may be forgiven on death in some jurisdictions). car_finance: vehicle finance agreement. hire_purchase: hire purchase agreement. mahr: Islamic deferred bridal gift — a legally recognised financial obligation that is a priority debt under Shariah law, enforceable in Shariah courts and in secular courts that recognise Islamic marriage contracts (e.g. UAE, Malaysia, Pakistan, and increasingly in UK/US family courts). ketubah_debt: Jewish marriage contract obligation — a legally recognised financial obligation under halachic law, enforceable in batei din and in secular courts where the ketubah is recognised as a binding contract (e.g. Israel; treated as a prenuptial in US/UK courts). lobola: African customary bride price — a legally recognised financial obligation under customary law, with statutory recognition under the Recognition of Customary Marriages Act 1998 (South Africa), and customary law statutes in Nigeria, Kenya, Zimbabwe, and other jurisdictions. May be partially refundable on certain events. tax_liability: income tax, capital gains tax, or other tax owed. funeral_costs: funeral and burial expenses — typically first priority debt. care_fees: care home or nursing fees owed. mezonot: Jewish widow's maintenance obligation — a legally recognised financial obligation under halachic law, paid from the estate before distribution, enforceable in Israeli rabbinical courts and in batei din worldwide. other: any liability not covered above.",
+      "$comment": "mortgage: secured loan against property. personal_loan: unsecured personal borrowing. credit_card: credit card balance. overdraft: bank overdraft. student_loan: education loan (may be forgiven on death in some jurisdictions). car_finance: vehicle finance agreement. hire_purchase: hire purchase agreement. secured_loan: a loan secured by a charge over an asset other than a first mortgage. second_charge: a further loan secured behind an existing first charge on the same property. logbook_loan: a loan secured against a vehicle under a bill of sale, where title passes to the lender until repayment. mahr: Islamic deferred bridal gift — a legally recognised financial obligation that is a priority debt under Shariah law, enforceable in Shariah courts and in secular courts that recognise Islamic marriage contracts (e.g. UAE, Malaysia, Pakistan, and increasingly in UK/US family courts). ketubah_debt: Jewish marriage contract obligation — a legally recognised financial obligation under halachic law, enforceable in batei din and in secular courts where the ketubah is recognised as a binding contract (e.g. Israel; treated as a prenuptial in US/UK courts). lobola: African customary bride price — a legally recognised financial obligation under customary law, with statutory recognition under the Recognition of Customary Marriages Act 1998 (South Africa), and customary law statutes in Nigeria, Kenya, Zimbabwe, and other jurisdictions. May be partially refundable on certain events. tax_liability: income tax, capital gains tax, or other tax owed. funeral_costs: funeral and burial expenses — typically first priority debt. care_fees: care home or nursing fees owed. mezonot: Jewish widow's maintenance obligation — a legally recognised financial obligation under halachic law, paid from the estate before distribution, enforceable in Israeli rabbinical courts and in batei din worldwide. other: any liability not covered above.",
       "examples": [ "mortgage", "credit_card", "mahr", "funeral_costs" ],
       "enum": [
         "mortgage",
@@ -28,6 +28,9 @@
         "student_loan",
         "car_finance",
         "hire_purchase",
+        "secured_loan",
+        "second_charge",
+        "logbook_loan",
         "mahr",
         "ketubah_debt",
         "lobola",
@@ -61,6 +64,29 @@
       "type": "string",
       "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
       "format": "uuid"
+    },
+    "chargeStatus": {
+      "description": "Lifecycle state of the registered charge securing this liability. Only meaningful when securedAgainst is present. A discharged or satisfied charge no longer reduces the equity in the asset it was registered against",
+      "$comment": "active: the charge is registered and outstanding — it reduces the net equity of the asset it is secured against by settlementAmount (or by amount where no settlement figure is recorded). discharged: the charge has been removed from the register (e.g. HM Land Registry DS1) — contributes zero to net equity. satisfied: the debt has been repaid in full but the register may not yet reflect it — contributes zero to net equity. The distinction between discharged and satisfied matters because a satisfied-but-not-discharged charge still appears on an official search and must be explained to a buyer or a probate registry",
+      "examples": [ "active", "discharged", "satisfied" ],
+      "enum": [ "active", "discharged", "satisfied" ]
+    },
+    "settlementAmount": {
+      "description": "Redemption or early-settlement figure to clear this liability, in minor currency units. May differ from amount — a PCP or hire-purchase settlement typically includes unpaid interest and fees, and a mortgage redemption may include an early-repayment charge. Where present this is the figure that nets against the secured asset's value",
+      "$ref": "common/money.json"
+    },
+    "chargeRegisteredDate": {
+      "description": "Date the charge was registered against the secured property or asset",
+      "examples": [ "2020-06-04", "2018-11-20" ],
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "chargeReference": {
+      "description": "Registry entry or agreement number identifying the charge — HM Land Registry charge entry, finance agreement number, or the equivalent in the jurisdiction of the secured asset",
+      "examples": [ "WYK123456", "HP-2021-884512", "CH/2019/0042" ],
+      "type": "string",
+      "maxLength": 255
     },
     "monthlyPayment": {
       "description": "Regular monthly payment amount in minor currency units, if applicable",
@@ -155,6 +181,12 @@
       "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
       "$ref": "common/provenance.json"
     }
+  },
+  "dependentRequired": {
+    "chargeStatus": [ "securedAgainst" ],
+    "settlementAmount": [ "securedAgainst" ],
+    "chargeRegisteredDate": [ "securedAgainst" ],
+    "chargeReference": [ "securedAgainst" ]
   },
   "patternProperties": {
     "^x-inherit-[a-z][a-z0-9-]{1,54}$": {

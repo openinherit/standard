@@ -8,6 +8,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- `liabilities[].securedAgainst` is now a checked reference. It had no referential-integrity
+  rule at all: a mortgage could name an asset or property that did not exist and every check in
+  the repository stayed green. Two rules, not one — `securedAgainst` is documented as
+  "Property.id or Asset.id" and a mortgage is charged against a property, so a single
+  `assets[].id` rule would have rejected the commonest secured liability in the standard.
+  `scripts/validate-refs.mjs` gained the matching multi-target loop.
+- Registered-charge lifecycle on `liability.json` — `chargeStatus` (`active` / `discharged` /
+  `satisfied`), `settlementAmount`, `chargeRegisteredDate` and `chargeReference`, all optional
+  and all tied to `securedAgainst` by a new `dependentRequired` block. A liability that records
+  a mortgage but cannot say whether the charge is still active cannot be netted, and netting is
+  the reason the primitive exists. Three `liabilityType` values added alongside: `secured_loan`,
+  `second_charge`, `logbook_loan`.
+- Derived net equity — `netEquity` and `inNegativeEquity` on `asset.json` and `property.json`,
+  and `netEstateEquity` on `estate.json`. Convenience denormalisations following the
+  `relationship.status` precedent: the derivation is in each field's `$comment`, producers MUST
+  keep them consistent, consumers SHOULD derive. Floored at zero, with `inNegativeEquity`
+  carrying the fact the floor would otherwise destroy — an executor needs to know a charged
+  asset is under water, since it may be worth disclaiming rather than administering.
+- `pnpm run validate:net-equity` (`scripts/validate-net-equity.mjs`) — JSON Schema cannot express
+  arithmetic, so without this the derivation would live only in a comment and `netEquity` would
+  be a number nobody checks, which is worse than no field because consumers would trust it. It
+  recomputes every stated figure, checks the currency it was derived from, and refuses to sum a
+  mixed-currency estate rather than produce a confident wrong total. Ships with
+  `examples/fixtures/net-equity-mismatch.json`, a deliberately wrong and structurally valid
+  document, and CI asserts that fixture STILL fails — a checker that has silently stopped
+  checking passes every positive test it has.
+- `examples/fixtures/spaces-and-liabilities-estate.json` — the Space/Liability round-trip: two
+  spaces (one interior, one off-site), two assets linked to them by `spaceId`, an active mortgage
+  charged against the property, a discharged hire-purchase charge against an asset, and an
+  unsecured mahr. Nothing in the repository previously exercised a document carrying both
+  primitives together with the charges that connect them.
+
 - Publishing workflow. A version tag now builds and publishes `@openinherit/schema`,
   `@openinherit/sdk` and `@openinherit/conformance` to npm from this repository, with
   provenance attestations. The packages were previously released from elsewhere, so tagging

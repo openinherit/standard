@@ -161,18 +161,12 @@
     "netEquity": {
       "description": "Value of this asset net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored",
       "$comment": "Derivation: netEquity = max(0, assetValue - SUM(liability.settlementAmount ?? liability.amount) over every liability whose securedAgainst is this asset.id AND whose chargeStatus is 'active'), where assetValue is professionalValuation if present, else estimatedValue. Floored at zero — where the charges exceed the value, netEquity is zero and inNegativeEquity is true. Producers MUST keep this consistent with the liabilities array. Consumers SHOULD derive it themselves when liabilities are present rather than trusting the stored value. Only the equity, not the gross value, is chargeable to inheritance tax in jurisdictions that tax the net estate. scripts/validate-net-equity.mjs enforces this arithmetic",
-      "allOf": [
-        {
-          "$ref": "common/money.json"
-        },
-        {
-          "properties": {
-            "amount": {
-              "minimum": 0
-            }
-          }
+      "$ref": "common/money.json",
+      "properties": {
+        "amount": {
+          "minimum": 0
         }
-      ]
+      }
     },
     "inNegativeEquity": {
       "description": "True when the active charges secured against this asset exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall",

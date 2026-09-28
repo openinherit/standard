@@ -62,18 +62,12 @@
     "netEquity": {
       "description": "Value of this property net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored",
       "$comment": "Derivation: netEquity = max(0, propertyValue - SUM(liability.settlementAmount ?? liability.amount) over every liability whose securedAgainst is this property.id AND whose chargeStatus is 'active'), where propertyValue is professionalValuation if present, else estimatedValue. A mortgage is the paradigm secured liability and it is charged against a property, not an asset, so the figure has to exist here as well as on Asset. Floored at zero — where the charges exceed the value, netEquity is zero and inNegativeEquity is true. mortgageOutstanding is NOT used in the derivation: it is an unreferenced convenience figure, whereas the liabilities array is the one that names which charge is still active. Producers MUST keep this consistent with the liabilities array. Consumers SHOULD derive it themselves when liabilities are present. scripts/validate-net-equity.mjs enforces this arithmetic",
-      "allOf": [
-        {
-          "$ref": "common/money.json"
-        },
-        {
-          "properties": {
-            "amount": {
-              "minimum": 0
-            }
-          }
+      "$ref": "common/money.json",
+      "properties": {
+        "amount": {
+          "minimum": 0
         }
-      ]
+      }
     },
     "inNegativeEquity": {
       "description": "True when the active charges secured against this property exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall",

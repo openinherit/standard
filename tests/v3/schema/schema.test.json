@@ -3267,6 +3267,106 @@
         ]
       },
       "valid": false
+    },
+    {
+      "description": "valid — document carrying spaces[] and liabilities[], asset linked by spaceId",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "aa10c0de-0001-4000-a000-000000000001",
+          "testatorPersonId": "aa10c0de-0002-4000-a000-000000000002",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          { "id": "aa10c0de-0002-4000-a000-000000000002", "givenName": "Alice", "roles": ["testator"] }
+        ],
+        "properties": [
+          { "id": "aa10c0de-0003-4000-a000-000000000003", "name": "12 Elm Row", "propertyType": "detached" }
+        ],
+        "spaces": [
+          {
+            "id": "aa10c0de-0004-4000-a000-000000000004",
+            "propertyId": "aa10c0de-0003-4000-a000-000000000003",
+            "name": "Study",
+            "spaceType": "study"
+          }
+        ],
+        "assets": [
+          {
+            "id": "aa10c0de-0005-4000-a000-000000000005",
+            "name": "Longcase clock",
+            "category": "antiques",
+            "spaceId": "aa10c0de-0004-4000-a000-000000000004"
+          }
+        ],
+        "liabilities": [
+          {
+            "id": "aa10c0de-0006-4000-a000-000000000006",
+            "liabilityType": "mortgage",
+            "amount": { "amount": 20000000, "currency": "GBP" },
+            "securedAgainst": "aa10c0de-0003-4000-a000-000000000003"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — spaces[] entry missing required spaceType",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "aa10c0de-0001-4000-a000-000000000001",
+          "testatorPersonId": "aa10c0de-0002-4000-a000-000000000002",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          { "id": "aa10c0de-0002-4000-a000-000000000002", "givenName": "Alice", "roles": ["testator"] }
+        ],
+        "properties": [
+          { "id": "aa10c0de-0003-4000-a000-000000000003", "name": "12 Elm Row", "propertyType": "detached" }
+        ],
+        "spaces": [
+          {
+            "id": "aa10c0de-0004-4000-a000-000000000004",
+            "propertyId": "aa10c0de-0003-4000-a000-000000000003",
+            "name": "Study"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — liabilities[] entry missing required amount",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "3.0.0",
+        "estate": {
+          "id": "aa10c0de-0001-4000-a000-000000000001",
+          "testatorPersonId": "aa10c0de-0002-4000-a000-000000000002",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": { "country": "GB" }
+        },
+        "people": [
+          { "id": "aa10c0de-0002-4000-a000-000000000002", "givenName": "Alice", "roles": ["testator"] }
+        ],
+        "liabilities": [
+          {
+            "id": "aa10c0de-0006-4000-a000-000000000006",
+            "liabilityType": "credit_card"
+          }
+        ]
+      },
+      "valid": false
     }
   ]
 }

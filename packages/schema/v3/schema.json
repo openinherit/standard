@@ -730,6 +730,20 @@
           "errorMessage": "Bequest source references a property that does not exist"
         },
         {
+          "field": "liabilities[].securedAgainst",
+          "references": "assets[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Liability securedAgainst references an asset that does not exist"
+        },
+        {
+          "field": "liabilities[].securedAgainst",
+          "references": "properties[].id",
+          "required": false,
+          "code": "INHERIT_REF_BROKEN",
+          "errorMessage": "Liability securedAgainst references a property that does not exist"
+        },
+        {
           "field": "kinships[].fromPersonId",
           "references": "people[].id",
           "required": true,

@@ -423,6 +423,100 @@
         "securedAgainst": "bad-uuid-value"
       },
       "valid": false
+    },
+    {
+      "description": "valid — mortgage with an active registered charge",
+      "data": {
+        "id": "c1a11a00-0001-4000-a000-000000000001",
+        "liabilityType": "mortgage",
+        "creditor": "Northern Building Society",
+        "amount": {
+          "amount": 20000000,
+          "currency": "GBP"
+        },
+        "securedAgainst": "c1a11a00-0002-4000-a000-000000000002",
+        "chargeStatus": "active",
+        "chargeRegisteredDate": "2020-06-04",
+        "chargeReference": "WYK123456",
+        "settlementAmount": {
+          "amount": 20450000,
+          "currency": "GBP"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — discharged charge contributes nothing",
+      "data": {
+        "id": "c1a11a00-0003-4000-a000-000000000003",
+        "liabilityType": "car_finance",
+        "amount": {
+          "amount": 1200000,
+          "currency": "GBP"
+        },
+        "securedAgainst": "c1a11a00-0004-4000-a000-000000000004",
+        "chargeStatus": "discharged",
+        "chargeRegisteredDate": "2021-03-18",
+        "chargeReference": "HP-2021-884512"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — chargeStatus without securedAgainst",
+      "data": {
+        "id": "c1a11a00-0005-4000-a000-000000000005",
+        "liabilityType": "mortgage",
+        "amount": {
+          "amount": 20000000,
+          "currency": "GBP"
+        },
+        "chargeStatus": "active"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — settlementAmount without securedAgainst",
+      "data": {
+        "id": "c1a11a00-0006-4000-a000-000000000006",
+        "liabilityType": "personal_loan",
+        "amount": {
+          "amount": 500000,
+          "currency": "GBP"
+        },
+        "settlementAmount": {
+          "amount": 480000,
+          "currency": "GBP"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — chargeStatus not in the enum",
+      "data": {
+        "id": "c1a11a00-0007-4000-a000-000000000007",
+        "liabilityType": "mortgage",
+        "amount": {
+          "amount": 20000000,
+          "currency": "GBP"
+        },
+        "securedAgainst": "c1a11a00-0002-4000-a000-000000000002",
+        "chargeStatus": "redeemed"
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — secured loan uses the new liabilityType",
+      "data": {
+        "id": "c1a11a00-0008-4000-a000-000000000008",
+        "liabilityType": "secured_loan",
+        "amount": {
+          "amount": 3000000,
+          "currency": "GBP"
+        },
+        "securedAgainst": "c1a11a00-0002-4000-a000-000000000002",
+        "chargeStatus": "active"
+      },
+      "valid": true
     }
   ]
 }

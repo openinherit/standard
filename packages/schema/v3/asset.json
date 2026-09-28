@@ -158,6 +158,22 @@
       "description": "Professional valuation of the asset, in minor currency units",
       "$ref": "common/money.json"
     },
+    "netEquity": {
+      "description": "Value of this asset net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored",
+      "$comment": "Derivation: netEquity = max(0, assetValue - SUM(liability.settlementAmount ?? liability.amount) over every liability whose securedAgainst is this asset.id AND whose chargeStatus is 'active'), where assetValue is professionalValuation if present, else estimatedValue. Floored at zero — where the charges exceed the value, netEquity is zero and inNegativeEquity is true. Producers MUST keep this consistent with the liabilities array. Consumers SHOULD derive it themselves when liabilities are present rather than trusting the stored value. Only the equity, not the gross value, is chargeable to inheritance tax in jurisdictions that tax the net estate. scripts/validate-net-equity.mjs enforces this arithmetic",
+      "$ref": "common/money.json",
+      "properties": {
+        "amount": {
+          "minimum": 0
+        }
+      }
+    },
+    "inNegativeEquity": {
+      "description": "True when the active charges secured against this asset exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall",
+      "$comment": "Flooring netEquity at zero loses the size and the existence of a shortfall — which is the fact an executor most needs, since a negatively-charged asset may be worth disclaiming rather than administering. This boolean restores the existence of it; the size is recoverable from the liabilities themselves",
+      "examples": [ false, true ],
+      "type": "boolean"
+    },
     "valuationDate": {
       "description": "Date of the most recent valuation",
       "examples": [ "2024-11-01", "2025-02-14" ],

@@ -1,0 +1,270 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.3.0",
+  "exportedAt": "2026-03-27T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples — Space/Liability round-trip",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "cc110000-0000-4000-a000-000000000000",
+    "testatorPersonId": "cc110000-0000-4000-a000-000000000009",
+    "status": "planning",
+    "createdAt": "2026-03-27T00:00:00Z",
+    "lastModifiedAt": "2026-03-27T00:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    },
+    "totalEstimatedValue": {
+      "amount": 52650000,
+      "currency": "GBP"
+    },
+    "netEstateEquity": {
+      "amount": 30700000,
+      "currency": "GBP"
+    }
+  },
+  "people": [
+    {
+      "id": "cc110000-0000-4000-a000-000000000009",
+      "givenName": "Yusuf",
+      "familyName": "Rahman",
+      "roles": [
+        "testator"
+      ]
+    }
+  ],
+  "kinships": [],
+  "relationships": [],
+  "properties": [
+    {
+      "id": "cc110000-0000-4000-a000-000000000001",
+      "name": "12 Elm Row",
+      "propertyType": "detached",
+      "estimatedValue": {
+        "amount": 50000000,
+        "currency": "GBP"
+      },
+      "netEquity": {
+        "amount": 29550000,
+        "currency": "GBP"
+      },
+      "inNegativeEquity": false
+    }
+  ],
+  "spaces": [
+    {
+      "id": "cc110000-0000-4000-a000-000000000002",
+      "propertyId": "cc110000-0000-4000-a000-000000000001",
+      "name": "Study",
+      "spaceType": "study"
+    },
+    {
+      "id": "cc110000-0000-4000-a000-000000000003",
+      "name": "Kingsway Self Storage, unit 41",
+      "spaceType": "self_storage"
+    }
+  ],
+  "assets": [
+    {
+      "id": "cc110000-0000-4000-a000-000000000004",
+      "name": "Longcase clock",
+      "category": "antiques",
+      "spaceId": "cc110000-0000-4000-a000-000000000002",
+      "estimatedValue": {
+        "amount": 850000,
+        "currency": "GBP"
+      },
+      "netEquity": {
+        "amount": 850000,
+        "currency": "GBP"
+      },
+      "inNegativeEquity": false
+    },
+    {
+      "id": "cc110000-0000-4000-a000-000000000005",
+      "name": "2019 Volvo XC60",
+      "category": "vehicle",
+      "spaceId": "cc110000-0000-4000-a000-000000000003",
+      "estimatedValue": {
+        "amount": 1800000,
+        "currency": "GBP"
+      },
+      "netEquity": {
+        "amount": 1800000,
+        "currency": "GBP"
+      },
+      "inNegativeEquity": false
+    }
+  ],
+  "liabilities": [
+    {
+      "id": "cc110000-0000-4000-a000-000000000006",
+      "liabilityType": "mortgage",
+      "creditor": "Northern Building Society",
+      "amount": {
+        "amount": 20000000,
+        "currency": "GBP"
+      },
+      "securedAgainst": "cc110000-0000-4000-a000-000000000001",
+      "chargeStatus": "active",
+      "chargeRegisteredDate": "2020-06-04",
+      "chargeReference": "WYK123456",
+      "settlementAmount": {
+        "amount": 20450000,
+        "currency": "GBP"
+      }
+    },
+    {
+      "id": "cc110000-0000-4000-a000-000000000007",
+      "liabilityType": "hire_purchase",
+      "creditor": "Volvo Car Financial Services",
+      "amount": {
+        "amount": 1200000,
+        "currency": "GBP"
+      },
+      "securedAgainst": "cc110000-0000-4000-a000-000000000005",
+      "chargeStatus": "discharged",
+      "chargeRegisteredDate": "2021-03-18",
+      "chargeReference": "HP-2021-884512"
+    },
+    {
+      "id": "cc110000-0000-4000-a000-000000000008",
+      "liabilityType": "mahr",
+      "creditor": "Aisha Rahman",
+      "amount": {
+        "amount": 1500000,
+        "currency": "GBP"
+      }
+    }
+  ],
+  "bequests": [],
+  "trusts": [],
+  "executors": [],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-03-28T12:00:00Z",
+    "validatedBy": "INHERIT Examples",
+    "schemaVersion": "6.3.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 12,
+      "maxScore": 100,
+      "jurisdiction": "GB-ENG",
+      "estateStatus": "planning",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "checklist": [
+        {
+          "category": "personal_details",
+          "item": "Testator full name recorded",
+          "weight": 10,
+          "status": "complete"
+        },
+        {
+          "category": "personal_details",
+          "item": "Testator jurisdiction",
+          "weight": 5,
+          "status": "complete"
+        },
+        {
+          "category": "assets_and_valuations",
+          "item": "At least one asset recorded",
+          "weight": 10,
+          "status": "incomplete"
+        },
+        {
+          "category": "beneficiaries",
+          "item": "At least one beneficiary identified",
+          "weight": 10,
+          "status": "incomplete"
+        },
+        {
+          "category": "executors",
+          "item": "At least one executor appointed",
+          "weight": 10,
+          "status": "incomplete"
+        },
+        {
+          "category": "legal_documents",
+          "item": "Will executed",
+          "weight": 10,
+          "status": "incomplete"
+        }
+      ]
+    },
+    "recommendedActions": [
+      {
+        "id": "act-001",
+        "category": "completeness",
+        "priority": "critical",
+        "title": "Add at least one beneficiary",
+        "description": "No beneficiaries are identified. The estate plan is incomplete without named recipients.",
+        "status": "pending",
+        "triggeredBy": "Zero people with beneficiary role"
+      },
+      {
+        "id": "act-002",
+        "category": "completeness",
+        "priority": "critical",
+        "title": "Appoint an executor",
+        "description": "No executor has been appointed. Without an executor, the court will appoint an administrator.",
+        "status": "pending",
+        "triggeredBy": "Zero executors"
+      },
+      {
+        "id": "act-003",
+        "category": "completeness",
+        "priority": "high",
+        "title": "Record at least one asset or property",
+        "description": "No assets or properties are recorded. An estate plan without assets has nothing to distribute.",
+        "status": "pending",
+        "triggeredBy": "Zero assets and zero properties"
+      },
+      {
+        "id": "act-004",
+        "category": "legal_requirement",
+        "priority": "high",
+        "title": "Create and execute a will",
+        "description": "No will execution date is recorded and no documents are listed. The testator should create and execute a will.",
+        "status": "pending",
+        "triggeredBy": "No executionDate and zero documents"
+      },
+      {
+        "id": "act-005",
+        "category": "tax_planning",
+        "priority": "medium",
+        "title": "Calculate tax position",
+        "description": "No tax position has been calculated. This will be needed once assets are recorded.",
+        "status": "pending",
+        "triggeredBy": "No taxPosition present"
+      }
+    ],
+    "taxPosition": {
+      "jurisdiction": "GB-ENG",
+      "calculatedAt": "2026-03-28T12:00:00Z",
+      "grossEstateValue": {
+        "amount": 52650000,
+        "currency": "GBP"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    }
+  }
+}

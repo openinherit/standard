@@ -1967,6 +1967,29 @@
         }
       },
       "valid": true
+    },
+    {
+      "description": "valid — asset carrying netEquity and inNegativeEquity",
+      "data": {
+        "id": "a55e7000-0001-4000-a000-000000000001",
+        "name": "Longcase clock",
+        "category": "antiques",
+        "estimatedValue": { "amount": 50000000, "currency": "GBP" },
+        "netEquity": { "amount": 30000000, "currency": "GBP" },
+        "inNegativeEquity": false
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — netEquity with a negative amount",
+      "data": {
+        "id": "a55e7000-0002-4000-a000-000000000002",
+        "name": "Longcase clock",
+        "category": "antiques",
+        "estimatedValue": { "amount": 50000000, "currency": "GBP" },
+        "netEquity": { "amount": -5000, "currency": "GBP" }
+      },
+      "valid": false
     }
   ]
 }

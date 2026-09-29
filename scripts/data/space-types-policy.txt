@@ -1,5 +1,8 @@
 # space-types-policy — the machine-readable form of TT-1671's D0 verdict.
 #
+# ⚠️ VENDORED COPY. Source of truth: testatetech/docs-strategy at
+# scripts/data/space-types-policy.txt. Edit there and re-copy.
+#
 # ⛔ DO NOT EDIT verdict: TO MAKE A RED GATE GREEN. A verdict other than
 # UNANSWERED requires a decided-by: line citing a lookup-able decision record —
 # a Linear comment URL carrying #comment-<id>, or coordinator-decision:<n>.

@@ -5,17 +5,20 @@ exit 0 = clean · 1 = REFUSED · 2 = CANNOT ANSWER. Never read 2 as clean.
 
 Reads a policy file whose `verdict:` line selects the contract:
   UNANSWERED   -> freeze: entry count and field-set must match the pins
-  V-OPEN       -> coverage: every spaceType enum value has an entry (minus
-                  declared exclusions), and every entry carries open-fields
-  V-COMMERCIAL -> removal: no entry carries a commercial field, every entry
-  / V-SPLIT       carries every open field, and (with --commercial-home) the
-                  removed content exists on the engine side
+  V-OPEN       -> every entry carries open-fields
+  V-COMMERCIAL -> removal too: no entry carries a commercial field, and (with
+  / V-SPLIT       --commercial-home) the removed content exists on the engine
+
+COVERAGE runs under ALL THREE answered verdicts, not just V-OPEN: every
+spaceType enum value has an entry (minus declared exclusions) and every entry's
+id is an enum value. It was fenced inside V-OPEN until 2026-09-29, which meant
+the 28 September flip to V-SPLIT silently turned TT-1671 D2b off.
 
 Single file with no local imports on purpose: it is vendored into the public
 repo openinherit/standard, where docs-strategy is not on the path.
 
 ⚠️ VENDORED COPY. The source of truth is testatetech/docs-strategy at
-scripts/check-space-types-lockstep.py, together with its 34 hermetic assertions
+scripts/check-space-types-lockstep.py, together with its 42 hermetic assertions
 in scripts/test-check-space-types-lockstep.sh. Fix it there and re-copy; a fix
 made only here has no test covering it.
 """
@@ -131,6 +134,25 @@ def space_type_enum(schema):
     cannot("spaceType declares no enum, at top level or inside anyOf")
 
 
+def extension_patterns(schema):
+    """The `pattern` branches declared beside the spaceType enum.
+
+    v3/space.json permits vendor extensions as `^x-inherit-.+` in an anyOf
+    branch of its own. A reference-data entry for one is therefore a legitimate
+    id that is absent from the enum list, and the stray-entry assertion must not
+    red it. Reading the pattern from the schema rather than hard-coding it means
+    the exemption disappears the day the schema stops granting it.
+    """
+    st = schema.get("properties", {}).get("spaceType", {})
+    out = []
+    for branch in st.get("anyOf", []):
+        if "pattern" in branch:
+            out.append(re.compile(branch["pattern"]))
+    if "pattern" in st:
+        out.append(re.compile(st["pattern"]))
+    return out
+
+
 def field_in_tree(directory, field):
     """True if any carrier file under `directory` mentions `field` as a key.
 
@@ -182,7 +204,8 @@ def main():
         if not p.is_file():
             cannot(f"{p} not found")
     try:
-        enum = space_type_enum(json.loads(sp.read_text()))
+        schema = json.loads(sp.read_text())
+        enum = space_type_enum(schema)
         types = json.loads(rd.read_text())["types"]
     except (json.JSONDecodeError, KeyError) as exc:
         cannot(f"unreadable: {exc}")
@@ -267,11 +290,37 @@ def main():
                         f"entry '{t.get('id', '?')}' is missing open field '{f}'"
                     )
 
-        if verdict == "V-OPEN":
-            uncovered = sorted(set(enum) - set(ids) - set(csv(pol, "exclusions")))
-            for value in uncovered:
-                problems.append(f"enum value '{value}' has no reference-data entry")
-        else:  # V-COMMERCIAL / V-SPLIT
+        # ⭐ COVERAGE IS A PROPERTY OF THE ARTEFACT, NOT OF THE VERDICT, and it
+        # runs for EVERY answered verdict. It used to sit inside the V-OPEN
+        # branch, so the 28 September flip to V-SPLIT turned D2b off -- the
+        # clause reads "a lockstep check fails when enum and reference-data
+        # drift again", and on the real public tree that day, deleting an entry
+        # printed "OK -- verdict V-SPLIT, 100 entries, 101 enum values" at exit
+        # 0. It stated both numbers and still said OK. Every answered verdict
+        # keeps a populated open artefact -- open-fields is asserted per entry
+        # in all three -- so WHICH ENTRIES MUST EXIST cannot depend on which
+        # fields are open. `exclusions:` stays the only way to narrow it.
+        uncovered = sorted(set(enum) - set(ids) - set(csv(pol, "exclusions")))
+        for value in uncovered:
+            problems.append(f"enum value '{value}' has no reference-data entry")
+
+        # The reverse direction, which nothing checked at all: `enum - ids` says
+        # nothing about an entry whose id is NOT a valid spaceType. That is
+        # drift too, and it is the side a count cannot catch -- a stray entry
+        # and a missing one net to the same total. Extension ids are exempt
+        # because the schema itself declares them valid (the ^x-inherit-.+
+        # branch beside the enum); the exemption is READ FROM THE SCHEMA rather
+        # than hard-coded, so a schema that stops permitting them stops
+        # exempting them.
+        for stray in sorted(set(ids) - set(enum)):
+            if any(pat.match(stray) for pat in extension_patterns(schema)):
+                continue
+            problems.append(
+                f"entry '{stray}' is not a spaceType enum value — "
+                f"reference-data has drifted ahead of the schema"
+            )
+
+        if verdict != "V-OPEN":  # V-COMMERCIAL / V-SPLIT
             commercial = csv(pol, "commercial-fields")
             for t in types:
                 for f in commercial:

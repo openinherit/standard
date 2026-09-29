@@ -15,7 +15,7 @@ Single file with no local imports on purpose: it is vendored into the public
 repo openinherit/standard, where docs-strategy is not on the path.
 
 ⚠️ VENDORED COPY. The source of truth is testatetech/docs-strategy at
-scripts/check-space-types-lockstep.py, together with its 26 hermetic assertions
+scripts/check-space-types-lockstep.py, together with its 34 hermetic assertions
 in scripts/test-check-space-types-lockstep.sh. Fix it there and re-copy; a fix
 made only here has no test covering it.
 """
@@ -156,6 +156,9 @@ def main():
     ap.add_argument("--tree", required=True)
     ap.add_argument("--policy", required=True)
     ap.add_argument("--commercial-home", default=None)
+    # Takes a REQUIRED value naming where D3c IS asserted. A bare
+    # skip would recreate the defect the comment below describes.
+    ap.add_argument("--carrier-elsewhere", default=None)
     args = ap.parse_args()
 
     pol = read_policy(Path(args.policy))
@@ -278,15 +281,32 @@ def main():
                         )
             # NOT opt-in. Without it the D3c carrier assertion does not run at
             # all, and a fully thinned artefact with no engine-side home is clean.
-            if not args.commercial_home:
+            #
+            # ⭐ ONE EXCEPTION, AND IT MUST NAME ITSELF. --commercial-home is a
+            # local path to the PRIVATE engine repo, so the copy of this gate
+            # vendored into the PUBLIC openinherit/standard can never supply it.
+            # --carrier-elsewhere declares that D3c is asserted by a checkout
+            # that CAN see the engine, and takes a required value saying which.
+            # The absence half above still runs here -- that is the leak
+            # direction, and it is answerable from the public tree alone.
+            if not args.commercial_home and not args.carrier_elsewhere:
                 cannot(
                     f"verdict {verdict} requires --commercial-home — without it "
                     f"the D3c carrier assertion does not run"
                 )
-            home = Path(args.commercial_home)
-            if not home.is_dir():
-                cannot(f"--commercial-home {home} is not a directory")
-            if True:
+            if not args.commercial_home:
+                where = str(args.carrier_elsewhere or "").strip()
+                if not where:
+                    cannot(
+                        "--carrier-elsewhere must NAME where D3c is asserted; "
+                        "an empty value is a silent skip"
+                    )
+                carrier_note = where
+            else:
+                carrier_note = None
+                home = Path(args.commercial_home)
+                if not home.is_dir():
+                    cannot(f"--commercial-home {home} is not a directory")
                 for f in commercial:
                     if not field_in_tree(home, f):
                         problems.append(
@@ -297,9 +317,14 @@ def main():
     if problems:
         refuse(problems)
 
+    tail = ""
+    if locals().get("carrier_note"):
+        # ⛔ A GREEN LINE MUST NOT READ AS "D3c PASSED". It did not run here.
+        tail = (f" — D3c NOT asserted here; the carrier assertion is "
+                f"{carrier_note}")
     print(
         f"space-types lockstep OK — verdict {verdict}, "
-        f"{len(types)} entries, {len(enum)} enum values"
+        f"{len(types)} entries, {len(enum)} enum values{tail}"
     )
     return 0
 

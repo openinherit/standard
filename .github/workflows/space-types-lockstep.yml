@@ -23,6 +23,18 @@ jobs:
 
       - name: spaceType enum vs reference-data/space-types.json
         run: |
+          # D3c -- that the removed content exists on the engine side --
+          # needs --commercial-home, a LOCAL PATH to the private engine
+          # repo. It cannot exist in a public checkout, so this run
+          # DECLARES where that assertion is made rather than skipping it
+          # silently. The gate requires the value to name a place, and
+          # prints 'D3c NOT asserted here' on success, so a green run here
+          # can never be read as a pass.
+          #
+          # The ABSENCE half -- no entry still carrying a commercial field,
+          # which is the leak direction and the one the moat boundary is
+          # about -- still runs, here, from this tree.
           python3 scripts/check-space-types-lockstep.py \
-            --tree . --policy scripts/data/space-types-policy.txt
+            --tree . --policy scripts/data/space-types-policy.txt \
+            --carrier-elsewhere "testatetech/docs-strategy .github/workflows/space-types-carrier.yml"
           echo "Space types lockstep: OK"

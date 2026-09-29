@@ -18,7 +18,7 @@ Single file with no local imports on purpose: it is vendored into the public
 repo openinherit/standard, where docs-strategy is not on the path.
 
 ⚠️ VENDORED COPY. The source of truth is testatetech/docs-strategy at
-scripts/check-space-types-lockstep.py, together with its 42 hermetic assertions
+scripts/check-space-types-lockstep.py, together with its 51 hermetic assertions
 in scripts/test-check-space-types-lockstep.sh. Fix it there and re-copy; a fix
 made only here has no test covering it.
 """
@@ -153,24 +153,102 @@ def extension_patterns(schema):
     return out
 
 
-def field_in_tree(directory, field):
-    """True if any carrier file under `directory` mentions `field` as a key.
+# A non-nested `{...}` region, and the `key: value` pairs inside one. Used only
+# when a carrier file is NOT JSON -- T21b's contract is that a TypeScript
+# engine-side home is a correct relocation, so a parser that handled JSON alone
+# would RED a correct one. (This file is vendored into a PUBLIC repo -- it names
+# no private repository, and the carrier is found by SHAPE, never by path.)
+_BLOCK = re.compile(r"\{[^{}]*\}")
+_PAIR = re.compile(
+    r"""(?P<k>"[^"]*"|'[^']*'|[A-Za-z_$][\w$]*)\s*:\s*"""
+    r"""(?P<v>"[^"]*"|'[^']*'|true|false|null|-?\d+(?:\.\d+)?)""",
+    re.VERBOSE,
+)
 
-    ⚠️ A FLOOR, not a proof. It answers "does the engine mention this key
-    anywhere", not "does the engine carry the relocated values, per id". A stub
-    satisfies it. The real per-id engine-side test is the plan's Task 7.
+
+def _unquote(tok):
+    if len(tok) >= 2 and tok[0] in "\"'" and tok[-1] == tok[0]:
+        return tok[1:-1]
+    return {"true": True, "false": False, "null": None}.get(tok, tok)
+
+
+def _rows_from_json(node, out):
+    """Collect every dict carrying a string `id`, at any depth."""
+    if isinstance(node, dict):
+        rid = node.get("id")
+        if isinstance(rid, str) and rid:
+            out.setdefault(rid, {}).update(node)
+        for v in node.values():
+            _rows_from_json(v, out)
+    elif isinstance(node, list):
+        for v in node:
+            _rows_from_json(v, out)
+
+
+def _rows_from_text(text, out):
+    for block in _BLOCK.findall(text):
+        pairs = {_unquote(m.group("k")): _unquote(m.group("v"))
+                 for m in _PAIR.finditer(block)}
+        rid = pairs.get("id")
+        if isinstance(rid, str) and rid:
+            out.setdefault(rid, {}).update(pairs)
+
+
+def carrier_rows(directory):
+    """`id` -> the merged key/value row the carrier tree holds for that id.
+
+    ⭐ THIS IS A JOIN, NOT A KEYWORD SEARCH, AND THAT IS THE WHOLE POINT. It
+    replaced `field_in_tree`, which returned True when ANY file under the tree
+    contained the string `"tier"`. Measured against the real public tree on
+    2026-09-29, that gate emitted byte-identical clean output for an engine
+    carrying all 101 relocated rows and for an engine carrying one four-line
+    stub with three nulls in it -- while being the only assertion standing
+    between a public deletion and the content being lost.
+
+    Rows are UNIONED across files: an engine keeping the walk order in one file
+    and the prompts in another has homed the content, and a gate demanding a
+    single file would refuse a correct relocation.
+
+    ⚠️ Block YAML is not extracted -- nothing here parses it, and adding a YAML
+    dependency to a script vendored into a public repo is not worth it for a
+    carrier that does not exist. The failure direction is safe: such a tree
+    yields NO rows and is REFUSED by name, not passed.
     """
-    needles = (f'"{field}"', f"'{field}'", f"{field}:")
-    for path in Path(directory).rglob("*"):
+    out = {}
+    for path in sorted(Path(directory).rglob("*")):
         if not path.is_file() or path.suffix not in CARRIER_SUFFIXES:
             continue
         try:
             text = path.read_text(errors="replace")
         except OSError:
             continue
-        if any(n in text for n in needles):
-            return True
-    return False
+        try:
+            _rows_from_json(json.loads(text), out)
+        except (ValueError, RecursionError):
+            _rows_from_text(text, out)
+    return out
+
+
+def carried(row, field):
+    """Present AND with something behind it.
+
+    ⛔ NOT a truthiness test. `urgencyFlag` is `false` on 98 of the real
+    carrier's 101 rows and `tier` is an integer, so `if row.get(f):` would
+    refuse the very artefact this assertion exists to protect. What does not
+    count is absent, null, or a string with only whitespace in it -- a key
+    written with nothing behind it being the cheapest way to green a gate that
+    asks only whether the key exists.
+    """
+    if field not in row:
+        return False
+    value = row[field]
+    if value is None:
+        return False
+    if isinstance(value, str) and not value.strip():
+        return False
+    if isinstance(value, (list, dict)) and not value:
+        return False
+    return True
 
 
 def main():
@@ -356,11 +434,36 @@ def main():
                 home = Path(args.commercial_home)
                 if not home.is_dir():
                     cannot(f"--commercial-home {home} is not a directory")
-                for f in commercial:
-                    if not field_in_tree(home, f):
+                rows = carrier_rows(home)
+                if not rows:
+                    problems.append(
+                        f"no per-id carrier row found under {home} — D3c is a join "
+                        f"on id, and a tree that merely mentions "
+                        f"{','.join(commercial)} homes nothing (D3c)"
+                    )
+                else:
+                    # Bounded. 101 unhomed ids is one defect, not 101, and a
+                    # refusal that scrolls off the log is a refusal nobody reads.
+                    misses = []
+                    for t in types:
+                        tid = t.get("id", "?")
+                        row = rows.get(tid)
+                        if row is None:
+                            misses.append(
+                                f"'{tid}' has no carrier row under {home} — "
+                                f"relocated content has no home (D3c)"
+                            )
+                            continue
+                        for f in commercial:
+                            if not carried(row, f):
+                                misses.append(
+                                    f"'{tid}' carrier row does not carry '{f}' "
+                                    f"— relocated content has no home (D3c)"
+                                )
+                    problems.extend(misses[:10])
+                    if len(misses) > 10:
                         problems.append(
-                            f"'{f}' removed from the open artefact and absent from {home} "
-                            f"— relocated content has no home (D3c)"
+                            f"… and {len(misses) - 10} further D3c carrier miss(es)"
                         )
 
     if problems:

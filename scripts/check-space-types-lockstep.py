@@ -18,7 +18,7 @@ Single file with no local imports on purpose: it is vendored into the public
 repo openinherit/standard, where docs-strategy is not on the path.
 
 ⚠️ VENDORED COPY. The source of truth is testatetech/docs-strategy at
-scripts/check-space-types-lockstep.py, together with its 51 hermetic assertions
+scripts/check-space-types-lockstep.py, together with its 54 hermetic assertions
 in scripts/test-check-space-types-lockstep.sh. Fix it there and re-copy; a fix
 made only here has no test covering it.
 """
@@ -153,23 +153,129 @@ def extension_patterns(schema):
     return out
 
 
-# A non-nested `{...}` region, and the `key: value` pairs inside one. Used only
-# when a carrier file is NOT JSON -- T21b's contract is that a TypeScript
-# engine-side home is a correct relocation, so a parser that handled JSON alone
-# would RED a correct one. (This file is vendored into a PUBLIC repo -- it names
-# no private repository, and the carrier is found by SHAPE, never by path.)
-_BLOCK = re.compile(r"\{[^{}]*\}")
-_PAIR = re.compile(
-    r"""(?P<k>"[^"]*"|'[^']*'|[A-Za-z_$][\w$]*)\s*:\s*"""
-    r"""(?P<v>"[^"]*"|'[^']*'|true|false|null|-?\d+(?:\.\d+)?)""",
-    re.VERBOSE,
-)
+# ── Extracting carrier rows from a file that is NOT JSON. T21b's contract is
+# that a TypeScript engine-side home is a correct relocation, so a parser that
+# handled JSON alone would RED a correct one. (This file is vendored into a
+# PUBLIC repo -- it names no private repository, and the carrier is found by
+# SHAPE, never by path.)
+#
+# ⚠️ THIS IS A BRACE WALKER, NOT A REGEX, AND THE REGEX IS WHY. The first cut
+# was `\{[^{}]*\}`, which cannot match a block containing a brace: one nested
+# `meta: {...}` deleted the whole row and the id was reported unhomed. Its value
+# grammar admitted only JSON scalars, so a backtick template literal or
+# `tier: Tier.ONE` -- both ordinary in the language this exists to support --
+# were dropped the same way. Every one of those is a FALSE RED on a correct
+# relocation, which is the failure that gets a gate switched off rather than
+# fixed.
 
 
-def _unquote(tok):
-    if len(tok) >= 2 and tok[0] in "\"'" and tok[-1] == tok[0]:
-        return tok[1:-1]
-    return {"true": True, "false": False, "null": None}.get(tok, tok)
+def _scan_objects(text):
+    """Yield `{key: raw-value-text}` for each object literal in `text`.
+
+    Depth-aware and string-aware: nested objects and arrays are skipped whole,
+    quotes (including backticks) are respected, so a brace or a comma inside a
+    string cannot end a value. Keys are read at the object's OWN depth only --
+    a `promptText` nested inside a row's `meta` is not that row's `promptText`.
+    """
+    quotes = "\"'`"
+    i, n = 0, len(text)
+    stack = []  # open objects: list of dicts being filled
+    key = None
+    while i < n:
+        c = text[i]
+        if c in quotes:  # a string at structural position: key, or a value
+            j = i + 1
+            while j < n and text[j] != c:
+                j += 2 if text[j] == "\\" else 1
+            token, i = text[i + 1:j], j + 1
+            if stack:
+                # `key :` vs a bare value -- look ahead past spaces for a colon.
+                k = i
+                while k < n and text[k] in " \t\r\n":
+                    k += 1
+                if k < n and text[k] == ":":
+                    key, i = token, k + 1
+                elif key is not None:
+                    stack[-1][key] = token
+                    key = None
+            continue
+        if c == "{":
+            stack.append({})
+            key = None
+            i += 1
+            continue
+        if c == "}":
+            if stack:
+                yield stack.pop()
+            key = None
+            i += 1
+            continue
+        if c == "[":
+            # ⛔ DO NOT SKIP THE BRACKETED RUN. The rows LIVE inside an array --
+            # `export const e = [{ id: … }]` -- so skipping it whole extracted
+            # nothing at all and reported every id unhomed. Record that the key
+            # has a list value and keep walking into it.
+            if stack and key is not None:
+                stack[-1][key] = "[…]"
+            key = None
+            i += 1
+            continue
+        if c == "]":
+            key = None
+            i += 1
+            continue
+        if stack and (c.isalnum() or c in "_$-."):
+            j = i
+            while j < n and (text[j].isalnum() or text[j] in "_$-."):
+                j += 1
+            token, i = text[i:j], j
+            if stack:
+                k = i
+                while k < n and text[k] in " \t\r\n":
+                    k += 1
+                if k < n and text[k] == ":":
+                    key, i = token, k + 1
+                elif key is not None:
+                    stack[-1][key] = token
+                    key = None
+            continue
+        if c == "," :
+            key = None
+        i += 1
+
+
+def _value_present(value):
+    """Present AND with something behind it.
+
+    ⛔ NOT a truthiness test. `urgencyFlag` is `false` on 98 of the real
+    carrier's 101 rows and `tier` is an integer, so `if value:` would refuse the
+    very artefact this assertion exists to protect. What does not count is
+    absent, null, or a string with only whitespace in it -- a key written with
+    nothing behind it being the cheapest way to green a gate that asks only
+    whether the key exists.
+    """
+    if value is None:
+        return False
+    if isinstance(value, str):
+        return value.strip() not in ("", "null", "undefined")
+    if isinstance(value, (list, dict)):
+        return bool(value)
+    return True
+
+
+def _merge(out, rid, pairs):
+    """Union a row into `out` WITHOUT letting an absent value clobber a real one.
+
+    ⛔ Last-file-wins is wrong here and it is not theoretical. Rows are unioned
+    across the whole tree and the ids are generic words (`loft`, `garage`,
+    `office`). An unrelated later-sorted file carrying `{"id": "garage"}` with a
+    null would overwrite what the real carrier homed, and the gate would refuse
+    the artefact because of a file that has nothing to do with it.
+    """
+    row = out.setdefault(rid, {})
+    for k, v in pairs.items():
+        if k not in row or not _value_present(row[k]):
+            row[k] = v
 
 
 def _rows_from_json(node, out):
@@ -177,7 +283,7 @@ def _rows_from_json(node, out):
     if isinstance(node, dict):
         rid = node.get("id")
         if isinstance(rid, str) and rid:
-            out.setdefault(rid, {}).update(node)
+            _merge(out, rid, node)
         for v in node.values():
             _rows_from_json(v, out)
     elif isinstance(node, list):
@@ -186,12 +292,10 @@ def _rows_from_json(node, out):
 
 
 def _rows_from_text(text, out):
-    for block in _BLOCK.findall(text):
-        pairs = {_unquote(m.group("k")): _unquote(m.group("v"))
-                 for m in _PAIR.finditer(block)}
+    for pairs in _scan_objects(text):
         rid = pairs.get("id")
-        if isinstance(rid, str) and rid:
-            out.setdefault(rid, {}).update(pairs)
+        if isinstance(rid, str) and rid and not rid.isdigit():
+            _merge(out, rid, pairs)
 
 
 def carrier_rows(directory):
@@ -203,16 +307,21 @@ def carrier_rows(directory):
     2026-09-29, that gate emitted byte-identical clean output for an engine
     carrying all 101 relocated rows and for an engine carrying one four-line
     stub with three nulls in it -- while being the only assertion standing
-    between a public deletion and the content being lost.
+    between a public deletion and the content being lost. Worse: with the real
+    carrier file DELETED it still passed `tier`, because five unrelated engine
+    files contain `tier:`.
 
     Rows are UNIONED across files: an engine keeping the walk order in one file
     and the prompts in another has homed the content, and a gate demanding a
     single file would refuse a correct relocation.
 
-    ⚠️ Block YAML is not extracted -- nothing here parses it, and adding a YAML
-    dependency to a script vendored into a public repo is not worth it for a
-    carrier that does not exist. The failure direction is safe: such a tree
-    yields NO rows and is REFUSED by name, not passed.
+    ⚠️ THE CONTRACT, stated because a miss message otherwise sends the next
+    session hunting an engine defect that is really a parser limit: a commercial
+    field must be a DIRECT SIBLING of `id` in the same object literal. A field
+    nested one level deeper is not that row's field. Block YAML is not extracted
+    at all -- nothing here parses it, and adding a YAML dependency to a script
+    vendored into a public repo is not worth it for a carrier that does not
+    exist; such a tree yields no rows and is REFUSED by name, not passed.
     """
     out = {}
     for path in sorted(Path(directory).rglob("*")):
@@ -230,25 +339,7 @@ def carrier_rows(directory):
 
 
 def carried(row, field):
-    """Present AND with something behind it.
-
-    ⛔ NOT a truthiness test. `urgencyFlag` is `false` on 98 of the real
-    carrier's 101 rows and `tier` is an integer, so `if row.get(f):` would
-    refuse the very artefact this assertion exists to protect. What does not
-    count is absent, null, or a string with only whitespace in it -- a key
-    written with nothing behind it being the cheapest way to green a gate that
-    asks only whether the key exists.
-    """
-    if field not in row:
-        return False
-    value = row[field]
-    if value is None:
-        return False
-    if isinstance(value, str) and not value.strip():
-        return False
-    if isinstance(value, (list, dict)) and not value:
-        return False
-    return True
+    return field in row and _value_present(row[field])
 
 
 def main():

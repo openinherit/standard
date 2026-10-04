@@ -2,7 +2,7 @@
 
 # INHERIT v2 Catalogue Schema
 
-Lightweight root schema for catalogue-only documents — living collectors cataloguing items without the full estate envelope. Assets, collections, valuations, and legacy contacts. Upgrade path: wrap in a full estate document (schema.json) when needed
+Entry point for catalogue-only documents — living collectors cataloguing items without the full estate envelope. Assets, collections, valuations, legacy contacts and allocation intent. This is the catalogue conformance profile of the INHERIT root: a document here that declares conformanceProfile 'catalogue' also conforms to schema.json as it stands, with nothing wrapped or moved. Do not wrap a catalogue inside an estate document — the estate profile carries assetInterests, legacyContacts and dealerInterests only inside applicationState, which is not part of the interchange standard. See proposal 0003
 
 Source: [`v3/catalogue.json`](../../v3/catalogue.json)
 
@@ -13,6 +13,7 @@ Schema `$id`: `https://openinherit.org/v3/catalogue.json`
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `$schema` | const `https://openinherit.org/v3/catalogue.json` | | Schema identifier — declares this as an INHERIT v3 catalogue document |
+| `conformanceProfile` | const `catalogue` | | Declares this document as the catalogue conformance profile of the INHERIT root (schema.json). With it, the same document — unchanged, unwrapped — also conforms to schema.json. Optional here so catalogue documents written before profiles existed stay valid against this schema |
 | `@context` | `string` (uri) | | JSON-LD context URI |
 | `schemaVersion` | `string` | | |
 | `exportedAt` | `string` (date-time) | | |

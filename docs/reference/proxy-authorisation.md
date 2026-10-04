@@ -14,11 +14,11 @@ Schema `$id`: `https://openinherit.org/v3/proxy-authorisation.json`
 | --- | --- | --- | --- |
 | `id` | `string` (uuid) | yes | Unique identifier for this proxy authorisation within the INHERIT document |
 | `delegateType` | one of `person`, `agent`, `organisation` | yes | The type of entity being delegated authority. Determines which identity fields are required |
-| `agentId` | `string` | | Identifier for the AI agent delegate. Required when delegateType is agent. Format is intentionally flexible to accommodate different agent identity schemes as they emerge |
+| `agentId` | `string` | when `delegateType` is `agent` | Identifier for the AI agent delegate. Required when delegateType is agent. Format is intentionally flexible to accommodate different agent identity schemes as they emerge |
 | `agentIdDisplay` | `string` | | Human-readable display name for the agent |
 | `agentCapabilities` | array of one of `read_catalogue`, `send_notifications`, `execute_sales`, `manage_communications`, `generate_reports`, `process_corrections`, `manage_dealer_offers`, `generate_legacy_letter` or `string` | | What the agent is permitted to do under this authorisation. The schema records the authorised capabilities; the application enforces whether they are exercised |
 | `authenticationMethod` | one of `api_key`, `oauth_token`, `verifiable_credential`, `delegation_protocol`, `mcp_session`, `human_verified` | | How the delegate proves its identity when exercising this authorisation |
-| `proxyPersonId` | `string` (uuid) | | Reference to the Person.id of the authorised proxy. Required when delegateType is person or organisation |
+| `proxyPersonId` | `string` (uuid) | when `delegateType` is `person` or `organisation` | Reference to the Person.id of the authorised proxy. Required when delegateType is person or organisation |
 | `proxyPersonIdDisplay` | `string` | | Human-readable display name for the referenced proxy person |
 | `testatorPersonId` | `string` (uuid) | yes | Reference to the Person.id of the testator granting the authorisation |
 | `testatorPersonIdDisplay` | `string` | | Human-readable display name for the referenced testator person |

@@ -12,10 +12,11 @@ Schema `$id`: `https://openinherit.org/v3/schema.json`
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `$schema` | const `https://openinherit.org/v3/schema.json` | | Schema identifier — declares this as an INHERIT v3 document. Standard JSON Schema keyword |
+| `$schema` | one of `https://openinherit.org/v3/schema.json`, `https://openinherit.org/v3/catalogue.json` | | Schema identifier — declares this as an INHERIT v3 document. Standard JSON Schema keyword. An estate-profile document carries the root URL; a catalogue-profile document may carry either the root URL or the catalogue URL, so a catalogue document written against catalogue.json conforms to the root unchanged |
 | `@context` | `string` (uri) or `object` | | JSON-LD context URI. When present, makes this document self-describing linked data |
 | `@type` | `string` | | JSON-LD type, e.g. InheritDocument |
-| `schemaVersion` | `string` | yes | Semver version of the INHERIT schema this document was created against. Enables consumers to detect compatibility and handle graceful degradation |
+| `conformanceProfile` | one of `estate`, `catalogue` | | The conformance profile this document claims. 'estate' (the default when absent) is the full estate document: estate, people and schemaVersion are required. 'catalogue' is a catalogue-only document — a living owner cataloguing items with no estate envelope: the document must satisfy catalogue.json in full, so assets is required, estate-only members are not allowed, and the catalogue's own members (assetInterests, legacyContacts, dealerInterests, giftListSettings, legacyLetter, completeness, recommendedActions) are carried at the root rather than in applicationState. A profile is a declared subset of this one root, not a second root |
+| `schemaVersion` | `string` | yes, unless `conformanceProfile` is `catalogue` | Semver version of the INHERIT schema this document was created against. Enables consumers to detect compatibility and handle graceful degradation |
 | `exportedAt` | `string` (date-time) | | Timestamp when this document was exported from the producing system |
 | `exportedBy` | `object` | | The person who exported or prepared this document |
 | `generator` | `object` | | The software that generated this INHERIT document |
@@ -23,8 +24,8 @@ Schema `$id`: `https://openinherit.org/v3/schema.json`
 | `versionedAt` | `string` (date-time) | | When this version of the document was created. Courts and regulators care about when changes were made, not just which version number |
 | `previousVersionId` | `string` or `null` (uuid) | | Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version |
 | `changeDescription` | `string` | | Human-readable summary of what changed in this version. Like a commit message for the document |
-| `estate` | [Estate](estate.md) | yes | The single estate record for this document |
-| `people` | array of [Person](person.md) | yes | All people involved in the estate — testator, beneficiaries, executors, witnesses, guardians, etc |
+| `estate` | [Estate](estate.md) | yes, unless `conformanceProfile` is `catalogue` | The single estate record for this document |
+| `people` | array of [Person](person.md) | yes, unless `conformanceProfile` is `catalogue` | All people involved in the estate — testator, beneficiaries, executors, witnesses, guardians, etc |
 | `kinships` | array of [Kinship](kinship.md) | | Familial bonds between people in the estate. Essential for intestacy calculations |
 | `relationships` | array of [Relationship](relationship.md) | | Spousal and partnership relationships. Determines marital property rights and surviving spouse claims |
 | `properties` | array of [Property](property.md) | | Real estate owned or partly owned by the testator |
@@ -68,6 +69,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `level` | one of `level_1`, `level_2`, `level_3` | yes | Conformance level achieved |
+| `profile` | one of `estate`, `catalogue` | | The conformance profile the document was validated at. Must match the document's conformanceProfile ('estate' when that is absent). Absent on certificates written before profiles existed, which are read as 'estate' |
 | `validatedAt` | `string` (date-time) | yes | When the validation was performed |
 | `validatedBy` | `string` | yes | Name of the tool that performed the validation |
 | `schemaVersion` | `string` | yes | INHERIT schema version this document was validated against |

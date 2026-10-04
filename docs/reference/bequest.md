@@ -17,7 +17,7 @@ Schema `$id`: `https://openinherit.org/v3/bequest.json`
 | `beneficiaryId` | `string` (uuid) | | Reference to the Person.id of the individual beneficiary |
 | `beneficiaryIdDisplay` | `string` | | Human-readable display name for the referenced beneficiary |
 | `beneficiaryOrganisation` | [BeneficiaryOrganisation](#def-BeneficiaryOrganisation) | | Organisation receiving this bequest, if not an individual |
-| `classDefinition` | `string` | | Natural-language definition of the beneficiary class. Required for class bequests. Must be precise enough for executors to identify all members |
+| `classDefinition` | `string` | when `bequestType` is `class` | Natural-language definition of the beneficiary class. Required for class bequests. Must be precise enough for executors to identify all members |
 | `lifeInterest` | [LifeInterest](#def-LifeInterest) | | Life interest details, required when type is 'life_interest' |
 | `amount` | [Money](common/money.md) | | Cash amount for pecuniary and demonstrative bequests, in minor currency units |
 | `sharePercentage` | `number` | | Percentage share of the residuary estate or a specified fund |

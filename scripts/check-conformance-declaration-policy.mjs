@@ -27,21 +27,38 @@ import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const DOCUMENT_ROOTS = ['estate', 'catalogue'];
+
+// Everything that can stop the gate from answering exits 2, never 1: a 1 must
+// always come with findings.
+const cannotAnswer = (why) => {
+  console.error(`CANNOT ANSWER — ${why}`);
+  process.exit(2);
+};
 const arg = (name, fallback) => {
   const i = process.argv.indexOf(name);
-  return i > -1 ? resolve(process.argv[i + 1]) : fallback;
+  if (i === -1) return fallback;
+  const value = process.argv[i + 1];
+  if (!value || value.startsWith('--')) cannotAnswer(`${name} needs a path`);
+  return resolve(value);
 };
 const schemaPath = arg('--schema', join(ROOT, 'v3/conformance-declaration.json'));
 const policyPath = arg('--policy', join(ROOT, 'docs/policies/conformance-declaration.md'));
-const DOCUMENT_ROOTS = ['estate', 'catalogue'];
 
-let schema, policy;
+let schema, policy, ajv, validate;
 try {
   schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
   policy = readFileSync(policyPath, 'utf8');
+  ajv = new Ajv({ allErrors: true, strict: false, validateFormats: true });
+  addFormats(ajv);
+  const commonDir = join(ROOT, 'v3/common');
+  for (const f of readdirSync(commonDir).filter((f) => f.endsWith('.json'))) {
+    const s = JSON.parse(readFileSync(join(commonDir, f), 'utf8'));
+    if (s.$id) ajv.addSchema(s);
+  }
+  validate = ajv.compile(schema);
 } catch (e) {
-  console.error(`CANNOT ANSWER — ${e.message}`);
-  process.exit(2);
+  cannotAnswer(e.message);
 }
 
 const findings = [];
@@ -63,19 +80,12 @@ for (const value of rootEnum) {
 
 // 4. Points at the schema that exists
 if (!policy.includes(schema.$id)) findings.push(`policy: does not cite the schema $id ${schema.$id}`);
-for (const m of policy.matchAll(/(?:openinherit\.org\/|\s|")(v[12]\/[\w./-]+\.json)/g)) {
+// Any v1/v2 path segment: a URL, a bare path, a `code` span or a [link](target)
+for (const m of policy.matchAll(/(?<![\w-])(v[12]\/[\w./-]*)/g)) {
   findings.push(`policy: cites removed path ${m[1]}`);
 }
 
 // 5. Every example declaration validates
-const ajv = new Ajv({ allErrors: true, strict: false, validateFormats: true });
-addFormats(ajv);
-const commonDir = join(ROOT, 'v3/common');
-for (const f of readdirSync(commonDir).filter((f) => f.endsWith('.json'))) {
-  const s = JSON.parse(readFileSync(join(commonDir, f), 'utf8'));
-  if (s.$id) ajv.addSchema(s);
-}
-const validate = ajv.compile(schema);
 const examples = [...policy.matchAll(/```json\n([\s\S]*?)```/g)]
   .map((m) => m[1])
   .filter((block) => block.includes('"implementation"'));

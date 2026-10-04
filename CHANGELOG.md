@@ -39,7 +39,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   (`scripts/check-conformance-declaration-policy.mjs`, wired into the test workflow). It fails if
   `docs/policies/conformance-declaration.md` and the schema disagree on a field or a document
   root, if the policy cites a removed v1/v2 path, or if one of its example declarations fails
-  validation.
+  validation. `scripts/test-check-conformance-declaration-policy.mjs` covers 15 cases and shows
+  that each check can fail.
 - `liabilities[].securedAgainst` is now a checked reference. It had no referential-integrity
   rule at all: a mortgage could name an asset or property that did not exist and every check in
   the repository stayed green. Two rules, not one — `securedAgainst` is documented as

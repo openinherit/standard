@@ -150,16 +150,60 @@ function describe(node, ctx) {
   return '';
 }
 
+// The discriminator in an `if` of the form { required: [p], properties: { p: { const: v } } }
+// — how v3/schema.json gates the conformance profiles. Anything else returns null.
+function discriminator(cond) {
+  const req = cond?.required;
+  if (!Array.isArray(req) || req.length !== 1) return null;
+  const p = req[0];
+  const keys = Object.keys(cond).filter((k) => k !== '$comment');
+  const props = Object.keys(cond.properties ?? {});
+  if (keys.length !== 2 || props.length !== 1 || props[0] !== p) return null;
+  if (!('const' in cond.properties[p])) return null;
+  return { p, v: cond.properties[p].const };
+}
+
+// Required-cell text per property: plain `required` → "yes"; a discriminator-gated
+// `allOf` member's else.required → "yes, unless …", then.required → "when …". A
+// property gated by several values of one discriminator names all of them.
+function requirements(node) {
+  const out = new Map((node.required ?? []).map((n) => [n, 'yes']));
+  const gated = new Map(); // name → Map("then|p" / "else|p" → [values])
+  for (const member of node.allOf ?? []) {
+    const d = discriminator(member?.if);
+    if (!d) continue;
+    for (const branch of ['then', 'else']) {
+      for (const n of member[branch]?.required ?? []) {
+        if (out.has(n)) continue;
+        if (!gated.has(n)) gated.set(n, new Map());
+        const key = `${branch}|${d.p}`;
+        const values = gated.get(n).get(key) ?? [];
+        if (!values.includes(d.v)) values.push(d.v);
+        gated.get(n).set(key, values);
+      }
+    }
+  }
+  for (const [n, groups] of gated) {
+    const parts = [...groups].map(([key, values]) => {
+      const [branch, p] = key.split('|');
+      const when = `${code(p)} is ${values.map(code).join(' or ')}`;
+      return branch === 'else' ? `yes, unless ${when}` : `when ${when}`;
+    });
+    out.set(n, parts.join('; '));
+  }
+  return out;
+}
+
 function propertyTable(node, ctx) {
   const props = node.properties ?? {};
   const names = Object.keys(props);
   if (!names.length) return '';
-  const required = new Set(node.required ?? []);
+  const required = requirements(node);
   const lines = [
     '| Property | Type | Required | Description |',
     '| --- | --- | --- | --- |',
     ...names.map((n) =>
-      row([code(n), typeOf(props[n], ctx), required.has(n) ? 'yes' : '', cell(describe(props[n], ctx))]),
+      row([code(n), typeOf(props[n], ctx), required.get(n) ?? '', cell(describe(props[n], ctx))]),
     ),
   ];
   return lines.join('\n') + '\n';

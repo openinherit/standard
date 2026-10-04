@@ -1,5 +1,5 @@
 ---
-github_issue: https://github.com/openinherit/standard/pulls?q=head%3Aclaude%2Fcatalogue-conformance-profile
+github_issue: https://github.com/openinherit/standard/pull/45
 ---
 
 # Proposal 0003: Catalogue-only is a conformance profile of the one root, not a second root

@@ -43,7 +43,13 @@ while IFS= read -r f; do RESOLVE+=(--resolve "$f"); done < <(find v3 -name '*.js
 # a hand list is how the room-gap fixture was skipped for a release.
 FIXTURES=()
 while IFS= read -r f; do
-  if jq -e --arg u "$CATALOGUE_URL" '(."$schema" == $u) or (.conformanceProfile == "catalogue")' "$f" >/dev/null 2>&1; then
+  # A fixture that does not parse cannot be classified, so it cannot be
+  # silently left out of the population either.
+  if ! jq empty "$f" >/dev/null 2>&1; then
+    echo "CANNOT ANSWER: $f is not valid JSON" >&2
+    exit 2
+  fi
+  if jq -e --arg u "$CATALOGUE_URL" '(."$schema" == $u) or (.conformanceProfile == "catalogue")' "$f" >/dev/null; then
     FIXTURES+=("$f")
   fi
 done < <(find examples/fixtures packages/conformance/catalogue/valid -name '*.json' | sort)

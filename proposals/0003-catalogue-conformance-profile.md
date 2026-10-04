@@ -8,15 +8,16 @@ github_issue: https://github.com/openinherit/standard/pulls?q=head%3Aclaude%2Fca
 change it describes. Merging that pull request is acceptance; closing it is rejection.
 **Author:** Testate Technologies
 **Date:** 2026-10-04
-**Change class:** additive — a strict relaxation of `v3/schema.json`. Every document that validates
-today still validates, and is read exactly as before.
+**Change class:** additive. Every document that validates today still validates, and is read
+exactly as before. The root newly accepts two optional declarations, `conformanceProfile` and
+`conformance.profile`, and catalogue documents that make the declaration.
 
 ## Summary
 
 Add `conformanceProfile` (`estate` | `catalogue`, default `estate`) to the root `v3/schema.json`. A
 document that declares `conformanceProfile: "catalogue"` conforms to the root **without an estate
-envelope**: `assets` is required, `estate` is not allowed, and the catalogue's own members are
-carried at the root. `v3/catalogue.json` stays as the catalogue entry point and accepts the same
+envelope**. For such a document the root applies `v3/catalogue.json` in full: that schema *is* the
+catalogue profile. `v3/catalogue.json` stays as the profile's entry point and accepts the same
 declaration, so one unchanged document conforms to both.
 
 ## Motivation
@@ -60,18 +61,42 @@ catalogues had no truthful way to say it conforms to *INHERIT*, rather than to a
 }
 ```
 
-The root's `required` list moves into an `if`/`then`/`else` on that member (first entry of the
-root `allOf`):
+The root's `required` list moves into an `if`/`then`/`else` on that member, which is the first
+entry of the root `allOf`:
+
+```jsonc
+{
+  "if":   { "required": [ "conformanceProfile" ],
+            "properties": { "conformanceProfile": { "const": "catalogue" } } },
+  "then": { "$ref": "catalogue.json" },
+  "else": { "required": [ "schemaVersion", "estate", "people" ],
+            "properties": { "$schema": { "const": "https://openinherit.org/v3/schema.json" },
+                            "conformance": { "properties": { "profile": { "const": "estate" } } },
+                            "assets": { "maxItems": 2000 }, "assetCollections": { "maxItems": 200 },
+                            "valuations": { "maxItems": 5000 }, "wishes": { "maxItems": 100 },
+                            "importSources": { "maxItems": 50 }, "insurancePolicies": { "maxItems": 50 } } }
+}
+```
 
 | | `conformanceProfile: "catalogue"` | anything else, or absent (`estate`) |
 |---|---|---|
-| required | `assets` | `schemaVersion`, `estate`, `people` — as today |
-| `estate` | **not allowed** — declare the estate profile instead | required |
-| `$schema` | the root URL **or** `https://openinherit.org/v3/catalogue.json` | the root URL only — as today |
-| catalogue members at the root | the seven above, each by `$ref` to `catalogue.json#/properties/…` | not allowed — as today |
-| `conformance.profile` (if present) | must be `catalogue` | must be `estate` |
+| applies | all of `catalogue.json`, plus the root's own member definitions | the root, as today |
+| required | `assets` | `schemaVersion`, `estate`, `people`, as today |
+| `estate`, `people`, `bequests` and the other estate-only members | **not allowed** (declare the estate profile instead) | as today |
+| `$schema`, if present | `https://openinherit.org/v3/catalogue.json` | the root URL only, as today |
+| the seven catalogue members | at the root, as defined in `catalogue.json` | not allowed at the root, as today |
+| array caps | the catalogue's, e.g. 10,000 `assets` | the root's, e.g. 2,000 `assets`, as today |
+| `conformance.profile`, if present | must be `catalogue` | must be `estate` |
 
-The catalogue members are referenced, not copied, so the two entry points cannot drift.
+**Why `$ref` the whole schema.** If the root only borrowed the seven catalogue members, the two
+entry points would still disagree everywhere else. Six root arrays have tighter `maxItems` caps
+than the catalogue's (`assets` 2,000 against 10,000). A catalogue of 2,001 items would then be
+valid against `catalogue.json` and refused by the root at the catalogue profile. Applying the whole
+schema makes the profile and the entry point one definition. Those six caps therefore move from the
+root's `properties` into the `else` branch, where they still bind every estate document exactly as
+before. Every other member the two schemas share is defined the same way, or more loosely at the
+root, so the root accepts every document `catalogue.json` accepts. That was measured by comparing
+each shared member's constraints with descriptions and examples ignored.
 
 ### The conformance certificate records the profile
 
@@ -81,9 +106,9 @@ are read as `estate`.
 
 ### `catalogue.json` stays, and points at the root
 
-`v3/catalogue.json` accepts `conformanceProfile` with `const: "catalogue"` (optional, so existing
-catalogue documents stay valid), constrains `conformance.profile` to `catalogue`, and its
-description withdraws the wrap-in-an-estate advice.
+`v3/catalogue.json` accepts `conformanceProfile` with `const: "catalogue"`. The member is optional,
+so existing catalogue documents stay valid. `catalogue.json` also constrains `conformance.profile`
+to `catalogue`, and its description withdraws the wrap-in-an-estate advice.
 
 ### Worked example
 
@@ -102,21 +127,38 @@ It then validates against `v3/schema.json` as well as `v3/catalogue.json`.
 
 ## Verification
 
-- `pnpm test` — 12 new cases in `tests/v3/schema/schema.test.json` and 3 in
-  `tests/v3/catalogue/catalogue.test.json`. Against the previous schema, 5 of them fail.
+- `pnpm test` adds 15 new cases to `tests/v3/schema/schema.test.json` and 3 to
+  `tests/v3/catalogue/catalogue.test.json`. Against the previous schema, every case that expects a
+  catalogue-profile document to be accepted fails. The cases include the array cap in both
+  directions: 201 collections pass at the catalogue profile and are refused at the estate profile.
 - `pnpm run test:catalogue-profile` (`scripts/check-catalogue-profile.sh`, run in
   `run-tests.yml`) finds every catalogue fixture by its own `$schema` or declared profile. It
   requires each one to declare the profile, carry no estate, and validate against both schemas. It
   also requires `v3/schema.json` to **refuse** the fixture once the declaration is stripped, which
-  proves the profile is what admits the document. It exits 1 on the fixtures before they declared
-  the profile, and 2 (never a pass) if it finds fewer than two catalogue fixtures.
+  proves the profile is what admits the document.
+  - It exits 1 on the fixtures before they declared the profile.
+  - It exits 1 when the root is edited to admit them without it.
+  - It exits 2, never a pass, on a fixture that does not parse or on fewer than two catalogue
+    fixtures.
 
 ## Backwards Compatibility
 
-Strict relaxation. A document without `conformanceProfile` is held to exactly the requirements the
-root has always had, including the root `$schema` URL and the refusal of root-level
-`assetInterests`. The only documents newly accepted by `v3/schema.json` are ones that declare the
-catalogue profile. `v3/catalogue.json` accepts everything it accepted before.
+Additive. A document without `conformanceProfile` is held to exactly the requirements the root has
+always had. That includes `schemaVersion`, `estate` and `people`, the root `$schema` URL, the array
+caps, and the refusal of root-level `assetInterests`. The root newly accepts only two kinds of
+document:
+
+- documents that declare `conformanceProfile` or `conformance.profile`, with either value;
+- catalogue documents that declare `conformanceProfile: "catalogue"`.
+
+`v3/catalogue.json` accepts everything it accepted before.
+
+`scripts/check-schema-compat.py` reports `assets` as newly required, because it counts every
+`required` inside a `then` as a demand. Here the `then` only selects documents carrying
+`conformanceProfile: "catalogue"`. The previous root refused all of those under
+`unevaluatedProperties: false`, so no previously valid document gains a requirement. All 82 root
+cases that existed before this change still pass unchanged. `scripts/schema-diff.sh` reports 0
+breaking changes.
 
 Consumers that read `required` from the root's top level will now find it inside `allOf`. Code
 generators reading the bundled schema may therefore show `estate` and `people` as optional on the
@@ -126,6 +168,10 @@ root type.
 
 - **Keep two roots and document the wrap.** Rejected. The wrap is where the loss happens, and
   documenting it does not stop it.
+- **Borrow only the seven catalogue members at the root.** This was the first draft, and review
+  rejected it. The root's tighter array caps would still refuse large catalogues, and estate-only
+  members would be allowed in a "catalogue" document. Either way, the two entry points would
+  disagree.
 - **Promote the seven members to the root for every document.** Rejected for now. It would give
   allocation intent two homes in an estate document (`assetInterests` at the root and in
   `applicationState`). Whether intent belongs at interchange level in the estate profile too is a

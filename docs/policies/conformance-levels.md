@@ -68,7 +68,7 @@ to be. INHERIT has one root, `v3/schema.json`, and two profiles of it, declared 
 | Profile | Declared by | Required | Use it for |
 |---|---|---|---|
 | `estate` | `conformanceProfile: "estate"`, or nothing at all | `schemaVersion`, `estate`, `people` | a full estate document |
-| `catalogue` | `conformanceProfile: "catalogue"` | `assets`. `estate` is not allowed | a catalogue of what a living person owns, with no estate envelope |
+| `catalogue` | `conformanceProfile: "catalogue"` | everything `v3/catalogue.json` requires (`assets`). Estate-only members are not allowed | a catalogue of what a living person owns, with no estate envelope |
 
 A catalogue-profile document carries `assetInterests`, `legacyContacts`, `dealerInterests`,
 `giftListSettings`, `legacyLetter`, `completeness` and `recommendedActions` **at the root**, the

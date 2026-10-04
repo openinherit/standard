@@ -7,7 +7,7 @@
   "type": "object",
   "allOf": [
     {
-      "$comment": "Conformance profiles (proposal 0003). The catalogue profile relaxes the estate requireds, forbids the estate envelope, and admits the catalogue members at the root by reference to catalogue.json, so the two entry points cannot drift apart. Any other value of conformanceProfile, or none, is the estate profile and keeps the requirements this root has always had.",
+      "$comment": "Conformance profiles (proposal 0003). A document declaring the catalogue profile must satisfy catalogue.json in full — that schema IS the profile, so the two entry points cannot drift apart, the catalogue members are evaluated at the root, and estate-only members (estate, people, bequests …) are refused. Otherwise the document is at the estate profile and keeps exactly the requirements this root has always had, including the array caps, which live in the else branch because catalogue.json allows larger arrays than the estate root does.",
       "if": {
         "required": [ "conformanceProfile" ],
         "properties": {
@@ -17,44 +17,29 @@
         }
       },
       "then": {
-        "not": {
-          "required": [ "estate" ]
-        },
-        "required": [ "assets" ],
-        "properties": {
-          "conformance": {
-            "properties": {
-              "profile": {
-                "const": "catalogue"
-              }
-            }
-          },
-          "legacyContacts": {
-            "$ref": "catalogue.json#/properties/legacyContacts"
-          },
-          "assetInterests": {
-            "$ref": "catalogue.json#/properties/assetInterests"
-          },
-          "dealerInterests": {
-            "$ref": "catalogue.json#/properties/dealerInterests"
-          },
-          "giftListSettings": {
-            "$ref": "catalogue.json#/properties/giftListSettings"
-          },
-          "legacyLetter": {
-            "$ref": "catalogue.json#/properties/legacyLetter"
-          },
-          "completeness": {
-            "$ref": "catalogue.json#/properties/completeness"
-          },
-          "recommendedActions": {
-            "$ref": "catalogue.json#/properties/recommendedActions"
-          }
-        }
+        "$ref": "catalogue.json"
       },
       "else": {
         "required": [ "schemaVersion", "estate", "people" ],
         "properties": {
+          "assets": {
+            "maxItems": 2000
+          },
+          "assetCollections": {
+            "maxItems": 200
+          },
+          "valuations": {
+            "maxItems": 5000
+          },
+          "wishes": {
+            "maxItems": 100
+          },
+          "importSources": {
+            "maxItems": 50
+          },
+          "insurancePolicies": {
+            "maxItems": 50
+          },
           "$schema": {
             "const": "https://openinherit.org/v3/schema.json"
           },
@@ -355,8 +340,8 @@
       "type": "string"
     },
     "conformanceProfile": {
-      "description": "The conformance profile this document claims. 'estate' (the default when absent) is the full estate document: estate, people and schemaVersion are required. 'catalogue' is a catalogue-only document — a living owner cataloguing items with no estate envelope: assets is required, an estate envelope is not allowed, and the catalogue's own members (assetInterests, legacyContacts, dealerInterests, giftListSettings, legacyLetter, completeness, recommendedActions) are carried at the root rather than in applicationState. A profile is a declared subset of this one root, not a second root",
-      "$comment": "Proposal 0003. The catalogue profile is a strict relaxation of the root: every document valid before this member existed is still valid, and is read as the estate profile.",
+      "description": "The conformance profile this document claims. 'estate' (the default when absent) is the full estate document: estate, people and schemaVersion are required. 'catalogue' is a catalogue-only document — a living owner cataloguing items with no estate envelope: the document must satisfy catalogue.json in full, so assets is required, estate-only members are not allowed, and the catalogue's own members (assetInterests, legacyContacts, dealerInterests, giftListSettings, legacyLetter, completeness, recommendedActions) are carried at the root rather than in applicationState. A profile is a declared subset of this one root, not a second root",
+      "$comment": "Proposal 0003. Additive: every document valid before this member existed is still valid, and is read as the estate profile.",
       "examples": [ "estate", "catalogue" ],
       "default": "estate",
       "enum": [ "estate", "catalogue" ]
@@ -506,7 +491,6 @@
     "assets": {
       "description": "Non-property assets — financial accounts, personal property, vehicles, digital assets, etc",
       "type": "array",
-      "maxItems": 2000,
       "items": {
         "$ref": "asset.json"
       }
@@ -514,7 +498,6 @@
     "assetCollections": {
       "description": "Named groups of related assets — collections (model railways, art, wine, etc.) that have collective significance and value",
       "type": "array",
-      "maxItems": 200,
       "items": {
         "$ref": "asset-collection.json"
       }
@@ -562,7 +545,6 @@
     "wishes": {
       "description": "Non-binding (or culturally binding) wishes — funeral, letters, pet care, digital estate",
       "type": "array",
-      "maxItems": 100,
       "items": {
         "$ref": "wish.json"
       }
@@ -603,7 +585,6 @@
     "valuations": {
       "description": "Valuations of assets, properties, and collections. Multiple valuations per entity are supported — owner estimates, professional valuations, AI estimates, dealer offers",
       "type": "array",
-      "maxItems": 5000,
       "items": {
         "$ref": "valuation.json"
       }
@@ -657,7 +638,6 @@
     "importSources": {
       "description": "Systems from which data was imported into this document. Enables audit trail and source tracking",
       "type": "array",
-      "maxItems": 50,
       "items": {
         "$ref": "#/$defs/ImportSource"
       }
@@ -715,7 +695,6 @@
     "insurancePolicies": {
       "description": "Insurance policies associated with the estate — life, home, health, motor, travel, pet, and professional indemnity",
       "type": "array",
-      "maxItems": 50,
       "items": {
         "$ref": "insurance-policy.json"
       }

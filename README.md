@@ -9,6 +9,12 @@ assets, beneficiaries, and the relationships between them.
 This repository is the public home of the standard. It is published under the
 Apache License 2.0.
 
+## Get started
+
+[`QUICKSTART.md`](QUICKSTART.md) takes you from a clone to a validated document
+and a derived figure in three steps. The [schema reference](docs/reference/README.md)
+has one generated page per schema.
+
 ## What's here
 
 - `v3/` — the JSON Schema 2020-12 entity schemas and jurisdiction extensions.
@@ -17,7 +23,8 @@ Apache License 2.0.
 - `openapi/` — the fully dereferenced OpenAPI description.
 - `examples/` — runnable examples and JSON fixtures.
 - `reference-data/` — enum descriptions and agent task definitions.
-- `docs/` — implementer guides, policies, integration notes, and proposals.
+- `docs/` — implementer guides, policies, integration notes, and proposals;
+  `docs/reference/` is generated from `v3/` (`pnpm run docs:reference`).
 - `llms.txt` — a compact machine-readable entry point for AI agents.
 
 ## Install

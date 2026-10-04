@@ -1,0 +1,79 @@
+name: Adopter docs
+
+# QUICKSTART.md and docs/reference/ are the first two things an adopter reads,
+# and both rot silently: a schema changes and the reference describes the old
+# one, a script's output changes and the quickstart shows a number that is no
+# longer printed. Prose cannot notice that, so this job runs the quickstart
+# and regenerates the reference, and goes red on any difference.
+#
+# Exit 2 from either script means "cannot answer" (nothing found to check) and
+# fails the job like any other non-zero exit -- it is never a pass.
+#
+# Links in both are checked by check-links.yml, which already covers **/*.md.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'v3/**'
+      - 'QUICKSTART.md'
+      - 'docs/reference/**'
+      - 'examples/fixtures/**'
+      - 'packages/conformance/estate/**'
+      - 'scripts/generate-reference-docs.mjs'
+      - 'scripts/test-reference-docs.mjs'
+      - 'scripts/test-quickstart.mjs'
+      - 'scripts/test-quickstart-runner.mjs'
+      - 'scripts/validate-net-equity.mjs'
+      - 'scripts/validate-refs.mjs'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'packages/*/package.json'
+      - '.github/workflows/adopter-docs.yml'
+  pull_request:
+    paths:
+      - 'v3/**'
+      - 'QUICKSTART.md'
+      - 'docs/reference/**'
+      - 'examples/fixtures/**'
+      - 'packages/conformance/estate/**'
+      - 'scripts/generate-reference-docs.mjs'
+      - 'scripts/test-reference-docs.mjs'
+      - 'scripts/test-quickstart.mjs'
+      - 'scripts/test-quickstart-runner.mjs'
+      - 'scripts/validate-net-equity.mjs'
+      - 'scripts/validate-refs.mjs'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'packages/*/package.json'
+      - '.github/workflows/adopter-docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  adopter-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v5
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: The gates themselves can still go red
+        run: pnpm run test:adopter-docs
+
+      - name: Generated reference matches v3/
+        run: pnpm run docs:reference:check
+
+      - name: QUICKSTART.md runs as written
+        run: pnpm run test:quickstart

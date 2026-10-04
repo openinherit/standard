@@ -24,7 +24,11 @@
  * Only entities that STATE a figure are checked. The fields are optional and
  * this script never invents one.
  *
- * Usage: node scripts/validate-net-equity.mjs <inherit-document.json>
+ * Usage: node scripts/validate-net-equity.mjs [--show] <inherit-document.json>
+ *
+ *   --show  also print every derived figure (one `derived` line per entity
+ *           with a value, plus the estate total) — the adopter quickstart's
+ *           "run one derivation" step. Checking and exit codes are unchanged.
  *
  * Exit codes:
  *   0 — every stated figure matches its derivation
@@ -39,12 +43,16 @@ const RED = '\x1b[31m';
 const GREEN = '\x1b[32m';
 const NC = '\x1b[0m';
 
-if (process.argv.length < 3) {
-  console.error('Usage: node scripts/validate-net-equity.mjs <inherit-document.json>');
+const args = process.argv.slice(2);
+const SHOW = args.includes('--show');
+const paths = args.filter((a) => a !== '--show');
+
+if (paths.length !== 1) {
+  console.error('Usage: node scripts/validate-net-equity.mjs [--show] <inherit-document.json>');
   process.exit(2);
 }
 
-const filePath = resolve(process.argv[2]);
+const filePath = resolve(paths[0]);
 let doc;
 try {
   doc = JSON.parse(readFileSync(filePath, 'utf-8'));
@@ -73,13 +81,23 @@ const activeChargesAgainst = (entityId) =>
     .filter((l) => l.securedAgainst === entityId && l.chargeStatus === 'active')
     .reduce((sum, l) => sum + (l.settlementAmount?.amount ?? l.amount?.amount ?? 0), 0);
 
+function show(where, field, amount, currency, workings) {
+  if (SHOW) console.log(`  derived  ${where}: ${field} = ${amount} ${currency}  (${workings})`);
+}
+
 function checkEntity(kind, index, entity) {
   const stated = entity.netEquity;
   const statedFlag = entity.inNegativeEquity;
-  if (stated === undefined && statedFlag === undefined) return;
-
   const value = valueOf(entity);
   const where = `${kind}[${index}] ${entity.id ?? '(no id)'}`;
+
+  if (SHOW && value !== null) {
+    const charges = activeChargesAgainst(entity.id);
+    show(where, 'netEquity', Math.max(0, value.amount - charges), value.currency,
+      `value ${value.amount} - active charges ${charges}, floored at 0`);
+  }
+
+  if (stated === undefined && statedFlag === undefined) return;
 
   if (value === null) {
     report('NET_EQUITY_UNDERIVABLE', where,
@@ -136,6 +154,8 @@ if (statedEstate !== undefined) {
     const expected =
       netted.reduce((s, e) => s + e.netEquity.amount, 0) -
       unsecured.reduce((s, l) => s + (l.amount?.amount ?? 0), 0);
+    show('estate', 'netEstateEquity', expected, statedEstate.currency,
+      `sum of ${netted.length} netted entities minus ${unsecured.length} unsecured liabilities`);
     if (statedEstate.amount !== expected) {
       report('NET_ESTATE_EQUITY_MISMATCH', 'estate',
         `netEstateEquity states ${statedEstate.amount}, derivation gives ${expected} ` +

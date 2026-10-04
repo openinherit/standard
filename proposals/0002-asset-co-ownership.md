@@ -100,6 +100,14 @@ Two consequential corrections ride with it:
 | Nothing v1 could say is lost | the v1 completeness floor gate | deleting or narrowing either category declaration |
 | `packages/schema/v3` mirrors `v3` | `diff -r v3/ packages/schema/v3/` (Staleness Check) | editing one tree only |
 
+### A note on measuring this
+
+A grep for quoted field names such as `"owner"`, `"ownership"` or `"coOwner"` returns **0** for
+`asset.json` both before and after this change, because none of those strings is the name v1 uses.
+The field is `"coOwnership"`, and the person reference inside it is `"coOwnerPersonIds"`. Adding those
+two names to the same grep returns 0 before and 2 after. Parsing the schema gives the reliable answer:
+`properties.coOwnership` is absent from `asset.json` before this change and present after it.
+
 ## Backwards compatibility
 
 Additive. Every document valid under v6.6.0 stays valid: the new property is optional, and the

@@ -43,3 +43,10 @@ jobs:
       # must make the root refuse it. Exit 2 (cannot answer) fails the step.
       - name: Catalogue fixtures conform to the root at the catalogue profile
         run: pnpm run test:catalogue-profile
+
+      # The policy is what an implementer reads to write a declaration. This
+      # fails if the policy and v3/conformance-declaration.json disagree on a
+      # field or a document root, if the policy cites a removed v1/v2 path, or
+      # if one of its examples would not validate.
+      - name: Conformance-declaration policy matches its schema
+        run: pnpm run test:conformance-declaration-policy

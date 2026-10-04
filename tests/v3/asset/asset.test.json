@@ -1990,6 +1990,108 @@
         "netEquity": { "amount": -5000, "currency": "GBP" }
       },
       "valid": false
+    },
+    {
+      "description": "valid — co-owned art: a painting held as joint tenants with a spouse",
+      "data": {
+        "id": "8a1d4c6e-2f3b-4d5a-9e7c-1b2c3d4e5f01",
+        "name": "Oil on canvas, harbour scene",
+        "category": "art",
+        "coOwnership": {
+          "coOwnerPersonIds": [
+            "5f0c2a1e-7b3d-4e8a-9c21-0d4b6e8f1a23"
+          ],
+          "ownershipType": "joint_tenants",
+          "ownershipPercentage": 50
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — co-owned jewellery_watches: a watch held as tenants in common, share recorded",
+      "data": {
+        "id": "8a1d4c6e-2f3b-4d5a-9e7c-1b2c3d4e5f02",
+        "name": "Steel wristwatch",
+        "category": "jewellery_watches",
+        "coOwnership": {
+          "coOwnerPersonIds": [
+            "5f0c2a1e-7b3d-4e8a-9c21-0d4b6e8f1a23"
+          ],
+          "ownershipType": "tenants_in_common",
+          "ownershipPercentage": 25
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — co-owned vehicle: a car held jointly",
+      "data": {
+        "id": "8a1d4c6e-2f3b-4d5a-9e7c-1b2c3d4e5f03",
+        "name": "Family estate car",
+        "category": "vehicle",
+        "coOwnership": {
+          "coOwnerPersonIds": [
+            "5f0c2a1e-7b3d-4e8a-9c21-0d4b6e8f1a23"
+          ],
+          "ownershipType": "joint_tenants",
+          "ownershipPercentage": 50
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — co-owned digital asset, joint tenancy severed",
+      "data": {
+        "id": "8a1d4c6e-2f3b-4d5a-9e7c-1b2c3d4e5f04",
+        "name": "Shared photo library",
+        "category": "digital",
+        "coOwnership": {
+          "coOwnerPersonIds": [
+            "5f0c2a1e-7b3d-4e8a-9c21-0d4b6e8f1a23"
+          ],
+          "ownershipType": "tenants_in_common",
+          "severanceDate": "2024-06-15"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — co-owned art: ownershipType not in the coOwnership enum",
+      "data": {
+        "id": "8a1d4c6e-2f3b-4d5a-9e7c-1b2c3d4e5f05",
+        "name": "Bronze figure",
+        "category": "art",
+        "coOwnership": {
+          "ownershipType": "timeshare"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — co-owned collectibles: undeclared key inside coOwnership",
+      "data": {
+        "id": "8a1d4c6e-2f3b-4d5a-9e7c-1b2c3d4e5f06",
+        "name": "Stamp album",
+        "category": "collectibles",
+        "coOwnership": {
+          "coOwners": [
+            "Jane"
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — co-owned vehicle: ownershipPercentage above 100",
+      "data": {
+        "id": "8a1d4c6e-2f3b-4d5a-9e7c-1b2c3d4e5f07",
+        "name": "Motorcycle",
+        "category": "vehicle",
+        "coOwnership": {
+          "ownershipPercentage": 150
+        }
+      },
+      "valid": false
     }
   ]
 }

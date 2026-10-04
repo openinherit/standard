@@ -22,6 +22,12 @@ jobs:
       - name: Run test suite
         run: pnpm test
 
+      # coOwnership is declared on the core asset and on two categories; under
+      # allOf all of them apply, so they must stay identical. Also refuses a
+      # reference-data rule that names a coOwnership field no schema declares.
+      - name: Co-ownership declarations agree
+        run: pnpm run test:co-ownership
+
       # Level 2 — referential integrity. Nothing in CI ran this until now, so
       # every cross-reference rule in scripts/validate-refs.mjs was advisory:
       # deleting one left the build green.

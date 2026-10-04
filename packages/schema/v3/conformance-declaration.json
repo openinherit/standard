@@ -31,6 +31,11 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "maxLength": 20
     },
+    "root": {
+      "description": "Which INHERIT document root the declared conformance applies to. 'estate' is the full estate document (schema.json); 'catalogue' is the catalogue-only document (catalogue.json) used by living collectors without the estate envelope. Absent means 'estate', which is what every declaration made before this field existed claimed",
+      "enum": [ "estate", "catalogue" ],
+      "default": "estate"
+    },
     "conformanceLevel": {
       "description": "Overall conformance level achieved. The minimum across all declared entities",
       "enum": [ 1, 2, 3 ]
@@ -88,6 +93,24 @@
     }
   },
   "additionalProperties": false,
+  "if": {
+    "properties": {
+      "root": {
+        "const": "catalogue"
+      }
+    },
+    "required": [ "root" ]
+  },
+  "then": {
+    "properties": {
+      "entities": {
+        "description": "A catalogue document has no estate envelope, so a catalogue-root declaration cannot claim conformance for the estate entity",
+        "not": {
+          "required": [ "estate" ]
+        }
+      }
+    }
+  },
   "$defs": {
     "EntityConformance": {
       "description": "Conformance result for a single entity schema",

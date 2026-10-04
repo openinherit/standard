@@ -1,20 +1,13 @@
 ---
-title: "Co-ownership on every asset, not only financial and business ones"
-description: "Promote the existing coOwnership shape from two asset categories to the core Asset schema, so a jointly-owned painting, watch or vehicle can be expressed."
-version: "0.1"
-status: under-review
-date: 2026-10-04
-lastmod: 2026-10-04
-github_issue: https://github.com/openinherit/standard/pulls?q=head%3Aclaude%2Fasset-owner-edge
-author: "Testate Technologies"
-source: "docs/proposals/asset-co-ownership.md"
-change_class: additive
+github_issue: "set to the pull request that carries this proposal once it is opened"
 ---
 
-# Proposal: co-ownership on every asset
+# Proposal 0002: Co-ownership on every asset, not only financial and business ones
 
 **Status:** under-review — the pull request that carries this document also carries the schema
 change it describes. Merging that pull request is acceptance; closing it is rejection.
+**Author:** Testate Technologies
+**Date:** 2026-10-04
 **Change class:** additive. One optional property becomes available on categories that did not
 have it. No existing document becomes invalid, and no existing field changes meaning.
 

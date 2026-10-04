@@ -3367,6 +3367,324 @@
         ]
       },
       "valid": false
+    },
+    {
+      "description": "valid — catalogue profile: a catalogue-only document conforms to the root by declaring conformanceProfile, no estate envelope",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — catalogue profile: the root's own $schema URL is accepted too",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — catalogue profile carries allocation intent, legacy contacts, gift list and letter at the root, not in applicationState",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ],
+        "schemaVersion": "6.6.0",
+        "assetInterests": [
+          {
+            "id": "5b0a3f7e-2a9c-4d1e-8f3b-6c7d8e9f0a1b",
+            "rootDocumentId": "8e1d2c3b-4a5f-4e6d-9c8b-7a6f5e4d3c2b",
+            "assetId": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "personIdDisplay": "Paul Frith",
+            "interestLevel": "agreed",
+            "expressedByRole": "testator"
+          }
+        ],
+        "legacyContacts": [
+          {
+            "id": "10000001-0000-4000-b000-000000000001",
+            "name": "Paul Frith",
+            "relationship": "son",
+            "email": "paul.frith@example.com"
+          }
+        ],
+        "giftListSettings": {
+          "enabled": false
+        },
+        "legacyLetter": {
+          "version": 1,
+          "delivered": false
+        },
+        "dealerInterests": [],
+        "recommendedActions": [],
+        "conformance": {
+          "level": "level_1",
+          "validatedAt": "2026-10-04T09:00:00Z",
+          "validatedBy": "openinherit-cli",
+          "schemaVersion": "6.6.0",
+          "profile": "catalogue"
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — a catalogue-shaped document that does not declare the profile is held to the estate profile (estate + people required)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — catalogue profile requires assets",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — catalogue profile cannot carry an estate envelope (declare the estate profile instead)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ],
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — the conformance certificate's profile must agree with the document's",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ],
+        "schemaVersion": "6.6.0",
+        "assetInterests": [
+          {
+            "id": "5b0a3f7e-2a9c-4d1e-8f3b-6c7d8e9f0a1b",
+            "rootDocumentId": "8e1d2c3b-4a5f-4e6d-9c8b-7a6f5e4d3c2b",
+            "assetId": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "personIdDisplay": "Paul Frith",
+            "interestLevel": "agreed",
+            "expressedByRole": "testator"
+          }
+        ],
+        "legacyContacts": [
+          {
+            "id": "10000001-0000-4000-b000-000000000001",
+            "name": "Paul Frith",
+            "relationship": "son",
+            "email": "paul.frith@example.com"
+          }
+        ],
+        "giftListSettings": {
+          "enabled": false
+        },
+        "legacyLetter": {
+          "version": 1,
+          "delivered": false
+        },
+        "dealerInterests": [],
+        "recommendedActions": [],
+        "conformance": {
+          "level": "level_1",
+          "validatedAt": "2026-10-04T09:00:00Z",
+          "validatedBy": "openinherit-cli",
+          "schemaVersion": "6.6.0",
+          "profile": "estate"
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — unknown conformance profile",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "dealer",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — estate profile declared explicitly behaves as today",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "conformanceProfile": "estate"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — estate profile still refuses root-level assetInterests (they stay in applicationState there)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "assetInterests": [
+          {
+            "id": "5b0a3f7e-2a9c-4d1e-8f3b-6c7d8e9f0a1b",
+            "rootDocumentId": "8e1d2c3b-4a5f-4e6d-9c8b-7a6f5e4d3c2b",
+            "assetId": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "personIdDisplay": "Paul Frith",
+            "interestLevel": "agreed",
+            "expressedByRole": "testator"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — estate profile still requires the root $schema URL, not the catalogue's",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — estate certificate cannot claim the catalogue profile",
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "conformance": {
+          "level": "level_1",
+          "validatedAt": "2026-10-04T09:00:00Z",
+          "validatedBy": "x",
+          "schemaVersion": "6.6.0",
+          "profile": "catalogue"
+        }
+      },
+      "valid": false
     }
   ]
 }

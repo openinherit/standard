@@ -1066,6 +1066,58 @@
         ]
       },
       "valid": true
+    },
+    {
+      "description": "valid — a catalogue document may declare its conformance profile, so the same document conforms to the root",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — a catalogue document cannot declare the estate profile",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "estate",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — a catalogue certificate cannot claim the estate profile",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ],
+        "conformance": {
+          "level": "level_1",
+          "validatedAt": "2026-10-04T09:00:00Z",
+          "validatedBy": "openinherit-cli",
+          "schemaVersion": "6.6.0",
+          "profile": "estate"
+        }
+      },
+      "valid": false
     }
   ]
 }

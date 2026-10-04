@@ -1,5 +1,5 @@
 ---
-github_issue: "set to the pull request that carries this proposal once it is opened"
+github_issue: https://github.com/openinherit/standard/pull/43
 ---
 
 # Proposal 0002: Co-ownership on every asset, not only financial and business ones

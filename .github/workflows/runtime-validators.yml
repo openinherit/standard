@@ -1,0 +1,72 @@
+name: Runtime Validators
+
+# The generated Zod schemas (@openinherit/sdk/zod) and pydantic models
+# (openinherit.models) are translations of v3/. This workflow keeps them
+# current and keeps them honest:
+#   fresh   — regenerating from v3/ must reproduce the committed files exactly
+#   zod     — every tests/v3 corpus case, against the register
+#   pydantic — the same corpus and register, on the lowest supported pydantic
+#              and on the newest
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  fresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pnpm install --frozen-lockfile
+      - run: pip install -r packages/sdk-python/requirements-codegen.txt
+      - name: Generated validators match v3/
+        run: bash scripts/check-runtime-validators-fresh.sh
+
+  zod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build:sdk
+      - name: Ratchet logic
+        run: node --test scripts/test-runtime-validator-corpus.mjs
+      - name: Zod against the tests/v3 corpus
+        run: node scripts/test-runtime-validators.mjs
+
+  pydantic:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 2.11 is the floor in pyproject.toml: 2.8–2.10 refuse valid corpus
+        # documents with these models. "latest" catches the next break early.
+        pydantic: ["2.11.7", "latest"]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install the SDK
+        run: |
+          pip install ./packages/sdk-python pytest pyyaml
+          if [ "${{ matrix.pydantic }}" != "latest" ]; then
+            pip install "pydantic[email]==${{ matrix.pydantic }}"
+          fi
+          python -c "import pydantic; print('pydantic', pydantic.VERSION)"
+      - name: Python SDK tests, including the corpus
+        working-directory: packages/sdk-python
+        run: python -m pytest -q

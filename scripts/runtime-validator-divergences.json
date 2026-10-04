@@ -1,0 +1,1197 @@
+{
+  "$comment": "Every corpus case (tests/v3/**/*.test.json) on which a GENERATED runtime validator disagrees with the JSON Schema verdict. Read by scripts/test-runtime-validators.mjs (zod) and packages/sdk-python/tests/test_corpus.py (pydantic). The match is exact in both directions: a new disagreement fails the build, and so does an entry that no longer reproduces. This file may only shrink. false_reject means a VALID document is refused; every such entry needs a reason and the intended steady state is empty. false_accept means an INVALID document gets through, usually because the JSON Schema keyword has no equivalent in the generated code.",
+  "excluded_targets": [
+    {
+      "target": "v3/dialect.json",
+      "reason": "A meta-schema describing the INHERIT JSON Schema dialect, not a document type. It is not a component of the OpenAPI bundle, so no validator is generated for it."
+    },
+    {
+      "target": "v3/common/error-codes.json",
+      "reason": "The catalogue of validation error codes, not a document type. It is not a component of the OpenAPI bundle, so no validator is generated for it."
+    }
+  ],
+  "zod": {
+    "false_reject": [],
+    "false_accept": [
+      {
+        "case": "tests/v3/acknowledgement/acknowledgement.test.json::invalid — unevaluated property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/africa-customary/africa-customary.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/ai-provenance/ai-provenance.test.json::invalid — additional property not allowed (outside x-inherit-)",
+        "json_schema_keywords": [
+          "additionalProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/ai-provenance/ai-provenance.test.json::invalid — extension block is string not object",
+        "json_schema_keywords": [
+          "type"
+        ]
+      },
+      {
+        "case": "tests/v3/asset-interest/asset-interest.test.json::invalid — missing required personId",
+        "json_schema_keywords": [
+          "anyOf",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — fiduciary access with bad scope",
+        "json_schema_keywords": [
+          "anyOf",
+          "enum",
+          "if",
+          "pattern",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — gemologicalCertificate with invalid laboratory enum",
+        "json_schema_keywords": [
+          "anyOf",
+          "enum",
+          "if",
+          "pattern",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — netEquity with a negative amount",
+        "json_schema_keywords": [
+          "minimum"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — platform delegation with bad action",
+        "json_schema_keywords": [
+          "anyOf",
+          "enum",
+          "if",
+          "pattern",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — stolenArtCheck with unknown property",
+        "json_schema_keywords": [
+          "additionalProperties",
+          "if",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — vehicleCheck missing required retrievedAt",
+        "json_schema_keywords": [
+          "if",
+          "required",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — vehicleCheck with invalid writeOffCategory",
+        "json_schema_keywords": [
+          "anyOf",
+          "enum",
+          "if",
+          "pattern",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/attestation/attestation.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/australia-nz/australia-nz.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::invalid — bequest with both assetIds AND assetCollectionId (exclusivity violation)",
+        "json_schema_keywords": [
+          "not"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::invalid — class bequest missing classDefinition",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::invalid — debt_forgiveness without beneficiaryId or beneficiaryOrganisation",
+        "json_schema_keywords": [
+          "anyOf",
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::invalid — life_interest bequest missing lifeInterest",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::invalid — unknown property at root level (unevaluatedProperties false)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::invalid: bequest with old extensionType field",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::valid — specific bequest missing beneficiary (core type without beneficiary is invalid)",
+        "json_schema_keywords": [
+          "anyOf",
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/brazil/brazil.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/completeness/completeness.test.json::invalid — missing required score",
+        "json_schema_keywords": [
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/dealer-interest/dealer-interest.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/document/document.test.json::invalid — entityId present without entityType (dependentRequired)",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/document/document.test.json::invalid — entityType present without entityId (dependentRequired)",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/document/document.test.json::invalid — unknown property at root level (unevaluatedProperties false)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/estate/estate.test.json::invalid — companionEstateId present without companionLinkStatus (dependentRequired)",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/estate/estate.test.json::invalid — missing status",
+        "json_schema_keywords": [
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/estate/estate.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/estate/estate.test.json::invalid: estate with old extensionWillType field",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/eu-succession/eu-succession.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/executor/executor.test.json::invalid — grantReference present with grantDate but missing issuingCourt (dependentRequired)",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/executor/executor.test.json::invalid — grantReference present without grantDate and issuingCourt (dependentRequired)",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/executor/executor.test.json::invalid — missing required personId",
+        "json_schema_keywords": [
+          "anyOf",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/executor/executor.test.json::invalid — unknown additional property at root level (unevaluatedProperties false)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/guardian/guardian.test.json::invalid — unknown additional property at root level (unevaluatedProperties false)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/hindu-succession/hindu-succession.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/hong-kong/hong-kong.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/india/india.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/insurance-policy/insurance-policy.test.json::invalid — non-camelCase property name",
+        "json_schema_keywords": [
+          "pattern",
+          "propertyNames",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/insurance-policy/insurance-policy.test.json::invalid — unknown additional property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/ireland/ireland.test.json::invalid — empty object (minProperties: 1 requires at least one property)",
+        "json_schema_keywords": [
+          "minProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/ireland/ireland.test.json::invalid — unknown property at root",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/islamic-succession/islamic-succession.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/israel/israel.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/japan-extension/japan-extension.test.json::invalid — empty object violates minProperties: 1",
+        "json_schema_keywords": [
+          "minProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/japan-extension/japan-extension.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/japan/japan.test.json::invalid — empty object (minProperties: 1)",
+        "json_schema_keywords": [
+          "minProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/japan/japan.test.json::invalid — extensibility property with wrong name pattern",
+        "json_schema_keywords": [
+          "pattern",
+          "propertyNames",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/japan/japan.test.json::invalid — unknown root property (unevaluatedProperties: false)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/jewish-succession/jewish-succession.test.json::invalid — additionalProperties at top level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — aiProvenance at root level (must be inside provenance)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — bloodDegree on grandparent_grandchild (not applicable)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — bloodDegree on half_sibling (not applicable — type already implies half-blood)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — bloodDegree value not in enum",
+        "json_schema_keywords": [
+          "enum",
+          "if",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — lineage on parent_child_biological (not applicable)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — lineage on sibling (not applicable)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — lineage value not in enum",
+        "json_schema_keywords": [
+          "enum",
+          "if",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/latin-america/latin-america.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/liability/liability.test.json::invalid — chargeStatus without securedAgainst",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/liability/liability.test.json::invalid — settlementAmount without securedAgainst",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/liability/liability.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/lifetime-transfer/lifetime-transfer.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/nonprobate-transfer/nonprobate-transfer.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/notification/notification.test.json::invalid — unevaluated property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/organisation/organisation.test.json::invalid — unevaluated property rejected",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/person/person.test.json::invalid — extension block is a string (must be object)",
+        "json_schema_keywords": [
+          "type"
+        ]
+      },
+      {
+        "case": "tests/v3/person/person.test.json::invalid — phoneticReading with no properties (minProperties: 1)",
+        "json_schema_keywords": [
+          "minProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/person/person.test.json::invalid — roles with duplicate values (uniqueItems)",
+        "json_schema_keywords": [
+          "uniqueItems"
+        ]
+      },
+      {
+        "case": "tests/v3/pet/pet.test.json::invalid — unevaluated property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/property/property.test.json::invalid — netEquity with a negative amount",
+        "json_schema_keywords": [
+          "minimum"
+        ]
+      },
+      {
+        "case": "tests/v3/property/property.test.json::invalid — ownershipPercentage with more than 2 decimal places (multipleOf: 0.01)",
+        "json_schema_keywords": [
+          "multipleOf"
+        ]
+      },
+      {
+        "case": "tests/v3/proxy-authorisation/proxy-authorisation.test.json::invalid agent delegation — missing agentId",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/proxy-authorisation/proxy-authorisation.test.json::invalid person delegation — missing proxyPersonId",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/relationship/relationship.test.json::invalid — ketubah financialInstrument missing required ketubahDetails",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/relationship/relationship.test.json::invalid — mahr financialInstrument missing required maharDetails",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/relationship/relationship.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/schema/schema.test.json::invalid — notifications at root level (must be in applicationState)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/scotland/scotland.test.json::invalid — empty object (minProperties: 1 requires at least one property)",
+        "json_schema_keywords": [
+          "minProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/scotland/scotland.test.json::invalid — unknown property at root",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/singapore-malaysia/singapore-malaysia.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/space/space.test.json::invalid — an off-site space may omit propertyId but not carry an unevaluated property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/space/space.test.json::invalid — missing required propertyId",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/space/space.test.json::invalid — unevaluated property rejected",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/space/space.test.json::invalid — x-inherit- space type still requires propertyId (extensions are not off-site)",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/subscription/subscription.test.json::invalid — unevaluated property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/switzerland/switzerland.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/trust/trust.test.json::invalid — unknown additional property at root level (unevaluatedProperties: false)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/uae/uae.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/uk-england-wales/uk-england-wales.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/us-estate/us-estate.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/wish/wish.test.json::invalid — unknown root property rejected",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      }
+    ]
+  },
+  "pydantic": {
+    "false_reject": [],
+    "false_accept": [
+      {
+        "case": "tests/v3/acknowledgement/acknowledgement.test.json::invalid — unevaluated property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/africa-customary/africa-customary.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/ai-provenance/ai-provenance.test.json::invalid — additional property not allowed (outside x-inherit-)",
+        "json_schema_keywords": [
+          "additionalProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/ai-provenance/ai-provenance.test.json::invalid — extension block is string not object",
+        "json_schema_keywords": [
+          "type"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — fiduciary access with bad scope",
+        "json_schema_keywords": [
+          "anyOf",
+          "enum",
+          "if",
+          "pattern",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — gemologicalCertificate with invalid laboratory enum",
+        "json_schema_keywords": [
+          "anyOf",
+          "enum",
+          "if",
+          "pattern",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — platform delegation with bad action",
+        "json_schema_keywords": [
+          "anyOf",
+          "enum",
+          "if",
+          "pattern",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — stolenArtCheck with unknown property",
+        "json_schema_keywords": [
+          "additionalProperties",
+          "if",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — vehicleCheck missing required retrievedAt",
+        "json_schema_keywords": [
+          "if",
+          "required",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/asset/asset.test.json::invalid — vehicleCheck with invalid writeOffCategory",
+        "json_schema_keywords": [
+          "anyOf",
+          "enum",
+          "if",
+          "pattern",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/attestation/attestation.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/australia-nz/australia-nz.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::invalid — bequest with both assetIds AND assetCollectionId (exclusivity violation)",
+        "json_schema_keywords": [
+          "not"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::invalid — class bequest missing classDefinition",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::invalid — debt_forgiveness without beneficiaryId or beneficiaryOrganisation",
+        "json_schema_keywords": [
+          "anyOf",
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::invalid — life_interest bequest missing lifeInterest",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::invalid — unknown property at root level (unevaluatedProperties false)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::invalid: bequest with old extensionType field",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/bequest/bequest.test.json::valid — specific bequest missing beneficiary (core type without beneficiary is invalid)",
+        "json_schema_keywords": [
+          "anyOf",
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/brazil/brazil.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/dealer-interest/dealer-interest.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/document/document.test.json::invalid — entityId present without entityType (dependentRequired)",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/document/document.test.json::invalid — entityType present without entityId (dependentRequired)",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/document/document.test.json::invalid — unknown property at root level (unevaluatedProperties false)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/estate/estate.test.json::invalid — companionEstateId present without companionLinkStatus (dependentRequired)",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/estate/estate.test.json::invalid — integrity as null",
+        "json_schema_keywords": [
+          "type"
+        ]
+      },
+      {
+        "case": "tests/v3/estate/estate.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/estate/estate.test.json::invalid: estate with old extensionWillType field",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/eu-succession/eu-succession.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/executor/executor.test.json::invalid — grantReference present with grantDate but missing issuingCourt (dependentRequired)",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/executor/executor.test.json::invalid — grantReference present without grantDate and issuingCourt (dependentRequired)",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/executor/executor.test.json::invalid — unknown additional property at root level (unevaluatedProperties false)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/guardian/guardian.test.json::invalid — unknown additional property at root level (unevaluatedProperties false)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/hindu-succession/hindu-succession.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/hong-kong/hong-kong.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/india/india.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/insurance-policy/insurance-policy.test.json::invalid — non-camelCase property name",
+        "json_schema_keywords": [
+          "pattern",
+          "propertyNames",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/insurance-policy/insurance-policy.test.json::invalid — unknown additional property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/ireland/ireland.test.json::invalid — empty object (minProperties: 1 requires at least one property)",
+        "json_schema_keywords": [
+          "minProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/ireland/ireland.test.json::invalid — unknown property at root",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/islamic-succession/islamic-succession.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/israel/israel.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/japan-extension/japan-extension.test.json::invalid — empty object violates minProperties: 1",
+        "json_schema_keywords": [
+          "minProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/japan-extension/japan-extension.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/japan/japan.test.json::invalid — empty object (minProperties: 1)",
+        "json_schema_keywords": [
+          "minProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/japan/japan.test.json::invalid — extensibility property with wrong name pattern",
+        "json_schema_keywords": [
+          "pattern",
+          "propertyNames",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/japan/japan.test.json::invalid — unknown root property (unevaluatedProperties: false)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/jewish-succession/jewish-succession.test.json::invalid — additionalProperties at top level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — aiProvenance at root level (must be inside provenance)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — bloodDegree on grandparent_grandchild (not applicable)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — bloodDegree on half_sibling (not applicable — type already implies half-blood)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — bloodDegree value not in enum",
+        "json_schema_keywords": [
+          "enum",
+          "if",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — lineage on parent_child_biological (not applicable)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — lineage on sibling (not applicable)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/kinship/kinship.test.json::invalid — lineage value not in enum",
+        "json_schema_keywords": [
+          "enum",
+          "if",
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/latin-america/latin-america.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/liability/liability.test.json::invalid — chargeStatus without securedAgainst",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/liability/liability.test.json::invalid — settlementAmount without securedAgainst",
+        "json_schema_keywords": [
+          "dependentRequired"
+        ]
+      },
+      {
+        "case": "tests/v3/liability/liability.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/lifetime-transfer/lifetime-transfer.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/media/media.test.json::invalid — url exceeds maxLength (2049 chars)",
+        "json_schema_keywords": [
+          "maxLength"
+        ]
+      },
+      {
+        "case": "tests/v3/media/media.test.json::invalid — url with uppercase scheme (fails pattern)",
+        "json_schema_keywords": [
+          "pattern"
+        ]
+      },
+      {
+        "case": "tests/v3/nonprobate-transfer/nonprobate-transfer.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/notification/notification.test.json::invalid — unevaluated property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/organisation/organisation.test.json::invalid — unevaluated property rejected",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/person/person.test.json::invalid — extension block is a string (must be object)",
+        "json_schema_keywords": [
+          "type"
+        ]
+      },
+      {
+        "case": "tests/v3/person/person.test.json::invalid — phoneticReading with no properties (minProperties: 1)",
+        "json_schema_keywords": [
+          "minProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/person/person.test.json::invalid — roles with duplicate values (uniqueItems)",
+        "json_schema_keywords": [
+          "uniqueItems"
+        ]
+      },
+      {
+        "case": "tests/v3/pet/pet.test.json::invalid — unevaluated property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/proxy-authorisation/proxy-authorisation.test.json::invalid agent delegation — missing agentId",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/proxy-authorisation/proxy-authorisation.test.json::invalid person delegation — missing proxyPersonId",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/relationship/relationship.test.json::invalid — ketubah financialInstrument missing required ketubahDetails",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/relationship/relationship.test.json::invalid — mahr financialInstrument missing required maharDetails",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/relationship/relationship.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/schema/schema.test.json::invalid — notifications at root level (must be in applicationState)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/scotland/scotland.test.json::invalid — empty object (minProperties: 1 requires at least one property)",
+        "json_schema_keywords": [
+          "minProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/scotland/scotland.test.json::invalid — unknown property at root",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/singapore-malaysia/singapore-malaysia.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/space/space.test.json::invalid — an off-site space may omit propertyId but not carry an unevaluated property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/space/space.test.json::invalid — missing required propertyId",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/space/space.test.json::invalid — unevaluated property rejected",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/space/space.test.json::invalid — x-inherit- space type still requires propertyId (extensions are not off-site)",
+        "json_schema_keywords": [
+          "if",
+          "required"
+        ]
+      },
+      {
+        "case": "tests/v3/subscription/subscription.test.json::invalid — unevaluated property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/switzerland/switzerland.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/trust/trust.test.json::invalid — unknown additional property at root level (unevaluatedProperties: false)",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/uae/uae.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/uk-england-wales/uk-england-wales.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/us-estate/us-estate.test.json::invalid — unknown root property",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/wish/wish.test.json::invalid — unknown root property rejected",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      }
+    ]
+  }
+}

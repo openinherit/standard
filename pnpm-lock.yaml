@@ -46,6 +46,10 @@ importers:
   packages/schema: {}
 
   packages/sdk:
+    dependencies:
+      zod:
+        specifier: ^4.1.0
+        version: 4.6.5
     devDependencies:
       '@hey-api/client-fetch':
         specifier: latest
@@ -874,6 +878,9 @@ packages:
     resolution: {integrity: sha512-g/eziiSUNBSsdDJtCLB8bdYEUMj4jR7AGeUo96p/3dTafgjHhpF4RiCFPiRILwjQoDXx5MqkBr4fwWtR3Ky4Wg==}
     engines: {node: '>=20'}
 
+  zod@4.6.5:
+    resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
+
 snapshots:
 
   '@esbuild/aix-ppc64@0.27.7':
@@ -1540,3 +1547,5 @@ snapshots:
     dependencies:
       is-wsl: 3.1.1
       powershell-utils: 0.1.0
+
+  zod@4.6.5: {}

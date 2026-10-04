@@ -38,3 +38,7 @@ packages/sdk/dist/
 .superpowers/
 .playwright-mcp/
 .vercel
+
+# Python bytecode (it embeds the absolute path of the source file)
+__pycache__/
+*.pyc

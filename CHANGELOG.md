@@ -8,6 +8,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Conformance profiles** (proposal 0003). `conformanceProfile` (`estate` | `catalogue`,
+  default `estate`) on `v3/schema.json`, and `profile` on its conformance certificate. A
+  catalogue-only document that declares `"catalogue"` now conforms to the root with no estate
+  envelope. It carries `assetInterests`, `legacyContacts`, `dealerInterests`,
+  `giftListSettings`, `legacyLetter`, `completeness` and `recommendedActions` at the root by
+  reference to `catalogue.json`. Before, the only advertised route was to wrap the catalogue in
+  an estate document, which moved the owner's allocation intent into `applicationState`, outside
+  the interchange standard. `v3/catalogue.json` accepts the same declaration and no longer advises
+  the wrap. This is a strict relaxation: documents with no declaration are held to exactly the
+  root's previous requirements. Gate: `pnpm run test:catalogue-profile`, run in
+  `run-tests.yml`.
 - `liabilities[].securedAgainst` is now a checked reference. It had no referential-integrity
   rule at all: a mortgage could name an asset or property that did not exist and every check in
   the repository stayed green. Two rules, not one — `securedAgainst` is documented as

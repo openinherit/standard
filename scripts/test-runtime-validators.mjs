@@ -47,6 +47,21 @@ const register = loadRegister(registerPath);
 const corpus = loadCorpus(ROOT);
 
 const excluded = new Map(register.excluded_targets.map((e) => [e.target, e.reason]));
+// An exclusion switches the gate off for a whole target, so it is held to what
+// it claims: a reason, a target the corpus actually has, and no generated
+// validator. Without this, excluding v3/pet.json would turn its regressions green.
+const badExclusions = [];
+for (const [target, reason] of excluded) {
+  const file = corpus.find((f) => f.target === target);
+  if (!reason || !reason.trim()) badExclusions.push(`${target}: no reason`);
+  if (!file) badExclusions.push(`${target}: no corpus file targets it — remove the exclusion`);
+  else if (schemasById[file.id]) badExclusions.push(`${target}: has a generated validator, so it cannot be excluded`);
+}
+if (badExclusions.length) {
+  console.error('REFUSED — invalid excluded_targets entries:');
+  for (const b of badExclusions) console.error(`  ${b}`);
+  process.exit(1);
+}
 const observed = { false_reject: [], false_accept: [] };
 const unanswerable = [];
 let ran = 0;

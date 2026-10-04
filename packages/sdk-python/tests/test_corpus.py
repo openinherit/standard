@@ -100,6 +100,25 @@ def _fixture(name: str):
     return json.loads((ROOT / "examples" / "fixtures" / name).read_text())
 
 
+def test_exclusions_are_only_for_targets_without_a_model():
+    """An exclusion switches the gate off for a whole target, so it must have a
+    reason, name a target the corpus has, and name one with no generated model."""
+    from openinherit.models_by_id import MODELS_BY_ID
+
+    register = json.loads(REGISTER.read_text())
+    by_target = {f["target"]: f for f in load_corpus()}
+    bad = []
+    for e in register["excluded_targets"]:
+        if not e.get("reason", "").strip():
+            bad.append(f"{e['target']}: no reason")
+        f = by_target.get(e["target"])
+        if f is None:
+            bad.append(f"{e['target']}: no corpus file targets it")
+        elif f["id"] in MODELS_BY_ID:
+            bad.append(f"{e['target']}: has a generated model, so it cannot be excluded")
+    assert not bad, bad
+
+
 def test_catalogue_only_fixture_is_accepted():
     """The repo publishes this file as a correct catalogue; validate() agrees."""
     from openinherit import validate

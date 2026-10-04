@@ -39,6 +39,10 @@
     "./reference": {
       "types": "./dist/reference/index.d.ts",
       "import": "./dist/reference/index.js"
+    },
+    "./zod": {
+      "types": "./dist/zod/index.d.ts",
+      "import": "./dist/zod/index.js"
     }
   },
   "files": [
@@ -48,6 +52,9 @@
   "scripts": {
     "build": "tsup && tsc --emitDeclarationOnly",
     "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "zod": "^4.1.0"
   },
   "peerDependencies": {
     "@hey-api/client-fetch": ">=0.1.0"

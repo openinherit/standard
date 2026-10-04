@@ -5,6 +5,7 @@ export default defineConfig({
     "estate/index": "src/estate/index.ts",
     "estate-v2/index": "src/estate-v2/index.ts",
     "reference/index": "src/reference/index.ts",
+    "zod/index": "src/zod/index.ts",
   },
   format: ["esm"],
   dts: false,

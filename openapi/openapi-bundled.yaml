@@ -41,7 +41,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/schema'
+              $ref: '#/components/schemas/InheritDocument'
       responses:
         '200':
           description: Validation result
@@ -81,7 +81,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/catalogue'
+              $ref: '#/components/schemas/Catalogue'
       responses:
         '200':
           description: Validation result
@@ -948,6 +948,35 @@ components:
             statutoryInstrument:
               type: string
               maxLength: 100
+        marriageRevocation:
+          type: object
+          description: Whether and how marriage revokes a prior will. For England & Wales, see s.18 Wills Act 1837 and the contemplation-of-marriage exception in s.18(3)–(4).
+          properties:
+            revokesPriorWill:
+              type: boolean
+              description: Whether a marriage (after execution of the will) automatically revokes the will.
+            statute:
+              type: string
+              maxLength: 255
+              description: Citation of the primary statute governing revocation-by-marriage.
+            statuteUrl:
+              type: string
+              format: uri
+              maxLength: 500
+            contemplationException:
+              type: boolean
+              description: Whether a will made in contemplation of a specific marriage survives that marriage.
+            contemplationRule:
+              type: string
+              maxLength: 2000
+              description: Plain-English description of the contemplation-of-marriage rule.
+            notes:
+              type: string
+              maxLength: 2000
+          required:
+            - revokesPriorWill
+            - statute
+          additionalProperties: false
       minProperties: 1
       patternProperties:
         ^x-inherit-[a-z][a-z0-9-]{1,54}$:
@@ -4483,6 +4512,31 @@ components:
         notes:
           type: string
           maxLength: 2000
+        marriageRevocation:
+          type: object
+          description: Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia.
+          properties:
+            revokesPriorWill:
+              type: boolean
+            statute:
+              type: string
+              maxLength: 255
+            statuteUrl:
+              type: string
+              format: uri
+              maxLength: 500
+            contemplationException:
+              type: boolean
+            contemplationRule:
+              type: string
+              maxLength: 2000
+            notes:
+              type: string
+              maxLength: 2000
+          required:
+            - revokesPriorWill
+            - statute
+          additionalProperties: false
       required:
         - country
       minProperties: 1
@@ -7800,6 +7854,31 @@ components:
         notes:
           type: string
           maxLength: 2000
+        marriageRevocation:
+          type: object
+          description: Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs.
+          properties:
+            revokesPriorWill:
+              type: boolean
+            statute:
+              type: string
+              maxLength: 255
+            statuteUrl:
+              type: string
+              format: uri
+              maxLength: 500
+            contemplationException:
+              type: boolean
+            contemplationRule:
+              type: string
+              maxLength: 2000
+            notes:
+              type: string
+              maxLength: 2000
+          required:
+            - revokesPriorWill
+            - statute
+          additionalProperties: false
       minProperties: 1
       patternProperties:
         ^x-inherit-[a-z][a-z0-9-]{1,54}$:
@@ -8902,6 +8981,13 @@ components:
         totalEstimatedValue:
           description: Estimated total value of the estate before liabilities. In minor currency units
           $ref: '#/components/schemas/money'
+        netEstateEquity:
+          description: 'Total value of the estate after netting secured charges against the assets they charge and subtracting unsecured liabilities, in minor currency units. The after-liabilities counterpart to totalEstimatedValue. A convenience denormalisation: the authoritative figure is derived, not stored'
+          $comment: 'Derivation: netEstateEquity = SUM(asset.netEquity over all assets) + SUM(property.netEquity over all properties) - SUM(liability.amount over every liability with no securedAgainst). Properties are summed alongside assets because a mortgage — the paradigm secured liability — is charged against a property, so omitting them would leave the commonest charge unnetted. Secured liabilities are excluded from the final sum because they have already been netted at entity level by netEquity — counting them again would double-subtract. Producers MUST keep this consistent with the assets and liabilities arrays. Consumers SHOULD derive it themselves when those arrays are present. scripts/validate-net-equity.mjs enforces this arithmetic'
+          $ref: '#/components/schemas/money'
+          properties:
+            amount:
+              minimum: 0
         attestation:
           description: Will execution formalities — witnesses, signing method, and compliance checks
           $ref: '#/components/schemas/attestation'
@@ -13160,6 +13246,20 @@ components:
         professionalValuation:
           description: Professional surveyor or valuer's assessment of the property value, in minor currency units
           $ref: '#/components/schemas/money'
+        netEquity:
+          description: 'Value of this property net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored'
+          $comment: 'Derivation: netEquity = max(0, propertyValue - SUM(liability.settlementAmount ?? liability.amount) over every liability whose securedAgainst is this property.id AND whose chargeStatus is ''active''), where propertyValue is professionalValuation if present, else estimatedValue. A mortgage is the paradigm secured liability and it is charged against a property, not an asset, so the figure has to exist here as well as on Asset. Floored at zero — where the charges exceed the value, netEquity is zero and inNegativeEquity is true. mortgageOutstanding is NOT used in the derivation: it is an unreferenced convenience figure, whereas the liabilities array is the one that names which charge is still active. Producers MUST keep this consistent with the liabilities array. Consumers SHOULD derive it themselves when liabilities are present. scripts/validate-net-equity.mjs enforces this arithmetic'
+          $ref: '#/components/schemas/money'
+          properties:
+            amount:
+              minimum: 0
+        inNegativeEquity:
+          description: True when the active charges secured against this property exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall
+          $comment: Flooring netEquity at zero loses the existence of a shortfall — the fact an executor most needs, since a property in negative equity may be worth disclaiming rather than administering. This boolean restores it; the size is recoverable from the liabilities themselves
+          examples:
+            - false
+            - true
+          type: boolean
         valuationDate:
           description: Date the most recent valuation (estimated or professional) was performed
           examples:
@@ -15972,6 +16072,20 @@ components:
         professionalValuation:
           description: Professional valuation of the asset, in minor currency units
           $ref: '#/components/schemas/money'
+        netEquity:
+          description: 'Value of this asset net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored'
+          $comment: 'Derivation: netEquity = max(0, assetValue - SUM(liability.settlementAmount ?? liability.amount) over every liability whose securedAgainst is this asset.id AND whose chargeStatus is ''active''), where assetValue is professionalValuation if present, else estimatedValue. Floored at zero — where the charges exceed the value, netEquity is zero and inNegativeEquity is true. Producers MUST keep this consistent with the liabilities array. Consumers SHOULD derive it themselves when liabilities are present rather than trusting the stored value. Only the equity, not the gross value, is chargeable to inheritance tax in jurisdictions that tax the net estate. scripts/validate-net-equity.mjs enforces this arithmetic'
+          $ref: '#/components/schemas/money'
+          properties:
+            amount:
+              minimum: 0
+        inNegativeEquity:
+          description: True when the active charges secured against this asset exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall
+          $comment: Flooring netEquity at zero loses the size and the existence of a shortfall — which is the fact an executor most needs, since a negatively-charged asset may be worth disclaiming rather than administering. This boolean restores the existence of it; the size is recoverable from the liabilities themselves
+          examples:
+            - false
+            - true
+          type: boolean
         valuationDate:
           description: Date of the most recent valuation
           examples:
@@ -17522,7 +17636,7 @@ components:
           format: uuid
         liabilityType:
           description: The category of liability. Cultural and religious obligations are included because they are priority debts in their respective legal systems
-          $comment: 'mortgage: secured loan against property. personal_loan: unsecured personal borrowing. credit_card: credit card balance. overdraft: bank overdraft. student_loan: education loan (may be forgiven on death in some jurisdictions). car_finance: vehicle finance agreement. hire_purchase: hire purchase agreement. mahr: Islamic deferred bridal gift — a legally recognised financial obligation that is a priority debt under Shariah law, enforceable in Shariah courts and in secular courts that recognise Islamic marriage contracts (e.g. UAE, Malaysia, Pakistan, and increasingly in UK/US family courts). ketubah_debt: Jewish marriage contract obligation — a legally recognised financial obligation under halachic law, enforceable in batei din and in secular courts where the ketubah is recognised as a binding contract (e.g. Israel; treated as a prenuptial in US/UK courts). lobola: African customary bride price — a legally recognised financial obligation under customary law, with statutory recognition under the Recognition of Customary Marriages Act 1998 (South Africa), and customary law statutes in Nigeria, Kenya, Zimbabwe, and other jurisdictions. May be partially refundable on certain events. tax_liability: income tax, capital gains tax, or other tax owed. funeral_costs: funeral and burial expenses — typically first priority debt. care_fees: care home or nursing fees owed. mezonot: Jewish widow''s maintenance obligation — a legally recognised financial obligation under halachic law, paid from the estate before distribution, enforceable in Israeli rabbinical courts and in batei din worldwide. other: any liability not covered above.'
+          $comment: 'mortgage: secured loan against property. personal_loan: unsecured personal borrowing. credit_card: credit card balance. overdraft: bank overdraft. student_loan: education loan (may be forgiven on death in some jurisdictions). car_finance: vehicle finance agreement. hire_purchase: hire purchase agreement. secured_loan: a loan secured by a charge over an asset other than a first mortgage. second_charge: a further loan secured behind an existing first charge on the same property. logbook_loan: a loan secured against a vehicle under a bill of sale, where title passes to the lender until repayment. mahr: Islamic deferred bridal gift — a legally recognised financial obligation that is a priority debt under Shariah law, enforceable in Shariah courts and in secular courts that recognise Islamic marriage contracts (e.g. UAE, Malaysia, Pakistan, and increasingly in UK/US family courts). ketubah_debt: Jewish marriage contract obligation — a legally recognised financial obligation under halachic law, enforceable in batei din and in secular courts where the ketubah is recognised as a binding contract (e.g. Israel; treated as a prenuptial in US/UK courts). lobola: African customary bride price — a legally recognised financial obligation under customary law, with statutory recognition under the Recognition of Customary Marriages Act 1998 (South Africa), and customary law statutes in Nigeria, Kenya, Zimbabwe, and other jurisdictions. May be partially refundable on certain events. tax_liability: income tax, capital gains tax, or other tax owed. funeral_costs: funeral and burial expenses — typically first priority debt. care_fees: care home or nursing fees owed. mezonot: Jewish widow''s maintenance obligation — a legally recognised financial obligation under halachic law, paid from the estate before distribution, enforceable in Israeli rabbinical courts and in batei din worldwide. other: any liability not covered above.'
           examples:
             - mortgage
             - credit_card
@@ -17536,6 +17650,9 @@ components:
             - student_loan
             - car_finance
             - hire_purchase
+            - secured_loan
+            - second_charge
+            - logbook_loan
             - mahr
             - ketubah_debt
             - lobola
@@ -17564,6 +17681,36 @@ components:
           type: string
           pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
           format: uuid
+        chargeStatus:
+          description: Lifecycle state of the registered charge securing this liability. Only meaningful when securedAgainst is present. A discharged or satisfied charge no longer reduces the equity in the asset it was registered against
+          $comment: 'active: the charge is registered and outstanding — it reduces the net equity of the asset it is secured against by settlementAmount (or by amount where no settlement figure is recorded). discharged: the charge has been removed from the register (e.g. HM Land Registry DS1) — contributes zero to net equity. satisfied: the debt has been repaid in full but the register may not yet reflect it — contributes zero to net equity. The distinction between discharged and satisfied matters because a satisfied-but-not-discharged charge still appears on an official search and must be explained to a buyer or a probate registry'
+          examples:
+            - active
+            - discharged
+            - satisfied
+          enum:
+            - active
+            - discharged
+            - satisfied
+        settlementAmount:
+          description: Redemption or early-settlement figure to clear this liability, in minor currency units. May differ from amount — a PCP or hire-purchase settlement typically includes unpaid interest and fees, and a mortgage redemption may include an early-repayment charge. Where present this is the figure that nets against the secured asset's value
+          $ref: '#/components/schemas/money'
+        chargeRegisteredDate:
+          description: Date the charge was registered against the secured property or asset
+          examples:
+            - '2020-06-04'
+            - '2018-11-20'
+          type: string
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          format: date
+        chargeReference:
+          description: Registry entry or agreement number identifying the charge — HM Land Registry charge entry, finance agreement number, or the equivalent in the jurisdiction of the secured asset
+          examples:
+            - WYK123456
+            - HP-2021-884512
+            - CH/2019/0042
+          type: string
+          maxLength: 255
         monthlyPayment:
           description: Regular monthly payment amount in minor currency units, if applicable
           $ref: '#/components/schemas/money'
@@ -17649,6 +17796,15 @@ components:
         provenance:
           description: Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
           $ref: '#/components/schemas/provenance'
+      dependentRequired:
+        chargeStatus:
+          - securedAgainst
+        settlementAmount:
+          - securedAgainst
+        chargeRegisteredDate:
+          - securedAgainst
+        chargeReference:
+          - securedAgainst
       patternProperties:
         ^x-inherit-[a-z][a-z0-9-]{1,54}$:
           type: object
@@ -22864,8 +23020,30 @@ components:
       type: object
       required:
         - id
-        - propertyId
         - spaceType
+      allOf:
+        - $comment: 'propertyId is required for every space that is inside a property. The eleven off-site spaceTypes below are, by the definitions in spaceType''s own $comment, not inside one — a portable space travels with the owner between locations, a safe deposit box is at the bank. Requiring them to name a property forced a catalogue to invent one. The inner required on spaceType is load-bearing: without it a document carrying no spaceType at all would satisfy the if vacuously and escape the propertyId requirement'
+          if:
+            properties:
+              spaceType:
+                not:
+                  enum:
+                    - self_storage
+                    - safe_deposit_box
+                    - workplace
+                    - relatives_house
+                    - holiday_home
+                    - vehicle_car
+                    - vehicle_boat
+                    - vehicle_caravan
+                    - allotment
+                    - digital_storage
+                    - portable
+            required:
+              - spaceType
+          then:
+            required:
+              - propertyId
       propertyNames:
         pattern: ^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$
       properties:
@@ -22877,6 +23055,14 @@ components:
         propertyId:
           description: Reference to the Property.id that contains or is associated with this space
           type: string
+          pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+          format: uuid
+        containedInSpaceId:
+          description: Reference to another Space.id that physically contains this space — a loft inside a house, a shelving bay inside a storage room. Enables the recursive Property → Space → Space → item chain a room-by-room listing walk produces. Absent or null means this space sits directly in the Property
+          $comment: The space-axis sibling of Asset.containedInAssetId. Use this axis for FIXED structure that is not itself an estate asset (a loft, a cellar, an outbuilding); use Asset.containedInAssetId for MOVABLE containers that are themselves assets (a safe, a trunk, a toolbox). A loft is not a bequeathable asset, so it cannot be modelled on the asset axis. The chain must be acyclic and every link must resolve — see schema.json referentialIntegrity, constraint kind 'acyclic'. Maps to schema:containedInPlace in JSON-LD; the JSON-LD context declared that term for the spaces node before this property existed
+          type:
+            - string
+            - 'null'
           pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
           format: uuid
         spaceType:
@@ -25489,6 +25675,19 @@ components:
         required:
           description: If true, a broken reference is always an error. If false, the field may reference multiple target arrays (grouped by field path)
           type: boolean
+        kind:
+          description: The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops
+          $comment: 'A validator encountering an unrecognised kind MUST fail with INHERIT_CONSTRAINT_UNKNOWN rather than skipping the constraint. A skipped constraint is a gate that reports green, which is the failure mode this keyword exists to avoid. Note also that the multi-target grouping described on referentialIntegrity groups by field AND kind: an acyclic row is never satisfied by an existence row on the same field'
+          enum:
+            - existence
+            - acyclic
+          default: existence
+        maxDepth:
+          description: 'For kind ''acyclic'': the maximum number of hops a containment chain may have before it is rejected as unreasonably deep. A chain longer than this fails with INHERIT_DEPTH_EXCEEDED even if it is acyclic'
+          $comment: 16 is the default for containment. It is not a legal limit; it is a guard against a pathological or generated chain. House -> loft -> trunk -> box -> tin is 5
+          type: integer
+          minimum: 1
+          maximum: 64
         code:
           description: Machine-readable error code from the INHERIT error vocabulary
           type: string
@@ -26062,7 +26261,7 @@ components:
           additionalProperties: true
         referentialIntegrity:
           description: Machine-readable cross-reference integrity constraints. Defined in the schema, not in individual documents. Validators read these rules and check that every referenced ID exists in the target array
-          $comment: 'These constraints define Level 2 (Referentially Intact) conformance. Multi-target semantics: when a field has multiple non-required constraints, the validator groups by field path — valid if ANY constraint in the group matches. applicationState fields are NOT covered.'
+          $comment: 'These constraints define Level 2 (Referentially Intact) conformance. Multi-target semantics: when a field has multiple non-required constraints of the SAME kind, the validator groups by field path AND kind — valid if ANY constraint in that group matches. Grouping by field alone would let an existence constraint satisfy an acyclic one on the same field. A constraint whose kind the validator does not recognise MUST be reported as INHERIT_CONSTRAINT_UNKNOWN, never skipped. applicationState fields are NOT covered.'
           default:
             - field: estate.testatorPersonId
               references: people[].id
@@ -26094,6 +26293,16 @@ components:
               required: false
               code: INHERIT_REF_BROKEN
               errorMessage: Bequest source references a property that does not exist
+            - field: liabilities[].securedAgainst
+              references: assets[].id
+              required: false
+              code: INHERIT_REF_BROKEN
+              errorMessage: Liability securedAgainst references an asset that does not exist
+            - field: liabilities[].securedAgainst
+              references: properties[].id
+              required: false
+              code: INHERIT_REF_BROKEN
+              errorMessage: Liability securedAgainst references a property that does not exist
             - field: kinships[].fromPersonId
               references: people[].id
               required: true
@@ -26129,6 +26338,35 @@ components:
               required: false
               code: INHERIT_REF_BROKEN
               errorMessage: Asset assetCollectionId references a collection that does not exist
+            - field: assets[].containedInAssetId
+              references: assets[].id
+              required: false
+              code: INHERIT_REF_BROKEN
+              errorMessage: Asset containedInAssetId references an asset that does not exist
+            - field: spaces[].containedInSpaceId
+              references: spaces[].id
+              required: false
+              code: INHERIT_REF_BROKEN
+              errorMessage: Space containedInSpaceId references a space that does not exist
+            - field: spaces[].propertyId
+              references: properties[].id
+              required: false
+              code: INHERIT_REF_BROKEN
+              errorMessage: Space propertyId references a property that does not exist
+            - field: assets[].containedInAssetId
+              references: assets[].id
+              kind: acyclic
+              maxDepth: 16
+              required: false
+              code: INHERIT_CONTAINMENT_CYCLE
+              errorMessage: Asset containment chain loops or exceeds the depth guard
+            - field: spaces[].containedInSpaceId
+              references: spaces[].id
+              kind: acyclic
+              maxDepth: 16
+              required: false
+              code: INHERIT_CONTAINMENT_CYCLE
+              errorMessage: Space containment chain loops or exceeds the depth guard
             - field: proxyAuthorisations[].agentPersonId
               references: people[].id
               required: true
@@ -26662,6 +26900,19 @@ components:
             required:
               description: If true, a broken reference is always an error. If false, the field may reference multiple target arrays (grouped by field path)
               type: boolean
+            kind:
+              description: The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops
+              $comment: 'A validator encountering an unrecognised kind MUST fail with INHERIT_CONSTRAINT_UNKNOWN rather than skipping the constraint. A skipped constraint is a gate that reports green, which is the failure mode this keyword exists to avoid. Note also that the multi-target grouping described on referentialIntegrity groups by field AND kind: an acyclic row is never satisfied by an existence row on the same field'
+              enum:
+                - existence
+                - acyclic
+              default: existence
+            maxDepth:
+              description: 'For kind ''acyclic'': the maximum number of hops a containment chain may have before it is rejected as unreasonably deep. A chain longer than this fails with INHERIT_DEPTH_EXCEEDED even if it is acyclic'
+              $comment: 16 is the default for containment. It is not a legal limit; it is a guard against a pathological or generated chain. House -> loft -> trunk -> box -> tin is 5
+              type: integer
+              minimum: 1
+              maximum: 64
             code:
               description: Machine-readable error code from the INHERIT error vocabulary
               type: string
@@ -26671,6 +26922,9 @@ components:
               type: string
               maxLength: 500
           additionalProperties: false
+    conformance:
+      description: Machine-readable conformance certificate — records the validation level, schema version, completeness score, and provenance summary at time of validation
+      $ref: '#/components/schemas/Conformance'
     catalogue:
       $schema: https://json-schema.org/draft/2020-12/schema
       $id: https://openinherit.org/v3/catalogue.json
@@ -26773,6 +27027,12 @@ components:
           maxItems: 200
           items:
             $ref: '#/components/schemas/organisation'
+        properties:
+          description: Properties whose spaces appear in this catalogue. A catalogue is not an estate document, so a property here need carry no more than an id and a name — enough for spaces[].propertyId to resolve inside the document and for a room to be attributed to an address
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/property'
         spaces:
           description: Physical storage locations for items in this catalogue. Each asset can reference a space via spaceId. Critical for collectors with items across multiple properties or countries — affects probate jurisdiction and dealer collection logistics
           type: array
@@ -26826,7 +27086,7 @@ components:
           items:
             $ref: '#/components/schemas/RecommendedAction'
         conformance:
-          $ref: '#/components/schemas/Conformance'
+          $ref: '#/components/schemas/conformance'
         insurancePolicies:
           description: Insurance policies associated with catalogued assets
           type: array

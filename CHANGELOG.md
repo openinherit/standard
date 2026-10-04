@@ -29,6 +29,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `pnpm run test:co-ownership` (`scripts/test-co-ownership-shape.mjs`, wired into the Test Suite)
   keeps all three identical. Proposal: `proposals/0002-asset-co-ownership.md`.
 
+- `root` on `conformance-declaration.json` (`estate` | `catalogue`, optional, default `estate`).
+  INHERIT has two document roots, `schema.json` and `catalogue.json`, but a declaration could not
+  say which one it covered. The only declaration available therefore claimed the full estate
+  envelope, and a catalogue-only implementation could not declare conformance truthfully. A
+  `catalogue` declaration cannot list `estate` under `entities`, because a catalogue document has
+  no estate envelope. Optional, so every existing declaration stays valid.
+- `pnpm run test:conformance-declaration-policy`
+  (`scripts/check-conformance-declaration-policy.mjs`, wired into the test workflow). It fails if
+  `docs/policies/conformance-declaration.md` and the schema disagree on a field or a document
+  root, if the policy cites a removed v1/v2 path, or if one of its example declarations fails
+  validation.
 - `liabilities[].securedAgainst` is now a checked reference. It had no referential-integrity
   rule at all: a mortgage could name an asset or property that did not exist and every check in
   the repository stayed green. Two rules, not one — `securedAgainst` is documented as
@@ -110,6 +121,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   tests `coOwnership.ownershipPercentage`. `scripts/test-co-ownership-shape.mjs` refuses any
   `coOwnership.<field>` path in reference data that no schema declares.
 
+- `docs/policies/conformance-declaration.md` pointed implementers at
+  `openinherit.org/v2/conformance-declaration.json` and at `v2/` file paths, both removed in
+  6.6.0. Following it validated against nothing. It now cites the v3 schema, gives working CLI and
+  Ajv 2020 commands, documents the `provenance` and `disclaimer` fields it had left out, and adds
+  a catalogue-only example.
 - Referential integrity now checks `assets[].propertyId`. `asset.json` has always declared the
   field; the validator checked the other references that resolve against `properties[]` and not
   this one.

@@ -20,12 +20,20 @@
  *   2 — cannot answer: no v3/ tree, or no schemas found. Never read 2 as clean.
  */
 
-import { existsSync, readFileSync, readdirSync, writeFileSync, mkdirSync, rmSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join, dirname, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const OUT = 'docs/reference';
-const SKIP = new Set(['v3/dialect.json']); // the metaschema, not a data schema
+
+// Every JSON file under v3/ gets a page unless a rule here says why not, so a
+// schema added somewhere new is documented by default rather than missed.
+const SKIP = [
+  [(rel) => rel === 'v3/dialect.json', 'the metaschema, not a data schema'],
+  [(rel) => rel.startsWith('v3/vocab/'), 'vocabulary metaschemas'],
+  [(rel) => rel.startsWith('v3/context/'), 'JSON-LD contexts, not schemas'],
+  [(rel) => /^v3\/extensions\/[^/]+\/extension\.json$/.test(rel), 'extension manifests, not schemas'],
+];
 
 const SECTIONS = [
   ['', 'Core entities'],
@@ -34,23 +42,23 @@ const SECTIONS = [
   ['extensions', 'Jurisdiction extensions'],
 ];
 
+// Codepoint order, never locale order: the output must be byte-identical on
+// every machine or --check reds for a contributor whose LANG differs from CI's.
+const byCodepoint = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+
 // ── Discovery ──────────────────────────────────────────────────────
 
-const jsonIn = (root, rel) =>
-  existsSync(join(root, rel))
-    ? readdirSync(join(root, rel)).filter((f) => f.endsWith('.json')).sort().map((f) => posix.join(rel, f))
-    : [];
-
 function discover(root) {
-  const files = [...jsonIn(root, 'v3'), ...jsonIn(root, 'v3/common'), ...jsonIn(root, 'v3/asset-categories')];
-  const extRoot = join(root, 'v3/extensions');
-  if (existsSync(extRoot)) {
-    for (const dir of readdirSync(extRoot).sort()) {
-      const rel = `v3/extensions/${dir}/${dir}.json`;
-      if (statSync(join(extRoot, dir)).isDirectory() && existsSync(join(root, rel))) files.push(rel);
+  const found = [];
+  const walk = (rel) => {
+    for (const entry of readdirSync(join(root, rel), { withFileTypes: true })) {
+      const child = posix.join(rel, entry.name);
+      if (entry.isDirectory()) walk(child);
+      else if (entry.name.endsWith('.json')) found.push(child);
     }
-  }
-  return files.filter((f) => !SKIP.has(f));
+  };
+  if (existsSync(join(root, 'v3'))) walk('v3');
+  return found.filter((rel) => !SKIP.some(([rule]) => rule(rel))).sort(byCodepoint);
 }
 
 const pageFor = (schemaRel) => `${OUT}/${schemaRel.replace(/^v3\//, '').replace(/\.json$/, '')}.md`;
@@ -72,7 +80,8 @@ const anchor = (name) => `def-${String(name).replace(/[^A-Za-z0-9_-]/g, '-')}`;
 
 const row = (cells) => '|' + cells.map((c) => (c === '' ? ' |' : ` ${c} |`)).join('');
 
-const code = (v) => '`' + (typeof v === 'string' ? v : JSON.stringify(v)) + '`';
+// Escapes | because every code span here may land in a table cell.
+const code = (v) => '`' + (typeof v === 'string' ? v : JSON.stringify(v)).replace(/\|/g, '\\|') + '`';
 
 const ENUM_LIMIT = 20;
 
@@ -84,6 +93,9 @@ function refLink(ref, ctx) {
     if (defName && ctx.defs.has(defName)) return `[${defName}](#${anchor(defName)})`;
     return code(`$ref: ${ref}`);
   }
+  // A pointer into some other part of a schema (e.g. #/properties/people) has
+  // no page of its own; linking the whole schema would misstate the type.
+  if (fragment && !defName) return code(`$ref: ${ref}`);
 
   const url = new URL(filePart, `https://openinherit.org/${ctx.schemaRel}`);
   const rel = url.pathname.slice(1);
@@ -163,7 +175,7 @@ function patternNote(node) {
 
 function renderSchema(schemaRel, schema, schemas) {
   const page = pageFor(schemaRel);
-  const defs = new Map(Object.entries(schema.$defs ?? {}).sort(([a], [b]) => a.localeCompare(b)));
+  const defs = new Map(Object.entries(schema.$defs ?? {}).sort(([a], [b]) => byCodepoint(a, b)));
   const ctx = { schemaRel, page, schemas, defs };
   const sourceHref = posix.relative(posix.dirname(page), schemaRel);
 
@@ -229,16 +241,18 @@ function renderIndex(schemas) {
     'One page per JSON Schema in `v3/`, generated from the schemas themselves. ' +
       'For a walkthrough, start with the [quickstart](../../QUICKSTART.md).',
   ];
-  for (const [dir, heading] of SECTIONS) {
-    const inSection = [...schemas.keys()].filter((rel) => {
-      const sub = rel.replace(/^v3\//, '');
-      return dir === '' ? !sub.includes('/') : sub.startsWith(dir + '/');
-    });
+  const sectionOf = (rel) => {
+    const sub = rel.replace(/^v3\//, '');
+    const top = sub.includes('/') ? sub.split('/')[0] : '';
+    return SECTIONS.some(([dir]) => dir === top) ? top : null;
+  };
+  for (const [dir, heading] of [...SECTIONS, [null, 'Other schemas']]) {
+    const inSection = [...schemas.keys()].filter((rel) => sectionOf(rel) === dir);
     if (!inSection.length) continue;
     inSection.sort((a, b) => {
       const ta = schemas.get(a).title ?? a;
       const tb = schemas.get(b).title ?? b;
-      return ta.localeCompare(tb) || a.localeCompare(b);
+      return byCodepoint(ta, tb) || byCodepoint(a, b);
     });
     out.push('', `## ${heading}`, '', '| Schema | Summary |', '| --- | --- |');
     for (const rel of inSection) {
@@ -308,7 +322,7 @@ function main(argv) {
   }
 
   const problems = [];
-  for (const [rel, body] of [...pages].sort(([a], [b]) => a.localeCompare(b))) {
+  for (const [rel, body] of [...pages].sort(([a], [b]) => byCodepoint(a, b))) {
     const abs = join(root, rel);
     if (!existsSync(abs)) problems.push(`MISSING  ${rel}`);
     else if (readFileSync(abs, 'utf-8') !== body) problems.push(`STALE    ${rel}`);

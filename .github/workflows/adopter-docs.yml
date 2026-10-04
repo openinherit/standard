@@ -28,6 +28,8 @@ on:
       - 'scripts/validate-refs.mjs'
       - 'package.json'
       - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'packages/*/package.json'
       - '.github/workflows/adopter-docs.yml'
   pull_request:
     paths:
@@ -44,8 +46,13 @@ on:
       - 'scripts/validate-refs.mjs'
       - 'package.json'
       - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'packages/*/package.json'
       - '.github/workflows/adopter-docs.yml'
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   adopter-docs:

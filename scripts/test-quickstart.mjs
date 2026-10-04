@@ -29,6 +29,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const MARKER = /^<!--\s*quickstart:(run(?: expect-fail)?|output)\s*-->\s*$/;
+const NEAR_MISS = /<!--\s*quickstart/i;
 const FENCE = /^(`{3,})/;
 const ANSI = /\x1b\[[0-9;]*m/g;
 
@@ -37,12 +38,31 @@ class Malformed extends Error {}
 export function parse(markdown) {
   const lines = markdown.split('\n');
   const steps = [];
+  const closeOf = (start, fence) =>
+    lines.findIndex((l, j) => j > start && l.startsWith(fence) && l.trim() === fence);
+
   for (let i = 0; i < lines.length; i++) {
+    // An unmarked fence is documentation: skip it whole, so a marker shown
+    // inside an example is never mistaken for a real one.
+    const bare = lines[i].match(FENCE);
+    if (bare) {
+      const end = closeOf(i, bare[1]);
+      if (end < 0) throw new Malformed(`line ${i + 1}: fenced block is never closed`);
+      i = end;
+      continue;
+    }
     const m = lines[i].match(MARKER);
-    if (!m) continue;
+    if (!m) {
+      // A typo in a marker would otherwise turn a step into prose and shrink
+      // what the gate checks without anyone noticing.
+      if (NEAR_MISS.test(lines[i])) {
+        throw new Malformed(`line ${i + 1}: "${lines[i].trim()}" is not a recognised quickstart marker`);
+      }
+      continue;
+    }
     const open = lines[i + 1]?.match(FENCE);
     if (!open) throw new Malformed(`line ${i + 1}: marker "${m[1]}" is not followed by a fenced block`);
-    const close = lines.findIndex((l, j) => j > i + 1 && l.startsWith(open[1]) && l.trim() === open[1]);
+    const close = closeOf(i + 1, open[1]);
     if (close < 0) throw new Malformed(`line ${i + 2}: fenced block is never closed`);
     const body = lines.slice(i + 2, close).join('\n');
 
@@ -64,7 +84,13 @@ function runStep(step, root) {
   const problems = [];
   if (r.error) problems.push(`could not start bash: ${r.error.message}`);
   else if (step.expectFail && r.status === 0) problems.push('expected a non-zero exit, got 0');
+  else if (step.expectFail && (r.status === 126 || r.status === 127)) {
+    problems.push(`exit ${r.status} is the shell failing to run the command, not the command refusing`);
+  }
   else if (!step.expectFail && r.status !== 0) problems.push(`exit ${r.status}`);
+  if (step.expectFail && !step.outputs.length) {
+    problems.push('expect-fail step shows no output, so any failure at all would satisfy it');
+  }
   for (const line of step.outputs) {
     if (!output.includes(line)) problems.push(`missing output line: ${line}`);
   }

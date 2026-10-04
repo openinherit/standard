@@ -51,8 +51,8 @@ One page per JSON Schema in `v3/`, generated from the schemas themselves. For a 
 | [Completeness](common/completeness.md) | A completeness score derived from a weighted checklist of estate data categories, scoped to a specific jurisdiction and estate status |
 | [Cultural Disposition](common/cultural-disposition.md) | Cultural, religious, and regulatory constraints on how an asset or property may be disposed of. |
 | [FieldProvenance](common/field-provenance.md) | Records how a specific field's value was obtained — manual entry, AI extraction, import, OCR, or computation |
-| [Identifier](common/identifier.md) | A typed external identifier. |
 | [INHERIT Error Code Registry](common/error-codes.md) | Machine-readable registry of all INHERIT error codes. |
+| [Identifier](common/identifier.md) | A typed external identifier. |
 | [Jurisdiction](common/jurisdiction.md) | A legal jurisdiction identified by ISO 3166 codes. |
 | [Media](common/media.md) | A media attachment — photograph, video, or document scan. |
 | [Money](common/money.md) | Monetary value in integer minor currency units with ISO 4217 code. |

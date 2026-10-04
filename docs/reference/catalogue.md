@@ -28,14 +28,14 @@ Schema `$id`: `https://openinherit.org/v3/catalogue.json`
 | `properties` | array of [Property](property.md) | | Properties whose spaces appear in this catalogue. A catalogue is not an estate document, so a property here need carry no more than an id and a name — enough for spaces[].propertyId to resolve inside the document and for a room to be attributed to an address |
 | `spaces` | array of [Space](space.md) | | Physical storage locations for items in this catalogue. Each asset can reference a space via spaceId. Critical for collectors with items across multiple properties or countries — affects probate jurisdiction and dealer collection logistics |
 | `valuations` | array of [Valuation](valuation.md) | | Valuations of items and collections |
-| `legacyContacts` | array of [INHERIT v3 Root Schema](schema.md) | | People to notify and grant access when the owner dies. The 'Please open when I have passed away' letter recipients |
+| `legacyContacts` | array of `$ref: schema.json#/properties/applicationState/properties/legacyContacts/items` | | People to notify and grant access when the owner dies. The 'Please open when I have passed away' letter recipients |
 | `assetInterests` | array of [Asset Interest](asset-interest.md) | | Expressions of interest about assets, collections, or products. Includes the catalogue owner's own wishlist (things they want to acquire), interest from other people, and allocation intentions. Complements assets[] — assets are things you own; assetInterests are things you want, things others want, and decisions about who gets what |
 | `wishes` | array of [Wish](wish.md) | | Personal messages, letters, care instructions, and non-binding wishes. Complements legacyContacts — legacyContacts tracks who receives the letter; wishes stores what it says. Types: letter (personal messages to specific people), care (maintenance and care instructions for items or collections), distribution (non-binding preferences about what should happen to items), general (anything else) |
 | `dataProvenance` | one of `manual_entry`, `ai_extracted`, `ocr_scanned`, `imported`, `migrated`, `system_generated` | | Default data provenance for entities in this catalogue |
-| `importSources` | array of [INHERIT v3 Root Schema](schema.md) | | Systems data was imported from |
+| `importSources` | array of `$ref: schema.json#/properties/importSources/items` | | Systems data was imported from |
 | `completeness` | [Completeness](common/completeness.md) | | |
-| `recommendedActions` | array of [INHERIT v3 Root Schema](schema.md) | | |
-| `conformance` | [INHERIT v3 Root Schema](schema.md) | | |
+| `recommendedActions` | array of `$ref: schema.json#/properties/applicationState/properties/recommendedActions/items` | | |
+| `conformance` | `$ref: schema.json#/properties/conformance` | | |
 | `insurancePolicies` | array of [InsurancePolicy](insurance-policy.md) | | Insurance policies associated with catalogued assets |
 | `dealerInterests` | array of [Dealer Interest](dealer-interest.md) | | Provisional offers and expressions of interest from dealers. Allows the catalogue owner to receive and track dealer offers on items they are considering selling, or standing offers to be included in the LegacyLetter |
 | `giftListSettings` | `object` | | Settings for the shareable gift wishlist. When enabled, the owner can share a public link to their wishlist for family and friends to buy from |

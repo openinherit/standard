@@ -97,3 +97,30 @@ test('exits 2 on a marker that is not followed by a fenced block', () => {
   const r = run('<!-- quickstart:run -->\n\nprose, not a fence\n');
   assert.equal(r.status, 2);
 });
+
+test('exits 2 on a near-miss marker instead of silently treating the block as prose', () => {
+  const r = run(`<!-- quickstart: run -->\n${F}bash\nexit 1\n${F}\n` + block('run', 'bash', 'true'));
+  assert.equal(r.status, 2);
+  assert.match(r.stderr, /not a recognised quickstart marker/);
+});
+
+test('a marker shown inside an unmarked fenced example is not a step', () => {
+  // A four-backtick fence documenting the marker syntax, with a failing
+  // three-backtick block inside it. None of it may run.
+  const doc = `${F}\`markdown\n<!-- quickstart:run -->\n${F}bash\nexit 9\n${F}\n${F}\`\n\n` + block('run', 'bash', 'true');
+  const r = run(doc);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /1 step\(s\) passed/);
+});
+
+test('expect-fail does not accept a shell-level failure (command not found)', () => {
+  const r = run(block('run expect-fail', 'bash', 'no-such-command-anywhere') + block('output', 'text', 'not found'));
+  assert.equal(r.status, 1);
+  assert.match(r.stdout, /exit 127/);
+});
+
+test('expect-fail with no output block is refused — any failure would satisfy it', () => {
+  const r = run(block('run expect-fail', 'bash', 'exit 1'));
+  assert.equal(r.status, 1);
+  assert.match(r.stdout, /expect-fail step shows no output/);
+});

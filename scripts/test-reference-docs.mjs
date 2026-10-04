@@ -236,3 +236,61 @@ test('a pure $defs ref with no description borrows the definition\'s description
     assert.match(page, /\| `dower` \| \[Dower\]\(#def-Dower\) \| \| Dower rights\. \|/);
   } finally { rmSync(root, { recursive: true }); }
 });
+
+test('a cross-file ref into a non-$defs fragment stays code rather than linking the whole page', () => {
+  const root = tree({
+    'v3/schema.json': { title: 'Document', type: 'object', properties: { people: { type: 'array' } } },
+    'v3/catalogue.json': {
+      title: 'Catalogue',
+      type: 'object',
+      properties: { people: { $ref: 'schema.json#/properties/people' } },
+    },
+  });
+  try {
+    const page = generateAll(root).get('docs/reference/catalogue.md');
+    assert.match(page, /\| `people` \| `\$ref: schema\.json#\/properties\/people` \|/);
+  } finally { rmSync(root, { recursive: true }); }
+});
+
+test('a schema in a new directory is documented and indexed, not silently skipped', () => {
+  const root = tree({
+    'v3/person.json': person,
+    'v3/common/money.json': money,
+    'v3/novel/thing.json': { title: 'Thing', description: 'New. More.', type: 'object' },
+  });
+  try {
+    const pages = generateAll(root);
+    assert.ok(pages.has('docs/reference/novel/thing.md'));
+    assert.match(pages.get('docs/reference/README.md'), /## Other schemas[\s\S]*\[Thing\]\(novel\/thing\.md\) \| New\. \|/);
+  } finally { rmSync(root, { recursive: true }); }
+});
+
+test('metaschemas, JSON-LD contexts and extension manifests are skipped by rule', () => {
+  const root = tree({
+    'v3/person.json': person,
+    'v3/common/money.json': money,
+    'v3/vocab/estate/meta.json': { title: 'Meta' },
+    'v3/context/inherit-v3.json': { '@context': {} },
+    'v3/extensions/canada/canada.json': { title: 'Canada', type: 'object' },
+    'v3/extensions/canada/extension.json': { name: 'canada' },
+  });
+  try {
+    const keys = [...generateAll(root).keys()].sort();
+    assert.deepEqual(keys, [
+      'docs/reference/README.md',
+      'docs/reference/common/money.md',
+      'docs/reference/extensions/canada/canada.md',
+      'docs/reference/person.md',
+    ]);
+  } finally { rmSync(root, { recursive: true }); }
+});
+
+test('a pipe inside an enum value cannot split the table cell', () => {
+  const root = tree({
+    'v3/x.json': { title: 'X', type: 'object', properties: { op: { type: 'string', enum: ['a|b'] } } },
+  });
+  try {
+    const page = generateAll(root).get('docs/reference/x.md');
+    assert.match(page, /one of `a\\\|b`/);
+  } finally { rmSync(root, { recursive: true }); }
+});

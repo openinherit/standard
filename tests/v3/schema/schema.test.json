@@ -3416,6 +3416,7 @@
             "id": "5b0a3f7e-2a9c-4d1e-8f3b-6c7d8e9f0a1b",
             "rootDocumentId": "8e1d2c3b-4a5f-4e6d-9c8b-7a6f5e4d3c2b",
             "assetId": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "personId": "10000001-0000-4000-b000-000000000001",
             "personIdDisplay": "Paul Frith",
             "interestLevel": "agreed",
             "expressedByRole": "testator"
@@ -3426,7 +3427,8 @@
             "id": "10000001-0000-4000-b000-000000000001",
             "name": "Paul Frith",
             "relationship": "son",
-            "email": "paul.frith@example.com"
+            "email": "paul.frith@example.com",
+            "accessLevel": "full"
           }
         ],
         "giftListSettings": {
@@ -3513,6 +3515,7 @@
             "id": "5b0a3f7e-2a9c-4d1e-8f3b-6c7d8e9f0a1b",
             "rootDocumentId": "8e1d2c3b-4a5f-4e6d-9c8b-7a6f5e4d3c2b",
             "assetId": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "personId": "10000001-0000-4000-b000-000000000001",
             "personIdDisplay": "Paul Frith",
             "interestLevel": "agreed",
             "expressedByRole": "testator"
@@ -3523,7 +3526,8 @@
             "id": "10000001-0000-4000-b000-000000000001",
             "name": "Paul Frith",
             "relationship": "son",
-            "email": "paul.frith@example.com"
+            "email": "paul.frith@example.com",
+            "accessLevel": "full"
           }
         ],
         "giftListSettings": {
@@ -3617,6 +3621,7 @@
             "id": "5b0a3f7e-2a9c-4d1e-8f3b-6c7d8e9f0a1b",
             "rootDocumentId": "8e1d2c3b-4a5f-4e6d-9c8b-7a6f5e4d3c2b",
             "assetId": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "personId": "10000001-0000-4000-b000-000000000001",
             "personIdDisplay": "Paul Frith",
             "interestLevel": "agreed",
             "expressedByRole": "testator"

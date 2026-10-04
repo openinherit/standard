@@ -340,6 +340,106 @@
         "disclaimer": "This is not the correct disclaimer text."
       },
       "valid": false
+    },
+    {
+      "description": "valid — catalogue-only implementation declares the catalogue root",
+      "data": {
+        "implementation": "CollectorApp",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "6.6.0",
+        "conformanceLevel": 2,
+        "declaredAt": "2026-10-04T10:00:00Z",
+        "root": "catalogue",
+        "entities": {
+          "catalogue": {
+            "level": 2,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0
+          },
+          "asset": {
+            "level": 2,
+            "passed": true
+          },
+          "valuation": {
+            "level": 2,
+            "passed": true
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — explicit estate root",
+      "data": {
+        "implementation": "CollectorApp",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "6.6.0",
+        "conformanceLevel": 2,
+        "declaredAt": "2026-10-04T10:00:00Z",
+        "root": "estate",
+        "entities": {
+          "estate": {
+            "level": 2,
+            "passed": true
+          },
+          "person": {
+            "level": 2,
+            "passed": true
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — unknown document root",
+      "data": {
+        "implementation": "CollectorApp",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "6.6.0",
+        "conformanceLevel": 2,
+        "declaredAt": "2026-10-04T10:00:00Z",
+        "root": "will",
+        "entities": {
+          "estate": {
+            "level": 1,
+            "passed": true
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — catalogue root cannot claim the estate entity (a catalogue document has no estate envelope)",
+      "data": {
+        "implementation": "CollectorApp",
+        "implementationVersion": "1.0.0",
+        "inheritVersion": "6.6.0",
+        "conformanceLevel": 2,
+        "declaredAt": "2026-10-04T10:00:00Z",
+        "root": "catalogue",
+        "entities": {
+          "catalogue": {
+            "level": 2,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0
+          },
+          "asset": {
+            "level": 2,
+            "passed": true
+          },
+          "valuation": {
+            "level": 2,
+            "passed": true
+          },
+          "estate": {
+            "level": 2,
+            "passed": true
+          }
+        }
+      },
+      "valid": false
     }
   ]
 }

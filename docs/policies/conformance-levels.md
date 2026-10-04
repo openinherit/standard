@@ -59,6 +59,34 @@ All jurisdiction-required fields are populated per the active extension.
 - UK estate missing `nilRateBand` in the extension data → fails
 - Islamic estate missing heir classifications → fails
 
+## Conformance Profiles
+
+A level says **how well** a document conforms. A profile says **what kind** of document it claims
+to be. INHERIT has one root, `v3/schema.json`, and two profiles of it, declared in the document by
+`conformanceProfile` ([proposal 0003](../../proposals/0003-catalogue-conformance-profile.md)):
+
+| Profile | Declared by | Required | Use it for |
+|---|---|---|---|
+| `estate` | `conformanceProfile: "estate"`, or nothing at all | `schemaVersion`, `estate`, `people` | a full estate document |
+| `catalogue` | `conformanceProfile: "catalogue"` | everything `v3/catalogue.json` requires (`assets`). Estate-only members are not allowed | a catalogue of what a living person owns, with no estate envelope |
+
+A catalogue-profile document carries `assetInterests`, `legacyContacts`, `dealerInterests`,
+`giftListSettings`, `legacyLetter`, `completeness` and `recommendedActions` **at the root**, the
+same as in `v3/catalogue.json`. It validates against `v3/schema.json` and `v3/catalogue.json`
+unchanged.
+
+**Do not wrap a catalogue in an estate document to make it conform.** The estate profile only
+carries those members inside `applicationState`, which is not part of the interchange standard.
+Declare the catalogue profile instead.
+
+The levels apply to both profiles. Level 3 (jurisdiction complete) is about an estate's
+jurisdiction, so it has no meaning for a catalogue-profile document. A catalogue's conformance
+certificate therefore records `level_1` or `level_2`, with `"profile": "catalogue"`:
+
+```bash
+pnpm run test:catalogue-profile   # every catalogue fixture conforms to the root at this profile
+```
+
 ## Checking Your Document's Level
 
 Run the test suite locally:

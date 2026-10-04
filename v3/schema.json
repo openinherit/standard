@@ -5,14 +5,16 @@
   "description": "Root entry point for an INHERIT v3 estate data interchange document. Contains a single estate and arrays of all entity types",
   "$comment": "$ref resolution convention: all $ref paths are resolved relative to the schema's $id URI, NOT filesystem paths. Core schemas use relative paths (e.g., 'common/money.json' resolves to 'https://openinherit.org/v3/common/money.json'). Extension schemas use '../common/money.json' (resolves relative to their $id in the extensions/ directory). All schemas MUST be registered with the validator before $ref resolution will work. Recommended maximum document size: 5MB. INHERIT NULL POLICY: (1) Missing = not provided, no inference should be drawn. (2) Null = explicitly cleared or not applicable, only allowed where the schema type includes null. (3) Empty array [] = assessed with zero results, distinct from missing (not assessed). (4) Fields that are never meaningful as null MUST NOT include null in their type union.",
   "type": "object",
-  "required": [ "schemaVersion", "estate", "people" ],
   "propertyNames": {
     "pattern": "^(x-inherit-[a-z][a-z0-9-]*|@context|@type|\\$schema|[a-z][a-zA-Z0-9]*)$"
   },
   "properties": {
     "$schema": {
-      "description": "Schema identifier — declares this as an INHERIT v3 document. Standard JSON Schema keyword",
-      "const": "https://openinherit.org/v3/schema.json"
+      "description": "Schema identifier — declares this as an INHERIT v3 document. Standard JSON Schema keyword. An estate-profile document carries the root URL; a catalogue-profile document may carry either the root URL or the catalogue URL, so a catalogue document written against catalogue.json conforms to the root unchanged",
+      "enum": [
+        "https://openinherit.org/v3/schema.json",
+        "https://openinherit.org/v3/catalogue.json"
+      ]
     },
     "@context": {
       "description": "JSON-LD context URI. When present, makes this document self-describing linked data",
@@ -32,6 +34,13 @@
       "description": "JSON-LD type, e.g. InheritDocument",
       "x-lint-exclude": [ "simple_properties_identifiers" ],
       "type": "string"
+    },
+    "conformanceProfile": {
+      "description": "The conformance profile this document claims. 'estate' (the default when absent) is the full estate document: estate, people and schemaVersion are required. 'catalogue' is a catalogue-only document — a living owner cataloguing items with no estate envelope: the document must satisfy catalogue.json in full, so assets is required, estate-only members are not allowed, and the catalogue's own members (assetInterests, legacyContacts, dealerInterests, giftListSettings, legacyLetter, completeness, recommendedActions) are carried at the root rather than in applicationState. A profile is a declared subset of this one root, not a second root",
+      "$comment": "Proposal 0003. Additive: every document valid before this member existed is still valid, and is read as the estate profile.",
+      "default": "estate",
+      "examples": [ "estate", "catalogue" ],
+      "enum": [ "estate", "catalogue" ]
     },
     "schemaVersion": {
       "description": "Semver version of the INHERIT schema this document was created against. Enables consumers to detect compatibility and handle graceful degradation",
@@ -178,7 +187,6 @@
     "assets": {
       "description": "Non-property assets — financial accounts, personal property, vehicles, digital assets, etc",
       "type": "array",
-      "maxItems": 2000,
       "items": {
         "$ref": "asset.json"
       }
@@ -186,7 +194,6 @@
     "assetCollections": {
       "description": "Named groups of related assets — collections (model railways, art, wine, etc.) that have collective significance and value",
       "type": "array",
-      "maxItems": 200,
       "items": {
         "$ref": "asset-collection.json"
       }
@@ -234,7 +241,6 @@
     "wishes": {
       "description": "Non-binding (or culturally binding) wishes — funeral, letters, pet care, digital estate",
       "type": "array",
-      "maxItems": 100,
       "items": {
         "$ref": "wish.json"
       }
@@ -275,7 +281,6 @@
     "valuations": {
       "description": "Valuations of assets, properties, and collections. Multiple valuations per entity are supported — owner estimates, professional valuations, AI estimates, dealer offers",
       "type": "array",
-      "maxItems": 5000,
       "items": {
         "$ref": "valuation.json"
       }
@@ -329,7 +334,6 @@
     "importSources": {
       "description": "Systems from which data was imported into this document. Enables audit trail and source tracking",
       "type": "array",
-      "maxItems": 50,
       "items": {
         "$ref": "#/$defs/ImportSource"
       }
@@ -387,7 +391,6 @@
     "insurancePolicies": {
       "description": "Insurance policies associated with the estate — life, home, health, motor, travel, pet, and professional indemnity",
       "type": "array",
-      "maxItems": 50,
       "items": {
         "$ref": "insurance-policy.json"
       }
@@ -897,6 +900,53 @@
   },
   "allOf": [
     {
+      "$comment": "Conformance profiles (proposal 0003). A document declaring the catalogue profile must satisfy catalogue.json in full — that schema IS the profile, so the two entry points cannot drift apart, the catalogue members are evaluated at the root, and estate-only members (estate, people, bequests …) are refused. Otherwise the document is at the estate profile and keeps exactly the requirements this root has always had, including the array caps, which live in the else branch because catalogue.json allows larger arrays than the estate root does.",
+      "if": {
+        "required": [ "conformanceProfile" ],
+        "properties": {
+          "conformanceProfile": {
+            "const": "catalogue"
+          }
+        }
+      },
+      "then": {
+        "$ref": "catalogue.json"
+      },
+      "else": {
+        "required": [ "schemaVersion", "estate", "people" ],
+        "properties": {
+          "assets": {
+            "maxItems": 2000
+          },
+          "assetCollections": {
+            "maxItems": 200
+          },
+          "valuations": {
+            "maxItems": 5000
+          },
+          "wishes": {
+            "maxItems": 100
+          },
+          "importSources": {
+            "maxItems": 50
+          },
+          "insurancePolicies": {
+            "maxItems": 50
+          },
+          "$schema": {
+            "const": "https://openinherit.org/v3/schema.json"
+          },
+          "conformance": {
+            "properties": {
+              "profile": {
+                "const": "estate"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
       "$comment": "Core extension validation: when a document contains an x-inherit-{name} property matching one of the 21 core extensions, the data block is validated against the extension schema via $ref. Community extensions (not listed here) fall through to the patternProperties generic object validation. This means core extensions get strict enum/required/type enforcement at Level 1, while community extensions only get property name and type validation."
     },
     {
@@ -1297,6 +1347,10 @@
           "description": "Conformance level achieved",
           "$comment": "level_1: structural validity — document parses and validates against JSON Schema. level_2: referential integrity — all cross-references resolve. level_3: jurisdiction complete — all required fields for the estate's jurisdiction are present.",
           "enum": [ "level_1", "level_2", "level_3" ]
+        },
+        "profile": {
+          "description": "The conformance profile the document was validated at. Must match the document's conformanceProfile ('estate' when that is absent). Absent on certificates written before profiles existed, which are read as 'estate'",
+          "enum": [ "estate", "catalogue" ]
         },
         "validatedAt": {
           "description": "When the validation was performed",

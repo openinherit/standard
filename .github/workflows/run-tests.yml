@@ -30,3 +30,10 @@ jobs:
 
       - name: Referential integrity across every fixture
         run: pnpm run validate:refs:all
+
+      # Proposal 0003 — catalogue-only is a conformance profile of the root.
+      # Each catalogue fixture must declare the profile, carry no estate, and
+      # validate against v3/schema.json unwrapped; stripping the declaration
+      # must make the root refuse it. Exit 2 (cannot answer) fails the step.
+      - name: Catalogue fixtures conform to the root at the catalogue profile
+        run: pnpm run test:catalogue-profile

@@ -9,6 +9,7 @@ from typing import Any, Dict, Literal
 from uuid import UUID
 
 from pydantic import (
+    model_validator,
     AnyUrl,
     AwareDatetime,
     BaseModel,
@@ -112,6 +113,1751 @@ class IntegrityPath(
     )
 
 
+class Money(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    amount: conint(ge=-999999999999999, le=999999999999999) = Field(
+        ...,
+        description='Value in the smallest currency unit (pence, cents, sen). The consumer must apply the ISO 4217 exponent to convert to a display value',
+        examples=[32500, 1000000, 500000, 0],
+    )
+    currency: constr(pattern=r'^[A-Z]{3}$') = Field(
+        ...,
+        description='ISO 4217 three-letter currency code. Use the code for the currency of the amount, not the reporting currency',
+        examples=['GBP', 'USD', 'EUR', 'JPY', 'INR', 'AED', 'SGD'],
+    )
+    exponent: conint(ge=0, le=4) | None = Field(
+        2,
+        description='Number of decimal places for this currency. Display value = amount / 10^exponent. Most currencies use 2 (default). JPY/KRW use 0. KWD/BHD/OMR use 3',
+    )
+
+
+class Shareholding(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    companyName: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the company in which shares are held',
+        examples=['Acme Ltd', 'Berkshire Hathaway Inc', 'Toyota Motor Corporation'],
+    )
+    companyNumber: constr(max_length=255) | None = Field(
+        None,
+        description='Company registration number',
+        examples=['12345678', 'DE-HRB-12345'],
+    )
+    shareClass: constr(max_length=255) | None = Field(
+        None,
+        description='Class of shares held',
+        examples=['Ordinary', 'Preference', 'Class A', 'Class B'],
+    )
+    numberOfShares: conint(ge=1) | None = Field(
+        None, description='Number of shares held', examples=[1000, 50000]
+    )
+    totalSharesIssued: conint(ge=1) | None = Field(
+        None,
+        description='Total shares issued by the company (for calculating percentage ownership)',
+        examples=[100000, 1000000],
+    )
+    votingRights: bool | None = Field(
+        None, description='Whether these shares carry voting rights', examples=[True]
+    )
+    restrictedTransfer: bool | None = Field(
+        None,
+        description='Whether transfer of these shares is restricted (e.g. pre-emption rights, shareholder agreement)',
+        examples=[True, False],
+    )
+    listedExchange: constr(max_length=255) | None = Field(
+        None,
+        description='Stock exchange where shares are listed, if publicly traded. Null/absent for private companies',
+        examples=['LSE', 'NYSE', 'TSE', 'ASX'],
+    )
+    ticker: constr(max_length=255) | None = Field(
+        None, description='Stock ticker symbol', examples=['AAPL', 'TSCO.L', '7203.T']
+    )
+    cusip: constr(max_length=255) | None = Field(
+        None,
+        description='CUSIP identifier (US/Canada). 9-character alphanumeric',
+        examples=['037833100'],
+    )
+    isin: constr(max_length=255) | None = Field(
+        None,
+        description='International Securities Identification Number',
+        examples=['US0378331005', 'GB0031215220'],
+    )
+
+
+class BusinessType(Enum):
+    sole_trader = 'sole_trader'
+    partnership = 'partnership'
+    llp = 'llp'
+    limited_company = 'limited_company'
+    plc = 'plc'
+    franchise = 'franchise'
+    cooperative = 'cooperative'
+    other = 'other'
+
+
+class BusinessInterest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    businessName: constr(max_length=255) | None = Field(
+        None,
+        description='Trading name of the business',
+        examples=['Davies & Sons Builders', 'Manchester Model Supplies'],
+    )
+    businessType: BusinessType | None = Field(
+        None, description='Legal structure of the business'
+    )
+    ownershipPercentage: confloat(ge=0.0, le=100.0) | None = Field(
+        None,
+        description="The testator's ownership percentage",
+        examples=[50, 33.33, 100],
+    )
+    controllingInterest: bool | None = Field(
+        None,
+        description='Whether the testator holds a controlling interest. Affects BPR eligibility and valuation discounts',
+        examples=[True, False],
+    )
+    partnershipAgreement: bool | None = Field(
+        None,
+        description='Whether a written partnership/operating agreement exists',
+        examples=[True],
+    )
+    successionProvision: constr(max_length=255) | None = Field(
+        None,
+        description='What the partnership/operating agreement says about succession on death',
+        examples=["Surviving partners must buy out deceased's share at book value", 'Option to purchase at market value within 90 days'],
+    )
+    annualTurnover: Money | None = Field(
+        None,
+        description='Approximate annual turnover — helps with BPR qualification and valuation',
+    )
+    employees: conint(ge=0) | None = Field(
+        None, description='Number of employees', examples=[5, 50]
+    )
+
+
+class SchemeType(Enum):
+    defined_benefit = 'defined_benefit'
+    defined_contribution = 'defined_contribution'
+    sipp = 'sipp'
+    state_pension = 'state_pension'
+    annuity = 'annuity'
+    drawdown = 'drawdown'
+    other = 'other'
+
+
+class NominatedBeneficiary(RootModel[UUID]):
+    root: UUID
+
+
+class DeathBenefitType(Enum):
+    lump_sum = 'lump_sum'
+    dependants_pension = 'dependants_pension'
+    drawdown_transfer = 'drawdown_transfer'
+    annuity_guarantee = 'annuity_guarantee'
+    none = 'none'
+
+
+class PensionType(Enum):
+    occupational = 'occupational'
+    personal = 'personal'
+    stakeholder = 'stakeholder'
+    sipp = 'sipp'
+    ssas = 'ssas'
+    workplace = 'workplace'
+    state = 'state'
+    cpf = 'cpf'
+    epf = 'epf'
+    other = 'other'
+
+
+class BenefitType(Enum):
+    lump_sum = 'lump_sum'
+    income = 'income'
+    pension = 'pension'
+    discretionary = 'discretionary'
+
+
+class DeathBenefitNomination(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    nomineePersonId: UUID | None = Field(
+        None, description='Reference to the Person.id of the nominated beneficiary'
+    )
+    nominationDate: date_aliased | None = Field(
+        None,
+        description='Date the nomination was made or last updated',
+        examples=['2024-01-15'],
+    )
+    nominationReviewDate: date_aliased | None = Field(
+        None,
+        description='Date the nomination should next be reviewed',
+        examples=['2026-01-15'],
+    )
+    nominationCurrent: bool | None = Field(
+        None,
+        description='Whether the nomination is believed to be current and valid',
+        examples=[True, False],
+    )
+    nominationExpiryDate: date_aliased | None = Field(
+        None,
+        description='Date the nomination expires, if applicable',
+        examples=['2027-01-15'],
+    )
+    benefitType: BenefitType | None = Field(
+        None, description='Type of death benefit the nominee would receive'
+    )
+    estimatedAmount: Money | None = Field(
+        None, description='Estimated death benefit amount, in minor currency units'
+    )
+
+
+class PensionValuationAtDeath(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    estimatedValue: Money | None = Field(None, description='Estimated value at death')
+    valuationMethod: constr(max_length=255) | None = Field(
+        None,
+        description='Method used',
+        examples=['Provider statement', 'Actuary estimate'],
+    )
+    valuationDate: date_aliased | None = Field(
+        None, description='Date of valuation', examples=['2026-03-30']
+    )
+
+
+class ContinuationOnDeath(Enum):
+    terminates = 'terminates'
+    continues_to_spouse = 'continues_to_spouse'
+    continues_to_beneficiary = 'continues_to_beneficiary'
+    fixed_term = 'fixed_term'
+
+
+class AnnuityContinuation(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    annuityInForce: bool | None = Field(
+        None, description='Whether an annuity is currently in force'
+    )
+    annuityAmount: Money | None = Field(
+        None, description='Annual annuity amount in minor currency units'
+    )
+    continuationOnDeath: ContinuationOnDeath | None = Field(
+        None, description="What happens to the annuity on the holder's death"
+    )
+    continuationBeneficiaryPersonId: (
+        UUID | None
+    ) = (
+        Field(None, description='Person.id of the beneficiary who receives continuation payments')
+    )
+
+
+class Pension(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    schemeType: SchemeType | None = Field(
+        None, description='The type of pension scheme'
+    )
+    provider: constr(max_length=255) | None = Field(
+        None,
+        description='Pension provider name',
+        examples=['Aviva', 'Scottish Widows', 'Fidelity', 'Vanguard', 'LGPS'],
+    )
+    policyReference: constr(max_length=500) | None = Field(
+        None,
+        description='Policy or membership reference number',
+        examples=['PEN-2015-123456'],
+    )
+    nominatedBeneficiaries: list[NominatedBeneficiary] | None = Field(
+        None,
+        description='Person IDs of nominated beneficiaries. Pension trustees usually have discretion but will consider nominations',
+        max_length=100,
+    )
+    nominationDate: date_aliased | None = Field(
+        None,
+        description='Date the beneficiary nomination was last updated',
+        examples=['2024-01-15'],
+    )
+    deathBenefitType: DeathBenefitType | None = Field(
+        None, description='Type of death benefit payable from this pension'
+    )
+    crystallised: bool | None = Field(
+        None,
+        description='Whether the pension has been accessed/crystallised. Affects tax treatment on death (UK: pre-75 tax-free, post-75 taxed as income)',
+        examples=[False, True],
+    )
+    lifetimeAllowanceUsed: confloat(ge=0.0, le=100.0) | None = Field(
+        None,
+        description='Percentage of lifetime allowance used (UK). Abolished April 2024 but transitional protections remain',
+        examples=[45.5],
+    )
+    pensionType: PensionType | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None,
+        description='The broad pension category, covering international pension types',
+        examples=['occupational', 'sipp', 'workplace'],
+    )
+    pensionProviderOrganisationId: (
+        UUID | None
+    ) = (
+        Field(None, description='Reference to the Organisation.id of the pension provider')
+    )
+    pensionMemberNumber: constr(max_length=100) | None = Field(
+        None,
+        description='Membership or scheme reference number',
+        examples=['MEM-2015-123456', 'NI: AB123456C'],
+    )
+    deathBenefitNomination: DeathBenefitNomination | None = Field(
+        None,
+        description='Structured death benefit nomination — who receives pension benefits on death, and the terms',
+    )
+    drawdownStartDate: date_aliased | None = Field(
+        None,
+        description='Date drawdown commenced, if the pension is in drawdown',
+        examples=['2025-04-06'],
+    )
+    pensionValuationAtDeath: PensionValuationAtDeath | None = Field(
+        None, description='Pension fund valuation at date of death'
+    )
+    annuityContinuation: AnnuityContinuation | None = Field(
+        None,
+        description='Details of annuity continuation on death — whether payments continue and to whom',
+    )
+
+
+class PolicyType(Enum):
+    term_life = 'term_life'
+    whole_life = 'whole_life'
+    endowment = 'endowment'
+    critical_illness = 'critical_illness'
+    income_protection = 'income_protection'
+    key_person = 'key_person'
+    other = 'other'
+
+
+class TrusteeName(RootModel[constr(max_length=500)]):
+    root: constr(max_length=500)
+
+
+class BeneficiaryPersonId(RootModel[UUID]):
+    root: UUID
+
+
+class PremiumFrequency(Enum):
+    monthly = 'monthly'
+    annual = 'annual'
+    single_premium = 'single_premium'
+    paid_up = 'paid_up'
+
+
+class InsurancePolicy2(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    policyType: PolicyType | None = Field(None, description='Type of insurance policy')
+    provider: constr(max_length=255) | None = Field(
+        None,
+        description='Insurance company name',
+        examples=['Aviva', 'Legal & General', 'Prudential', 'MetLife'],
+    )
+    policyReference: constr(max_length=500) | None = Field(
+        None, description='Policy reference number', examples=['LG-LIFE-2020-789']
+    )
+    sumAssured: Money | None = Field(
+        None, description='The amount payable on death, in minor currency units'
+    )
+    writtenInTrust: bool | None = Field(
+        None,
+        description='Whether the policy is written in trust. If true, proceeds pass outside the estate and are not subject to inheritance tax',
+        examples=[True, False],
+    )
+    trusteeNames: list[TrusteeName] | None = Field(
+        None,
+        description='Names of the policy trustees, if written in trust',
+        examples=[['Sarah Davies', 'James Davies']],
+        max_length=50,
+    )
+    beneficiaryPersonIds: list[BeneficiaryPersonId] | None = Field(
+        None, description='Person IDs of named beneficiaries', max_length=100
+    )
+    premiumFrequency: PremiumFrequency | None = Field(
+        None, description='How often premiums are paid'
+    )
+    expiryDate: date_aliased | None = Field(
+        None,
+        description='Policy expiry date (for term policies)',
+        examples=['2035-06-01'],
+    )
+
+
+class CoOwnerPersonId(RootModel[UUID]):
+    root: UUID
+
+
+class OwnershipType(Enum):
+    joint_tenants = 'joint_tenants'
+    tenants_in_common = 'tenants_in_common'
+    community_property = 'community_property'
+    partnership = 'partnership'
+    other = 'other'
+
+
+class CoOwnership(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    coOwnerPersonIds: list[CoOwnerPersonId] | None = Field(
+        None, description='Person IDs of co-owners', max_length=100
+    )
+    ownershipType: OwnershipType | None = Field(
+        None, description='How ownership is structured between co-owners'
+    )
+    ownershipPercentage: confloat(ge=0.0, le=100.0) | None = Field(
+        None, description="The testator's ownership percentage", examples=[50, 33.33]
+    )
+    severanceDate: date_aliased | None = Field(
+        None,
+        description='Date joint tenancy was severed to become tenants in common (if applicable)',
+        examples=['2024-06-15'],
+    )
+
+
+class IpType(Enum):
+    patent = 'patent'
+    copyright = 'copyright'
+    trademark = 'trademark'
+    design_right = 'design_right'
+    trade_secret = 'trade_secret'
+    database_right = 'database_right'
+    other = 'other'
+
+
+class Licensee(RootModel[constr(max_length=500)]):
+    root: constr(max_length=500)
+
+
+class IntellectualProperty(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    ipType: IpType | None = Field(None, description='Type of intellectual property')
+    registrationNumber: constr(max_length=500) | None = Field(
+        None,
+        description='Registration or application number',
+        examples=['GB2345678', 'US10,123,456'],
+    )
+    registrationOffice: constr(max_length=255) | None = Field(
+        None,
+        description='Intellectual property office where registered',
+        examples=['UK IPO', 'USPTO', 'EPO', 'WIPO'],
+    )
+    expiryDate: date_aliased | None = Field(
+        None, description='Date the IP right expires', examples=['2040-03-15']
+    )
+    annualRevenue: Money | None = Field(
+        None,
+        description='Approximate annual revenue generated from this IP (licensing, royalties, etc.)',
+    )
+    licensees: list[Licensee] | None = Field(
+        None,
+        description='Current licensees of this IP',
+        examples=[['Publisher A', 'Manufacturer B']],
+        max_length=50,
+    )
+
+
+class CompensationType(Enum):
+    iso = 'iso'
+    nso = 'nso'
+    rsu = 'rsu'
+    espp = 'espp'
+    phantom_stock = 'phantom_stock'
+    sar = 'sar'
+    other = 'other'
+
+
+class StockCompensation(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    compensationType: CompensationType | None = Field(
+        None, description='Type of stock compensation'
+    )
+    grantDate: date_aliased | None = Field(
+        None, description='Date the award was granted', examples=['2022-03-15']
+    )
+    vestingSchedule: constr(max_length=255) | None = Field(
+        None,
+        description='Description of the vesting schedule',
+        examples=['4-year vest with 1-year cliff', '3-year monthly vesting', 'Fully vested'],
+    )
+    vestedQuantity: conint(ge=0) | None = Field(
+        None, description='Number of shares/units currently vested', examples=[2500]
+    )
+    unvestedQuantity: conint(ge=0) | None = Field(
+        None,
+        description='Number of shares/units not yet vested. May be forfeited on death depending on plan terms',
+        examples=[7500],
+    )
+    exercisePrice: Money | None = Field(
+        None, description='Strike/exercise price per share for options'
+    )
+    expirationDate: date_aliased | None = Field(
+        None,
+        description='Date the options expire. Estate typically has limited window to exercise after death',
+        examples=['2032-03-15'],
+    )
+    postDeathExerciseWindow: constr(max_length=255) | None = Field(
+        None,
+        description='Time allowed for estate to exercise options after death',
+        examples=['12 months from date of death', '90 days', 'Per plan administrator discretion'],
+    )
+    acceleratesOnDeath: bool | None = Field(
+        None,
+        description='Whether unvested awards accelerate (fully vest) on death',
+        examples=[True, False],
+    )
+
+
+class Collectibility(Enum):
+    likely = 'likely'
+    uncertain = 'uncertain'
+    doubtful = 'doubtful'
+    uncollectible = 'uncollectible'
+
+
+class DebtReceivable(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    debtorName: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the person or organisation that owes the debt',
+        examples=['John Smith', 'Acme Trading Ltd'],
+    )
+    debtorPersonId: UUID | None = Field(
+        None, description='Reference to Person.id if the debtor is in the people array'
+    )
+    originalAmount: Money | None = Field(
+        None, description='Original amount of the debt'
+    )
+    outstandingAmount: Money | None = Field(
+        None, description='Amount currently outstanding'
+    )
+    interestRate: confloat(ge=0.0) | None = Field(
+        None,
+        description='Annual interest rate on the debt, as a percentage',
+        examples=[0, 3.5, 8],
+    )
+    secured: bool | None = Field(
+        None,
+        description='Whether the debt is secured against collateral',
+        examples=[False],
+    )
+    documentRef: constr(max_length=500) | None = Field(
+        None,
+        description='Reference to any loan agreement or promissory note',
+        examples=['Promissory note dated 15 March 2023'],
+    )
+    collectibility: Collectibility | None = Field(
+        None, description='Likelihood of collecting this debt'
+    )
+
+
+class Financial(BaseModel):
+    shareholding: Shareholding | None = Field(
+        None,
+        description='Detailed shareholding information — company, share class, voting rights, restrictions. Relevant for BPR (UK), stepped-up basis (US), and controlling interest calculations',
+    )
+    businessInterest: BusinessInterest | None = Field(
+        None,
+        description='Detailed business interest information — partnership shares, LLP membership, sole trader business. Relevant for BPR (UK), QFOBI (US), and succession planning',
+    )
+    pension: Pension | None = Field(
+        None,
+        description='Detailed pension information — scheme type, nominated beneficiaries, death benefits. Pensions often pass outside the estate via nomination',
+    )
+    insurancePolicy: InsurancePolicy2 | None = Field(
+        None,
+        description='Life insurance policy details — type, sum assured, beneficiaries, trust status. Policies written in trust pass outside the estate',
+    )
+    coOwnership: CoOwnership | None = Field(
+        None,
+        description='Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will',
+    )
+    intellectualProperty: IntellectualProperty | None = Field(
+        None,
+        description='Intellectual property details — patents, copyrights, trademarks, trade secrets. IP succession varies by jurisdiction and type',
+    )
+    stockCompensation: StockCompensation | None = Field(
+        None,
+        description='Employee stock compensation details — options, RSUs, ESPPs. Vesting schedules and exercise windows are critical on death',
+    )
+    debtReceivable: DebtReceivable | None = Field(
+        None,
+        description='Details of money owed to the testator by others. These are estate assets that the executor must collect',
+    )
+
+
+class FuelType(Enum):
+    petrol = 'petrol'
+    diesel = 'diesel'
+    electric = 'electric'
+    hybrid_petrol = 'hybrid_petrol'
+    hybrid_diesel = 'hybrid_diesel'
+    lpg = 'lpg'
+    other = 'other'
+
+
+class VehicleType(Enum):
+    car = 'car'
+    motorcycle = 'motorcycle'
+    van = 'van'
+    motorhome = 'motorhome'
+    trike = 'trike'
+    sidecar_outfit = 'sidecar_outfit'
+    other = 'other'
+
+
+class KeeperStatus(Enum):
+    registered_keeper = 'registered_keeper'
+    not_registered_keeper = 'not_registered_keeper'
+    unknown = 'unknown'
+
+
+class V5cStatus(Enum):
+    held = 'held'
+    missing = 'missing'
+    applied_for = 'applied_for'
+    with_dvla = 'with_dvla'
+
+
+class FinanceType(Enum):
+    none = 'none'
+    hp = 'hp'
+    pcp = 'pcp'
+    lease = 'lease'
+    loan = 'loan'
+    unknown = 'unknown'
+
+
+class IntendedDisposal(Enum):
+    transfer_to_beneficiary = 'transfer_to_beneficiary'
+    sell = 'sell'
+    scrap = 'scrap'
+    sorn_and_store = 'sorn_and_store'
+    undecided = 'undecided'
+
+
+class DeathActions(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    dvlaNotified: bool | None = Field(
+        None, description="Whether DVLA has been notified of the keeper's death"
+    )
+    dvlaNotifiedAt: date_aliased | None = Field(
+        None, description='When DVLA was notified'
+    )
+    insurerNotified: bool | None = Field(
+        None, description='Whether the vehicle insurer has been notified'
+    )
+    insurerNotifiedAt: date_aliased | None = Field(
+        None, description='When the insurer was notified'
+    )
+    financeCompanyNotified: bool | None = Field(
+        None,
+        description='Whether the finance company has been notified (if applicable)',
+    )
+    financeSettled: bool | None = Field(
+        None, description='Whether the finance has been settled or the vehicle returned'
+    )
+    taxRefundClaimed: bool | None = Field(
+        None,
+        description='Whether a refund has been claimed for remaining full months of vehicle tax',
+    )
+    intendedDisposal: (
+        IntendedDisposal | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='What the executor intends to do with the vehicle')
+
+
+class Vehicle1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    registrationNumber: constr(max_length=20) | None = Field(
+        None,
+        description='Vehicle registration number (number plate). Primary UK identifier. Format varies by jurisdiction',
+        examples=['AB12 CDE', 'S123 ABC', 'A1'],
+    )
+    vin: constr(pattern=r'^[A-HJ-NPR-Z0-9]{17}$') | None = Field(
+        None,
+        description='17-character Vehicle Identification Number. International standard, globally unique per vehicle',
+        examples=['WBANE53516CK72834'],
+    )
+    make: constr(max_length=100) | None = Field(
+        None,
+        description='Vehicle manufacturer. Use the DVLA-registered name where available',
+        examples=['BMW', 'TRIUMPH', 'JAGUAR', 'HONDA'],
+    )
+    model: constr(max_length=255) | None = Field(
+        None,
+        description='Vehicle model name. DVLA VES API does not return this — must come from user input or VIN decode',
+        examples=['M3 Competition', 'Bonneville T120', 'E-Type Series 1 FHC'],
+    )
+    variant: constr(max_length=255) | None = Field(
+        None,
+        description='Trim level, edition, or variant',
+        examples=['Competition', 'Black Edition', 'SE', 'Sport'],
+    )
+    yearOfManufacture: conint(ge=1886, le=2100) | None = Field(
+        None, description='Four-digit year of manufacture'
+    )
+    dateOfFirstRegistration: date_aliased | None = Field(
+        None,
+        description='Date of first registration in the UK (or equivalent jurisdiction)',
+    )
+    colour: constr(max_length=50) | None = Field(
+        None,
+        description='DVLA-registered colour',
+        examples=['BLACK', 'SILVER', 'BRITISH RACING GREEN'],
+    )
+    fuelType: FuelType | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
+        Field(None, description='Fuel type as reported by DVLA')
+    )
+    engineCapacity: conint(ge=0, le=20000) | None = Field(
+        None,
+        description='Engine capacity in cubic centimetres (cc). Zero for electric vehicles',
+    )
+    co2Emissions: conint(ge=0) | None = Field(
+        None, description='CO2 emissions in grams per kilometre'
+    )
+    vehicleType: (
+        VehicleType | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='Type of vehicle')
+    isClassic: bool | None = Field(
+        None,
+        description='Whether the vehicle is considered a classic or historic vehicle. In the UK, vehicles manufactured before 1 January 1977 are exempt from vehicle excise duty. Classic vehicles may need specialist valuation (Hagerty, auction houses) rather than standard guides',
+    )
+    keeperStatus: (
+        KeeperStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='Whether the deceased was the registered keeper of this vehicle')
+    v5cStatus: V5cStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
+        Field(None, description='Status of the V5C registration document (logbook)')
+    )
+    financeType: (
+        FinanceType | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='Type of finance arrangement on the vehicle. If HP or PCP, the vehicle is owned by the finance company, not the estate')
+    sornDeclared: bool | None = Field(
+        None,
+        description='Whether a Statutory Off Road Notification (SORN) is currently in effect',
+    )
+    deathActions: DeathActions | None = Field(
+        None,
+        description='Tracks which estate administration steps have been completed for this vehicle',
+    )
+
+
+class MotStatus(Enum):
+    valid = 'valid'
+    expired = 'expired'
+    no_mot_required = 'no_mot_required'
+    sorn = 'sorn'
+
+
+class TaxStatus(Enum):
+    taxed = 'taxed'
+    untaxed = 'untaxed'
+    sorn = 'sorn'
+    not_taxed_for_on_road_use = 'not_taxed_for_on_road_use'
+
+
+class InsuranceStatus(Enum):
+    insured = 'insured'
+    not_insured = 'not_insured'
+    unknown = 'unknown'
+
+
+class WriteOffCategory(Enum):
+    A = 'A'
+    B = 'B'
+    S = 'S'
+    N = 'N'
+    none = 'none'
+
+
+class StolenStatus(Enum):
+    clear = 'clear'
+    reported_stolen = 'reported_stolen'
+    unknown = 'unknown'
+
+
+class VehicleCheck(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    retrievedAt: AwareDatetime = Field(
+        ..., description='When this check data was fetched'
+    )
+    motExpiry: date_aliased | None = Field(None, description='Current MOT expiry date')
+    motStatus: MotStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
+        Field(None, description='Current MOT status')
+    )
+    lastMileage: conint(ge=0) | None = Field(
+        None, description='Mileage at last MOT test'
+    )
+    lastMileageDate: date_aliased | None = Field(
+        None, description='Date of the last MOT mileage reading'
+    )
+    advisoryCount: conint(ge=0) | None = Field(
+        None, description='Number of advisory items at last MOT'
+    )
+    failureCount: conint(ge=0) | None = Field(
+        None, description='Number of failure items at last MOT'
+    )
+    taxStatus: TaxStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
+        Field(None, description='DVLA vehicle tax status')
+    )
+    taxDueDate: date_aliased | None = Field(
+        None, description='When vehicle tax expires'
+    )
+    insuranceStatus: (
+        InsuranceStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='Whether the vehicle appears insured on the Motor Insurance Database')
+    financeOutstanding: bool | None = Field(
+        None, description='Whether there is outstanding finance on the vehicle'
+    )
+    financeSettlementAmount: conint(ge=0) | None = Field(
+        None,
+        description='Finance settlement figure in minor units (pennies). The amount needed to clear the finance and take ownership',
+    )
+    writeOffCategory: (
+        WriteOffCategory | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='Insurance write-off category, if applicable')
+    stolenStatus: (
+        StolenStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='Whether the vehicle is reported stolen')
+    previousKeepers: conint(ge=0) | None = Field(
+        None, description='Number of previous registered keepers'
+    )
+    plateChanges: conint(ge=0) | None = Field(
+        None,
+        description="Number of registration plate changes in the vehicle's history",
+    )
+    mileageAnomaly: bool | None = Field(
+        None,
+        description='Whether MOT mileage readings show a discrepancy (clocking indicator)',
+    )
+
+
+class Vehicle(BaseModel):
+    vehicle: Vehicle1 | None = Field(
+        None,
+        description="Structured vehicle data — identity, registration, and estate administration tracking. Present when category is 'vehicle'. Maps to schema:Vehicle in JSON-LD",
+    )
+    vehicleCheck: VehicleCheck | None = Field(
+        None,
+        description='Live vehicle check data from DVLA VES, DVSA MOT History, and HPI/finance check APIs. Point-in-time snapshot at retrievedAt',
+    )
+
+
+class Type(Enum):
+    backup_codes = 'backup_codes'
+    email = 'email'
+    phone = 'phone'
+    security_key = 'security_key'
+
+
+class RecoveryMethod(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type | None = Field(None, description='Type of recovery method')
+    location: constr(max_length=500) | None = Field(
+        None,
+        description='Where this recovery method or device is stored',
+        examples=['Backup codes in LastPass secure notes', 'Recovery phone: +44 7700 900123'],
+    )
+
+
+class PlatformDeathPolicy(Enum):
+    memorialise = 'memorialise'
+    delete = 'delete'
+    transfer = 'transfer'
+    archive = 'archive'
+    unknown = 'unknown'
+
+
+class DigitalAccess(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    username: constr(max_length=255) | None = Field(
+        None,
+        description='Username or login identifier for this account',
+        examples=['john.davies@example.com', '@johndavies'],
+    )
+    passwordStorageLocation: constr(max_length=500) | None = Field(
+        None,
+        description='Where the password is stored — a password manager, physical location, or person who holds it',
+        examples=['LastPass vault', 'Safe deposit box at Barclays Wrexham', 'Written in sealed envelope with solicitor'],
+    )
+    passwordManager: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the password manager holding credentials for this account',
+        examples=['LastPass', '1Password', 'Bitwarden', 'Apple Keychain'],
+    )
+    twoFactorEnabled: bool | None = Field(
+        None,
+        description='Whether two-factor authentication is enabled on this account',
+        examples=[True, False],
+    )
+    recoveryMethods: list[RecoveryMethod] | None = Field(
+        None,
+        description='Methods available to recover access to this account if the primary credentials are unavailable',
+        max_length=20,
+    )
+    platformDeathPolicy: (
+        PlatformDeathPolicy | constr(pattern=r'^x-inherit-.+') | None
+    ) = Field(None, description="The platform's policy for handling accounts after the holder's death", examples=['memorialise', 'delete'])
+    legacyContactConfigured: bool | None = Field(
+        None,
+        description='Whether a legacy contact has been configured on the platform (e.g. Google Inactive Account Manager, Facebook Legacy Contact)',
+        examples=[True, False],
+    )
+    legacyContactPersonId: UUID | None = Field(
+        None,
+        description="Reference to the Person.id configured as the platform's legacy contact",
+    )
+
+
+class Platform(Enum):
+    facebook = 'facebook'
+    instagram = 'instagram'
+    tiktok = 'tiktok'
+    twitter_x = 'twitter_x'
+    linkedin = 'linkedin'
+    threads = 'threads'
+    youtube = 'youtube'
+    pinterest = 'pinterest'
+    other = 'other'
+
+
+class PostDeathAction(Enum):
+    memorialise = 'memorialise'
+    delete = 'delete'
+    transfer = 'transfer'
+    archive = 'archive'
+    unknown = 'unknown'
+
+
+class SocialMedia(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    platform: Platform | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None, description='The social media platform'
+    )
+    username: constr(max_length=255) | None = Field(
+        None, description='Username or handle', examples=['@johndavies']
+    )
+    url: AnyUrl | None = Field(None, description='Direct URL to the profile')
+    followerCount: conint(ge=0) | None = Field(None, description='Number of followers')
+    monetised: bool | None = Field(
+        None, description='Whether the account generates revenue'
+    )
+    postDeathAction: PostDeathAction | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None, description='Preferred action after death'
+    )
+    transferToPersonId: UUID | None = Field(
+        None, description='Person.id to transfer the account to'
+    )
+
+
+class Blockchain(Enum):
+    bitcoin = 'bitcoin'
+    ethereum = 'ethereum'
+    solana = 'solana'
+    cardano = 'cardano'
+    other = 'other'
+
+
+class WalletType(Enum):
+    hardware = 'hardware'
+    software = 'software'
+    exchange = 'exchange'
+    custodian = 'custodian'
+    paper = 'paper'
+
+
+class CryptoAccess(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    blockchain: Blockchain | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None, description='The blockchain network'
+    )
+    walletType: WalletType | None = Field(None, description='Type of wallet')
+    walletAddress: constr(max_length=255) | None = Field(
+        None, description='Public wallet address'
+    )
+    privateKeyLocation: constr(max_length=500) | None = Field(
+        None,
+        description='Where the private key is stored — DO NOT store the key itself',
+    )
+    seedPhraseLocation: constr(max_length=500) | None = Field(
+        None, description='Where the seed phrase is stored — DO NOT store it'
+    )
+    exchangeOrganisationId: UUID | None = Field(
+        None, description='Organisation.id of the exchange'
+    )
+    costBasis: Money | None = Field(None, description='Original cost basis for CGT')
+
+
+class Provider(Enum):
+    google_drive = 'google_drive'
+    onedrive = 'onedrive'
+    icloud = 'icloud'
+    dropbox = 'dropbox'
+    aws_s3 = 'aws_s3'
+    other = 'other'
+
+
+class Action(Enum):
+    archive = 'archive'
+    delete = 'delete'
+    transfer = 'transfer'
+
+
+class ImportantFolder(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    name: constr(max_length=255) | None = Field(
+        None,
+        description='Folder name',
+        examples=['Family Photos', 'Financial Documents'],
+    )
+    contents: constr(max_length=500) | None = Field(
+        None, description='Description of folder contents'
+    )
+    action: Action | None = Field(None, description='What should happen to this folder')
+
+
+class CloudStorage(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    provider: Provider | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None, description='Cloud storage provider'
+    )
+    storageUsed: constr(max_length=50) | None = Field(
+        None,
+        description='Amount of storage used',
+        examples=['45 GB of 100 GB', '2.1 TB'],
+    )
+    importantFolders: list[ImportantFolder] | None = Field(
+        None,
+        description='Important folders that need attention during estate administration',
+        max_length=50,
+    )
+    familyPhotoAccess: bool | None = Field(
+        None,
+        description='Whether the account contains family photos that should be preserved and shared',
+    )
+
+
+class DomainNameAccess(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    domainName: constr(max_length=255) | None = Field(
+        None,
+        description='The registered domain name',
+        examples=['example.com', 'family-trust.co.uk'],
+    )
+    registrar: constr(max_length=255) | None = Field(
+        None,
+        description='Domain registrar name',
+        examples=['GoDaddy', 'Namecheap', 'Cloudflare Registrar'],
+    )
+    registrantOrganisationId: UUID | None = Field(
+        None,
+        description='Organisation.id of the registrant, if the domain is held by an organisation',
+    )
+    expiryDate: date_aliased | None = Field(
+        None, description='Domain registration expiry date'
+    )
+    autoRenew: bool | None = Field(
+        None, description='Whether automatic renewal is enabled'
+    )
+    transferLocked: bool | None = Field(
+        None,
+        description='Whether the domain has a transfer lock (registrar lock / clientTransferProhibited)',
+    )
+    authCodeLocation: constr(max_length=500) | None = Field(
+        None,
+        description='Where the transfer auth code is stored — reference only, never the code itself',
+    )
+    nameservers: list[str] | None = Field(
+        None, description='Nameservers currently assigned to the domain', max_length=20
+    )
+
+
+class Blockchain1(Enum):
+    bitcoin = 'bitcoin'
+    ethereum = 'ethereum'
+    solana = 'solana'
+    cardano = 'cardano'
+    polygon = 'polygon'
+    other = 'other'
+
+
+class TokenStandard(Enum):
+    erc_721 = 'erc_721'
+    erc_1155 = 'erc_1155'
+    other = 'other'
+
+
+class NftAccess(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    blockchain: Blockchain1 | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None, description='The blockchain network hosting the NFT'
+    )
+    contractAddress: constr(max_length=255) | None = Field(
+        None,
+        description='Smart contract address for the NFT collection',
+        examples=['0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'],
+    )
+    tokenId: constr(max_length=255) | None = Field(
+        None,
+        description='Token identifier — string because can be very large integers',
+        examples=['42', '115792089237316195423570985008687907853269'],
+    )
+    tokenStandard: TokenStandard | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None, description='The token standard used by the NFT contract'
+    )
+    marketplace: constr(max_length=255) | None = Field(
+        None,
+        description='Primary marketplace where this NFT is listed or was purchased',
+        examples=['OpenSea', 'Rarible', 'Magic Eden'],
+    )
+    marketplaceUrl: AnyUrl | None = Field(
+        None, description='Direct URL to the NFT listing on the marketplace'
+    )
+    metadataUri: AnyUrl | None = Field(
+        None, description='Points to off-chain metadata JSON (tokenURI)'
+    )
+
+
+class Platform1(Enum):
+    youtube = 'youtube'
+    substack = 'substack'
+    etsy = 'etsy'
+    patreon = 'patreon'
+    twitch = 'twitch'
+    spotify = 'spotify'
+    medium = 'medium'
+    other = 'other'
+
+
+class MonetisationStatus(Enum):
+    active = 'active'
+    suspended = 'suspended'
+    demonetised = 'demonetised'
+    pending = 'pending'
+    none = 'none'
+
+
+class ContentType(Enum):
+    video = 'video'
+    audio = 'audio'
+    written = 'written'
+    mixed = 'mixed'
+    other = 'other'
+
+
+class RevenueModel(Enum):
+    advertising = 'advertising'
+    subscription = 'subscription'
+    tips = 'tips'
+    affiliate = 'affiliate'
+    merchandise = 'merchandise'
+    mixed = 'mixed'
+
+
+class MonetisedContentAccess(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    platform: Platform1 | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None, description='Content platform'
+    )
+    channelUrl: AnyUrl | None = Field(
+        None, description='Direct URL to the channel or storefront'
+    )
+    channelName: constr(max_length=255) | None = Field(
+        None, description='Display name of the channel or storefront'
+    )
+    subscriberCount: conint(ge=0) | None = Field(
+        None, description='Number of subscribers or followers on the platform'
+    )
+    monthlyRevenue: Money | None = Field(
+        None,
+        description='Approximate monthly revenue from the platform, in minor currency units',
+    )
+    monetisationStatus: MonetisationStatus | constr(pattern=r'^x-inherit-.+') | None = (
+        Field(None, description='Current monetisation status of the content')
+    )
+    contentType: ContentType | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None, description='Primary type of content produced'
+    )
+    revenueModel: RevenueModel | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None, description='How the content generates revenue'
+    )
+
+
+class LoyaltyAccess(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    programme: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the loyalty programme',
+        examples=['Avios', 'Nectar', 'Tesco Clubcard'],
+    )
+    programmeProvider: constr(max_length=255) | None = Field(
+        None,
+        description='Organisation that operates the programme',
+        examples=['British Airways', "Sainsbury's", 'Tesco'],
+    )
+    pointsBalance: conint(ge=0) | None = Field(
+        None, description='Current points balance'
+    )
+    cashEquivalent: Money | None = Field(
+        None,
+        description='Approximate cash equivalent of the points balance, in minor currency units',
+    )
+    expiryDate: date_aliased | None = Field(
+        None, description='Date when the points expire if not used'
+    )
+    transferable: bool | None = Field(
+        None, description='Whether the programme permits transfer of points after death'
+    )
+    transferUrl: AnyUrl | None = Field(
+        None, description="URL to the programme's transfer or bereavement page"
+    )
+
+
+class Platform2(Enum):
+    steam = 'steam'
+    xbox = 'xbox'
+    playstation = 'playstation'
+    nintendo = 'nintendo'
+    epic = 'epic'
+    roblox = 'roblox'
+    other = 'other'
+
+
+class GamingAccess(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    platform: Platform2 | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None, description='Gaming platform'
+    )
+    accountName: constr(max_length=255) | None = Field(
+        None,
+        description='Account name or gamertag on the platform',
+        examples=['testator_gamer', 'GamerTag#1234'],
+    )
+    virtualCurrencyBalance: conint(ge=0) | None = Field(
+        None, description='Balance of virtual currency on the platform'
+    )
+    virtualCurrencyName: constr(max_length=100) | None = Field(
+        None,
+        description='Name of the virtual currency',
+        examples=['Steam Wallet Funds', 'V-Bucks', 'Robux'],
+    )
+    transferable: bool | None = Field(
+        None,
+        description='Whether the platform permits account or library transfer after death',
+    )
+    estimatedRealValue: Money | None = Field(
+        None,
+        description="Estimated real-world value of the account's digital assets, in minor currency units",
+    )
+
+
+class Action1(Enum):
+    memorialise = 'memorialise'
+    delete = 'delete'
+    transfer = 'transfer'
+    archive = 'archive'
+    deactivate = 'deactivate'
+    preserve = 'preserve'
+
+
+class PlatformToolType(Enum):
+    inactive_account_manager = 'inactive_account_manager'
+    legacy_contact = 'legacy_contact'
+    digital_legacy = 'digital_legacy'
+    memorialisation_request = 'memorialisation_request'
+    none = 'none'
+    other = 'other'
+
+
+class PlatformDelegation(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    action: Action1 | constr(pattern=r'^x-inherit-.+') = Field(
+        ..., description='Desired post-death action for this digital asset'
+    )
+    delayDuration: (
+        constr(
+            pattern=r'^P(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$'
+        )
+        | None
+    ) = Field(None, description='How long to wait before executing the action, as an ISO 8601 duration', examples=['P6M', 'P1Y', 'P5Y'])
+    transferToPersonId: UUID | None = Field(
+        None,
+        description="Person.id to transfer the asset to (when action is 'transfer')",
+    )
+    specificInstructions: constr(max_length=500) | None = Field(
+        None,
+        description='Free-text instructions for the executor regarding this digital asset',
+    )
+    platformToolConfigured: bool | None = Field(
+        None,
+        description="Whether the platform's native death/inactivity tool has been set up",
+    )
+    platformToolType: PlatformToolType | constr(pattern=r'^x-inherit-.+') | None = (
+        Field(None, description='Which platform tool has been configured, if any')
+    )
+    configuredDate: date_aliased | None = Field(
+        None, description='Date when the platform tool was configured'
+    )
+
+
+class AccessMethod(Enum):
+    designated_recipient = 'designated_recipient'
+    legacy_contact = 'legacy_contact'
+    inactive_account_manager = 'inactive_account_manager'
+    court_order = 'court_order'
+    rufadaa_request = 'rufadaa_request'
+    platform_form = 'platform_form'
+    credential_sharing = 'credential_sharing'
+    none = 'none'
+
+
+class AccessScope(Enum):
+    catalogue_only = 'catalogue_only'
+    full_content = 'full_content'
+    restricted = 'restricted'
+    unknown = 'unknown'
+
+
+class FiduciaryAccess(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    accessMethod: AccessMethod | constr(pattern=r'^x-inherit-.+') = Field(
+        ..., description='The method by which a fiduciary can access this digital asset'
+    )
+    accessConfigured: bool | None = Field(
+        None,
+        description='Whether the chosen access method has been set up with the platform',
+    )
+    designatedRecipientPersonId: (
+        UUID | None
+    ) = (
+        Field(None, description='Person.id of the designated recipient for this digital asset')
+    )
+    accessScope: AccessScope | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None, description='RUFADAA catalogue vs content distinction'
+    )
+    termsOfServiceUrl: AnyUrl | None = Field(
+        None, description="URL to the platform's terms of service or bereavement policy"
+    )
+    termsOfServiceConstraints: constr(max_length=500) | None = Field(
+        None,
+        description="Summary of key constraints from the platform's terms of service that affect fiduciary access",
+    )
+
+
+class Digital(BaseModel):
+    digitalAccess: DigitalAccess | None = Field(
+        None,
+        description='Structured access information for digital assets — login credentials, 2FA, recovery methods, and platform death policies. Critical for executors managing the digital estate',
+    )
+    socialMedia: SocialMedia | None = Field(
+        None, description='Social media account details for digital assets'
+    )
+    cryptoAccess: CryptoAccess | None = Field(
+        None, description='Cryptocurrency wallet and key access information'
+    )
+    cloudStorage: CloudStorage | None = Field(
+        None,
+        description='Cloud storage account details for digital assets — provider, usage, important folders, family photo access',
+    )
+    domainNameAccess: DomainNameAccess | None = Field(
+        None,
+        description='Domain name registration details — registrar, expiry, transfer locks. Critical for executors managing digital estates with web properties',
+    )
+    nftAccess: NftAccess | None = Field(
+        None,
+        description='Non-fungible token (NFT) details — blockchain, contract, token identifier, and marketplace information',
+    )
+    monetisedContentAccess: MonetisedContentAccess | None = Field(
+        None,
+        description='Monetised online content — YouTube channels, Substack newsletters, Patreon pages, and similar revenue-generating content platforms',
+    )
+    loyaltyAccess: LoyaltyAccess | None = Field(
+        None,
+        description='Loyalty programme points and rewards — airline miles, hotel points, retailer schemes. Some programmes permit post-death transfer; others forfeit on death',
+    )
+    gamingAccess: GamingAccess | None = Field(
+        None,
+        description='Gaming platform account details — Steam, Xbox, PlayStation, and similar platforms with virtual currencies and digital game libraries',
+    )
+    platformDelegation: PlatformDelegation | None = Field(
+        None,
+        description='Instructions for what should happen to a digital asset or account after death — memorialise, delete, transfer, archive, or preserve',
+    )
+    fiduciaryAccess: FiduciaryAccess | None = Field(
+        None,
+        description='How a fiduciary (executor, personal representative) can gain lawful access to this digital asset after death',
+    )
+
+
+class BusinessInterest1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    businessName: constr(max_length=255) | None = Field(
+        None,
+        description='Trading name of the business',
+        examples=['Davies & Sons Builders', 'Manchester Model Supplies'],
+    )
+    businessType: BusinessType | None = Field(
+        None, description='Legal structure of the business'
+    )
+    ownershipPercentage: confloat(ge=0.0, le=100.0) | None = Field(
+        None,
+        description="The testator's ownership percentage",
+        examples=[50, 33.33, 100],
+    )
+    controllingInterest: bool | None = Field(
+        None,
+        description='Whether the testator holds a controlling interest. Affects BPR eligibility and valuation discounts',
+        examples=[True, False],
+    )
+    partnershipAgreement: bool | None = Field(
+        None,
+        description='Whether a written partnership/operating agreement exists',
+        examples=[True],
+    )
+    successionProvision: constr(max_length=255) | None = Field(
+        None,
+        description='What the partnership/operating agreement says about succession on death',
+        examples=["Surviving partners must buy out deceased's share at book value", 'Option to purchase at market value within 90 days'],
+    )
+    annualTurnover: Money | None = Field(
+        None,
+        description='Approximate annual turnover — helps with BPR qualification and valuation',
+    )
+    employees: conint(ge=0) | None = Field(
+        None, description='Number of employees', examples=[5, 50]
+    )
+
+
+class IntellectualProperty1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    ipType: IpType | None = Field(None, description='Type of intellectual property')
+    registrationNumber: constr(max_length=500) | None = Field(
+        None,
+        description='Registration or application number',
+        examples=['GB2345678', 'US10,123,456'],
+    )
+    registrationOffice: constr(max_length=255) | None = Field(
+        None,
+        description='Intellectual property office where registered',
+        examples=['UK IPO', 'USPTO', 'EPO', 'WIPO'],
+    )
+    expiryDate: date_aliased | None = Field(
+        None, description='Date the IP right expires', examples=['2040-03-15']
+    )
+    annualRevenue: Money | None = Field(
+        None,
+        description='Approximate annual revenue generated from this IP (licensing, royalties, etc.)',
+    )
+    licensees: list[Licensee] | None = Field(
+        None,
+        description='Current licensees of this IP',
+        examples=[['Publisher A', 'Manufacturer B']],
+        max_length=50,
+    )
+
+
+class StockCompensation1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    compensationType: CompensationType | None = Field(
+        None, description='Type of stock compensation'
+    )
+    grantDate: date_aliased | None = Field(
+        None, description='Date the award was granted', examples=['2022-03-15']
+    )
+    vestingSchedule: constr(max_length=255) | None = Field(
+        None,
+        description='Description of the vesting schedule',
+        examples=['4-year vest with 1-year cliff', '3-year monthly vesting', 'Fully vested'],
+    )
+    vestedQuantity: conint(ge=0) | None = Field(
+        None, description='Number of shares/units currently vested', examples=[2500]
+    )
+    unvestedQuantity: conint(ge=0) | None = Field(
+        None,
+        description='Number of shares/units not yet vested. May be forfeited on death depending on plan terms',
+        examples=[7500],
+    )
+    exercisePrice: Money | None = Field(
+        None, description='Strike/exercise price per share for options'
+    )
+    expirationDate: date_aliased | None = Field(
+        None,
+        description='Date the options expire. Estate typically has limited window to exercise after death',
+        examples=['2032-03-15'],
+    )
+    postDeathExerciseWindow: constr(max_length=255) | None = Field(
+        None,
+        description='Time allowed for estate to exercise options after death',
+        examples=['12 months from date of death', '90 days', 'Per plan administrator discretion'],
+    )
+    acceleratesOnDeath: bool | None = Field(
+        None,
+        description='Whether unvested awards accelerate (fully vest) on death',
+        examples=[True, False],
+    )
+
+
+class CoOwnership1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    coOwnerPersonIds: list[CoOwnerPersonId] | None = Field(
+        None, description='Person IDs of co-owners', max_length=100
+    )
+    ownershipType: OwnershipType | None = Field(
+        None, description='How ownership is structured between co-owners'
+    )
+    ownershipPercentage: confloat(ge=0.0, le=100.0) | None = Field(
+        None, description="The testator's ownership percentage", examples=[50, 33.33]
+    )
+    severanceDate: date_aliased | None = Field(
+        None,
+        description='Date joint tenancy was severed to become tenants in common (if applicable)',
+        examples=['2024-06-15'],
+    )
+
+
+class Business(BaseModel):
+    businessInterest: BusinessInterest1 | None = Field(
+        None,
+        description='Detailed business interest information — partnership shares, LLP membership, sole trader business. Relevant for BPR (UK), QFOBI (US), and succession planning',
+    )
+    intellectualProperty: IntellectualProperty1 | None = Field(
+        None,
+        description='Intellectual property details — patents, copyrights, trademarks, trade secrets. IP succession varies by jurisdiction and type',
+    )
+    stockCompensation: StockCompensation1 | None = Field(
+        None,
+        description='Employee stock compensation details — options, RSUs, ESPPs. Vesting schedules and exercise windows are critical on death',
+    )
+    coOwnership: CoOwnership1 | None = Field(
+        None,
+        description='Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will',
+    )
+
+
+class Result(Enum):
+    clear = 'clear'
+    flagged = 'flagged'
+    inconclusive = 'inconclusive'
+
+
+class StolenArtCheck(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    retrievedAt: AwareDatetime = Field(..., description='When the check was performed')
+    result: Result | constr(pattern=r'^x-inherit-.+', max_length=100) | None = Field(
+        None, description='Outcome of the stolen art check'
+    )
+    certificateReference: constr(max_length=100) | None = Field(
+        None, description='ALR certificate or search reference number'
+    )
+    certificateUrl: AnyUrl | None = Field(
+        None, description='URL to the ALR certificate or search result'
+    )
+    checkedBy: constr(max_length=255) | None = Field(
+        None,
+        description='Who performed the check — person name, organisation, or system identifier',
+    )
+
+
+class Laboratory(Enum):
+    gia = 'gia'
+    ags = 'ags'
+    igi = 'igi'
+    hrd = 'hrd'
+    egl = 'egl'
+
+
+class GemologicalCertificate(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    retrievedAt: AwareDatetime = Field(
+        ..., description='When this certificate data was retrieved or verified'
+    )
+    laboratory: Laboratory | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
+        Field(None, description='The grading laboratory that issued the certificate')
+    )
+    certificateNumber: constr(max_length=100) | None = Field(
+        None, description='Certificate or report number'
+    )
+    verificationUrl: AnyUrl | None = Field(
+        None,
+        description='URL to verify the certificate online with the issuing laboratory',
+    )
+    stoneType: constr(max_length=100) | None = Field(
+        None,
+        description='Type of gemstone',
+        examples=['diamond', 'ruby', 'sapphire', 'emerald'],
+    )
+    caratWeight: confloat(ge=0.0) | None = Field(None, description='Weight in carats')
+    colourGrade: constr(max_length=50) | None = Field(
+        None,
+        description='Colour grade as assigned by the laboratory',
+        examples=['D', 'E', 'F', 'G', 'fancy vivid yellow'],
+    )
+    clarityGrade: constr(max_length=50) | None = Field(
+        None,
+        description='Clarity grade as assigned by the laboratory',
+        examples=['FL', 'IF', 'VVS1', 'VS1', 'SI1', 'I1'],
+    )
+    cutGrade: constr(max_length=50) | None = Field(
+        None,
+        description='Cut grade as assigned by the laboratory (diamonds only — not all labs grade cut for coloured stones)',
+        examples=['Excellent', 'Very Good', 'Good', 'Fair'],
+    )
+
+
+class General(BaseModel):
+    stolenArtCheck: StolenArtCheck | None = Field(
+        None,
+        description='Result of a stolen art check against the Art Loss Register (ALR) or equivalent database. Required by auction houses before sale of art, antiques, and high-value collectibles',
+    )
+    gemologicalCertificate: GemologicalCertificate | None = Field(
+        None,
+        description='Structured gemological certificate data from GIA, AGS, or other grading laboratory. Confirms stone identity, quality grades, and weight — essential for insurance and sale valuation',
+    )
+
+
+class Identifier(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    system: constr(max_length=100) | None = Field(
+        None,
+        description='Namespace URI or name identifying the issuing authority or system. Use URN format where possible for unambiguous identification',
+        examples=['urn:hmrc:nino', 'urn:ssa:ssn', 'urn:jpn:my-number', 'urn:aus:tfn', 'urn:charity-commission:number'],
+    )
+    value: constr(min_length=1, max_length=255) = Field(
+        ...,
+        description='The identifier value itself. Format depends on the system — may include hyphens, spaces, or check digits as appropriate',
+        examples=['AB123456C', '123-45-6789', '1234 5678 9012', 'SC012345'],
+    )
+    type: constr(max_length=100) | None = Field(
+        None,
+        description='Human-readable type label describing what kind of identifier this is',
+        examples=['passport', 'national_insurance', 'social_security', 'charity_number', 'driving_licence', 'tax_file_number'],
+    )
+
+
+class ViewType(Enum):
+    overview = 'overview'
+    identification = 'identification'
+    condition = 'condition'
+    provenance = 'provenance'
+    maker_mark = 'maker_mark'
+    serial_number = 'serial_number'
+    damage = 'damage'
+    scale_reference = 'scale_reference'
+    label = 'label'
+    certificate = 'certificate'
+    receipt = 'receipt'
+    environment = 'environment'
+
+
+class Media(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    url: AnyUrl = Field(
+        ...,
+        description='URI pointing to the media file. May be an HTTPS URL, S3 URI, or other storage reference',
+        examples=['https://storage.example.com/photos/ring-001.jpg', 's3://estate-docs/assets/painting.jpg'],
+    )
+    caption: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable description of what this media shows',
+        examples=['Front view of the engagement ring', 'Walk-through video of the model railway layout', 'Scan of the GIA diamond certificate'],
+    )
+    mediaType: constr(max_length=100) | None = Field(
+        None,
+        description='MIME type of the media file. Maps to Schema.org encodingFormat',
+        examples=['image/jpeg', 'image/png', 'video/mp4', 'application/pdf'],
+    )
+    content: constr(max_length=10485760) | None = Field(
+        None,
+        description='Base64-encoded media content for self-contained documents. Use for small files (attestation scans, signatures, certificates) that must travel with the estate plan. For large files (photos, videos), use url instead',
+        json_schema_extra={
+            'contentEncoding': 'base64',
+            'contentMediaType': 'image/jpeg',
+        },
+    )
+    viewType: ViewType | None = Field(
+        None,
+        description='The purpose of this media — what question does it answer? Enables executors and dealers to find specific documentation without scrolling through galleries',
+        examples=['overview', 'identification', 'condition', 'serial_number'],
+    )
+    takenAt: AwareDatetime | None = Field(
+        None,
+        description='When this media was captured. Useful for establishing condition at a point in time',
+        examples=['2026-03-15T14:30:00Z'],
+    )
+    thumbnailUrl: AnyUrl | None = Field(
+        None,
+        description='URI for a smaller preview version of the media. Maps to Schema.org thumbnail',
+        examples=['https://storage.example.com/thumbnails/ring-001-thumb.jpg'],
+    )
+
+
 class LegalSystem(Enum):
     common_law = 'common_law'
     civil_law = 'civil_law'
@@ -152,7 +1898,5221 @@ class Jurisdiction(BaseModel):
     )
 
 
+class SacredStatus(Enum):
+    secular = 'secular'
+    consecrated = 'consecrated'
+    ritually_significant = 'ritually_significant'
+    inalienable_endowment = 'inalienable_endowment'
+
+
+class CulturalSignificance(Enum):
+    personal = 'personal'
+    family_heirloom = 'family_heirloom'
+    community = 'community'
+    national_heritage = 'national_heritage'
+
+
+class AuthorityType(Enum):
+    religious_body = 'religious_body'
+    family_council = 'family_council'
+    clan_association = 'clan_association'
+    tribal_council = 'tribal_council'
+    government = 'government'
+    heritage_authority = 'heritage_authority'
+
+
+class DisposalRestriction(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    authority: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the authority imposing this restriction',
+        examples=['Wat Phra Kaew Temple', 'Okonkwo Family Council', 'MUIS'],
+    )
+    authorityType: AuthorityType | None = Field(
+        None, description='Category of the authority'
+    )
+    requirement: constr(min_length=1, max_length=255) = Field(
+        ...,
+        description='What the restriction requires',
+        examples=['Must be returned to temple', 'Requires ritual disposal ceremony', 'Community approval needed before sale'],
+    )
+    jurisdiction: Jurisdiction | None = Field(
+        None, description='Jurisdiction where this restriction applies'
+    )
+
+
+class RestrictionType(Enum):
+    cultural_property = 'cultural_property'
+    national_treasure = 'national_treasure'
+    antiquity = 'antiquity'
+    protected_species = 'protected_species'
+    controlled_goods = 'controlled_goods'
+
+
+class ExportRestriction(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    jurisdiction: Jurisdiction = Field(
+        ..., description='Jurisdiction imposing the export restriction'
+    )
+    restrictionType: RestrictionType = Field(
+        ..., description='Category of export restriction'
+    )
+    authority: constr(max_length=255) | None = Field(
+        None,
+        description='The government body or agency that controls export',
+        examples=['Agency for Cultural Affairs (Japan)', 'State Administration of Cultural Heritage (China)'],
+    )
+    licenceRequired: bool | None = Field(
+        None, description='Whether a licence or permit is required for export'
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None, description='Additional details about the restriction'
+    )
+
+
+class CulturalDisposition(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    sacredStatus: SacredStatus | None = Field(
+        None,
+        description='Whether this item has religious or spiritual significance that restricts disposal',
+    )
+    culturalSignificance: CulturalSignificance | None = Field(
+        None,
+        description='The cultural weight of this item — determines who should be consulted about its disposition',
+    )
+    bequeathable: bool | None = Field(
+        True,
+        description='Whether this item can be willed to another person. False for waqf endowments, some ancestral property, and inalienable cultural artefacts',
+    )
+    disposalRestrictions: list[DisposalRestriction] | None = Field(
+        None,
+        description='Specific restrictions on how this item may be disposed of, with the authority that imposes each restriction',
+        max_length=100,
+    )
+    exportRestrictions: list[ExportRestriction] | None = Field(
+        None,
+        description='Legal restrictions on exporting this item from its current jurisdiction',
+        max_length=100,
+    )
+
+
+class Visibility(Enum):
+    testator_only = 'testator_only'
+    proxy_visible = 'proxy_visible'
+    companion_visible = 'companion_visible'
+    executor_visible = 'executor_visible'
+    beneficiary_visible = 'beneficiary_visible'
+    all_parties = 'all_parties'
+
+
+class Method(Enum):
+    manual_entry = 'manual_entry'
+    ai_extracted = 'ai_extracted'
+    imported = 'imported'
+    computed = 'computed'
+    ocr_scanned = 'ocr_scanned'
+
+
+class OriginalScript(Enum):
+    latin = 'latin'
+    kanji = 'kanji'
+    hiragana = 'hiragana'
+    katakana = 'katakana'
+    arabic = 'arabic'
+    hebrew = 'hebrew'
+    devanagari = 'devanagari'
+    tamil = 'tamil'
+    chinese_simplified = 'chinese_simplified'
+    chinese_traditional = 'chinese_traditional'
+    hangul = 'hangul'
+    cyrillic = 'cyrillic'
+    thai = 'thai'
+    mixed = 'mixed'
+    other = 'other'
+
+
+class DataSource(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    source: constr(max_length=100) | None = Field(
+        None, description='Short identifier for the data source'
+    )
+    sourceUrl: AnyUrl | None = Field(
+        None,
+        description="URL to the source's website or the specific page this data came from",
+    )
+    retrievedAt: AwareDatetime | None = Field(
+        None, description='When this data was retrieved from the source'
+    )
+
+
+class FieldProvenance(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    field: constr(min_length=1, max_length=255) = Field(
+        ...,
+        description='The field name this provenance record applies to',
+        examples=['estimatedValue', 'name', 'category'],
+    )
+    method: Method | constr(pattern=r'^x-inherit-.+') = Field(
+        ..., description='How the field value was obtained'
+    )
+    confidence: conint(ge=0, le=100) | None = Field(
+        None, description='Confidence in the field value (0-100)'
+    )
+    verifiedAt: AwareDatetime | None = Field(
+        None, description='When this field was last verified'
+    )
+    verifiedBy: constr(max_length=255) | None = Field(
+        None,
+        description='Who verified this field',
+        examples=['James Davies', 'INHERIT Scanner v2'],
+    )
+    sourceDocumentId: UUID | None = Field(
+        None,
+        description='Reference to the document.json entity this value was extracted from',
+    )
+    sourcePageNumber: conint(ge=1) | None = Field(
+        None,
+        description='Page number in the source document where this value was found',
+    )
+    sourceRegion: constr(max_length=255) | None = Field(
+        None,
+        description='Location within the page where this value was found',
+        examples=['top-right', 'paragraph 3', 'signature block', 'attestation clause'],
+    )
+    originalText: constr(max_length=2000) | None = Field(
+        None,
+        description='The raw text as extracted before any normalisation or structuring. Preserves exactly what the source document said',
+        examples=['born on the 15th day of March nineteen forty eight', 'I appoint my wife Margaret Anne Frith'],
+    )
+    originalScript: OriginalScript | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None,
+        description='Writing system of the source document. Critical for handwritten wills in non-Latin scripts',
+    )
+    ocrEngine: constr(max_length=255) | None = Field(
+        None,
+        description='OCR engine or extraction tool used to obtain this value',
+        examples=['AWS Textract', 'Google Cloud Vision', 'Tesseract 5.3', 'WillScan v1.0'],
+    )
+    extractedAt: AwareDatetime = Field(
+        ..., description='When this value was extracted from the source document'
+    )
+    dataSource: DataSource | None = Field(
+        None,
+        description='The third-party source that provided this field value. Enables attribution credits and the data source kill switch',
+    )
+
+
+class Model(Enum):
+    claude = 'claude'
+    gpt = 'gpt'
+    gemini = 'gemini'
+    grok = 'grok'
+    llama = 'llama'
+    mistral = 'mistral'
+    other = 'other'
+
+
+class AiProvenance(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    model: Model | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None,
+        description='AI model family that generated this data',
+        examples=['claude', 'gpt', 'gemini'],
+    )
+    confidence: conint(ge=0, le=100) | None = Field(
+        None,
+        description='Confidence score 0–100 indicating how certain the AI is about the generated data',
+        examples=[92, 75, 50],
+    )
+    generatedAt: AwareDatetime | None = Field(
+        None,
+        description='When the AI produced this data',
+        examples=['2026-03-30T14:00:00Z'],
+    )
+    humanReviewed: bool | None = Field(
+        None,
+        description='Whether a human has verified this AI-generated data',
+        examples=[True, False],
+    )
+    reviewedBy: constr(max_length=255) | None = Field(
+        None,
+        description='Person ID or role of the reviewer who verified this data',
+        examples=['James Davies', 'Legal review team', 'Estate administrator'],
+    )
+    reviewedAt: AwareDatetime | None = Field(
+        None,
+        description='When the human review occurred',
+        examples=['2026-03-30T16:00:00Z'],
+    )
+
+
+class Source(Enum):
+    import_ = 'import'
+    manual = 'manual'
+    ai_generated = 'ai_generated'
+
+
+class HumanVerdict(Enum):
+    approved = 'approved'
+    rejected = 'rejected'
+    modified = 'modified'
+    pending_review = 'pending_review'
+
+
+class Provenance(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    source: Source | None = Field(
+        None, description="How this entity's data was originally created"
+    )
+    confidence: confloat(ge=0.0, le=1.0) | None = Field(
+        None,
+        description="Overall confidence score for this entity's data (0.0 = no confidence, 1.0 = fully verified)",
+    )
+    importSourceId: constr(max_length=255) | None = Field(
+        None,
+        description="References importSources[].id on the root document — identifies which import source produced this entity's data. Plain string, not UUID",
+    )
+    aiProvenance: AiProvenance | None = Field(
+        None,
+        description='AI provenance metadata — which AI model produced this data and whether a human has verified it',
+    )
+    humanVerdict: HumanVerdict | None = Field(
+        None, description='Human review verdict on AI-generated or imported data'
+    )
+    rejectionReason: constr(max_length=2000) | None = Field(
+        None, description='Reason for rejecting or modifying data'
+    )
+    verdictAt: AwareDatetime | None = Field(
+        None, description='When the human verdict was recorded'
+    )
+    agentTaskId: constr(max_length=255) | None = Field(
+        None,
+        description='ID of the agent task that created or modified this entity — links to the agent orchestration system',
+        examples=['task-enrich-001', 'task-extract-will-003'],
+    )
+
+
+class ServiceRecord(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    serviceDate: date_aliased = Field(..., description='When the service was performed')
+    provider: constr(max_length=255) | None = Field(
+        None,
+        description='Who performed the service (manufacturer service centre, independent specialist, etc.)',
+    )
+    description: constr(max_length=2000) | None = Field(
+        None, description='What was done'
+    )
+    cost: Money | None = Field(
+        None, description='Cost of the service, in minor currency units'
+    )
+    documentReference: constr(max_length=255) | None = Field(
+        None,
+        description='Reference to a service certificate, receipt, or MOT certificate',
+    )
+
+
+class Category(Enum):
+    financial = 'financial'
+    vehicle = 'vehicle'
+    digital = 'digital'
+    business = 'business'
+    property_contents = 'property_contents'
+    jewellery_watches = 'jewellery_watches'
+    art = 'art'
+    antiques = 'antiques'
+    collectibles = 'collectibles'
+    musical_instruments = 'musical_instruments'
+    books_manuscripts = 'books_manuscripts'
+    wine_spirits = 'wine_spirits'
+    clothing_textiles = 'clothing_textiles'
+    firearms_sporting = 'firearms_sporting'
+    islamic_financial = 'islamic_financial'
+    other = 'other'
+
+
+class NetEquity(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    amount: conint(ge=0, le=999999999999999) = Field(
+        ...,
+        description='Value in the smallest currency unit (pence, cents, sen). The consumer must apply the ISO 4217 exponent to convert to a display value',
+        examples=[32500, 1000000, 500000, 0],
+    )
+    currency: constr(pattern=r'^[A-Z]{3}$') = Field(
+        ...,
+        description='ISO 4217 three-letter currency code. Use the code for the currency of the amount, not the reporting currency',
+        examples=['GBP', 'USD', 'EUR', 'JPY', 'INR', 'AED', 'SGD'],
+    )
+    exponent: conint(ge=0, le=4) | None = Field(
+        2,
+        description='Number of decimal places for this currency. Display value = amount / 10^exponent. Most currencies use 2 (default). JPY/KRW use 0. KWD/BHD/OMR use 3',
+    )
+
+
+class ValuationConfidence(Enum):
+    estimated = 'estimated'
+    professional = 'professional'
+    official = 'official'
+    unknown = 'unknown'
+
+
+class Condition(Enum):
+    excellent = 'excellent'
+    good = 'good'
+    fair = 'fair'
+    poor = 'poor'
+    unknown = 'unknown'
+    not_applicable = 'not_applicable'
+
+
+class ExternalLink(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    system: constr(pattern=r'^[a-z][a-zA-Z0-9]*$', max_length=100) = Field(
+        ...,
+        description='The external system or platform name. Use lowercase, no spaces',
+        examples=['chrono24', 'discogs', 'artnet', 'ebay', 'catawiki', 'rightmove', 'zoopla', 'companieshouse', 'landregistry', 'artlossregister', 'watchchartsRef', 'livex', 'gtin'],
+    )
+    id: constr(min_length=1, max_length=500) = Field(
+        ..., description='The platform-specific identifier for this asset'
+    )
+    url: AnyUrl | None = Field(
+        None,
+        description="Direct URL to the asset's page on the external platform. Optional — some systems are API-only",
+    )
+    label: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable label for display. Optional — defaults to the system name',
+        examples=['Chrono24 listing', 'Discogs release page', 'Companies House filing'],
+    )
+    retrievedAt: AwareDatetime | None = Field(
+        None,
+        description='Timestamp when this link was last verified or data was last retrieved',
+    )
+
+
+class AcquisitionMethod(Enum):
+    purchase = 'purchase'
+    inheritance = 'inheritance'
+    gift = 'gift'
+    commission = 'commission'
+    restitution = 'restitution'
+    auction = 'auction'
+    unknown = 'unknown'
+
+
+class ProvenanceChainItem(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    description: constr(min_length=1, max_length=2000) = Field(
+        ..., description='Description of this provenance record'
+    )
+    ownerName: constr(max_length=255) | None = Field(
+        None, description='Name of the previous owner (may be anonymised)'
+    )
+    fromDate: date_aliased | None = Field(
+        None, description='Approximate start date of this ownership period'
+    )
+    toDate: date_aliased | None = Field(
+        None, description='Approximate end date of this ownership period'
+    )
+    acquisitionMethod: AcquisitionMethod | None = Field(
+        None, description='How the owner acquired the asset'
+    )
+    source: constr(max_length=500) | None = Field(
+        None, description='Where this provenance information came from'
+    )
+    evidenceUrl: AnyUrl | None = Field(
+        None,
+        description='Link to supporting evidence (sale record, catalogue entry, etc.)',
+    )
+
+
+class PossessionStatus(Enum):
+    possessed_at_death = 'possessed_at_death'
+    receivable = 'receivable'
+    contingent = 'contingent'
+
+
+class MobilityType(Enum):
+    immoveable = 'immoveable'
+    moveable = 'moveable'
+    mixed = 'mixed'
+
+
+class AcquisitionType(Enum):
+    self_acquired = 'self_acquired'
+    ancestral_joint = 'ancestral_joint'
+    ancestral_severed = 'ancestral_severed'
+    inherited = 'inherited'
+    gifted = 'gifted'
+    stridhan = 'stridhan'
+    communal = 'communal'
+    waqf_endowed = 'waqf_endowed'
+
+
+class RegistrationStatus(Enum):
+    formally_registered = 'formally_registered'
+    informally_held = 'informally_held'
+    community_acknowledged = 'community_acknowledged'
+    disputed = 'disputed'
+    undocumented = 'undocumented'
+
+
+class OwnershipEvidence(Enum):
+    title_deed = 'title_deed'
+    certificate_of_occupancy = 'certificate_of_occupancy'
+    family_recognition = 'family_recognition'
+    community_testimony = 'community_testimony'
+    receipts_only = 'receipts_only'
+    none = 'none'
+
+
+class AuthorityType1(Enum):
+    family_council = 'family_council'
+    clan_association = 'clan_association'
+    religious_body = 'religious_body'
+    tribal_council = 'tribal_council'
+    government = 'government'
+
+
+class CommunalAuthority(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    authorityType: AuthorityType1 | None = Field(
+        None, description='Category of communal authority'
+    )
+    approvalRequired: bool | None = Field(
+        None,
+        description='Whether approval from this authority is legally required before disposal',
+    )
+    authorityName: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the specific authority or person',
+        examples=['Karta of Sharma HUF', 'Okonkwo Family Council', 'MUIS'],
+    )
+    jurisdiction: Jurisdiction | None = Field(
+        None,
+        description='Jurisdiction where this communal authority has legal standing',
+    )
+
+
+class LegalTradition(Enum):
+    common_law = 'common_law'
+    civil_law = 'civil_law'
+    mixed = 'mixed'
+    customary_law = 'customary_law'
+    islamic_law = 'islamic_law'
+    hindu_law = 'hindu_law'
+    jewish_law = 'jewish_law'
+    canon_law = 'canon_law'
+
+
+class GoverningLaw(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    jurisdiction: Jurisdiction | None = Field(
+        None, description='Jurisdiction whose succession law applies'
+    )
+    legalTradition: LegalTradition | None = Field(
+        None, description='Which legal tradition applies'
+    )
+    statute: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the governing statute',
+        examples=['Wills Act 1837', 'PRC Civil Code', 'Hindu Succession Act 1956'],
+    )
+    section: constr(max_length=255) | None = Field(
+        None,
+        description='Specific section of the statute',
+        examples=['s.9', 'Book VI Succession', 's.6 (coparcenary)'],
+    )
+
+
+class DeterminedBy(Enum):
+    domicile = 'domicile'
+    situs = 'situs'
+    nationality = 'nationality'
+    personal_status = 'personal_status'
+    choice_of_law = 'choice_of_law'
+    treaty = 'treaty'
+
+
+class Extension(RootModel[constr(max_length=500)]):
+    root: constr(max_length=500)
+
+
+class SuccessionRegime(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    governingLaw: GoverningLaw | None = Field(
+        None, description='The law governing succession for this asset'
+    )
+    determinedBy: DeterminedBy | None = Field(
+        None, description='How the governing law was determined'
+    )
+    binding: bool | None = Field(
+        None, description='Whether this succession regime is legally binding'
+    )
+    extensions: list[Extension] | None = Field(
+        None,
+        description="INHERIT extension IDs that apply to this asset's succession",
+        max_length=50,
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None, description='Additional context about the succession regime'
+    )
+
+
+class PrimaryBeneficiaryPersonId(RootModel[UUID]):
+    root: UUID
+
+
+class ContingentBeneficiaryPersonId(RootModel[UUID]):
+    root: UUID
+
+
+class DesignationType(Enum):
+    retirement_account = 'retirement_account'
+    life_insurance = 'life_insurance'
+    superannuation = 'superannuation'
+    pod_account = 'pod_account'
+    other = 'other'
+
+
+class BeneficiaryDesignation(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    primaryBeneficiaryPersonIds: list[PrimaryBeneficiaryPersonId] | None = Field(
+        None, description='Person IDs of the primary beneficiaries', max_length=100
+    )
+    contingentBeneficiaryPersonIds: list[ContingentBeneficiaryPersonId] | None = Field(
+        None,
+        description='Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)',
+        max_length=100,
+    )
+    designationType: DesignationType | None = Field(
+        None,
+        description='The type of beneficiary designation',
+        examples=['life_insurance', 'retirement_account'],
+    )
+    linkedNonprobateTransferId: (
+        UUID | None
+    ) = (
+        Field(None, description='Reference to the NonprobateTransfer entity that tracks this designation')
+    )
+
+
+class Scope(Enum):
+    full_access = 'full_access'
+    limited_access = 'limited_access'
+    no_access = 'no_access'
+
+
+class DigitalAccessConsent(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    consentGiven: bool | None = Field(
+        None,
+        description='Whether the account holder has given consent for fiduciary access',
+        examples=[True],
+    )
+    scope: Scope | None = Field(
+        None,
+        description='The scope of access granted to fiduciaries',
+        examples=['full_access', 'limited_access'],
+    )
+    designatedRecipientPersonId: (
+        UUID | None
+    ) = (
+        Field(None, description='Reference to the Person.id designated to receive access to this digital asset')
+    )
+    designatedRecipientPersonIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced designated recipient person',
+    )
+    onlineToolDirective: bool | None = Field(
+        None,
+        description="Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA",
+        examples=[True, False],
+    )
+
+
+class Brand(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    name: constr(max_length=255) = Field(..., description='Brand or manufacturer name')
+    wikidataId: constr(pattern=r'^Q[1-9][0-9]*$', max_length=20) | None = Field(
+        None,
+        description='Wikidata Q-number for this brand. Resolves to structured data via the Wikidata API — founding year, country, parent company, logo, official website, product categories',
+        examples=['Q62288', 'Q1567489', 'Q538587'],
+    )
+    website: AnyUrl | None = Field(None, description='Official brand website')
+
+
+class OriginalPackaging(Enum):
+    complete = 'complete'
+    partial = 'partial'
+    box_only = 'box_only'
+    papers_only = 'papers_only'
+    none = 'none'
+    unknown = 'unknown'
+
+
+class Custodian(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    name: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the person or organisation holding the asset',
+        examples=['London City Bond', 'Barclays Bank, Manchester branch', "Sotheby's (on consignment)"],
+    )
+    contactEmail: EmailStr | None = Field(
+        None, description='Email address for the custodian'
+    )
+    contactPhone: constr(max_length=255) | None = Field(
+        None,
+        description='Phone number for the custodian',
+        examples=['+44 20 7293 5000'],
+    )
+    relationship: constr(max_length=255) | None = Field(
+        None,
+        description='The nature of the custodial relationship',
+        examples=['bonded storage', 'safe deposit box', 'repair/service', 'consignment', 'loan', 'pawn'],
+    )
+    reference: constr(max_length=500) | None = Field(
+        None,
+        description='Account or reference number with the custodian',
+        examples=['Account #LC-2024-5678', 'Box 247', 'Repair ticket #R-4521'],
+    )
+
+
+class ConditionSystem(Enum):
+    goldmine = 'goldmine'
+    sheldon = 'sheldon'
+    ags = 'ags'
+    bsc = 'bsc'
+    gia = 'gia'
+    watch_trade = 'watch_trade'
+    classic_vehicle = 'classic_vehicle'
+    book_trade = 'book_trade'
+
+
+class Urgency(Enum):
+    immediate = 'immediate'
+    within_7_days = 'within_7_days'
+    within_30_days = 'within_30_days'
+    none = 'none'
+
+
+class Insurance(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    provider: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the insurance provider',
+        examples=['Hiscox', 'Chubb', 'NFU Mutual', 'Allianz'],
+    )
+    policyReference: constr(max_length=500) | None = Field(
+        None,
+        description='Policy reference number',
+        examples=['HX-2024-5678', 'CHB/ART/2024/001'],
+    )
+    insuredValue: Money | None = Field(
+        None, description='The insured value in minor currency units'
+    )
+    renewalDate: date_aliased | None = Field(
+        None,
+        description='Next renewal date. Important — cover may lapse if not renewed after death',
+        examples=['2026-09-01'],
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Additional insurance notes',
+        examples=['Cover continues for 30 days after death per policy terms'],
+    )
+
+
+class EntityType(Enum):
+    asset = 'asset'
+    asset_collection = 'asset_collection'
+
+
+class SplitFrom(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    entityType: EntityType = Field(..., description='The type of entity that was split')
+    entityId: UUID = Field(
+        ..., description='The id of the original entity that was split'
+    )
+    splitAt: AwareDatetime = Field(..., description='When the split occurred')
+    reason: constr(max_length=2000) | None = Field(
+        None, description='Why the split was requested'
+    )
+
+
+class DataProvenance(Enum):
+    manual_entry = 'manual_entry'
+    ai_extracted = 'ai_extracted'
+    ocr_scanned = 'ocr_scanned'
+    imported = 'imported'
+    migrated = 'migrated'
+    system_generated = 'system_generated'
+
+
+class SearchTerm(RootModel[constr(max_length=500)]):
+    root: constr(max_length=500)
+
+
+class Platform3(RootModel[constr(max_length=500)]):
+    root: constr(max_length=500)
+
+
+class ExcludePlatform(RootModel[constr(max_length=500)]):
+    root: constr(max_length=500)
+
+
+class SearchFrequency(Enum):
+    once = 'once'
+    weekly = 'weekly'
+    monthly = 'monthly'
+    on_demand = 'on_demand'
+
+
+class ComparableSearchProfile(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    platforms: list[Platform3] | None = Field(
+        None,
+        description='Marketplaces and platforms to search',
+        examples=[['ebay', 'catawiki', 'rails_of_sheffield', 'hattons']],
+        max_length=50,
+    )
+    searchQuery: constr(max_length=255) | None = Field(
+        None,
+        description='Natural-language query an agent should use',
+        examples=['Hornby R3456 Class 66 OO gauge boxed'],
+    )
+    filters: dict[str, constr(max_length=255)] | None = Field(
+        None,
+        description='Key-value filters to narrow results. Agents map to platform-specific parameters',
+        examples=[{'condition': 'good+', 'packaging': 'with_box', 'gauge': 'OO'}],
+    )
+    excludePlatforms: list[ExcludePlatform] | None = Field(
+        None, description='Platforms explicitly excluded', max_length=50
+    )
+    lastSearchedAt: AwareDatetime | None = Field(
+        None, description='When an agent last executed this search profile'
+    )
+    searchFrequency: SearchFrequency | None = Field(
+        None, description='How often this item should be re-searched'
+    )
+
+
+class Comment(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    id: UUID = Field(..., description='Unique identifier for this comment')
+    authorPersonId: UUID | None = Field(
+        None, description='Person.id of the comment author'
+    )
+    authorPersonIdDisplay: constr(max_length=255) | None = Field(
+        None, description='Human-readable display name for the referenced author person'
+    )
+    content: constr(min_length=1, max_length=5000) = Field(
+        ..., description='Comment text'
+    )
+    createdAt: AwareDatetime = Field(..., description='When the comment was created')
+    visibility: Visibility | None = 'all_parties'
+
+
+class MergedInto(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    entityType: EntityType | None = Field(None, description='Type of the target entity')
+    entityId: UUID | None = Field(None, description='ID of the target entity')
+    mergedAt: AwareDatetime | None = Field(None, description='When the merge occurred')
+    reason: constr(max_length=2000) | None = Field(
+        None,
+        description='Why the entities were merged',
+        examples=['Duplicate entries identified during estate inventory'],
+    )
+
+
+class AssetType(Enum):
+    immoveable = 'immoveable'
+    moveable = 'moveable'
+    mixed = 'mixed'
+    exempt = 'exempt'
+
+
+class TaxTreatment(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    jurisdiction: Jurisdiction | None = None
+    assetType: AssetType | None = None
+    exemptions: list[constr(max_length=100)] | None = None
+    reliefClaimed: list[constr(max_length=100)] | None = None
+
+
+class Step(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    step: conint(ge=1)
+    method: constr(min_length=1, max_length=100)
+    description: constr(max_length=500) | None = None
+    location: constr(max_length=500) | None = None
+    holderPersonId: UUID | None = None
+
+
+class Preference(Enum):
+    transfer_to_beneficiary = 'transfer_to_beneficiary'
+    memorialise = 'memorialise'
+    delete = 'delete'
+    archive = 'archive'
+    no_preference = 'no_preference'
+
+
+class Memorialisation(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    preference: Preference | None = None
+    instructions: constr(max_length=1000) | None = None
+
+
+class AccessInstructions(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    accessType: constr(max_length=100) | None = None
+    platform: constr(max_length=255) | None = None
+    visibility: Visibility | None = 'all_parties'
+    requiredRole: constr(max_length=50) | None = Field(
+        None, description='The estate role required to follow these instructions'
+    )
+    steps: list[Step] | None = None
+    memorialisation: Memorialisation | None = None
+    lastVerified: date_aliased | None = None
+    verifiedBy: constr(max_length=255) | None = None
+
+
+class OwnerIntent(Enum):
+    keeping = 'keeping'
+    considering = 'considering'
+    thinning = 'thinning'
+    listed = 'listed'
+    sold = 'sold'
+    allocated = 'allocated'
+    donated = 'donated'
+
+
+class Channel(Enum):
+    ebay = 'ebay'
+    amazon = 'amazon'
+    shopify = 'shopify'
+    etsy = 'etsy'
+    own_website = 'own_website'
+    auction_house = 'auction_house'
+    other = 'other'
+
+
 class Status(Enum):
+    draft = 'draft'
+    active = 'active'
+    sold = 'sold'
+    withdrawn = 'withdrawn'
+    expired = 'expired'
+
+
+class Listing(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    channel: Channel = Field(
+        ..., description='The sales channel where this item is listed'
+    )
+    channelName: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable name of the channel, especially when channel is other',
+    )
+    listingId: constr(max_length=255) | None = Field(
+        None, description='The platform-specific listing identifier'
+    )
+    listingUrl: AnyUrl | None = Field(
+        None, description='Direct URL to the listing on the external platform'
+    )
+    status: Status = Field(..., description='Current status of this listing')
+    askingPrice: Money | None = Field(None, description='The listed asking price')
+    listedAt: AwareDatetime | None = Field(
+        None, description='When this listing was created or last activated'
+    )
+    soldAt: AwareDatetime | None = Field(
+        None, description='When the item was sold via this listing, if applicable'
+    )
+    soldPrice: Money | None = Field(None, description='The actual sale price, if sold')
+
+
+class PolicyType1(Enum):
+    home_contents = 'home_contents'
+    specialist_collectibles = 'specialist_collectibles'
+    classic_vehicle = 'classic_vehicle'
+    individual_item = 'individual_item'
+    fine_art = 'fine_art'
+    jewellery = 'jewellery'
+    other = 'other'
+
+
+class InsuranceCover(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    insurer: constr(max_length=255) | None = Field(
+        None, description='Name of the insurance company'
+    )
+    policyNumber: constr(max_length=100) | None = Field(
+        None, description='The insurance policy number'
+    )
+    policyType: PolicyType1 | None = Field(
+        None, description='The type of insurance policy covering this item'
+    )
+    agreedValue: Money | None = Field(
+        None,
+        description='The agreed or insured value, in minor currency units. May differ from market value',
+    )
+    coverConfirmedAt: date_aliased | None = Field(
+        None,
+        description='When the insurance cover for this item was last confirmed or reviewed',
+    )
+
+
+class ShippingClass(Enum):
+    parcel = 'parcel'
+    large_item = 'large_item'
+    specialist_transport = 'specialist_transport'
+    collection_only = 'collection_only'
+
+
+class IncludedDocuments(Enum):
+    outer_box = 'outer_box'
+    inner_box = 'inner_box'
+    warranty_card = 'warranty_card'
+    cosc_certificate = 'cosc_certificate'
+    instruction_manual = 'instruction_manual'
+    hang_tags = 'hang_tags'
+    service_booklet = 'service_booklet'
+    purchase_receipt = 'purchase_receipt'
+    original_invoice = 'original_invoice'
+    v5c_logbook = 'v5c_logbook'
+    mot_certificate = 'mot_certificate'
+    provenance_letter = 'provenance_letter'
+    certificate_of_authenticity = 'certificate_of_authenticity'
+    appraisal_certificate = 'appraisal_certificate'
+    export_licence = 'export_licence'
+    customs_declaration = 'customs_declaration'
+
+
+class ReliefType(Enum):
+    agricultural_property = 'agricultural_property'
+    business_property = 'business_property'
+    woodland = 'woodland'
+    heritage = 'heritage'
+    charitable = 'charitable'
+
+
+class TaxReliefEligibility(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    reliefType: ReliefType | None = Field(
+        None, description='The type of tax relief claimed'
+    )
+    eligible: bool | None = None
+    percentage: conint(ge=0, le=100) | None = Field(
+        None,
+        description='Relief percentage (e.g. 100 for full APR, 50 for partial BPR)',
+    )
+    conditions: constr(max_length=500) | None = Field(
+        None,
+        description='Conditions for maintaining eligibility',
+        examples=['Beneficiary must actively farm for minimum 2 years'],
+    )
+    jurisdiction: Jurisdiction | None = None
+    statute: constr(max_length=500) | None = Field(
+        None, examples=['IHTA 1984 s.115-124C']
+    )
+
+
+class Type1(Enum):
+    sentimental = 'sentimental'
+    cultural = 'cultural'
+    religious = 'religious'
+    historical = 'historical'
+    family_heirloom = 'family_heirloom'
+    professional = 'professional'
+
+
+class RestrictionOnDisposal(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    exists: bool | None = None
+    nature: constr(max_length=500) | None = Field(
+        None, examples=['Must not be sold', 'Must stay in the family']
+    )
+
+
+class Significance(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type1 | None = None
+    description: constr(max_length=1000) | None = None
+    restrictionOnDisposal: RestrictionOnDisposal | None = Field(
+        None,
+        description='Whether and how the testator has restricted disposal of this asset',
+    )
+
+
+class Asset(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/asset.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    id: UUID = Field(
+        ...,
+        description='Unique identifier for this asset within the INHERIT document',
+        examples=['e5f6a7b8-c9d0-1234-ef01-23456789abcd'],
+    )
+    name: constr(min_length=1, max_length=255) = Field(
+        ...,
+        description='Display name for this asset. Should be specific enough to identify the item during probate',
+        examples=["Grandmother's engagement ring", 'Barclays Current Account', '2019 Toyota Corolla', 'Bitcoin wallet', 'Stradivarius violin'],
+    )
+    category: Category = Field(
+        ...,
+        description='Top-level category from the INHERIT Product Taxonomy. Use the `subcategory` field for finer classification. See `reference-data/category-guidance.json` for valid subcategories, recommended identifiers, and photography guidance per category',
+        examples=['financial', 'collectibles', 'vehicle', 'jewellery_watches'],
+    )
+    subcategory: constr(max_length=100) | None = Field(
+        None,
+        description="Finer classification within the top-level category. Values are defined in reference-data/category-guidance.json but the field is freeform to accommodate jurisdiction-specific asset types. Examples: financial → 'pension', collectibles → 'model_railways', vehicle → 'classic_vehicle'",
+        examples=['engagement ring', 'ISA', 'self-invested personal pension', 'NFT', 'vintage wine'],
+    )
+    estimatedValue: Money | None = Field(
+        None,
+        description="Owner's estimate of the asset's current value, in minor currency units",
+    )
+    professionalValuation: Money | None = Field(
+        None, description='Professional valuation of the asset, in minor currency units'
+    )
+    netEquity: NetEquity | None = Field(
+        None,
+        description='Value of this asset net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored',
+        title='Money',
+    )
+    inNegativeEquity: bool | None = Field(
+        None,
+        description='True when the active charges secured against this asset exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall',
+        examples=[False, True],
+    )
+    valuationDate: date_aliased | None = Field(
+        None,
+        description='Date of the most recent valuation',
+        examples=['2024-11-01', '2025-02-14'],
+    )
+    valuationConfidence: ValuationConfidence | None = Field(
+        None,
+        description='Level of confidence in the stated valuation',
+        examples=['estimated', 'professional'],
+    )
+    condition: Condition | None = Field(
+        None,
+        description="Physical condition of the asset. Affects resale value — dealers use this to price items. Pair with conditionSystem and conditionGrade for domain-specific grading. Use 'not_applicable' for financial assets where condition is meaningless",
+        examples=['good', 'not_applicable'],
+    )
+    quantity: conint(ge=1) | None = Field(
+        None,
+        description='Number of items if this represents multiple identical or similar items',
+        examples=[1, 12, 500],
+    )
+    location: constr(max_length=255) | None = Field(
+        None,
+        description='Where this asset is physically stored or held — a bank, safe, property, or institution',
+        examples=['Barclays Bank, Manchester branch', 'Home safe', 'Bonhams storage, London', 'Coinbase exchange'],
+    )
+    propertyId: UUID | None = Field(
+        None,
+        description='Reference to a Property.id if this asset is located at a specific property in the estate',
+    )
+    assetCollectionId: UUID | None = Field(
+        None,
+        description="Reference to the AssetCollection.id this asset belongs to. An asset may belong to at most one collection. If set, this asset's value contributes to the collection's total",
+    )
+    spaceId: UUID | None = Field(
+        None,
+        description='Reference to a Space.id representing where this item is physically stored. Critical for collections spread across multiple properties or countries — affects probate jurisdiction and dealer collection logistics',
+    )
+    identifiers: list[Identifier] | None = Field(
+        None,
+        description='External identifiers — serial numbers, account numbers, policy references, registration numbers, etc',
+        examples=[[{'system': 'urn:barclays:sort-code-account', 'value': '20-45-67 12345678', 'type': 'bank_account'}], [{'value': 'DVLA: AB12 CDE', 'type': 'vehicle_registration'}]],
+        max_length=100,
+    )
+    externalLinks: list[ExternalLink] | None = Field(
+        None,
+        description='Links to this asset in external databases, marketplaces, and registries. The universal connector — any external system can be referenced without a schema change. Use identifiers for formal identifier schemes (ISBN, VIN, NINO); use externalLinks for platform-specific references, product pages, and database entries',
+        examples=[[{'system': 'chrono24', 'id': '12345678', 'url': 'https://www.chrono24.co.uk/rolex/ref-116610ln--id12345678.htm'}, {'system': 'watchchartsRef', 'id': 'rolex-submariner-116610ln'}], [{'system': 'discogs', 'id': '1234567', 'url': 'https://www.discogs.com/release/1234567'}], [{'system': 'companieshouse', 'id': '12345678', 'url': 'https://find-and-update.company-information.service.gov.uk/company/12345678'}], [{'system': 'artnet', 'id': 'andy-warhol-campbells-soup-can', 'url': 'https://www.artnet.com/artists/andy-warhol/'}, {'system': 'artlossregister', 'id': 'ALR-2025-98765'}]],
+        max_length=50,
+    )
+    productPage: AnyUrl | None = Field(
+        None,
+        description="URI pointing to the manufacturer's or retailer's official product page for this exact item. Distinct from storageRef (document storage) and externalLinks (database references). Enables direct linking to manufacturer specifications, manuals, and warranty information",
+        examples=['https://www.rolex.com/watches/submariner/m126610ln-0001', 'https://www.gibson.com/en-US/Electric-Guitar/Les-Paul-Standard-50s', 'https://www.hornby.com/shop/r30350'],
+    )
+    provenanceChain: list[ProvenanceChainItem] | None = Field(
+        None,
+        description='Prior ownership records — establishes the chain of provenance for the asset. Critical for art, antiques, and high-value collectibles',
+        max_length=100,
+    )
+    images: list[Media] | None = Field(
+        None,
+        description='Photographs, videos, and document scans. Vision-capable AI agents use these to identify items, assess condition, and find visual matches on marketplaces. Use viewType from media.json to categorize each media item',
+        max_length=100,
+    )
+    possessionStatus: PossessionStatus | None = Field(
+        None,
+        description='Whether the asset was held at death, is receivable post-death, or is contingent on a future event',
+        examples=['possessed_at_death', 'receivable'],
+    )
+    mobilityType: MobilityType | None = Field(
+        None,
+        description='Whether this asset is classified as immoveable or moveable property. Affects which conflict-of-laws rules apply in cross-border estates',
+        examples=['moveable'],
+    )
+    acquisitionType: AcquisitionType | None = Field(
+        None,
+        description='How this asset was acquired. Determines succession rules in Indian and other customary systems',
+        examples=['self_acquired', 'inherited'],
+    )
+    registrationStatus: RegistrationStatus | None = Field(
+        None,
+        description='Whether ownership of this asset is formally registered or documented',
+        examples=['formally_registered'],
+    )
+    ownershipEvidence: OwnershipEvidence | None = Field(
+        None,
+        description='The type of evidence available to prove ownership of this asset',
+        examples=['receipts_only', 'title_deed'],
+    )
+    culturalDisposition: CulturalDisposition | None = Field(
+        None,
+        description='Cultural, religious, and regulatory constraints on disposal of this asset',
+    )
+    communalAuthority: CommunalAuthority | None = Field(
+        None,
+        description='The communal or family authority whose approval is required to dispose of this asset',
+    )
+    successionRegime: SuccessionRegime | None = Field(
+        None,
+        description='The succession regime governing this specific asset. Overrides estate.defaultSuccessionRegime when present',
+    )
+    beneficiaryDesignation: BeneficiaryDesignation | None = Field(
+        None,
+        description='Named beneficiary designation for this asset. Assets with beneficiary designations pass outside the probate estate — the will does not control their distribution',
+    )
+    digitalAccessConsent: DigitalAccessConsent | None = Field(
+        None,
+        description="Digital access consent under RUFADAA or equivalent legislation. Governs whether executors and fiduciaries can access the deceased's digital accounts and assets",
+    )
+    passesOutsideEstate: bool | None = Field(
+        None,
+        description='Whether this asset passes outside the probate estate. Beneficiary designations, POD accounts, and jointly held assets typically bypass the will',
+        examples=[True, False],
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Free-text notes about this asset. Use for provenance, sentimental value, special handling instructions, or anything not captured by structured fields',
+        examples=['Belonged to great-grandmother — significant sentimental value to the family', 'Firearm requires Section 1 certificate — must be surrendered or transferred to a licence holder within 7 days of death'],
+    )
+    description: constr(max_length=2000) | None = Field(
+        None,
+        description="Structured description of the asset — what it is, its significance, and key details a dealer or executor would need. Distinct from 'notes' which is free-form",
+        examples=['OO gauge Hornby R3456 Class 66 locomotive in EWS livery, DCC fitted, with original box and instructions', '18ct yellow gold solitaire engagement ring, 1.2ct round brilliant diamond, GIA certified VS1/G'],
+    )
+    brand: constr(max_length=255) | Brand | None = Field(
+        None,
+        description='The manufacturer or brand name. Accepts a plain string (backwards compatible) or a structured object with Wikidata linkage for rich product data. AI agents should use this as a primary search dimension when finding comparables',
+        examples=['Rolex', {'name': 'Rolex', 'wikidataId': 'Q62288'}, {'name': 'Hornby', 'wikidataId': 'Q1567489', 'website': 'https://www.hornby.com'}],
+    )
+    model: constr(max_length=255) | None = Field(
+        None,
+        description='The specific model, product line, or range name. Combined with brand and identifiers, this is the primary key for marketplace search. AI agents construct search queries from brand + model + subcategory',
+        examples=['Class 66', 'Submariner Date', 'Perfect Reel', 'Model D Grand Piano', 'Birkin 25', 'Les Paul Standard'],
+    )
+    purchaseDate: date_aliased | None = Field(
+        None,
+        description='Date the asset was acquired by the current owner. Used for capital gains tax calculations, insurance claims, and provenance. Maps to Schema.org purchaseDate',
+        examples=['2015-06-20', '1998-12-25'],
+    )
+    originalPackaging: OriginalPackaging | None = Field(
+        None,
+        description='Whether original packaging, documentation, and accessories are present. Affects value by 20–40% across watches, model railways, jewellery, and many other domains',
+        examples=['complete', 'none', 'unknown'],
+    )
+    custodian: Custodian | None = Field(
+        None,
+        description='Third party currently holding this asset — a bank (safe deposit), storage facility (bonded wine), repairer (watch at jeweller), gallery (art on loan), or institution. The executor needs to know who to contact',
+    )
+    conditionSystem: (
+        ConditionSystem | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='The grading system used for the conditionGrade value. Allows domain-specific condition assessment alongside the generic condition field', examples=['goldmine', 'sheldon', 'gia', 'watch_trade', 'classic_vehicle'])
+    conditionGrade: constr(max_length=100) | None = Field(
+        None,
+        description='The specific grade within the conditionSystem. Meaningful only when conditionSystem is set',
+        examples=['VG+', 'MS-65', 'VS1', 'Fine'],
+    )
+    conditionStandard: AnyUrl | None = Field(
+        None,
+        description='URI pointing to the official documentation of the grading standard used. Enables tools to display the correct grading scale and interpret the conditionGrade value',
+        examples=['https://www.goldminemag.com/collector-resources/record-grading-101', 'https://www.pcgs.com/grades', 'https://www.gia.edu/gem-grading', 'https://www.bada-antiques.org/guides/condition-grading'],
+    )
+    urgency: Urgency | None = Field(
+        None,
+        description="How urgently this asset needs attention after the testator's death. Drives the executor's priority list",
+        examples=['immediate', 'none'],
+    )
+    urgencyReason: constr(max_length=2000) | None = Field(
+        None,
+        description="Explanation of why this asset is urgent. Particularly important for 'immediate' items",
+        examples=['Firearm requires Section 1 certificate — must be surrendered or transferred to a licence holder within 7 days of death', 'Live animals requiring daily care', 'Perishable wine collection in temperature-controlled storage — power must be maintained'],
+    )
+    containedInAssetId: UUID | None = Field(
+        None,
+        description='Reference to another Asset.id if this asset is physically contained within or logically part of another asset. Enables hierarchical asset nesting — e.g. a watch inside a safe, tools inside a toolbox',
+        examples=['a1b2c3d4-e5f6-7890-abcd-ef1234567890'],
+    )
+    insurance: Insurance | None = Field(
+        None,
+        description="Insurance coverage for this asset. The executor needs to know what's insured, by whom, and whether cover continues after death",
+    )
+    purchasedFrom: constr(max_length=255) | None = Field(
+        None,
+        description='Where the asset was purchased or acquired from. Collectors track provenance — valuable for dealers and for establishing authenticity',
+        examples=['Rails of Sheffield', "Christie's", "Sotheby's", 'Private sale', 'eBay seller vintage-trains-uk', 'Car boot sale, Wrexham'],
+    )
+    splitFrom: SplitFrom | None = Field(
+        None,
+        description='Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split',
+    )
+    dataProvenance: DataProvenance | None = Field(
+        None,
+        description="How this specific entity's data was captured. Overrides the document-level default if set",
+    )
+    searchTerms: list[SearchTerm] | None = Field(
+        None,
+        description='Keywords for marketplace search — AI-generated or human-curated. Memoization: once derived, cached here so subsequent agents reuse them instantly rather than re-deriving',
+        examples=[['Hornby R3456', 'Class 66 OO gauge', 'EWS livery locomotive']],
+        max_length=50,
+    )
+    comparableSearchProfile: ComparableSearchProfile | None = Field(
+        None,
+        description='Structured search instructions for comparable-finding agents. Acts as agent memory — the item teaches future agents how to find its peers',
+    )
+    suggestedSubcategory: constr(max_length=255) | None = Field(
+        None,
+        description='AI-suggested subcategory refinement, kept separate from the human-set subcategory. Accepted when the user confirms. Provenance: always AI-generated',
+    )
+    valuationReliability: conint(ge=0, le=100) | None = Field(
+        None,
+        description='Numeric reliability score (0-100) for the current valuation. Computed from: recency, method, corroborating comparables, variance between estimates. Companion to the categorical valuationConfidence enum — the enum captures source, this number captures trustworthiness now. Agents use this to prioritise which assets need re-valuation',
+    )
+    lastVerifiedAt: AwareDatetime | None = Field(
+        None,
+        description="When this entity's data was last verified by a human or authoritative source. Agents use this to decide whether to trust existing values or re-derive them",
+    )
+    verifiedBy: constr(max_length=255) | None = Field(
+        None,
+        description="Who or what verified this entity — a person's name, a tool, or 'owner'",
+        examples=['James Ashford', 'INHERIT Scanner v2', 'Rails of Sheffield (dealer)'],
+    )
+    visibility: Visibility | None = Field(
+        'all_parties',
+        description='Controls who can see this asset. Some assets (firearms, digital accounts, sensitive collections) may need restricted visibility',
+    )
+    fieldProvenance: list[FieldProvenance] | None = Field(
+        None,
+        description="Per-field provenance records — how each field's value was obtained",
+        max_length=100,
+    )
+    comments: list[Comment] | None = Field(
+        None, description='Discussion comments on this entity', max_length=100
+    )
+    mergedInto: MergedInto | None = Field(
+        None,
+        description='Records that this entity was merged into another entity — the target entity is the canonical version',
+    )
+    spaceIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced storage location',
+    )
+    provenance: Provenance | None = Field(
+        None,
+        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
+    )
+    applicableLaw: Jurisdiction | None = Field(
+        None,
+        description='The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile',
+    )
+    taxTreatment: TaxTreatment | None = Field(
+        None,
+        description='Per-asset tax treatment — how this asset is classified for tax purposes in a specific jurisdiction',
+    )
+    accessInstructions: AccessInstructions | None = Field(
+        None,
+        description='Instructions for accessing this asset after death — steps, locations, holders. No secrets in the document, just instructions for finding them. Available for all asset categories (digital: crypto wallets, social media; physical: safes, storage units)',
+    )
+    ownerIntent: OwnerIntent | None = Field(
+        None,
+        description="The owner's current intention for this item. Absent means keeping (the default). Used by catalogue applications to track whether items are being actively managed, offered for sale, or allocated to specific people",
+    )
+    listings: list[Listing] | None = Field(
+        None,
+        description='Active or historical listings of this item for sale on external channels. Tracks where the item is listed, its status, and sale outcome. Application-level data — not part of the estate interchange but carried alongside it for catalogue and dealer workflows',
+        max_length=20,
+    )
+    serviceHistory: list[ServiceRecord] | None = Field(
+        None,
+        description='Service, maintenance, and restoration records. Critical for watches (service intervals affect value), vehicles (MOT history, restoration), clocks, and musical instruments',
+        max_length=100,
+    )
+    insuranceCover: InsuranceCover | None = Field(
+        None,
+        description='Insurance details for this item. Tracks which policy covers it, the agreed value, and when cover was last confirmed. Essential for executors who need to claim on the correct policy',
+    )
+    shippingClass: ShippingClass | None = Field(
+        None,
+        description='How this item can be transported for selling or verification. Determines which logistics path the Deal Comparison uses',
+    )
+    includedDocuments: (
+        list[IncludedDocuments | constr(pattern=r'^x-inherit-.+', max_length=100)]
+        | None
+    ) = Field(None, description='Original documents, certificates, and packaging elements present with this item. Affects value significantly across many categories. Cross-category: watches, vehicles, books, art, and collectibles share some document types', max_length=30)
+    taxReliefEligibility: TaxReliefEligibility | None = Field(
+        None,
+        description='Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)',
+    )
+    significance: Significance | None = Field(
+        None,
+        description='Cultural, religious, sentimental, or professional significance beyond monetary value',
+    )
+
+
+class Category1(Enum):
+    model_railways = 'model_railways'
+    vinyl_records = 'vinyl_records'
+    art = 'art'
+    jewellery = 'jewellery'
+    wine = 'wine'
+    stamps = 'stamps'
+    coins = 'coins'
+    books = 'books'
+    musical_instruments = 'musical_instruments'
+    fishing_gear = 'fishing_gear'
+    handbags = 'handbags'
+    power_tools = 'power_tools'
+    watches = 'watches'
+    ceramics = 'ceramics'
+    memorabilia = 'memorabilia'
+    other = 'other'
+
+
+class ValuationSource(Enum):
+    self_estimated = 'self_estimated'
+    dealer_valuation = 'dealer_valuation'
+    auction_estimate = 'auction_estimate'
+    insurance_value = 'insurance_value'
+
+
+class DisposalStrategy(Enum):
+    keep_together = 'keep_together'
+    sell_as_collection = 'sell_as_collection'
+    sell_individually = 'sell_individually'
+    auction = 'auction'
+    donate = 'donate'
+    gift_to_person = 'gift_to_person'
+    dealer_bids = 'dealer_bids'
+    mixed = 'mixed'
+    undecided = 'undecided'
+
+
+class PreferredDisposalMethod(Enum):
+    private_sale = 'private_sale'
+    auction_house = 'auction_house'
+    dealer_network = 'dealer_network'
+    online_marketplace = 'online_marketplace'
+    specialist_fair = 'specialist_fair'
+    museum_acquisition = 'museum_acquisition'
+    other = 'other'
+
+
+class SplitFrom1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    entityType: EntityType = Field(..., description='The type of entity that was split')
+    entityId: UUID = Field(
+        ..., description='The id of the original entity that was split'
+    )
+    splitAt: AwareDatetime = Field(..., description='When the split occurred')
+    reason: constr(max_length=2000) | None = Field(
+        None, description='Why the split was requested'
+    )
+
+
+class DisposalMethod(Enum):
+    sold_as_collection = 'sold_as_collection'
+    sold_individually = 'sold_individually'
+    gifted_to_beneficiary = 'gifted_to_beneficiary'
+    donated = 'donated'
+    kept = 'kept'
+    other = 'other'
+
+
+class DisposalHistoryItem(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    assetId: UUID | None = Field(None, description='Asset.id of the disposed item')
+    disposalMethod: DisposalMethod | None = Field(
+        None, description='How the item was disposed of'
+    )
+    proceeds: Money | None = Field(None, description='Sale proceeds')
+    recipientPersonId: UUID | None = Field(
+        None, description='Person.id of the recipient'
+    )
+    recipientPersonIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced recipient person',
+    )
+    recipientOrganisationId: UUID | None = Field(
+        None, description='Organisation.id of the recipient'
+    )
+    recipientOrganisationIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced recipient organisation',
+    )
+    date: date_aliased | None = Field(None, description='Date of disposal')
+    notes: constr(max_length=2000) | None = Field(
+        None, description='Notes about the disposal'
+    )
+
+
+class MergedInto1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    entityType: EntityType | None = Field(None, description='Type of the target entity')
+    entityId: UUID | None = Field(None, description='ID of the target entity')
+    mergedAt: AwareDatetime | None = Field(None, description='When the merge occurred')
+    reason: constr(max_length=2000) | None = Field(
+        None,
+        description='Why the entities were merged',
+        examples=['Duplicate entries identified during estate inventory'],
+    )
+
+
+class ValuationComparison(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    insuranceValue: Money | None = Field(None, description='Insurance valuation')
+    insuranceDate: date_aliased | None = Field(
+        None, description='Date of insurance valuation'
+    )
+    dealerEstimate: Money | None = Field(None, description="Dealer's estimate")
+    dealerDate: date_aliased | None = Field(None, description='Date of dealer estimate')
+    auctionEstimate: Money | None = Field(None, description='Auction house estimate')
+    auctionDate: date_aliased | None = Field(
+        None, description='Date of auction estimate'
+    )
+    likelyRealisableAmount: Money | None = Field(
+        None, description='Most likely realisable amount considering all sources'
+    )
+
+
+class AssetCollection(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    id: UUID = Field(
+        ...,
+        description='Unique identifier for this asset collection',
+        examples=['b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8'],
+    )
+    rootDocumentId: UUID = Field(
+        ...,
+        description='The root document this entity belongs to — either an estate document (schema.json) or a catalogue document (catalogue.json)',
+        examples=['a1b2c3d4-e5f6-7890-abcd-ef1234567890'],
+    )
+    name: constr(min_length=1, max_length=255) = Field(
+        ...,
+        description='Display name for this collection',
+        examples=['Model railway collection', 'Vinyl record library', 'Japanese woodblock prints'],
+    )
+    description: constr(max_length=2000) | None = Field(
+        None,
+        description="Context for family members and dealers about the collection's scope, provenance, or significance",
+        examples=['OO gauge collection started in 1985, mostly Hornby with some Lima coaches. Layout stored in the loft at Oakfield Road.'],
+    )
+    category: Category1 | None = Field(
+        None,
+        description='The primary category of items in this collection',
+        examples=['model_railways', 'vinyl_records', 'art'],
+    )
+    estimatedValue: Money | None = Field(
+        None,
+        description='Estimated total value of the collection as a whole',
+        examples=[{'amount': 1500000, 'currency': 'GBP'}],
+    )
+    valuationSource: ValuationSource | None = Field(
+        None,
+        description='How the estimated value was determined',
+        examples=['dealer_valuation'],
+    )
+    valuationDate: date_aliased | None = Field(
+        None,
+        description='Date the valuation was performed or last updated',
+        examples=['2025-11-15'],
+    )
+    disposalWishes: constr(max_length=255) | None = Field(
+        None,
+        description='Free-text guidance from the testator about what should happen to this collection — keep together, sell at auction, donate to a museum, etc',
+        examples=['Keep together if possible. Contact Dave at Manchester Model Railway Club — he knows the right dealers. Do not sell on eBay individually.'],
+    )
+    disposalStrategy: DisposalStrategy | None = Field(
+        None,
+        description="The testator's preferred strategy for disposing of this collection. More structured than disposalWishes",
+        examples=['dealer_bids', 'keep_together'],
+    )
+    minimumAcceptableValue: Money | None = Field(
+        None,
+        description='The minimum total value the testator or executor will accept for the collection. Prevents fire-sale disposal. In minor currency units',
+    )
+    preferredDisposalMethod: PreferredDisposalMethod | None = Field(
+        None,
+        description='Preferred channel for disposing of the collection',
+        examples=['dealer_network', 'auction_house'],
+    )
+    specialistDealerNotes: constr(max_length=2000) | None = Field(
+        None,
+        description='Notes about specialist dealers who might be interested in this collection. Names, contact details, areas of expertise',
+        examples=["Rails of Sheffield (01onal@railsofsheffield.com) — largest UK model railway dealer. Hattons of Liverpool — strong on Bachmann/Hornby. Avoid eBay 'lot sellers' — they undervalue specialist items."],
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Any additional notes about this collection',
+        examples=["Insurance policy with Hiscox, ref HX-2024-1234. Photos in Google Drive folder 'Railway Collection'."],
+    )
+    images: list[Media] | None = Field(
+        None,
+        description='Overview photographs and videos of the collection as a whole — the display, the storage, the scale of the collection',
+        max_length=100,
+    )
+    splitFrom: SplitFrom1 | None = Field(
+        None,
+        description='Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split',
+    )
+    disposalHistory: list[DisposalHistoryItem] | None = Field(
+        None,
+        description='History of how items in this collection were disposed of during estate administration',
+        max_length=500,
+    )
+    mergedInto: MergedInto1 | None = Field(
+        None,
+        description='Records that this entity was merged into another entity — the target entity is the canonical version',
+    )
+    valuationComparison: ValuationComparison | None = Field(
+        None,
+        description='Comparison of different valuation sources for this collection — insurance, dealer, auction',
+    )
+    provenance: Provenance | None = Field(
+        None,
+        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
+    )
+
+
+class AddressOrder(Enum):
+    western = 'western'
+    japanese = 'japanese'
+    indian = 'indian'
+    arabic = 'arabic'
+    custom = 'custom'
+
+
+class Address(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    formattedAddress: constr(max_length=5000) | None = Field(
+        None,
+        description='The full address as a single formatted string, suitable for display. Preserves the original representation from the source document. Must not be the sole address representation — always populate structured fields where possible',
+        examples=['13 Park Avenue, Flint, Flintshire CH6 5DW', '123 Main Street, Apt 4B, New York, NY 10001', '〒100-0001 東京都千代田区千代田1-1'],
+    )
+    streetAddress: constr(max_length=255) | None = Field(
+        None,
+        description='Street number and name. For Japanese addresses, use the block and building number (chōme-ban-gō)',
+        examples=['13 Park Avenue', '123 Main Street, Apt 4B', '千代田1-1', '42 Rue de Rivoli'],
+    )
+    addressLine2: constr(max_length=255) | None = Field(
+        None,
+        description='Secondary address line — flat, suite, building, or floor. Use when the primary street address is insufficient',
+        examples=['Flat 3B', 'Suite 400', '2nd Floor, Tower A'],
+    )
+    addressLocality: constr(max_length=255) | None = Field(
+        None,
+        description='City, town, village, or ward. For Japanese addresses, this is the city or special ward (ku)',
+        examples=['Manchester', '千代田区', 'Mumbai', 'Dubai', 'Toronto'],
+    )
+    addressRegion: constr(max_length=255) | None = Field(
+        None,
+        description='State, prefecture, province, or county. The administrative division below national level',
+        examples=['Greater Manchester', '東京都', 'Maharashtra', 'California', 'Ontario'],
+    )
+    postalCode: constr(max_length=255) | None = Field(
+        None,
+        description='Postal or ZIP code. Format varies by country — UK postcodes, US ZIP codes, Japanese 〒 codes, etc',
+        examples=['M1 1AA', '10001', '100-0001', '400001', 'M5V 2T6'],
+    )
+    addressCountry: constr(pattern=r'^[A-Z]{2}$') | None = Field(
+        None,
+        description='ISO 3166-1 alpha-2 country code. Always uppercase',
+        examples=['GB', 'US', 'JP', 'IN', 'AE', 'NG'],
+    )
+    latitude: confloat(ge=-90.0, le=90.0) | None = Field(
+        None,
+        description='Geographic latitude in decimal degrees. Useful for properties in jurisdictions without formal addressing systems',
+        examples=[51.5074, 35.6762, -33.8688],
+    )
+    longitude: confloat(ge=-180.0, le=180.0) | None = Field(
+        None,
+        description='Geographic longitude in decimal degrees. Pair with latitude for precise property location',
+        examples=[-0.1278, 139.6503, 151.2093],
+    )
+    landmark: constr(max_length=255) | None = Field(
+        None,
+        description='A nearby landmark used to locate the address. Essential in jurisdictions without formal street addressing — India, Nigeria, and rural areas worldwide',
+        examples=['Near Meenakshi Temple', 'Behind Shoprite, Lekki Phase 1', 'Opposite the District Court'],
+    )
+    directionNotes: constr(max_length=2000) | None = Field(
+        None,
+        description='Free-form directions to reach the address when no formal address system exists. Common in rural communities across Africa, South Asia, and the Pacific Islands',
+        examples=['Take the second left after the market, third compound on the right', '500m past the village well, red gate'],
+    )
+    addressOrder: AddressOrder | None = Field(
+        None,
+        description="The addressing convention that governs the display order of this address. Defaults to 'western' if omitted",
+        examples=['western', 'japanese'],
+    )
+
+
+class Status1(Enum):
+    active = 'active'
+    suspended = 'suspended'
+    revoked = 'revoked'
+    voluntary = 'voluntary'
+    expired = 'expired'
+
+
+class CompanyStatus(Enum):
+    active = 'active'
+    dissolved = 'dissolved'
+    liquidation = 'liquidation'
+    receivership = 'receivership'
+    administration = 'administration'
+    voluntary_arrangement = 'voluntary-arrangement'
+    converted_closed = 'converted-closed'
+
+
+class SicCode(RootModel[constr(max_length=10)]):
+    root: constr(max_length=10)
+
+
+class AuthorisationStatus(Enum):
+    authorised = 'authorised'
+    revoked = 'revoked'
+    suspended = 'suspended'
+    cancelled = 'cancelled'
+    no_longer_authorised = 'no-longer-authorised'
+
+
+class Permission(RootModel[constr(max_length=500)]):
+    root: constr(max_length=500)
+
+
+class CharityStatus(Enum):
+    registered = 'registered'
+    removed = 'removed'
+    suspended = 'suspended'
+    in_default = 'in-default'
+
+
+class ReportingStatus(Enum):
+    up_to_date = 'up-to-date'
+    overdue = 'overdue'
+    not_required = 'not-required'
+
+
+class LiveCheck(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    retrievedAt: AwareDatetime = Field(..., description='When this check was performed')
+    companyStatus: (
+        CompanyStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='Companies House company status')
+    sicCodes: list[SicCode] | None = Field(
+        None,
+        description='Standard Industrial Classification codes from Companies House',
+        max_length=10,
+    )
+    incorporatedAt: date_aliased | None = Field(
+        None, description='Date of incorporation'
+    )
+    accountsOverdue: bool | None = Field(
+        None, description='Whether accounts are overdue at Companies House'
+    )
+    insolvencyFlag: bool | None = Field(
+        None, description='Whether there are active insolvency proceedings'
+    )
+    authorisationStatus: (
+        AuthorisationStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='FCA authorisation status')
+    firmReference: constr(max_length=50) | None = Field(
+        None, description='FCA firm reference number'
+    )
+    permissions: list[Permission] | None = Field(
+        None,
+        description='Regulated activities the firm is authorised for',
+        max_length=50,
+    )
+    effectiveFrom: date_aliased | None = Field(
+        None, description='When FCA authorisation took effect'
+    )
+    charityStatus: (
+        CharityStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='Charity Commission or OSCR registration status')
+    income: conint(ge=0) | None = Field(
+        None, description='Latest reported annual income in minor units (pennies/cents)'
+    )
+    objects: constr(max_length=2000) | None = Field(
+        None, description='Charitable objects or purposes'
+    )
+    dateRegistered: date_aliased | None = Field(
+        None, description='Date the charity was registered'
+    )
+    reportingStatus: (
+        ReportingStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description="Whether the charity's reporting is up to date")
+
+
+class Registration(BaseModel):
+    body: constr(max_length=100) = Field(
+        ...,
+        description='The regulatory body or registry. Use an id from well-known-organisations.json where available, or a descriptive string for unlisted bodies',
+        examples=['sra', 'ccew', 'oscr', 'companies_house', 'fca', 'rics', 'nafd'],
+    )
+    number: constr(max_length=100) = Field(
+        ...,
+        description='The registration number. Format varies by body — see well-known-organisations.json for expected patterns',
+        examples=['642790', '1089471', 'SC012345', '01234567', 'MRICS-1234567'],
+    )
+    status: Status1 | None = Field(
+        None, description='Current status of this registration'
+    )
+    jurisdiction: constr(max_length=10) | None = Field(
+        None,
+        description='Jurisdiction this registration applies to. ISO 3166-1 alpha-2 or ISO 3166-2 code',
+    )
+    verificationUrl: AnyUrl | None = Field(
+        None,
+        description='URL to verify this registration with the regulatory body',
+        examples=['https://www.sra.org.uk/consumers/register/organisation/?sraNumber=642790'],
+    )
+    verifiedAt: AwareDatetime | None = Field(
+        None, description='When this registration was last verified'
+    )
+    liveCheck: LiveCheck | None = Field(
+        None,
+        description='Result of a live API check against this registry. Snapshot at retrievedAt. Registry-specific fields are validated conditionally based on the parent body field',
+    )
+
+
+class OrganisationType(Enum):
+    legal_firm = 'legal_firm'
+    financial_institution = 'financial_institution'
+    pension_provider = 'pension_provider'
+    insurance_provider = 'insurance_provider'
+    dealer = 'dealer'
+    auction_house = 'auction_house'
+    valuation_firm = 'valuation_firm'
+    funeral_provider = 'funeral_provider'
+    charity = 'charity'
+    religious_institution = 'religious_institution'
+    employer = 'employer'
+    trust_corporation = 'trust_corporation'
+    accountancy_firm = 'accountancy_firm'
+    government_body = 'government_body'
+    retailer = 'retailer'
+    manufacturer = 'manufacturer'
+    property_management = 'property_management'
+    storage_facility = 'storage_facility'
+    digital_platform = 'digital_platform'
+    utility_provider = 'utility_provider'
+    other = 'other'
+
+
+class EstateRoles(Enum):
+    beneficiary = 'beneficiary'
+    will_writer = 'will_writer'
+    executor = 'executor'
+    trustee = 'trustee'
+    asset_holder = 'asset_holder'
+    liability_holder = 'liability_holder'
+    insurer = 'insurer'
+    valuer = 'valuer'
+    recommended_dealer = 'recommended_dealer'
+    funeral_provider = 'funeral_provider'
+    professional_adviser = 'professional_adviser'
+    regulatory_body = 'regulatory_body'
+    employer = 'employer'
+    retailer = 'retailer'
+    service_provider = 'service_provider'
+
+
+class Platform4(Enum):
+    trustpilot = 'trustpilot'
+    google = 'google'
+    feefo = 'feefo'
+    reviews_io = 'reviews_io'
+    funeral_guide = 'funeral_guide'
+    checkatrade = 'checkatrade'
+
+
+class Rating(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    platform: Platform4 | constr(pattern=r'^x-inherit-.+', max_length=100) = Field(
+        ..., description='The review platform'
+    )
+    ratingValue: confloat(ge=0.0, le=10.0) = Field(
+        ..., description='The aggregate rating score'
+    )
+    bestRating: confloat(ge=0.0, le=10.0) | None = Field(
+        5, description='Maximum possible score on this platform. Default 5 if absent'
+    )
+    worstRating: confloat(ge=0.0, le=10.0) | None = Field(
+        1, description='Minimum possible score on this platform. Default 1 if absent'
+    )
+    reviewCount: conint(ge=0) | None = Field(
+        None, description='Total number of reviews on this platform'
+    )
+    profileUrl: AnyUrl | None = Field(
+        None, description="URL to the organisation's profile on this platform"
+    )
+    retrievedAt: AwareDatetime = Field(
+        ..., description='When this rating data was retrieved or verified'
+    )
+
+
+class VatScheme(Enum):
+    margin_scheme = 'margin_scheme'
+    global_accounting = 'global_accounting'
+    standard_vat = 'standard_vat'
+
+
+class VatConfiguration(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    vatRegistered: bool | None = Field(
+        None, description='Whether the organisation is VAT registered'
+    )
+    vatScheme: VatScheme | None = Field(
+        None,
+        description='Which VAT scheme the organisation uses. Only relevant if vatRegistered is true',
+    )
+    vatNumber: constr(max_length=50) | None = Field(
+        None, description="The organisation's VAT registration number"
+    )
+    vatCountry: constr(pattern=r'^[A-Z]{2}$', max_length=2) | None = Field(
+        None, description='The country of VAT registration, as ISO 3166-1 alpha-2'
+    )
+
+
+class ShipsToCountry(RootModel[constr(pattern=r'^[A-Z]{2}$', max_length=2)]):
+    root: constr(pattern=r'^[A-Z]{2}$', max_length=2)
+
+
+class ReceivesFromCountry(RootModel[constr(pattern=r'^[A-Z]{2}$', max_length=2)]):
+    root: constr(pattern=r'^[A-Z]{2}$', max_length=2)
+
+
+class ImportDutyPolicy(Enum):
+    dealer_absorbs = 'dealer_absorbs'
+    buyer_pays = 'buyer_pays'
+    included_in_shipping = 'included_in_shipping'
+
+
+class InternationalShipping(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    shipsToCountries: list[ShipsToCountry] | None = Field(
+        None,
+        description='ISO 3166-1 alpha-2 country codes this organisation ships to',
+        max_length=250,
+    )
+    receivesFromCountries: list[ReceivesFromCountry] | None = Field(
+        None,
+        description='ISO 3166-1 alpha-2 country codes this organisation receives items from',
+        max_length=250,
+    )
+    customsHandling: bool | None = Field(
+        None,
+        description='Whether this organisation handles customs declarations for international shipments',
+    )
+    importDutyPolicy: ImportDutyPolicy | None = Field(
+        None, description='Who pays import duties on international transactions'
+    )
+    currency: constr(pattern=r'^[A-Z]{3}$', max_length=3) | None = Field(
+        None,
+        description='The primary currency this organisation trades in, as ISO 4217',
+    )
+
+
+class Category2(RootModel[constr(max_length=100)]):
+    root: constr(max_length=100)
+
+
+class DealerTier(Enum):
+    free = 'free'
+    standard = 'standard'
+    professional = 'professional'
+
+
+class FulfilmentCapability(Enum):
+    inspection = 'inspection'
+    grading = 'grading'
+    photography = 'photography'
+    storage = 'storage'
+    shipping = 'shipping'
+    restoration = 'restoration'
+
+
+class GeographicReach(Enum):
+    local = 'local'
+    national = 'national'
+    international = 'international'
+
+
+class DealerProfile(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    categories: list[Category2] | None = Field(
+        None, description='Asset categories this dealer specialises in', max_length=20
+    )
+    dealerTier: DealerTier | None = Field(
+        None, description="The dealer's subscription tier on the platform"
+    )
+    fulfilmentCapabilities: list[FulfilmentCapability] | None = Field(
+        None, description='Physical services this dealer can provide', max_length=10
+    )
+    geographicReach: GeographicReach | None = Field(
+        None, description='How far the dealer operates'
+    )
+    averageResponseTime: constr(max_length=50) | None = Field(
+        None, description='Typical time to respond to a valuation request or offer'
+    )
+
+
+class Organisation(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    id: UUID = Field(
+        ...,
+        description='Unique identifier for this organisation within the INHERIT document',
+    )
+    name: constr(min_length=1, max_length=255) = Field(
+        ...,
+        description="The organisation's legal or trading name",
+        examples=['IDR Law', 'Barclays Bank UK PLC', 'Macmillan Cancer Support', 'Rails of Sheffield', 'Dignity Funerals Ltd'],
+    )
+    organisationType: OrganisationType | constr(pattern=r'^x-inherit-.+') = Field(
+        ...,
+        description='The nature of the organisation. Use x-inherit- prefix for jurisdiction-specific or niche types not covered by the core enum',
+    )
+    estateRoles: list[EstateRoles | constr(pattern=r'^x-inherit-.+')] | None = Field(
+        None,
+        description='The roles this organisation plays in this specific estate. An organisation may play multiple roles',
+        max_length=20,
+    )
+    jurisdiction: constr(max_length=10) | None = Field(
+        None,
+        description='Primary jurisdiction where this organisation operates. ISO 3166-1 alpha-2 or ISO 3166-2 code',
+        examples=['GB', 'GB-ENG', 'US-NY', 'SG', 'JP'],
+    )
+    address: Address | None = Field(None, description="The organisation's address")
+    url: AnyUrl | None = Field(
+        None,
+        description="The organisation's website",
+        examples=['https://www.idrlaw.co.uk', 'https://www.macmillan.org.uk'],
+    )
+    email: EmailStr | None = Field(
+        None, description='Primary contact email', examples=['enquiries@idrlaw.co.uk']
+    )
+    phone: constr(max_length=50) | None = Field(
+        None, description='Primary contact phone number', examples=['+44 1234 567890']
+    )
+    logo: AnyUrl | None = Field(None, description="URL to the organisation's logo")
+    wikidataId: constr(pattern=r'^Q[0-9]+$', max_length=20) | None = Field(
+        None,
+        description='Wikidata Q-number for this organisation, enabling linked data resolution. Many major organisations have Wikidata entries with structured data (founding date, parent company, headquarters, etc.)',
+        examples=['Q2402878', 'Q4424418', 'Q5277509'],
+    )
+    description: constr(max_length=2000) | None = Field(
+        None,
+        description='Brief description of the organisation and its relevance to this estate',
+        examples=['Family solicitor since 2018. Handled the purchase of 42 Oak Lane.'],
+    )
+    registrations: list[Registration] | None = Field(
+        None,
+        description='Registrations with regulatory bodies, professional associations, and government registries. An organisation may hold multiple registrations across jurisdictions',
+        max_length=20,
+    )
+    contactPerson: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the primary contact person at this organisation for estate matters',
+        examples=['Sarah Chen', 'Dave at the model railway desk'],
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description="Free-text notes about this organisation's relationship to the estate",
+        examples=['Contact Dave at Manchester Model Railway Club — he knows the right dealers. Do not sell on eBay individually.', "Margaret's employer. Death-in-service benefit: 4x salary. HR contact: Jane Williams."],
+    )
+    ratings: list[Rating] | None = Field(
+        None,
+        description='Aggregate ratings from review platforms. One entry per platform. Supports user decision-making, agent filtering/ranking, and point-in-time audit trails',
+        max_length=20,
+    )
+    sameAs: list[AnyUrl] | None = Field(
+        None,
+        description='URIs identifying this entity elsewhere (schema.org sameAs). e.g. Wikidata, LinkedIn, DBpedia',
+    )
+    provenance: Provenance | None = Field(
+        None,
+        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
+    )
+    vatConfiguration: VatConfiguration | None = Field(
+        None,
+        description="The organisation's VAT registration status and scheme. Affects how VAT is calculated on transactions involving this organisation",
+    )
+    internationalShipping: InternationalShipping | None = Field(
+        None,
+        description='International shipping capabilities and policies for this organisation',
+    )
+    identifiers: list[Identifier] | None = Field(
+        None,
+        description='External identifiers — charity number, company registration, UEN, etc.',
+        max_length=50,
+    )
+    dealerProfile: DealerProfile | None = Field(
+        None,
+        description='Dealer-specific profile information. Only relevant for organisations that operate as dealers on marketplace or catalogue platforms',
+    )
+
+
+class PropertyType(Enum):
+    detached = 'detached'
+    attached = 'attached'
+    apartment = 'apartment'
+    land = 'land'
+    commercial = 'commercial'
+    mixed_use = 'mixed_use'
+    rural = 'rural'
+    mobile = 'mobile'
+    watercraft = 'watercraft'
+    other = 'other'
+
+
+class OwnershipType2(Enum):
+    sole = 'sole'
+    joint_tenants = 'joint_tenants'
+    tenants_in_common = 'tenants_in_common'
+    trust = 'trust'
+    tenancy_by_entirety = 'tenancy_by_entirety'
+
+
+class OwnershipModel(Enum):
+    individual = 'individual'
+    joint = 'joint'
+    communal_family = 'communal_family'
+    huf_coparcenary = 'huf_coparcenary'
+    tribal = 'tribal'
+    government_vested = 'government_vested'
+    trust_held = 'trust_held'
+
+
+class TenureType(Enum):
+    ownership = 'ownership'
+    lease = 'lease'
+    communal = 'communal'
+    customary = 'customary'
+    informal = 'informal'
+    government_allocated = 'government_allocated'
+
+
+class CommunalAuthority1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    authorityType: AuthorityType1 | None = Field(
+        None, description='Category of communal authority'
+    )
+    approvalRequired: bool | None = Field(
+        None,
+        description='Whether approval from this authority is legally required before disposal',
+    )
+    authorityName: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the specific authority or person',
+        examples=['Karta of Sharma HUF', 'Okonkwo Family Council', 'MUIS'],
+    )
+    jurisdiction: Jurisdiction | None = Field(
+        None,
+        description='Jurisdiction where this communal authority has legal standing',
+    )
+
+
+class GoverningLaw1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    jurisdiction: Jurisdiction | None = Field(
+        None, description='Jurisdiction whose succession law applies'
+    )
+    legalTradition: LegalTradition | None = Field(
+        None, description='Which legal tradition applies'
+    )
+    statute: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the governing statute',
+        examples=['Wills Act 1837', 'PRC Civil Code', 'Hindu Succession Act 1956'],
+    )
+    section: constr(max_length=255) | None = Field(
+        None,
+        description='Specific section of the statute',
+        examples=['s.9', 'Book VI Succession', 's.6 (coparcenary)'],
+    )
+
+
+class SuccessionRegime1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    governingLaw: GoverningLaw1 | None = Field(
+        None, description='The law governing succession for this property'
+    )
+    determinedBy: DeterminedBy | None = Field(
+        None, description='How the governing law was determined'
+    )
+    binding: bool | None = Field(
+        None, description='Whether this succession regime is legally binding'
+    )
+    extensions: list[Extension] | None = Field(
+        None,
+        description="INHERIT extension IDs that apply to this property's succession",
+        max_length=50,
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None, description='Additional context about the succession regime'
+    )
+
+
+class CharacterClassification(Enum):
+    community = 'community'
+    separate = 'separate'
+    quasi_community = 'quasi_community'
+    mixed = 'mixed'
+    not_applicable = 'not_applicable'
+
+
+class HomesteadStatus(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    isHomestead: bool | None = Field(
+        None,
+        description='Whether this property qualifies as a homestead',
+        examples=[True],
+    )
+    exemptionAmount: Money | None = Field(
+        None, description='Dollar value of the homestead exemption, if capped'
+    )
+    exemptionUnlimited: bool | None = Field(
+        None,
+        description='Whether the homestead exemption has no dollar cap. True in Florida, Texas (rural), and several other states',
+        examples=[True, False],
+    )
+    deviseRestriction: bool | None = Field(
+        None,
+        description='Whether this homestead is subject to restrictions on devise — e.g. Florida prohibits devising homestead away from a surviving spouse or minor children',
+        examples=[True],
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Additional notes on homestead status',
+        examples=['Florida unlimited homestead — devise restricted by Art. X s.4 Florida Constitution'],
+    )
+
+
+class StatutoryLifeEstate(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    beneficiaryPersonId: UUID | None = Field(
+        None, description='Reference to the Person.id of the life estate beneficiary'
+    )
+    beneficiaryPersonIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced beneficiary person',
+    )
+    basis: constr(max_length=500) | None = Field(
+        None,
+        description='The statutory basis for this life estate',
+        examples=['Alberta Dower Act', 'Florida Constitution Art. X s.4'],
+    )
+    conditions: constr(max_length=255) | None = Field(
+        None,
+        description='Any conditions on the life estate',
+        examples=['Terminates on remarriage', 'Must maintain the property in habitable condition'],
+    )
+
+
+class ExternalLink1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    system: constr(pattern=r'^[a-z][a-zA-Z0-9]*$', max_length=100) = Field(
+        ..., description='The external system or platform name'
+    )
+    id: constr(min_length=1, max_length=500) = Field(
+        ..., description='The platform-specific identifier for this property'
+    )
+    url: AnyUrl | None = Field(
+        None, description="Direct URL to the property's page on the external platform"
+    )
+    label: constr(max_length=255) | None = Field(
+        None, description='Human-readable label for display'
+    )
+    retrievedAt: AwareDatetime | None = Field(
+        None, description='Timestamp when this link was last verified'
+    )
+
+
+class RentalIncome(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    monthlyAmount: Money | None = Field(None, description='Monthly rental income')
+    tenantName: constr(max_length=255) | None = Field(
+        None, description='Name of the current tenant', examples=['Mr & Mrs Patel']
+    )
+    leaseEndDate: date_aliased | None = Field(
+        None, description='Date the current lease expires'
+    )
+    managingAgentOrganisationId: (
+        UUID | None
+    ) = Field(None, description='Organisation.id of the managing agent')
+    managingAgentOrganisationIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced managing agent organisation',
+    )
+
+
+class Rating1(Enum):
+    A = 'A'
+    B = 'B'
+    C = 'C'
+    D = 'D'
+    E = 'E'
+    F = 'F'
+    G = 'G'
+
+
+class Epc(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    retrievedAt: AwareDatetime = Field(
+        ..., description='When this EPC data was retrieved from the register'
+    )
+    rating: Rating1 | None = Field(None, description='Overall EPC rating band')
+    energyEfficiencyScore: conint(ge=1, le=100) | None = Field(
+        None, description='Numeric energy efficiency score (1–100, higher is better)'
+    )
+    environmentalImpactScore: conint(ge=1, le=100) | None = Field(
+        None, description='Numeric environmental impact score (1–100, higher is better)'
+    )
+    expiryDate: date_aliased | None = Field(
+        None, description='When the EPC expires (valid for 10 years from issue)'
+    )
+    certificateNumber: constr(max_length=100) | None = Field(
+        None, description='EPC certificate reference number'
+    )
+    certificateUrl: AnyUrl | None = Field(
+        None, description='URL to the certificate on the EPC register'
+    )
+    floorArea: confloat(ge=0.0) | None = Field(
+        None, description='Total floor area in square metres'
+    )
+    heatingType: constr(max_length=255) | None = Field(
+        None, description='Primary heating system description'
+    )
+
+
+class TitleClass(Enum):
+    absolute = 'absolute'
+    qualified = 'qualified'
+    possessory = 'possessory'
+    good_leasehold = 'good_leasehold'
+
+
+class Tenure(Enum):
+    freehold = 'freehold'
+    leasehold = 'leasehold'
+
+
+class RegisteredOwner(RootModel[constr(max_length=255)]):
+    root: constr(max_length=255)
+
+
+class LandRegistry(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    retrievedAt: AwareDatetime = Field(
+        ..., description='When this data was retrieved from Land Registry'
+    )
+    titleNumber: constr(max_length=50) | None = Field(
+        None,
+        description='Land Registry title number',
+        examples=['DN123456', 'SGL123456'],
+    )
+    titleClass: TitleClass | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
+        Field(None, description='Class of title registered at Land Registry')
+    )
+    lastSalePrice: conint(ge=0) | None = Field(
+        None, description='Last recorded sale price in minor units (pennies)'
+    )
+    lastSaleDate: date_aliased | None = Field(
+        None, description='Date of last recorded sale'
+    )
+    tenure: Tenure | constr(pattern=r'^x-inherit-.+', max_length=100) | None = Field(
+        None, description='Tenure as recorded by Land Registry'
+    )
+    registeredOwners: list[RegisteredOwner] | None = Field(
+        None, description='Owner names as they appear on the register', max_length=10
+    )
+    chargesCount: conint(ge=0) | None = Field(
+        None,
+        description='Number of registered charges (mortgages, restrictions, notices)',
+    )
+
+
+class RiverAndSeaRisk(Enum):
+    high = 'high'
+    medium = 'medium'
+    low = 'low'
+    very_low = 'very_low'
+
+
+class SurfaceWaterRisk(Enum):
+    high = 'high'
+    medium = 'medium'
+    low = 'low'
+    very_low = 'very_low'
+
+
+class FloodZone(Enum):
+    field_1 = '1'
+    field_2 = '2'
+    field_3a = '3a'
+    field_3b = '3b'
+
+
+class FloodRisk(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    retrievedAt: AwareDatetime = Field(
+        ..., description='When this flood risk data was retrieved'
+    )
+    riverAndSeaRisk: (
+        RiverAndSeaRisk | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='Risk of flooding from rivers and the sea')
+    surfaceWaterRisk: (
+        SurfaceWaterRisk | constr(pattern=r'^x-inherit-.+', max_length=100) | None
+    ) = Field(None, description='Risk of flooding from surface water')
+    floodZone: FloodZone | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
+        Field(None, description='Environment Agency flood zone designation')
+    )
+    nearestWatercourse: constr(max_length=255) | None = Field(
+        None, description='Name of the nearest river, stream, or watercourse'
+    )
+    historicalFlooding: bool | None = Field(
+        None, description='Whether the area has been affected by flooding in the past'
+    )
+
+
+class Leasehold(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    retrievedAt: AwareDatetime = Field(
+        ..., description='When this leasehold data was retrieved or last verified'
+    )
+    leaseStartDate: date_aliased | None = Field(
+        None, description='Date the lease commenced'
+    )
+    leaseTerm: conint(ge=1, le=999) | None = Field(
+        None, description='Original lease term in years'
+    )
+    yearsRemaining: conint(ge=0, le=999) | None = Field(
+        None,
+        description='Approximate years remaining at retrievedAt. Below 80 years triggers mortgage difficulties; below 70 significantly impacts value',
+    )
+    groundRent: conint(ge=0) | None = Field(
+        None,
+        description='Annual ground rent in minor units (pennies). Zero for peppercorn rents',
+    )
+    groundRentReviewDate: date_aliased | None = Field(
+        None, description='Next ground rent review date'
+    )
+    serviceCharge: conint(ge=0) | None = Field(
+        None, description='Annual service charge in minor units (pennies)'
+    )
+    freeholderName: constr(max_length=255) | None = Field(
+        None, description='Name of the freeholder or landlord'
+    )
+    managementCompany: constr(max_length=255) | None = Field(
+        None, description='Name of the managing agent or management company'
+    )
+
+
+class TaxTreatment1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    jurisdiction: Jurisdiction | None = None
+    assetType: AssetType | None = None
+    exemptions: list[constr(max_length=100)] | None = None
+    reliefClaimed: list[constr(max_length=100)] | None = None
+
+
+class TaxReliefEligibility1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    reliefType: ReliefType | None = Field(
+        None, description='The type of tax relief claimed'
+    )
+    eligible: bool | None = None
+    percentage: conint(ge=0, le=100) | None = Field(
+        None,
+        description='Relief percentage (e.g. 100 for full APR, 50 for partial BPR)',
+    )
+    conditions: constr(max_length=500) | None = Field(
+        None,
+        description='Conditions for maintaining eligibility',
+        examples=['Beneficiary must actively farm for minimum 2 years'],
+    )
+    jurisdiction: Jurisdiction | None = None
+    statute: constr(max_length=500) | None = Field(
+        None, examples=['IHTA 1984 s.115-124C']
+    )
+
+
+class Property(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/property.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    id: UUID = Field(
+        ...,
+        description='Unique identifier for this property within the INHERIT document',
+        examples=['d4e5f6a7-b8c9-0123-def0-123456789abc'],
+    )
+    name: constr(min_length=1, max_length=255) = Field(
+        ...,
+        description='Display name for this property — a familiar label or street address. Should be recognisable to all parties involved in the estate',
+        examples=['Family Home', '42 Acacia Avenue', 'Lagos Investment Property', 'Hokkaido Farmland', 'Mumbai Flat', 'Dubai Marina Apartment'],
+    )
+    propertyType: PropertyType | None = Field(
+        None,
+        description='Territory-neutral property type. Use reference-data/local-term-mappings.json to display jurisdiction-appropriate labels in UIs',
+        examples=['detached', 'apartment', 'land', 'commercial'],
+    )
+    address: Address | None = Field(
+        None, description='Physical address of the property'
+    )
+    estimatedValue: Money | None = Field(
+        None,
+        description="Owner's estimate of the property's current market value, in minor currency units",
+    )
+    professionalValuation: Money | None = Field(
+        None,
+        description="Professional surveyor or valuer's assessment of the property value, in minor currency units",
+    )
+    netEquity: NetEquity | None = Field(
+        None,
+        description='Value of this property net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored',
+        title='Money',
+    )
+    inNegativeEquity: bool | None = Field(
+        None,
+        description='True when the active charges secured against this property exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall',
+        examples=[False, True],
+    )
+    valuationDate: date_aliased | None = Field(
+        None,
+        description='Date the most recent valuation (estimated or professional) was performed',
+        examples=['2024-09-15', '2025-01-20'],
+    )
+    valuationConfidence: ValuationConfidence | None = Field(
+        None,
+        description='Level of confidence in the stated valuation',
+        examples=['estimated', 'professional'],
+    )
+    isPrimaryResidence: bool | None = Field(
+        None,
+        description="Whether this is the testator's primary residence. Relevant for residence nil rate band (UK), homestead exemption (US), and similar tax reliefs",
+        examples=[True, False],
+    )
+    ownershipType: OwnershipType2 | None = Field(
+        None,
+        description='How ownership of this property is legally structured',
+        examples=['sole', 'joint_tenants', 'tenants_in_common'],
+    )
+    ownershipPercentage: confloat(ge=0.0, le=100.0, multiple_of=0.01) | None = Field(
+        None,
+        description="The testator's ownership share as a percentage. For joint tenants, typically 50% for two co-owners. For tenants in common, may be any split",
+    )
+    ownershipModel: OwnershipModel | None = Field(
+        None,
+        description='The cultural or legal model of ownership. Goes beyond the simple legal title to capture communal and customary ownership forms',
+        examples=['individual', 'joint', 'communal_family'],
+    )
+    acquisitionType: AcquisitionType | None = Field(
+        None,
+        description='How the property was acquired. Determines which succession law applies in India and other jurisdictions',
+        examples=['self_acquired', 'inherited'],
+    )
+    tenureType: TenureType | None = Field(
+        None,
+        description='Territory-neutral tenure type. Use reference-data/local-term-mappings.json to display jurisdiction-appropriate labels in UIs',
+        examples=['ownership', 'lease', 'communal'],
+    )
+    registrationStatus: RegistrationStatus | None = Field(
+        None,
+        description='Whether this property is formally registered with a land authority',
+        examples=['formally_registered', 'informally_held'],
+    )
+    ownershipEvidence: OwnershipEvidence | None = Field(
+        None,
+        description='The type of evidence available to prove ownership. In many jurisdictions, informal evidence is the only kind available',
+        examples=['title_deed', 'family_recognition'],
+    )
+    culturalDisposition: CulturalDisposition | None = Field(
+        None,
+        description='Cultural, religious, and regulatory constraints on disposal of this property',
+    )
+    communalAuthority: CommunalAuthority1 | None = Field(
+        None,
+        description='The communal or family authority whose approval is required to dispose of this property',
+    )
+    successionRegime: SuccessionRegime1 | None = Field(
+        None,
+        description='The succession regime governing this specific property. Overrides estate.defaultSuccessionRegime when present',
+    )
+    custodianPersonId: UUID | None = Field(
+        None,
+        description='Reference to the Person.id of the current custodian of communal or family property. The custodian manages but does not own the property',
+    )
+    custodianPersonIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced custodian person',
+    )
+    governmentConsentRequired: (
+        bool | None
+    ) = (
+        Field(None, description="Whether government or regulatory consent is required to transfer this property. Common in Nigeria (governor's consent) and for agricultural land in parts of India", examples=[True, False])
+    )
+    mobilityType: MobilityType | None = Field(
+        None,
+        description='Whether this property is classified as immoveable, moveable, or mixed. Determines which conflict-of-laws rules apply',
+        examples=['immoveable'],
+    )
+    mortgageOutstanding: Money | None = Field(
+        None,
+        description='Outstanding mortgage balance in minor currency units. If the property is mortgage-free, omit this field',
+    )
+    characterClassification: CharacterClassification | None = Field(
+        None,
+        description='Marital property character classification for US community property states. Determines whether the testator may dispose of the entire property or only their half',
+        examples=['separate', 'community', 'not_applicable'],
+    )
+    homesteadStatus: HomesteadStatus | None = Field(
+        None,
+        description="US homestead exemption status. Protects the primary residence from creditors and may restrict the testator's ability to devise the property",
+    )
+    passesOutsideEstate: bool | None = Field(
+        None,
+        description='Whether this property passes outside the probate estate — typically via joint tenancy with right of survivorship, a transfer-on-death deed, or a trust',
+        examples=[True, False],
+    )
+    statutoryLifeEstate: StatutoryLifeEstate | None = Field(
+        None,
+        description='A life estate imposed by statute rather than by the will. The surviving spouse or other protected person has a right to occupy for life',
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Free-text notes about this property. Use for unusual tenure arrangements, ongoing disputes, or planning considerations',
+        examples=['Grade II listed building — consent required for any alterations', 'Boundary dispute with neighbour ongoing since 2022'],
+    )
+    externalLinks: list[ExternalLink1] | None = Field(
+        None,
+        description='Links to this property in external databases, portals, and registries — Land Registry, Rightmove, Zoopla, Zillow, council tax records, EPC certificates, etc',
+        examples=[[{'system': 'landregistry', 'id': 'DN123456', 'url': 'https://search.landregistry.data.gov.uk/data/ppi/transaction/DN123456'}, {'system': 'rightmove', 'id': '98765432', 'url': 'https://www.rightmove.co.uk/properties/98765432'}]],
+        max_length=50,
+    )
+    images: list[Media] | None = Field(
+        None,
+        description='Photographs and videos of this property — exterior, interior, key rooms, any damage or features relevant to valuation',
+        max_length=100,
+    )
+    visibility: Visibility | None = Field(
+        'all_parties', description='Controls who can see this property record'
+    )
+    fieldProvenance: list[FieldProvenance] | None = Field(
+        None,
+        description="Per-field provenance records — how each field's value was obtained",
+        max_length=100,
+    )
+    comments: list[Comment] | None = Field(
+        None, description='Discussion comments on this entity', max_length=100
+    )
+    rentalIncome: RentalIncome | None = Field(
+        None,
+        description='Rental income details if the property is let — important for estate income tax and beneficiary entitlements',
+    )
+    epc: Epc | None = Field(
+        None,
+        description='Energy Performance Certificate data. UK properties require an EPC for sale or letting. Rating A (most efficient) to G (least efficient). Legally significant — EPC below E cannot be let without exemption',
+    )
+    landRegistry: LandRegistry | None = Field(
+        None,
+        description='HM Land Registry data — title information, last sale price, and registered charges. Confirms ownership and surfaces encumbrances relevant to estate administration',
+    )
+    floodRisk: FloodRisk | None = Field(
+        None,
+        description='Flood risk data from the Environment Agency (England) or equivalent national agency. Affects insurability, value, and estate planning decisions',
+    )
+    leasehold: Leasehold | None = Field(
+        None,
+        description="Leasehold-specific data — lease term, ground rent, service charge, freeholder. Relevant when tenureType is 'lease'. No conditional enforcement — allowed on any property for flexibility",
+    )
+    provenance: Provenance | None = Field(
+        None,
+        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
+    )
+    applicableLaw: Jurisdiction | None = Field(
+        None,
+        description='The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile',
+    )
+    taxTreatment: TaxTreatment1 | None = Field(
+        None,
+        description='Per-property tax treatment — how this property is classified for tax purposes',
+    )
+    taxReliefEligibility: TaxReliefEligibility1 | None = Field(
+        None,
+        description='Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)',
+    )
+
+
+class SpaceType(Enum):
+    living_room = 'living_room'
+    dining_room = 'dining_room'
+    kitchen = 'kitchen'
+    kitchen_diner = 'kitchen_diner'
+    breakfast_room = 'breakfast_room'
+    family_room = 'family_room'
+    sitting_room = 'sitting_room'
+    drawing_room = 'drawing_room'
+    conservatory = 'conservatory'
+    sunroom = 'sunroom'
+    snug = 'snug'
+    bedroom = 'bedroom'
+    guest_bedroom = 'guest_bedroom'
+    nursery = 'nursery'
+    spare_room = 'spare_room'
+    dressing_room = 'dressing_room'
+    bathroom = 'bathroom'
+    en_suite = 'en_suite'
+    shower_room = 'shower_room'
+    wet_room = 'wet_room'
+    cloakroom = 'cloakroom'
+    wc = 'wc'
+    hallway = 'hallway'
+    entrance_hall = 'entrance_hall'
+    landing = 'landing'
+    corridor = 'corridor'
+    porch = 'porch'
+    vestibule = 'vestibule'
+    study = 'study'
+    home_office = 'home_office'
+    library = 'library'
+    workshop = 'workshop'
+    studio = 'studio'
+    music_room = 'music_room'
+    craft_room = 'craft_room'
+    art_studio = 'art_studio'
+    games_room = 'games_room'
+    home_cinema = 'home_cinema'
+    gym = 'gym'
+    utility_room = 'utility_room'
+    laundry_room = 'laundry_room'
+    boot_room = 'boot_room'
+    pantry = 'pantry'
+    larder = 'larder'
+    airing_cupboard = 'airing_cupboard'
+    boiler_room = 'boiler_room'
+    loft = 'loft'
+    attic = 'attic'
+    basement = 'basement'
+    cellar = 'cellar'
+    wine_cellar = 'wine_cellar'
+    walk_in_wardrobe = 'walk_in_wardrobe'
+    storage_room = 'storage_room'
+    cupboard_under_stairs = 'cupboard_under_stairs'
+    box_room = 'box_room'
+    garage = 'garage'
+    double_garage = 'double_garage'
+    carport = 'carport'
+    shed = 'shed'
+    greenhouse = 'greenhouse'
+    summerhouse = 'summerhouse'
+    garden_room = 'garden_room'
+    outbuilding = 'outbuilding'
+    barn = 'barn'
+    annex = 'annex'
+    stable = 'stable'
+    front_garden = 'front_garden'
+    rear_garden = 'rear_garden'
+    side_garden = 'side_garden'
+    patio = 'patio'
+    terrace = 'terrace'
+    balcony = 'balcony'
+    roof_terrace = 'roof_terrace'
+    driveway = 'driveway'
+    courtyard = 'courtyard'
+    yard = 'yard'
+    swimming_pool = 'swimming_pool'
+    prayer_room = 'prayer_room'
+    puja_room = 'puja_room'
+    butsudan_room = 'butsudan_room'
+    tatami_room = 'tatami_room'
+    genkan = 'genkan'
+    majlis = 'majlis'
+    helpers_room = 'helpers_room'
+    gurdwara_room = 'gurdwara_room'
+    meditation_room = 'meditation_room'
+    gun_room = 'gun_room'
+    safe_room = 'safe_room'
+    safe = 'safe'
+    self_storage = 'self_storage'
+    safe_deposit_box = 'safe_deposit_box'
+    workplace = 'workplace'
+    relatives_house = 'relatives_house'
+    holiday_home = 'holiday_home'
+    vehicle_car = 'vehicle_car'
+    vehicle_boat = 'vehicle_boat'
+    vehicle_caravan = 'vehicle_caravan'
+    allotment = 'allotment'
+    digital_storage = 'digital_storage'
+    portable = 'portable'
+    other = 'other'
+
+
+class Floor(Enum):
+    basement = 'basement'
+    ground = 'ground'
+    first = 'first'
+    second = 'second'
+    third = 'third'
+    fourth = 'fourth'
+    fifth = 'fifth'
+    attic = 'attic'
+    mezzanine = 'mezzanine'
+    other = 'other'
+
+
+class Space(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    id: UUID = Field(
+        ..., description='Unique identifier for this space within the INHERIT document'
+    )
+    propertyId: UUID | None = Field(
+        None,
+        description='Reference to the Property.id that contains or is associated with this space',
+    )
+    containedInSpaceId: UUID | None = Field(
+        None,
+        description='Reference to another Space.id that physically contains this space — a loft inside a house, a shelving bay inside a storage room. Enables the recursive Property → Space → Space → item chain a room-by-room listing walk produces. Absent or null means this space sits directly in the Property',
+    )
+    spaceType: SpaceType | constr(pattern=r'^x-inherit-.+') = Field(
+        ...,
+        description='The type of space. Use x-inherit- prefix for cultural or jurisdiction-specific space types not covered by the core enum',
+    )
+    name: constr(max_length=255) | None = Field(
+        None,
+        description='Display name for this space. Allows personalisation beyond the spaceType label',
+        examples=["Dad's workshop", "Andrew's old room", 'The cellar at Oakfield Road', 'Safe deposit box #42, Barclays Manchester'],
+    )
+    floor: Floor | None = Field(
+        None, description='Which floor this space is on, if applicable'
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Additional notes about this space — access instructions, security details, storage conditions',
+        examples=["Key is in the kitchen drawer, labelled 'cellar'", 'Temperature-controlled. Do not turn off the cooling unit.', 'Box 42, main branch. Requires two keys — mine is in the study safe, bank holds the other.'],
+    )
+    images: list[Media] | None = Field(
+        None,
+        description='Photographs of this space — overview, contents, access points',
+        max_length=50,
+    )
+    provenance: Provenance | None = Field(
+        None,
+        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
+    )
+
+
+class MatchConfidence(Enum):
+    exact = 'exact'
+    close = 'close'
+    approximate = 'approximate'
+    weak = 'weak'
+
+
+class MatchFactor(RootModel[constr(max_length=500)]):
+    root: constr(max_length=500)
+
+
+class HumanVerdict1(Enum):
+    accepted = 'accepted'
+    rejected = 'rejected'
+    adjusted = 'adjusted'
+    not_reviewed = 'not_reviewed'
+
+
+class Comparable(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    url: AnyUrl | None = Field(
+        None,
+        description='Link to the comparable sale or listing',
+        examples=['https://www.ebay.co.uk/itm/123456789', 'https://www.sothebys.com/en/buy/auction/2025/lot-42'],
+    )
+    screenshotUrl: AnyUrl | None = Field(
+        None,
+        description='Screenshot of the listing at the time it was captured. Listings are often removed after sale — the screenshot preserves the evidence',
+        examples=['https://storage.example.com/comparables/ebay-123456789.png'],
+    )
+    title: constr(max_length=255) | None = Field(
+        None,
+        description='Description of the comparable item',
+        examples=['Hornby R3456 Class 66 EWS DCC Fitted — mint, boxed', '18ct gold solitaire diamond ring, 1.1ct, VS2/H'],
+    )
+    salePrice: Money | None = Field(
+        None,
+        description='The sale price of the comparable item, in minor currency units',
+    )
+    saleDate: date_aliased | None = Field(
+        None,
+        description='Date the comparable item sold',
+        examples=['2025-01-15', '2024-11-20'],
+    )
+    platform: constr(max_length=255) | None = Field(
+        None,
+        description='Where the comparable sold — marketplace, auction house, or dealer',
+        examples=['eBay', "Sotheby's", 'Bonhams', 'Catawiki', '1stDibs', 'The Saleroom', 'Rightmove', 'Zoopla'],
+    )
+    platformListingId: constr(max_length=255) | None = Field(
+        None,
+        description='The platform-specific listing or item identifier. Enables API-driven price lookups — e.g. eBay item ID resolves via the Browse API, Chrono24 ref resolves to watch data, Discogs release ID resolves to vinyl data',
+        examples=['123456789012', 'LOT-2025-04-0042', '82347291'],
+    )
+    auctionLotRef: constr(max_length=500) | None = Field(
+        None,
+        description='Structured auction lot reference for provenance tracking — house, sale, and lot number. Enables lookups against auction house archives and provenance databases',
+        examples=["Christie's / Sale 21234 / Lot 42", 'Bonhams / Sale 28901 / Lot 115', "Sotheby's / L25010 / Lot 203"],
+    )
+    capturedAt: AwareDatetime | None = Field(
+        None,
+        description='Timestamp when the comparable was captured or recorded. Important because market values shift and stale comparables lose evidential weight',
+        examples=['2025-02-01T10:00:00Z', '2025-03-10T15:30:00Z'],
+    )
+    matchConfidence: MatchConfidence | None = Field(
+        None,
+        description='How closely the comparable matches the item being valued',
+        examples=['close', 'approximate'],
+    )
+    matchFactors: list[MatchFactor] | None = Field(
+        None,
+        description='What makes this item comparable — the specific attributes that justify the comparison',
+        examples=[['same manufacturer', 'same era', 'similar condition', 'original box'], ['same carat weight', 'similar clarity grade', 'same metal']],
+        max_length=50,
+    )
+    matchNotes: constr(max_length=2000) | None = Field(
+        None,
+        description='Free-text notes explaining the comparison — differences, adjustments, or caveats',
+        examples=['Slightly lower carat weight (1.1ct vs 1.2ct) but same clarity — adjust upward ~8%', 'US sale — add 5% for UK market premium on this brand'],
+    )
+    matchScore: conint(ge=0, le=100) | None = Field(
+        None,
+        description="Numeric match confidence (0-100). Companion to the matchConfidence categorical enum. Agents use this for filtering and ranking — 'show me everything above 70' is quantitative reasoning that categorical enums don't support",
+    )
+    humanVerdict: HumanVerdict1 | None = Field(
+        None,
+        description='Human feedback on this comparable. Creates the learning feedback loop — agents learn which comparables humans accept, improving future searches',
+    )
+    rejectionReason: constr(max_length=255) | None = Field(
+        None,
+        description='Why this comparable was rejected. Feeds back into agent learning — future searches avoid this type of mismatch',
+        examples=['Wrong gauge — this is HO not OO', 'Repainted model, not original livery'],
+    )
+
+
+class EntityType4(Enum):
+    asset = 'asset'
+    property = 'property'
+    asset_collection = 'asset_collection'
+
+
+class ProviderType(Enum):
+    owner = 'owner'
+    professional_valuer = 'professional_valuer'
+    auction_house = 'auction_house'
+    dealer = 'dealer'
+    insurance_assessor = 'insurance_assessor'
+    tax_authority = 'tax_authority'
+    ai_estimate = 'ai_estimate'
+    other = 'other'
+
+
+class ValuerRegistration(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    body: constr(max_length=255) | None = Field(
+        None,
+        description='The professional body or accreditation organisation',
+        examples=['RICS', 'ASA', 'IVSC', 'AAA', 'ISA'],
+    )
+    membershipId: constr(max_length=255) | None = Field(
+        None,
+        description="The valuer's membership or registration number with the professional body",
+        examples=['MRICS-1234567', 'ASA-AM-56789'],
+    )
+    designation: constr(max_length=100) | None = Field(
+        None,
+        description="The valuer's professional designation or qualification level",
+        examples=['FRICS', 'MRICS', 'AssocRICS', 'AM', 'ASA'],
+    )
+    verificationUrl: AnyUrl | None = Field(
+        None,
+        description="URL to verify the valuer's registration with the professional body",
+        examples=['https://www.rics.org/find-a-member'],
+    )
+
+
+class Method1(Enum):
+    comparable_sales = 'comparable_sales'
+    replacement_cost = 'replacement_cost'
+    income_approach = 'income_approach'
+    market_listing = 'market_listing'
+    insurance_schedule = 'insurance_schedule'
+    ai_analysis = 'ai_analysis'
+    expert_opinion = 'expert_opinion'
+    other = 'other'
+
+
+class ValuationPurpose(Enum):
+    current_estimate = 'current_estimate'
+    date_of_death = 'date_of_death'
+    insurance = 'insurance'
+    official = 'official'
+    tax_return = 'tax_return'
+    dealer_offer = 'dealer_offer'
+    ai_estimate = 'ai_estimate'
+    pre_sale = 'pre_sale'
+    probate = 'probate'
+
+
+class Confidence(Enum):
+    high = 'high'
+    medium = 'medium'
+    low = 'low'
+    unknown = 'unknown'
+
+
+class AuctionData(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    auctionHouseOrganisationId: (
+        UUID | None
+    ) = Field(None, description='Organisation.id of the auction house')
+    auctionHouseOrganisationIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced auction house organisation',
+    )
+    saleDate: date_aliased | None = Field(None, description='Date of the auction sale')
+    lotNumber: constr(max_length=100) | None = Field(
+        None, description='Auction lot number', examples=['Lot 247']
+    )
+    estimateLow: Money | None = Field(None, description='Low estimate')
+    estimateHigh: Money | None = Field(None, description='High estimate')
+    hammerPrice: Money | None = Field(
+        None, description='Hammer price (winning bid before premium)'
+    )
+    buyersPremiumPercentage: confloat(ge=0.0, le=100.0) | None = Field(
+        None, description="Buyer's premium as a percentage"
+    )
+    totalRealised: Money | None = Field(
+        None, description='Total amount realised including premium'
+    )
+    sold: bool | None = Field(None, description='Whether the lot was sold')
+
+
+class Valuation(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    id: UUID = Field(
+        ...,
+        description='Unique identifier for this valuation within the INHERIT document',
+        examples=['a1b2c3d4-e5f6-7890-abcd-ef0123456789'],
+    )
+    entityType: EntityType4 = Field(
+        ...,
+        description='The type of entity being valued',
+        examples=['asset', 'property'],
+    )
+    entityId: UUID = Field(
+        ...,
+        description='Reference to the entity being valued — an Asset.id, Property.id, or AssetCollection.id',
+        examples=['e5f6a7b8-c9d0-1234-ef01-23456789abcd'],
+    )
+    valuedAmount: Money = Field(
+        ..., description='The valuation amount, in minor currency units'
+    )
+    valuationDate: date_aliased = Field(
+        ...,
+        description='Date the valuation was performed or assessed',
+        examples=['2025-01-15', '2025-03-28'],
+    )
+    provider: constr(max_length=255) | None = Field(
+        None,
+        description='Who performed the valuation — the name of the person, firm, or service',
+        examples=['Bonhams', 'RICS Surveyor — John Smith FRICS', 'HMRC Shares & Assets Valuation', 'OpenInherit AI', 'Estate owner'],
+    )
+    providerType: ProviderType | None = Field(
+        None,
+        description='The type of person or organisation that provided the valuation',
+        examples=['professional_valuer', 'auction_house', 'ai_estimate'],
+    )
+    valuerRegistration: ValuerRegistration | None = Field(
+        None,
+        description='The professional body registration of the valuer. A valuation from a RICS-registered surveyor or ASA-accredited appraiser carries significantly more weight with tax authorities and probate courts',
+    )
+    method: Method1 | None = Field(
+        None,
+        description='The valuation methodology used',
+        examples=['comparable_sales', 'expert_opinion', 'ai_analysis'],
+    )
+    valuationPurpose: ValuationPurpose | None = Field(
+        None,
+        description='The purpose for which this valuation was obtained',
+        examples=['date_of_death', 'insurance', 'probate'],
+    )
+    confidence: Confidence | None = Field(
+        None,
+        description='Confidence level in this valuation',
+        examples=['high', 'medium'],
+    )
+    comparables: list[Comparable] | None = Field(
+        None,
+        description='Comparable items found on marketplaces — used to support the valuation. Agent-generated comparables should include matchScore for quantitative filtering and will accumulate humanVerdict feedback over time',
+        max_length=100,
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Free-text notes about this valuation — methodology details, caveats, market conditions, or disagreements with other valuations',
+        examples=['RICS Red Book valuation — market value basis. Assumes vacant possession.', 'AI estimate based on 47 eBay sold listings over the past 90 days. Excludes outliers above £500.', 'Owner estimate — collected model railways for 30 years, knowledgeable about market values in this niche.'],
+    )
+    fieldProvenance: list[FieldProvenance] | None = Field(
+        None,
+        description="Per-field provenance records — how each field's value was obtained",
+        max_length=100,
+    )
+    auctionData: AuctionData | None = Field(
+        None, description='Auction house estimate and result data'
+    )
+    validUntil: date_aliased | None = Field(
+        None,
+        description='The date until which this valuation is considered valid. Common for insurance valuations which require annual renewal. After this date, the valuation may need to be refreshed',
+    )
+    provenance: Provenance | None = Field(
+        None,
+        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
+    )
+
+
+class NotificationMethod(Enum):
+    email = 'email'
+    phone = 'phone'
+    post = 'post'
+    in_person = 'in_person'
+
+
+class AccessLevel(Enum):
+    full = 'full'
+    read_only = 'read_only'
+    collection_only = 'collection_only'
+    financial_only = 'financial_only'
+
+
+class LetterDeliveryMethod(Enum):
+    printed = 'printed'
+    digital = 'digital'
+    both = 'both'
+
+
+class LegacyContact(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    id: UUID = Field(..., description='Unique identifier for this legacy contact')
+    personId: UUID | None = Field(
+        None,
+        description='Reference to a Person.id, if the legacy contact is also in the people array',
+    )
+    personIdDisplay: constr(max_length=255) | None = Field(
+        None, description='Human-readable display name for the referenced person'
+    )
+    name: constr(min_length=1, max_length=255) = Field(
+        ...,
+        description='Display name — required because catalogue-only documents may not have a people array',
+        examples=['Paul Frith', 'Sarah Davies'],
+    )
+    relationship: constr(max_length=255) | None = Field(
+        None,
+        description='Relationship to the catalogue/estate owner',
+        examples=['son', 'daughter', 'partner', 'friend', 'solicitor'],
+    )
+    email: EmailStr | None = Field(None, description='Email address for notification')
+    phone: constr(max_length=255) | None = Field(None, description='Phone number')
+    notificationMethod: NotificationMethod | None = Field(
+        None, description='How to notify this person'
+    )
+    accessLevel: AccessLevel = Field(
+        ..., description='What level of access this person should receive'
+    )
+    letterGenerated: bool | None = Field(
+        None,
+        description="Whether the 'Please open when I have passed away' letter has been generated for this contact",
+    )
+    letterGeneratedAt: AwareDatetime | None = Field(
+        None, description='When the letter was last generated'
+    )
+    letterDeliveryMethod: LetterDeliveryMethod | None = Field(
+        None, description='How the letter was or should be delivered'
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None, description='Additional notes about this legacy contact'
+    )
+
+
+class InterestLevel(Enum):
+    mentioned = 'mentioned'
+    expressed_interest = 'expressed_interest'
+    strongly_wants = 'strongly_wants'
+    agreed = 'agreed'
+
+
+class SourceType(Enum):
+    family_conversation = 'family_conversation'
+    written_request = 'written_request'
+    chat_message = 'chat_message'
+    platform_private_message = 'platform_private_message'
+    platform_group_message = 'platform_group_message'
+    proxy_reported = 'proxy_reported'
+    testator_observed = 'testator_observed'
+    manual = 'manual'
+
+
+class ExpressedByRole(Enum):
+    testator = 'testator'
+    beneficiary = 'beneficiary'
+    executor = 'executor'
+    proxy = 'proxy'
+
+
+class IntentType(Enum):
+    acquire = 'acquire'
+    receive = 'receive'
+    allocate = 'allocate'
+    sell = 'sell'
+    admire = 'admire'
+
+
+class MinimumCondition(Enum):
+    excellent = 'excellent'
+    good = 'good'
+    fair = 'fair'
+    poor = 'poor'
+
+
+class ProductMatch(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    identifierSystem: constr(max_length=100) | None = Field(
+        None,
+        description='The identifier system, from reference-data/identifier-systems.json',
+        examples=['manufacturer_sku', 'ean'],
+    )
+    identifierValue: constr(max_length=255) | None = Field(
+        None,
+        description='The product identifier value within the system',
+        examples=['R3456', '5010963123456'],
+    )
+    brand: constr(max_length=255) | None = Field(
+        None, description='Brand name for matching', examples=['Hornby', 'Bachmann']
+    )
+    brandWikidataId: constr(pattern=r'^Q\d+$') | None = Field(
+        None,
+        description='Wikidata entity ID for the brand — strongest cross-system brand match',
+        examples=['Q1139498'],
+    )
+    category: constr(max_length=255) | None = Field(
+        None, description='INHERIT product category for broad matching'
+    )
+    subcategory: constr(max_length=255) | None = Field(
+        None, description='INHERIT subcategory for narrower matching'
+    )
+    minimumCondition: MinimumCondition | None = Field(
+        None,
+        description='Minimum acceptable condition. If absent, matches all conditions. Uses the same enum as asset.condition',
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Additional matching criteria in free text',
+        examples=['1970s era locomotives only', 'DCC fitted preferred', 'Must be BR green livery'],
+    )
+
+
+class OrderStatus(Enum):
+    wanted = 'wanted'
+    pre_ordered_unpaid = 'pre_ordered_unpaid'
+    pre_ordered_paid = 'pre_ordered_paid'
+    dispatched = 'dispatched'
+    received = 'received'
+
+
+class PaymentStatus(Enum):
+    unpaid = 'unpaid'
+    deposit_paid = 'deposit_paid'
+    fully_paid = 'fully_paid'
+    refunded = 'refunded'
+
+
+class PreOrderStatus(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    orderStatus: OrderStatus | None = Field(
+        None, description='Current status of the pre-order'
+    )
+    orderedFrom: constr(max_length=255) | None = Field(
+        None, description='The dealer or manufacturer the item was ordered from'
+    )
+    orderReference: constr(max_length=255) | None = Field(
+        None, description="The dealer's or manufacturer's order reference number"
+    )
+    orderDate: date_aliased | None = Field(
+        None, description='When the order was placed'
+    )
+    expectedDeliveryDate: date_aliased | None = Field(
+        None,
+        description='When the item is expected to arrive. Manufacturers often announce target quarters rather than exact dates',
+    )
+    paymentStatus: PaymentStatus | None = Field(
+        None, description='Whether the item has been paid for'
+    )
+    amountPaid: Money | None = Field(
+        None, description='The amount paid so far, in minor currency units'
+    )
+    paymentMethod: constr(max_length=255) | None = Field(
+        None, description='How the payment was made'
+    )
+
+
+class AssetInterest2(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    id: UUID = Field(
+        ...,
+        description='Unique identifier for this interest record',
+        examples=['c3d4e5f6-a7b8-9012-cdef-3456789abcde'],
+    )
+    rootDocumentId: UUID = Field(
+        ...,
+        description='The root document this entity belongs to — either an estate document (schema.json) or a catalogue document (catalogue.json)',
+        examples=['a1b2c3d4-e5f6-7890-abcd-ef1234567890'],
+    )
+    assetId: UUID | None = Field(
+        None,
+        description='Reference to a specific Asset.id, if the interest is in a single asset',
+        examples=['d4e5f6a7-b8c9-0123-def4-56789abcdef0'],
+    )
+    collectionId: UUID | None = Field(
+        None,
+        description='Reference to an AssetCollection.id, if the interest is in an entire collection',
+        examples=['b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8'],
+    )
+    personId: UUID = Field(
+        ...,
+        description="The person expressing interest (a Person.id). The person's relationship to the estate is qualified by expressedByRole",
+        examples=['e5f6a7b8-c9d0-1234-ef56-789abcdef012'],
+    )
+    personIdDisplay: constr(max_length=255) | None = Field(
+        None, description='Human-readable display name for the referenced person'
+    )
+    interestLevel: InterestLevel = Field(
+        ...,
+        description='How strongly the beneficiary has expressed interest',
+        examples=['expressed_interest', 'agreed'],
+    )
+    sourceType: SourceType | None = Field(
+        None,
+        description='How this interest was communicated or recorded',
+        examples=['family_conversation', 'platform_private_message'],
+    )
+    testatorAcknowledged: bool | None = Field(
+        False,
+        description='Whether the testator has seen and acknowledged this interest',
+        examples=[True, False],
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Additional context about this interest',
+        examples=["Sarah mentioned at Christmas 2024 that she'd love Mum's engagement ring. Mum seemed pleased.", 'Haruki has always admired the woodblock print collection — discussed at Obon 2024.', 'Amara expressed strong interest in the family compound during the last family council meeting.'],
+    )
+    organisationId: UUID | None = Field(
+        None,
+        description='Reference to the Organisation.id expressing interest, if an organisation rather than a person. Mutually exclusive with personId',
+    )
+    organisationIdDisplay: constr(max_length=255) | None = Field(
+        None, description='Human-readable display name for the referenced organisation'
+    )
+    expressedByRole: ExpressedByRole | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None,
+        description='The role of the person expressing this interest in relation to the estate or catalogue. Qualifies the authority and weight of the expression. Follows the Schema.org Role pattern',
+        examples=['testator', 'beneficiary', 'executor'],
+    )
+    intentType: IntentType | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None,
+        description='The nature of the interest being expressed. Distinguishes between wanting to acquire, wanting to receive, wanting to allocate to someone, willingness to sell, and soft admiration',
+        examples=['acquire', 'receive', 'allocate'],
+    )
+    productMatch: ProductMatch | None = Field(
+        None,
+        description='Interest in any asset matching this product identity, rather than a specific asset. Use instead of assetId when the interest is in a product class, not a specific instance. Maps to Schema.org Product (vs IndividualProduct for assetId). Matching is by identifier (strongest), brand + category (medium), or category alone (weakest)',
+    )
+    quantity: conint(ge=1, le=1000) | None = Field(
+        1,
+        description='Number of items desired (for productMatch wishlist entries) or number of the specific asset being discussed. Default 1 if absent. Follows the same convention as asset.quantity',
+        examples=[1, 3, 6],
+    )
+    expressedAt: AwareDatetime | None = Field(
+        None, description='When this interest was expressed or recorded'
+    )
+    preOrderStatus: PreOrderStatus | None = Field(
+        None,
+        description='For wishlist items that have been pre-ordered from a dealer or manufacturer but not yet received. Tracks order status, payment, and expected delivery',
+    )
+    provenance: Provenance | None = Field(
+        None,
+        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
+    )
+
+
+class ProductMatch1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    identifierSystem: constr(max_length=100) | None = Field(
+        None,
+        description='The identifier system, from reference-data/identifier-systems.json',
+        examples=['manufacturer_sku', 'ean'],
+    )
+    identifierValue: constr(max_length=255) | None = Field(
+        None,
+        description='The product identifier value within the system',
+        examples=['R3456', '5010963123456'],
+    )
+    brand: constr(max_length=255) | None = Field(
+        None, description='Brand name for matching', examples=['Hornby', 'Bachmann']
+    )
+    brandWikidataId: constr(pattern=r'^Q\d+$') | None = Field(
+        None,
+        description='Wikidata entity ID for the brand — strongest cross-system brand match',
+        examples=['Q1139498'],
+    )
+    category: constr(max_length=255) | None = Field(
+        None, description='INHERIT product category for broad matching'
+    )
+    subcategory: constr(max_length=255) | None = Field(
+        None, description='INHERIT subcategory for narrower matching'
+    )
+    minimumCondition: MinimumCondition | None = Field(
+        None,
+        description='Minimum acceptable condition. If absent, matches all conditions. Uses the same enum as asset.condition',
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Additional matching criteria in free text',
+        examples=['1970s era locomotives only', 'DCC fitted preferred', 'Must be BR green livery'],
+    )
+
+
+class PreOrderStatus1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    orderStatus: OrderStatus | None = Field(
+        None, description='Current status of the pre-order'
+    )
+    orderedFrom: constr(max_length=255) | None = Field(
+        None, description='The dealer or manufacturer the item was ordered from'
+    )
+    orderReference: constr(max_length=255) | None = Field(
+        None, description="The dealer's or manufacturer's order reference number"
+    )
+    orderDate: date_aliased | None = Field(
+        None, description='When the order was placed'
+    )
+    expectedDeliveryDate: date_aliased | None = Field(
+        None,
+        description='When the item is expected to arrive. Manufacturers often announce target quarters rather than exact dates',
+    )
+    paymentStatus: PaymentStatus | None = Field(
+        None, description='Whether the item has been paid for'
+    )
+    amountPaid: Money | None = Field(
+        None, description='The amount paid so far, in minor currency units'
+    )
+    paymentMethod: constr(max_length=255) | None = Field(
+        None, description='How the payment was made'
+    )
+
+
+class AssetInterest3(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    id: UUID = Field(
+        ...,
+        description='Unique identifier for this interest record',
+        examples=['c3d4e5f6-a7b8-9012-cdef-3456789abcde'],
+    )
+    rootDocumentId: UUID = Field(
+        ...,
+        description='The root document this entity belongs to — either an estate document (schema.json) or a catalogue document (catalogue.json)',
+        examples=['a1b2c3d4-e5f6-7890-abcd-ef1234567890'],
+    )
+    assetId: UUID | None = Field(
+        None,
+        description='Reference to a specific Asset.id, if the interest is in a single asset',
+        examples=['d4e5f6a7-b8c9-0123-def4-56789abcdef0'],
+    )
+    collectionId: UUID | None = Field(
+        None,
+        description='Reference to an AssetCollection.id, if the interest is in an entire collection',
+        examples=['b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8'],
+    )
+    personId: UUID | None = Field(
+        None,
+        description="The person expressing interest (a Person.id). The person's relationship to the estate is qualified by expressedByRole",
+        examples=['e5f6a7b8-c9d0-1234-ef56-789abcdef012'],
+    )
+    personIdDisplay: constr(max_length=255) | None = Field(
+        None, description='Human-readable display name for the referenced person'
+    )
+    interestLevel: InterestLevel = Field(
+        ...,
+        description='How strongly the beneficiary has expressed interest',
+        examples=['expressed_interest', 'agreed'],
+    )
+    sourceType: SourceType | None = Field(
+        None,
+        description='How this interest was communicated or recorded',
+        examples=['family_conversation', 'platform_private_message'],
+    )
+    testatorAcknowledged: bool | None = Field(
+        False,
+        description='Whether the testator has seen and acknowledged this interest',
+        examples=[True, False],
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Additional context about this interest',
+        examples=["Sarah mentioned at Christmas 2024 that she'd love Mum's engagement ring. Mum seemed pleased.", 'Haruki has always admired the woodblock print collection — discussed at Obon 2024.', 'Amara expressed strong interest in the family compound during the last family council meeting.'],
+    )
+    organisationId: UUID = Field(
+        ...,
+        description='Reference to the Organisation.id expressing interest, if an organisation rather than a person. Mutually exclusive with personId',
+    )
+    organisationIdDisplay: constr(max_length=255) | None = Field(
+        None, description='Human-readable display name for the referenced organisation'
+    )
+    expressedByRole: ExpressedByRole | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None,
+        description='The role of the person expressing this interest in relation to the estate or catalogue. Qualifies the authority and weight of the expression. Follows the Schema.org Role pattern',
+        examples=['testator', 'beneficiary', 'executor'],
+    )
+    intentType: IntentType | constr(pattern=r'^x-inherit-.+') | None = Field(
+        None,
+        description='The nature of the interest being expressed. Distinguishes between wanting to acquire, wanting to receive, wanting to allocate to someone, willingness to sell, and soft admiration',
+        examples=['acquire', 'receive', 'allocate'],
+    )
+    productMatch: ProductMatch1 | None = Field(
+        None,
+        description='Interest in any asset matching this product identity, rather than a specific asset. Use instead of assetId when the interest is in a product class, not a specific instance. Maps to Schema.org Product (vs IndividualProduct for assetId). Matching is by identifier (strongest), brand + category (medium), or category alone (weakest)',
+    )
+    quantity: conint(ge=1, le=1000) | None = Field(
+        1,
+        description='Number of items desired (for productMatch wishlist entries) or number of the specific asset being discussed. Default 1 if absent. Follows the same convention as asset.quantity',
+        examples=[1, 3, 6],
+    )
+    expressedAt: AwareDatetime | None = Field(
+        None, description='When this interest was expressed or recorded'
+    )
+    preOrderStatus: PreOrderStatus1 | None = Field(
+        None,
+        description='For wishlist items that have been pre-ordered from a dealer or manufacturer but not yet received. Tracks order status, payment, and expected delivery',
+    )
+    provenance: Provenance | None = Field(
+        None,
+        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
+    )
+
+
+class AssetInterest(RootModel[AssetInterest2 | AssetInterest3]):
+    root: AssetInterest2 | AssetInterest3 = Field(
+        ...,
+        description='Captures expressions of interest about an asset, collection, or product from any perspective — owner wishlists, beneficiary preferences, executor observations, proxy-relayed interests, and cross-system collector interest. Qualified by expressedByRole (who), intentType (what kind), and optionally productMatch (product-level vs asset-level). Maps to Schema.org ReactAction + Role',
+        title='Asset Interest',
+    )
+
+
+class WishType(Enum):
+    funeral = 'funeral'
+    letter = 'letter'
+    care = 'care'
+    distribution = 'distribution'
+    digital = 'digital'
+    pets = 'pets'
+    general = 'general'
+    digital_likeness = 'digital_likeness'
+
+
+class BindingNature(Enum):
+    non_binding = 'non_binding'
+    culturally_obligatory = 'culturally_obligatory'
+    religiously_obligatory = 'religiously_obligatory'
+    legally_binding = 'legally_binding'
+
+
+class FuneralArrangementType(Enum):
+    burial = 'burial'
+    cremation = 'cremation'
+    green_burial = 'green_burial'
+    sea_burial = 'sea_burial'
+    sky_burial = 'sky_burial'
+    donation_to_science = 'donation_to_science'
+    other = 'other'
+
+
+class FuneralCeremonyType(Enum):
+    religious = 'religious'
+    secular = 'secular'
+    hybrid = 'hybrid'
+    none = 'none'
+
+
+class FuneralBudgetSource(Enum):
+    estate = 'estate'
+    pre_paid = 'pre_paid'
+    insurance = 'insurance'
+    family = 'family'
+    other = 'other'
+
+
+class Organ(RootModel[constr(max_length=100)]):
+    root: constr(max_length=100)
+
+
+class OrganDonation(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    consentGiven: bool | None = Field(None, description='Whether consent given')
+    organs: list[Organ] | None = Field(
+        None, description='Specific organs consented', max_length=20
+    )
+    coordinatingOrganisationId: (
+        UUID | None
+    ) = Field(None, description='Organisation coordinating donation')
+    coordinatingOrganisationIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced coordinating organisation',
+    )
+
+
+class MedicalResearchDonation(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    consentGiven: bool | None = Field(None, description='Whether consent given')
+    institutionOrganisationId: (
+        UUID | None
+    ) = Field(None, description='Research institution Organisation.id')
+    institutionOrganisationIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced institution organisation',
+    )
+    restrictions: constr(max_length=2000) | None = Field(
+        None, description='Any restrictions'
+    )
+
+
+class AutopsyPreference(Enum):
+    requested = 'requested'
+    declined = 'declined'
+    no_preference = 'no_preference'
+
+
+class LikenessConsent(Enum):
+    permitted = 'permitted'
+    prohibited = 'prohibited'
+    restricted = 'restricted'
+    not_stated = 'not_stated'
+
+
+class LikenessScopeEnum(Enum):
+    voice = 'voice'
+    visual_appearance = 'visual_appearance'
+    writing_style = 'writing_style'
+    personality_model = 'personality_model'
+    full_avatar = 'full_avatar'
+
+
+class LikenessPermittedUs(Enum):
+    memorial = 'memorial'
+    family_private = 'family_private'
+    educational = 'educational'
+    commercial = 'commercial'
+    legal_proceedings = 'legal_proceedings'
+    artistic = 'artistic'
+
+
+class LikenessProhibitedUs(Enum):
+    memorial = 'memorial'
+    family_private = 'family_private'
+    educational = 'educational'
+    commercial = 'commercial'
+    legal_proceedings = 'legal_proceedings'
+    artistic = 'artistic'
+
+
+class SyntheticMediaPolicy(Enum):
+    allow_with_attribution = 'allow_with_attribution'
+    allow_without_attribution = 'allow_without_attribution'
+    prohibit_all = 'prohibit_all'
+    family_decision = 'family_decision'
+    not_stated = 'not_stated'
+
+
+class RequestType(Enum):
+    takedown = 'takedown'
+    restrict = 'restrict'
+    transfer_control = 'transfer_control'
+    verify_consent = 'verify_consent'
+    cease_training = 'cease_training'
+    other = 'other'
+
+
+class Status2(Enum):
+    pending = 'pending'
+    acknowledged = 'acknowledged'
+    complied = 'complied'
+    refused = 'refused'
+    escalated = 'escalated'
+    unknown = 'unknown'
+
+
+class LikenessEnforcementItem(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    platform: constr(min_length=1, max_length=255) = Field(
+        ..., description='Platform where enforcement action is directed'
+    )
+    requestType: RequestType = Field(
+        ..., description='What type of enforcement action was requested'
+    )
+    requestDate: date_aliased | None = Field(
+        None, description='When the enforcement request was made'
+    )
+    requestedBy: constr(max_length=255) | None = Field(
+        None,
+        description='Who made the request (executor, controller, legal representative)',
+    )
+    requestedByPersonId: UUID | None = Field(
+        None, description='FK to person who made the request'
+    )
+    requestedByPersonIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced requested by person',
+    )
+    status: Status2 | None = Field(
+        None, description='Current status of the enforcement request'
+    )
+    responseDate: date_aliased | None = Field(
+        None, description='When the platform responded'
+    )
+    referenceNumber: constr(max_length=255) | None = Field(
+        None, description="Platform's reference number for the request"
+    )
+    legalBasis: constr(max_length=500) | None = Field(
+        None,
+        description='Legal basis for the request, e.g. EU AI Act, NO FAKES Act, estate executor authority',
+    )
+    notes: constr(max_length=500) | None = None
+
+
+class ModelType(Enum):
+    chatbot = 'chatbot'
+    voice_clone = 'voice_clone'
+    visual_avatar = 'visual_avatar'
+    full_replica = 'full_replica'
+    other = 'other'
+
+
+class Action2(Enum):
+    preserve = 'preserve'
+    delete = 'delete'
+    transfer = 'transfer'
+    restrict = 'restrict'
+
+
+class ExistingDigitalModel(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    provider: constr(max_length=255) | None = Field(
+        None, description='e.g. HereAfter, StoryFile (schema.org provider)'
+    )
+    modelType: ModelType | None = Field(None, description='Type of digital model')
+    action: Action2 | None = Field(
+        None, description='Instruction for what to do with this model after death'
+    )
+    controllerPersonId: UUID | None = Field(
+        None, description='Person.id who has authority over this specific model'
+    )
+    controllerPersonIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced controller person',
+    )
+
+
+class RelatedTrustId(RootModel[UUID]):
+    root: UUID
+
+
+class Wish(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    id: UUID = Field(
+        ...,
+        description='Unique identifier for this wish within the INHERIT document',
+        examples=['e1f2a3b4-c5d6-7890-e123-456789abcdef'],
+    )
+    wishType: WishType = Field(
+        ...,
+        description='The category of wish. Wishes may be non-binding in law but culturally or religiously obligatory',
+        examples=['funeral', 'letter', 'pets'],
+    )
+    title: constr(min_length=1, max_length=255) = Field(
+        ...,
+        description='A short descriptive title for this wish',
+        examples=['Funeral wishes', 'Letter to my executors', 'Care of my dog Biscuit', 'Digital accounts instructions'],
+    )
+    content: constr(max_length=5000) | None = Field(
+        None,
+        description='The full text content of the wish. May be lengthy for letters of wishes',
+        examples=['I wish to be cremated and my ashes scattered at Coniston Water', 'Please ensure my cat Mochi is rehomed with my sister Akiko', 'Burial in accordance with Islamic rites — contact Imam Hassan at the East London Mosque', 'Please ensure my dog is cared for by my nephew Tendai'],
+    )
+    bindingNature: BindingNature | None = Field(
+        None,
+        description='The legal or moral force of this wish. Most wishes are non-binding but may carry significant cultural or religious weight',
+        examples=['non_binding', 'religiously_obligatory'],
+    )
+    addresseePersonId: UUID | None = Field(
+        None,
+        description='Reference to the Person.id this wish is addressed to — typically an executor, guardian, or family member',
+    )
+    addresseePersonIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced addressee person',
+    )
+    relatedAssetId: UUID | None = Field(
+        None,
+        description='Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item)',
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Additional notes about this wish',
+        examples=['Written in consultation with Imam Hassan — follows Hanafi funeral practice', 'Updated after acquiring second dog in 2024'],
+    )
+    visibility: Visibility | None = 'all_parties'
+    funeralArrangementType: (
+        FuneralArrangementType | constr(pattern=r'^x-inherit-.+') | None
+    ) = Field(None, description='Type of funeral arrangement preferred', examples=['burial', 'cremation', 'green_burial'])
+    funeralCeremonyType: FuneralCeremonyType | None = Field(
+        None,
+        description='Type of ceremony preferred',
+        examples=['religious', 'secular'],
+    )
+    funeralCeremonyReligion: constr(max_length=255) | None = Field(
+        None,
+        description="Religion or faith tradition for the ceremony, if funeralCeremonyType is 'religious' or 'hybrid'",
+        examples=['Church of England', 'Roman Catholic', 'Sunni Islam', 'Reform Judaism', 'Sikhism'],
+    )
+    funeralProviderOrganisationId: (
+        UUID | None
+    ) = (
+        Field(None, description='Reference to the Organisation.id of the preferred funeral provider')
+    )
+    funeralProviderOrganisationIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced funeral provider organisation',
+    )
+    funeralPrePaid: bool | None = Field(
+        None,
+        description='Whether a pre-paid funeral plan is in place',
+        examples=[True, False],
+    )
+    funeralPrePaidPolicyNumber: constr(max_length=100) | None = Field(
+        None,
+        description='Policy number for the pre-paid funeral plan',
+        examples=['FP-2024-123456'],
+    )
+    funeralBudgetMaximum: Money | None = Field(
+        None, description='Maximum budget for the funeral, in minor currency units'
+    )
+    funeralBudgetSource: FuneralBudgetSource | None = Field(
+        None,
+        description='How the funeral is to be funded',
+        examples=['estate', 'pre_paid'],
+    )
+    funeralLocationPreference: constr(max_length=500) | None = Field(
+        None,
+        description='Preferred location for the funeral service or burial',
+        examples=["St Mary's Church, Wrexham", 'Coniston Water, Lake District'],
+    )
+    funeralMusicWishes: constr(max_length=2000) | None = Field(
+        None,
+        description='Music requested for the funeral service',
+        examples=['Jerusalem, Abide With Me, and Time to Say Goodbye'],
+    )
+    funeralReadingWishes: constr(max_length=2000) | None = Field(
+        None,
+        description='Readings or poems requested for the funeral service',
+        examples=['Psalm 23, Do Not Stand at My Grave and Weep'],
+    )
+    organDonation: OrganDonation | None = Field(
+        None, description='Organ donation preferences'
+    )
+    medicalResearchDonation: MedicalResearchDonation | None = Field(
+        None, description='Body donation to medical research'
+    )
+    autopsyPreference: AutopsyPreference | None = Field(
+        None, description='Preference regarding autopsy'
+    )
+    funeralBudgetNotes: constr(max_length=2000) | None = Field(
+        None, description='Additional notes about funeral budget'
+    )
+    likenessConsent: LikenessConsent | None = Field(
+        None,
+        description='Whether the person consents to posthumous AI/digital recreation',
+    )
+    likenessScope: list[LikenessScopeEnum] | None = Field(
+        None, description='What aspects of likeness are covered'
+    )
+    likenessPermittedUses: list[LikenessPermittedUs] | None = Field(
+        None, description='What purposes are allowed'
+    )
+    likenessProhibitedUses: list[LikenessProhibitedUs] | None = Field(
+        None, description='What purposes are explicitly forbidden'
+    )
+    likenessControllerPersonId: (
+        UUID | None
+    ) = Field(None, description='Who has authority over likeness decisions after death')
+    likenessControllerPersonIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced likeness controller person',
+    )
+    likenessTimeLimit: (
+        constr(
+            pattern=r'^P(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$'
+        )
+        | None
+    ) = Field(None, description='ISO 8601 duration — how long consent/prohibition lasts, e.g. P25Y = 25 years')
+    likenessRevocationConditions: constr(max_length=500) | None = Field(
+        None, description='Conditions under which consent is revoked'
+    )
+    syntheticMediaPolicy: SyntheticMediaPolicy | None = Field(
+        None,
+        description="Policy on AI-generated synthetic media using the person's likeness",
+    )
+    likenessEnforcement: list[LikenessEnforcementItem] | None = Field(
+        None,
+        description='Tracking enforcement of likeness wishes — takedown requests and platform compliance',
+    )
+    existingDigitalModels: list[ExistingDigitalModel] | None = Field(
+        None,
+        description='Inventory of existing AI/digital likeness models and instructions for each',
+    )
+    relatedTrustIds: list[RelatedTrustId] | None = Field(
+        None,
+        description='Trust IDs this wish or letter of wishes applies to',
+        max_length=50,
+    )
+    provenance: Provenance | None = Field(
+        None,
+        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
+    )
+
+
+class ImportMethod(Enum):
+    api = 'api'
+    file_upload = 'file_upload'
+    manual_copy = 'manual_copy'
+    ai_extraction = 'ai_extraction'
+    ocr = 'ocr'
+    migration_script = 'migration_script'
+
+
+class ImportSource(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    id: constr(max_length=255) = Field(
+        ...,
+        description='Unique identifier for this import source, referenced by importSourceId on entities',
+        examples=['src-clio-001', 'src-paper-file'],
+    )
+    systemName: constr(max_length=255) = Field(
+        ...,
+        description='Name of the source system',
+        examples=['Clio Manage', 'LEAP Legal Software', 'Paper file', "Previous solicitor's firm", 'LegacyLists'],
+    )
+    importDate: date_aliased | None = Field(
+        None,
+        description='Date the data was imported from this source',
+        examples=['2026-03-15'],
+    )
+    importMethod: ImportMethod | None = Field(
+        None, description='How the data was imported from this source'
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Additional context about the import',
+        examples=['Migrated from Clio matter #12345 — assets and liabilities only'],
+    )
+
+
+class Category3(Enum):
+    personal_details = 'personal_details'
+    assets_and_valuations = 'assets_and_valuations'
+    liabilities = 'liabilities'
+    beneficiaries = 'beneficiaries'
+    executors = 'executors'
+    guardians = 'guardians'
+    tax_information = 'tax_information'
+    legal_documents = 'legal_documents'
+    lifetime_transfers = 'lifetime_transfers'
+    pension_and_insurance = 'pension_and_insurance'
+
+
+class Status3(Enum):
+    complete = 'complete'
+    incomplete = 'incomplete'
+    not_applicable = 'not_applicable'
+    unknown = 'unknown'
+
+
+class ChecklistItem(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    category: Category3 = Field(
+        ...,
+        description='The data category this checklist item belongs to',
+        examples=['personal_details', 'assets_and_valuations', 'tax_information'],
+    )
+    item: constr(min_length=1, max_length=255) = Field(
+        ...,
+        description='A human-readable label describing what was checked',
+        examples=['Testator date of birth', 'Property valuations within 12 months', 'IHT nil-rate band utilization'],
+    )
+    weight: conint(ge=1) = Field(
+        ...,
+        description='Relative importance of this item. Higher weights contribute more to the overall score',
+        examples=[1, 3, 5, 10],
+    )
+    status: Status3 = Field(
+        ...,
+        description='Whether the data for this item is present and sufficient',
+        examples=['complete', 'incomplete', 'not_applicable'],
+    )
+    details: constr(max_length=255) | None = Field(
+        None,
+        description='Optional explanation of the status, such as what is missing or why the item is not applicable',
+        examples=['No valuation on file for 3 of 5 properties', 'Guardians not required — no minor children'],
+    )
+
+
+class Completeness(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    score: conint(ge=0, le=100) = Field(
+        ...,
+        description='Overall completeness percentage, calculated from the weighted checklist items',
+        examples=[72, 100, 0, 45],
+    )
+    maxScore: conint(ge=0) = Field(
+        ...,
+        description='Maximum possible score for this jurisdiction and estate status combination. May be less than 100 if certain categories are not applicable',
+        examples=[100, 85, 92],
+    )
+    jurisdiction: constr(max_length=255) | None = Field(
+        None,
+        description='ISO 3166-1 alpha-2 country code or ISO 3166-2 subdivision code identifying which jurisdiction this scoring applies to',
+        examples=['GB', 'US', 'GB-SCT', 'AU-NSW'],
+    )
+    estateStatus: constr(max_length=255) | None = Field(
+        None,
+        description='The estate status this completeness score was calculated against. Different statuses may require different data, affecting which checklist items are applicable',
+        examples=['pre_death_planning', 'grant_application', 'administration'],
+    )
+    calculatedAt: AwareDatetime | None = Field(
+        None,
+        description='ISO 8601 date-time when this completeness score was computed',
+        examples=['2026-03-28T14:30:00Z'],
+    )
+    checklist: list[ChecklistItem] = Field(
+        ...,
+        description='The individual items assessed to produce the overall score. Each item belongs to a category, has a relative weight, and a status indicating whether the data is present',
+        max_length=100,
+    )
+
+
+class Category4(Enum):
+    completeness = 'completeness'
+    tax_planning = 'tax_planning'
+    legal_requirement = 'legal_requirement'
+    valuation = 'valuation'
+    transfer_history = 'transfer_history'
+    beneficiary_review = 'beneficiary_review'
+    document_update = 'document_update'
+
+
+class Priority(Enum):
+    critical = 'critical'
+    high = 'high'
+    medium = 'medium'
+    low = 'low'
+
+
+class Status4(Enum):
+    pending = 'pending'
+    in_progress = 'in_progress'
+    completed = 'completed'
+    dismissed = 'dismissed'
+
+
+class RecommendedAction(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    id: constr(max_length=255) = Field(
+        ...,
+        description='Unique identifier for this action',
+        examples=['act-001', 'act-val-shares'],
+    )
+    category: Category4 = Field(..., description='Category of the recommended action')
+    priority: Priority = Field(..., description='Priority level for this action')
+    title: constr(max_length=255) = Field(
+        ...,
+        description='Short action title',
+        examples=['Get professional valuation for share portfolio', 'Update pension nomination', 'Document lifetime gifts in lookback period'],
+    )
+    description: constr(max_length=2000) | None = Field(
+        None, description='Detailed explanation of what to do and why'
+    )
+    status: Status4 = Field(..., description='Current status of this action')
+    triggeredBy: constr(max_length=255) | None = Field(
+        None,
+        description='What data gap or condition generated this action',
+        examples=["Asset 'Barclays shares' has estimatedValue > £50,000 but no professional valuation", 'No executor appointed', 'Pension has no nominated beneficiary'],
+    )
+    relatedEntityType: constr(max_length=255) | None = Field(
+        None,
+        description='Entity type this action relates to',
+        examples=['asset', 'person', 'estate', 'bequest'],
+    )
+    relatedEntityId: UUID | None = Field(
+        None, description='ID of the specific entity this action relates to'
+    )
+
+
+class Level2(Enum):
+    level_1 = 'level_1'
+    level_2 = 'level_2'
+    level_3 = 'level_3'
+
+
+class Profile(Enum):
+    estate = 'estate'
+    catalogue = 'catalogue'
+
+
+class Conformance(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    level: Level2 = Field(..., description='Conformance level achieved')
+    profile: Profile | None = Field(
+        None,
+        description="The conformance profile the document was validated at. Must match the document's conformanceProfile ('estate' when that is absent). Absent on certificates written before profiles existed, which are read as 'estate'",
+    )
+    validatedAt: AwareDatetime = Field(
+        ...,
+        description='When the validation was performed',
+        examples=['2026-03-28T14:00:00Z'],
+    )
+    validatedBy: constr(max_length=255) = Field(
+        ...,
+        description='Name of the tool that performed the validation',
+        examples=['INHERIT Web Validator', 'MyFamilyInherits v2.1', 'openinherit-cli'],
+    )
+    schemaVersion: constr(max_length=255) = Field(
+        ...,
+        description='INHERIT schema version this document was validated against',
+        examples=['1.2.0'],
+    )
+    completenessScore: conint(ge=0, le=100) | None = Field(
+        None, description='Completeness score at time of validation'
+    )
+    entityCounts: dict[str, int] | None = Field(
+        None,
+        description='Count of entities per type at time of validation',
+        examples=[{'people': 5, 'properties': 2, 'assets': 12, 'bequests': 4, 'executors': 2}],
+    )
+    provenanceSummary: dict[str, int] | None = Field(
+        None,
+        description='Count of entities by data provenance source',
+        examples=[{'manual_entry': 15, 'ai_extracted': 8, 'imported': 3}],
+    )
+    warnings: list[constr(max_length=500)] | None = Field(
+        None,
+        description='Validation warnings — non-blocking issues that may need attention',
+        examples=[['2 assets have estimated but no professional valuation', 'Lifetime transfer history covers only 5 of 7 required lookback years']],
+    )
+    validationEndpoint: AnyUrl | None = Field(
+        None,
+        description='URL of the validation service that produced this conformance certificate',
+        examples=['https://validate.openinherit.org/v3'],
+    )
+
+
+class PolicyType2(Enum):
+    life = 'life'
+    home = 'home'
+    health = 'health'
+    motor = 'motor'
+    travel = 'travel'
+    pet = 'pet'
+    professional_indemnity = 'professional_indemnity'
+    other = 'other'
+
+
+class PremiumFrequency1(Enum):
+    monthly = 'monthly'
+    annual = 'annual'
+    single_premium = 'single_premium'
+    paid_up = 'paid_up'
+    other = 'other'
+
+
+class BeneficiaryVerificationStatus(Enum):
+    unverified = 'unverified'
+    identity_confirmed = 'identity_confirmed'
+    entitlement_confirmed = 'entitlement_confirmed'
+
+
+class DeathBenefit(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    amount: Money | None = Field(
+        None, description='Death benefit amount in minor currency units'
+    )
+    nomineePersonId: UUID | None = Field(
+        None,
+        description='Reference to the Person.id of the nominated death benefit recipient',
+    )
+    nomineePersonIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced nominee person',
+    )
+    nomineeOrganisationId: UUID | None = Field(
+        None,
+        description='Reference to the Organisation.id of the nominated death benefit recipient, if an organisation. Mutually exclusive with nomineePersonId',
+    )
+    nomineeOrganisationIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced nominee organisation',
+    )
+    nominationCurrent: bool | None = Field(
+        None,
+        description='Whether the death benefit nomination is believed to be current and valid',
+        examples=[True, False],
+    )
+    benefitType: BenefitType | None = Field(
+        None,
+        description='How the death benefit is paid',
+        examples=['lump_sum', 'income'],
+    )
+    beneficiaryVerificationStatus: (
+        BeneficiaryVerificationStatus | None
+    ) = Field(None, description='Verification status of the death benefit beneficiary')
+
+
+class TrustDetails(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    trusteePersonId: UUID | None = Field(
+        None, description='Reference to the Person.id of the policy trustee'
+    )
+    trusteePersonIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced trustee person',
+    )
+    trusteeOrganisationId: UUID | None = Field(
+        None, description='Reference to the Organisation.id of a corporate trustee'
+    )
+    trusteeOrganisationIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced trustee organisation',
+    )
+    trustName: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the trust',
+        examples=['Davies Family Life Policy Trust'],
+    )
+
+
+class ClaimStatus(Enum):
+    active = 'active'
+    claim_submitted = 'claim_submitted'
+    claim_approved = 'claim_approved'
+    claim_paid = 'claim_paid'
+    claim_disputed = 'claim_disputed'
+    pending = 'pending'
+    approved = 'approved'
+    paid = 'paid'
+    declined = 'declined'
+
+
+class NominationStatus(Enum):
+    active = 'active'
+    revoked = 'revoked'
+    superseded = 'superseded'
+    expired = 'expired'
+    disputed = 'disputed'
+
+
+class NominationLifecycle(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    nominationStatus: NominationStatus | None = Field(
+        None, description='Current status of the nomination'
+    )
+    verifiedAt: AwareDatetime | None = Field(
+        None, description='When the nomination was last verified as current'
+    )
+    lastUpdated: AwareDatetime | None = Field(
+        None, description='When the nomination was last updated by the policyholder'
+    )
+    supersedesNominationId: constr(max_length=255) | None = Field(
+        None, description='Reference to a previous nomination that this one replaces'
+    )
+
+
+class PolicyCondition(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    condition: constr(max_length=500) | None = Field(
+        None,
+        description='Description of the condition or clause',
+        examples=['2-year suicide exclusion clause', 'Pre-existing condition exclusion: heart disease'],
+    )
+    expiryDate: date_aliased | None = Field(
+        None, description='Date the condition expires, if applicable'
+    )
+    impact: constr(max_length=500) | None = Field(
+        None,
+        description='How this condition affects a claim',
+        examples=['Claim void if death by suicide within 2 years of policy start'],
+    )
+
+
+class FuneralPlanDetails(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    coveredFuneralProviderOrganisationId: (
+        UUID | None
+    ) = (
+        Field(None, description='Reference to the Organisation.id of the covered funeral provider')
+    )
+    coveredFuneralProviderOrganisationIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced covered funeral provider organisation',
+    )
+    transferableOnDeath: bool | None = Field(
+        None, description='Whether the plan is transferable on death'
+    )
+    advancePayments: Money | None = Field(
+        None, description='Total advance payments made'
+    )
+
+
+class Scheme(Enum):
+    fscs = 'fscs'
+    mib = 'mib'
+
+
+class DepositorProtection(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    retrievedAt: AwareDatetime = Field(
+        ..., description='When this protection status was checked'
+    )
+    scheme: Scheme | constr(pattern=r'^x-inherit-.+', max_length=100) | None = Field(
+        None, description='The compensation or protection scheme'
+    )
+    protected: bool | None = Field(
+        None, description='Whether this policy is protected by the scheme'
+    )
+    protectionLimit: conint(ge=0) | None = Field(
+        None,
+        description='Maximum protection amount in minor units (pennies). FSCS insurance limit is unlimited for compulsory insurance, £85,000 for non-compulsory',
+    )
+    claimProcessUrl: AnyUrl | None = Field(
+        None, description="URL to the scheme's claim process or guidance page"
+    )
+
+
+class InsurancePolicy(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    id: UUID = Field(
+        ...,
+        description='Unique identifier for this insurance policy within the INHERIT document',
+        examples=['f1234567-89ab-4cde-8012-3456789abcde'],
+    )
+    policyType: PolicyType2 | constr(pattern=r'^x-inherit-.+') = Field(
+        ...,
+        description='The type of insurance policy',
+        examples=['life', 'home', 'motor'],
+    )
+    providerOrganisationId: UUID = Field(
+        ..., description='Reference to the Organisation.id of the insurance provider'
+    )
+    providerOrganisationIdDisplay: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable display name for the referenced provider organisation',
+    )
+    policyNumber: constr(max_length=100) | None = Field(
+        None,
+        description='The insurance policy number or reference',
+        examples=['LG-LIFE-2020-789', 'HX-HOME-2024-001'],
+    )
+    coverAmount: Money | None = Field(
+        None,
+        description='Total cover amount (sum assured for life, rebuild cost for home, etc.) in minor currency units',
+    )
+    premiumAmount: Money | None = Field(
+        None, description='Premium amount per payment period, in minor currency units'
+    )
+    premiumFrequency: PremiumFrequency1 | None = Field(
+        None, description='How often premiums are paid', examples=['monthly', 'annual']
+    )
+    renewalDate: date_aliased | None = Field(
+        None,
+        description='Next renewal date. Important — cover may lapse if not renewed after death',
+        examples=['2027-01-01'],
+    )
+    maturityDate: date_aliased | None = Field(
+        None,
+        description='Date the policy matures (for endowment policies and investment-linked policies)',
+        examples=['2035-06-01'],
+    )
+    deathBenefit: DeathBenefit | None = Field(
+        None,
+        description="Death benefit details — what is payable on the policyholder's death, to whom, and how",
+    )
+    writtenInTrust: bool | None = Field(
+        None,
+        description='Whether the policy is written in trust. If true, proceeds pass outside the estate and are not subject to inheritance tax',
+        examples=[True, False],
+    )
+    trustDetails: TrustDetails | None = Field(
+        None,
+        description='Details of the trust holding this policy, if writtenInTrust is true',
+    )
+    claimStatus: ClaimStatus | None = Field(
+        None,
+        description='Current status of any claim against this policy',
+        examples=['active', 'claim_submitted', 'claim_paid'],
+    )
+    externalPolicyRef: AnyUrl | None = Field(
+        None,
+        description='URI pointing to an external policy record (FHIR Coverage resource, or any external insurance management system)',
+    )
+    nominationLifecycle: NominationLifecycle | None = Field(
+        None,
+        description='Lifecycle tracking for policy nominations — tracks the current nomination status and any superseding nominations',
+    )
+    policyConditions: list[PolicyCondition] | None = Field(
+        None,
+        description='Conditions, exclusions, or clauses that affect the policy — e.g. suicide clause, contestability period, pre-existing condition exclusions',
+        max_length=50,
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Free-text notes about this insurance policy',
+        examples=['Policy written in trust — proceeds bypass probate', 'Contact Sarah at Legal & General for claims: 0800 123 456'],
+    )
+    funeralPlanDetails: FuneralPlanDetails | None = Field(
+        None, description='Details specific to funeral plan insurance'
+    )
+    depositorProtection: DepositorProtection | None = Field(
+        None,
+        description='Financial compensation scheme protection status. In the UK, the FSCS protects insurance policyholders if the insurer fails. Knowing whether a policy is protected matters for estate risk assessment',
+    )
+    provenance: Provenance | None = Field(
+        None,
+        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
+    )
+
+
+class Type2(Enum):
+    art_dealer = 'art_dealer'
+    antique_dealer = 'antique_dealer'
+    property_investor = 'property_investor'
+    auction_house = 'auction_house'
+    gallery = 'gallery'
+    private_collector = 'private_collector'
+    museum = 'museum'
+    institution = 'institution'
+    charity = 'charity'
+    developer = 'developer'
+    fund_manager = 'fund_manager'
+    family_office = 'family_office'
+    estate_agent = 'estate_agent'
+    legal_practice = 'legal_practice'
+    other = 'other'
+
+
+class InterestedParty(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    personId: UUID | None = Field(
+        None,
+        description='Reference to a Person.id if the interested party is an individual in the people array',
+    )
+    personIdDisplay: constr(max_length=255) | None = Field(
+        None, description='Human-readable display name for the referenced person'
+    )
+    name: constr(max_length=255) = Field(
+        ...,
+        description='Name of the interested party — individual or organisation',
+        examples=["Christie's", 'Savills', 'Dr Heinrich Müller', 'Bonhams', 'Galerie Tanaka, Tokyo', 'Rahul Mehta Fine Art', 'Al-Futtaim Auction House'],
+    )
+    type: Type2 = Field(..., description='The type of interested party')
+    contactDetails: constr(max_length=255) | None = Field(
+        None,
+        description='Contact details for the interested party',
+        examples=['acquisitions@christies.com', '+44 20 7839 9060', 'Dr Müller, Galerie Müller, Zurich'],
+    )
+    organisationId: UUID | None = Field(
+        None,
+        description='Reference to an Organisation.id if the interested party is a known organisation. Mutually exclusive with personId',
+    )
+    organisationIdDisplay: constr(max_length=255) | None = Field(
+        None, description='Human-readable display name for the referenced organisation'
+    )
+
+
+class InterestLevel2(Enum):
+    exploratory = 'exploratory'
+    moderate = 'moderate'
+    strong = 'strong'
+    committed = 'committed'
+
+
+class AssetInterestItem(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    assetId: UUID | None = Field(None, description='Reference to an Asset.id')
+    propertyId: UUID | None = Field(None, description='Reference to a Property.id')
+    interestLevel: InterestLevel2 | None = Field(
+        None,
+        description="How strong the interested party's intent is",
+        examples=['strong', 'exploratory'],
+    )
+
+
+class AssetId(RootModel[UUID]):
+    root: UUID
+
+
+class PropertyId(RootModel[UUID]):
+    root: UUID
+
+
+class CollectionInterest1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    name: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the collection',
+        examples=['Victorian watercolour collection', 'Hampstead property portfolio', 'Japanese woodblock print collection'],
+    )
+    assetIds: list[AssetId] = Field(
+        ..., description='Asset IDs that make up this collection', max_length=100
+    )
+    propertyIds: list[PropertyId] | None = Field(
+        None, description='Property IDs that make up this collection', max_length=100
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Additional notes about the collection interest',
+        examples=['Interested in acquiring the complete collection, not individual pieces'],
+    )
+
+
+class CollectionInterest2(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    name: constr(max_length=255) | None = Field(
+        None,
+        description='Name of the collection',
+        examples=['Victorian watercolour collection', 'Hampstead property portfolio', 'Japanese woodblock print collection'],
+    )
+    assetIds: list[AssetId] | None = Field(
+        None, description='Asset IDs that make up this collection', max_length=100
+    )
+    propertyIds: list[PropertyId] = Field(
+        ..., description='Property IDs that make up this collection', max_length=100
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Additional notes about the collection interest',
+        examples=['Interested in acquiring the complete collection, not individual pieces'],
+    )
+
+
+class CollectionInterest(RootModel[CollectionInterest1 | CollectionInterest2]):
+    root: CollectionInterest1 | CollectionInterest2 = Field(
+        ...,
+        description='Interest in a collection of assets or properties as a whole, rather than individual items',
+    )
+
+
+class Condition1(RootModel[constr(max_length=500)]):
+    root: constr(max_length=500)
+
+
+class OfferDetails(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    amount: Money | None = Field(
+        None, description='The offer amount in minor currency units'
+    )
+    conditions: list[Condition1] | None = Field(
+        None,
+        description='Conditions attached to the offer',
+        examples=[['Subject to independent valuation', 'Conditional on vacant possession']],
+        max_length=50,
+    )
+    validUntil: date_aliased | None = Field(
+        None, description='Date the offer expires', examples=['2025-12-31']
+    )
+    offerDate: date_aliased | None = Field(
+        None, description='Date the offer was made', examples=['2025-06-15']
+    )
+    documentRef: constr(max_length=500) | None = Field(
+        None,
+        description='Reference to the document containing the offer',
+        examples=['DOC-2025-OFFER-001'],
+    )
+    offerTerms: constr(max_length=2000) | None = Field(
+        None,
+        description='Terms and conditions of the offer',
+        examples=['Subject to independent valuation and clear title'],
+    )
+    inspectionRequired: bool | None = Field(
+        None,
+        description='Whether a physical inspection is required before the offer can be finalised',
+        examples=[True, False],
+    )
+    inspectionDate: date_aliased | None = Field(
+        None,
+        description='Date the inspection is scheduled or took place',
+        examples=['2026-06-15'],
+    )
+
+
+class OfferStatus(Enum):
+    standing_interest = 'standing_interest'
+    verbal_offer = 'verbal_offer'
+    written_offer = 'written_offer'
+    formal_valuation = 'formal_valuation'
+    conditional_offer = 'conditional_offer'
+    accepted = 'accepted'
+    declined = 'declined'
+    expired = 'expired'
+    withdrawn = 'withdrawn'
+
+
+class TestatorDisposition(Enum):
+    willing_to_sell = 'willing_to_sell'
+    prefer_not_to_sell = 'prefer_not_to_sell'
+    hold_for_executor = 'hold_for_executor'
+    deferred_to_family = 'deferred_to_family'
+    promised_to_institution = 'promised_to_institution'
+    undecided = 'undecided'
+
+
+class PrivacyLevel(Enum):
+    testator_only = 'testator_only'
+    proxy_visible = 'proxy_visible'
+    executor_visible = 'executor_visible'
+    all_parties = 'all_parties'
+
+
+class CommunicationInitiatedBy(Enum):
+    buyer = 'buyer'
+    testator = 'testator'
+    proxy = 'proxy'
+    executor = 'executor'
+
+
+class VerificationResult(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    verified: bool | None = Field(
+        None, description='Whether the item has been through verification'
+    )
+    verifiedAt: AwareDatetime | None = Field(
+        None, description='When the verification was completed'
+    )
+    conditionConfirmed: bool | None = Field(
+        None,
+        description="Whether the item's condition matched the seller's listed grade",
+    )
+    adjustedAmount: Money | None = Field(
+        None,
+        description='The adjusted price if condition differed from listed. Null if no adjustment needed',
+    )
+    discrepancyNotes: constr(max_length=2000) | None = Field(
+        None,
+        description='Details of any condition discrepancy found during verification',
+    )
+    verifiedByOrganisationId: UUID | None = Field(
+        None, description='Reference to the Organisation.id of the verification dealer'
+    )
+
+
+class DealerInterest(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    id: UUID = Field(
+        ...,
+        description='Unique identifier for this dealer interest record within the INHERIT document',
+        examples=['e7f8a9b0-c1d2-3456-e789-abcdef012345'],
+    )
+    interestedParty: InterestedParty = Field(
+        ..., description='The third party expressing interest in estate assets'
+    )
+    assets: list[AssetInterestItem] | None = Field(
+        None,
+        description='Specific assets or properties the interested party wants to acquire',
+        max_length=100,
+    )
+    collection: CollectionInterest | None = Field(
+        None, description='Interest in a collection of assets as a whole'
+    )
+    offerStatus: OfferStatus = Field(
+        ...,
+        description='Current status of the offer or expression of interest',
+        examples=['standing_interest', 'written_offer', 'accepted'],
+    )
+    offerDetails: OfferDetails | None = Field(
+        None, description='Details of a specific offer, if one has been made'
+    )
+    testatorDisposition: TestatorDisposition | None = Field(
+        None,
+        description="The testator's disposition towards selling this asset",
+        examples=['willing_to_sell', 'hold_for_executor'],
+    )
+    linkedBequestId: UUID | None = Field(
+        None,
+        description='Reference to a Bequest.id if this asset is also subject to a bequest. A dealer interest and a bequest may conflict',
+    )
+    privacyLevel: PrivacyLevel = Field(
+        ...,
+        description='Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches',
+        examples=['proxy_visible', 'executor_visible'],
+    )
+    communicationInitiatedBy: CommunicationInitiatedBy | None = Field(
+        None,
+        description='Who initiated the communication about this potential transaction',
+        examples=['buyer', 'proxy'],
+    )
+    managedByProxyId: UUID | None = Field(
+        None,
+        description='Reference to the ProxyAuthorisation.id that governs this dealer interest — the proxy managing the negotiation',
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Free-text notes about this dealer interest',
+        examples=["Christie's approached via family friend — informal valuation suggests £120,000-£150,000", 'Testator does not want this disclosed to the family during their lifetime'],
+    )
+    verificationResult: VerificationResult | None = Field(
+        None,
+        description='The outcome of a verification inspection — records whether the item matched its listed condition and any price adjustments',
+    )
+    provenance: Provenance | None = Field(
+        None,
+        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
+    )
+
+
+class Action3(Enum):
+    created = 'created'
+    modified = 'modified'
+    deleted = 'deleted'
+    accessed = 'accessed'
+    exported = 'exported'
+    validated = 'validated'
+    version_created = 'version_created'
+    granted = 'granted'
+    revoked = 'revoked'
+    challenged = 'challenged'
+
+
+class AuditEvent(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    action: Action3 = Field(..., description='What type of action was performed')
+    performedAt: AwareDatetime = Field(..., description='When the action occurred')
+    agentPersonId: UUID | None = Field(
+        None,
+        description='Reference to the Person.id who performed the action. Uses a UUID reference rather than a display name for GDPR data minimisation — resolve the name at display time, not storage time',
+    )
+    agentDescription: constr(max_length=255) | None = Field(
+        None,
+        description='Human-readable description of who performed the action. Use only when a person ID is not available (e.g. system actions, external agents)',
+    )
+    entityType: constr(max_length=100) | None = Field(
+        None, description='The type of INHERIT entity that was affected'
+    )
+    entityId: UUID | None = Field(
+        None, description='The ID of the entity that was affected'
+    )
+    detail: constr(max_length=2000) | None = Field(
+        None,
+        description='What specifically was done. Should be specific enough for an auditor to understand without seeing the before/after data',
+    )
+    previousValue: constr(max_length=5000) | None = Field(
+        None,
+        description='The value before the change, if applicable. For field-level audit trails',
+    )
+    newValue: constr(max_length=5000) | None = Field(
+        None, description='The value after the change, if applicable'
+    )
+    redacted: bool | None = Field(
+        None,
+        description='Whether this audit entry has been redacted for GDPR compliance. When true, the agentPersonId and detail fields may have been cleared but the structural record of the action is preserved',
+    )
+    evidenceUrl: AnyUrl | None = Field(
+        None,
+        description='Link to supporting evidence (court order, signed document, etc.)',
+    )
+
+
+class ExportedBy(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    name: constr(max_length=255) | None = None
+    email: EmailStr | None = None
+
+
+class Generator(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    name: constr(min_length=1, max_length=255)
+    version: constr(max_length=255) | None = None
+    url: constr(max_length=2048) | None = None
+
+
+class Conformance2(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    level: Level2 = Field(..., description='Conformance level achieved')
+    profile: Literal['catalogue'] | None = Field(
+        None,
+        description="The conformance profile the document was validated at. Must match the document's conformanceProfile ('estate' when that is absent). Absent on certificates written before profiles existed, which are read as 'estate'",
+    )
+    validatedAt: AwareDatetime = Field(
+        ...,
+        description='When the validation was performed',
+        examples=['2026-03-28T14:00:00Z'],
+    )
+    validatedBy: constr(max_length=255) = Field(
+        ...,
+        description='Name of the tool that performed the validation',
+        examples=['INHERIT Web Validator', 'MyFamilyInherits v2.1', 'openinherit-cli'],
+    )
+    schemaVersion: constr(max_length=255) = Field(
+        ...,
+        description='INHERIT schema version this document was validated against',
+        examples=['1.2.0'],
+    )
+    completenessScore: conint(ge=0, le=100) | None = Field(
+        None, description='Completeness score at time of validation'
+    )
+    entityCounts: dict[str, int] | None = Field(
+        None,
+        description='Count of entities per type at time of validation',
+        examples=[{'people': 5, 'properties': 2, 'assets': 12, 'bequests': 4, 'executors': 2}],
+    )
+    provenanceSummary: dict[str, int] | None = Field(
+        None,
+        description='Count of entities by data provenance source',
+        examples=[{'manual_entry': 15, 'ai_extracted': 8, 'imported': 3}],
+    )
+    warnings: list[constr(max_length=500)] | None = Field(
+        None,
+        description='Validation warnings — non-blocking issues that may need attention',
+        examples=[['2 assets have estimated but no professional valuation', 'Lifetime transfer history covers only 5 of 7 required lookback years']],
+    )
+    validationEndpoint: AnyUrl | None = Field(
+        None,
+        description='URL of the validation service that produced this conformance certificate',
+        examples=['https://validate.openinherit.org/v3'],
+    )
+
+
+class Visibility2(Enum):
+    public = 'public'
+    link_only = 'link_only'
+    private = 'private'
+
+
+class FulfilledItem(RootModel[UUID]):
+    root: UUID
+
+
+class GiftListSettings(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    enabled: bool | None = Field(
+        None, description='Whether the gift list is currently shareable'
+    )
+    personalMessage: constr(max_length=2000) | None = Field(
+        None,
+        description="The owner's personal message shown at the top of the gift list",
+    )
+    visibility: Visibility2 | None = Field(
+        None, description='Who can see the gift list'
+    )
+    fulfilledItems: list[FulfilledItem] | None = Field(
+        None,
+        description='Asset interest IDs that someone has marked as bought. These are hidden from the public gift list to prevent duplicate gifts',
+        max_length=5000,
+    )
+
+
+class DeliveryMethod(Enum):
+    printed = 'printed'
+    digital = 'digital'
+    both = 'both'
+
+
+class LegacyLetter(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    lastGenerated: AwareDatetime | None = Field(
+        None, description='When the letter was last generated'
+    )
+    version: conint(ge=1) | None = Field(
+        None, description='Incremental version number of the letter'
+    )
+    delivered: bool | None = Field(
+        None, description='Whether the letter has been delivered to the legacy contacts'
+    )
+    deliveryMethod: DeliveryMethod | None = Field(
+        None, description='How the letter was delivered'
+    )
+    itemCountAtGeneration: conint(ge=0) | None = Field(
+        None,
+        description='Number of items in the catalogue when the letter was last generated. Used to detect staleness — if the current item count differs significantly, the letter should be regenerated',
+    )
+
+
+class Catalogue(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/catalogue.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_schema: Literal['https://openinherit.org/v3/catalogue.json'] | None = Field(
+        None,
+        alias='$schema',
+        description='Schema identifier — declares this as an INHERIT v3 catalogue document',
+    )
+    conformanceProfile: Literal['catalogue'] | None = Field(
+        None,
+        description='Declares this document as the catalogue conformance profile of the INHERIT root (schema.json). With it, the same document — unchanged, unwrapped — also conforms to schema.json. Optional here so catalogue documents written before profiles existed stay valid against this schema',
+    )
+    field_context: AnyUrl | None = Field(
+        None,
+        alias='@context',
+        description='JSON-LD context URI',
+        examples=['https://openinherit.org/v3/context/inherit-v3.jsonld'],
+    )
+    schemaVersion: constr(pattern=r'^\d+\.\d+\.\d+$', max_length=255) | None = Field(
+        None, examples=['1.3.0']
+    )
+    exportedAt: AwareDatetime | None = None
+    exportedBy: ExportedBy | None = None
+    generator: Generator | None = None
+    documentVersion: conint(ge=1) | None = Field(
+        None,
+        description='Sequential version number for this document. Incremented each time the document is substantively modified. Version 1 is the first version',
+    )
+    versionedAt: AwareDatetime | None = Field(
+        None,
+        description='When this version of the document was created. Courts and regulators care about when changes were made, not just which version number',
+    )
+    previousVersionId: UUID | None = Field(
+        None,
+        description='Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version',
+    )
+    changeDescription: constr(max_length=2000) | None = Field(
+        None,
+        description='Human-readable summary of what changed in this version. Like a commit message for the document',
+    )
+    assets: list[Asset] = Field(
+        ..., description='The catalogued items', max_length=10000
+    )
+    assetCollections: list[AssetCollection] | None = Field(
+        None, description='Named groupings of assets', max_length=500
+    )
+    organisations: list[Organisation] | None = Field(
+        None,
+        description='Organisations associated with catalogued assets — dealers, retailers, valuers, auction houses',
+        max_length=200,
+    )
+    properties: list[Property] | None = Field(
+        None,
+        description='Properties whose spaces appear in this catalogue. A catalogue is not an estate document, so a property here need carry no more than an id and a name — enough for spaces[].propertyId to resolve inside the document and for a room to be attributed to an address',
+        max_length=200,
+    )
+    spaces: list[Space] | None = Field(
+        None,
+        description='Physical storage locations for items in this catalogue. Each asset can reference a space via spaceId. Critical for collectors with items across multiple properties or countries — affects probate jurisdiction and dealer collection logistics',
+        max_length=200,
+    )
+    valuations: list[Valuation] | None = Field(
+        None, description='Valuations of items and collections', max_length=10000
+    )
+    legacyContacts: list[LegacyContact] | None = Field(
+        None,
+        description="People to notify and grant access when the owner dies. The 'Please open when I have passed away' letter recipients",
+        max_length=100,
+    )
+    assetInterests: list[AssetInterest] | None = Field(
+        None,
+        description="Expressions of interest about assets, collections, or products. Includes the catalogue owner's own wishlist (things they want to acquire), interest from other people, and allocation intentions. Complements assets[] — assets are things you own; assetInterests are things you want, things others want, and decisions about who gets what",
+        max_length=5000,
+    )
+    wishes: list[Wish] | None = Field(
+        None,
+        description='Personal messages, letters, care instructions, and non-binding wishes. Complements legacyContacts — legacyContacts tracks who receives the letter; wishes stores what it says. Types: letter (personal messages to specific people), care (maintenance and care instructions for items or collections), distribution (non-binding preferences about what should happen to items), general (anything else)',
+        max_length=200,
+    )
+    dataProvenance: DataProvenance | None = Field(
+        None, description='Default data provenance for entities in this catalogue'
+    )
+    importSources: list[ImportSource] | None = Field(
+        None, description='Systems data was imported from', max_length=100
+    )
+    completeness: Completeness | None = None
+    recommendedActions: list[RecommendedAction] | None = Field(None, max_length=100)
+    conformance: Conformance2 | None = Field(
+        None,
+        description='Machine-readable conformance certificate — records the validation level, schema version, completeness score, and provenance summary at time of validation',
+    )
+    insurancePolicies: list[InsurancePolicy] | None = Field(
+        None,
+        description='Insurance policies associated with catalogued assets',
+        max_length=100,
+    )
+    dealerInterests: list[DealerInterest] | None = Field(
+        None,
+        description='Provisional offers and expressions of interest from dealers. Allows the catalogue owner to receive and track dealer offers on items they are considering selling, or standing offers to be included in the LegacyLetter',
+        max_length=2000,
+    )
+    giftListSettings: GiftListSettings | None = Field(
+        None,
+        description='Settings for the shareable gift wishlist. When enabled, the owner can share a public link to their wishlist for family and friends to buy from',
+    )
+    legacyLetter: LegacyLetter | None = Field(
+        None,
+        description="Metadata about the LegacyLetter — the printed or digital document addressed to the owner's legacy contacts, summarising the catalogue, allocations, dealer offers, and personal messages. Tracks generation status to flag when the letter is stale",
+    )
+    auditLog: list[AuditEvent] | None = Field(
+        None,
+        description='Formal audit trail of actions taken on this document. Records who changed what, when, and why. Uses person ID references for GDPR data minimisation. Entries may be redacted under Article 17(3)(e) without breaking the log structure. Retention aligns with the estate document lifecycle',
+        max_length=10000,
+    )
+
+
+class Status5(Enum):
     enacted = 'enacted'
     royal_assent = 'royal_assent'
     bill_stage = 'bill_stage'
@@ -179,7 +7139,7 @@ class TemporalRule(BaseModel):
         description='The date this rule value was or will be superseded. Null means it is currently in effect with no known end date',
         examples=['2024-04-05', None],
     )
-    status: Status = Field(
+    status: Status5 = Field(
         ...,
         description="The legislative status of this rule. Only 'enacted' rules are legally binding — all others are prospective",
         examples=['enacted', 'bill_stage'],
@@ -205,26 +7165,6 @@ class TemporalRule(BaseModel):
     )
 
 
-class Money(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    amount: conint(ge=-999999999999999, le=999999999999999) = Field(
-        ...,
-        description='Value in the smallest currency unit (pence, cents, sen). The consumer must apply the ISO 4217 exponent to convert to a display value',
-        examples=[32500, 1000000, 500000, 0],
-    )
-    currency: constr(pattern=r'^[A-Z]{3}$') = Field(
-        ...,
-        description='ISO 4217 three-letter currency code. Use the code for the currency of the amount, not the reporting currency',
-        examples=['GBP', 'USD', 'EUR', 'JPY', 'INR', 'AED', 'SGD'],
-    )
-    exponent: conint(ge=0, le=4) | None = Field(
-        2,
-        description='Number of decimal places for this currency. Display value = amount / 10^exponent. Most currencies use 2 (default). JPY/KRW use 0. KWD/BHD/OMR use 3',
-    )
-
-
 class CohabitantRights(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -234,7 +7174,7 @@ class CohabitantRights(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Category(StrEnum):
+class Category5(StrEnum):
     spouse = 'spouse'
     former_spouse = 'former_spouse'
     child = 'child'
@@ -248,7 +7188,7 @@ class Ifpa1975EligibleItem(BaseModel):
         extra='forbid',
     )
     personId: UUID
-    category: Category
+    category: Category5
     notes: constr(max_length=2000) | None = None
 
 
@@ -306,7 +7246,7 @@ class LocalGrantType(BaseModel):
     localType: LocalType2
 
 
-class Status1(StrEnum):
+class Status6(StrEnum):
     enacted = 'enacted'
     royal_assent = 'royal_assent'
     bill_stage = 'bill_stage'
@@ -319,7 +7259,7 @@ class LegislativeChange(BaseModel):
         extra='forbid',
     )
     description: constr(min_length=1, max_length=2000)
-    status: Status1
+    status: Status6
     effectiveDate: date_aliased | None = None
     notes: constr(max_length=2000) | None = None
 
@@ -596,7 +7536,7 @@ class Intestacy(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class EntityType(StrEnum):
+class EntityType5(StrEnum):
     property = 'property'
     asset = 'asset'
 
@@ -610,7 +7550,7 @@ class HeritableMoveableClassification(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    entityType: EntityType
+    entityType: EntityType5
     entityId: UUID
     classification: Classification
     basis: constr(max_length=500) | None = None
@@ -675,7 +7615,7 @@ class SurvivorshipDestination(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class TenureType(StrEnum):
+class TenureType1(StrEnum):
     tenant = 'tenant'
     owner_occupier = 'owner_occupier'
     absentee = 'absentee'
@@ -699,7 +7639,7 @@ class Croft(BaseModel):
     )
     propertyId: UUID
     croftingRegisterNumber: constr(max_length=100) | None = None
-    tenureType: TenureType
+    tenureType: TenureType1
     landlordName: constr(max_length=255) | None = None
     successionRoute: SuccessionRoute | None = None
     legateePersonId: UUID | None = None
@@ -1216,11 +8156,7 @@ class IntestacyRules1(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class PropertyId(RootModel[UUID]):
-    root: UUID
-
-
-class Status2(StrEnum):
+class Status7(StrEnum):
     not_filed = 'not_filed'
     filed = 'filed'
     granted = 'granted'
@@ -1235,7 +8171,7 @@ class AncillaryProbateItem(BaseModel):
     state: constr(pattern=r'^US-[A-Z]{2}$', max_length=5)
     propertyIds: list[PropertyId] | None = Field(None, max_length=50)
     acceptsDomiciliaryLetters: bool | None = None
-    status: Status2 | None = None
+    status: Status7 | None = None
     caseNumber: constr(max_length=100) | None = None
     notes: constr(max_length=2000) | None = None
 
@@ -1736,7 +8672,7 @@ class SpanishRegionalRegime(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Model(StrEnum):
+class Model1(StrEnum):
     french_reserve = 'french_reserve'
     german_pflichtteil = 'german_pflichtteil'
     scandinavian_laglott = 'scandinavian_laglott'
@@ -1750,7 +8686,7 @@ class ForcedHeirshipVariant(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    model: Model
+    model: Model1
     claimNature: constr(max_length=255) | None = None
     reservedFraction: constr(pattern=r'^[0-9]+/[0-9]+$', max_length=255) | None = None
     calculationNotes: constr(max_length=2000) | None = None
@@ -1768,7 +8704,7 @@ class PostBrexitAssetHandling(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Status3(StrEnum):
+class Status8(StrEnum):
     enacted = 'enacted'
     royal_assent = 'royal_assent'
     bill_stage = 'bill_stage'
@@ -1781,7 +8717,7 @@ class LegislativeChange1(BaseModel):
         extra='forbid',
     )
     description: constr(min_length=1, max_length=2000)
-    status: Status3
+    status: Status8
     effectiveDate: date_aliased | None = None
     notes: constr(max_length=2000) | None = None
 
@@ -1898,7 +8834,7 @@ class LocalWillFormality(StrEnum):
     himitsusho = 'himitsusho'
 
 
-class Type(StrEnum):
+class Type3(StrEnum):
     voluntary = 'voluntary'
     court_mediated = 'court_mediated'
     court_adjudicated = 'court_adjudicated'
@@ -1912,7 +8848,7 @@ class IsanBunkatsu(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    type: Type | None = None
+    type: Type3 | None = None
     agreed: bool | None = None
     agreementDate: date_aliased | None = None
     allHeirsConsented: bool | None = None
@@ -1928,7 +8864,7 @@ class LegislativeChange2(BaseModel):
         extra='forbid',
     )
     description: constr(min_length=1, max_length=2000)
-    status: Status3
+    status: Status8
     effectiveDate: date_aliased | None = None
     notes: constr(max_length=2000) | None = None
 
@@ -2048,7 +8984,7 @@ class IntestacyOrder(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Type1(StrEnum):
+class Type4(StrEnum):
     notarised = 'notarised'
     holograph = 'holograph'
     scrivener = 'scrivener'
@@ -2061,7 +8997,7 @@ class WillForm(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    type: Type1 | None = None
+    type: Type4 | None = None
     dateExecuted: date_aliased | None = None
     notarisationOffice: constr(max_length=255) | None = None
     witnesses: conint(ge=0) | None = None
@@ -2304,7 +9240,7 @@ class SingaporeMalaysia(BaseModel):
     )
 
 
-class Category1(StrEnum):
+class Category6(StrEnum):
     descendant = 'descendant'
     ascendant = 'ascendant'
     spouse = 'spouse'
@@ -2315,7 +9251,7 @@ class NecessaryHeir(BaseModel):
         extra='forbid',
     )
     personId: UUID
-    category: Category1
+    category: Category6
 
 
 class BrazilianSuccession(BaseModel):
@@ -2599,7 +9535,7 @@ class WaqfDetail(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Type2(StrEnum):
+class Type5(StrEnum):
     mahr = 'mahr'
     kafan = 'kafan'
     funeral_costs = 'funeral_costs'
@@ -2612,7 +9548,7 @@ class PriorityDebt(BaseModel):
         extra='forbid',
     )
     description: constr(max_length=2000)
-    type: Type2
+    type: Type5
     amount: Money
     creditorPersonId: UUID | None = None
     notes: constr(max_length=2000) | None = None
@@ -2771,7 +9707,7 @@ class HalachicWitnessValidity(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Type3(StrEnum):
+class Type6(StrEnum):
     kinyan_sudar = 'kinyan_sudar'
     kinyan_agav = 'kinyan_agav'
     kinyan_meshichah = 'kinyan_meshichah'
@@ -2786,13 +9722,13 @@ class KinyanDetails(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    type: Type3
+    type: Type6
     performed: bool
     witnessPersonIds: list[WitnessPersonId] | None = Field(None, max_length=50)
     notes: constr(max_length=2000) | None = None
 
 
-class Type4(StrEnum):
+class Type7(StrEnum):
     matanah = 'matanah'
     yerusha = 'yerusha'
     shtar_chov_gift = 'shtar_chov_gift'
@@ -2802,7 +9738,7 @@ class BequestClassification(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    type: Type4
+    type: Type7
     bequestId: UUID
     notes: constr(max_length=2000) | None = None
 
@@ -3954,7 +10890,7 @@ class CoparcenaryDetails(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Type5(Enum):
+class Type8(Enum):
     ancestral = 'ancestral'
     self_acquired = 'self_acquired'
     mixed = 'mixed'
@@ -3964,12 +10900,12 @@ class PropertyClassification(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    type: Type5 | None = None
+    type: Type8 | None = None
     ancestralPropertyIdentified: bool | None = None
     notes: constr(max_length=2000) | None = None
 
 
-class Type6(Enum):
+class Type9(Enum):
     succession_certificate = 'succession_certificate'
     letters_of_administration = 'letters_of_administration'
     probate = 'probate'
@@ -3980,7 +10916,7 @@ class SuccessionCertificate(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    type: Type6 | None = None
+    type: Type9 | None = None
     court: constr(max_length=255) | None = None
     applicationDate: date_aliased | None = None
     granted: bool | None = None
@@ -4201,7 +11137,7 @@ class NonMuslimWillRegistration(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class TenureType1(Enum):
+class TenureType2(Enum):
     freehold = 'freehold'
     leasehold = 'leasehold'
     usufruct = 'usufruct'
@@ -4212,7 +11148,7 @@ class PropertyTreatment(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    tenureType: TenureType1 | None = None
+    tenureType: TenureType2 | None = None
     designatedArea: bool | None = Field(
         None, description='Whether property is in a foreigners-permitted freehold zone'
     )
@@ -4228,7 +11164,7 @@ class Forum(Enum):
     mediation = 'mediation'
 
 
-class Status5(Enum):
+class Status10(Enum):
     pending = 'pending'
     resolved = 'resolved'
     appealed = 'appealed'
@@ -4240,7 +11176,7 @@ class DisputeResolution(BaseModel):
     )
     forum: Forum | None = None
     caseReference: constr(max_length=255) | None = None
-    status: Status5 | None = None
+    status: Status10 | None = None
     notes: constr(max_length=2000) | None = None
 
 
@@ -4311,100 +11247,6 @@ class Uae(BaseModel):
     )
 
 
-class Model1(Enum):
-    claude = 'claude'
-    gpt = 'gpt'
-    gemini = 'gemini'
-    grok = 'grok'
-    llama = 'llama'
-    mistral = 'mistral'
-    other = 'other'
-
-
-class AiProvenance(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    model: Model1 | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None,
-        description='AI model family that generated this data',
-        examples=['claude', 'gpt', 'gemini'],
-    )
-    confidence: conint(ge=0, le=100) | None = Field(
-        None,
-        description='Confidence score 0–100 indicating how certain the AI is about the generated data',
-        examples=[92, 75, 50],
-    )
-    generatedAt: AwareDatetime | None = Field(
-        None,
-        description='When the AI produced this data',
-        examples=['2026-03-30T14:00:00Z'],
-    )
-    humanReviewed: bool | None = Field(
-        None,
-        description='Whether a human has verified this AI-generated data',
-        examples=[True, False],
-    )
-    reviewedBy: constr(max_length=255) | None = Field(
-        None,
-        description='Person ID or role of the reviewer who verified this data',
-        examples=['James Davies', 'Legal review team', 'Estate administrator'],
-    )
-    reviewedAt: AwareDatetime | None = Field(
-        None,
-        description='When the human review occurred',
-        examples=['2026-03-30T16:00:00Z'],
-    )
-
-
-class Source(Enum):
-    import_ = 'import'
-    manual = 'manual'
-    ai_generated = 'ai_generated'
-
-
-class HumanVerdict(Enum):
-    approved = 'approved'
-    rejected = 'rejected'
-    modified = 'modified'
-    pending_review = 'pending_review'
-
-
-class Provenance(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    source: Source | None = Field(
-        None, description="How this entity's data was originally created"
-    )
-    confidence: confloat(ge=0.0, le=1.0) | None = Field(
-        None,
-        description="Overall confidence score for this entity's data (0.0 = no confidence, 1.0 = fully verified)",
-    )
-    importSourceId: constr(max_length=255) | None = Field(
-        None,
-        description="References importSources[].id on the root document — identifies which import source produced this entity's data. Plain string, not UUID",
-    )
-    aiProvenance: AiProvenance | None = Field(
-        None,
-        description='AI provenance metadata — which AI model produced this data and whether a human has verified it',
-    )
-    humanVerdict: HumanVerdict | None = Field(
-        None, description='Human review verdict on AI-generated or imported data'
-    )
-    rejectionReason: constr(max_length=2000) | None = Field(
-        None, description='Reason for rejecting or modifying data'
-    )
-    verdictAt: AwareDatetime | None = Field(
-        None, description='When the human verdict was recorded'
-    )
-    agentTaskId: constr(max_length=255) | None = Field(
-        None,
-        description='ID of the agent task that created or modified this entity — links to the agent orchestration system',
-        examples=['task-enrich-001', 'task-extract-will-003'],
-    )
-
-
 class Witness(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -4425,7 +11267,7 @@ class Witness(BaseModel):
     )
 
 
-class Method(Enum):
+class Method2(Enum):
     in_person = 'in_person'
     video = 'video'
     remote = 'remote'
@@ -4531,7 +11373,7 @@ class Attestation(BaseModel):
         description='Detailed witness information as recorded on the will. Witnesses are often not estate participants — their names and addresses appear on the document but they may not be in the people array. Coexists with witnessPersonIds for backward compatibility',
         max_length=100,
     )
-    method: Method | None = Field(
+    method: Method2 | None = Field(
         None,
         description='The method by which the will or document was executed',
         examples=['in_person', 'video', 'inkan_registered'],
@@ -4855,7 +11697,7 @@ class ForcedHeirship1(BaseModel):
     )
 
 
-class Type7(Enum):
+class Type10(Enum):
     secular_court = 'secular_court'
     religious_court = 'religious_court'
     beth_din = 'beth_din'
@@ -4874,7 +11716,7 @@ class AdjudicatingBody(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    type: Type7 = Field(..., description='The type of adjudicating body')
+    type: Type10 = Field(..., description='The type of adjudicating body')
     name: constr(max_length=255) | None = Field(
         None,
         description='Name of the specific court or body',
@@ -5105,7 +11947,7 @@ class ExternalReference(BaseModel):
     )
 
 
-class Status6(Enum):
+class Status11(Enum):
     planning = 'planning'
     confirmed = 'confirmed'
     pre_probate = 'pre_probate'
@@ -5374,7 +12216,7 @@ class CommorientesRule(BaseModel):
     )
 
 
-class Status7(Enum):
+class Status12(Enum):
     not_started = 'not_started'
     applied = 'applied'
     granted = 'granted'
@@ -5397,7 +12239,7 @@ class AncillaryProbateItem1(BaseModel):
         None,
         description='Human-readable display name for the referenced fiduciary person',
     )
-    status: Status7 | None = Field(
+    status: Status12 | None = Field(
         None, description='Current status of ancillary probate in this jurisdiction'
     )
     grantReference: constr(max_length=500) | None = Field(
@@ -5415,7 +12257,7 @@ class AncillaryProbateItem1(BaseModel):
     )
 
 
-class Registration(BaseModel):
+class Registration1(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -5511,7 +12353,7 @@ class GrantType1(Enum):
     other = 'other'
 
 
-class Status8(Enum):
+class Status13(Enum):
     not_applied = 'not_applied'
     applied = 'applied'
     received = 'received'
@@ -5522,7 +12364,7 @@ class TaxClearance(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    status: Status8 | None = Field(None, description='Current status of tax clearance')
+    status: Status13 | None = Field(None, description='Current status of tax clearance')
     clearanceDate: date_aliased | None = Field(
         None, description='Date clearance was received'
     )
@@ -5628,18 +12470,7 @@ class Administration(BaseModel):
     )
 
 
-class LegalTradition(Enum):
-    common_law = 'common_law'
-    civil_law = 'civil_law'
-    mixed = 'mixed'
-    customary_law = 'customary_law'
-    islamic_law = 'islamic_law'
-    hindu_law = 'hindu_law'
-    jewish_law = 'jewish_law'
-    canon_law = 'canon_law'
-
-
-class GoverningLaw(BaseModel):
+class GoverningLaw2(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -5659,24 +12490,11 @@ class GoverningLaw(BaseModel):
     )
 
 
-class DeterminedBy(Enum):
-    domicile = 'domicile'
-    situs = 'situs'
-    nationality = 'nationality'
-    personal_status = 'personal_status'
-    choice_of_law = 'choice_of_law'
-    treaty = 'treaty'
-
-
-class Extension(RootModel[constr(max_length=500)]):
-    root: constr(max_length=500)
-
-
 class DefaultSuccessionRegime(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    governingLaw: GoverningLaw | None = Field(
+    governingLaw: GoverningLaw2 | None = Field(
         None, description='The default governing law for succession'
     )
     determinedBy: DeterminedBy | None = Field(
@@ -5782,7 +12600,7 @@ class JurisdictionRules(BaseModel):
     choiceOfLaw: ChoiceOfLaw1 | None = None
 
 
-class Status9(Enum):
+class Status14(Enum):
     not_assessed = 'not_assessed'
     assessed_no_grounds = 'assessed_no_grounds'
     grounds_identified = 'grounds_identified'
@@ -5840,7 +12658,7 @@ class Contestability(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    status: Status9
+    status: Status14
     grounds: list[Ground] | None = None
     influenceFactors: list[InfluenceFactor] | None = None
 
@@ -5893,7 +12711,7 @@ class TaxTreaty(BaseModel):
     treatyReference: constr(max_length=255) | None = None
 
 
-class Method1(Enum):
+class Method3(Enum):
     death_certificate = 'death_certificate'
     coroner_report = 'coroner_report'
     civil_registry = 'civil_registry'
@@ -5915,7 +12733,7 @@ class DeathVerification(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    method: Method1 | None = None
+    method: Method3 | None = None
     issuingAuthority: constr(max_length=255) | None = None
     jurisdiction: Jurisdiction | None = None
     referenceNumber: constr(max_length=255) | None = None
@@ -5936,7 +12754,7 @@ class DeathVerification(BaseModel):
     )
 
 
-class Status10(Enum):
+class Status15(Enum):
     at_risk = 'at_risk'
     dormancy_running = 'dormancy_running'
     escheated = 'escheated'
@@ -5965,7 +12783,7 @@ class Escheatment(BaseModel):
         None,
         description='Name of the government authority claiming the escheated property',
     )
-    status: Status10 | None = Field(
+    status: Status15 | None = Field(
         None, description='Current status of the escheatment'
     )
     affectedAssetIds: list[AffectedAssetId] | None = Field(
@@ -5982,7 +12800,7 @@ class Event2(Enum):
     incapacity = 'incapacity'
 
 
-class Condition(BaseModel):
+class Condition2(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -6000,7 +12818,7 @@ class TestamentaryScenario(BaseModel):
     )
     id: constr(min_length=1, max_length=100)
     description: constr(min_length=1, max_length=500)
-    conditions: list[Condition]
+    conditions: list[Condition2]
     activeBequests: list[UUID] | None = Field(
         None, description='Bequest IDs that activate under this scenario'
     )
@@ -6053,7 +12871,7 @@ class DisinheritedPerson(BaseModel):
     )
 
 
-class Scope(Enum):
+class Scope1(Enum):
     default = 'default'
     specific_assets = 'specific_assets'
 
@@ -6063,7 +12881,7 @@ class GoverningJurisdiction(BaseModel):
         extra='forbid',
     )
     jurisdiction: Jurisdiction
-    scope: Scope = Field(
+    scope: Scope1 = Field(
         ...,
         description='Whether this jurisdiction applies to the whole estate or specific assets',
     )
@@ -6148,7 +12966,7 @@ class ClaimType(Enum):
     maintained_person = 'maintained_person'
 
 
-class Status11(Enum):
+class Status16(Enum):
     potential = 'potential'
     filed = 'filed'
     settled = 'settled'
@@ -6163,7 +12981,7 @@ class FamilyProvisionClaim1(BaseModel):
     claimType: ClaimType
     jurisdiction: Jurisdiction | None = None
     statute: constr(max_length=500) | None = None
-    status: Status11 | None = None
+    status: Status16 | None = None
     amount: Money | None = None
     notes: constr(max_length=2000) | None = None
 
@@ -6222,7 +13040,7 @@ class ConditionType(Enum):
     custom = 'custom'
 
 
-class Status12(Enum):
+class Status17(Enum):
     satisfied = 'satisfied'
     breached = 'breached'
     unknown = 'unknown'
@@ -6234,12 +13052,12 @@ class ValidityStatu(BaseModel):
     )
     conditionType: ConditionType
     description: constr(max_length=500) | None = None
-    status: Status12 | None = None
+    status: Status17 | None = None
     breachedDate: date_aliased | None = None
     statute: constr(max_length=500) | None = None
 
 
-class Category2(Enum):
+class Category7(Enum):
     funeral_expenses = 'funeral_expenses'
     testamentary_expenses = 'testamentary_expenses'
     secured_debts = 'secured_debts'
@@ -6253,7 +13071,7 @@ class AdministrationPhase(BaseModel):
         extra='forbid',
     )
     priority: conint(ge=1, le=99)
-    category: Category2
+    category: Category7
     description: constr(max_length=500) | None = None
 
 
@@ -6300,6 +13118,11 @@ class StatutoryExclusion(BaseModel):
 
 
 class Estate(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/estate.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='allow',
     )
@@ -6316,7 +13139,7 @@ class Estate(BaseModel):
         None,
         description='Human-readable display name for the referenced testator person',
     )
-    status: Status6 = Field(
+    status: Status11 = Field(
         ...,
         description='The lifecycle status of this estate record. Progresses from planning through to closure',
         examples=['planning', 'confirmed', 'in_administration'],
@@ -6457,7 +13280,7 @@ class Estate(BaseModel):
         description='Ancillary probate proceedings in jurisdictions other than the primary domiciliary jurisdiction. Required when the estate includes assets in foreign jurisdictions',
         max_length=100,
     )
-    registrations: list[Registration] | None = Field(
+    registrations: list[Registration1] | None = Field(
         None,
         description='Registrations of the will with official will registries. Not all jurisdictions have will registries, and registration is rarely compulsory',
         max_length=100,
@@ -6635,211 +13458,6 @@ class Estate(BaseModel):
     )
 
 
-class AddressOrder(Enum):
-    western = 'western'
-    japanese = 'japanese'
-    indian = 'indian'
-    arabic = 'arabic'
-    custom = 'custom'
-
-
-class Address(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    formattedAddress: constr(max_length=5000) | None = Field(
-        None,
-        description='The full address as a single formatted string, suitable for display. Preserves the original representation from the source document. Must not be the sole address representation — always populate structured fields where possible',
-        examples=['13 Park Avenue, Flint, Flintshire CH6 5DW', '123 Main Street, Apt 4B, New York, NY 10001', '〒100-0001 東京都千代田区千代田1-1'],
-    )
-    streetAddress: constr(max_length=255) | None = Field(
-        None,
-        description='Street number and name. For Japanese addresses, use the block and building number (chōme-ban-gō)',
-        examples=['13 Park Avenue', '123 Main Street, Apt 4B', '千代田1-1', '42 Rue de Rivoli'],
-    )
-    addressLine2: constr(max_length=255) | None = Field(
-        None,
-        description='Secondary address line — flat, suite, building, or floor. Use when the primary street address is insufficient',
-        examples=['Flat 3B', 'Suite 400', '2nd Floor, Tower A'],
-    )
-    addressLocality: constr(max_length=255) | None = Field(
-        None,
-        description='City, town, village, or ward. For Japanese addresses, this is the city or special ward (ku)',
-        examples=['Manchester', '千代田区', 'Mumbai', 'Dubai', 'Toronto'],
-    )
-    addressRegion: constr(max_length=255) | None = Field(
-        None,
-        description='State, prefecture, province, or county. The administrative division below national level',
-        examples=['Greater Manchester', '東京都', 'Maharashtra', 'California', 'Ontario'],
-    )
-    postalCode: constr(max_length=255) | None = Field(
-        None,
-        description='Postal or ZIP code. Format varies by country — UK postcodes, US ZIP codes, Japanese 〒 codes, etc',
-        examples=['M1 1AA', '10001', '100-0001', '400001', 'M5V 2T6'],
-    )
-    addressCountry: constr(pattern=r'^[A-Z]{2}$') | None = Field(
-        None,
-        description='ISO 3166-1 alpha-2 country code. Always uppercase',
-        examples=['GB', 'US', 'JP', 'IN', 'AE', 'NG'],
-    )
-    latitude: confloat(ge=-90.0, le=90.0) | None = Field(
-        None,
-        description='Geographic latitude in decimal degrees. Useful for properties in jurisdictions without formal addressing systems',
-        examples=[51.5074, 35.6762, -33.8688],
-    )
-    longitude: confloat(ge=-180.0, le=180.0) | None = Field(
-        None,
-        description='Geographic longitude in decimal degrees. Pair with latitude for precise property location',
-        examples=[-0.1278, 139.6503, 151.2093],
-    )
-    landmark: constr(max_length=255) | None = Field(
-        None,
-        description='A nearby landmark used to locate the address. Essential in jurisdictions without formal street addressing — India, Nigeria, and rural areas worldwide',
-        examples=['Near Meenakshi Temple', 'Behind Shoprite, Lekki Phase 1', 'Opposite the District Court'],
-    )
-    directionNotes: constr(max_length=2000) | None = Field(
-        None,
-        description='Free-form directions to reach the address when no formal address system exists. Common in rural communities across Africa, South Asia, and the Pacific Islands',
-        examples=['Take the second left after the market, third compound on the right', '500m past the village well, red gate'],
-    )
-    addressOrder: AddressOrder | None = Field(
-        None,
-        description="The addressing convention that governs the display order of this address. Defaults to 'western' if omitted",
-        examples=['western', 'japanese'],
-    )
-
-
-class Identifier(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    system: constr(max_length=100) | None = Field(
-        None,
-        description='Namespace URI or name identifying the issuing authority or system. Use URN format where possible for unambiguous identification',
-        examples=['urn:hmrc:nino', 'urn:ssa:ssn', 'urn:jpn:my-number', 'urn:aus:tfn', 'urn:charity-commission:number'],
-    )
-    value: constr(min_length=1, max_length=255) = Field(
-        ...,
-        description='The identifier value itself. Format depends on the system — may include hyphens, spaces, or check digits as appropriate',
-        examples=['AB123456C', '123-45-6789', '1234 5678 9012', 'SC012345'],
-    )
-    type: constr(max_length=100) | None = Field(
-        None,
-        description='Human-readable type label describing what kind of identifier this is',
-        examples=['passport', 'national_insurance', 'social_security', 'charity_number', 'driving_licence', 'tax_file_number'],
-    )
-
-
-class Method2(Enum):
-    manual_entry = 'manual_entry'
-    ai_extracted = 'ai_extracted'
-    imported = 'imported'
-    computed = 'computed'
-    ocr_scanned = 'ocr_scanned'
-
-
-class OriginalScript(Enum):
-    latin = 'latin'
-    kanji = 'kanji'
-    hiragana = 'hiragana'
-    katakana = 'katakana'
-    arabic = 'arabic'
-    hebrew = 'hebrew'
-    devanagari = 'devanagari'
-    tamil = 'tamil'
-    chinese_simplified = 'chinese_simplified'
-    chinese_traditional = 'chinese_traditional'
-    hangul = 'hangul'
-    cyrillic = 'cyrillic'
-    thai = 'thai'
-    mixed = 'mixed'
-    other = 'other'
-
-
-class DataSource(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    source: constr(max_length=100) | None = Field(
-        None, description='Short identifier for the data source'
-    )
-    sourceUrl: AnyUrl | None = Field(
-        None,
-        description="URL to the source's website or the specific page this data came from",
-    )
-    retrievedAt: AwareDatetime | None = Field(
-        None, description='When this data was retrieved from the source'
-    )
-
-
-class FieldProvenance(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    field: constr(min_length=1, max_length=255) = Field(
-        ...,
-        description='The field name this provenance record applies to',
-        examples=['estimatedValue', 'name', 'category'],
-    )
-    method: Method2 | constr(pattern=r'^x-inherit-.+') = Field(
-        ..., description='How the field value was obtained'
-    )
-    confidence: conint(ge=0, le=100) | None = Field(
-        None, description='Confidence in the field value (0-100)'
-    )
-    verifiedAt: AwareDatetime | None = Field(
-        None, description='When this field was last verified'
-    )
-    verifiedBy: constr(max_length=255) | None = Field(
-        None,
-        description='Who verified this field',
-        examples=['James Davies', 'INHERIT Scanner v2'],
-    )
-    sourceDocumentId: UUID | None = Field(
-        None,
-        description='Reference to the document.json entity this value was extracted from',
-    )
-    sourcePageNumber: conint(ge=1) | None = Field(
-        None,
-        description='Page number in the source document where this value was found',
-    )
-    sourceRegion: constr(max_length=255) | None = Field(
-        None,
-        description='Location within the page where this value was found',
-        examples=['top-right', 'paragraph 3', 'signature block', 'attestation clause'],
-    )
-    originalText: constr(max_length=2000) | None = Field(
-        None,
-        description='The raw text as extracted before any normalisation or structuring. Preserves exactly what the source document said',
-        examples=['born on the 15th day of March nineteen forty eight', 'I appoint my wife Margaret Anne Frith'],
-    )
-    originalScript: OriginalScript | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None,
-        description='Writing system of the source document. Critical for handwritten wills in non-Latin scripts',
-    )
-    ocrEngine: constr(max_length=255) | None = Field(
-        None,
-        description='OCR engine or extraction tool used to obtain this value',
-        examples=['AWS Textract', 'Google Cloud Vision', 'Tesseract 5.3', 'WillScan v1.0'],
-    )
-    extractedAt: AwareDatetime = Field(
-        ..., description='When this value was extracted from the source document'
-    )
-    dataSource: DataSource | None = Field(
-        None,
-        description='The third-party source that provided this field value. Enables attribution credits and the data source kill switch',
-    )
-
-
-class Visibility(Enum):
-    testator_only = 'testator_only'
-    proxy_visible = 'proxy_visible'
-    companion_visible = 'companion_visible'
-    executor_visible = 'executor_visible'
-    beneficiary_visible = 'beneficiary_visible'
-    all_parties = 'all_parties'
-
-
 class PhoneticReading(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -6861,7 +13479,7 @@ class PhoneticReading(BaseModel):
     )
 
 
-class Type8(Enum):
+class Type11(Enum):
     chieftaincy = 'chieftaincy'
     traditional = 'traditional'
     religious = 'religious'
@@ -6882,7 +13500,7 @@ class Title(BaseModel):
         description='The title text itself',
         examples=['Dr', 'Prof', 'Eze', 'Rabbi', 'Alhaji', 'Dame'],
     )
-    type: Type8 | None = None
+    type: Type11 | None = None
 
 
 class Gender(Enum):
@@ -7013,24 +13631,6 @@ class TaxResidencyItem(BaseModel):
     )
 
 
-class Comment(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    id: UUID = Field(..., description='Unique identifier for this comment')
-    authorPersonId: UUID | None = Field(
-        None, description='Person.id of the comment author'
-    )
-    authorPersonIdDisplay: constr(max_length=255) | None = Field(
-        None, description='Human-readable display name for the referenced author person'
-    )
-    content: constr(min_length=1, max_length=5000) = Field(
-        ..., description='Comment text'
-    )
-    createdAt: AwareDatetime = Field(..., description='When the comment was created')
-    visibility: Visibility | None = 'all_parties'
-
-
 class PreferredFormat(Enum):
     standard = 'standard'
     large_print = 'large_print'
@@ -7127,7 +13727,7 @@ class ExternalId(BaseModel):
     redacted: bool | None = None
 
 
-class Confidence(Enum):
+class Confidence1(Enum):
     high = 'high'
     medium = 'medium'
     low = 'low'
@@ -7143,7 +13743,7 @@ class Identity(BaseModel):
     algorithm: Literal['inherit-ici-v1'] | None = None
     components: Components | None = None
     externalIds: list[ExternalId] | None = None
-    confidence: Confidence | None = None
+    confidence: Confidence1 | None = None
 
 
 class Faith(Enum):
@@ -7484,7 +14084,7 @@ class Partner(BaseModel):
     )
 
 
-class Type9(Enum):
+class Type12(Enum):
     ceremony = 'ceremony'
     registration = 'registration'
     engagement = 'engagement'
@@ -7508,7 +14108,7 @@ class RelationshipEvent(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    type: Type9 = Field(..., description='The type of relationship event')
+    type: Type12 = Field(..., description='The type of relationship event')
     eventDate: date_aliased = Field(
         ...,
         description='Date this event occurred',
@@ -7548,7 +14148,7 @@ class JurisdictionalRecognition(BaseModel):
     )
 
 
-class Type10(Enum):
+class Type13(Enum):
     mahr = 'mahr'
     ketubah = 'ketubah'
     lobola = 'lobola'
@@ -7557,7 +14157,7 @@ class Type10(Enum):
     marriage_settlement = 'marriage_settlement'
 
 
-class Status13(Enum):
+class Status18(Enum):
     agreed = 'agreed'
     paid = 'paid'
     partially_paid = 'partially_paid'
@@ -7653,11 +14253,11 @@ class FinancialInstrument(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    type: Type10 = Field(..., description='The type of financial instrument')
+    type: Type13 = Field(..., description='The type of financial instrument')
     value: Money | None = Field(
         None, description='Monetary value of the instrument, in minor currency units'
     )
-    status: Status13 | None = Field(
+    status: Status18 | None = Field(
         None,
         description='Payment status of this financial instrument',
         examples=['deferred', 'paid'],
@@ -7695,7 +14295,7 @@ class FinancialInstrument(BaseModel):
     )
 
 
-class Type11(Enum):
+class Type14(Enum):
     marriage_civil = 'marriage_civil'
     marriage_religious = 'marriage_religious'
     marriage_customary = 'marriage_customary'
@@ -7742,7 +14342,7 @@ class Relationship(BaseModel):
         description='Unique identifier for this relationship within the INHERIT document',
         examples=['f2a3b4c5-d6e7-8901-f234-56789abcdef0'],
     )
-    type: Type11 = Field(
+    type: Type14 = Field(
         ...,
         description='The legal form of the relationship',
         examples=['marriage_civil', 'marriage_religious', 'de_facto'],
@@ -7796,3765 +14396,6 @@ class Relationship(BaseModel):
         None,
         description='Free-text notes about this relationship',
         examples=['Polygamous marriage valid under Nigerian customary law', 'Agunah situation — civilly divorced in 2020 but get (Jewish divorce) not yet given'],
-    )
-    provenance: Provenance | None = Field(
-        None,
-        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
-    )
-
-
-class SacredStatus(Enum):
-    secular = 'secular'
-    consecrated = 'consecrated'
-    ritually_significant = 'ritually_significant'
-    inalienable_endowment = 'inalienable_endowment'
-
-
-class CulturalSignificance(Enum):
-    personal = 'personal'
-    family_heirloom = 'family_heirloom'
-    community = 'community'
-    national_heritage = 'national_heritage'
-
-
-class AuthorityType(Enum):
-    religious_body = 'religious_body'
-    family_council = 'family_council'
-    clan_association = 'clan_association'
-    tribal_council = 'tribal_council'
-    government = 'government'
-    heritage_authority = 'heritage_authority'
-
-
-class DisposalRestriction(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    authority: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the authority imposing this restriction',
-        examples=['Wat Phra Kaew Temple', 'Okonkwo Family Council', 'MUIS'],
-    )
-    authorityType: AuthorityType | None = Field(
-        None, description='Category of the authority'
-    )
-    requirement: constr(min_length=1, max_length=255) = Field(
-        ...,
-        description='What the restriction requires',
-        examples=['Must be returned to temple', 'Requires ritual disposal ceremony', 'Community approval needed before sale'],
-    )
-    jurisdiction: Jurisdiction | None = Field(
-        None, description='Jurisdiction where this restriction applies'
-    )
-
-
-class RestrictionType(Enum):
-    cultural_property = 'cultural_property'
-    national_treasure = 'national_treasure'
-    antiquity = 'antiquity'
-    protected_species = 'protected_species'
-    controlled_goods = 'controlled_goods'
-
-
-class ExportRestriction(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    jurisdiction: Jurisdiction = Field(
-        ..., description='Jurisdiction imposing the export restriction'
-    )
-    restrictionType: RestrictionType = Field(
-        ..., description='Category of export restriction'
-    )
-    authority: constr(max_length=255) | None = Field(
-        None,
-        description='The government body or agency that controls export',
-        examples=['Agency for Cultural Affairs (Japan)', 'State Administration of Cultural Heritage (China)'],
-    )
-    licenceRequired: bool | None = Field(
-        None, description='Whether a licence or permit is required for export'
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None, description='Additional details about the restriction'
-    )
-
-
-class CulturalDisposition(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    sacredStatus: SacredStatus | None = Field(
-        None,
-        description='Whether this item has religious or spiritual significance that restricts disposal',
-    )
-    culturalSignificance: CulturalSignificance | None = Field(
-        None,
-        description='The cultural weight of this item — determines who should be consulted about its disposition',
-    )
-    bequeathable: bool | None = Field(
-        True,
-        description='Whether this item can be willed to another person. False for waqf endowments, some ancestral property, and inalienable cultural artefacts',
-    )
-    disposalRestrictions: list[DisposalRestriction] | None = Field(
-        None,
-        description='Specific restrictions on how this item may be disposed of, with the authority that imposes each restriction',
-        max_length=100,
-    )
-    exportRestrictions: list[ExportRestriction] | None = Field(
-        None,
-        description='Legal restrictions on exporting this item from its current jurisdiction',
-        max_length=100,
-    )
-
-
-class ViewType(Enum):
-    overview = 'overview'
-    identification = 'identification'
-    condition = 'condition'
-    provenance = 'provenance'
-    maker_mark = 'maker_mark'
-    serial_number = 'serial_number'
-    damage = 'damage'
-    scale_reference = 'scale_reference'
-    label = 'label'
-    certificate = 'certificate'
-    receipt = 'receipt'
-    environment = 'environment'
-
-
-class Media(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    url: AnyUrl = Field(
-        ...,
-        description='URI pointing to the media file. May be an HTTPS URL, S3 URI, or other storage reference',
-        examples=['https://storage.example.com/photos/ring-001.jpg', 's3://estate-docs/assets/painting.jpg'],
-    )
-    caption: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable description of what this media shows',
-        examples=['Front view of the engagement ring', 'Walk-through video of the model railway layout', 'Scan of the GIA diamond certificate'],
-    )
-    mediaType: constr(max_length=100) | None = Field(
-        None,
-        description='MIME type of the media file. Maps to Schema.org encodingFormat',
-        examples=['image/jpeg', 'image/png', 'video/mp4', 'application/pdf'],
-    )
-    content: constr(max_length=10485760) | None = Field(
-        None,
-        description='Base64-encoded media content for self-contained documents. Use for small files (attestation scans, signatures, certificates) that must travel with the estate plan. For large files (photos, videos), use url instead',
-        json_schema_extra={
-            'contentEncoding': 'base64',
-            'contentMediaType': 'image/jpeg',
-        },
-    )
-    viewType: ViewType | None = Field(
-        None,
-        description='The purpose of this media — what question does it answer? Enables executors and dealers to find specific documentation without scrolling through galleries',
-        examples=['overview', 'identification', 'condition', 'serial_number'],
-    )
-    takenAt: AwareDatetime | None = Field(
-        None,
-        description='When this media was captured. Useful for establishing condition at a point in time',
-        examples=['2026-03-15T14:30:00Z'],
-    )
-    thumbnailUrl: AnyUrl | None = Field(
-        None,
-        description='URI for a smaller preview version of the media. Maps to Schema.org thumbnail',
-        examples=['https://storage.example.com/thumbnails/ring-001-thumb.jpg'],
-    )
-
-
-class PropertyType(Enum):
-    detached = 'detached'
-    attached = 'attached'
-    apartment = 'apartment'
-    land = 'land'
-    commercial = 'commercial'
-    mixed_use = 'mixed_use'
-    rural = 'rural'
-    mobile = 'mobile'
-    watercraft = 'watercraft'
-    other = 'other'
-
-
-class NetEquity(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    amount: conint(ge=0, le=999999999999999) = Field(
-        ...,
-        description='Value in the smallest currency unit (pence, cents, sen). The consumer must apply the ISO 4217 exponent to convert to a display value',
-        examples=[32500, 1000000, 500000, 0],
-    )
-    currency: constr(pattern=r'^[A-Z]{3}$') = Field(
-        ...,
-        description='ISO 4217 three-letter currency code. Use the code for the currency of the amount, not the reporting currency',
-        examples=['GBP', 'USD', 'EUR', 'JPY', 'INR', 'AED', 'SGD'],
-    )
-    exponent: conint(ge=0, le=4) | None = Field(
-        2,
-        description='Number of decimal places for this currency. Display value = amount / 10^exponent. Most currencies use 2 (default). JPY/KRW use 0. KWD/BHD/OMR use 3',
-    )
-
-
-class ValuationConfidence(Enum):
-    estimated = 'estimated'
-    professional = 'professional'
-    official = 'official'
-    unknown = 'unknown'
-
-
-class OwnershipType(Enum):
-    sole = 'sole'
-    joint_tenants = 'joint_tenants'
-    tenants_in_common = 'tenants_in_common'
-    trust = 'trust'
-    tenancy_by_entirety = 'tenancy_by_entirety'
-
-
-class OwnershipModel(Enum):
-    individual = 'individual'
-    joint = 'joint'
-    communal_family = 'communal_family'
-    huf_coparcenary = 'huf_coparcenary'
-    tribal = 'tribal'
-    government_vested = 'government_vested'
-    trust_held = 'trust_held'
-
-
-class AcquisitionType(Enum):
-    self_acquired = 'self_acquired'
-    ancestral_joint = 'ancestral_joint'
-    ancestral_severed = 'ancestral_severed'
-    inherited = 'inherited'
-    gifted = 'gifted'
-    stridhan = 'stridhan'
-    communal = 'communal'
-    waqf_endowed = 'waqf_endowed'
-
-
-class TenureType2(Enum):
-    ownership = 'ownership'
-    lease = 'lease'
-    communal = 'communal'
-    customary = 'customary'
-    informal = 'informal'
-    government_allocated = 'government_allocated'
-
-
-class RegistrationStatus(Enum):
-    formally_registered = 'formally_registered'
-    informally_held = 'informally_held'
-    community_acknowledged = 'community_acknowledged'
-    disputed = 'disputed'
-    undocumented = 'undocumented'
-
-
-class OwnershipEvidence(Enum):
-    title_deed = 'title_deed'
-    certificate_of_occupancy = 'certificate_of_occupancy'
-    family_recognition = 'family_recognition'
-    community_testimony = 'community_testimony'
-    receipts_only = 'receipts_only'
-    none = 'none'
-
-
-class AuthorityType1(Enum):
-    family_council = 'family_council'
-    clan_association = 'clan_association'
-    religious_body = 'religious_body'
-    tribal_council = 'tribal_council'
-    government = 'government'
-
-
-class CommunalAuthority(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    authorityType: AuthorityType1 | None = Field(
-        None, description='Category of communal authority'
-    )
-    approvalRequired: bool | None = Field(
-        None,
-        description='Whether approval from this authority is legally required before disposal',
-    )
-    authorityName: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the specific authority or person',
-        examples=['Karta of Sharma HUF', 'Okonkwo Family Council', 'MUIS'],
-    )
-    jurisdiction: Jurisdiction | None = Field(
-        None,
-        description='Jurisdiction where this communal authority has legal standing',
-    )
-
-
-class GoverningLaw1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    jurisdiction: Jurisdiction | None = Field(
-        None, description='Jurisdiction whose succession law applies'
-    )
-    legalTradition: LegalTradition | None = Field(
-        None, description='Which legal tradition applies'
-    )
-    statute: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the governing statute',
-        examples=['Wills Act 1837', 'PRC Civil Code', 'Hindu Succession Act 1956'],
-    )
-    section: constr(max_length=255) | None = Field(
-        None,
-        description='Specific section of the statute',
-        examples=['s.9', 'Book VI Succession', 's.6 (coparcenary)'],
-    )
-
-
-class SuccessionRegime(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    governingLaw: GoverningLaw1 | None = Field(
-        None, description='The law governing succession for this property'
-    )
-    determinedBy: DeterminedBy | None = Field(
-        None, description='How the governing law was determined'
-    )
-    binding: bool | None = Field(
-        None, description='Whether this succession regime is legally binding'
-    )
-    extensions: list[Extension] | None = Field(
-        None,
-        description="INHERIT extension IDs that apply to this property's succession",
-        max_length=50,
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None, description='Additional context about the succession regime'
-    )
-
-
-class MobilityType(Enum):
-    immoveable = 'immoveable'
-    moveable = 'moveable'
-    mixed = 'mixed'
-
-
-class CharacterClassification(Enum):
-    community = 'community'
-    separate = 'separate'
-    quasi_community = 'quasi_community'
-    mixed = 'mixed'
-    not_applicable = 'not_applicable'
-
-
-class HomesteadStatus(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    isHomestead: bool | None = Field(
-        None,
-        description='Whether this property qualifies as a homestead',
-        examples=[True],
-    )
-    exemptionAmount: Money | None = Field(
-        None, description='Dollar value of the homestead exemption, if capped'
-    )
-    exemptionUnlimited: bool | None = Field(
-        None,
-        description='Whether the homestead exemption has no dollar cap. True in Florida, Texas (rural), and several other states',
-        examples=[True, False],
-    )
-    deviseRestriction: bool | None = Field(
-        None,
-        description='Whether this homestead is subject to restrictions on devise — e.g. Florida prohibits devising homestead away from a surviving spouse or minor children',
-        examples=[True],
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Additional notes on homestead status',
-        examples=['Florida unlimited homestead — devise restricted by Art. X s.4 Florida Constitution'],
-    )
-
-
-class StatutoryLifeEstate(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    beneficiaryPersonId: UUID | None = Field(
-        None, description='Reference to the Person.id of the life estate beneficiary'
-    )
-    beneficiaryPersonIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced beneficiary person',
-    )
-    basis: constr(max_length=500) | None = Field(
-        None,
-        description='The statutory basis for this life estate',
-        examples=['Alberta Dower Act', 'Florida Constitution Art. X s.4'],
-    )
-    conditions: constr(max_length=255) | None = Field(
-        None,
-        description='Any conditions on the life estate',
-        examples=['Terminates on remarriage', 'Must maintain the property in habitable condition'],
-    )
-
-
-class ExternalLink(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    system: constr(pattern=r'^[a-z][a-zA-Z0-9]*$', max_length=100) = Field(
-        ..., description='The external system or platform name'
-    )
-    id: constr(min_length=1, max_length=500) = Field(
-        ..., description='The platform-specific identifier for this property'
-    )
-    url: AnyUrl | None = Field(
-        None, description="Direct URL to the property's page on the external platform"
-    )
-    label: constr(max_length=255) | None = Field(
-        None, description='Human-readable label for display'
-    )
-    retrievedAt: AwareDatetime | None = Field(
-        None, description='Timestamp when this link was last verified'
-    )
-
-
-class RentalIncome(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    monthlyAmount: Money | None = Field(None, description='Monthly rental income')
-    tenantName: constr(max_length=255) | None = Field(
-        None, description='Name of the current tenant', examples=['Mr & Mrs Patel']
-    )
-    leaseEndDate: date_aliased | None = Field(
-        None, description='Date the current lease expires'
-    )
-    managingAgentOrganisationId: (
-        UUID | None
-    ) = Field(None, description='Organisation.id of the managing agent')
-    managingAgentOrganisationIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced managing agent organisation',
-    )
-
-
-class Rating(Enum):
-    A = 'A'
-    B = 'B'
-    C = 'C'
-    D = 'D'
-    E = 'E'
-    F = 'F'
-    G = 'G'
-
-
-class Epc(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    retrievedAt: AwareDatetime = Field(
-        ..., description='When this EPC data was retrieved from the register'
-    )
-    rating: Rating | None = Field(None, description='Overall EPC rating band')
-    energyEfficiencyScore: conint(ge=1, le=100) | None = Field(
-        None, description='Numeric energy efficiency score (1–100, higher is better)'
-    )
-    environmentalImpactScore: conint(ge=1, le=100) | None = Field(
-        None, description='Numeric environmental impact score (1–100, higher is better)'
-    )
-    expiryDate: date_aliased | None = Field(
-        None, description='When the EPC expires (valid for 10 years from issue)'
-    )
-    certificateNumber: constr(max_length=100) | None = Field(
-        None, description='EPC certificate reference number'
-    )
-    certificateUrl: AnyUrl | None = Field(
-        None, description='URL to the certificate on the EPC register'
-    )
-    floorArea: confloat(ge=0.0) | None = Field(
-        None, description='Total floor area in square metres'
-    )
-    heatingType: constr(max_length=255) | None = Field(
-        None, description='Primary heating system description'
-    )
-
-
-class TitleClass(Enum):
-    absolute = 'absolute'
-    qualified = 'qualified'
-    possessory = 'possessory'
-    good_leasehold = 'good_leasehold'
-
-
-class Tenure(Enum):
-    freehold = 'freehold'
-    leasehold = 'leasehold'
-
-
-class RegisteredOwner(RootModel[constr(max_length=255)]):
-    root: constr(max_length=255)
-
-
-class LandRegistry(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    retrievedAt: AwareDatetime = Field(
-        ..., description='When this data was retrieved from Land Registry'
-    )
-    titleNumber: constr(max_length=50) | None = Field(
-        None,
-        description='Land Registry title number',
-        examples=['DN123456', 'SGL123456'],
-    )
-    titleClass: TitleClass | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
-        Field(None, description='Class of title registered at Land Registry')
-    )
-    lastSalePrice: conint(ge=0) | None = Field(
-        None, description='Last recorded sale price in minor units (pennies)'
-    )
-    lastSaleDate: date_aliased | None = Field(
-        None, description='Date of last recorded sale'
-    )
-    tenure: Tenure | constr(pattern=r'^x-inherit-.+', max_length=100) | None = Field(
-        None, description='Tenure as recorded by Land Registry'
-    )
-    registeredOwners: list[RegisteredOwner] | None = Field(
-        None, description='Owner names as they appear on the register', max_length=10
-    )
-    chargesCount: conint(ge=0) | None = Field(
-        None,
-        description='Number of registered charges (mortgages, restrictions, notices)',
-    )
-
-
-class RiverAndSeaRisk(Enum):
-    high = 'high'
-    medium = 'medium'
-    low = 'low'
-    very_low = 'very_low'
-
-
-class SurfaceWaterRisk(Enum):
-    high = 'high'
-    medium = 'medium'
-    low = 'low'
-    very_low = 'very_low'
-
-
-class FloodZone(Enum):
-    field_1 = '1'
-    field_2 = '2'
-    field_3a = '3a'
-    field_3b = '3b'
-
-
-class FloodRisk(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    retrievedAt: AwareDatetime = Field(
-        ..., description='When this flood risk data was retrieved'
-    )
-    riverAndSeaRisk: (
-        RiverAndSeaRisk | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='Risk of flooding from rivers and the sea')
-    surfaceWaterRisk: (
-        SurfaceWaterRisk | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='Risk of flooding from surface water')
-    floodZone: FloodZone | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
-        Field(None, description='Environment Agency flood zone designation')
-    )
-    nearestWatercourse: constr(max_length=255) | None = Field(
-        None, description='Name of the nearest river, stream, or watercourse'
-    )
-    historicalFlooding: bool | None = Field(
-        None, description='Whether the area has been affected by flooding in the past'
-    )
-
-
-class Leasehold(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    retrievedAt: AwareDatetime = Field(
-        ..., description='When this leasehold data was retrieved or last verified'
-    )
-    leaseStartDate: date_aliased | None = Field(
-        None, description='Date the lease commenced'
-    )
-    leaseTerm: conint(ge=1, le=999) | None = Field(
-        None, description='Original lease term in years'
-    )
-    yearsRemaining: conint(ge=0, le=999) | None = Field(
-        None,
-        description='Approximate years remaining at retrievedAt. Below 80 years triggers mortgage difficulties; below 70 significantly impacts value',
-    )
-    groundRent: conint(ge=0) | None = Field(
-        None,
-        description='Annual ground rent in minor units (pennies). Zero for peppercorn rents',
-    )
-    groundRentReviewDate: date_aliased | None = Field(
-        None, description='Next ground rent review date'
-    )
-    serviceCharge: conint(ge=0) | None = Field(
-        None, description='Annual service charge in minor units (pennies)'
-    )
-    freeholderName: constr(max_length=255) | None = Field(
-        None, description='Name of the freeholder or landlord'
-    )
-    managementCompany: constr(max_length=255) | None = Field(
-        None, description='Name of the managing agent or management company'
-    )
-
-
-class AssetType(Enum):
-    immoveable = 'immoveable'
-    moveable = 'moveable'
-    mixed = 'mixed'
-    exempt = 'exempt'
-
-
-class TaxTreatment(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    jurisdiction: Jurisdiction | None = None
-    assetType: AssetType | None = None
-    exemptions: list[constr(max_length=100)] | None = None
-    reliefClaimed: list[constr(max_length=100)] | None = None
-
-
-class ReliefType(Enum):
-    agricultural_property = 'agricultural_property'
-    business_property = 'business_property'
-    woodland = 'woodland'
-    heritage = 'heritage'
-    charitable = 'charitable'
-
-
-class TaxReliefEligibility(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    reliefType: ReliefType | None = Field(
-        None, description='The type of tax relief claimed'
-    )
-    eligible: bool | None = None
-    percentage: conint(ge=0, le=100) | None = Field(
-        None,
-        description='Relief percentage (e.g. 100 for full APR, 50 for partial BPR)',
-    )
-    conditions: constr(max_length=500) | None = Field(
-        None,
-        description='Conditions for maintaining eligibility',
-        examples=['Beneficiary must actively farm for minimum 2 years'],
-    )
-    jurisdiction: Jurisdiction | None = None
-    statute: constr(max_length=500) | None = Field(
-        None, examples=['IHTA 1984 s.115-124C']
-    )
-
-
-class Property(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    id: UUID = Field(
-        ...,
-        description='Unique identifier for this property within the INHERIT document',
-        examples=['d4e5f6a7-b8c9-0123-def0-123456789abc'],
-    )
-    name: constr(min_length=1, max_length=255) = Field(
-        ...,
-        description='Display name for this property — a familiar label or street address. Should be recognisable to all parties involved in the estate',
-        examples=['Family Home', '42 Acacia Avenue', 'Lagos Investment Property', 'Hokkaido Farmland', 'Mumbai Flat', 'Dubai Marina Apartment'],
-    )
-    propertyType: PropertyType | None = Field(
-        None,
-        description='Territory-neutral property type. Use reference-data/local-term-mappings.json to display jurisdiction-appropriate labels in UIs',
-        examples=['detached', 'apartment', 'land', 'commercial'],
-    )
-    address: Address | None = Field(
-        None, description='Physical address of the property'
-    )
-    estimatedValue: Money | None = Field(
-        None,
-        description="Owner's estimate of the property's current market value, in minor currency units",
-    )
-    professionalValuation: Money | None = Field(
-        None,
-        description="Professional surveyor or valuer's assessment of the property value, in minor currency units",
-    )
-    netEquity: NetEquity | None = Field(
-        None,
-        description='Value of this property net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored',
-        title='Money',
-    )
-    inNegativeEquity: bool | None = Field(
-        None,
-        description='True when the active charges secured against this property exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall',
-        examples=[False, True],
-    )
-    valuationDate: date_aliased | None = Field(
-        None,
-        description='Date the most recent valuation (estimated or professional) was performed',
-        examples=['2024-09-15', '2025-01-20'],
-    )
-    valuationConfidence: ValuationConfidence | None = Field(
-        None,
-        description='Level of confidence in the stated valuation',
-        examples=['estimated', 'professional'],
-    )
-    isPrimaryResidence: bool | None = Field(
-        None,
-        description="Whether this is the testator's primary residence. Relevant for residence nil rate band (UK), homestead exemption (US), and similar tax reliefs",
-        examples=[True, False],
-    )
-    ownershipType: OwnershipType | None = Field(
-        None,
-        description='How ownership of this property is legally structured',
-        examples=['sole', 'joint_tenants', 'tenants_in_common'],
-    )
-    ownershipPercentage: confloat(ge=0.0, le=100.0, multiple_of=0.01) | None = Field(
-        None,
-        description="The testator's ownership share as a percentage. For joint tenants, typically 50% for two co-owners. For tenants in common, may be any split",
-    )
-    ownershipModel: OwnershipModel | None = Field(
-        None,
-        description='The cultural or legal model of ownership. Goes beyond the simple legal title to capture communal and customary ownership forms',
-        examples=['individual', 'joint', 'communal_family'],
-    )
-    acquisitionType: AcquisitionType | None = Field(
-        None,
-        description='How the property was acquired. Determines which succession law applies in India and other jurisdictions',
-        examples=['self_acquired', 'inherited'],
-    )
-    tenureType: TenureType2 | None = Field(
-        None,
-        description='Territory-neutral tenure type. Use reference-data/local-term-mappings.json to display jurisdiction-appropriate labels in UIs',
-        examples=['ownership', 'lease', 'communal'],
-    )
-    registrationStatus: RegistrationStatus | None = Field(
-        None,
-        description='Whether this property is formally registered with a land authority',
-        examples=['formally_registered', 'informally_held'],
-    )
-    ownershipEvidence: OwnershipEvidence | None = Field(
-        None,
-        description='The type of evidence available to prove ownership. In many jurisdictions, informal evidence is the only kind available',
-        examples=['title_deed', 'family_recognition'],
-    )
-    culturalDisposition: CulturalDisposition | None = Field(
-        None,
-        description='Cultural, religious, and regulatory constraints on disposal of this property',
-    )
-    communalAuthority: CommunalAuthority | None = Field(
-        None,
-        description='The communal or family authority whose approval is required to dispose of this property',
-    )
-    successionRegime: SuccessionRegime | None = Field(
-        None,
-        description='The succession regime governing this specific property. Overrides estate.defaultSuccessionRegime when present',
-    )
-    custodianPersonId: UUID | None = Field(
-        None,
-        description='Reference to the Person.id of the current custodian of communal or family property. The custodian manages but does not own the property',
-    )
-    custodianPersonIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced custodian person',
-    )
-    governmentConsentRequired: (
-        bool | None
-    ) = (
-        Field(None, description="Whether government or regulatory consent is required to transfer this property. Common in Nigeria (governor's consent) and for agricultural land in parts of India", examples=[True, False])
-    )
-    mobilityType: MobilityType | None = Field(
-        None,
-        description='Whether this property is classified as immoveable, moveable, or mixed. Determines which conflict-of-laws rules apply',
-        examples=['immoveable'],
-    )
-    mortgageOutstanding: Money | None = Field(
-        None,
-        description='Outstanding mortgage balance in minor currency units. If the property is mortgage-free, omit this field',
-    )
-    characterClassification: CharacterClassification | None = Field(
-        None,
-        description='Marital property character classification for US community property states. Determines whether the testator may dispose of the entire property or only their half',
-        examples=['separate', 'community', 'not_applicable'],
-    )
-    homesteadStatus: HomesteadStatus | None = Field(
-        None,
-        description="US homestead exemption status. Protects the primary residence from creditors and may restrict the testator's ability to devise the property",
-    )
-    passesOutsideEstate: bool | None = Field(
-        None,
-        description='Whether this property passes outside the probate estate — typically via joint tenancy with right of survivorship, a transfer-on-death deed, or a trust',
-        examples=[True, False],
-    )
-    statutoryLifeEstate: StatutoryLifeEstate | None = Field(
-        None,
-        description='A life estate imposed by statute rather than by the will. The surviving spouse or other protected person has a right to occupy for life',
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Free-text notes about this property. Use for unusual tenure arrangements, ongoing disputes, or planning considerations',
-        examples=['Grade II listed building — consent required for any alterations', 'Boundary dispute with neighbour ongoing since 2022'],
-    )
-    externalLinks: list[ExternalLink] | None = Field(
-        None,
-        description='Links to this property in external databases, portals, and registries — Land Registry, Rightmove, Zoopla, Zillow, council tax records, EPC certificates, etc',
-        examples=[[{'system': 'landregistry', 'id': 'DN123456', 'url': 'https://search.landregistry.data.gov.uk/data/ppi/transaction/DN123456'}, {'system': 'rightmove', 'id': '98765432', 'url': 'https://www.rightmove.co.uk/properties/98765432'}]],
-        max_length=50,
-    )
-    images: list[Media] | None = Field(
-        None,
-        description='Photographs and videos of this property — exterior, interior, key rooms, any damage or features relevant to valuation',
-        max_length=100,
-    )
-    visibility: Visibility | None = Field(
-        'all_parties', description='Controls who can see this property record'
-    )
-    fieldProvenance: list[FieldProvenance] | None = Field(
-        None,
-        description="Per-field provenance records — how each field's value was obtained",
-        max_length=100,
-    )
-    comments: list[Comment] | None = Field(
-        None, description='Discussion comments on this entity', max_length=100
-    )
-    rentalIncome: RentalIncome | None = Field(
-        None,
-        description='Rental income details if the property is let — important for estate income tax and beneficiary entitlements',
-    )
-    epc: Epc | None = Field(
-        None,
-        description='Energy Performance Certificate data. UK properties require an EPC for sale or letting. Rating A (most efficient) to G (least efficient). Legally significant — EPC below E cannot be let without exemption',
-    )
-    landRegistry: LandRegistry | None = Field(
-        None,
-        description='HM Land Registry data — title information, last sale price, and registered charges. Confirms ownership and surfaces encumbrances relevant to estate administration',
-    )
-    floodRisk: FloodRisk | None = Field(
-        None,
-        description='Flood risk data from the Environment Agency (England) or equivalent national agency. Affects insurability, value, and estate planning decisions',
-    )
-    leasehold: Leasehold | None = Field(
-        None,
-        description="Leasehold-specific data — lease term, ground rent, service charge, freeholder. Relevant when tenureType is 'lease'. No conditional enforcement — allowed on any property for flexibility",
-    )
-    provenance: Provenance | None = Field(
-        None,
-        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
-    )
-    applicableLaw: Jurisdiction | None = Field(
-        None,
-        description='The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile',
-    )
-    taxTreatment: TaxTreatment | None = Field(
-        None,
-        description='Per-property tax treatment — how this property is classified for tax purposes',
-    )
-    taxReliefEligibility: TaxReliefEligibility | None = Field(
-        None,
-        description='Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)',
-    )
-
-
-class Shareholding(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    companyName: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the company in which shares are held',
-        examples=['Acme Ltd', 'Berkshire Hathaway Inc', 'Toyota Motor Corporation'],
-    )
-    companyNumber: constr(max_length=255) | None = Field(
-        None,
-        description='Company registration number',
-        examples=['12345678', 'DE-HRB-12345'],
-    )
-    shareClass: constr(max_length=255) | None = Field(
-        None,
-        description='Class of shares held',
-        examples=['Ordinary', 'Preference', 'Class A', 'Class B'],
-    )
-    numberOfShares: conint(ge=1) | None = Field(
-        None, description='Number of shares held', examples=[1000, 50000]
-    )
-    totalSharesIssued: conint(ge=1) | None = Field(
-        None,
-        description='Total shares issued by the company (for calculating percentage ownership)',
-        examples=[100000, 1000000],
-    )
-    votingRights: bool | None = Field(
-        None, description='Whether these shares carry voting rights', examples=[True]
-    )
-    restrictedTransfer: bool | None = Field(
-        None,
-        description='Whether transfer of these shares is restricted (e.g. pre-emption rights, shareholder agreement)',
-        examples=[True, False],
-    )
-    listedExchange: constr(max_length=255) | None = Field(
-        None,
-        description='Stock exchange where shares are listed, if publicly traded. Null/absent for private companies',
-        examples=['LSE', 'NYSE', 'TSE', 'ASX'],
-    )
-    ticker: constr(max_length=255) | None = Field(
-        None, description='Stock ticker symbol', examples=['AAPL', 'TSCO.L', '7203.T']
-    )
-    cusip: constr(max_length=255) | None = Field(
-        None,
-        description='CUSIP identifier (US/Canada). 9-character alphanumeric',
-        examples=['037833100'],
-    )
-    isin: constr(max_length=255) | None = Field(
-        None,
-        description='International Securities Identification Number',
-        examples=['US0378331005', 'GB0031215220'],
-    )
-
-
-class BusinessType(Enum):
-    sole_trader = 'sole_trader'
-    partnership = 'partnership'
-    llp = 'llp'
-    limited_company = 'limited_company'
-    plc = 'plc'
-    franchise = 'franchise'
-    cooperative = 'cooperative'
-    other = 'other'
-
-
-class BusinessInterest(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    businessName: constr(max_length=255) | None = Field(
-        None,
-        description='Trading name of the business',
-        examples=['Davies & Sons Builders', 'Manchester Model Supplies'],
-    )
-    businessType: BusinessType | None = Field(
-        None, description='Legal structure of the business'
-    )
-    ownershipPercentage: confloat(ge=0.0, le=100.0) | None = Field(
-        None,
-        description="The testator's ownership percentage",
-        examples=[50, 33.33, 100],
-    )
-    controllingInterest: bool | None = Field(
-        None,
-        description='Whether the testator holds a controlling interest. Affects BPR eligibility and valuation discounts',
-        examples=[True, False],
-    )
-    partnershipAgreement: bool | None = Field(
-        None,
-        description='Whether a written partnership/operating agreement exists',
-        examples=[True],
-    )
-    successionProvision: constr(max_length=255) | None = Field(
-        None,
-        description='What the partnership/operating agreement says about succession on death',
-        examples=["Surviving partners must buy out deceased's share at book value", 'Option to purchase at market value within 90 days'],
-    )
-    annualTurnover: Money | None = Field(
-        None,
-        description='Approximate annual turnover — helps with BPR qualification and valuation',
-    )
-    employees: conint(ge=0) | None = Field(
-        None, description='Number of employees', examples=[5, 50]
-    )
-
-
-class SchemeType(Enum):
-    defined_benefit = 'defined_benefit'
-    defined_contribution = 'defined_contribution'
-    sipp = 'sipp'
-    state_pension = 'state_pension'
-    annuity = 'annuity'
-    drawdown = 'drawdown'
-    other = 'other'
-
-
-class NominatedBeneficiary(RootModel[UUID]):
-    root: UUID
-
-
-class DeathBenefitType(Enum):
-    lump_sum = 'lump_sum'
-    dependants_pension = 'dependants_pension'
-    drawdown_transfer = 'drawdown_transfer'
-    annuity_guarantee = 'annuity_guarantee'
-    none = 'none'
-
-
-class PensionType(Enum):
-    occupational = 'occupational'
-    personal = 'personal'
-    stakeholder = 'stakeholder'
-    sipp = 'sipp'
-    ssas = 'ssas'
-    workplace = 'workplace'
-    state = 'state'
-    cpf = 'cpf'
-    epf = 'epf'
-    other = 'other'
-
-
-class BenefitType(Enum):
-    lump_sum = 'lump_sum'
-    income = 'income'
-    pension = 'pension'
-    discretionary = 'discretionary'
-
-
-class DeathBenefitNomination(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    nomineePersonId: UUID | None = Field(
-        None, description='Reference to the Person.id of the nominated beneficiary'
-    )
-    nominationDate: date_aliased | None = Field(
-        None,
-        description='Date the nomination was made or last updated',
-        examples=['2024-01-15'],
-    )
-    nominationReviewDate: date_aliased | None = Field(
-        None,
-        description='Date the nomination should next be reviewed',
-        examples=['2026-01-15'],
-    )
-    nominationCurrent: bool | None = Field(
-        None,
-        description='Whether the nomination is believed to be current and valid',
-        examples=[True, False],
-    )
-    nominationExpiryDate: date_aliased | None = Field(
-        None,
-        description='Date the nomination expires, if applicable',
-        examples=['2027-01-15'],
-    )
-    benefitType: BenefitType | None = Field(
-        None, description='Type of death benefit the nominee would receive'
-    )
-    estimatedAmount: Money | None = Field(
-        None, description='Estimated death benefit amount, in minor currency units'
-    )
-
-
-class PensionValuationAtDeath(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    estimatedValue: Money | None = Field(None, description='Estimated value at death')
-    valuationMethod: constr(max_length=255) | None = Field(
-        None,
-        description='Method used',
-        examples=['Provider statement', 'Actuary estimate'],
-    )
-    valuationDate: date_aliased | None = Field(
-        None, description='Date of valuation', examples=['2026-03-30']
-    )
-
-
-class ContinuationOnDeath(Enum):
-    terminates = 'terminates'
-    continues_to_spouse = 'continues_to_spouse'
-    continues_to_beneficiary = 'continues_to_beneficiary'
-    fixed_term = 'fixed_term'
-
-
-class AnnuityContinuation(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    annuityInForce: bool | None = Field(
-        None, description='Whether an annuity is currently in force'
-    )
-    annuityAmount: Money | None = Field(
-        None, description='Annual annuity amount in minor currency units'
-    )
-    continuationOnDeath: ContinuationOnDeath | None = Field(
-        None, description="What happens to the annuity on the holder's death"
-    )
-    continuationBeneficiaryPersonId: (
-        UUID | None
-    ) = (
-        Field(None, description='Person.id of the beneficiary who receives continuation payments')
-    )
-
-
-class Pension(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    schemeType: SchemeType | None = Field(
-        None, description='The type of pension scheme'
-    )
-    provider: constr(max_length=255) | None = Field(
-        None,
-        description='Pension provider name',
-        examples=['Aviva', 'Scottish Widows', 'Fidelity', 'Vanguard', 'LGPS'],
-    )
-    policyReference: constr(max_length=500) | None = Field(
-        None,
-        description='Policy or membership reference number',
-        examples=['PEN-2015-123456'],
-    )
-    nominatedBeneficiaries: list[NominatedBeneficiary] | None = Field(
-        None,
-        description='Person IDs of nominated beneficiaries. Pension trustees usually have discretion but will consider nominations',
-        max_length=100,
-    )
-    nominationDate: date_aliased | None = Field(
-        None,
-        description='Date the beneficiary nomination was last updated',
-        examples=['2024-01-15'],
-    )
-    deathBenefitType: DeathBenefitType | None = Field(
-        None, description='Type of death benefit payable from this pension'
-    )
-    crystallised: bool | None = Field(
-        None,
-        description='Whether the pension has been accessed/crystallised. Affects tax treatment on death (UK: pre-75 tax-free, post-75 taxed as income)',
-        examples=[False, True],
-    )
-    lifetimeAllowanceUsed: confloat(ge=0.0, le=100.0) | None = Field(
-        None,
-        description='Percentage of lifetime allowance used (UK). Abolished April 2024 but transitional protections remain',
-        examples=[45.5],
-    )
-    pensionType: PensionType | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None,
-        description='The broad pension category, covering international pension types',
-        examples=['occupational', 'sipp', 'workplace'],
-    )
-    pensionProviderOrganisationId: (
-        UUID | None
-    ) = (
-        Field(None, description='Reference to the Organisation.id of the pension provider')
-    )
-    pensionMemberNumber: constr(max_length=100) | None = Field(
-        None,
-        description='Membership or scheme reference number',
-        examples=['MEM-2015-123456', 'NI: AB123456C'],
-    )
-    deathBenefitNomination: DeathBenefitNomination | None = Field(
-        None,
-        description='Structured death benefit nomination — who receives pension benefits on death, and the terms',
-    )
-    drawdownStartDate: date_aliased | None = Field(
-        None,
-        description='Date drawdown commenced, if the pension is in drawdown',
-        examples=['2025-04-06'],
-    )
-    pensionValuationAtDeath: PensionValuationAtDeath | None = Field(
-        None, description='Pension fund valuation at date of death'
-    )
-    annuityContinuation: AnnuityContinuation | None = Field(
-        None,
-        description='Details of annuity continuation on death — whether payments continue and to whom',
-    )
-
-
-class PolicyType(Enum):
-    term_life = 'term_life'
-    whole_life = 'whole_life'
-    endowment = 'endowment'
-    critical_illness = 'critical_illness'
-    income_protection = 'income_protection'
-    key_person = 'key_person'
-    other = 'other'
-
-
-class TrusteeName(RootModel[constr(max_length=500)]):
-    root: constr(max_length=500)
-
-
-class BeneficiaryPersonId(RootModel[UUID]):
-    root: UUID
-
-
-class PremiumFrequency(Enum):
-    monthly = 'monthly'
-    annual = 'annual'
-    single_premium = 'single_premium'
-    paid_up = 'paid_up'
-
-
-class InsurancePolicy2(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    policyType: PolicyType | None = Field(None, description='Type of insurance policy')
-    provider: constr(max_length=255) | None = Field(
-        None,
-        description='Insurance company name',
-        examples=['Aviva', 'Legal & General', 'Prudential', 'MetLife'],
-    )
-    policyReference: constr(max_length=500) | None = Field(
-        None, description='Policy reference number', examples=['LG-LIFE-2020-789']
-    )
-    sumAssured: Money | None = Field(
-        None, description='The amount payable on death, in minor currency units'
-    )
-    writtenInTrust: bool | None = Field(
-        None,
-        description='Whether the policy is written in trust. If true, proceeds pass outside the estate and are not subject to inheritance tax',
-        examples=[True, False],
-    )
-    trusteeNames: list[TrusteeName] | None = Field(
-        None,
-        description='Names of the policy trustees, if written in trust',
-        examples=[['Sarah Davies', 'James Davies']],
-        max_length=50,
-    )
-    beneficiaryPersonIds: list[BeneficiaryPersonId] | None = Field(
-        None, description='Person IDs of named beneficiaries', max_length=100
-    )
-    premiumFrequency: PremiumFrequency | None = Field(
-        None, description='How often premiums are paid'
-    )
-    expiryDate: date_aliased | None = Field(
-        None,
-        description='Policy expiry date (for term policies)',
-        examples=['2035-06-01'],
-    )
-
-
-class CoOwnerPersonId(RootModel[UUID]):
-    root: UUID
-
-
-class OwnershipType1(Enum):
-    joint_tenants = 'joint_tenants'
-    tenants_in_common = 'tenants_in_common'
-    community_property = 'community_property'
-    partnership = 'partnership'
-    other = 'other'
-
-
-class CoOwnership(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    coOwnerPersonIds: list[CoOwnerPersonId] | None = Field(
-        None, description='Person IDs of co-owners', max_length=100
-    )
-    ownershipType: OwnershipType1 | None = Field(
-        None, description='How ownership is structured between co-owners'
-    )
-    ownershipPercentage: confloat(ge=0.0, le=100.0) | None = Field(
-        None, description="The testator's ownership percentage", examples=[50, 33.33]
-    )
-    severanceDate: date_aliased | None = Field(
-        None,
-        description='Date joint tenancy was severed to become tenants in common (if applicable)',
-        examples=['2024-06-15'],
-    )
-
-
-class IpType(Enum):
-    patent = 'patent'
-    copyright = 'copyright'
-    trademark = 'trademark'
-    design_right = 'design_right'
-    trade_secret = 'trade_secret'
-    database_right = 'database_right'
-    other = 'other'
-
-
-class Licensee(RootModel[constr(max_length=500)]):
-    root: constr(max_length=500)
-
-
-class IntellectualProperty(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    ipType: IpType | None = Field(None, description='Type of intellectual property')
-    registrationNumber: constr(max_length=500) | None = Field(
-        None,
-        description='Registration or application number',
-        examples=['GB2345678', 'US10,123,456'],
-    )
-    registrationOffice: constr(max_length=255) | None = Field(
-        None,
-        description='Intellectual property office where registered',
-        examples=['UK IPO', 'USPTO', 'EPO', 'WIPO'],
-    )
-    expiryDate: date_aliased | None = Field(
-        None, description='Date the IP right expires', examples=['2040-03-15']
-    )
-    annualRevenue: Money | None = Field(
-        None,
-        description='Approximate annual revenue generated from this IP (licensing, royalties, etc.)',
-    )
-    licensees: list[Licensee] | None = Field(
-        None,
-        description='Current licensees of this IP',
-        examples=[['Publisher A', 'Manufacturer B']],
-        max_length=50,
-    )
-
-
-class CompensationType(Enum):
-    iso = 'iso'
-    nso = 'nso'
-    rsu = 'rsu'
-    espp = 'espp'
-    phantom_stock = 'phantom_stock'
-    sar = 'sar'
-    other = 'other'
-
-
-class StockCompensation(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    compensationType: CompensationType | None = Field(
-        None, description='Type of stock compensation'
-    )
-    grantDate: date_aliased | None = Field(
-        None, description='Date the award was granted', examples=['2022-03-15']
-    )
-    vestingSchedule: constr(max_length=255) | None = Field(
-        None,
-        description='Description of the vesting schedule',
-        examples=['4-year vest with 1-year cliff', '3-year monthly vesting', 'Fully vested'],
-    )
-    vestedQuantity: conint(ge=0) | None = Field(
-        None, description='Number of shares/units currently vested', examples=[2500]
-    )
-    unvestedQuantity: conint(ge=0) | None = Field(
-        None,
-        description='Number of shares/units not yet vested. May be forfeited on death depending on plan terms',
-        examples=[7500],
-    )
-    exercisePrice: Money | None = Field(
-        None, description='Strike/exercise price per share for options'
-    )
-    expirationDate: date_aliased | None = Field(
-        None,
-        description='Date the options expire. Estate typically has limited window to exercise after death',
-        examples=['2032-03-15'],
-    )
-    postDeathExerciseWindow: constr(max_length=255) | None = Field(
-        None,
-        description='Time allowed for estate to exercise options after death',
-        examples=['12 months from date of death', '90 days', 'Per plan administrator discretion'],
-    )
-    acceleratesOnDeath: bool | None = Field(
-        None,
-        description='Whether unvested awards accelerate (fully vest) on death',
-        examples=[True, False],
-    )
-
-
-class Collectibility(Enum):
-    likely = 'likely'
-    uncertain = 'uncertain'
-    doubtful = 'doubtful'
-    uncollectible = 'uncollectible'
-
-
-class DebtReceivable(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    debtorName: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the person or organisation that owes the debt',
-        examples=['John Smith', 'Acme Trading Ltd'],
-    )
-    debtorPersonId: UUID | None = Field(
-        None, description='Reference to Person.id if the debtor is in the people array'
-    )
-    originalAmount: Money | None = Field(
-        None, description='Original amount of the debt'
-    )
-    outstandingAmount: Money | None = Field(
-        None, description='Amount currently outstanding'
-    )
-    interestRate: confloat(ge=0.0) | None = Field(
-        None,
-        description='Annual interest rate on the debt, as a percentage',
-        examples=[0, 3.5, 8],
-    )
-    secured: bool | None = Field(
-        None,
-        description='Whether the debt is secured against collateral',
-        examples=[False],
-    )
-    documentRef: constr(max_length=500) | None = Field(
-        None,
-        description='Reference to any loan agreement or promissory note',
-        examples=['Promissory note dated 15 March 2023'],
-    )
-    collectibility: Collectibility | None = Field(
-        None, description='Likelihood of collecting this debt'
-    )
-
-
-class Financial(BaseModel):
-    shareholding: Shareholding | None = Field(
-        None,
-        description='Detailed shareholding information — company, share class, voting rights, restrictions. Relevant for BPR (UK), stepped-up basis (US), and controlling interest calculations',
-    )
-    businessInterest: BusinessInterest | None = Field(
-        None,
-        description='Detailed business interest information — partnership shares, LLP membership, sole trader business. Relevant for BPR (UK), QFOBI (US), and succession planning',
-    )
-    pension: Pension | None = Field(
-        None,
-        description='Detailed pension information — scheme type, nominated beneficiaries, death benefits. Pensions often pass outside the estate via nomination',
-    )
-    insurancePolicy: InsurancePolicy2 | None = Field(
-        None,
-        description='Life insurance policy details — type, sum assured, beneficiaries, trust status. Policies written in trust pass outside the estate',
-    )
-    coOwnership: CoOwnership | None = Field(
-        None,
-        description='Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will',
-    )
-    intellectualProperty: IntellectualProperty | None = Field(
-        None,
-        description='Intellectual property details — patents, copyrights, trademarks, trade secrets. IP succession varies by jurisdiction and type',
-    )
-    stockCompensation: StockCompensation | None = Field(
-        None,
-        description='Employee stock compensation details — options, RSUs, ESPPs. Vesting schedules and exercise windows are critical on death',
-    )
-    debtReceivable: DebtReceivable | None = Field(
-        None,
-        description='Details of money owed to the testator by others. These are estate assets that the executor must collect',
-    )
-
-
-class FuelType(Enum):
-    petrol = 'petrol'
-    diesel = 'diesel'
-    electric = 'electric'
-    hybrid_petrol = 'hybrid_petrol'
-    hybrid_diesel = 'hybrid_diesel'
-    lpg = 'lpg'
-    other = 'other'
-
-
-class VehicleType(Enum):
-    car = 'car'
-    motorcycle = 'motorcycle'
-    van = 'van'
-    motorhome = 'motorhome'
-    trike = 'trike'
-    sidecar_outfit = 'sidecar_outfit'
-    other = 'other'
-
-
-class KeeperStatus(Enum):
-    registered_keeper = 'registered_keeper'
-    not_registered_keeper = 'not_registered_keeper'
-    unknown = 'unknown'
-
-
-class V5cStatus(Enum):
-    held = 'held'
-    missing = 'missing'
-    applied_for = 'applied_for'
-    with_dvla = 'with_dvla'
-
-
-class FinanceType(Enum):
-    none = 'none'
-    hp = 'hp'
-    pcp = 'pcp'
-    lease = 'lease'
-    loan = 'loan'
-    unknown = 'unknown'
-
-
-class IntendedDisposal(Enum):
-    transfer_to_beneficiary = 'transfer_to_beneficiary'
-    sell = 'sell'
-    scrap = 'scrap'
-    sorn_and_store = 'sorn_and_store'
-    undecided = 'undecided'
-
-
-class DeathActions(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    dvlaNotified: bool | None = Field(
-        None, description="Whether DVLA has been notified of the keeper's death"
-    )
-    dvlaNotifiedAt: date_aliased | None = Field(
-        None, description='When DVLA was notified'
-    )
-    insurerNotified: bool | None = Field(
-        None, description='Whether the vehicle insurer has been notified'
-    )
-    insurerNotifiedAt: date_aliased | None = Field(
-        None, description='When the insurer was notified'
-    )
-    financeCompanyNotified: bool | None = Field(
-        None,
-        description='Whether the finance company has been notified (if applicable)',
-    )
-    financeSettled: bool | None = Field(
-        None, description='Whether the finance has been settled or the vehicle returned'
-    )
-    taxRefundClaimed: bool | None = Field(
-        None,
-        description='Whether a refund has been claimed for remaining full months of vehicle tax',
-    )
-    intendedDisposal: (
-        IntendedDisposal | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='What the executor intends to do with the vehicle')
-
-
-class Vehicle1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    registrationNumber: constr(max_length=20) | None = Field(
-        None,
-        description='Vehicle registration number (number plate). Primary UK identifier. Format varies by jurisdiction',
-        examples=['AB12 CDE', 'S123 ABC', 'A1'],
-    )
-    vin: constr(pattern=r'^[A-HJ-NPR-Z0-9]{17}$') | None = Field(
-        None,
-        description='17-character Vehicle Identification Number. International standard, globally unique per vehicle',
-        examples=['WBANE53516CK72834'],
-    )
-    make: constr(max_length=100) | None = Field(
-        None,
-        description='Vehicle manufacturer. Use the DVLA-registered name where available',
-        examples=['BMW', 'TRIUMPH', 'JAGUAR', 'HONDA'],
-    )
-    model: constr(max_length=255) | None = Field(
-        None,
-        description='Vehicle model name. DVLA VES API does not return this — must come from user input or VIN decode',
-        examples=['M3 Competition', 'Bonneville T120', 'E-Type Series 1 FHC'],
-    )
-    variant: constr(max_length=255) | None = Field(
-        None,
-        description='Trim level, edition, or variant',
-        examples=['Competition', 'Black Edition', 'SE', 'Sport'],
-    )
-    yearOfManufacture: conint(ge=1886, le=2100) | None = Field(
-        None, description='Four-digit year of manufacture'
-    )
-    dateOfFirstRegistration: date_aliased | None = Field(
-        None,
-        description='Date of first registration in the UK (or equivalent jurisdiction)',
-    )
-    colour: constr(max_length=50) | None = Field(
-        None,
-        description='DVLA-registered colour',
-        examples=['BLACK', 'SILVER', 'BRITISH RACING GREEN'],
-    )
-    fuelType: FuelType | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
-        Field(None, description='Fuel type as reported by DVLA')
-    )
-    engineCapacity: conint(ge=0, le=20000) | None = Field(
-        None,
-        description='Engine capacity in cubic centimetres (cc). Zero for electric vehicles',
-    )
-    co2Emissions: conint(ge=0) | None = Field(
-        None, description='CO2 emissions in grams per kilometre'
-    )
-    vehicleType: (
-        VehicleType | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='Type of vehicle')
-    isClassic: bool | None = Field(
-        None,
-        description='Whether the vehicle is considered a classic or historic vehicle. In the UK, vehicles manufactured before 1 January 1977 are exempt from vehicle excise duty. Classic vehicles may need specialist valuation (Hagerty, auction houses) rather than standard guides',
-    )
-    keeperStatus: (
-        KeeperStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='Whether the deceased was the registered keeper of this vehicle')
-    v5cStatus: V5cStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
-        Field(None, description='Status of the V5C registration document (logbook)')
-    )
-    financeType: (
-        FinanceType | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='Type of finance arrangement on the vehicle. If HP or PCP, the vehicle is owned by the finance company, not the estate')
-    sornDeclared: bool | None = Field(
-        None,
-        description='Whether a Statutory Off Road Notification (SORN) is currently in effect',
-    )
-    deathActions: DeathActions | None = Field(
-        None,
-        description='Tracks which estate administration steps have been completed for this vehicle',
-    )
-
-
-class MotStatus(Enum):
-    valid = 'valid'
-    expired = 'expired'
-    no_mot_required = 'no_mot_required'
-    sorn = 'sorn'
-
-
-class TaxStatus(Enum):
-    taxed = 'taxed'
-    untaxed = 'untaxed'
-    sorn = 'sorn'
-    not_taxed_for_on_road_use = 'not_taxed_for_on_road_use'
-
-
-class InsuranceStatus(Enum):
-    insured = 'insured'
-    not_insured = 'not_insured'
-    unknown = 'unknown'
-
-
-class WriteOffCategory(Enum):
-    A = 'A'
-    B = 'B'
-    S = 'S'
-    N = 'N'
-    none = 'none'
-
-
-class StolenStatus(Enum):
-    clear = 'clear'
-    reported_stolen = 'reported_stolen'
-    unknown = 'unknown'
-
-
-class VehicleCheck(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    retrievedAt: AwareDatetime = Field(
-        ..., description='When this check data was fetched'
-    )
-    motExpiry: date_aliased | None = Field(None, description='Current MOT expiry date')
-    motStatus: MotStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
-        Field(None, description='Current MOT status')
-    )
-    lastMileage: conint(ge=0) | None = Field(
-        None, description='Mileage at last MOT test'
-    )
-    lastMileageDate: date_aliased | None = Field(
-        None, description='Date of the last MOT mileage reading'
-    )
-    advisoryCount: conint(ge=0) | None = Field(
-        None, description='Number of advisory items at last MOT'
-    )
-    failureCount: conint(ge=0) | None = Field(
-        None, description='Number of failure items at last MOT'
-    )
-    taxStatus: TaxStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
-        Field(None, description='DVLA vehicle tax status')
-    )
-    taxDueDate: date_aliased | None = Field(
-        None, description='When vehicle tax expires'
-    )
-    insuranceStatus: (
-        InsuranceStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='Whether the vehicle appears insured on the Motor Insurance Database')
-    financeOutstanding: bool | None = Field(
-        None, description='Whether there is outstanding finance on the vehicle'
-    )
-    financeSettlementAmount: conint(ge=0) | None = Field(
-        None,
-        description='Finance settlement figure in minor units (pennies). The amount needed to clear the finance and take ownership',
-    )
-    writeOffCategory: (
-        WriteOffCategory | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='Insurance write-off category, if applicable')
-    stolenStatus: (
-        StolenStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='Whether the vehicle is reported stolen')
-    previousKeepers: conint(ge=0) | None = Field(
-        None, description='Number of previous registered keepers'
-    )
-    plateChanges: conint(ge=0) | None = Field(
-        None,
-        description="Number of registration plate changes in the vehicle's history",
-    )
-    mileageAnomaly: bool | None = Field(
-        None,
-        description='Whether MOT mileage readings show a discrepancy (clocking indicator)',
-    )
-
-
-class Vehicle(BaseModel):
-    vehicle: Vehicle1 | None = Field(
-        None,
-        description="Structured vehicle data — identity, registration, and estate administration tracking. Present when category is 'vehicle'. Maps to schema:Vehicle in JSON-LD",
-    )
-    vehicleCheck: VehicleCheck | None = Field(
-        None,
-        description='Live vehicle check data from DVLA VES, DVSA MOT History, and HPI/finance check APIs. Point-in-time snapshot at retrievedAt',
-    )
-
-
-class Type12(Enum):
-    backup_codes = 'backup_codes'
-    email = 'email'
-    phone = 'phone'
-    security_key = 'security_key'
-
-
-class RecoveryMethod(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    type: Type12 | None = Field(None, description='Type of recovery method')
-    location: constr(max_length=500) | None = Field(
-        None,
-        description='Where this recovery method or device is stored',
-        examples=['Backup codes in LastPass secure notes', 'Recovery phone: +44 7700 900123'],
-    )
-
-
-class PlatformDeathPolicy(Enum):
-    memorialise = 'memorialise'
-    delete = 'delete'
-    transfer = 'transfer'
-    archive = 'archive'
-    unknown = 'unknown'
-
-
-class DigitalAccess(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    username: constr(max_length=255) | None = Field(
-        None,
-        description='Username or login identifier for this account',
-        examples=['john.davies@example.com', '@johndavies'],
-    )
-    passwordStorageLocation: constr(max_length=500) | None = Field(
-        None,
-        description='Where the password is stored — a password manager, physical location, or person who holds it',
-        examples=['LastPass vault', 'Safe deposit box at Barclays Wrexham', 'Written in sealed envelope with solicitor'],
-    )
-    passwordManager: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the password manager holding credentials for this account',
-        examples=['LastPass', '1Password', 'Bitwarden', 'Apple Keychain'],
-    )
-    twoFactorEnabled: bool | None = Field(
-        None,
-        description='Whether two-factor authentication is enabled on this account',
-        examples=[True, False],
-    )
-    recoveryMethods: list[RecoveryMethod] | None = Field(
-        None,
-        description='Methods available to recover access to this account if the primary credentials are unavailable',
-        max_length=20,
-    )
-    platformDeathPolicy: (
-        PlatformDeathPolicy | constr(pattern=r'^x-inherit-.+') | None
-    ) = Field(None, description="The platform's policy for handling accounts after the holder's death", examples=['memorialise', 'delete'])
-    legacyContactConfigured: bool | None = Field(
-        None,
-        description='Whether a legacy contact has been configured on the platform (e.g. Google Inactive Account Manager, Facebook Legacy Contact)',
-        examples=[True, False],
-    )
-    legacyContactPersonId: UUID | None = Field(
-        None,
-        description="Reference to the Person.id configured as the platform's legacy contact",
-    )
-
-
-class Platform(Enum):
-    facebook = 'facebook'
-    instagram = 'instagram'
-    tiktok = 'tiktok'
-    twitter_x = 'twitter_x'
-    linkedin = 'linkedin'
-    threads = 'threads'
-    youtube = 'youtube'
-    pinterest = 'pinterest'
-    other = 'other'
-
-
-class PostDeathAction(Enum):
-    memorialise = 'memorialise'
-    delete = 'delete'
-    transfer = 'transfer'
-    archive = 'archive'
-    unknown = 'unknown'
-
-
-class SocialMedia(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    platform: Platform | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None, description='The social media platform'
-    )
-    username: constr(max_length=255) | None = Field(
-        None, description='Username or handle', examples=['@johndavies']
-    )
-    url: AnyUrl | None = Field(None, description='Direct URL to the profile')
-    followerCount: conint(ge=0) | None = Field(None, description='Number of followers')
-    monetised: bool | None = Field(
-        None, description='Whether the account generates revenue'
-    )
-    postDeathAction: PostDeathAction | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None, description='Preferred action after death'
-    )
-    transferToPersonId: UUID | None = Field(
-        None, description='Person.id to transfer the account to'
-    )
-
-
-class Blockchain(Enum):
-    bitcoin = 'bitcoin'
-    ethereum = 'ethereum'
-    solana = 'solana'
-    cardano = 'cardano'
-    other = 'other'
-
-
-class WalletType(Enum):
-    hardware = 'hardware'
-    software = 'software'
-    exchange = 'exchange'
-    custodian = 'custodian'
-    paper = 'paper'
-
-
-class CryptoAccess(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    blockchain: Blockchain | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None, description='The blockchain network'
-    )
-    walletType: WalletType | None = Field(None, description='Type of wallet')
-    walletAddress: constr(max_length=255) | None = Field(
-        None, description='Public wallet address'
-    )
-    privateKeyLocation: constr(max_length=500) | None = Field(
-        None,
-        description='Where the private key is stored — DO NOT store the key itself',
-    )
-    seedPhraseLocation: constr(max_length=500) | None = Field(
-        None, description='Where the seed phrase is stored — DO NOT store it'
-    )
-    exchangeOrganisationId: UUID | None = Field(
-        None, description='Organisation.id of the exchange'
-    )
-    costBasis: Money | None = Field(None, description='Original cost basis for CGT')
-
-
-class Provider(Enum):
-    google_drive = 'google_drive'
-    onedrive = 'onedrive'
-    icloud = 'icloud'
-    dropbox = 'dropbox'
-    aws_s3 = 'aws_s3'
-    other = 'other'
-
-
-class Action(Enum):
-    archive = 'archive'
-    delete = 'delete'
-    transfer = 'transfer'
-
-
-class ImportantFolder(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    name: constr(max_length=255) | None = Field(
-        None,
-        description='Folder name',
-        examples=['Family Photos', 'Financial Documents'],
-    )
-    contents: constr(max_length=500) | None = Field(
-        None, description='Description of folder contents'
-    )
-    action: Action | None = Field(None, description='What should happen to this folder')
-
-
-class CloudStorage(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    provider: Provider | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None, description='Cloud storage provider'
-    )
-    storageUsed: constr(max_length=50) | None = Field(
-        None,
-        description='Amount of storage used',
-        examples=['45 GB of 100 GB', '2.1 TB'],
-    )
-    importantFolders: list[ImportantFolder] | None = Field(
-        None,
-        description='Important folders that need attention during estate administration',
-        max_length=50,
-    )
-    familyPhotoAccess: bool | None = Field(
-        None,
-        description='Whether the account contains family photos that should be preserved and shared',
-    )
-
-
-class DomainNameAccess(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    domainName: constr(max_length=255) | None = Field(
-        None,
-        description='The registered domain name',
-        examples=['example.com', 'family-trust.co.uk'],
-    )
-    registrar: constr(max_length=255) | None = Field(
-        None,
-        description='Domain registrar name',
-        examples=['GoDaddy', 'Namecheap', 'Cloudflare Registrar'],
-    )
-    registrantOrganisationId: UUID | None = Field(
-        None,
-        description='Organisation.id of the registrant, if the domain is held by an organisation',
-    )
-    expiryDate: date_aliased | None = Field(
-        None, description='Domain registration expiry date'
-    )
-    autoRenew: bool | None = Field(
-        None, description='Whether automatic renewal is enabled'
-    )
-    transferLocked: bool | None = Field(
-        None,
-        description='Whether the domain has a transfer lock (registrar lock / clientTransferProhibited)',
-    )
-    authCodeLocation: constr(max_length=500) | None = Field(
-        None,
-        description='Where the transfer auth code is stored — reference only, never the code itself',
-    )
-    nameservers: list[str] | None = Field(
-        None, description='Nameservers currently assigned to the domain', max_length=20
-    )
-
-
-class Blockchain1(Enum):
-    bitcoin = 'bitcoin'
-    ethereum = 'ethereum'
-    solana = 'solana'
-    cardano = 'cardano'
-    polygon = 'polygon'
-    other = 'other'
-
-
-class TokenStandard(Enum):
-    erc_721 = 'erc_721'
-    erc_1155 = 'erc_1155'
-    other = 'other'
-
-
-class NftAccess(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    blockchain: Blockchain1 | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None, description='The blockchain network hosting the NFT'
-    )
-    contractAddress: constr(max_length=255) | None = Field(
-        None,
-        description='Smart contract address for the NFT collection',
-        examples=['0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'],
-    )
-    tokenId: constr(max_length=255) | None = Field(
-        None,
-        description='Token identifier — string because can be very large integers',
-        examples=['42', '115792089237316195423570985008687907853269'],
-    )
-    tokenStandard: TokenStandard | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None, description='The token standard used by the NFT contract'
-    )
-    marketplace: constr(max_length=255) | None = Field(
-        None,
-        description='Primary marketplace where this NFT is listed or was purchased',
-        examples=['OpenSea', 'Rarible', 'Magic Eden'],
-    )
-    marketplaceUrl: AnyUrl | None = Field(
-        None, description='Direct URL to the NFT listing on the marketplace'
-    )
-    metadataUri: AnyUrl | None = Field(
-        None, description='Points to off-chain metadata JSON (tokenURI)'
-    )
-
-
-class Platform1(Enum):
-    youtube = 'youtube'
-    substack = 'substack'
-    etsy = 'etsy'
-    patreon = 'patreon'
-    twitch = 'twitch'
-    spotify = 'spotify'
-    medium = 'medium'
-    other = 'other'
-
-
-class MonetisationStatus(Enum):
-    active = 'active'
-    suspended = 'suspended'
-    demonetised = 'demonetised'
-    pending = 'pending'
-    none = 'none'
-
-
-class ContentType(Enum):
-    video = 'video'
-    audio = 'audio'
-    written = 'written'
-    mixed = 'mixed'
-    other = 'other'
-
-
-class RevenueModel(Enum):
-    advertising = 'advertising'
-    subscription = 'subscription'
-    tips = 'tips'
-    affiliate = 'affiliate'
-    merchandise = 'merchandise'
-    mixed = 'mixed'
-
-
-class MonetisedContentAccess(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    platform: Platform1 | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None, description='Content platform'
-    )
-    channelUrl: AnyUrl | None = Field(
-        None, description='Direct URL to the channel or storefront'
-    )
-    channelName: constr(max_length=255) | None = Field(
-        None, description='Display name of the channel or storefront'
-    )
-    subscriberCount: conint(ge=0) | None = Field(
-        None, description='Number of subscribers or followers on the platform'
-    )
-    monthlyRevenue: Money | None = Field(
-        None,
-        description='Approximate monthly revenue from the platform, in minor currency units',
-    )
-    monetisationStatus: MonetisationStatus | constr(pattern=r'^x-inherit-.+') | None = (
-        Field(None, description='Current monetisation status of the content')
-    )
-    contentType: ContentType | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None, description='Primary type of content produced'
-    )
-    revenueModel: RevenueModel | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None, description='How the content generates revenue'
-    )
-
-
-class LoyaltyAccess(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    programme: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the loyalty programme',
-        examples=['Avios', 'Nectar', 'Tesco Clubcard'],
-    )
-    programmeProvider: constr(max_length=255) | None = Field(
-        None,
-        description='Organisation that operates the programme',
-        examples=['British Airways', "Sainsbury's", 'Tesco'],
-    )
-    pointsBalance: conint(ge=0) | None = Field(
-        None, description='Current points balance'
-    )
-    cashEquivalent: Money | None = Field(
-        None,
-        description='Approximate cash equivalent of the points balance, in minor currency units',
-    )
-    expiryDate: date_aliased | None = Field(
-        None, description='Date when the points expire if not used'
-    )
-    transferable: bool | None = Field(
-        None, description='Whether the programme permits transfer of points after death'
-    )
-    transferUrl: AnyUrl | None = Field(
-        None, description="URL to the programme's transfer or bereavement page"
-    )
-
-
-class Platform2(Enum):
-    steam = 'steam'
-    xbox = 'xbox'
-    playstation = 'playstation'
-    nintendo = 'nintendo'
-    epic = 'epic'
-    roblox = 'roblox'
-    other = 'other'
-
-
-class GamingAccess(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    platform: Platform2 | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None, description='Gaming platform'
-    )
-    accountName: constr(max_length=255) | None = Field(
-        None,
-        description='Account name or gamertag on the platform',
-        examples=['testator_gamer', 'GamerTag#1234'],
-    )
-    virtualCurrencyBalance: conint(ge=0) | None = Field(
-        None, description='Balance of virtual currency on the platform'
-    )
-    virtualCurrencyName: constr(max_length=100) | None = Field(
-        None,
-        description='Name of the virtual currency',
-        examples=['Steam Wallet Funds', 'V-Bucks', 'Robux'],
-    )
-    transferable: bool | None = Field(
-        None,
-        description='Whether the platform permits account or library transfer after death',
-    )
-    estimatedRealValue: Money | None = Field(
-        None,
-        description="Estimated real-world value of the account's digital assets, in minor currency units",
-    )
-
-
-class Action1(Enum):
-    memorialise = 'memorialise'
-    delete = 'delete'
-    transfer = 'transfer'
-    archive = 'archive'
-    deactivate = 'deactivate'
-    preserve = 'preserve'
-
-
-class PlatformToolType(Enum):
-    inactive_account_manager = 'inactive_account_manager'
-    legacy_contact = 'legacy_contact'
-    digital_legacy = 'digital_legacy'
-    memorialisation_request = 'memorialisation_request'
-    none = 'none'
-    other = 'other'
-
-
-class PlatformDelegation(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    action: Action1 | constr(pattern=r'^x-inherit-.+') = Field(
-        ..., description='Desired post-death action for this digital asset'
-    )
-    delayDuration: (
-        constr(
-            pattern=r'^P(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$'
-        )
-        | None
-    ) = Field(None, description='How long to wait before executing the action, as an ISO 8601 duration', examples=['P6M', 'P1Y', 'P5Y'])
-    transferToPersonId: UUID | None = Field(
-        None,
-        description="Person.id to transfer the asset to (when action is 'transfer')",
-    )
-    specificInstructions: constr(max_length=500) | None = Field(
-        None,
-        description='Free-text instructions for the executor regarding this digital asset',
-    )
-    platformToolConfigured: bool | None = Field(
-        None,
-        description="Whether the platform's native death/inactivity tool has been set up",
-    )
-    platformToolType: PlatformToolType | constr(pattern=r'^x-inherit-.+') | None = (
-        Field(None, description='Which platform tool has been configured, if any')
-    )
-    configuredDate: date_aliased | None = Field(
-        None, description='Date when the platform tool was configured'
-    )
-
-
-class AccessMethod(Enum):
-    designated_recipient = 'designated_recipient'
-    legacy_contact = 'legacy_contact'
-    inactive_account_manager = 'inactive_account_manager'
-    court_order = 'court_order'
-    rufadaa_request = 'rufadaa_request'
-    platform_form = 'platform_form'
-    credential_sharing = 'credential_sharing'
-    none = 'none'
-
-
-class AccessScope(Enum):
-    catalogue_only = 'catalogue_only'
-    full_content = 'full_content'
-    restricted = 'restricted'
-    unknown = 'unknown'
-
-
-class FiduciaryAccess(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    accessMethod: AccessMethod | constr(pattern=r'^x-inherit-.+') = Field(
-        ..., description='The method by which a fiduciary can access this digital asset'
-    )
-    accessConfigured: bool | None = Field(
-        None,
-        description='Whether the chosen access method has been set up with the platform',
-    )
-    designatedRecipientPersonId: (
-        UUID | None
-    ) = (
-        Field(None, description='Person.id of the designated recipient for this digital asset')
-    )
-    accessScope: AccessScope | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None, description='RUFADAA catalogue vs content distinction'
-    )
-    termsOfServiceUrl: AnyUrl | None = Field(
-        None, description="URL to the platform's terms of service or bereavement policy"
-    )
-    termsOfServiceConstraints: constr(max_length=500) | None = Field(
-        None,
-        description="Summary of key constraints from the platform's terms of service that affect fiduciary access",
-    )
-
-
-class Digital(BaseModel):
-    digitalAccess: DigitalAccess | None = Field(
-        None,
-        description='Structured access information for digital assets — login credentials, 2FA, recovery methods, and platform death policies. Critical for executors managing the digital estate',
-    )
-    socialMedia: SocialMedia | None = Field(
-        None, description='Social media account details for digital assets'
-    )
-    cryptoAccess: CryptoAccess | None = Field(
-        None, description='Cryptocurrency wallet and key access information'
-    )
-    cloudStorage: CloudStorage | None = Field(
-        None,
-        description='Cloud storage account details for digital assets — provider, usage, important folders, family photo access',
-    )
-    domainNameAccess: DomainNameAccess | None = Field(
-        None,
-        description='Domain name registration details — registrar, expiry, transfer locks. Critical for executors managing digital estates with web properties',
-    )
-    nftAccess: NftAccess | None = Field(
-        None,
-        description='Non-fungible token (NFT) details — blockchain, contract, token identifier, and marketplace information',
-    )
-    monetisedContentAccess: MonetisedContentAccess | None = Field(
-        None,
-        description='Monetised online content — YouTube channels, Substack newsletters, Patreon pages, and similar revenue-generating content platforms',
-    )
-    loyaltyAccess: LoyaltyAccess | None = Field(
-        None,
-        description='Loyalty programme points and rewards — airline miles, hotel points, retailer schemes. Some programmes permit post-death transfer; others forfeit on death',
-    )
-    gamingAccess: GamingAccess | None = Field(
-        None,
-        description='Gaming platform account details — Steam, Xbox, PlayStation, and similar platforms with virtual currencies and digital game libraries',
-    )
-    platformDelegation: PlatformDelegation | None = Field(
-        None,
-        description='Instructions for what should happen to a digital asset or account after death — memorialise, delete, transfer, archive, or preserve',
-    )
-    fiduciaryAccess: FiduciaryAccess | None = Field(
-        None,
-        description='How a fiduciary (executor, personal representative) can gain lawful access to this digital asset after death',
-    )
-
-
-class BusinessInterest1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    businessName: constr(max_length=255) | None = Field(
-        None,
-        description='Trading name of the business',
-        examples=['Davies & Sons Builders', 'Manchester Model Supplies'],
-    )
-    businessType: BusinessType | None = Field(
-        None, description='Legal structure of the business'
-    )
-    ownershipPercentage: confloat(ge=0.0, le=100.0) | None = Field(
-        None,
-        description="The testator's ownership percentage",
-        examples=[50, 33.33, 100],
-    )
-    controllingInterest: bool | None = Field(
-        None,
-        description='Whether the testator holds a controlling interest. Affects BPR eligibility and valuation discounts',
-        examples=[True, False],
-    )
-    partnershipAgreement: bool | None = Field(
-        None,
-        description='Whether a written partnership/operating agreement exists',
-        examples=[True],
-    )
-    successionProvision: constr(max_length=255) | None = Field(
-        None,
-        description='What the partnership/operating agreement says about succession on death',
-        examples=["Surviving partners must buy out deceased's share at book value", 'Option to purchase at market value within 90 days'],
-    )
-    annualTurnover: Money | None = Field(
-        None,
-        description='Approximate annual turnover — helps with BPR qualification and valuation',
-    )
-    employees: conint(ge=0) | None = Field(
-        None, description='Number of employees', examples=[5, 50]
-    )
-
-
-class IntellectualProperty1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    ipType: IpType | None = Field(None, description='Type of intellectual property')
-    registrationNumber: constr(max_length=500) | None = Field(
-        None,
-        description='Registration or application number',
-        examples=['GB2345678', 'US10,123,456'],
-    )
-    registrationOffice: constr(max_length=255) | None = Field(
-        None,
-        description='Intellectual property office where registered',
-        examples=['UK IPO', 'USPTO', 'EPO', 'WIPO'],
-    )
-    expiryDate: date_aliased | None = Field(
-        None, description='Date the IP right expires', examples=['2040-03-15']
-    )
-    annualRevenue: Money | None = Field(
-        None,
-        description='Approximate annual revenue generated from this IP (licensing, royalties, etc.)',
-    )
-    licensees: list[Licensee] | None = Field(
-        None,
-        description='Current licensees of this IP',
-        examples=[['Publisher A', 'Manufacturer B']],
-        max_length=50,
-    )
-
-
-class StockCompensation1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    compensationType: CompensationType | None = Field(
-        None, description='Type of stock compensation'
-    )
-    grantDate: date_aliased | None = Field(
-        None, description='Date the award was granted', examples=['2022-03-15']
-    )
-    vestingSchedule: constr(max_length=255) | None = Field(
-        None,
-        description='Description of the vesting schedule',
-        examples=['4-year vest with 1-year cliff', '3-year monthly vesting', 'Fully vested'],
-    )
-    vestedQuantity: conint(ge=0) | None = Field(
-        None, description='Number of shares/units currently vested', examples=[2500]
-    )
-    unvestedQuantity: conint(ge=0) | None = Field(
-        None,
-        description='Number of shares/units not yet vested. May be forfeited on death depending on plan terms',
-        examples=[7500],
-    )
-    exercisePrice: Money | None = Field(
-        None, description='Strike/exercise price per share for options'
-    )
-    expirationDate: date_aliased | None = Field(
-        None,
-        description='Date the options expire. Estate typically has limited window to exercise after death',
-        examples=['2032-03-15'],
-    )
-    postDeathExerciseWindow: constr(max_length=255) | None = Field(
-        None,
-        description='Time allowed for estate to exercise options after death',
-        examples=['12 months from date of death', '90 days', 'Per plan administrator discretion'],
-    )
-    acceleratesOnDeath: bool | None = Field(
-        None,
-        description='Whether unvested awards accelerate (fully vest) on death',
-        examples=[True, False],
-    )
-
-
-class CoOwnership1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    coOwnerPersonIds: list[CoOwnerPersonId] | None = Field(
-        None, description='Person IDs of co-owners', max_length=100
-    )
-    ownershipType: OwnershipType1 | None = Field(
-        None, description='How ownership is structured between co-owners'
-    )
-    ownershipPercentage: confloat(ge=0.0, le=100.0) | None = Field(
-        None, description="The testator's ownership percentage", examples=[50, 33.33]
-    )
-    severanceDate: date_aliased | None = Field(
-        None,
-        description='Date joint tenancy was severed to become tenants in common (if applicable)',
-        examples=['2024-06-15'],
-    )
-
-
-class Business(BaseModel):
-    businessInterest: BusinessInterest1 | None = Field(
-        None,
-        description='Detailed business interest information — partnership shares, LLP membership, sole trader business. Relevant for BPR (UK), QFOBI (US), and succession planning',
-    )
-    intellectualProperty: IntellectualProperty1 | None = Field(
-        None,
-        description='Intellectual property details — patents, copyrights, trademarks, trade secrets. IP succession varies by jurisdiction and type',
-    )
-    stockCompensation: StockCompensation1 | None = Field(
-        None,
-        description='Employee stock compensation details — options, RSUs, ESPPs. Vesting schedules and exercise windows are critical on death',
-    )
-    coOwnership: CoOwnership1 | None = Field(
-        None,
-        description='Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will',
-    )
-
-
-class Result(Enum):
-    clear = 'clear'
-    flagged = 'flagged'
-    inconclusive = 'inconclusive'
-
-
-class StolenArtCheck(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    retrievedAt: AwareDatetime = Field(..., description='When the check was performed')
-    result: Result | constr(pattern=r'^x-inherit-.+', max_length=100) | None = Field(
-        None, description='Outcome of the stolen art check'
-    )
-    certificateReference: constr(max_length=100) | None = Field(
-        None, description='ALR certificate or search reference number'
-    )
-    certificateUrl: AnyUrl | None = Field(
-        None, description='URL to the ALR certificate or search result'
-    )
-    checkedBy: constr(max_length=255) | None = Field(
-        None,
-        description='Who performed the check — person name, organisation, or system identifier',
-    )
-
-
-class Laboratory(Enum):
-    gia = 'gia'
-    ags = 'ags'
-    igi = 'igi'
-    hrd = 'hrd'
-    egl = 'egl'
-
-
-class GemologicalCertificate(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    retrievedAt: AwareDatetime = Field(
-        ..., description='When this certificate data was retrieved or verified'
-    )
-    laboratory: Laboratory | constr(pattern=r'^x-inherit-.+', max_length=100) | None = (
-        Field(None, description='The grading laboratory that issued the certificate')
-    )
-    certificateNumber: constr(max_length=100) | None = Field(
-        None, description='Certificate or report number'
-    )
-    verificationUrl: AnyUrl | None = Field(
-        None,
-        description='URL to verify the certificate online with the issuing laboratory',
-    )
-    stoneType: constr(max_length=100) | None = Field(
-        None,
-        description='Type of gemstone',
-        examples=['diamond', 'ruby', 'sapphire', 'emerald'],
-    )
-    caratWeight: confloat(ge=0.0) | None = Field(None, description='Weight in carats')
-    colourGrade: constr(max_length=50) | None = Field(
-        None,
-        description='Colour grade as assigned by the laboratory',
-        examples=['D', 'E', 'F', 'G', 'fancy vivid yellow'],
-    )
-    clarityGrade: constr(max_length=50) | None = Field(
-        None,
-        description='Clarity grade as assigned by the laboratory',
-        examples=['FL', 'IF', 'VVS1', 'VS1', 'SI1', 'I1'],
-    )
-    cutGrade: constr(max_length=50) | None = Field(
-        None,
-        description='Cut grade as assigned by the laboratory (diamonds only — not all labs grade cut for coloured stones)',
-        examples=['Excellent', 'Very Good', 'Good', 'Fair'],
-    )
-
-
-class General(BaseModel):
-    stolenArtCheck: StolenArtCheck | None = Field(
-        None,
-        description='Result of a stolen art check against the Art Loss Register (ALR) or equivalent database. Required by auction houses before sale of art, antiques, and high-value collectibles',
-    )
-    gemologicalCertificate: GemologicalCertificate | None = Field(
-        None,
-        description='Structured gemological certificate data from GIA, AGS, or other grading laboratory. Confirms stone identity, quality grades, and weight — essential for insurance and sale valuation',
-    )
-
-
-class ServiceRecord(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    serviceDate: date_aliased = Field(..., description='When the service was performed')
-    provider: constr(max_length=255) | None = Field(
-        None,
-        description='Who performed the service (manufacturer service centre, independent specialist, etc.)',
-    )
-    description: constr(max_length=2000) | None = Field(
-        None, description='What was done'
-    )
-    cost: Money | None = Field(
-        None, description='Cost of the service, in minor currency units'
-    )
-    documentReference: constr(max_length=255) | None = Field(
-        None,
-        description='Reference to a service certificate, receipt, or MOT certificate',
-    )
-
-
-class Category3(Enum):
-    financial = 'financial'
-    vehicle = 'vehicle'
-    digital = 'digital'
-    business = 'business'
-    property_contents = 'property_contents'
-    jewellery_watches = 'jewellery_watches'
-    art = 'art'
-    antiques = 'antiques'
-    collectibles = 'collectibles'
-    musical_instruments = 'musical_instruments'
-    books_manuscripts = 'books_manuscripts'
-    wine_spirits = 'wine_spirits'
-    clothing_textiles = 'clothing_textiles'
-    firearms_sporting = 'firearms_sporting'
-    islamic_financial = 'islamic_financial'
-    other = 'other'
-
-
-class Condition1(Enum):
-    excellent = 'excellent'
-    good = 'good'
-    fair = 'fair'
-    poor = 'poor'
-    unknown = 'unknown'
-    not_applicable = 'not_applicable'
-
-
-class ExternalLink1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    system: constr(pattern=r'^[a-z][a-zA-Z0-9]*$', max_length=100) = Field(
-        ...,
-        description='The external system or platform name. Use lowercase, no spaces',
-        examples=['chrono24', 'discogs', 'artnet', 'ebay', 'catawiki', 'rightmove', 'zoopla', 'companieshouse', 'landregistry', 'artlossregister', 'watchchartsRef', 'livex', 'gtin'],
-    )
-    id: constr(min_length=1, max_length=500) = Field(
-        ..., description='The platform-specific identifier for this asset'
-    )
-    url: AnyUrl | None = Field(
-        None,
-        description="Direct URL to the asset's page on the external platform. Optional — some systems are API-only",
-    )
-    label: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable label for display. Optional — defaults to the system name',
-        examples=['Chrono24 listing', 'Discogs release page', 'Companies House filing'],
-    )
-    retrievedAt: AwareDatetime | None = Field(
-        None,
-        description='Timestamp when this link was last verified or data was last retrieved',
-    )
-
-
-class AcquisitionMethod(Enum):
-    purchase = 'purchase'
-    inheritance = 'inheritance'
-    gift = 'gift'
-    commission = 'commission'
-    restitution = 'restitution'
-    auction = 'auction'
-    unknown = 'unknown'
-
-
-class ProvenanceChainItem(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    description: constr(min_length=1, max_length=2000) = Field(
-        ..., description='Description of this provenance record'
-    )
-    ownerName: constr(max_length=255) | None = Field(
-        None, description='Name of the previous owner (may be anonymised)'
-    )
-    fromDate: date_aliased | None = Field(
-        None, description='Approximate start date of this ownership period'
-    )
-    toDate: date_aliased | None = Field(
-        None, description='Approximate end date of this ownership period'
-    )
-    acquisitionMethod: AcquisitionMethod | None = Field(
-        None, description='How the owner acquired the asset'
-    )
-    source: constr(max_length=500) | None = Field(
-        None, description='Where this provenance information came from'
-    )
-    evidenceUrl: AnyUrl | None = Field(
-        None,
-        description='Link to supporting evidence (sale record, catalogue entry, etc.)',
-    )
-
-
-class PossessionStatus(Enum):
-    possessed_at_death = 'possessed_at_death'
-    receivable = 'receivable'
-    contingent = 'contingent'
-
-
-class CommunalAuthority1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    authorityType: AuthorityType1 | None = Field(
-        None, description='Category of communal authority'
-    )
-    approvalRequired: bool | None = Field(
-        None,
-        description='Whether approval from this authority is legally required before disposal',
-    )
-    authorityName: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the specific authority or person',
-        examples=['Karta of Sharma HUF', 'Okonkwo Family Council', 'MUIS'],
-    )
-    jurisdiction: Jurisdiction | None = Field(
-        None,
-        description='Jurisdiction where this communal authority has legal standing',
-    )
-
-
-class GoverningLaw2(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    jurisdiction: Jurisdiction | None = Field(
-        None, description='Jurisdiction whose succession law applies'
-    )
-    legalTradition: LegalTradition | None = Field(
-        None, description='Which legal tradition applies'
-    )
-    statute: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the governing statute',
-        examples=['Wills Act 1837', 'PRC Civil Code', 'Hindu Succession Act 1956'],
-    )
-    section: constr(max_length=255) | None = Field(
-        None,
-        description='Specific section of the statute',
-        examples=['s.9', 'Book VI Succession', 's.6 (coparcenary)'],
-    )
-
-
-class SuccessionRegime1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    governingLaw: GoverningLaw2 | None = Field(
-        None, description='The law governing succession for this asset'
-    )
-    determinedBy: DeterminedBy | None = Field(
-        None, description='How the governing law was determined'
-    )
-    binding: bool | None = Field(
-        None, description='Whether this succession regime is legally binding'
-    )
-    extensions: list[Extension] | None = Field(
-        None,
-        description="INHERIT extension IDs that apply to this asset's succession",
-        max_length=50,
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None, description='Additional context about the succession regime'
-    )
-
-
-class PrimaryBeneficiaryPersonId(RootModel[UUID]):
-    root: UUID
-
-
-class ContingentBeneficiaryPersonId(RootModel[UUID]):
-    root: UUID
-
-
-class DesignationType(Enum):
-    retirement_account = 'retirement_account'
-    life_insurance = 'life_insurance'
-    superannuation = 'superannuation'
-    pod_account = 'pod_account'
-    other = 'other'
-
-
-class BeneficiaryDesignation(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    primaryBeneficiaryPersonIds: list[PrimaryBeneficiaryPersonId] | None = Field(
-        None, description='Person IDs of the primary beneficiaries', max_length=100
-    )
-    contingentBeneficiaryPersonIds: list[ContingentBeneficiaryPersonId] | None = Field(
-        None,
-        description='Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)',
-        max_length=100,
-    )
-    designationType: DesignationType | None = Field(
-        None,
-        description='The type of beneficiary designation',
-        examples=['life_insurance', 'retirement_account'],
-    )
-    linkedNonprobateTransferId: (
-        UUID | None
-    ) = (
-        Field(None, description='Reference to the NonprobateTransfer entity that tracks this designation')
-    )
-
-
-class Scope1(Enum):
-    full_access = 'full_access'
-    limited_access = 'limited_access'
-    no_access = 'no_access'
-
-
-class DigitalAccessConsent(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    consentGiven: bool | None = Field(
-        None,
-        description='Whether the account holder has given consent for fiduciary access',
-        examples=[True],
-    )
-    scope: Scope1 | None = Field(
-        None,
-        description='The scope of access granted to fiduciaries',
-        examples=['full_access', 'limited_access'],
-    )
-    designatedRecipientPersonId: (
-        UUID | None
-    ) = (
-        Field(None, description='Reference to the Person.id designated to receive access to this digital asset')
-    )
-    designatedRecipientPersonIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced designated recipient person',
-    )
-    onlineToolDirective: bool | None = Field(
-        None,
-        description="Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA",
-        examples=[True, False],
-    )
-
-
-class Brand(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    name: constr(max_length=255) = Field(..., description='Brand or manufacturer name')
-    wikidataId: constr(pattern=r'^Q[1-9][0-9]*$', max_length=20) | None = Field(
-        None,
-        description='Wikidata Q-number for this brand. Resolves to structured data via the Wikidata API — founding year, country, parent company, logo, official website, product categories',
-        examples=['Q62288', 'Q1567489', 'Q538587'],
-    )
-    website: AnyUrl | None = Field(None, description='Official brand website')
-
-
-class OriginalPackaging(Enum):
-    complete = 'complete'
-    partial = 'partial'
-    box_only = 'box_only'
-    papers_only = 'papers_only'
-    none = 'none'
-    unknown = 'unknown'
-
-
-class Custodian(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    name: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the person or organisation holding the asset',
-        examples=['London City Bond', 'Barclays Bank, Manchester branch', "Sotheby's (on consignment)"],
-    )
-    contactEmail: EmailStr | None = Field(
-        None, description='Email address for the custodian'
-    )
-    contactPhone: constr(max_length=255) | None = Field(
-        None,
-        description='Phone number for the custodian',
-        examples=['+44 20 7293 5000'],
-    )
-    relationship: constr(max_length=255) | None = Field(
-        None,
-        description='The nature of the custodial relationship',
-        examples=['bonded storage', 'safe deposit box', 'repair/service', 'consignment', 'loan', 'pawn'],
-    )
-    reference: constr(max_length=500) | None = Field(
-        None,
-        description='Account or reference number with the custodian',
-        examples=['Account #LC-2024-5678', 'Box 247', 'Repair ticket #R-4521'],
-    )
-
-
-class ConditionSystem(Enum):
-    goldmine = 'goldmine'
-    sheldon = 'sheldon'
-    ags = 'ags'
-    bsc = 'bsc'
-    gia = 'gia'
-    watch_trade = 'watch_trade'
-    classic_vehicle = 'classic_vehicle'
-    book_trade = 'book_trade'
-
-
-class Urgency(Enum):
-    immediate = 'immediate'
-    within_7_days = 'within_7_days'
-    within_30_days = 'within_30_days'
-    none = 'none'
-
-
-class Insurance(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    provider: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the insurance provider',
-        examples=['Hiscox', 'Chubb', 'NFU Mutual', 'Allianz'],
-    )
-    policyReference: constr(max_length=500) | None = Field(
-        None,
-        description='Policy reference number',
-        examples=['HX-2024-5678', 'CHB/ART/2024/001'],
-    )
-    insuredValue: Money | None = Field(
-        None, description='The insured value in minor currency units'
-    )
-    renewalDate: date_aliased | None = Field(
-        None,
-        description='Next renewal date. Important — cover may lapse if not renewed after death',
-        examples=['2026-09-01'],
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Additional insurance notes',
-        examples=['Cover continues for 30 days after death per policy terms'],
-    )
-
-
-class EntityType1(Enum):
-    asset = 'asset'
-    asset_collection = 'asset_collection'
-
-
-class SplitFrom(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    entityType: EntityType1 = Field(
-        ..., description='The type of entity that was split'
-    )
-    entityId: UUID = Field(
-        ..., description='The id of the original entity that was split'
-    )
-    splitAt: AwareDatetime = Field(..., description='When the split occurred')
-    reason: constr(max_length=2000) | None = Field(
-        None, description='Why the split was requested'
-    )
-
-
-class DataProvenance(Enum):
-    manual_entry = 'manual_entry'
-    ai_extracted = 'ai_extracted'
-    ocr_scanned = 'ocr_scanned'
-    imported = 'imported'
-    migrated = 'migrated'
-    system_generated = 'system_generated'
-
-
-class SearchTerm(RootModel[constr(max_length=500)]):
-    root: constr(max_length=500)
-
-
-class Platform3(RootModel[constr(max_length=500)]):
-    root: constr(max_length=500)
-
-
-class ExcludePlatform(RootModel[constr(max_length=500)]):
-    root: constr(max_length=500)
-
-
-class SearchFrequency(Enum):
-    once = 'once'
-    weekly = 'weekly'
-    monthly = 'monthly'
-    on_demand = 'on_demand'
-
-
-class ComparableSearchProfile(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    platforms: list[Platform3] | None = Field(
-        None,
-        description='Marketplaces and platforms to search',
-        examples=[['ebay', 'catawiki', 'rails_of_sheffield', 'hattons']],
-        max_length=50,
-    )
-    searchQuery: constr(max_length=255) | None = Field(
-        None,
-        description='Natural-language query an agent should use',
-        examples=['Hornby R3456 Class 66 OO gauge boxed'],
-    )
-    filters: dict[str, constr(max_length=255)] | None = Field(
-        None,
-        description='Key-value filters to narrow results. Agents map to platform-specific parameters',
-        examples=[{'condition': 'good+', 'packaging': 'with_box', 'gauge': 'OO'}],
-    )
-    excludePlatforms: list[ExcludePlatform] | None = Field(
-        None, description='Platforms explicitly excluded', max_length=50
-    )
-    lastSearchedAt: AwareDatetime | None = Field(
-        None, description='When an agent last executed this search profile'
-    )
-    searchFrequency: SearchFrequency | None = Field(
-        None, description='How often this item should be re-searched'
-    )
-
-
-class MergedInto(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    entityType: EntityType1 | None = Field(
-        None, description='Type of the target entity'
-    )
-    entityId: UUID | None = Field(None, description='ID of the target entity')
-    mergedAt: AwareDatetime | None = Field(None, description='When the merge occurred')
-    reason: constr(max_length=2000) | None = Field(
-        None,
-        description='Why the entities were merged',
-        examples=['Duplicate entries identified during estate inventory'],
-    )
-
-
-class TaxTreatment1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    jurisdiction: Jurisdiction | None = None
-    assetType: AssetType | None = None
-    exemptions: list[constr(max_length=100)] | None = None
-    reliefClaimed: list[constr(max_length=100)] | None = None
-
-
-class Step(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    step: conint(ge=1)
-    method: constr(min_length=1, max_length=100)
-    description: constr(max_length=500) | None = None
-    location: constr(max_length=500) | None = None
-    holderPersonId: UUID | None = None
-
-
-class Preference(Enum):
-    transfer_to_beneficiary = 'transfer_to_beneficiary'
-    memorialise = 'memorialise'
-    delete = 'delete'
-    archive = 'archive'
-    no_preference = 'no_preference'
-
-
-class Memorialisation(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    preference: Preference | None = None
-    instructions: constr(max_length=1000) | None = None
-
-
-class AccessInstructions(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    accessType: constr(max_length=100) | None = None
-    platform: constr(max_length=255) | None = None
-    visibility: Visibility | None = 'all_parties'
-    requiredRole: constr(max_length=50) | None = Field(
-        None, description='The estate role required to follow these instructions'
-    )
-    steps: list[Step] | None = None
-    memorialisation: Memorialisation | None = None
-    lastVerified: date_aliased | None = None
-    verifiedBy: constr(max_length=255) | None = None
-
-
-class OwnerIntent(Enum):
-    keeping = 'keeping'
-    considering = 'considering'
-    thinning = 'thinning'
-    listed = 'listed'
-    sold = 'sold'
-    allocated = 'allocated'
-    donated = 'donated'
-
-
-class Channel(Enum):
-    ebay = 'ebay'
-    amazon = 'amazon'
-    shopify = 'shopify'
-    etsy = 'etsy'
-    own_website = 'own_website'
-    auction_house = 'auction_house'
-    other = 'other'
-
-
-class Status14(Enum):
-    draft = 'draft'
-    active = 'active'
-    sold = 'sold'
-    withdrawn = 'withdrawn'
-    expired = 'expired'
-
-
-class Listing(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    channel: Channel = Field(
-        ..., description='The sales channel where this item is listed'
-    )
-    channelName: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable name of the channel, especially when channel is other',
-    )
-    listingId: constr(max_length=255) | None = Field(
-        None, description='The platform-specific listing identifier'
-    )
-    listingUrl: AnyUrl | None = Field(
-        None, description='Direct URL to the listing on the external platform'
-    )
-    status: Status14 = Field(..., description='Current status of this listing')
-    askingPrice: Money | None = Field(None, description='The listed asking price')
-    listedAt: AwareDatetime | None = Field(
-        None, description='When this listing was created or last activated'
-    )
-    soldAt: AwareDatetime | None = Field(
-        None, description='When the item was sold via this listing, if applicable'
-    )
-    soldPrice: Money | None = Field(None, description='The actual sale price, if sold')
-
-
-class PolicyType1(Enum):
-    home_contents = 'home_contents'
-    specialist_collectibles = 'specialist_collectibles'
-    classic_vehicle = 'classic_vehicle'
-    individual_item = 'individual_item'
-    fine_art = 'fine_art'
-    jewellery = 'jewellery'
-    other = 'other'
-
-
-class InsuranceCover(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    insurer: constr(max_length=255) | None = Field(
-        None, description='Name of the insurance company'
-    )
-    policyNumber: constr(max_length=100) | None = Field(
-        None, description='The insurance policy number'
-    )
-    policyType: PolicyType1 | None = Field(
-        None, description='The type of insurance policy covering this item'
-    )
-    agreedValue: Money | None = Field(
-        None,
-        description='The agreed or insured value, in minor currency units. May differ from market value',
-    )
-    coverConfirmedAt: date_aliased | None = Field(
-        None,
-        description='When the insurance cover for this item was last confirmed or reviewed',
-    )
-
-
-class ShippingClass(Enum):
-    parcel = 'parcel'
-    large_item = 'large_item'
-    specialist_transport = 'specialist_transport'
-    collection_only = 'collection_only'
-
-
-class IncludedDocuments(Enum):
-    outer_box = 'outer_box'
-    inner_box = 'inner_box'
-    warranty_card = 'warranty_card'
-    cosc_certificate = 'cosc_certificate'
-    instruction_manual = 'instruction_manual'
-    hang_tags = 'hang_tags'
-    service_booklet = 'service_booklet'
-    purchase_receipt = 'purchase_receipt'
-    original_invoice = 'original_invoice'
-    v5c_logbook = 'v5c_logbook'
-    mot_certificate = 'mot_certificate'
-    provenance_letter = 'provenance_letter'
-    certificate_of_authenticity = 'certificate_of_authenticity'
-    appraisal_certificate = 'appraisal_certificate'
-    export_licence = 'export_licence'
-    customs_declaration = 'customs_declaration'
-
-
-class TaxReliefEligibility1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    reliefType: ReliefType | None = Field(
-        None, description='The type of tax relief claimed'
-    )
-    eligible: bool | None = None
-    percentage: conint(ge=0, le=100) | None = Field(
-        None,
-        description='Relief percentage (e.g. 100 for full APR, 50 for partial BPR)',
-    )
-    conditions: constr(max_length=500) | None = Field(
-        None,
-        description='Conditions for maintaining eligibility',
-        examples=['Beneficiary must actively farm for minimum 2 years'],
-    )
-    jurisdiction: Jurisdiction | None = None
-    statute: constr(max_length=500) | None = Field(
-        None, examples=['IHTA 1984 s.115-124C']
-    )
-
-
-class Type13(Enum):
-    sentimental = 'sentimental'
-    cultural = 'cultural'
-    religious = 'religious'
-    historical = 'historical'
-    family_heirloom = 'family_heirloom'
-    professional = 'professional'
-
-
-class RestrictionOnDisposal(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    exists: bool | None = None
-    nature: constr(max_length=500) | None = Field(
-        None, examples=['Must not be sold', 'Must stay in the family']
-    )
-
-
-class Significance(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    type: Type13 | None = None
-    description: constr(max_length=1000) | None = None
-    restrictionOnDisposal: RestrictionOnDisposal | None = Field(
-        None,
-        description='Whether and how the testator has restricted disposal of this asset',
-    )
-
-
-class Asset(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    id: UUID = Field(
-        ...,
-        description='Unique identifier for this asset within the INHERIT document',
-        examples=['e5f6a7b8-c9d0-1234-ef01-23456789abcd'],
-    )
-    name: constr(min_length=1, max_length=255) = Field(
-        ...,
-        description='Display name for this asset. Should be specific enough to identify the item during probate',
-        examples=["Grandmother's engagement ring", 'Barclays Current Account', '2019 Toyota Corolla', 'Bitcoin wallet', 'Stradivarius violin'],
-    )
-    category: Category3 = Field(
-        ...,
-        description='Top-level category from the INHERIT Product Taxonomy. Use the `subcategory` field for finer classification. See `reference-data/category-guidance.json` for valid subcategories, recommended identifiers, and photography guidance per category',
-        examples=['financial', 'collectibles', 'vehicle', 'jewellery_watches'],
-    )
-    subcategory: constr(max_length=100) | None = Field(
-        None,
-        description="Finer classification within the top-level category. Values are defined in reference-data/category-guidance.json but the field is freeform to accommodate jurisdiction-specific asset types. Examples: financial → 'pension', collectibles → 'model_railways', vehicle → 'classic_vehicle'",
-        examples=['engagement ring', 'ISA', 'self-invested personal pension', 'NFT', 'vintage wine'],
-    )
-    estimatedValue: Money | None = Field(
-        None,
-        description="Owner's estimate of the asset's current value, in minor currency units",
-    )
-    professionalValuation: Money | None = Field(
-        None, description='Professional valuation of the asset, in minor currency units'
-    )
-    netEquity: NetEquity | None = Field(
-        None,
-        description='Value of this asset net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored',
-        title='Money',
-    )
-    inNegativeEquity: bool | None = Field(
-        None,
-        description='True when the active charges secured against this asset exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall',
-        examples=[False, True],
-    )
-    valuationDate: date_aliased | None = Field(
-        None,
-        description='Date of the most recent valuation',
-        examples=['2024-11-01', '2025-02-14'],
-    )
-    valuationConfidence: ValuationConfidence | None = Field(
-        None,
-        description='Level of confidence in the stated valuation',
-        examples=['estimated', 'professional'],
-    )
-    condition: Condition1 | None = Field(
-        None,
-        description="Physical condition of the asset. Affects resale value — dealers use this to price items. Pair with conditionSystem and conditionGrade for domain-specific grading. Use 'not_applicable' for financial assets where condition is meaningless",
-        examples=['good', 'not_applicable'],
-    )
-    quantity: conint(ge=1) | None = Field(
-        None,
-        description='Number of items if this represents multiple identical or similar items',
-        examples=[1, 12, 500],
-    )
-    location: constr(max_length=255) | None = Field(
-        None,
-        description='Where this asset is physically stored or held — a bank, safe, property, or institution',
-        examples=['Barclays Bank, Manchester branch', 'Home safe', 'Bonhams storage, London', 'Coinbase exchange'],
-    )
-    propertyId: UUID | None = Field(
-        None,
-        description='Reference to a Property.id if this asset is located at a specific property in the estate',
-    )
-    assetCollectionId: UUID | None = Field(
-        None,
-        description="Reference to the AssetCollection.id this asset belongs to. An asset may belong to at most one collection. If set, this asset's value contributes to the collection's total",
-    )
-    spaceId: UUID | None = Field(
-        None,
-        description='Reference to a Space.id representing where this item is physically stored. Critical for collections spread across multiple properties or countries — affects probate jurisdiction and dealer collection logistics',
-    )
-    identifiers: list[Identifier] | None = Field(
-        None,
-        description='External identifiers — serial numbers, account numbers, policy references, registration numbers, etc',
-        examples=[[{'system': 'urn:barclays:sort-code-account', 'value': '20-45-67 12345678', 'type': 'bank_account'}], [{'value': 'DVLA: AB12 CDE', 'type': 'vehicle_registration'}]],
-        max_length=100,
-    )
-    externalLinks: list[ExternalLink1] | None = Field(
-        None,
-        description='Links to this asset in external databases, marketplaces, and registries. The universal connector — any external system can be referenced without a schema change. Use identifiers for formal identifier schemes (ISBN, VIN, NINO); use externalLinks for platform-specific references, product pages, and database entries',
-        examples=[[{'system': 'chrono24', 'id': '12345678', 'url': 'https://www.chrono24.co.uk/rolex/ref-116610ln--id12345678.htm'}, {'system': 'watchchartsRef', 'id': 'rolex-submariner-116610ln'}], [{'system': 'discogs', 'id': '1234567', 'url': 'https://www.discogs.com/release/1234567'}], [{'system': 'companieshouse', 'id': '12345678', 'url': 'https://find-and-update.company-information.service.gov.uk/company/12345678'}], [{'system': 'artnet', 'id': 'andy-warhol-campbells-soup-can', 'url': 'https://www.artnet.com/artists/andy-warhol/'}, {'system': 'artlossregister', 'id': 'ALR-2025-98765'}]],
-        max_length=50,
-    )
-    productPage: AnyUrl | None = Field(
-        None,
-        description="URI pointing to the manufacturer's or retailer's official product page for this exact item. Distinct from storageRef (document storage) and externalLinks (database references). Enables direct linking to manufacturer specifications, manuals, and warranty information",
-        examples=['https://www.rolex.com/watches/submariner/m126610ln-0001', 'https://www.gibson.com/en-US/Electric-Guitar/Les-Paul-Standard-50s', 'https://www.hornby.com/shop/r30350'],
-    )
-    provenanceChain: list[ProvenanceChainItem] | None = Field(
-        None,
-        description='Prior ownership records — establishes the chain of provenance for the asset. Critical for art, antiques, and high-value collectibles',
-        max_length=100,
-    )
-    images: list[Media] | None = Field(
-        None,
-        description='Photographs, videos, and document scans. Vision-capable AI agents use these to identify items, assess condition, and find visual matches on marketplaces. Use viewType from media.json to categorize each media item',
-        max_length=100,
-    )
-    possessionStatus: PossessionStatus | None = Field(
-        None,
-        description='Whether the asset was held at death, is receivable post-death, or is contingent on a future event',
-        examples=['possessed_at_death', 'receivable'],
-    )
-    mobilityType: MobilityType | None = Field(
-        None,
-        description='Whether this asset is classified as immoveable or moveable property. Affects which conflict-of-laws rules apply in cross-border estates',
-        examples=['moveable'],
-    )
-    acquisitionType: AcquisitionType | None = Field(
-        None,
-        description='How this asset was acquired. Determines succession rules in Indian and other customary systems',
-        examples=['self_acquired', 'inherited'],
-    )
-    registrationStatus: RegistrationStatus | None = Field(
-        None,
-        description='Whether ownership of this asset is formally registered or documented',
-        examples=['formally_registered'],
-    )
-    ownershipEvidence: OwnershipEvidence | None = Field(
-        None,
-        description='The type of evidence available to prove ownership of this asset',
-        examples=['receipts_only', 'title_deed'],
-    )
-    culturalDisposition: CulturalDisposition | None = Field(
-        None,
-        description='Cultural, religious, and regulatory constraints on disposal of this asset',
-    )
-    communalAuthority: CommunalAuthority1 | None = Field(
-        None,
-        description='The communal or family authority whose approval is required to dispose of this asset',
-    )
-    successionRegime: SuccessionRegime1 | None = Field(
-        None,
-        description='The succession regime governing this specific asset. Overrides estate.defaultSuccessionRegime when present',
-    )
-    beneficiaryDesignation: BeneficiaryDesignation | None = Field(
-        None,
-        description='Named beneficiary designation for this asset. Assets with beneficiary designations pass outside the probate estate — the will does not control their distribution',
-    )
-    digitalAccessConsent: DigitalAccessConsent | None = Field(
-        None,
-        description="Digital access consent under RUFADAA or equivalent legislation. Governs whether executors and fiduciaries can access the deceased's digital accounts and assets",
-    )
-    passesOutsideEstate: bool | None = Field(
-        None,
-        description='Whether this asset passes outside the probate estate. Beneficiary designations, POD accounts, and jointly held assets typically bypass the will',
-        examples=[True, False],
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Free-text notes about this asset. Use for provenance, sentimental value, special handling instructions, or anything not captured by structured fields',
-        examples=['Belonged to great-grandmother — significant sentimental value to the family', 'Firearm requires Section 1 certificate — must be surrendered or transferred to a licence holder within 7 days of death'],
-    )
-    description: constr(max_length=2000) | None = Field(
-        None,
-        description="Structured description of the asset — what it is, its significance, and key details a dealer or executor would need. Distinct from 'notes' which is free-form",
-        examples=['OO gauge Hornby R3456 Class 66 locomotive in EWS livery, DCC fitted, with original box and instructions', '18ct yellow gold solitaire engagement ring, 1.2ct round brilliant diamond, GIA certified VS1/G'],
-    )
-    brand: constr(max_length=255) | Brand | None = Field(
-        None,
-        description='The manufacturer or brand name. Accepts a plain string (backwards compatible) or a structured object with Wikidata linkage for rich product data. AI agents should use this as a primary search dimension when finding comparables',
-        examples=['Rolex', {'name': 'Rolex', 'wikidataId': 'Q62288'}, {'name': 'Hornby', 'wikidataId': 'Q1567489', 'website': 'https://www.hornby.com'}],
-    )
-    model: constr(max_length=255) | None = Field(
-        None,
-        description='The specific model, product line, or range name. Combined with brand and identifiers, this is the primary key for marketplace search. AI agents construct search queries from brand + model + subcategory',
-        examples=['Class 66', 'Submariner Date', 'Perfect Reel', 'Model D Grand Piano', 'Birkin 25', 'Les Paul Standard'],
-    )
-    purchaseDate: date_aliased | None = Field(
-        None,
-        description='Date the asset was acquired by the current owner. Used for capital gains tax calculations, insurance claims, and provenance. Maps to Schema.org purchaseDate',
-        examples=['2015-06-20', '1998-12-25'],
-    )
-    originalPackaging: OriginalPackaging | None = Field(
-        None,
-        description='Whether original packaging, documentation, and accessories are present. Affects value by 20–40% across watches, model railways, jewellery, and many other domains',
-        examples=['complete', 'none', 'unknown'],
-    )
-    custodian: Custodian | None = Field(
-        None,
-        description='Third party currently holding this asset — a bank (safe deposit), storage facility (bonded wine), repairer (watch at jeweller), gallery (art on loan), or institution. The executor needs to know who to contact',
-    )
-    conditionSystem: (
-        ConditionSystem | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='The grading system used for the conditionGrade value. Allows domain-specific condition assessment alongside the generic condition field', examples=['goldmine', 'sheldon', 'gia', 'watch_trade', 'classic_vehicle'])
-    conditionGrade: constr(max_length=100) | None = Field(
-        None,
-        description='The specific grade within the conditionSystem. Meaningful only when conditionSystem is set',
-        examples=['VG+', 'MS-65', 'VS1', 'Fine'],
-    )
-    conditionStandard: AnyUrl | None = Field(
-        None,
-        description='URI pointing to the official documentation of the grading standard used. Enables tools to display the correct grading scale and interpret the conditionGrade value',
-        examples=['https://www.goldminemag.com/collector-resources/record-grading-101', 'https://www.pcgs.com/grades', 'https://www.gia.edu/gem-grading', 'https://www.bada-antiques.org/guides/condition-grading'],
-    )
-    urgency: Urgency | None = Field(
-        None,
-        description="How urgently this asset needs attention after the testator's death. Drives the executor's priority list",
-        examples=['immediate', 'none'],
-    )
-    urgencyReason: constr(max_length=2000) | None = Field(
-        None,
-        description="Explanation of why this asset is urgent. Particularly important for 'immediate' items",
-        examples=['Firearm requires Section 1 certificate — must be surrendered or transferred to a licence holder within 7 days of death', 'Live animals requiring daily care', 'Perishable wine collection in temperature-controlled storage — power must be maintained'],
-    )
-    containedInAssetId: UUID | None = Field(
-        None,
-        description='Reference to another Asset.id if this asset is physically contained within or logically part of another asset. Enables hierarchical asset nesting — e.g. a watch inside a safe, tools inside a toolbox',
-        examples=['a1b2c3d4-e5f6-7890-abcd-ef1234567890'],
-    )
-    insurance: Insurance | None = Field(
-        None,
-        description="Insurance coverage for this asset. The executor needs to know what's insured, by whom, and whether cover continues after death",
-    )
-    purchasedFrom: constr(max_length=255) | None = Field(
-        None,
-        description='Where the asset was purchased or acquired from. Collectors track provenance — valuable for dealers and for establishing authenticity',
-        examples=['Rails of Sheffield', "Christie's", "Sotheby's", 'Private sale', 'eBay seller vintage-trains-uk', 'Car boot sale, Wrexham'],
-    )
-    splitFrom: SplitFrom | None = Field(
-        None,
-        description='Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split',
-    )
-    dataProvenance: DataProvenance | None = Field(
-        None,
-        description="How this specific entity's data was captured. Overrides the document-level default if set",
-    )
-    searchTerms: list[SearchTerm] | None = Field(
-        None,
-        description='Keywords for marketplace search — AI-generated or human-curated. Memoization: once derived, cached here so subsequent agents reuse them instantly rather than re-deriving',
-        examples=[['Hornby R3456', 'Class 66 OO gauge', 'EWS livery locomotive']],
-        max_length=50,
-    )
-    comparableSearchProfile: ComparableSearchProfile | None = Field(
-        None,
-        description='Structured search instructions for comparable-finding agents. Acts as agent memory — the item teaches future agents how to find its peers',
-    )
-    suggestedSubcategory: constr(max_length=255) | None = Field(
-        None,
-        description='AI-suggested subcategory refinement, kept separate from the human-set subcategory. Accepted when the user confirms. Provenance: always AI-generated',
-    )
-    valuationReliability: conint(ge=0, le=100) | None = Field(
-        None,
-        description='Numeric reliability score (0-100) for the current valuation. Computed from: recency, method, corroborating comparables, variance between estimates. Companion to the categorical valuationConfidence enum — the enum captures source, this number captures trustworthiness now. Agents use this to prioritise which assets need re-valuation',
-    )
-    lastVerifiedAt: AwareDatetime | None = Field(
-        None,
-        description="When this entity's data was last verified by a human or authoritative source. Agents use this to decide whether to trust existing values or re-derive them",
-    )
-    verifiedBy: constr(max_length=255) | None = Field(
-        None,
-        description="Who or what verified this entity — a person's name, a tool, or 'owner'",
-        examples=['James Ashford', 'INHERIT Scanner v2', 'Rails of Sheffield (dealer)'],
-    )
-    visibility: Visibility | None = Field(
-        'all_parties',
-        description='Controls who can see this asset. Some assets (firearms, digital accounts, sensitive collections) may need restricted visibility',
-    )
-    fieldProvenance: list[FieldProvenance] | None = Field(
-        None,
-        description="Per-field provenance records — how each field's value was obtained",
-        max_length=100,
-    )
-    comments: list[Comment] | None = Field(
-        None, description='Discussion comments on this entity', max_length=100
-    )
-    mergedInto: MergedInto | None = Field(
-        None,
-        description='Records that this entity was merged into another entity — the target entity is the canonical version',
-    )
-    spaceIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced storage location',
-    )
-    provenance: Provenance | None = Field(
-        None,
-        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
-    )
-    applicableLaw: Jurisdiction | None = Field(
-        None,
-        description='The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile',
-    )
-    taxTreatment: TaxTreatment1 | None = Field(
-        None,
-        description='Per-asset tax treatment — how this asset is classified for tax purposes in a specific jurisdiction',
-    )
-    accessInstructions: AccessInstructions | None = Field(
-        None,
-        description='Instructions for accessing this asset after death — steps, locations, holders. No secrets in the document, just instructions for finding them. Available for all asset categories (digital: crypto wallets, social media; physical: safes, storage units)',
-    )
-    ownerIntent: OwnerIntent | None = Field(
-        None,
-        description="The owner's current intention for this item. Absent means keeping (the default). Used by catalogue applications to track whether items are being actively managed, offered for sale, or allocated to specific people",
-    )
-    listings: list[Listing] | None = Field(
-        None,
-        description='Active or historical listings of this item for sale on external channels. Tracks where the item is listed, its status, and sale outcome. Application-level data — not part of the estate interchange but carried alongside it for catalogue and dealer workflows',
-        max_length=20,
-    )
-    serviceHistory: list[ServiceRecord] | None = Field(
-        None,
-        description='Service, maintenance, and restoration records. Critical for watches (service intervals affect value), vehicles (MOT history, restoration), clocks, and musical instruments',
-        max_length=100,
-    )
-    insuranceCover: InsuranceCover | None = Field(
-        None,
-        description='Insurance details for this item. Tracks which policy covers it, the agreed value, and when cover was last confirmed. Essential for executors who need to claim on the correct policy',
-    )
-    shippingClass: ShippingClass | None = Field(
-        None,
-        description='How this item can be transported for selling or verification. Determines which logistics path the Deal Comparison uses',
-    )
-    includedDocuments: (
-        list[IncludedDocuments | constr(pattern=r'^x-inherit-.+', max_length=100)]
-        | None
-    ) = Field(None, description='Original documents, certificates, and packaging elements present with this item. Affects value significantly across many categories. Cross-category: watches, vehicles, books, art, and collectibles share some document types', max_length=30)
-    taxReliefEligibility: TaxReliefEligibility1 | None = Field(
-        None,
-        description='Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)',
-    )
-    significance: Significance | None = Field(
-        None,
-        description='Cultural, religious, sentimental, or professional significance beyond monetary value',
-    )
-
-
-class Category4(Enum):
-    model_railways = 'model_railways'
-    vinyl_records = 'vinyl_records'
-    art = 'art'
-    jewellery = 'jewellery'
-    wine = 'wine'
-    stamps = 'stamps'
-    coins = 'coins'
-    books = 'books'
-    musical_instruments = 'musical_instruments'
-    fishing_gear = 'fishing_gear'
-    handbags = 'handbags'
-    power_tools = 'power_tools'
-    watches = 'watches'
-    ceramics = 'ceramics'
-    memorabilia = 'memorabilia'
-    other = 'other'
-
-
-class ValuationSource(Enum):
-    self_estimated = 'self_estimated'
-    dealer_valuation = 'dealer_valuation'
-    auction_estimate = 'auction_estimate'
-    insurance_value = 'insurance_value'
-
-
-class DisposalStrategy(Enum):
-    keep_together = 'keep_together'
-    sell_as_collection = 'sell_as_collection'
-    sell_individually = 'sell_individually'
-    auction = 'auction'
-    donate = 'donate'
-    gift_to_person = 'gift_to_person'
-    dealer_bids = 'dealer_bids'
-    mixed = 'mixed'
-    undecided = 'undecided'
-
-
-class PreferredDisposalMethod(Enum):
-    private_sale = 'private_sale'
-    auction_house = 'auction_house'
-    dealer_network = 'dealer_network'
-    online_marketplace = 'online_marketplace'
-    specialist_fair = 'specialist_fair'
-    museum_acquisition = 'museum_acquisition'
-    other = 'other'
-
-
-class SplitFrom1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    entityType: EntityType1 = Field(
-        ..., description='The type of entity that was split'
-    )
-    entityId: UUID = Field(
-        ..., description='The id of the original entity that was split'
-    )
-    splitAt: AwareDatetime = Field(..., description='When the split occurred')
-    reason: constr(max_length=2000) | None = Field(
-        None, description='Why the split was requested'
-    )
-
-
-class DisposalMethod(Enum):
-    sold_as_collection = 'sold_as_collection'
-    sold_individually = 'sold_individually'
-    gifted_to_beneficiary = 'gifted_to_beneficiary'
-    donated = 'donated'
-    kept = 'kept'
-    other = 'other'
-
-
-class DisposalHistoryItem(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    assetId: UUID | None = Field(None, description='Asset.id of the disposed item')
-    disposalMethod: DisposalMethod | None = Field(
-        None, description='How the item was disposed of'
-    )
-    proceeds: Money | None = Field(None, description='Sale proceeds')
-    recipientPersonId: UUID | None = Field(
-        None, description='Person.id of the recipient'
-    )
-    recipientPersonIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced recipient person',
-    )
-    recipientOrganisationId: UUID | None = Field(
-        None, description='Organisation.id of the recipient'
-    )
-    recipientOrganisationIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced recipient organisation',
-    )
-    date: date_aliased | None = Field(None, description='Date of disposal')
-    notes: constr(max_length=2000) | None = Field(
-        None, description='Notes about the disposal'
-    )
-
-
-class MergedInto1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    entityType: EntityType1 | None = Field(
-        None, description='Type of the target entity'
-    )
-    entityId: UUID | None = Field(None, description='ID of the target entity')
-    mergedAt: AwareDatetime | None = Field(None, description='When the merge occurred')
-    reason: constr(max_length=2000) | None = Field(
-        None,
-        description='Why the entities were merged',
-        examples=['Duplicate entries identified during estate inventory'],
-    )
-
-
-class ValuationComparison(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    insuranceValue: Money | None = Field(None, description='Insurance valuation')
-    insuranceDate: date_aliased | None = Field(
-        None, description='Date of insurance valuation'
-    )
-    dealerEstimate: Money | None = Field(None, description="Dealer's estimate")
-    dealerDate: date_aliased | None = Field(None, description='Date of dealer estimate')
-    auctionEstimate: Money | None = Field(None, description='Auction house estimate')
-    auctionDate: date_aliased | None = Field(
-        None, description='Date of auction estimate'
-    )
-    likelyRealisableAmount: Money | None = Field(
-        None, description='Most likely realisable amount considering all sources'
-    )
-
-
-class AssetCollection(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    id: UUID = Field(
-        ...,
-        description='Unique identifier for this asset collection',
-        examples=['b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8'],
-    )
-    rootDocumentId: UUID = Field(
-        ...,
-        description='The root document this entity belongs to — either an estate document (schema.json) or a catalogue document (catalogue.json)',
-        examples=['a1b2c3d4-e5f6-7890-abcd-ef1234567890'],
-    )
-    name: constr(min_length=1, max_length=255) = Field(
-        ...,
-        description='Display name for this collection',
-        examples=['Model railway collection', 'Vinyl record library', 'Japanese woodblock prints'],
-    )
-    description: constr(max_length=2000) | None = Field(
-        None,
-        description="Context for family members and dealers about the collection's scope, provenance, or significance",
-        examples=['OO gauge collection started in 1985, mostly Hornby with some Lima coaches. Layout stored in the loft at Oakfield Road.'],
-    )
-    category: Category4 | None = Field(
-        None,
-        description='The primary category of items in this collection',
-        examples=['model_railways', 'vinyl_records', 'art'],
-    )
-    estimatedValue: Money | None = Field(
-        None,
-        description='Estimated total value of the collection as a whole',
-        examples=[{'amount': 1500000, 'currency': 'GBP'}],
-    )
-    valuationSource: ValuationSource | None = Field(
-        None,
-        description='How the estimated value was determined',
-        examples=['dealer_valuation'],
-    )
-    valuationDate: date_aliased | None = Field(
-        None,
-        description='Date the valuation was performed or last updated',
-        examples=['2025-11-15'],
-    )
-    disposalWishes: constr(max_length=255) | None = Field(
-        None,
-        description='Free-text guidance from the testator about what should happen to this collection — keep together, sell at auction, donate to a museum, etc',
-        examples=['Keep together if possible. Contact Dave at Manchester Model Railway Club — he knows the right dealers. Do not sell on eBay individually.'],
-    )
-    disposalStrategy: DisposalStrategy | None = Field(
-        None,
-        description="The testator's preferred strategy for disposing of this collection. More structured than disposalWishes",
-        examples=['dealer_bids', 'keep_together'],
-    )
-    minimumAcceptableValue: Money | None = Field(
-        None,
-        description='The minimum total value the testator or executor will accept for the collection. Prevents fire-sale disposal. In minor currency units',
-    )
-    preferredDisposalMethod: PreferredDisposalMethod | None = Field(
-        None,
-        description='Preferred channel for disposing of the collection',
-        examples=['dealer_network', 'auction_house'],
-    )
-    specialistDealerNotes: constr(max_length=2000) | None = Field(
-        None,
-        description='Notes about specialist dealers who might be interested in this collection. Names, contact details, areas of expertise',
-        examples=["Rails of Sheffield (01onal@railsofsheffield.com) — largest UK model railway dealer. Hattons of Liverpool — strong on Bachmann/Hornby. Avoid eBay 'lot sellers' — they undervalue specialist items."],
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Any additional notes about this collection',
-        examples=["Insurance policy with Hiscox, ref HX-2024-1234. Photos in Google Drive folder 'Railway Collection'."],
-    )
-    images: list[Media] | None = Field(
-        None,
-        description='Overview photographs and videos of the collection as a whole — the display, the storage, the scale of the collection',
-        max_length=100,
-    )
-    splitFrom: SplitFrom1 | None = Field(
-        None,
-        description='Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split',
-    )
-    disposalHistory: list[DisposalHistoryItem] | None = Field(
-        None,
-        description='History of how items in this collection were disposed of during estate administration',
-        max_length=500,
-    )
-    mergedInto: MergedInto1 | None = Field(
-        None,
-        description='Records that this entity was merged into another entity — the target entity is the canonical version',
-    )
-    valuationComparison: ValuationComparison | None = Field(
-        None,
-        description='Comparison of different valuation sources for this collection — insurance, dealer, auction',
     )
     provenance: Provenance | None = Field(
         None,
@@ -11706,7 +14547,7 @@ class Liability(BaseModel):
     )
 
 
-class Type14(Enum):
+class Type15(Enum):
     charity = 'charity'
     company = 'company'
     unincorporated_association = 'unincorporated_association'
@@ -11723,7 +14564,7 @@ class BeneficiaryOrganisation(BaseModel):
         description='Name of the beneficiary organisation',
         examples=['British Red Cross', 'Manchester University', 'Médecins Sans Frontières'],
     )
-    type: Type14 = Field(..., description='The legal form of the organisation')
+    type: Type15 = Field(..., description='The legal form of the organisation')
     registrationNumber: constr(max_length=500) | None = Field(
         None,
         description='Charity registration number, company number, or other official registration',
@@ -11803,7 +14644,7 @@ class Substitution(BaseModel):
     )
 
 
-class Type15(Enum):
+class Type16(Enum):
     disclaimer = 'disclaimer'
     deed_of_variation = 'deed_of_variation'
     appropriation = 'appropriation'
@@ -11832,7 +14673,7 @@ class PostDeathAction1(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    type: Type15 = Field(..., description='The type of post-death action')
+    type: Type16 = Field(..., description='The type of post-death action')
     actionDate: date_aliased | None = Field(
         None, description='Date the action was taken', examples=['2025-12-01']
     )
@@ -11915,7 +14756,7 @@ class FailureConsequence(Enum):
     custom = 'custom'
 
 
-class Condition2(BaseModel):
+class Condition3(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -11969,10 +14810,6 @@ class ConstrainedBy(Enum):
 
 
 class HotchpotTransferId(RootModel[UUID]):
-    root: UUID
-
-
-class AssetId(RootModel[UUID]):
     root: UUID
 
 
@@ -12079,6 +14916,11 @@ class PrecatoryWish(BaseModel):
 
 
 class Bequest(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/bequest.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='allow',
     )
@@ -12126,7 +14968,7 @@ class Bequest(BaseModel):
         None,
         description='Reference to the Asset.id from which a demonstrative bequest should be paid',
     )
-    conditions: list[Condition2] | None = Field(
+    conditions: list[Condition3] | None = Field(
         None,
         description='Conditions precedent that must be satisfied before the beneficiary receives this bequest. Each condition has a typed category for machine-readable common patterns, plus a human-readable description',
         max_length=50,
@@ -13281,397 +16123,6 @@ class Guardian(RootModel[Guardian2 | Guardian3]):
     )
 
 
-class WishType(Enum):
-    funeral = 'funeral'
-    letter = 'letter'
-    care = 'care'
-    distribution = 'distribution'
-    digital = 'digital'
-    pets = 'pets'
-    general = 'general'
-    digital_likeness = 'digital_likeness'
-
-
-class BindingNature(Enum):
-    non_binding = 'non_binding'
-    culturally_obligatory = 'culturally_obligatory'
-    religiously_obligatory = 'religiously_obligatory'
-    legally_binding = 'legally_binding'
-
-
-class FuneralArrangementType(Enum):
-    burial = 'burial'
-    cremation = 'cremation'
-    green_burial = 'green_burial'
-    sea_burial = 'sea_burial'
-    sky_burial = 'sky_burial'
-    donation_to_science = 'donation_to_science'
-    other = 'other'
-
-
-class FuneralCeremonyType(Enum):
-    religious = 'religious'
-    secular = 'secular'
-    hybrid = 'hybrid'
-    none = 'none'
-
-
-class FuneralBudgetSource(Enum):
-    estate = 'estate'
-    pre_paid = 'pre_paid'
-    insurance = 'insurance'
-    family = 'family'
-    other = 'other'
-
-
-class Organ(RootModel[constr(max_length=100)]):
-    root: constr(max_length=100)
-
-
-class OrganDonation(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    consentGiven: bool | None = Field(None, description='Whether consent given')
-    organs: list[Organ] | None = Field(
-        None, description='Specific organs consented', max_length=20
-    )
-    coordinatingOrganisationId: (
-        UUID | None
-    ) = Field(None, description='Organisation coordinating donation')
-    coordinatingOrganisationIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced coordinating organisation',
-    )
-
-
-class MedicalResearchDonation(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    consentGiven: bool | None = Field(None, description='Whether consent given')
-    institutionOrganisationId: (
-        UUID | None
-    ) = Field(None, description='Research institution Organisation.id')
-    institutionOrganisationIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced institution organisation',
-    )
-    restrictions: constr(max_length=2000) | None = Field(
-        None, description='Any restrictions'
-    )
-
-
-class AutopsyPreference(Enum):
-    requested = 'requested'
-    declined = 'declined'
-    no_preference = 'no_preference'
-
-
-class LikenessConsent(Enum):
-    permitted = 'permitted'
-    prohibited = 'prohibited'
-    restricted = 'restricted'
-    not_stated = 'not_stated'
-
-
-class LikenessScopeEnum(Enum):
-    voice = 'voice'
-    visual_appearance = 'visual_appearance'
-    writing_style = 'writing_style'
-    personality_model = 'personality_model'
-    full_avatar = 'full_avatar'
-
-
-class LikenessPermittedUs(Enum):
-    memorial = 'memorial'
-    family_private = 'family_private'
-    educational = 'educational'
-    commercial = 'commercial'
-    legal_proceedings = 'legal_proceedings'
-    artistic = 'artistic'
-
-
-class LikenessProhibitedUs(Enum):
-    memorial = 'memorial'
-    family_private = 'family_private'
-    educational = 'educational'
-    commercial = 'commercial'
-    legal_proceedings = 'legal_proceedings'
-    artistic = 'artistic'
-
-
-class SyntheticMediaPolicy(Enum):
-    allow_with_attribution = 'allow_with_attribution'
-    allow_without_attribution = 'allow_without_attribution'
-    prohibit_all = 'prohibit_all'
-    family_decision = 'family_decision'
-    not_stated = 'not_stated'
-
-
-class RequestType(Enum):
-    takedown = 'takedown'
-    restrict = 'restrict'
-    transfer_control = 'transfer_control'
-    verify_consent = 'verify_consent'
-    cease_training = 'cease_training'
-    other = 'other'
-
-
-class Status15(Enum):
-    pending = 'pending'
-    acknowledged = 'acknowledged'
-    complied = 'complied'
-    refused = 'refused'
-    escalated = 'escalated'
-    unknown = 'unknown'
-
-
-class LikenessEnforcementItem(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    platform: constr(min_length=1, max_length=255) = Field(
-        ..., description='Platform where enforcement action is directed'
-    )
-    requestType: RequestType = Field(
-        ..., description='What type of enforcement action was requested'
-    )
-    requestDate: date_aliased | None = Field(
-        None, description='When the enforcement request was made'
-    )
-    requestedBy: constr(max_length=255) | None = Field(
-        None,
-        description='Who made the request (executor, controller, legal representative)',
-    )
-    requestedByPersonId: UUID | None = Field(
-        None, description='FK to person who made the request'
-    )
-    requestedByPersonIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced requested by person',
-    )
-    status: Status15 | None = Field(
-        None, description='Current status of the enforcement request'
-    )
-    responseDate: date_aliased | None = Field(
-        None, description='When the platform responded'
-    )
-    referenceNumber: constr(max_length=255) | None = Field(
-        None, description="Platform's reference number for the request"
-    )
-    legalBasis: constr(max_length=500) | None = Field(
-        None,
-        description='Legal basis for the request, e.g. EU AI Act, NO FAKES Act, estate executor authority',
-    )
-    notes: constr(max_length=500) | None = None
-
-
-class ModelType(Enum):
-    chatbot = 'chatbot'
-    voice_clone = 'voice_clone'
-    visual_avatar = 'visual_avatar'
-    full_replica = 'full_replica'
-    other = 'other'
-
-
-class Action2(Enum):
-    preserve = 'preserve'
-    delete = 'delete'
-    transfer = 'transfer'
-    restrict = 'restrict'
-
-
-class ExistingDigitalModel(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    provider: constr(max_length=255) | None = Field(
-        None, description='e.g. HereAfter, StoryFile (schema.org provider)'
-    )
-    modelType: ModelType | None = Field(None, description='Type of digital model')
-    action: Action2 | None = Field(
-        None, description='Instruction for what to do with this model after death'
-    )
-    controllerPersonId: UUID | None = Field(
-        None, description='Person.id who has authority over this specific model'
-    )
-    controllerPersonIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced controller person',
-    )
-
-
-class RelatedTrustId(RootModel[UUID]):
-    root: UUID
-
-
-class Wish(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    id: UUID = Field(
-        ...,
-        description='Unique identifier for this wish within the INHERIT document',
-        examples=['e1f2a3b4-c5d6-7890-e123-456789abcdef'],
-    )
-    wishType: WishType = Field(
-        ...,
-        description='The category of wish. Wishes may be non-binding in law but culturally or religiously obligatory',
-        examples=['funeral', 'letter', 'pets'],
-    )
-    title: constr(min_length=1, max_length=255) = Field(
-        ...,
-        description='A short descriptive title for this wish',
-        examples=['Funeral wishes', 'Letter to my executors', 'Care of my dog Biscuit', 'Digital accounts instructions'],
-    )
-    content: constr(max_length=5000) | None = Field(
-        None,
-        description='The full text content of the wish. May be lengthy for letters of wishes',
-        examples=['I wish to be cremated and my ashes scattered at Coniston Water', 'Please ensure my cat Mochi is rehomed with my sister Akiko', 'Burial in accordance with Islamic rites — contact Imam Hassan at the East London Mosque', 'Please ensure my dog is cared for by my nephew Tendai'],
-    )
-    bindingNature: BindingNature | None = Field(
-        None,
-        description='The legal or moral force of this wish. Most wishes are non-binding but may carry significant cultural or religious weight',
-        examples=['non_binding', 'religiously_obligatory'],
-    )
-    addresseePersonId: UUID | None = Field(
-        None,
-        description='Reference to the Person.id this wish is addressed to — typically an executor, guardian, or family member',
-    )
-    addresseePersonIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced addressee person',
-    )
-    relatedAssetId: UUID | None = Field(
-        None,
-        description='Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item)',
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Additional notes about this wish',
-        examples=['Written in consultation with Imam Hassan — follows Hanafi funeral practice', 'Updated after acquiring second dog in 2024'],
-    )
-    visibility: Visibility | None = 'all_parties'
-    funeralArrangementType: (
-        FuneralArrangementType | constr(pattern=r'^x-inherit-.+') | None
-    ) = Field(None, description='Type of funeral arrangement preferred', examples=['burial', 'cremation', 'green_burial'])
-    funeralCeremonyType: FuneralCeremonyType | None = Field(
-        None,
-        description='Type of ceremony preferred',
-        examples=['religious', 'secular'],
-    )
-    funeralCeremonyReligion: constr(max_length=255) | None = Field(
-        None,
-        description="Religion or faith tradition for the ceremony, if funeralCeremonyType is 'religious' or 'hybrid'",
-        examples=['Church of England', 'Roman Catholic', 'Sunni Islam', 'Reform Judaism', 'Sikhism'],
-    )
-    funeralProviderOrganisationId: (
-        UUID | None
-    ) = (
-        Field(None, description='Reference to the Organisation.id of the preferred funeral provider')
-    )
-    funeralProviderOrganisationIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced funeral provider organisation',
-    )
-    funeralPrePaid: bool | None = Field(
-        None,
-        description='Whether a pre-paid funeral plan is in place',
-        examples=[True, False],
-    )
-    funeralPrePaidPolicyNumber: constr(max_length=100) | None = Field(
-        None,
-        description='Policy number for the pre-paid funeral plan',
-        examples=['FP-2024-123456'],
-    )
-    funeralBudgetMaximum: Money | None = Field(
-        None, description='Maximum budget for the funeral, in minor currency units'
-    )
-    funeralBudgetSource: FuneralBudgetSource | None = Field(
-        None,
-        description='How the funeral is to be funded',
-        examples=['estate', 'pre_paid'],
-    )
-    funeralLocationPreference: constr(max_length=500) | None = Field(
-        None,
-        description='Preferred location for the funeral service or burial',
-        examples=["St Mary's Church, Wrexham", 'Coniston Water, Lake District'],
-    )
-    funeralMusicWishes: constr(max_length=2000) | None = Field(
-        None,
-        description='Music requested for the funeral service',
-        examples=['Jerusalem, Abide With Me, and Time to Say Goodbye'],
-    )
-    funeralReadingWishes: constr(max_length=2000) | None = Field(
-        None,
-        description='Readings or poems requested for the funeral service',
-        examples=['Psalm 23, Do Not Stand at My Grave and Weep'],
-    )
-    organDonation: OrganDonation | None = Field(
-        None, description='Organ donation preferences'
-    )
-    medicalResearchDonation: MedicalResearchDonation | None = Field(
-        None, description='Body donation to medical research'
-    )
-    autopsyPreference: AutopsyPreference | None = Field(
-        None, description='Preference regarding autopsy'
-    )
-    funeralBudgetNotes: constr(max_length=2000) | None = Field(
-        None, description='Additional notes about funeral budget'
-    )
-    likenessConsent: LikenessConsent | None = Field(
-        None,
-        description='Whether the person consents to posthumous AI/digital recreation',
-    )
-    likenessScope: list[LikenessScopeEnum] | None = Field(
-        None, description='What aspects of likeness are covered'
-    )
-    likenessPermittedUses: list[LikenessPermittedUs] | None = Field(
-        None, description='What purposes are allowed'
-    )
-    likenessProhibitedUses: list[LikenessProhibitedUs] | None = Field(
-        None, description='What purposes are explicitly forbidden'
-    )
-    likenessControllerPersonId: (
-        UUID | None
-    ) = Field(None, description='Who has authority over likeness decisions after death')
-    likenessControllerPersonIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced likeness controller person',
-    )
-    likenessTimeLimit: (
-        constr(
-            pattern=r'^P(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$'
-        )
-        | None
-    ) = Field(None, description='ISO 8601 duration — how long consent/prohibition lasts, e.g. P25Y = 25 years')
-    likenessRevocationConditions: constr(max_length=500) | None = Field(
-        None, description='Conditions under which consent is revoked'
-    )
-    syntheticMediaPolicy: SyntheticMediaPolicy | None = Field(
-        None,
-        description="Policy on AI-generated synthetic media using the person's likeness",
-    )
-    likenessEnforcement: list[LikenessEnforcementItem] | None = Field(
-        None,
-        description='Tracking enforcement of likeness wishes — takedown requests and platform compliance',
-    )
-    existingDigitalModels: list[ExistingDigitalModel] | None = Field(
-        None,
-        description='Inventory of existing AI/digital likeness models and instructions for each',
-    )
-    relatedTrustIds: list[RelatedTrustId] | None = Field(
-        None,
-        description='Trust IDs this wish or letter of wishes applies to',
-        max_length=50,
-    )
-    provenance: Provenance | None = Field(
-        None,
-        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
-    )
-
-
 class RelatedEntityId(RootModel[UUID]):
     root: UUID
 
@@ -13741,7 +16192,7 @@ class Provenance2(BaseModel):
     )
 
 
-class Type16(Enum):
+class Type17(Enum):
     court = 'court'
     religious_body = 'religious_body'
     notary = 'notary'
@@ -13755,7 +16206,7 @@ class ValidatingAuthority(BaseModel):
     name: constr(max_length=255) | None = Field(
         None, description='Name of the validating authority'
     )
-    type: Type16 | None = Field(None, description='Type of validating authority')
+    type: Type17 | None = Field(None, description='Type of validating authority')
     jurisdiction: Jurisdiction | None = Field(
         None, description='Jurisdiction of the validating authority'
     )
@@ -13791,7 +16242,7 @@ class WillClause(BaseModel):
     )
 
 
-class Type17(Enum):
+class Type18(Enum):
     will = 'will'
     codicil = 'codicil'
     trust_deed = 'trust_deed'
@@ -13851,7 +16302,7 @@ class RegistryReference(BaseModel):
     )
 
 
-class Registration1(BaseModel):
+class Registration2(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -13886,7 +16337,7 @@ class Document(BaseModel):
         description='Unique identifier for this document within the INHERIT document',
         examples=['b4c5d6e7-f8a9-0123-b456-789abcdef012'],
     )
-    type: Type17 | constr(pattern=r'^x-inherit-.+$') = Field(
+    type: Type18 | constr(pattern=r'^x-inherit-.+$') = Field(
         ...,
         description='The type of document. Core types cover common law and civil law documents. Extension types use the x-inherit- prefix',
     )
@@ -13969,7 +16420,7 @@ class Document(BaseModel):
     registryReference: RegistryReference | None = Field(
         None, description='Structured reference to a government registry entry'
     )
-    registrations: list[Registration1] | None = Field(
+    registrations: list[Registration2] | None = Field(
         None,
         description='Registries where this document has been registered. Tracks will registration with services such as the National Will Register (England & Wales) or the Register of Deeds (Scotland). Maps to Schema.org RegisterAction',
         max_length=10,
@@ -14334,7 +16785,7 @@ class SubDelegation(BaseModel):
     )
 
 
-class Action3(Enum):
+class Action4(Enum):
     granted = 'granted'
     exercised = 'exercised'
     revoked = 'revoked'
@@ -14347,7 +16798,7 @@ class AuditLogItem(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    action: Action3 = Field(..., description='What delegation action was taken')
+    action: Action4 = Field(..., description='What delegation action was taken')
     agent: constr(min_length=1, max_length=255) = Field(
         ..., description='Who performed this action (schema.org agent)'
     )
@@ -14359,6 +16810,11 @@ class AuditLogItem(BaseModel):
 
 
 class ProxyAuthorisation(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/proxy-authorisation.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='allow',
     )
@@ -14559,289 +17015,6 @@ class PowerOfAppointment(BaseModel):
     )
 
 
-class MatchConfidence(Enum):
-    exact = 'exact'
-    close = 'close'
-    approximate = 'approximate'
-    weak = 'weak'
-
-
-class MatchFactor(RootModel[constr(max_length=500)]):
-    root: constr(max_length=500)
-
-
-class HumanVerdict1(Enum):
-    accepted = 'accepted'
-    rejected = 'rejected'
-    adjusted = 'adjusted'
-    not_reviewed = 'not_reviewed'
-
-
-class Comparable(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    url: AnyUrl | None = Field(
-        None,
-        description='Link to the comparable sale or listing',
-        examples=['https://www.ebay.co.uk/itm/123456789', 'https://www.sothebys.com/en/buy/auction/2025/lot-42'],
-    )
-    screenshotUrl: AnyUrl | None = Field(
-        None,
-        description='Screenshot of the listing at the time it was captured. Listings are often removed after sale — the screenshot preserves the evidence',
-        examples=['https://storage.example.com/comparables/ebay-123456789.png'],
-    )
-    title: constr(max_length=255) | None = Field(
-        None,
-        description='Description of the comparable item',
-        examples=['Hornby R3456 Class 66 EWS DCC Fitted — mint, boxed', '18ct gold solitaire diamond ring, 1.1ct, VS2/H'],
-    )
-    salePrice: Money | None = Field(
-        None,
-        description='The sale price of the comparable item, in minor currency units',
-    )
-    saleDate: date_aliased | None = Field(
-        None,
-        description='Date the comparable item sold',
-        examples=['2025-01-15', '2024-11-20'],
-    )
-    platform: constr(max_length=255) | None = Field(
-        None,
-        description='Where the comparable sold — marketplace, auction house, or dealer',
-        examples=['eBay', "Sotheby's", 'Bonhams', 'Catawiki', '1stDibs', 'The Saleroom', 'Rightmove', 'Zoopla'],
-    )
-    platformListingId: constr(max_length=255) | None = Field(
-        None,
-        description='The platform-specific listing or item identifier. Enables API-driven price lookups — e.g. eBay item ID resolves via the Browse API, Chrono24 ref resolves to watch data, Discogs release ID resolves to vinyl data',
-        examples=['123456789012', 'LOT-2025-04-0042', '82347291'],
-    )
-    auctionLotRef: constr(max_length=500) | None = Field(
-        None,
-        description='Structured auction lot reference for provenance tracking — house, sale, and lot number. Enables lookups against auction house archives and provenance databases',
-        examples=["Christie's / Sale 21234 / Lot 42", 'Bonhams / Sale 28901 / Lot 115', "Sotheby's / L25010 / Lot 203"],
-    )
-    capturedAt: AwareDatetime | None = Field(
-        None,
-        description='Timestamp when the comparable was captured or recorded. Important because market values shift and stale comparables lose evidential weight',
-        examples=['2025-02-01T10:00:00Z', '2025-03-10T15:30:00Z'],
-    )
-    matchConfidence: MatchConfidence | None = Field(
-        None,
-        description='How closely the comparable matches the item being valued',
-        examples=['close', 'approximate'],
-    )
-    matchFactors: list[MatchFactor] | None = Field(
-        None,
-        description='What makes this item comparable — the specific attributes that justify the comparison',
-        examples=[['same manufacturer', 'same era', 'similar condition', 'original box'], ['same carat weight', 'similar clarity grade', 'same metal']],
-        max_length=50,
-    )
-    matchNotes: constr(max_length=2000) | None = Field(
-        None,
-        description='Free-text notes explaining the comparison — differences, adjustments, or caveats',
-        examples=['Slightly lower carat weight (1.1ct vs 1.2ct) but same clarity — adjust upward ~8%', 'US sale — add 5% for UK market premium on this brand'],
-    )
-    matchScore: conint(ge=0, le=100) | None = Field(
-        None,
-        description="Numeric match confidence (0-100). Companion to the matchConfidence categorical enum. Agents use this for filtering and ranking — 'show me everything above 70' is quantitative reasoning that categorical enums don't support",
-    )
-    humanVerdict: HumanVerdict1 | None = Field(
-        None,
-        description='Human feedback on this comparable. Creates the learning feedback loop — agents learn which comparables humans accept, improving future searches',
-    )
-    rejectionReason: constr(max_length=255) | None = Field(
-        None,
-        description='Why this comparable was rejected. Feeds back into agent learning — future searches avoid this type of mismatch',
-        examples=['Wrong gauge — this is HO not OO', 'Repainted model, not original livery'],
-    )
-
-
-class EntityType5(Enum):
-    asset = 'asset'
-    property = 'property'
-    asset_collection = 'asset_collection'
-
-
-class ProviderType(Enum):
-    owner = 'owner'
-    professional_valuer = 'professional_valuer'
-    auction_house = 'auction_house'
-    dealer = 'dealer'
-    insurance_assessor = 'insurance_assessor'
-    tax_authority = 'tax_authority'
-    ai_estimate = 'ai_estimate'
-    other = 'other'
-
-
-class ValuerRegistration(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    body: constr(max_length=255) | None = Field(
-        None,
-        description='The professional body or accreditation organisation',
-        examples=['RICS', 'ASA', 'IVSC', 'AAA', 'ISA'],
-    )
-    membershipId: constr(max_length=255) | None = Field(
-        None,
-        description="The valuer's membership or registration number with the professional body",
-        examples=['MRICS-1234567', 'ASA-AM-56789'],
-    )
-    designation: constr(max_length=100) | None = Field(
-        None,
-        description="The valuer's professional designation or qualification level",
-        examples=['FRICS', 'MRICS', 'AssocRICS', 'AM', 'ASA'],
-    )
-    verificationUrl: AnyUrl | None = Field(
-        None,
-        description="URL to verify the valuer's registration with the professional body",
-        examples=['https://www.rics.org/find-a-member'],
-    )
-
-
-class Method3(Enum):
-    comparable_sales = 'comparable_sales'
-    replacement_cost = 'replacement_cost'
-    income_approach = 'income_approach'
-    market_listing = 'market_listing'
-    insurance_schedule = 'insurance_schedule'
-    ai_analysis = 'ai_analysis'
-    expert_opinion = 'expert_opinion'
-    other = 'other'
-
-
-class ValuationPurpose(Enum):
-    current_estimate = 'current_estimate'
-    date_of_death = 'date_of_death'
-    insurance = 'insurance'
-    official = 'official'
-    tax_return = 'tax_return'
-    dealer_offer = 'dealer_offer'
-    ai_estimate = 'ai_estimate'
-    pre_sale = 'pre_sale'
-    probate = 'probate'
-
-
-class Confidence1(Enum):
-    high = 'high'
-    medium = 'medium'
-    low = 'low'
-    unknown = 'unknown'
-
-
-class AuctionData(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    auctionHouseOrganisationId: (
-        UUID | None
-    ) = Field(None, description='Organisation.id of the auction house')
-    auctionHouseOrganisationIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced auction house organisation',
-    )
-    saleDate: date_aliased | None = Field(None, description='Date of the auction sale')
-    lotNumber: constr(max_length=100) | None = Field(
-        None, description='Auction lot number', examples=['Lot 247']
-    )
-    estimateLow: Money | None = Field(None, description='Low estimate')
-    estimateHigh: Money | None = Field(None, description='High estimate')
-    hammerPrice: Money | None = Field(
-        None, description='Hammer price (winning bid before premium)'
-    )
-    buyersPremiumPercentage: confloat(ge=0.0, le=100.0) | None = Field(
-        None, description="Buyer's premium as a percentage"
-    )
-    totalRealised: Money | None = Field(
-        None, description='Total amount realised including premium'
-    )
-    sold: bool | None = Field(None, description='Whether the lot was sold')
-
-
-class Valuation(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    id: UUID = Field(
-        ...,
-        description='Unique identifier for this valuation within the INHERIT document',
-        examples=['a1b2c3d4-e5f6-7890-abcd-ef0123456789'],
-    )
-    entityType: EntityType5 = Field(
-        ...,
-        description='The type of entity being valued',
-        examples=['asset', 'property'],
-    )
-    entityId: UUID = Field(
-        ...,
-        description='Reference to the entity being valued — an Asset.id, Property.id, or AssetCollection.id',
-        examples=['e5f6a7b8-c9d0-1234-ef01-23456789abcd'],
-    )
-    valuedAmount: Money = Field(
-        ..., description='The valuation amount, in minor currency units'
-    )
-    valuationDate: date_aliased = Field(
-        ...,
-        description='Date the valuation was performed or assessed',
-        examples=['2025-01-15', '2025-03-28'],
-    )
-    provider: constr(max_length=255) | None = Field(
-        None,
-        description='Who performed the valuation — the name of the person, firm, or service',
-        examples=['Bonhams', 'RICS Surveyor — John Smith FRICS', 'HMRC Shares & Assets Valuation', 'OpenInherit AI', 'Estate owner'],
-    )
-    providerType: ProviderType | None = Field(
-        None,
-        description='The type of person or organisation that provided the valuation',
-        examples=['professional_valuer', 'auction_house', 'ai_estimate'],
-    )
-    valuerRegistration: ValuerRegistration | None = Field(
-        None,
-        description='The professional body registration of the valuer. A valuation from a RICS-registered surveyor or ASA-accredited appraiser carries significantly more weight with tax authorities and probate courts',
-    )
-    method: Method3 | None = Field(
-        None,
-        description='The valuation methodology used',
-        examples=['comparable_sales', 'expert_opinion', 'ai_analysis'],
-    )
-    valuationPurpose: ValuationPurpose | None = Field(
-        None,
-        description='The purpose for which this valuation was obtained',
-        examples=['date_of_death', 'insurance', 'probate'],
-    )
-    confidence: Confidence1 | None = Field(
-        None,
-        description='Confidence level in this valuation',
-        examples=['high', 'medium'],
-    )
-    comparables: list[Comparable] | None = Field(
-        None,
-        description='Comparable items found on marketplaces — used to support the valuation. Agent-generated comparables should include matchScore for quantitative filtering and will accumulate humanVerdict feedback over time',
-        max_length=100,
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Free-text notes about this valuation — methodology details, caveats, market conditions, or disagreements with other valuations',
-        examples=['RICS Red Book valuation — market value basis. Assumes vacant possession.', 'AI estimate based on 47 eBay sold listings over the past 90 days. Excludes outliers above £500.', 'Owner estimate — collected model railways for 30 years, knowledgeable about market values in this niche.'],
-    )
-    fieldProvenance: list[FieldProvenance] | None = Field(
-        None,
-        description="Per-field provenance records — how each field's value was obtained",
-        max_length=100,
-    )
-    auctionData: AuctionData | None = Field(
-        None, description='Auction house estimate and result data'
-    )
-    validUntil: date_aliased | None = Field(
-        None,
-        description='The date until which this valuation is considered valid. Common for insurance valuations which require annual renewal. After this date, the valuation may need to be refreshed',
-    )
-    provenance: Provenance | None = Field(
-        None,
-        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
-    )
-
-
 class DoneePersonId(RootModel[UUID]):
     root: UUID
 
@@ -14860,7 +17033,7 @@ class TransferType1(Enum):
     other = 'other'
 
 
-class Type18(Enum):
+class Type19(Enum):
     annual_exemption = 'annual_exemption'
     small_gift = 'small_gift'
     marriage_gift = 'marriage_gift'
@@ -14880,7 +17053,7 @@ class ExemptionsClaimedItem(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    type: Type18 = Field(
+    type: Type19 = Field(
         ...,
         description='The type of exemption or relief claimed against this transfer',
         examples=['annual_exemption', 'spouse_exemption', 'annual_exclusion'],
@@ -15010,962 +17183,6 @@ class LifetimeTransfer(BaseModel):
     lookbackPeriod: LookbackPeriod | None = Field(
         None,
         description='Jurisdiction-specific lookback period for this lifetime transfer — determines tax liability based on proximity to date of death',
-    )
-
-
-class Status16(Enum):
-    active = 'active'
-    suspended = 'suspended'
-    revoked = 'revoked'
-    voluntary = 'voluntary'
-    expired = 'expired'
-
-
-class CompanyStatus(Enum):
-    active = 'active'
-    dissolved = 'dissolved'
-    liquidation = 'liquidation'
-    receivership = 'receivership'
-    administration = 'administration'
-    voluntary_arrangement = 'voluntary-arrangement'
-    converted_closed = 'converted-closed'
-
-
-class SicCode(RootModel[constr(max_length=10)]):
-    root: constr(max_length=10)
-
-
-class AuthorisationStatus(Enum):
-    authorised = 'authorised'
-    revoked = 'revoked'
-    suspended = 'suspended'
-    cancelled = 'cancelled'
-    no_longer_authorised = 'no-longer-authorised'
-
-
-class Permission(RootModel[constr(max_length=500)]):
-    root: constr(max_length=500)
-
-
-class CharityStatus(Enum):
-    registered = 'registered'
-    removed = 'removed'
-    suspended = 'suspended'
-    in_default = 'in-default'
-
-
-class ReportingStatus(Enum):
-    up_to_date = 'up-to-date'
-    overdue = 'overdue'
-    not_required = 'not-required'
-
-
-class LiveCheck(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    retrievedAt: AwareDatetime = Field(..., description='When this check was performed')
-    companyStatus: (
-        CompanyStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='Companies House company status')
-    sicCodes: list[SicCode] | None = Field(
-        None,
-        description='Standard Industrial Classification codes from Companies House',
-        max_length=10,
-    )
-    incorporatedAt: date_aliased | None = Field(
-        None, description='Date of incorporation'
-    )
-    accountsOverdue: bool | None = Field(
-        None, description='Whether accounts are overdue at Companies House'
-    )
-    insolvencyFlag: bool | None = Field(
-        None, description='Whether there are active insolvency proceedings'
-    )
-    authorisationStatus: (
-        AuthorisationStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='FCA authorisation status')
-    firmReference: constr(max_length=50) | None = Field(
-        None, description='FCA firm reference number'
-    )
-    permissions: list[Permission] | None = Field(
-        None,
-        description='Regulated activities the firm is authorised for',
-        max_length=50,
-    )
-    effectiveFrom: date_aliased | None = Field(
-        None, description='When FCA authorisation took effect'
-    )
-    charityStatus: (
-        CharityStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description='Charity Commission or OSCR registration status')
-    income: conint(ge=0) | None = Field(
-        None, description='Latest reported annual income in minor units (pennies/cents)'
-    )
-    objects: constr(max_length=2000) | None = Field(
-        None, description='Charitable objects or purposes'
-    )
-    dateRegistered: date_aliased | None = Field(
-        None, description='Date the charity was registered'
-    )
-    reportingStatus: (
-        ReportingStatus | constr(pattern=r'^x-inherit-.+', max_length=100) | None
-    ) = Field(None, description="Whether the charity's reporting is up to date")
-
-
-class Registration2(BaseModel):
-    body: constr(max_length=100) = Field(
-        ...,
-        description='The regulatory body or registry. Use an id from well-known-organisations.json where available, or a descriptive string for unlisted bodies',
-        examples=['sra', 'ccew', 'oscr', 'companies_house', 'fca', 'rics', 'nafd'],
-    )
-    number: constr(max_length=100) = Field(
-        ...,
-        description='The registration number. Format varies by body — see well-known-organisations.json for expected patterns',
-        examples=['642790', '1089471', 'SC012345', '01234567', 'MRICS-1234567'],
-    )
-    status: Status16 | None = Field(
-        None, description='Current status of this registration'
-    )
-    jurisdiction: constr(max_length=10) | None = Field(
-        None,
-        description='Jurisdiction this registration applies to. ISO 3166-1 alpha-2 or ISO 3166-2 code',
-    )
-    verificationUrl: AnyUrl | None = Field(
-        None,
-        description='URL to verify this registration with the regulatory body',
-        examples=['https://www.sra.org.uk/consumers/register/organisation/?sraNumber=642790'],
-    )
-    verifiedAt: AwareDatetime | None = Field(
-        None, description='When this registration was last verified'
-    )
-    liveCheck: LiveCheck | None = Field(
-        None,
-        description='Result of a live API check against this registry. Snapshot at retrievedAt. Registry-specific fields are validated conditionally based on the parent body field',
-    )
-
-
-class OrganisationType(Enum):
-    legal_firm = 'legal_firm'
-    financial_institution = 'financial_institution'
-    pension_provider = 'pension_provider'
-    insurance_provider = 'insurance_provider'
-    dealer = 'dealer'
-    auction_house = 'auction_house'
-    valuation_firm = 'valuation_firm'
-    funeral_provider = 'funeral_provider'
-    charity = 'charity'
-    religious_institution = 'religious_institution'
-    employer = 'employer'
-    trust_corporation = 'trust_corporation'
-    accountancy_firm = 'accountancy_firm'
-    government_body = 'government_body'
-    retailer = 'retailer'
-    manufacturer = 'manufacturer'
-    property_management = 'property_management'
-    storage_facility = 'storage_facility'
-    digital_platform = 'digital_platform'
-    utility_provider = 'utility_provider'
-    other = 'other'
-
-
-class EstateRoles(Enum):
-    beneficiary = 'beneficiary'
-    will_writer = 'will_writer'
-    executor = 'executor'
-    trustee = 'trustee'
-    asset_holder = 'asset_holder'
-    liability_holder = 'liability_holder'
-    insurer = 'insurer'
-    valuer = 'valuer'
-    recommended_dealer = 'recommended_dealer'
-    funeral_provider = 'funeral_provider'
-    professional_adviser = 'professional_adviser'
-    regulatory_body = 'regulatory_body'
-    employer = 'employer'
-    retailer = 'retailer'
-    service_provider = 'service_provider'
-
-
-class Platform4(Enum):
-    trustpilot = 'trustpilot'
-    google = 'google'
-    feefo = 'feefo'
-    reviews_io = 'reviews_io'
-    funeral_guide = 'funeral_guide'
-    checkatrade = 'checkatrade'
-
-
-class Rating1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    platform: Platform4 | constr(pattern=r'^x-inherit-.+', max_length=100) = Field(
-        ..., description='The review platform'
-    )
-    ratingValue: confloat(ge=0.0, le=10.0) = Field(
-        ..., description='The aggregate rating score'
-    )
-    bestRating: confloat(ge=0.0, le=10.0) | None = Field(
-        5, description='Maximum possible score on this platform. Default 5 if absent'
-    )
-    worstRating: confloat(ge=0.0, le=10.0) | None = Field(
-        1, description='Minimum possible score on this platform. Default 1 if absent'
-    )
-    reviewCount: conint(ge=0) | None = Field(
-        None, description='Total number of reviews on this platform'
-    )
-    profileUrl: AnyUrl | None = Field(
-        None, description="URL to the organisation's profile on this platform"
-    )
-    retrievedAt: AwareDatetime = Field(
-        ..., description='When this rating data was retrieved or verified'
-    )
-
-
-class VatScheme(Enum):
-    margin_scheme = 'margin_scheme'
-    global_accounting = 'global_accounting'
-    standard_vat = 'standard_vat'
-
-
-class VatConfiguration(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    vatRegistered: bool | None = Field(
-        None, description='Whether the organisation is VAT registered'
-    )
-    vatScheme: VatScheme | None = Field(
-        None,
-        description='Which VAT scheme the organisation uses. Only relevant if vatRegistered is true',
-    )
-    vatNumber: constr(max_length=50) | None = Field(
-        None, description="The organisation's VAT registration number"
-    )
-    vatCountry: constr(pattern=r'^[A-Z]{2}$', max_length=2) | None = Field(
-        None, description='The country of VAT registration, as ISO 3166-1 alpha-2'
-    )
-
-
-class ShipsToCountry(RootModel[constr(pattern=r'^[A-Z]{2}$', max_length=2)]):
-    root: constr(pattern=r'^[A-Z]{2}$', max_length=2)
-
-
-class ReceivesFromCountry(RootModel[constr(pattern=r'^[A-Z]{2}$', max_length=2)]):
-    root: constr(pattern=r'^[A-Z]{2}$', max_length=2)
-
-
-class ImportDutyPolicy(Enum):
-    dealer_absorbs = 'dealer_absorbs'
-    buyer_pays = 'buyer_pays'
-    included_in_shipping = 'included_in_shipping'
-
-
-class InternationalShipping(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    shipsToCountries: list[ShipsToCountry] | None = Field(
-        None,
-        description='ISO 3166-1 alpha-2 country codes this organisation ships to',
-        max_length=250,
-    )
-    receivesFromCountries: list[ReceivesFromCountry] | None = Field(
-        None,
-        description='ISO 3166-1 alpha-2 country codes this organisation receives items from',
-        max_length=250,
-    )
-    customsHandling: bool | None = Field(
-        None,
-        description='Whether this organisation handles customs declarations for international shipments',
-    )
-    importDutyPolicy: ImportDutyPolicy | None = Field(
-        None, description='Who pays import duties on international transactions'
-    )
-    currency: constr(pattern=r'^[A-Z]{3}$', max_length=3) | None = Field(
-        None,
-        description='The primary currency this organisation trades in, as ISO 4217',
-    )
-
-
-class Category5(RootModel[constr(max_length=100)]):
-    root: constr(max_length=100)
-
-
-class DealerTier(Enum):
-    free = 'free'
-    standard = 'standard'
-    professional = 'professional'
-
-
-class FulfilmentCapability(Enum):
-    inspection = 'inspection'
-    grading = 'grading'
-    photography = 'photography'
-    storage = 'storage'
-    shipping = 'shipping'
-    restoration = 'restoration'
-
-
-class GeographicReach(Enum):
-    local = 'local'
-    national = 'national'
-    international = 'international'
-
-
-class DealerProfile(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    categories: list[Category5] | None = Field(
-        None, description='Asset categories this dealer specialises in', max_length=20
-    )
-    dealerTier: DealerTier | None = Field(
-        None, description="The dealer's subscription tier on the platform"
-    )
-    fulfilmentCapabilities: list[FulfilmentCapability] | None = Field(
-        None, description='Physical services this dealer can provide', max_length=10
-    )
-    geographicReach: GeographicReach | None = Field(
-        None, description='How far the dealer operates'
-    )
-    averageResponseTime: constr(max_length=50) | None = Field(
-        None, description='Typical time to respond to a valuation request or offer'
-    )
-
-
-class Organisation(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    id: UUID = Field(
-        ...,
-        description='Unique identifier for this organisation within the INHERIT document',
-    )
-    name: constr(min_length=1, max_length=255) = Field(
-        ...,
-        description="The organisation's legal or trading name",
-        examples=['IDR Law', 'Barclays Bank UK PLC', 'Macmillan Cancer Support', 'Rails of Sheffield', 'Dignity Funerals Ltd'],
-    )
-    organisationType: OrganisationType | constr(pattern=r'^x-inherit-.+') = Field(
-        ...,
-        description='The nature of the organisation. Use x-inherit- prefix for jurisdiction-specific or niche types not covered by the core enum',
-    )
-    estateRoles: list[EstateRoles | constr(pattern=r'^x-inherit-.+')] | None = Field(
-        None,
-        description='The roles this organisation plays in this specific estate. An organisation may play multiple roles',
-        max_length=20,
-    )
-    jurisdiction: constr(max_length=10) | None = Field(
-        None,
-        description='Primary jurisdiction where this organisation operates. ISO 3166-1 alpha-2 or ISO 3166-2 code',
-        examples=['GB', 'GB-ENG', 'US-NY', 'SG', 'JP'],
-    )
-    address: Address | None = Field(None, description="The organisation's address")
-    url: AnyUrl | None = Field(
-        None,
-        description="The organisation's website",
-        examples=['https://www.idrlaw.co.uk', 'https://www.macmillan.org.uk'],
-    )
-    email: EmailStr | None = Field(
-        None, description='Primary contact email', examples=['enquiries@idrlaw.co.uk']
-    )
-    phone: constr(max_length=50) | None = Field(
-        None, description='Primary contact phone number', examples=['+44 1234 567890']
-    )
-    logo: AnyUrl | None = Field(None, description="URL to the organisation's logo")
-    wikidataId: constr(pattern=r'^Q[0-9]+$', max_length=20) | None = Field(
-        None,
-        description='Wikidata Q-number for this organisation, enabling linked data resolution. Many major organisations have Wikidata entries with structured data (founding date, parent company, headquarters, etc.)',
-        examples=['Q2402878', 'Q4424418', 'Q5277509'],
-    )
-    description: constr(max_length=2000) | None = Field(
-        None,
-        description='Brief description of the organisation and its relevance to this estate',
-        examples=['Family solicitor since 2018. Handled the purchase of 42 Oak Lane.'],
-    )
-    registrations: list[Registration2] | None = Field(
-        None,
-        description='Registrations with regulatory bodies, professional associations, and government registries. An organisation may hold multiple registrations across jurisdictions',
-        max_length=20,
-    )
-    contactPerson: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the primary contact person at this organisation for estate matters',
-        examples=['Sarah Chen', 'Dave at the model railway desk'],
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description="Free-text notes about this organisation's relationship to the estate",
-        examples=['Contact Dave at Manchester Model Railway Club — he knows the right dealers. Do not sell on eBay individually.', "Margaret's employer. Death-in-service benefit: 4x salary. HR contact: Jane Williams."],
-    )
-    ratings: list[Rating1] | None = Field(
-        None,
-        description='Aggregate ratings from review platforms. One entry per platform. Supports user decision-making, agent filtering/ranking, and point-in-time audit trails',
-        max_length=20,
-    )
-    sameAs: list[AnyUrl] | None = Field(
-        None,
-        description='URIs identifying this entity elsewhere (schema.org sameAs). e.g. Wikidata, LinkedIn, DBpedia',
-    )
-    provenance: Provenance | None = Field(
-        None,
-        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
-    )
-    vatConfiguration: VatConfiguration | None = Field(
-        None,
-        description="The organisation's VAT registration status and scheme. Affects how VAT is calculated on transactions involving this organisation",
-    )
-    internationalShipping: InternationalShipping | None = Field(
-        None,
-        description='International shipping capabilities and policies for this organisation',
-    )
-    identifiers: list[Identifier] | None = Field(
-        None,
-        description='External identifiers — charity number, company registration, UEN, etc.',
-        max_length=50,
-    )
-    dealerProfile: DealerProfile | None = Field(
-        None,
-        description='Dealer-specific profile information. Only relevant for organisations that operate as dealers on marketplace or catalogue platforms',
-    )
-
-
-class SpaceType(Enum):
-    living_room = 'living_room'
-    dining_room = 'dining_room'
-    kitchen = 'kitchen'
-    kitchen_diner = 'kitchen_diner'
-    breakfast_room = 'breakfast_room'
-    family_room = 'family_room'
-    sitting_room = 'sitting_room'
-    drawing_room = 'drawing_room'
-    conservatory = 'conservatory'
-    sunroom = 'sunroom'
-    snug = 'snug'
-    bedroom = 'bedroom'
-    guest_bedroom = 'guest_bedroom'
-    nursery = 'nursery'
-    spare_room = 'spare_room'
-    dressing_room = 'dressing_room'
-    bathroom = 'bathroom'
-    en_suite = 'en_suite'
-    shower_room = 'shower_room'
-    wet_room = 'wet_room'
-    cloakroom = 'cloakroom'
-    wc = 'wc'
-    hallway = 'hallway'
-    entrance_hall = 'entrance_hall'
-    landing = 'landing'
-    corridor = 'corridor'
-    porch = 'porch'
-    vestibule = 'vestibule'
-    study = 'study'
-    home_office = 'home_office'
-    library = 'library'
-    workshop = 'workshop'
-    studio = 'studio'
-    music_room = 'music_room'
-    craft_room = 'craft_room'
-    art_studio = 'art_studio'
-    games_room = 'games_room'
-    home_cinema = 'home_cinema'
-    gym = 'gym'
-    utility_room = 'utility_room'
-    laundry_room = 'laundry_room'
-    boot_room = 'boot_room'
-    pantry = 'pantry'
-    larder = 'larder'
-    airing_cupboard = 'airing_cupboard'
-    boiler_room = 'boiler_room'
-    loft = 'loft'
-    attic = 'attic'
-    basement = 'basement'
-    cellar = 'cellar'
-    wine_cellar = 'wine_cellar'
-    walk_in_wardrobe = 'walk_in_wardrobe'
-    storage_room = 'storage_room'
-    cupboard_under_stairs = 'cupboard_under_stairs'
-    box_room = 'box_room'
-    garage = 'garage'
-    double_garage = 'double_garage'
-    carport = 'carport'
-    shed = 'shed'
-    greenhouse = 'greenhouse'
-    summerhouse = 'summerhouse'
-    garden_room = 'garden_room'
-    outbuilding = 'outbuilding'
-    barn = 'barn'
-    annex = 'annex'
-    stable = 'stable'
-    front_garden = 'front_garden'
-    rear_garden = 'rear_garden'
-    side_garden = 'side_garden'
-    patio = 'patio'
-    terrace = 'terrace'
-    balcony = 'balcony'
-    roof_terrace = 'roof_terrace'
-    driveway = 'driveway'
-    courtyard = 'courtyard'
-    yard = 'yard'
-    swimming_pool = 'swimming_pool'
-    prayer_room = 'prayer_room'
-    puja_room = 'puja_room'
-    butsudan_room = 'butsudan_room'
-    tatami_room = 'tatami_room'
-    genkan = 'genkan'
-    majlis = 'majlis'
-    helpers_room = 'helpers_room'
-    gurdwara_room = 'gurdwara_room'
-    meditation_room = 'meditation_room'
-    gun_room = 'gun_room'
-    safe_room = 'safe_room'
-    safe = 'safe'
-    self_storage = 'self_storage'
-    safe_deposit_box = 'safe_deposit_box'
-    workplace = 'workplace'
-    relatives_house = 'relatives_house'
-    holiday_home = 'holiday_home'
-    vehicle_car = 'vehicle_car'
-    vehicle_boat = 'vehicle_boat'
-    vehicle_caravan = 'vehicle_caravan'
-    allotment = 'allotment'
-    digital_storage = 'digital_storage'
-    portable = 'portable'
-    other = 'other'
-
-
-class Floor(Enum):
-    basement = 'basement'
-    ground = 'ground'
-    first = 'first'
-    second = 'second'
-    third = 'third'
-    fourth = 'fourth'
-    fifth = 'fifth'
-    attic = 'attic'
-    mezzanine = 'mezzanine'
-    other = 'other'
-
-
-class Space(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    id: UUID = Field(
-        ..., description='Unique identifier for this space within the INHERIT document'
-    )
-    propertyId: UUID | None = Field(
-        None,
-        description='Reference to the Property.id that contains or is associated with this space',
-    )
-    containedInSpaceId: UUID | None = Field(
-        None,
-        description='Reference to another Space.id that physically contains this space — a loft inside a house, a shelving bay inside a storage room. Enables the recursive Property → Space → Space → item chain a room-by-room listing walk produces. Absent or null means this space sits directly in the Property',
-    )
-    spaceType: SpaceType | constr(pattern=r'^x-inherit-.+') = Field(
-        ...,
-        description='The type of space. Use x-inherit- prefix for cultural or jurisdiction-specific space types not covered by the core enum',
-    )
-    name: constr(max_length=255) | None = Field(
-        None,
-        description='Display name for this space. Allows personalisation beyond the spaceType label',
-        examples=["Dad's workshop", "Andrew's old room", 'The cellar at Oakfield Road', 'Safe deposit box #42, Barclays Manchester'],
-    )
-    floor: Floor | None = Field(
-        None, description='Which floor this space is on, if applicable'
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Additional notes about this space — access instructions, security details, storage conditions',
-        examples=["Key is in the kitchen drawer, labelled 'cellar'", 'Temperature-controlled. Do not turn off the cooling unit.', 'Box 42, main branch. Requires two keys — mine is in the study safe, bank holds the other.'],
-    )
-    images: list[Media] | None = Field(
-        None,
-        description='Photographs of this space — overview, contents, access points',
-        max_length=50,
-    )
-    provenance: Provenance | None = Field(
-        None,
-        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
-    )
-
-
-class ImportMethod(Enum):
-    api = 'api'
-    file_upload = 'file_upload'
-    manual_copy = 'manual_copy'
-    ai_extraction = 'ai_extraction'
-    ocr = 'ocr'
-    migration_script = 'migration_script'
-
-
-class ImportSource(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    id: constr(max_length=255) = Field(
-        ...,
-        description='Unique identifier for this import source, referenced by importSourceId on entities',
-        examples=['src-clio-001', 'src-paper-file'],
-    )
-    systemName: constr(max_length=255) = Field(
-        ...,
-        description='Name of the source system',
-        examples=['Clio Manage', 'LEAP Legal Software', 'Paper file', "Previous solicitor's firm", 'LegacyLists'],
-    )
-    importDate: date_aliased | None = Field(
-        None,
-        description='Date the data was imported from this source',
-        examples=['2026-03-15'],
-    )
-    importMethod: ImportMethod | None = Field(
-        None, description='How the data was imported from this source'
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Additional context about the import',
-        examples=['Migrated from Clio matter #12345 — assets and liabilities only'],
-    )
-
-
-class Level2(Enum):
-    level_1 = 'level_1'
-    level_2 = 'level_2'
-    level_3 = 'level_3'
-
-
-class Conformance(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    level: Level2 = Field(..., description='Conformance level achieved')
-    validatedAt: AwareDatetime = Field(
-        ...,
-        description='When the validation was performed',
-        examples=['2026-03-28T14:00:00Z'],
-    )
-    validatedBy: constr(max_length=255) = Field(
-        ...,
-        description='Name of the tool that performed the validation',
-        examples=['INHERIT Web Validator', 'MyFamilyInherits v2.1', 'openinherit-cli'],
-    )
-    schemaVersion: constr(max_length=255) = Field(
-        ...,
-        description='INHERIT schema version this document was validated against',
-        examples=['1.2.0'],
-    )
-    completenessScore: conint(ge=0, le=100) | None = Field(
-        None, description='Completeness score at time of validation'
-    )
-    entityCounts: dict[str, int] | None = Field(
-        None,
-        description='Count of entities per type at time of validation',
-        examples=[{'people': 5, 'properties': 2, 'assets': 12, 'bequests': 4, 'executors': 2}],
-    )
-    provenanceSummary: dict[str, int] | None = Field(
-        None,
-        description='Count of entities by data provenance source',
-        examples=[{'manual_entry': 15, 'ai_extracted': 8, 'imported': 3}],
-    )
-    warnings: list[constr(max_length=500)] | None = Field(
-        None,
-        description='Validation warnings — non-blocking issues that may need attention',
-        examples=[['2 assets have estimated but no professional valuation', 'Lifetime transfer history covers only 5 of 7 required lookback years']],
-    )
-    validationEndpoint: AnyUrl | None = Field(
-        None,
-        description='URL of the validation service that produced this conformance certificate',
-        examples=['https://validate.openinherit.org/v3'],
-    )
-
-
-class PolicyType2(Enum):
-    life = 'life'
-    home = 'home'
-    health = 'health'
-    motor = 'motor'
-    travel = 'travel'
-    pet = 'pet'
-    professional_indemnity = 'professional_indemnity'
-    other = 'other'
-
-
-class PremiumFrequency1(Enum):
-    monthly = 'monthly'
-    annual = 'annual'
-    single_premium = 'single_premium'
-    paid_up = 'paid_up'
-    other = 'other'
-
-
-class BeneficiaryVerificationStatus(Enum):
-    unverified = 'unverified'
-    identity_confirmed = 'identity_confirmed'
-    entitlement_confirmed = 'entitlement_confirmed'
-
-
-class DeathBenefit(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    amount: Money | None = Field(
-        None, description='Death benefit amount in minor currency units'
-    )
-    nomineePersonId: UUID | None = Field(
-        None,
-        description='Reference to the Person.id of the nominated death benefit recipient',
-    )
-    nomineePersonIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced nominee person',
-    )
-    nomineeOrganisationId: UUID | None = Field(
-        None,
-        description='Reference to the Organisation.id of the nominated death benefit recipient, if an organisation. Mutually exclusive with nomineePersonId',
-    )
-    nomineeOrganisationIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced nominee organisation',
-    )
-    nominationCurrent: bool | None = Field(
-        None,
-        description='Whether the death benefit nomination is believed to be current and valid',
-        examples=[True, False],
-    )
-    benefitType: BenefitType | None = Field(
-        None,
-        description='How the death benefit is paid',
-        examples=['lump_sum', 'income'],
-    )
-    beneficiaryVerificationStatus: (
-        BeneficiaryVerificationStatus | None
-    ) = Field(None, description='Verification status of the death benefit beneficiary')
-
-
-class TrustDetails(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    trusteePersonId: UUID | None = Field(
-        None, description='Reference to the Person.id of the policy trustee'
-    )
-    trusteePersonIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced trustee person',
-    )
-    trusteeOrganisationId: UUID | None = Field(
-        None, description='Reference to the Organisation.id of a corporate trustee'
-    )
-    trusteeOrganisationIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced trustee organisation',
-    )
-    trustName: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the trust',
-        examples=['Davies Family Life Policy Trust'],
-    )
-
-
-class ClaimStatus(Enum):
-    active = 'active'
-    claim_submitted = 'claim_submitted'
-    claim_approved = 'claim_approved'
-    claim_paid = 'claim_paid'
-    claim_disputed = 'claim_disputed'
-    pending = 'pending'
-    approved = 'approved'
-    paid = 'paid'
-    declined = 'declined'
-
-
-class NominationStatus(Enum):
-    active = 'active'
-    revoked = 'revoked'
-    superseded = 'superseded'
-    expired = 'expired'
-    disputed = 'disputed'
-
-
-class NominationLifecycle(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    nominationStatus: NominationStatus | None = Field(
-        None, description='Current status of the nomination'
-    )
-    verifiedAt: AwareDatetime | None = Field(
-        None, description='When the nomination was last verified as current'
-    )
-    lastUpdated: AwareDatetime | None = Field(
-        None, description='When the nomination was last updated by the policyholder'
-    )
-    supersedesNominationId: constr(max_length=255) | None = Field(
-        None, description='Reference to a previous nomination that this one replaces'
-    )
-
-
-class PolicyCondition(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    condition: constr(max_length=500) | None = Field(
-        None,
-        description='Description of the condition or clause',
-        examples=['2-year suicide exclusion clause', 'Pre-existing condition exclusion: heart disease'],
-    )
-    expiryDate: date_aliased | None = Field(
-        None, description='Date the condition expires, if applicable'
-    )
-    impact: constr(max_length=500) | None = Field(
-        None,
-        description='How this condition affects a claim',
-        examples=['Claim void if death by suicide within 2 years of policy start'],
-    )
-
-
-class FuneralPlanDetails(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    coveredFuneralProviderOrganisationId: (
-        UUID | None
-    ) = (
-        Field(None, description='Reference to the Organisation.id of the covered funeral provider')
-    )
-    coveredFuneralProviderOrganisationIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced covered funeral provider organisation',
-    )
-    transferableOnDeath: bool | None = Field(
-        None, description='Whether the plan is transferable on death'
-    )
-    advancePayments: Money | None = Field(
-        None, description='Total advance payments made'
-    )
-
-
-class Scheme(Enum):
-    fscs = 'fscs'
-    mib = 'mib'
-
-
-class DepositorProtection(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    retrievedAt: AwareDatetime = Field(
-        ..., description='When this protection status was checked'
-    )
-    scheme: Scheme | constr(pattern=r'^x-inherit-.+', max_length=100) | None = Field(
-        None, description='The compensation or protection scheme'
-    )
-    protected: bool | None = Field(
-        None, description='Whether this policy is protected by the scheme'
-    )
-    protectionLimit: conint(ge=0) | None = Field(
-        None,
-        description='Maximum protection amount in minor units (pennies). FSCS insurance limit is unlimited for compulsory insurance, £85,000 for non-compulsory',
-    )
-    claimProcessUrl: AnyUrl | None = Field(
-        None, description="URL to the scheme's claim process or guidance page"
-    )
-
-
-class InsurancePolicy(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    id: UUID = Field(
-        ...,
-        description='Unique identifier for this insurance policy within the INHERIT document',
-        examples=['f1234567-89ab-4cde-8012-3456789abcde'],
-    )
-    policyType: PolicyType2 | constr(pattern=r'^x-inherit-.+') = Field(
-        ...,
-        description='The type of insurance policy',
-        examples=['life', 'home', 'motor'],
-    )
-    providerOrganisationId: UUID = Field(
-        ..., description='Reference to the Organisation.id of the insurance provider'
-    )
-    providerOrganisationIdDisplay: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable display name for the referenced provider organisation',
-    )
-    policyNumber: constr(max_length=100) | None = Field(
-        None,
-        description='The insurance policy number or reference',
-        examples=['LG-LIFE-2020-789', 'HX-HOME-2024-001'],
-    )
-    coverAmount: Money | None = Field(
-        None,
-        description='Total cover amount (sum assured for life, rebuild cost for home, etc.) in minor currency units',
-    )
-    premiumAmount: Money | None = Field(
-        None, description='Premium amount per payment period, in minor currency units'
-    )
-    premiumFrequency: PremiumFrequency1 | None = Field(
-        None, description='How often premiums are paid', examples=['monthly', 'annual']
-    )
-    renewalDate: date_aliased | None = Field(
-        None,
-        description='Next renewal date. Important — cover may lapse if not renewed after death',
-        examples=['2027-01-01'],
-    )
-    maturityDate: date_aliased | None = Field(
-        None,
-        description='Date the policy matures (for endowment policies and investment-linked policies)',
-        examples=['2035-06-01'],
-    )
-    deathBenefit: DeathBenefit | None = Field(
-        None,
-        description="Death benefit details — what is payable on the policyholder's death, to whom, and how",
-    )
-    writtenInTrust: bool | None = Field(
-        None,
-        description='Whether the policy is written in trust. If true, proceeds pass outside the estate and are not subject to inheritance tax',
-        examples=[True, False],
-    )
-    trustDetails: TrustDetails | None = Field(
-        None,
-        description='Details of the trust holding this policy, if writtenInTrust is true',
-    )
-    claimStatus: ClaimStatus | None = Field(
-        None,
-        description='Current status of any claim against this policy',
-        examples=['active', 'claim_submitted', 'claim_paid'],
-    )
-    externalPolicyRef: AnyUrl | None = Field(
-        None,
-        description='URI pointing to an external policy record (FHIR Coverage resource, or any external insurance management system)',
-    )
-    nominationLifecycle: NominationLifecycle | None = Field(
-        None,
-        description='Lifecycle tracking for policy nominations — tracks the current nomination status and any superseding nominations',
-    )
-    policyConditions: list[PolicyCondition] | None = Field(
-        None,
-        description='Conditions, exclusions, or clauses that affect the policy — e.g. suicide clause, contestability period, pre-existing condition exclusions',
-        max_length=50,
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Free-text notes about this insurance policy',
-        examples=['Policy written in trust — proceeds bypass probate', 'Contact Sarah at Legal & General for claims: 0800 123 456'],
-    )
-    funeralPlanDetails: FuneralPlanDetails | None = Field(
-        None, description='Details specific to funeral plan insurance'
-    )
-    depositorProtection: DepositorProtection | None = Field(
-        None,
-        description='Financial compensation scheme protection status. In the UK, the FSCS protects insurance policyholders if the insurer fails. Knowing whether a policy is protected matters for estate risk assessment',
-    )
-    provenance: Provenance | None = Field(
-        None,
-        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
     )
 
 
@@ -16109,60 +17326,6 @@ class Pet(BaseModel):
     )
 
 
-class Action4(Enum):
-    created = 'created'
-    modified = 'modified'
-    deleted = 'deleted'
-    accessed = 'accessed'
-    exported = 'exported'
-    validated = 'validated'
-    version_created = 'version_created'
-    granted = 'granted'
-    revoked = 'revoked'
-    challenged = 'challenged'
-
-
-class AuditEvent(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    action: Action4 = Field(..., description='What type of action was performed')
-    performedAt: AwareDatetime = Field(..., description='When the action occurred')
-    agentPersonId: UUID | None = Field(
-        None,
-        description='Reference to the Person.id who performed the action. Uses a UUID reference rather than a display name for GDPR data minimisation — resolve the name at display time, not storage time',
-    )
-    agentDescription: constr(max_length=255) | None = Field(
-        None,
-        description='Human-readable description of who performed the action. Use only when a person ID is not available (e.g. system actions, external agents)',
-    )
-    entityType: constr(max_length=100) | None = Field(
-        None, description='The type of INHERIT entity that was affected'
-    )
-    entityId: UUID | None = Field(
-        None, description='The ID of the entity that was affected'
-    )
-    detail: constr(max_length=2000) | None = Field(
-        None,
-        description='What specifically was done. Should be specific enough for an auditor to understand without seeing the before/after data',
-    )
-    previousValue: constr(max_length=5000) | None = Field(
-        None,
-        description='The value before the change, if applicable. For field-level audit trails',
-    )
-    newValue: constr(max_length=5000) | None = Field(
-        None, description='The value after the change, if applicable'
-    )
-    redacted: bool | None = Field(
-        None,
-        description='Whether this audit entry has been redacted for GDPR compliance. When true, the agentPersonId and detail fields may have been cleared but the structural record of the action is preserved',
-    )
-    evidenceUrl: AnyUrl | None = Field(
-        None,
-        description='Link to supporting evidence (court order, signed document, etc.)',
-    )
-
-
 class NotificationType(Enum):
     beneficiary_notified = 'beneficiary_notified'
     executor_appointed = 'executor_appointed'
@@ -16187,7 +17350,7 @@ class Channel1(Enum):
     other = 'other'
 
 
-class Status17(Enum):
+class Status19(Enum):
     pending = 'pending'
     sent = 'sent'
     delivered = 'delivered'
@@ -16219,7 +17382,7 @@ class Notification(BaseModel):
         description='When the notification was sent',
         examples=['2026-03-30T10:00:00Z'],
     )
-    status: Status17 | None = Field(None, description='Current delivery status')
+    status: Status19 | None = Field(None, description='Current delivery status')
     templateId: constr(max_length=100) | None = Field(
         None,
         description='Identifier of the notification template used',
@@ -16231,152 +17394,6 @@ class Notification(BaseModel):
     provenance: Provenance | None = Field(
         None,
         description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
-    )
-
-
-class Category6(Enum):
-    completeness = 'completeness'
-    tax_planning = 'tax_planning'
-    legal_requirement = 'legal_requirement'
-    valuation = 'valuation'
-    transfer_history = 'transfer_history'
-    beneficiary_review = 'beneficiary_review'
-    document_update = 'document_update'
-
-
-class Priority(Enum):
-    critical = 'critical'
-    high = 'high'
-    medium = 'medium'
-    low = 'low'
-
-
-class Status18(Enum):
-    pending = 'pending'
-    in_progress = 'in_progress'
-    completed = 'completed'
-    dismissed = 'dismissed'
-
-
-class RecommendedAction(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    id: constr(max_length=255) = Field(
-        ...,
-        description='Unique identifier for this action',
-        examples=['act-001', 'act-val-shares'],
-    )
-    category: Category6 = Field(..., description='Category of the recommended action')
-    priority: Priority = Field(..., description='Priority level for this action')
-    title: constr(max_length=255) = Field(
-        ...,
-        description='Short action title',
-        examples=['Get professional valuation for share portfolio', 'Update pension nomination', 'Document lifetime gifts in lookback period'],
-    )
-    description: constr(max_length=2000) | None = Field(
-        None, description='Detailed explanation of what to do and why'
-    )
-    status: Status18 = Field(..., description='Current status of this action')
-    triggeredBy: constr(max_length=255) | None = Field(
-        None,
-        description='What data gap or condition generated this action',
-        examples=["Asset 'Barclays shares' has estimatedValue > £50,000 but no professional valuation", 'No executor appointed', 'Pension has no nominated beneficiary'],
-    )
-    relatedEntityType: constr(max_length=255) | None = Field(
-        None,
-        description='Entity type this action relates to',
-        examples=['asset', 'person', 'estate', 'bequest'],
-    )
-    relatedEntityId: UUID | None = Field(
-        None, description='ID of the specific entity this action relates to'
-    )
-
-
-class Category7(Enum):
-    personal_details = 'personal_details'
-    assets_and_valuations = 'assets_and_valuations'
-    liabilities = 'liabilities'
-    beneficiaries = 'beneficiaries'
-    executors = 'executors'
-    guardians = 'guardians'
-    tax_information = 'tax_information'
-    legal_documents = 'legal_documents'
-    lifetime_transfers = 'lifetime_transfers'
-    pension_and_insurance = 'pension_and_insurance'
-
-
-class Status19(Enum):
-    complete = 'complete'
-    incomplete = 'incomplete'
-    not_applicable = 'not_applicable'
-    unknown = 'unknown'
-
-
-class ChecklistItem(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    category: Category7 = Field(
-        ...,
-        description='The data category this checklist item belongs to',
-        examples=['personal_details', 'assets_and_valuations', 'tax_information'],
-    )
-    item: constr(min_length=1, max_length=255) = Field(
-        ...,
-        description='A human-readable label describing what was checked',
-        examples=['Testator date of birth', 'Property valuations within 12 months', 'IHT nil-rate band utilization'],
-    )
-    weight: conint(ge=1) = Field(
-        ...,
-        description='Relative importance of this item. Higher weights contribute more to the overall score',
-        examples=[1, 3, 5, 10],
-    )
-    status: Status19 = Field(
-        ...,
-        description='Whether the data for this item is present and sufficient',
-        examples=['complete', 'incomplete', 'not_applicable'],
-    )
-    details: constr(max_length=255) | None = Field(
-        None,
-        description='Optional explanation of the status, such as what is missing or why the item is not applicable',
-        examples=['No valuation on file for 3 of 5 properties', 'Guardians not required — no minor children'],
-    )
-
-
-class Completeness(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    score: conint(ge=0, le=100) = Field(
-        ...,
-        description='Overall completeness percentage, calculated from the weighted checklist items',
-        examples=[72, 100, 0, 45],
-    )
-    maxScore: conint(ge=0) = Field(
-        ...,
-        description='Maximum possible score for this jurisdiction and estate status combination. May be less than 100 if certain categories are not applicable',
-        examples=[100, 85, 92],
-    )
-    jurisdiction: constr(max_length=255) | None = Field(
-        None,
-        description='ISO 3166-1 alpha-2 country code or ISO 3166-2 subdivision code identifying which jurisdiction this scoring applies to',
-        examples=['GB', 'US', 'GB-SCT', 'AU-NSW'],
-    )
-    estateStatus: constr(max_length=255) | None = Field(
-        None,
-        description='The estate status this completeness score was calculated against. Different statuses may require different data, affecting which checklist items are applicable',
-        examples=['pre_death_planning', 'grant_application', 'administration'],
-    )
-    calculatedAt: AwareDatetime | None = Field(
-        None,
-        description='ISO 8601 date-time when this completeness score was computed',
-        examples=['2026-03-28T14:30:00Z'],
-    )
-    checklist: list[ChecklistItem] = Field(
-        ...,
-        description='The individual items assessed to produce the overall score. Each item belongs to a category, has a relative weight, and a status indicating whether the data is present',
-        max_length=100,
     )
 
 
@@ -16501,71 +17518,6 @@ class TaxPosition(BaseModel):
     )
 
 
-class NotificationMethod(Enum):
-    email = 'email'
-    phone = 'phone'
-    post = 'post'
-    in_person = 'in_person'
-
-
-class AccessLevel(Enum):
-    full = 'full'
-    read_only = 'read_only'
-    collection_only = 'collection_only'
-    financial_only = 'financial_only'
-
-
-class LetterDeliveryMethod(Enum):
-    printed = 'printed'
-    digital = 'digital'
-    both = 'both'
-
-
-class LegacyContact(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    id: UUID = Field(..., description='Unique identifier for this legacy contact')
-    personId: UUID | None = Field(
-        None,
-        description='Reference to a Person.id, if the legacy contact is also in the people array',
-    )
-    personIdDisplay: constr(max_length=255) | None = Field(
-        None, description='Human-readable display name for the referenced person'
-    )
-    name: constr(min_length=1, max_length=255) = Field(
-        ...,
-        description='Display name — required because catalogue-only documents may not have a people array',
-        examples=['Paul Frith', 'Sarah Davies'],
-    )
-    relationship: constr(max_length=255) | None = Field(
-        None,
-        description='Relationship to the catalogue/estate owner',
-        examples=['son', 'daughter', 'partner', 'friend', 'solicitor'],
-    )
-    email: EmailStr | None = Field(None, description='Email address for notification')
-    phone: constr(max_length=255) | None = Field(None, description='Phone number')
-    notificationMethod: NotificationMethod | None = Field(
-        None, description='How to notify this person'
-    )
-    accessLevel: AccessLevel = Field(
-        ..., description='What level of access this person should receive'
-    )
-    letterGenerated: bool | None = Field(
-        None,
-        description="Whether the 'Please open when I have passed away' letter has been generated for this contact",
-    )
-    letterGeneratedAt: AwareDatetime | None = Field(
-        None, description='When the letter was last generated'
-    )
-    letterDeliveryMethod: LetterDeliveryMethod | None = Field(
-        None, description='How the letter was or should be delivered'
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None, description='Additional notes about this legacy contact'
-    )
-
-
 class ConsentMethod1(Enum):
     in_app = 'in_app'
     written = 'written'
@@ -16639,7 +17591,7 @@ class AffectedEntityType(RootModel[constr(min_length=1, max_length=500)]):
     root: constr(min_length=1, max_length=500)
 
 
-class Type19(Enum):
+class Type20(Enum):
     court = 'court'
     executor = 'executor'
     beneficiary = 'beneficiary'
@@ -16657,7 +17609,7 @@ class Actor(BaseModel):
         extra='forbid',
     )
     name: constr(max_length=255) | None = Field(None, description='Name of the actor')
-    type: Type19 | None = Field(None, description='Category of actor')
+    type: Type20 | None = Field(None, description='Category of actor')
     jurisdiction: Jurisdiction | None = Field(
         None, description='Jurisdiction of the actor'
     )
@@ -16779,684 +17731,6 @@ class Acknowledgement(BaseModel):
         None, description='How the acknowledgement was communicated'
     )
     notes: constr(max_length=2000) | None = Field(None, description='Additional notes')
-    provenance: Provenance | None = Field(
-        None,
-        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
-    )
-
-
-class InterestLevel(Enum):
-    mentioned = 'mentioned'
-    expressed_interest = 'expressed_interest'
-    strongly_wants = 'strongly_wants'
-    agreed = 'agreed'
-
-
-class SourceType(Enum):
-    family_conversation = 'family_conversation'
-    written_request = 'written_request'
-    chat_message = 'chat_message'
-    platform_private_message = 'platform_private_message'
-    platform_group_message = 'platform_group_message'
-    proxy_reported = 'proxy_reported'
-    testator_observed = 'testator_observed'
-    manual = 'manual'
-
-
-class ExpressedByRole(Enum):
-    testator = 'testator'
-    beneficiary = 'beneficiary'
-    executor = 'executor'
-    proxy = 'proxy'
-
-
-class IntentType(Enum):
-    acquire = 'acquire'
-    receive = 'receive'
-    allocate = 'allocate'
-    sell = 'sell'
-    admire = 'admire'
-
-
-class MinimumCondition(Enum):
-    excellent = 'excellent'
-    good = 'good'
-    fair = 'fair'
-    poor = 'poor'
-
-
-class ProductMatch(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    identifierSystem: constr(max_length=100) | None = Field(
-        None,
-        description='The identifier system, from reference-data/identifier-systems.json',
-        examples=['manufacturer_sku', 'ean'],
-    )
-    identifierValue: constr(max_length=255) | None = Field(
-        None,
-        description='The product identifier value within the system',
-        examples=['R3456', '5010963123456'],
-    )
-    brand: constr(max_length=255) | None = Field(
-        None, description='Brand name for matching', examples=['Hornby', 'Bachmann']
-    )
-    brandWikidataId: constr(pattern=r'^Q\d+$') | None = Field(
-        None,
-        description='Wikidata entity ID for the brand — strongest cross-system brand match',
-        examples=['Q1139498'],
-    )
-    category: constr(max_length=255) | None = Field(
-        None, description='INHERIT product category for broad matching'
-    )
-    subcategory: constr(max_length=255) | None = Field(
-        None, description='INHERIT subcategory for narrower matching'
-    )
-    minimumCondition: MinimumCondition | None = Field(
-        None,
-        description='Minimum acceptable condition. If absent, matches all conditions. Uses the same enum as asset.condition',
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Additional matching criteria in free text',
-        examples=['1970s era locomotives only', 'DCC fitted preferred', 'Must be BR green livery'],
-    )
-
-
-class OrderStatus(Enum):
-    wanted = 'wanted'
-    pre_ordered_unpaid = 'pre_ordered_unpaid'
-    pre_ordered_paid = 'pre_ordered_paid'
-    dispatched = 'dispatched'
-    received = 'received'
-
-
-class PaymentStatus(Enum):
-    unpaid = 'unpaid'
-    deposit_paid = 'deposit_paid'
-    fully_paid = 'fully_paid'
-    refunded = 'refunded'
-
-
-class PreOrderStatus(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    orderStatus: OrderStatus | None = Field(
-        None, description='Current status of the pre-order'
-    )
-    orderedFrom: constr(max_length=255) | None = Field(
-        None, description='The dealer or manufacturer the item was ordered from'
-    )
-    orderReference: constr(max_length=255) | None = Field(
-        None, description="The dealer's or manufacturer's order reference number"
-    )
-    orderDate: date_aliased | None = Field(
-        None, description='When the order was placed'
-    )
-    expectedDeliveryDate: date_aliased | None = Field(
-        None,
-        description='When the item is expected to arrive. Manufacturers often announce target quarters rather than exact dates',
-    )
-    paymentStatus: PaymentStatus | None = Field(
-        None, description='Whether the item has been paid for'
-    )
-    amountPaid: Money | None = Field(
-        None, description='The amount paid so far, in minor currency units'
-    )
-    paymentMethod: constr(max_length=255) | None = Field(
-        None, description='How the payment was made'
-    )
-
-
-class AssetInterest2(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    id: UUID = Field(
-        ...,
-        description='Unique identifier for this interest record',
-        examples=['c3d4e5f6-a7b8-9012-cdef-3456789abcde'],
-    )
-    rootDocumentId: UUID = Field(
-        ...,
-        description='The root document this entity belongs to — either an estate document (schema.json) or a catalogue document (catalogue.json)',
-        examples=['a1b2c3d4-e5f6-7890-abcd-ef1234567890'],
-    )
-    assetId: UUID | None = Field(
-        None,
-        description='Reference to a specific Asset.id, if the interest is in a single asset',
-        examples=['d4e5f6a7-b8c9-0123-def4-56789abcdef0'],
-    )
-    collectionId: UUID | None = Field(
-        None,
-        description='Reference to an AssetCollection.id, if the interest is in an entire collection',
-        examples=['b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8'],
-    )
-    personId: UUID = Field(
-        ...,
-        description="The person expressing interest (a Person.id). The person's relationship to the estate is qualified by expressedByRole",
-        examples=['e5f6a7b8-c9d0-1234-ef56-789abcdef012'],
-    )
-    personIdDisplay: constr(max_length=255) | None = Field(
-        None, description='Human-readable display name for the referenced person'
-    )
-    interestLevel: InterestLevel = Field(
-        ...,
-        description='How strongly the beneficiary has expressed interest',
-        examples=['expressed_interest', 'agreed'],
-    )
-    sourceType: SourceType | None = Field(
-        None,
-        description='How this interest was communicated or recorded',
-        examples=['family_conversation', 'platform_private_message'],
-    )
-    testatorAcknowledged: bool | None = Field(
-        False,
-        description='Whether the testator has seen and acknowledged this interest',
-        examples=[True, False],
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Additional context about this interest',
-        examples=["Sarah mentioned at Christmas 2024 that she'd love Mum's engagement ring. Mum seemed pleased.", 'Haruki has always admired the woodblock print collection — discussed at Obon 2024.', 'Amara expressed strong interest in the family compound during the last family council meeting.'],
-    )
-    organisationId: UUID | None = Field(
-        None,
-        description='Reference to the Organisation.id expressing interest, if an organisation rather than a person. Mutually exclusive with personId',
-    )
-    organisationIdDisplay: constr(max_length=255) | None = Field(
-        None, description='Human-readable display name for the referenced organisation'
-    )
-    expressedByRole: ExpressedByRole | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None,
-        description='The role of the person expressing this interest in relation to the estate or catalogue. Qualifies the authority and weight of the expression. Follows the Schema.org Role pattern',
-        examples=['testator', 'beneficiary', 'executor'],
-    )
-    intentType: IntentType | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None,
-        description='The nature of the interest being expressed. Distinguishes between wanting to acquire, wanting to receive, wanting to allocate to someone, willingness to sell, and soft admiration',
-        examples=['acquire', 'receive', 'allocate'],
-    )
-    productMatch: ProductMatch | None = Field(
-        None,
-        description='Interest in any asset matching this product identity, rather than a specific asset. Use instead of assetId when the interest is in a product class, not a specific instance. Maps to Schema.org Product (vs IndividualProduct for assetId). Matching is by identifier (strongest), brand + category (medium), or category alone (weakest)',
-    )
-    quantity: conint(ge=1, le=1000) | None = Field(
-        1,
-        description='Number of items desired (for productMatch wishlist entries) or number of the specific asset being discussed. Default 1 if absent. Follows the same convention as asset.quantity',
-        examples=[1, 3, 6],
-    )
-    expressedAt: AwareDatetime | None = Field(
-        None, description='When this interest was expressed or recorded'
-    )
-    preOrderStatus: PreOrderStatus | None = Field(
-        None,
-        description='For wishlist items that have been pre-ordered from a dealer or manufacturer but not yet received. Tracks order status, payment, and expected delivery',
-    )
-    provenance: Provenance | None = Field(
-        None,
-        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
-    )
-
-
-class ProductMatch1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    identifierSystem: constr(max_length=100) | None = Field(
-        None,
-        description='The identifier system, from reference-data/identifier-systems.json',
-        examples=['manufacturer_sku', 'ean'],
-    )
-    identifierValue: constr(max_length=255) | None = Field(
-        None,
-        description='The product identifier value within the system',
-        examples=['R3456', '5010963123456'],
-    )
-    brand: constr(max_length=255) | None = Field(
-        None, description='Brand name for matching', examples=['Hornby', 'Bachmann']
-    )
-    brandWikidataId: constr(pattern=r'^Q\d+$') | None = Field(
-        None,
-        description='Wikidata entity ID for the brand — strongest cross-system brand match',
-        examples=['Q1139498'],
-    )
-    category: constr(max_length=255) | None = Field(
-        None, description='INHERIT product category for broad matching'
-    )
-    subcategory: constr(max_length=255) | None = Field(
-        None, description='INHERIT subcategory for narrower matching'
-    )
-    minimumCondition: MinimumCondition | None = Field(
-        None,
-        description='Minimum acceptable condition. If absent, matches all conditions. Uses the same enum as asset.condition',
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Additional matching criteria in free text',
-        examples=['1970s era locomotives only', 'DCC fitted preferred', 'Must be BR green livery'],
-    )
-
-
-class PreOrderStatus1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    orderStatus: OrderStatus | None = Field(
-        None, description='Current status of the pre-order'
-    )
-    orderedFrom: constr(max_length=255) | None = Field(
-        None, description='The dealer or manufacturer the item was ordered from'
-    )
-    orderReference: constr(max_length=255) | None = Field(
-        None, description="The dealer's or manufacturer's order reference number"
-    )
-    orderDate: date_aliased | None = Field(
-        None, description='When the order was placed'
-    )
-    expectedDeliveryDate: date_aliased | None = Field(
-        None,
-        description='When the item is expected to arrive. Manufacturers often announce target quarters rather than exact dates',
-    )
-    paymentStatus: PaymentStatus | None = Field(
-        None, description='Whether the item has been paid for'
-    )
-    amountPaid: Money | None = Field(
-        None, description='The amount paid so far, in minor currency units'
-    )
-    paymentMethod: constr(max_length=255) | None = Field(
-        None, description='How the payment was made'
-    )
-
-
-class AssetInterest3(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    id: UUID = Field(
-        ...,
-        description='Unique identifier for this interest record',
-        examples=['c3d4e5f6-a7b8-9012-cdef-3456789abcde'],
-    )
-    rootDocumentId: UUID = Field(
-        ...,
-        description='The root document this entity belongs to — either an estate document (schema.json) or a catalogue document (catalogue.json)',
-        examples=['a1b2c3d4-e5f6-7890-abcd-ef1234567890'],
-    )
-    assetId: UUID | None = Field(
-        None,
-        description='Reference to a specific Asset.id, if the interest is in a single asset',
-        examples=['d4e5f6a7-b8c9-0123-def4-56789abcdef0'],
-    )
-    collectionId: UUID | None = Field(
-        None,
-        description='Reference to an AssetCollection.id, if the interest is in an entire collection',
-        examples=['b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8'],
-    )
-    personId: UUID | None = Field(
-        None,
-        description="The person expressing interest (a Person.id). The person's relationship to the estate is qualified by expressedByRole",
-        examples=['e5f6a7b8-c9d0-1234-ef56-789abcdef012'],
-    )
-    personIdDisplay: constr(max_length=255) | None = Field(
-        None, description='Human-readable display name for the referenced person'
-    )
-    interestLevel: InterestLevel = Field(
-        ...,
-        description='How strongly the beneficiary has expressed interest',
-        examples=['expressed_interest', 'agreed'],
-    )
-    sourceType: SourceType | None = Field(
-        None,
-        description='How this interest was communicated or recorded',
-        examples=['family_conversation', 'platform_private_message'],
-    )
-    testatorAcknowledged: bool | None = Field(
-        False,
-        description='Whether the testator has seen and acknowledged this interest',
-        examples=[True, False],
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Additional context about this interest',
-        examples=["Sarah mentioned at Christmas 2024 that she'd love Mum's engagement ring. Mum seemed pleased.", 'Haruki has always admired the woodblock print collection — discussed at Obon 2024.', 'Amara expressed strong interest in the family compound during the last family council meeting.'],
-    )
-    organisationId: UUID = Field(
-        ...,
-        description='Reference to the Organisation.id expressing interest, if an organisation rather than a person. Mutually exclusive with personId',
-    )
-    organisationIdDisplay: constr(max_length=255) | None = Field(
-        None, description='Human-readable display name for the referenced organisation'
-    )
-    expressedByRole: ExpressedByRole | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None,
-        description='The role of the person expressing this interest in relation to the estate or catalogue. Qualifies the authority and weight of the expression. Follows the Schema.org Role pattern',
-        examples=['testator', 'beneficiary', 'executor'],
-    )
-    intentType: IntentType | constr(pattern=r'^x-inherit-.+') | None = Field(
-        None,
-        description='The nature of the interest being expressed. Distinguishes between wanting to acquire, wanting to receive, wanting to allocate to someone, willingness to sell, and soft admiration',
-        examples=['acquire', 'receive', 'allocate'],
-    )
-    productMatch: ProductMatch1 | None = Field(
-        None,
-        description='Interest in any asset matching this product identity, rather than a specific asset. Use instead of assetId when the interest is in a product class, not a specific instance. Maps to Schema.org Product (vs IndividualProduct for assetId). Matching is by identifier (strongest), brand + category (medium), or category alone (weakest)',
-    )
-    quantity: conint(ge=1, le=1000) | None = Field(
-        1,
-        description='Number of items desired (for productMatch wishlist entries) or number of the specific asset being discussed. Default 1 if absent. Follows the same convention as asset.quantity',
-        examples=[1, 3, 6],
-    )
-    expressedAt: AwareDatetime | None = Field(
-        None, description='When this interest was expressed or recorded'
-    )
-    preOrderStatus: PreOrderStatus1 | None = Field(
-        None,
-        description='For wishlist items that have been pre-ordered from a dealer or manufacturer but not yet received. Tracks order status, payment, and expected delivery',
-    )
-    provenance: Provenance | None = Field(
-        None,
-        description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
-    )
-
-
-class AssetInterest(RootModel[AssetInterest2 | AssetInterest3]):
-    root: AssetInterest2 | AssetInterest3 = Field(
-        ...,
-        description='Captures expressions of interest about an asset, collection, or product from any perspective — owner wishlists, beneficiary preferences, executor observations, proxy-relayed interests, and cross-system collector interest. Qualified by expressedByRole (who), intentType (what kind), and optionally productMatch (product-level vs asset-level). Maps to Schema.org ReactAction + Role',
-        title='Asset Interest',
-    )
-
-
-class Type20(Enum):
-    art_dealer = 'art_dealer'
-    antique_dealer = 'antique_dealer'
-    property_investor = 'property_investor'
-    auction_house = 'auction_house'
-    gallery = 'gallery'
-    private_collector = 'private_collector'
-    museum = 'museum'
-    institution = 'institution'
-    charity = 'charity'
-    developer = 'developer'
-    fund_manager = 'fund_manager'
-    family_office = 'family_office'
-    estate_agent = 'estate_agent'
-    legal_practice = 'legal_practice'
-    other = 'other'
-
-
-class InterestedParty(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    personId: UUID | None = Field(
-        None,
-        description='Reference to a Person.id if the interested party is an individual in the people array',
-    )
-    personIdDisplay: constr(max_length=255) | None = Field(
-        None, description='Human-readable display name for the referenced person'
-    )
-    name: constr(max_length=255) = Field(
-        ...,
-        description='Name of the interested party — individual or organisation',
-        examples=["Christie's", 'Savills', 'Dr Heinrich Müller', 'Bonhams', 'Galerie Tanaka, Tokyo', 'Rahul Mehta Fine Art', 'Al-Futtaim Auction House'],
-    )
-    type: Type20 = Field(..., description='The type of interested party')
-    contactDetails: constr(max_length=255) | None = Field(
-        None,
-        description='Contact details for the interested party',
-        examples=['acquisitions@christies.com', '+44 20 7839 9060', 'Dr Müller, Galerie Müller, Zurich'],
-    )
-    organisationId: UUID | None = Field(
-        None,
-        description='Reference to an Organisation.id if the interested party is a known organisation. Mutually exclusive with personId',
-    )
-    organisationIdDisplay: constr(max_length=255) | None = Field(
-        None, description='Human-readable display name for the referenced organisation'
-    )
-
-
-class InterestLevel2(Enum):
-    exploratory = 'exploratory'
-    moderate = 'moderate'
-    strong = 'strong'
-    committed = 'committed'
-
-
-class AssetInterestItem(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    assetId: UUID | None = Field(None, description='Reference to an Asset.id')
-    propertyId: UUID | None = Field(None, description='Reference to a Property.id')
-    interestLevel: InterestLevel2 | None = Field(
-        None,
-        description="How strong the interested party's intent is",
-        examples=['strong', 'exploratory'],
-    )
-
-
-class CollectionInterest1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    name: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the collection',
-        examples=['Victorian watercolour collection', 'Hampstead property portfolio', 'Japanese woodblock print collection'],
-    )
-    assetIds: list[AssetId] = Field(
-        ..., description='Asset IDs that make up this collection', max_length=100
-    )
-    propertyIds: list[PropertyId] | None = Field(
-        None, description='Property IDs that make up this collection', max_length=100
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Additional notes about the collection interest',
-        examples=['Interested in acquiring the complete collection, not individual pieces'],
-    )
-
-
-class CollectionInterest2(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    name: constr(max_length=255) | None = Field(
-        None,
-        description='Name of the collection',
-        examples=['Victorian watercolour collection', 'Hampstead property portfolio', 'Japanese woodblock print collection'],
-    )
-    assetIds: list[AssetId] | None = Field(
-        None, description='Asset IDs that make up this collection', max_length=100
-    )
-    propertyIds: list[PropertyId] = Field(
-        ..., description='Property IDs that make up this collection', max_length=100
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Additional notes about the collection interest',
-        examples=['Interested in acquiring the complete collection, not individual pieces'],
-    )
-
-
-class CollectionInterest(RootModel[CollectionInterest1 | CollectionInterest2]):
-    root: CollectionInterest1 | CollectionInterest2 = Field(
-        ...,
-        description='Interest in a collection of assets or properties as a whole, rather than individual items',
-    )
-
-
-class Condition3(RootModel[constr(max_length=500)]):
-    root: constr(max_length=500)
-
-
-class OfferDetails(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    amount: Money | None = Field(
-        None, description='The offer amount in minor currency units'
-    )
-    conditions: list[Condition3] | None = Field(
-        None,
-        description='Conditions attached to the offer',
-        examples=[['Subject to independent valuation', 'Conditional on vacant possession']],
-        max_length=50,
-    )
-    validUntil: date_aliased | None = Field(
-        None, description='Date the offer expires', examples=['2025-12-31']
-    )
-    offerDate: date_aliased | None = Field(
-        None, description='Date the offer was made', examples=['2025-06-15']
-    )
-    documentRef: constr(max_length=500) | None = Field(
-        None,
-        description='Reference to the document containing the offer',
-        examples=['DOC-2025-OFFER-001'],
-    )
-    offerTerms: constr(max_length=2000) | None = Field(
-        None,
-        description='Terms and conditions of the offer',
-        examples=['Subject to independent valuation and clear title'],
-    )
-    inspectionRequired: bool | None = Field(
-        None,
-        description='Whether a physical inspection is required before the offer can be finalised',
-        examples=[True, False],
-    )
-    inspectionDate: date_aliased | None = Field(
-        None,
-        description='Date the inspection is scheduled or took place',
-        examples=['2026-06-15'],
-    )
-
-
-class OfferStatus(Enum):
-    standing_interest = 'standing_interest'
-    verbal_offer = 'verbal_offer'
-    written_offer = 'written_offer'
-    formal_valuation = 'formal_valuation'
-    conditional_offer = 'conditional_offer'
-    accepted = 'accepted'
-    declined = 'declined'
-    expired = 'expired'
-    withdrawn = 'withdrawn'
-
-
-class TestatorDisposition(Enum):
-    willing_to_sell = 'willing_to_sell'
-    prefer_not_to_sell = 'prefer_not_to_sell'
-    hold_for_executor = 'hold_for_executor'
-    deferred_to_family = 'deferred_to_family'
-    promised_to_institution = 'promised_to_institution'
-    undecided = 'undecided'
-
-
-class PrivacyLevel(Enum):
-    testator_only = 'testator_only'
-    proxy_visible = 'proxy_visible'
-    executor_visible = 'executor_visible'
-    all_parties = 'all_parties'
-
-
-class CommunicationInitiatedBy(Enum):
-    buyer = 'buyer'
-    testator = 'testator'
-    proxy = 'proxy'
-    executor = 'executor'
-
-
-class VerificationResult(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    verified: bool | None = Field(
-        None, description='Whether the item has been through verification'
-    )
-    verifiedAt: AwareDatetime | None = Field(
-        None, description='When the verification was completed'
-    )
-    conditionConfirmed: bool | None = Field(
-        None,
-        description="Whether the item's condition matched the seller's listed grade",
-    )
-    adjustedAmount: Money | None = Field(
-        None,
-        description='The adjusted price if condition differed from listed. Null if no adjustment needed',
-    )
-    discrepancyNotes: constr(max_length=2000) | None = Field(
-        None,
-        description='Details of any condition discrepancy found during verification',
-    )
-    verifiedByOrganisationId: UUID | None = Field(
-        None, description='Reference to the Organisation.id of the verification dealer'
-    )
-
-
-class DealerInterest(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    id: UUID = Field(
-        ...,
-        description='Unique identifier for this dealer interest record within the INHERIT document',
-        examples=['e7f8a9b0-c1d2-3456-e789-abcdef012345'],
-    )
-    interestedParty: InterestedParty = Field(
-        ..., description='The third party expressing interest in estate assets'
-    )
-    assets: list[AssetInterestItem] | None = Field(
-        None,
-        description='Specific assets or properties the interested party wants to acquire',
-        max_length=100,
-    )
-    collection: CollectionInterest | None = Field(
-        None, description='Interest in a collection of assets as a whole'
-    )
-    offerStatus: OfferStatus = Field(
-        ...,
-        description='Current status of the offer or expression of interest',
-        examples=['standing_interest', 'written_offer', 'accepted'],
-    )
-    offerDetails: OfferDetails | None = Field(
-        None, description='Details of a specific offer, if one has been made'
-    )
-    testatorDisposition: TestatorDisposition | None = Field(
-        None,
-        description="The testator's disposition towards selling this asset",
-        examples=['willing_to_sell', 'hold_for_executor'],
-    )
-    linkedBequestId: UUID | None = Field(
-        None,
-        description='Reference to a Bequest.id if this asset is also subject to a bequest. A dealer interest and a bequest may conflict',
-    )
-    privacyLevel: PrivacyLevel = Field(
-        ...,
-        description='Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches',
-        examples=['proxy_visible', 'executor_visible'],
-    )
-    communicationInitiatedBy: CommunicationInitiatedBy | None = Field(
-        None,
-        description='Who initiated the communication about this potential transaction',
-        examples=['buyer', 'proxy'],
-    )
-    managedByProxyId: UUID | None = Field(
-        None,
-        description='Reference to the ProxyAuthorisation.id that governs this dealer interest — the proxy managing the negotiation',
-    )
-    notes: constr(max_length=2000) | None = Field(
-        None,
-        description='Free-text notes about this dealer interest',
-        examples=["Christie's approached via family friend — informal valuation suggests £120,000-£150,000", 'Testator does not want this disclosed to the family during their lifetime'],
-    )
-    verificationResult: VerificationResult | None = Field(
-        None,
-        description='The outcome of a verification inspection — records whether the item matched its listed condition and any price adjustments',
-    )
     provenance: Provenance | None = Field(
         None,
         description='Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it',
@@ -17594,7 +17868,17 @@ class IntegrityConstraint(BaseModel):
     )
 
 
-class ExportedBy(BaseModel):
+class FieldSchema(Enum):
+    https___openinherit_org_v3_schema_json = 'https://openinherit.org/v3/schema.json'
+    https___openinherit_org_v3_catalogue_json = 'https://openinherit.org/v3/catalogue.json'
+
+
+class ConformanceProfile(Enum):
+    estate = 'estate'
+    catalogue = 'catalogue'
+
+
+class ExportedBy1(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -17615,7 +17899,7 @@ class ExportedBy(BaseModel):
     )
 
 
-class Generator(BaseModel):
+class Generator1(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -17843,13 +18127,18 @@ class ApplicationState(BaseModel):
 
 
 class Schema(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/schema.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='allow',
     )
-    field_schema: Literal['https://openinherit.org/v3/schema.json'] | None = Field(
+    field_schema: FieldSchema | None = Field(
         None,
         alias='$schema',
-        description='Schema identifier — declares this as an INHERIT v3 document. Standard JSON Schema keyword',
+        description='Schema identifier — declares this as an INHERIT v3 document. Standard JSON Schema keyword. An estate-profile document carries the root URL; a catalogue-profile document may carry either the root URL or the catalogue URL, so a catalogue document written against catalogue.json conforms to the root unchanged',
     )
     field_context: AnyUrl | dict[str, Any] | None = Field(
         None,
@@ -17860,8 +18149,13 @@ class Schema(BaseModel):
     field_type: str | None = Field(
         None, alias='@type', description='JSON-LD type, e.g. InheritDocument'
     )
-    schemaVersion: constr(pattern=r'^\d+\.\d+\.\d+$', max_length=255) = Field(
-        ...,
+    conformanceProfile: ConformanceProfile | None = Field(
+        'estate',
+        description="The conformance profile this document claims. 'estate' (the default when absent) is the full estate document: estate, people and schemaVersion are required. 'catalogue' is a catalogue-only document — a living owner cataloguing items with no estate envelope: the document must satisfy catalogue.json in full, so assets is required, estate-only members are not allowed, and the catalogue's own members (assetInterests, legacyContacts, dealerInterests, giftListSettings, legacyLetter, completeness, recommendedActions) are carried at the root rather than in applicationState. A profile is a declared subset of this one root, not a second root",
+        examples=['estate', 'catalogue'],
+    )
+    schemaVersion: constr(pattern=r'^\d+\.\d+\.\d+$', max_length=255) | None = Field(
+        None,
         description='Semver version of the INHERIT schema this document was created against. Enables consumers to detect compatibility and handle graceful degradation',
         examples=['1.0.0', '1.1.0', '1.2.3'],
     )
@@ -17870,10 +18164,10 @@ class Schema(BaseModel):
         description='Timestamp when this document was exported from the producing system',
         examples=['2025-03-27T12:00:00Z'],
     )
-    exportedBy: ExportedBy | None = Field(
+    exportedBy: ExportedBy1 | None = Field(
         None, description='The person who exported or prepared this document'
     )
-    generator: Generator | None = Field(
+    generator: Generator1 | None = Field(
         None, description='The software that generated this INHERIT document'
     )
     documentVersion: conint(ge=1) | None = Field(
@@ -17892,11 +18186,11 @@ class Schema(BaseModel):
         None,
         description='Human-readable summary of what changed in this version. Like a commit message for the document',
     )
-    estate: Estate = Field(
-        ..., description='The single estate record for this document'
+    estate: Estate | None = Field(
+        None, description='The single estate record for this document'
     )
-    people: list[Person] = Field(
-        ...,
+    people: list[Person] | None = Field(
+        None,
         description='All people involved in the estate — testator, beneficiaries, executors, witnesses, guardians, etc',
         max_length=500,
         min_length=1,
@@ -17919,12 +18213,10 @@ class Schema(BaseModel):
     assets: list[Asset] | None = Field(
         None,
         description='Non-property assets — financial accounts, personal property, vehicles, digital assets, etc',
-        max_length=2000,
     )
     assetCollections: list[AssetCollection] | None = Field(
         None,
         description='Named groups of related assets — collections (model railways, art, wine, etc.) that have collective significance and value',
-        max_length=200,
     )
     liabilities: list[Liability] | None = Field(
         None,
@@ -17950,7 +18242,6 @@ class Schema(BaseModel):
     wishes: list[Wish] | None = Field(
         None,
         description='Non-binding (or culturally binding) wishes — funeral, letters, pet care, digital estate',
-        max_length=100,
     )
     documents: list[Document] | None = Field(
         None,
@@ -17975,7 +18266,6 @@ class Schema(BaseModel):
     valuations: list[Valuation] | None = Field(
         None,
         description='Valuations of assets, properties, and collections. Multiple valuations per entity are supported — owner estimates, professional valuations, AI estimates, dealer offers',
-        max_length=5000,
     )
     lifetimeTransfers: list[LifetimeTransfer] | None = Field(
         None,
@@ -18007,7 +18297,6 @@ class Schema(BaseModel):
     importSources: list[ImportSource] | None = Field(
         None,
         description='Systems from which data was imported into this document. Enables audit trail and source tracking',
-        max_length=50,
     )
     conformance: Conformance | None = Field(
         None,
@@ -18021,7 +18310,6 @@ class Schema(BaseModel):
     insurancePolicies: list[InsurancePolicy] | None = Field(
         None,
         description='Insurance policies associated with the estate — life, home, health, motor, travel, pet, and professional indemnity',
-        max_length=50,
     )
     pets: list[Pet] | None = Field(
         None, description='Pets requiring care arrangements', max_length=50
@@ -18046,193 +18334,7 @@ class Schema(BaseModel):
     )
 
 
-class ExportedBy1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    name: constr(max_length=255) | None = None
-    email: EmailStr | None = None
-
-
-class Generator1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    name: constr(min_length=1, max_length=255)
-    version: constr(max_length=255) | None = None
-    url: constr(max_length=2048) | None = None
-
-
-class Visibility2(Enum):
-    public = 'public'
-    link_only = 'link_only'
-    private = 'private'
-
-
-class FulfilledItem(RootModel[UUID]):
-    root: UUID
-
-
-class GiftListSettings(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    enabled: bool | None = Field(
-        None, description='Whether the gift list is currently shareable'
-    )
-    personalMessage: constr(max_length=2000) | None = Field(
-        None,
-        description="The owner's personal message shown at the top of the gift list",
-    )
-    visibility: Visibility2 | None = Field(
-        None, description='Who can see the gift list'
-    )
-    fulfilledItems: list[FulfilledItem] | None = Field(
-        None,
-        description='Asset interest IDs that someone has marked as bought. These are hidden from the public gift list to prevent duplicate gifts',
-        max_length=5000,
-    )
-
-
-class DeliveryMethod(Enum):
-    printed = 'printed'
-    digital = 'digital'
-    both = 'both'
-
-
-class LegacyLetter(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    lastGenerated: AwareDatetime | None = Field(
-        None, description='When the letter was last generated'
-    )
-    version: conint(ge=1) | None = Field(
-        None, description='Incremental version number of the letter'
-    )
-    delivered: bool | None = Field(
-        None, description='Whether the letter has been delivered to the legacy contacts'
-    )
-    deliveryMethod: DeliveryMethod | None = Field(
-        None, description='How the letter was delivered'
-    )
-    itemCountAtGeneration: conint(ge=0) | None = Field(
-        None,
-        description='Number of items in the catalogue when the letter was last generated. Used to detect staleness — if the current item count differs significantly, the letter should be regenerated',
-    )
-
-
-class Catalogue(BaseModel):
-    model_config = ConfigDict(
-        extra='allow',
-    )
-    field_schema: Literal['https://openinherit.org/v3/catalogue.json'] | None = Field(
-        None,
-        alias='$schema',
-        description='Schema identifier — declares this as an INHERIT v3 catalogue document',
-    )
-    field_context: AnyUrl | None = Field(
-        None,
-        alias='@context',
-        description='JSON-LD context URI',
-        examples=['https://openinherit.org/v3/context/inherit-v3.jsonld'],
-    )
-    schemaVersion: constr(pattern=r'^\d+\.\d+\.\d+$', max_length=255) | None = Field(
-        None, examples=['1.3.0']
-    )
-    exportedAt: AwareDatetime | None = None
-    exportedBy: ExportedBy1 | None = None
-    generator: Generator1 | None = None
-    documentVersion: conint(ge=1) | None = Field(
-        None,
-        description='Sequential version number for this document. Incremented each time the document is substantively modified. Version 1 is the first version',
-    )
-    versionedAt: AwareDatetime | None = Field(
-        None,
-        description='When this version of the document was created. Courts and regulators care about when changes were made, not just which version number',
-    )
-    previousVersionId: UUID | None = Field(
-        None,
-        description='Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version',
-    )
-    changeDescription: constr(max_length=2000) | None = Field(
-        None,
-        description='Human-readable summary of what changed in this version. Like a commit message for the document',
-    )
-    assets: list[Asset] = Field(
-        ..., description='The catalogued items', max_length=10000
-    )
-    assetCollections: list[AssetCollection] | None = Field(
-        None, description='Named groupings of assets', max_length=500
-    )
-    organisations: list[Organisation] | None = Field(
-        None,
-        description='Organisations associated with catalogued assets — dealers, retailers, valuers, auction houses',
-        max_length=200,
-    )
-    properties: list[Property] | None = Field(
-        None,
-        description='Properties whose spaces appear in this catalogue. A catalogue is not an estate document, so a property here need carry no more than an id and a name — enough for spaces[].propertyId to resolve inside the document and for a room to be attributed to an address',
-        max_length=200,
-    )
-    spaces: list[Space] | None = Field(
-        None,
-        description='Physical storage locations for items in this catalogue. Each asset can reference a space via spaceId. Critical for collectors with items across multiple properties or countries — affects probate jurisdiction and dealer collection logistics',
-        max_length=200,
-    )
-    valuations: list[Valuation] | None = Field(
-        None, description='Valuations of items and collections', max_length=10000
-    )
-    legacyContacts: list[LegacyContact] | None = Field(
-        None,
-        description="People to notify and grant access when the owner dies. The 'Please open when I have passed away' letter recipients",
-        max_length=100,
-    )
-    assetInterests: list[AssetInterest] | None = Field(
-        None,
-        description="Expressions of interest about assets, collections, or products. Includes the catalogue owner's own wishlist (things they want to acquire), interest from other people, and allocation intentions. Complements assets[] — assets are things you own; assetInterests are things you want, things others want, and decisions about who gets what",
-        max_length=5000,
-    )
-    wishes: list[Wish] | None = Field(
-        None,
-        description='Personal messages, letters, care instructions, and non-binding wishes. Complements legacyContacts — legacyContacts tracks who receives the letter; wishes stores what it says. Types: letter (personal messages to specific people), care (maintenance and care instructions for items or collections), distribution (non-binding preferences about what should happen to items), general (anything else)',
-        max_length=200,
-    )
-    dataProvenance: DataProvenance | None = Field(
-        None, description='Default data provenance for entities in this catalogue'
-    )
-    importSources: list[ImportSource] | None = Field(
-        None, description='Systems data was imported from', max_length=100
-    )
-    completeness: Completeness | None = None
-    recommendedActions: list[RecommendedAction] | None = Field(None, max_length=100)
-    conformance: Conformance | None = None
-    insurancePolicies: list[InsurancePolicy] | None = Field(
-        None,
-        description='Insurance policies associated with catalogued assets',
-        max_length=100,
-    )
-    dealerInterests: list[DealerInterest] | None = Field(
-        None,
-        description='Provisional offers and expressions of interest from dealers. Allows the catalogue owner to receive and track dealer offers on items they are considering selling, or standing offers to be included in the LegacyLetter',
-        max_length=2000,
-    )
-    giftListSettings: GiftListSettings | None = Field(
-        None,
-        description='Settings for the shareable gift wishlist. When enabled, the owner can share a public link to their wishlist for family and friends to buy from',
-    )
-    legacyLetter: LegacyLetter | None = Field(
-        None,
-        description="Metadata about the LegacyLetter — the printed or digital document addressed to the owner's legacy contacts, summarising the catalogue, allocations, dealer offers, and personal messages. Tracks generation status to flag when the letter is stale",
-    )
-    auditLog: list[AuditEvent] | None = Field(
-        None,
-        description='Formal audit trail of actions taken on this document. Records who changed what, when, and why. Uses person ID references for GDPR data minimisation. Entries may be redacted under Article 17(3)(e) without breaking the log structure. Retention aligns with the estate document lifecycle',
-        max_length=10000,
-    )
-
-
-class Level3(Enum):
+class Level4(Enum):
     int_1 = 1
     int_2 = 2
     int_3 = 3
@@ -18242,7 +18344,7 @@ class EntityConformance(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    level: Level3 = Field(..., description='Conformance level tested')
+    level: Level4 = Field(..., description='Conformance level tested')
     passed: bool = Field(
         ..., description='Whether the entity passed at the declared level'
     )
@@ -18267,7 +18369,7 @@ class ExtensionConformance(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    level: Level3 = Field(..., description='Conformance level tested')
+    level: Level4 = Field(..., description='Conformance level tested')
     passed: bool = Field(
         ..., description='Whether the extension passed at the declared level'
     )
@@ -18515,3 +18617,999 @@ class ExtensionUae(RootModel[Uae]):
     root: Uae = Field(
         ..., description='UAE succession — federal law, DIFC/ADGM wills, Sharia default'
     )
+
+
+# --- Conditional layer -------------------------------------------------------
+# Generated by scripts/lib/write-conditional-layer.py. See it for what this
+# evaluates and why the generated models cannot.
+
+import json as _json
+import re as _re
+
+from pydantic import TypeAdapter as _TypeAdapter
+from pydantic import ValidationError as _ValidationError
+
+
+def _canon(v):
+    if isinstance(v, list):
+        return [_canon(x) for x in v]
+    if isinstance(v, dict):
+        return {k: _canon(v[k]) for k in sorted(v)}
+    return v
+
+
+def _same(a, b):
+    # JSON equality: 1 == 1.0, but True is not 1.
+    if isinstance(a, bool) or isinstance(b, bool):
+        return type(a) is type(b) and a == b
+    return _json.dumps(_canon(a)) == _json.dumps(_canon(b))
+
+
+def _evaluate(s, v, path, out):
+    if "$ref" in s:
+        try:
+            _TypeAdapter(_LAYER_MODELS[s["$ref"]]).validate_json(_json.dumps(v), strict=True)
+        except _ValidationError as e:
+            for err in e.errors():
+                out.append(("/".join(map(str, [*path, *err["loc"]])), err["msg"]))
+    if "const" in s and not _same(v, s["const"]):
+        out.append(("/".join(map(str, path)), f"must be {_json.dumps(s['const'])}"))
+    if "enum" in s and not any(_same(v, e) for e in s["enum"]):
+        out.append(("/".join(map(str, path)), f"must be one of {_json.dumps(s['enum'])}"))
+    if isinstance(v, (int, float)) and not isinstance(v, bool):
+        for k, bad, word in (("minimum", v.__lt__, ">="), ("maximum", v.__gt__, "<="),
+                             ("exclusiveMinimum", v.__le__, ">"), ("exclusiveMaximum", v.__ge__, "<")):
+            if k in s and bad(s[k]):
+                out.append(("/".join(map(str, path)), f"must be {word} {s[k]}"))
+    if isinstance(v, list):
+        if "maxItems" in s and len(v) > s["maxItems"]:
+            out.append(("/".join(map(str, path)), f"must have at most {s['maxItems']} items"))
+        if "minItems" in s and len(v) < s["minItems"]:
+            out.append(("/".join(map(str, path)), f"must have at least {s['minItems']} items"))
+        if "contains" in s and not any(_passes(s["contains"], x) for x in v):
+            out.append(("/".join(map(str, path)), "must contain a matching item"))
+    if isinstance(v, dict):
+        for k in s.get("required", []):
+            if k not in v:
+                out.append(("/".join(map(str, [*path, k])), f"required: {k}"))
+        for k, sub in s.get("properties", {}).items():
+            if k in v:
+                _evaluate(sub, v[k], [*path, k], out)
+    for sub in s.get("allOf", []):
+        _evaluate(sub, v, path, out)
+    if "not" in s and _passes(s["not"], v):
+        out.append(("/".join(map(str, path)), "must not match the excluded shape"))
+    if "if" in s:
+        branch = s.get("then") if _passes(s["if"], v) else s.get("else")
+        if branch is not None:
+            _evaluate(branch, v, path, out)
+
+
+def _passes(s, v):
+    out = []
+    _evaluate(s, v, [], out)
+    return not out
+
+
+def _evaluated(s, names, patterns):
+    names.update(s.get("properties", {}))
+    if "$ref" in s:
+        names.update(_REFKEYS[s["$ref"]]["props"])
+        patterns.extend(_REFKEYS[s["$ref"]]["patterns"])
+    for sub in s.get("allOf", []):
+        _evaluated(sub, names, patterns)
+
+
+def _layer_check(sid, data):
+    if not isinstance(data, dict):
+        return data
+    rule, out = _LAYER_RULES[sid], []
+    closed = rule["closed"] or {"props": [], "patterns": []}
+    names, patterns = set(closed["props"]), list(closed["patterns"])
+    for c in rule["conditionals"]:
+        ok = _passes(c["if"], data)
+        branch = c.get("then") if ok else c.get("else")
+        if ok:
+            _evaluated(c["if"], names, patterns)
+        if branch is not None:
+            _evaluate(branch, data, [], out)
+            _evaluated(branch, names, patterns)
+    for k in rule["nonnull"]:
+        if k in data and data[k] is None:
+            out.append((k, f"{k} must not be null"))
+    for k, sub in rule["overlays"].items():
+        if k in data:
+            _evaluate(sub, data[k], [k], out)
+    if rule["closed"]:
+        for k in data:
+            if k not in names and not any(_re.search(p, k) for p in patterns):
+                out.append((k, f"{k} is not allowed here (unevaluatedProperties)"))
+    if out:
+        raise ValueError("; ".join(f"{p or '(root)'}: {m}" for p, m in out))
+    return data
+
+
+class _InheritRawKeyGuard:
+    """Wraps a model's __pydantic_validator__ to refuse, on the raw input, keys
+    that pydantic would otherwise discard unseen: the Python names of aliased
+    fields, which the schema does not allow at that level."""
+
+    def __init__(self, inner, title, names):
+        self._inner, self._title, self._names = inner, title, frozenset(names)
+
+    def _check(self, obj):
+        if isinstance(obj, dict):
+            bad = [k for k in obj if k in self._names]
+            if bad:
+                from pydantic_core import InitErrorDetails, PydanticCustomError
+                raise _ValidationError.from_exception_data(self._title, [
+                    InitErrorDetails(
+                        type=PydanticCustomError("unevaluated_property", "{key} is not allowed here (unevaluatedProperties)", {"key": k}),
+                        loc=(k,), input=obj[k],
+                    ) for k in bad
+                ])
+
+    def validate_json(self, data, *args, **kwargs):
+        try:
+            parsed = _json.loads(data)
+        except (TypeError, ValueError):
+            parsed = None
+        self._check(parsed)
+        return self._inner.validate_json(data, *args, **kwargs)
+
+    def validate_python(self, obj, *args, **kwargs):
+        self._check(obj)
+        return self._inner.validate_python(obj, *args, **kwargs)
+
+    def validate_strings(self, obj, *args, **kwargs):
+        self._check(obj)
+        return self._inner.validate_strings(obj, *args, **kwargs)
+
+    def __getattr__(self, name):
+        return getattr(self._inner, name)
+
+
+def _guard(cls, names):
+    cls.__pydantic_validator__ = _InheritRawKeyGuard(cls.__pydantic_validator__, cls.__name__, names)
+
+
+_LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if': {'required': ['category'],
+                                                                    'properties': {'category': {'const': 'financial'}}},
+                                                             'then': {'$ref': 'https://openinherit.org/v3/asset-categories/financial.json'}},
+                                                            {'if': {'required': ['category'],
+                                                                    'properties': {'category': {'const': 'vehicle'}}},
+                                                             'then': {'$ref': 'https://openinherit.org/v3/asset-categories/vehicle.json'}},
+                                                            {'if': {'required': ['category'],
+                                                                    'properties': {'category': {'const': 'digital'}}},
+                                                             'then': {'$ref': 'https://openinherit.org/v3/asset-categories/digital.json'}},
+                                                            {'if': {'required': ['category'],
+                                                                    'properties': {'category': {'const': 'business'}}},
+                                                             'then': {'$ref': 'https://openinherit.org/v3/asset-categories/business.json'}}],
+                                           'overlays': {'netEquity': {'properties': {'amount': {'minimum': 0}}}},
+                                           'closed': {'props': ['accessInstructions',
+                                                                'acquisitionType',
+                                                                'applicableLaw',
+                                                                'assetCollectionId',
+                                                                'beneficiaryDesignation',
+                                                                'brand',
+                                                                'category',
+                                                                'comments',
+                                                                'communalAuthority',
+                                                                'comparableSearchProfile',
+                                                                'condition',
+                                                                'conditionGrade',
+                                                                'conditionStandard',
+                                                                'conditionSystem',
+                                                                'containedInAssetId',
+                                                                'culturalDisposition',
+                                                                'custodian',
+                                                                'dataProvenance',
+                                                                'description',
+                                                                'digitalAccessConsent',
+                                                                'estimatedValue',
+                                                                'externalLinks',
+                                                                'fieldProvenance',
+                                                                'gemologicalCertificate',
+                                                                'id',
+                                                                'identifiers',
+                                                                'images',
+                                                                'inNegativeEquity',
+                                                                'includedDocuments',
+                                                                'insurance',
+                                                                'insuranceCover',
+                                                                'lastVerifiedAt',
+                                                                'listings',
+                                                                'location',
+                                                                'mergedInto',
+                                                                'mobilityType',
+                                                                'model',
+                                                                'name',
+                                                                'netEquity',
+                                                                'notes',
+                                                                'originalPackaging',
+                                                                'ownerIntent',
+                                                                'ownershipEvidence',
+                                                                'passesOutsideEstate',
+                                                                'possessionStatus',
+                                                                'productPage',
+                                                                'professionalValuation',
+                                                                'propertyId',
+                                                                'provenance',
+                                                                'provenanceChain',
+                                                                'purchaseDate',
+                                                                'purchasedFrom',
+                                                                'quantity',
+                                                                'registrationStatus',
+                                                                'searchTerms',
+                                                                'serviceHistory',
+                                                                'shippingClass',
+                                                                'significance',
+                                                                'spaceId',
+                                                                'spaceIdDisplay',
+                                                                'splitFrom',
+                                                                'stolenArtCheck',
+                                                                'subcategory',
+                                                                'successionRegime',
+                                                                'suggestedSubcategory',
+                                                                'taxReliefEligibility',
+                                                                'taxTreatment',
+                                                                'urgency',
+                                                                'urgencyReason',
+                                                                'valuationConfidence',
+                                                                'valuationDate',
+                                                                'valuationReliability',
+                                                                'verifiedBy',
+                                                                'visibility'],
+                                                      'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                           'nonnull': ['accessInstructions',
+                                                       'acquisitionType',
+                                                       'applicableLaw',
+                                                       'assetCollectionId',
+                                                       'beneficiaryDesignation',
+                                                       'category',
+                                                       'comments',
+                                                       'communalAuthority',
+                                                       'comparableSearchProfile',
+                                                       'condition',
+                                                       'conditionGrade',
+                                                       'conditionStandard',
+                                                       'containedInAssetId',
+                                                       'culturalDisposition',
+                                                       'custodian',
+                                                       'dataProvenance',
+                                                       'description',
+                                                       'digitalAccessConsent',
+                                                       'estimatedValue',
+                                                       'externalLinks',
+                                                       'fieldProvenance',
+                                                       'id',
+                                                       'identifiers',
+                                                       'images',
+                                                       'inNegativeEquity',
+                                                       'includedDocuments',
+                                                       'insurance',
+                                                       'insuranceCover',
+                                                       'lastVerifiedAt',
+                                                       'listings',
+                                                       'location',
+                                                       'mergedInto',
+                                                       'mobilityType',
+                                                       'model',
+                                                       'name',
+                                                       'netEquity',
+                                                       'notes',
+                                                       'originalPackaging',
+                                                       'ownerIntent',
+                                                       'ownershipEvidence',
+                                                       'passesOutsideEstate',
+                                                       'possessionStatus',
+                                                       'productPage',
+                                                       'professionalValuation',
+                                                       'propertyId',
+                                                       'provenance',
+                                                       'provenanceChain',
+                                                       'purchaseDate',
+                                                       'purchasedFrom',
+                                                       'quantity',
+                                                       'registrationStatus',
+                                                       'searchTerms',
+                                                       'serviceHistory',
+                                                       'shippingClass',
+                                                       'significance',
+                                                       'spaceIdDisplay',
+                                                       'splitFrom',
+                                                       'subcategory',
+                                                       'successionRegime',
+                                                       'suggestedSubcategory',
+                                                       'taxReliefEligibility',
+                                                       'taxTreatment',
+                                                       'urgency',
+                                                       'urgencyReason',
+                                                       'valuationConfidence',
+                                                       'valuationDate',
+                                                       'valuationReliability',
+                                                       'verifiedBy',
+                                                       'visibility']},
+ 'https://openinherit.org/v3/bequest.json': {'conditionals': [{'if': {'required': ['bequestType'],
+                                                                      'properties': {'bequestType': {'const': 'class'}}},
+                                                               'then': {'required': ['classDefinition']}},
+                                                              {'if': {'required': ['bequestType'],
+                                                                      'properties': {'bequestType': {'const': 'life_interest'}}},
+                                                               'then': {'required': ['lifeInterest']}}],
+                                             'overlays': {},
+                                             'closed': {'props': ['amount',
+                                                                  'applicableLaw',
+                                                                  'assetCollectionId',
+                                                                  'assetIds',
+                                                                  'beneficiaryId',
+                                                                  'beneficiaryIdDisplay',
+                                                                  'beneficiaryOrganisation',
+                                                                  'bequestType',
+                                                                  'charityGiftAidEligible',
+                                                                  'charityNonMergingClause',
+                                                                  'charityPurposeRestriction',
+                                                                  'charityRegistrationVerifiedAt',
+                                                                  'charityReportingRequired',
+                                                                  'classDefinition',
+                                                                  'classSubstitution',
+                                                                  'clauseReference',
+                                                                  'comments',
+                                                                  'conditions',
+                                                                  'constrainedBy',
+                                                                  'customaryOverride',
+                                                                  'description',
+                                                                  'distributionMethod',
+                                                                  'executorDirections',
+                                                                  'giftAidRegistrationNumber',
+                                                                  'giftAidVerificationUrl',
+                                                                  'giftAidVerifiedAt',
+                                                                  'hotchpot',
+                                                                  'hotchpotTransferIds',
+                                                                  'id',
+                                                                  'inheritanceResponse',
+                                                                  'insurancePolicyIds',
+                                                                  'legacyPledge',
+                                                                  'liabilityIds',
+                                                                  'lifeInterest',
+                                                                  'mentionedAssetIds',
+                                                                  'mentionedPropertyIds',
+                                                                  'notes',
+                                                                  'postDeathActions',
+                                                                  'powerOfAppointmentId',
+                                                                  'precatoryWishes',
+                                                                  'predeceaseRule',
+                                                                  'priority',
+                                                                  'propertyIds',
+                                                                  'provenance',
+                                                                  'sharePercentage',
+                                                                  'sourceAssetId',
+                                                                  'substitutions',
+                                                                  'visibility'],
+                                                        'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                             'nonnull': ['amount',
+                                                         'applicableLaw',
+                                                         'assetCollectionId',
+                                                         'assetIds',
+                                                         'beneficiaryId',
+                                                         'beneficiaryIdDisplay',
+                                                         'beneficiaryOrganisation',
+                                                         'charityGiftAidEligible',
+                                                         'charityNonMergingClause',
+                                                         'charityPurposeRestriction',
+                                                         'charityRegistrationVerifiedAt',
+                                                         'charityReportingRequired',
+                                                         'classDefinition',
+                                                         'classSubstitution',
+                                                         'clauseReference',
+                                                         'comments',
+                                                         'conditions',
+                                                         'constrainedBy',
+                                                         'customaryOverride',
+                                                         'description',
+                                                         'executorDirections',
+                                                         'giftAidRegistrationNumber',
+                                                         'giftAidVerificationUrl',
+                                                         'giftAidVerifiedAt',
+                                                         'hotchpot',
+                                                         'hotchpotTransferIds',
+                                                         'id',
+                                                         'inheritanceResponse',
+                                                         'insurancePolicyIds',
+                                                         'legacyPledge',
+                                                         'liabilityIds',
+                                                         'lifeInterest',
+                                                         'mentionedAssetIds',
+                                                         'mentionedPropertyIds',
+                                                         'notes',
+                                                         'postDeathActions',
+                                                         'powerOfAppointmentId',
+                                                         'precatoryWishes',
+                                                         'predeceaseRule',
+                                                         'priority',
+                                                         'propertyIds',
+                                                         'provenance',
+                                                         'sharePercentage',
+                                                         'sourceAssetId',
+                                                         'substitutions',
+                                                         'visibility']},
+ 'https://openinherit.org/v3/catalogue.json': {'conditionals': [],
+                                               'overlays': {'conformance': {'properties': {'profile': {'const': 'catalogue'}}}},
+                                               'closed': {'props': ['$schema',
+                                                                    '@context',
+                                                                    'assetCollections',
+                                                                    'assetInterests',
+                                                                    'assets',
+                                                                    'auditLog',
+                                                                    'changeDescription',
+                                                                    'completeness',
+                                                                    'conformance',
+                                                                    'conformanceProfile',
+                                                                    'dataProvenance',
+                                                                    'dealerInterests',
+                                                                    'documentVersion',
+                                                                    'exportedAt',
+                                                                    'exportedBy',
+                                                                    'generator',
+                                                                    'giftListSettings',
+                                                                    'importSources',
+                                                                    'insurancePolicies',
+                                                                    'legacyContacts',
+                                                                    'legacyLetter',
+                                                                    'organisations',
+                                                                    'previousVersionId',
+                                                                    'properties',
+                                                                    'recommendedActions',
+                                                                    'schemaVersion',
+                                                                    'spaces',
+                                                                    'valuations',
+                                                                    'versionedAt',
+                                                                    'wishes'],
+                                                          'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                               'nonnull': ['$schema',
+                                                           '@context',
+                                                           'assetCollections',
+                                                           'assetInterests',
+                                                           'assets',
+                                                           'auditLog',
+                                                           'changeDescription',
+                                                           'completeness',
+                                                           'conformance',
+                                                           'conformanceProfile',
+                                                           'dataProvenance',
+                                                           'dealerInterests',
+                                                           'documentVersion',
+                                                           'exportedAt',
+                                                           'exportedBy',
+                                                           'generator',
+                                                           'giftListSettings',
+                                                           'importSources',
+                                                           'insurancePolicies',
+                                                           'legacyContacts',
+                                                           'legacyLetter',
+                                                           'organisations',
+                                                           'properties',
+                                                           'recommendedActions',
+                                                           'schemaVersion',
+                                                           'spaces',
+                                                           'valuations',
+                                                           'versionedAt',
+                                                           'wishes']},
+ 'https://openinherit.org/v3/estate.json': {'conditionals': [],
+                                            'overlays': {'netEstateEquity': {'properties': {'amount': {'minimum': 0}}}},
+                                            'closed': {'props': ['adjudicatingBodies',
+                                                                 'administration',
+                                                                 'administrationDeadline',
+                                                                 'administrationDeadlineSource',
+                                                                 'administrationPhases',
+                                                                 'ancillaryProbate',
+                                                                 'attestation',
+                                                                 'careProvisions',
+                                                                 'choiceOfLaw',
+                                                                 'codicils',
+                                                                 'commorientesRule',
+                                                                 'companionEstateId',
+                                                                 'companionLinkStatus',
+                                                                 'connections',
+                                                                 'constructionClauses',
+                                                                 'contestability',
+                                                                 'conversionRates',
+                                                                 'createdAt',
+                                                                 'deathCertificateDate',
+                                                                 'deathCertificateReference',
+                                                                 'deathRecord',
+                                                                 'deathVerification',
+                                                                 'decoupledAt',
+                                                                 'defaultPropertyRegime',
+                                                                 'defaultSuccessionRegime',
+                                                                 'disinheritedPersons',
+                                                                 'domicile',
+                                                                 'electiveShareRight',
+                                                                 'escheatment',
+                                                                 'executionDate',
+                                                                 'executorPowers',
+                                                                 'externalReferences',
+                                                                 'familyProvisionClaims',
+                                                                 'forcedHeirship',
+                                                                 'governingJurisdictions',
+                                                                 'id',
+                                                                 'integrity',
+                                                                 'judicialVariationPower',
+                                                                 'jurisdictionRules',
+                                                                 'lastModifiedAt',
+                                                                 'linkedAt',
+                                                                 'mirrorWillId',
+                                                                 'mutualWillAgreement',
+                                                                 'netEstateEquity',
+                                                                 'noContestClause',
+                                                                 'notes',
+                                                                 'parallelDistributions',
+                                                                 'parallelSuccessionConflicts',
+                                                                 'pretermittedHeirClaims',
+                                                                 'primaryInstrument',
+                                                                 'priorMatrimonialClaim',
+                                                                 'probateGrant',
+                                                                 'probateReadiness',
+                                                                 'provenance',
+                                                                 'registrations',
+                                                                 'religiousConsideration',
+                                                                 'reportingCurrency',
+                                                                 'revocationClause',
+                                                                 'revokesDocumentIds',
+                                                                 'status',
+                                                                 'statutoryExclusions',
+                                                                 'successionConflicts',
+                                                                 'suggestedPractitionerNeeds',
+                                                                 'taxTreaties',
+                                                                 'taxTreatyPositions',
+                                                                 'testamentaryCapacity',
+                                                                 'testamentaryPromises',
+                                                                 'testamentaryScenarios',
+                                                                 'testatorPersonId',
+                                                                 'testatorPersonIdDisplay',
+                                                                 'totalEstimatedValue',
+                                                                 'validityStatus',
+                                                                 'willType'],
+                                                       'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                            'nonnull': ['adjudicatingBodies',
+                                                        'administration',
+                                                        'administrationDeadline',
+                                                        'administrationDeadlineSource',
+                                                        'administrationPhases',
+                                                        'ancillaryProbate',
+                                                        'attestation',
+                                                        'careProvisions',
+                                                        'choiceOfLaw',
+                                                        'codicils',
+                                                        'commorientesRule',
+                                                        'companionEstateId',
+                                                        'companionLinkStatus',
+                                                        'connections',
+                                                        'constructionClauses',
+                                                        'contestability',
+                                                        'conversionRates',
+                                                        'createdAt',
+                                                        'deathCertificateDate',
+                                                        'deathCertificateReference',
+                                                        'deathRecord',
+                                                        'deathVerification',
+                                                        'decoupledAt',
+                                                        'defaultPropertyRegime',
+                                                        'defaultSuccessionRegime',
+                                                        'disinheritedPersons',
+                                                        'domicile',
+                                                        'electiveShareRight',
+                                                        'escheatment',
+                                                        'executionDate',
+                                                        'executorPowers',
+                                                        'externalReferences',
+                                                        'familyProvisionClaims',
+                                                        'forcedHeirship',
+                                                        'governingJurisdictions',
+                                                        'id',
+                                                        'integrity',
+                                                        'judicialVariationPower',
+                                                        'jurisdictionRules',
+                                                        'lastModifiedAt',
+                                                        'linkedAt',
+                                                        'mirrorWillId',
+                                                        'mutualWillAgreement',
+                                                        'netEstateEquity',
+                                                        'noContestClause',
+                                                        'notes',
+                                                        'parallelDistributions',
+                                                        'parallelSuccessionConflicts',
+                                                        'pretermittedHeirClaims',
+                                                        'primaryInstrument',
+                                                        'priorMatrimonialClaim',
+                                                        'probateGrant',
+                                                        'probateReadiness',
+                                                        'provenance',
+                                                        'registrations',
+                                                        'religiousConsideration',
+                                                        'reportingCurrency',
+                                                        'revocationClause',
+                                                        'revokesDocumentIds',
+                                                        'status',
+                                                        'statutoryExclusions',
+                                                        'successionConflicts',
+                                                        'suggestedPractitionerNeeds',
+                                                        'taxTreaties',
+                                                        'taxTreatyPositions',
+                                                        'testamentaryCapacity',
+                                                        'testamentaryPromises',
+                                                        'testamentaryScenarios',
+                                                        'testatorPersonId',
+                                                        'testatorPersonIdDisplay',
+                                                        'totalEstimatedValue',
+                                                        'validityStatus']},
+ 'https://openinherit.org/v3/property.json': {'conditionals': [],
+                                              'overlays': {'netEquity': {'properties': {'amount': {'minimum': 0}}}},
+                                              'closed': {'props': ['acquisitionType',
+                                                                   'address',
+                                                                   'applicableLaw',
+                                                                   'characterClassification',
+                                                                   'comments',
+                                                                   'communalAuthority',
+                                                                   'culturalDisposition',
+                                                                   'custodianPersonId',
+                                                                   'custodianPersonIdDisplay',
+                                                                   'epc',
+                                                                   'estimatedValue',
+                                                                   'externalLinks',
+                                                                   'fieldProvenance',
+                                                                   'floodRisk',
+                                                                   'governmentConsentRequired',
+                                                                   'homesteadStatus',
+                                                                   'id',
+                                                                   'images',
+                                                                   'inNegativeEquity',
+                                                                   'isPrimaryResidence',
+                                                                   'landRegistry',
+                                                                   'leasehold',
+                                                                   'mobilityType',
+                                                                   'mortgageOutstanding',
+                                                                   'name',
+                                                                   'netEquity',
+                                                                   'notes',
+                                                                   'ownershipEvidence',
+                                                                   'ownershipModel',
+                                                                   'ownershipPercentage',
+                                                                   'ownershipType',
+                                                                   'passesOutsideEstate',
+                                                                   'professionalValuation',
+                                                                   'propertyType',
+                                                                   'provenance',
+                                                                   'registrationStatus',
+                                                                   'rentalIncome',
+                                                                   'statutoryLifeEstate',
+                                                                   'successionRegime',
+                                                                   'taxReliefEligibility',
+                                                                   'taxTreatment',
+                                                                   'tenureType',
+                                                                   'valuationConfidence',
+                                                                   'valuationDate',
+                                                                   'visibility'],
+                                                         'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                              'nonnull': ['acquisitionType',
+                                                          'address',
+                                                          'applicableLaw',
+                                                          'characterClassification',
+                                                          'comments',
+                                                          'communalAuthority',
+                                                          'culturalDisposition',
+                                                          'custodianPersonId',
+                                                          'custodianPersonIdDisplay',
+                                                          'epc',
+                                                          'estimatedValue',
+                                                          'externalLinks',
+                                                          'fieldProvenance',
+                                                          'floodRisk',
+                                                          'governmentConsentRequired',
+                                                          'homesteadStatus',
+                                                          'id',
+                                                          'images',
+                                                          'inNegativeEquity',
+                                                          'isPrimaryResidence',
+                                                          'landRegistry',
+                                                          'leasehold',
+                                                          'mobilityType',
+                                                          'mortgageOutstanding',
+                                                          'name',
+                                                          'netEquity',
+                                                          'notes',
+                                                          'ownershipEvidence',
+                                                          'ownershipModel',
+                                                          'ownershipPercentage',
+                                                          'ownershipType',
+                                                          'passesOutsideEstate',
+                                                          'professionalValuation',
+                                                          'propertyType',
+                                                          'provenance',
+                                                          'registrationStatus',
+                                                          'rentalIncome',
+                                                          'statutoryLifeEstate',
+                                                          'successionRegime',
+                                                          'taxReliefEligibility',
+                                                          'taxTreatment',
+                                                          'tenureType',
+                                                          'valuationConfidence',
+                                                          'valuationDate',
+                                                          'visibility']},
+ 'https://openinherit.org/v3/proxy-authorisation.json': {'conditionals': [{'if': {'required': ['delegateType'],
+                                                                                  'properties': {'delegateType': {'const': 'person'}}},
+                                                                           'then': {'required': ['proxyPersonId']}},
+                                                                          {'if': {'required': ['delegateType'],
+                                                                                  'properties': {'delegateType': {'const': 'agent'}}},
+                                                                           'then': {'required': ['agentId']}},
+                                                                          {'if': {'required': ['delegateType'],
+                                                                                  'properties': {'delegateType': {'const': 'organisation'}}},
+                                                                           'then': {'required': ['proxyPersonId']}}],
+                                                         'overlays': {},
+                                                         'closed': {'props': ['activationDate',
+                                                                              'activationTrigger',
+                                                                              'activationVerificationMethod',
+                                                                              'activationVerifiedAt',
+                                                                              'activationVerifiedBy',
+                                                                              'agentCapabilities',
+                                                                              'agentId',
+                                                                              'agentIdDisplay',
+                                                                              'auditLog',
+                                                                              'auditTrailEnabled',
+                                                                              'authenticationMethod',
+                                                                              'consentRecord',
+                                                                              'credentialRef',
+                                                                              'dealerNegotiationPermitted',
+                                                                              'delegateType',
+                                                                              'delegationConstraints',
+                                                                              'delegationType',
+                                                                              'expiryDate',
+                                                                              'externalConsentRef',
+                                                                              'healthcareRecordAccess',
+                                                                              'id',
+                                                                              'notes',
+                                                                              'provenance',
+                                                                              'proxyPersonId',
+                                                                              'proxyPersonIdDisplay',
+                                                                              'revocation',
+                                                                              'revocationDate',
+                                                                              'scope',
+                                                                              'startDate',
+                                                                              'subDelegation',
+                                                                              'testatorPersonId',
+                                                                              'testatorPersonIdDisplay'],
+                                                                    'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                                         'nonnull': ['activationDate',
+                                                                     'activationTrigger',
+                                                                     'activationVerificationMethod',
+                                                                     'activationVerifiedAt',
+                                                                     'activationVerifiedBy',
+                                                                     'agentCapabilities',
+                                                                     'agentId',
+                                                                     'agentIdDisplay',
+                                                                     'auditLog',
+                                                                     'auditTrailEnabled',
+                                                                     'authenticationMethod',
+                                                                     'consentRecord',
+                                                                     'credentialRef',
+                                                                     'dealerNegotiationPermitted',
+                                                                     'delegateType',
+                                                                     'delegationConstraints',
+                                                                     'delegationType',
+                                                                     'expiryDate',
+                                                                     'externalConsentRef',
+                                                                     'healthcareRecordAccess',
+                                                                     'id',
+                                                                     'notes',
+                                                                     'provenance',
+                                                                     'proxyPersonId',
+                                                                     'proxyPersonIdDisplay',
+                                                                     'revocation',
+                                                                     'revocationDate',
+                                                                     'scope',
+                                                                     'startDate',
+                                                                     'subDelegation',
+                                                                     'testatorPersonId',
+                                                                     'testatorPersonIdDisplay']},
+ 'https://openinherit.org/v3/schema.json': {'conditionals': [{'if': {'required': ['conformanceProfile'],
+                                                                     'properties': {'conformanceProfile': {'const': 'catalogue'}}},
+                                                              'then': {'$ref': 'https://openinherit.org/v3/catalogue.json'},
+                                                              'else': {'required': ['schemaVersion',
+                                                                                    'estate',
+                                                                                    'people'],
+                                                                       'properties': {'assets': {'maxItems': 2000},
+                                                                                      'assetCollections': {'maxItems': 200},
+                                                                                      'valuations': {'maxItems': 5000},
+                                                                                      'wishes': {'maxItems': 100},
+                                                                                      'importSources': {'maxItems': 50},
+                                                                                      'insurancePolicies': {'maxItems': 50},
+                                                                                      '$schema': {'const': 'https://openinherit.org/v3/schema.json'},
+                                                                                      'conformance': {'properties': {'profile': {'const': 'estate'}}}}}}],
+                                            'overlays': {},
+                                            'closed': {'props': ['$schema',
+                                                                 '@context',
+                                                                 '@type',
+                                                                 'applicationState',
+                                                                 'assetCollections',
+                                                                 'assets',
+                                                                 'auditLog',
+                                                                 'bequests',
+                                                                 'bundleType',
+                                                                 'changeDescription',
+                                                                 'conformance',
+                                                                 'conformanceProfile',
+                                                                 'dataProvenance',
+                                                                 'documentVersion',
+                                                                 'documents',
+                                                                 'estate',
+                                                                 'executors',
+                                                                 'exportedAt',
+                                                                 'exportedBy',
+                                                                 'extensions',
+                                                                 'generator',
+                                                                 'guardians',
+                                                                 'importSources',
+                                                                 'insurancePolicies',
+                                                                 'integrity',
+                                                                 'kinships',
+                                                                 'liabilities',
+                                                                 'lifetimeTransfers',
+                                                                 'nonprobateTransfers',
+                                                                 'organisations',
+                                                                 'partialDocument',
+                                                                 'people',
+                                                                 'pets',
+                                                                 'powersOfAppointment',
+                                                                 'previousVersionId',
+                                                                 'properties',
+                                                                 'proxyAuthorisations',
+                                                                 'referentialIntegrity',
+                                                                 'relationships',
+                                                                 'schemaVersion',
+                                                                 'spaces',
+                                                                 'trusts',
+                                                                 'valuations',
+                                                                 'versionedAt',
+                                                                 'wishes',
+                                                                 'x-inherit-africa-customary',
+                                                                 'x-inherit-australia-nz',
+                                                                 'x-inherit-brazil',
+                                                                 'x-inherit-canada',
+                                                                 'x-inherit-eu-succession',
+                                                                 'x-inherit-hindu-succession',
+                                                                 'x-inherit-hong-kong',
+                                                                 'x-inherit-india',
+                                                                 'x-inherit-ireland',
+                                                                 'x-inherit-islamic-succession',
+                                                                 'x-inherit-israel',
+                                                                 'x-inherit-japan',
+                                                                 'x-inherit-jewish-succession',
+                                                                 'x-inherit-latin-america',
+                                                                 'x-inherit-prc-china',
+                                                                 'x-inherit-scotland',
+                                                                 'x-inherit-singapore-malaysia',
+                                                                 'x-inherit-switzerland',
+                                                                 'x-inherit-uae',
+                                                                 'x-inherit-uk-england-wales',
+                                                                 'x-inherit-us-estate'],
+                                                       'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                            'nonnull': ['$schema',
+                                                        '@type',
+                                                        'applicationState',
+                                                        'assetCollections',
+                                                        'assets',
+                                                        'auditLog',
+                                                        'bequests',
+                                                        'bundleType',
+                                                        'changeDescription',
+                                                        'conformance',
+                                                        'conformanceProfile',
+                                                        'dataProvenance',
+                                                        'documentVersion',
+                                                        'documents',
+                                                        'estate',
+                                                        'executors',
+                                                        'exportedAt',
+                                                        'exportedBy',
+                                                        'extensions',
+                                                        'generator',
+                                                        'guardians',
+                                                        'importSources',
+                                                        'insurancePolicies',
+                                                        'integrity',
+                                                        'kinships',
+                                                        'liabilities',
+                                                        'lifetimeTransfers',
+                                                        'nonprobateTransfers',
+                                                        'organisations',
+                                                        'partialDocument',
+                                                        'people',
+                                                        'pets',
+                                                        'powersOfAppointment',
+                                                        'properties',
+                                                        'proxyAuthorisations',
+                                                        'referentialIntegrity',
+                                                        'relationships',
+                                                        'schemaVersion',
+                                                        'spaces',
+                                                        'trusts',
+                                                        'valuations',
+                                                        'versionedAt',
+                                                        'wishes']}}
+
+_REFKEYS = {'https://openinherit.org/v3/asset-categories/business.json': {'props': ['businessInterest',
+                                                                         'coOwnership',
+                                                                         'intellectualProperty',
+                                                                         'stockCompensation'],
+                                                               'patterns': []},
+ 'https://openinherit.org/v3/asset-categories/digital.json': {'props': ['cloudStorage',
+                                                                        'cryptoAccess',
+                                                                        'digitalAccess',
+                                                                        'domainNameAccess',
+                                                                        'fiduciaryAccess',
+                                                                        'gamingAccess',
+                                                                        'loyaltyAccess',
+                                                                        'monetisedContentAccess',
+                                                                        'nftAccess',
+                                                                        'platformDelegation',
+                                                                        'socialMedia'],
+                                                              'patterns': []},
+ 'https://openinherit.org/v3/asset-categories/financial.json': {'props': ['businessInterest',
+                                                                          'coOwnership',
+                                                                          'debtReceivable',
+                                                                          'insurancePolicy',
+                                                                          'intellectualProperty',
+                                                                          'pension',
+                                                                          'shareholding',
+                                                                          'stockCompensation'],
+                                                                'patterns': []},
+ 'https://openinherit.org/v3/asset-categories/vehicle.json': {'props': ['vehicle', 'vehicleCheck'],
+                                                              'patterns': []},
+ 'https://openinherit.org/v3/catalogue.json': {'props': ['$schema',
+                                                         '@context',
+                                                         'assetCollections',
+                                                         'assetInterests',
+                                                         'assets',
+                                                         'auditLog',
+                                                         'changeDescription',
+                                                         'completeness',
+                                                         'conformance',
+                                                         'conformanceProfile',
+                                                         'dataProvenance',
+                                                         'dealerInterests',
+                                                         'documentVersion',
+                                                         'exportedAt',
+                                                         'exportedBy',
+                                                         'generator',
+                                                         'giftListSettings',
+                                                         'importSources',
+                                                         'insurancePolicies',
+                                                         'legacyContacts',
+                                                         'legacyLetter',
+                                                         'organisations',
+                                                         'previousVersionId',
+                                                         'properties',
+                                                         'recommendedActions',
+                                                         'schemaVersion',
+                                                         'spaces',
+                                                         'valuations',
+                                                         'versionedAt',
+                                                         'wishes'],
+                                               'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']}}
+
+_LAYER_MODELS = {
+    'https://openinherit.org/v3/asset-categories/business.json': Business,
+    'https://openinherit.org/v3/asset-categories/digital.json': Digital,
+    'https://openinherit.org/v3/asset-categories/financial.json': Financial,
+    'https://openinherit.org/v3/asset-categories/vehicle.json': Vehicle,
+    'https://openinherit.org/v3/asset.json': Asset,
+    'https://openinherit.org/v3/bequest.json': Bequest,
+    'https://openinherit.org/v3/catalogue.json': Catalogue,
+    'https://openinherit.org/v3/estate.json': Estate,
+    'https://openinherit.org/v3/property.json': Property,
+    'https://openinherit.org/v3/proxy-authorisation.json': ProxyAuthorisation,
+    'https://openinherit.org/v3/schema.json': Schema,
+}
+
+_guard(Catalogue, ['field_context', 'field_schema'])
+_guard(Schema, ['field_context', 'field_schema', 'field_type'])
+_guard(InheritDocument, ['field_context', 'field_schema', 'field_type'])

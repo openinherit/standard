@@ -46,6 +46,10 @@ jobs:
         run: node --test scripts/test-runtime-validator-corpus.mjs
       - name: Zod against the tests/v3 corpus
         run: node scripts/test-runtime-validators.mjs
+      - name: Zod enforces the root's conformance profile
+        run: node --test scripts/test-runtime-validator-profile.mjs
+      - name: Zod agrees with JSON Schema and pydantic on the agreement fixtures
+        run: node --test scripts/test-runtime-validator-agreement.mjs
 
   pydantic:
     runs-on: ubuntu-latest

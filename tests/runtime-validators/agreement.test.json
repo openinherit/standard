@@ -1,0 +1,727 @@
+{
+  "$comment": "Documents on which a generated runtime validator could decide the root's conformance profile, or a conditional it governs, differently from JSON Schema. Every case is run three ways, and all three must give the declared verdict: JSON Schema (Draft202012Validator over the conformance kit's bundled schema, as packages/conformance/runners/run-tests.py does), the published Zod schema (scripts/test-runtime-validator-agreement.mjs), and the published pydantic model, strict JSON and lax Python (packages/sdk-python/tests/test_runtime_agreement.py). A case carries `raw` instead of `data` when the bytes matter, e.g. duplicate keys.",
+  "target": "https://openinherit.org/v3/schema.json",
+  "tests": [
+    {
+      "description": "valid — minimal estate document",
+      "valid": true,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "description": "valid — catalogue-profile document",
+      "valid": true,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      }
+    },
+    {
+      "description": "valid — estate document with a valid nested asset",
+      "valid": true,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "assets": [
+          {
+            "id": "d73880dc-c616-4724-ad29-79364bad1719",
+            "name": "Barclays Current Account",
+            "category": "financial"
+          }
+        ]
+      }
+    },
+    {
+      "description": "valid — catalogue-profile document with a valid nested asset",
+      "valid": true,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "d73880dc-c616-4724-ad29-79364bad1719",
+            "name": "Barclays Current Account",
+            "category": "financial"
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — default profile, estate is null (null is not the member)",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": null,
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — default profile, estate absent",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — default profile, people is null (null is not the member)",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": null
+      }
+    },
+    {
+      "description": "invalid — default profile, people absent",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        }
+      }
+    },
+    {
+      "description": "invalid — default profile, schemaVersion is null (null is not the member)",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": null,
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — default profile, schemaVersion absent",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — explicit estate profile, estate absent",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "conformanceProfile": "estate"
+      }
+    },
+    {
+      "description": "invalid — conformanceProfile null is not the catalogue profile: estate still required",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": null,
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — conformanceProfile 'Catalogue' (wrong case) is not the catalogue profile: estate still required",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "Catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — conformanceProfile 'catalogue ' (trailing space) is not the catalogue profile: estate still required",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue ",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — conformanceProfile 1 is not the catalogue profile: estate still required",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": 1,
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — conformanceProfile true is not the catalogue profile: estate still required",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": true,
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — conformanceProfile ['catalogue'] is not the catalogue profile: estate still required",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": [
+          "catalogue"
+        ],
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — conformanceProfile {'const': 'catalogue'} is not the catalogue profile: estate still required",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": {
+          "const": "catalogue"
+        },
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — catalogue-shaped document with no conformanceProfile is held to the estate profile",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — catalogue profile with estate: null",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ],
+        "estate": null
+      }
+    },
+    {
+      "description": "invalid — catalogue profile with people: null",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ],
+        "people": null
+      }
+    },
+    {
+      "description": "invalid — catalogue profile with an unknown member",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ],
+        "foo": 1
+      }
+    },
+    {
+      "description": "invalid — catalogue profile with 'field_schema' (a pydantic field name, not a member)",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ],
+        "field_schema": "x"
+      }
+    },
+    {
+      "description": "invalid — catalogue profile with 'field_context' (a pydantic field name, not a member)",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ],
+        "field_context": "x"
+      }
+    },
+    {
+      "description": "invalid — estate document with 'field_type' (a pydantic field name, not a member)",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "field_type": "x"
+      }
+    },
+    {
+      "description": "invalid — estate document with 'field_schema' (a pydantic field name, not a member)",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "field_schema": "https://openinherit.org/v3/schema.json"
+      }
+    },
+    {
+      "description": "invalid — catalogue profile with 'conformance_profile' (snake case is not the member)",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ],
+        "conformance_profile": "catalogue"
+      }
+    },
+    {
+      "description": "invalid — estate profile with root-level assetInterests",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "conformanceProfile": "estate",
+        "assetInterests": []
+      }
+    },
+    {
+      "description": "invalid — catalogue profile with the estate $schema",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bcae5a58-b1ae-4215-a068-c6eb9770dccf",
+            "name": "Hornby R3456 Class 66 EWS Livery",
+            "category": "collectibles"
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — nested asset breaks its category conditional (vehicleCheck without retrievedAt)",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "assets": [
+          {
+            "id": "bb44df6d-955d-4d2e-b689-b0b7a6cdaa6d",
+            "name": "Test Vehicle",
+            "category": "vehicle",
+            "vehicleCheck": {
+              "motStatus": "valid"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — nested asset breaks a $ref-sibling minimum (negative netEquity)",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "assets": [
+          {
+            "id": "a55e7000-0002-4000-a000-000000000002",
+            "name": "Longcase clock",
+            "category": "antiques",
+            "estimatedValue": {
+              "amount": 50000000,
+              "currency": "GBP"
+            },
+            "netEquity": {
+              "amount": -5000,
+              "currency": "GBP"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — nested bequest breaks its type conditional (class bequest without classDefinition)",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          }
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ],
+        "bequests": [
+          {
+            "id": "b0000001-0000-0000-0000-000000000038",
+            "bequestType": "class"
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — catalogue profile, nested asset breaks its category conditional",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "conformanceProfile": "catalogue",
+        "assets": [
+          {
+            "id": "bb44df6d-955d-4d2e-b689-b0b7a6cdaa6d",
+            "name": "Test Vehicle",
+            "category": "vehicle",
+            "vehicleCheck": {
+              "motStatus": "valid"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — nested estate carries an unknown member",
+      "valid": false,
+      "data": {
+        "$schema": "https://openinherit.org/v3/schema.json",
+        "schemaVersion": "1.9.0",
+        "estate": {
+          "id": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+          "testatorPersonId": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+          "status": "planning",
+          "createdAt": "2025-01-01T09:00:00Z",
+          "lastModifiedAt": "2025-01-01T09:00:00Z",
+          "domicile": {
+            "country": "GB"
+          },
+          "foo": 1
+        },
+        "people": [
+          {
+            "id": "c3a88035-cfc1-4284-b394-d2d0c5414d5b",
+            "givenName": "Alice",
+            "roles": [
+              "testator"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "description": "invalid — duplicate conformanceProfile, catalogue then estate: the last wins, so estate is required",
+      "valid": false,
+      "raw": "{\"conformanceProfile\": \"catalogue\", \"$schema\": \"https://openinherit.org/v3/catalogue.json\", \"assets\": [{\"id\": \"bcae5a58-b1ae-4215-a068-c6eb9770dccf\", \"name\": \"Hornby R3456 Class 66 EWS Livery\", \"category\": \"collectibles\"}], \"conformanceProfile\": \"estate\"}"
+    },
+    {
+      "description": "valid — duplicate conformanceProfile, estate then catalogue: the last wins",
+      "valid": true,
+      "raw": "{\"conformanceProfile\": \"estate\", \"$schema\": \"https://openinherit.org/v3/catalogue.json\", \"assets\": [{\"id\": \"bcae5a58-b1ae-4215-a068-c6eb9770dccf\", \"name\": \"Hornby R3456 Class 66 EWS Livery\", \"category\": \"collectibles\"}], \"conformanceProfile\": \"catalogue\"}"
+    }
+  ]
+}

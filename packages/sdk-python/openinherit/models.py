@@ -2387,6 +2387,26 @@ class OwnershipEvidence(Enum):
     none = 'none'
 
 
+class CoOwnership2(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    coOwnerPersonIds: list[CoOwnerPersonId] | None = Field(
+        None, description='Person IDs of co-owners', max_length=100
+    )
+    ownershipType: OwnershipType | None = Field(
+        None, description='How ownership is structured between co-owners'
+    )
+    ownershipPercentage: confloat(ge=0.0, le=100.0) | None = Field(
+        None, description="The testator's ownership percentage", examples=[50, 33.33]
+    )
+    severanceDate: date_aliased | None = Field(
+        None,
+        description='Date joint tenancy was severed to become tenants in common (if applicable)',
+        examples=['2024-06-15'],
+    )
+
+
 class AuthorityType1(Enum):
     family_council = 'family_council'
     clan_association = 'clan_association'
@@ -3141,6 +3161,10 @@ class Asset(BaseModel):
         None,
         description='The type of evidence available to prove ownership of this asset',
         examples=['receipts_only', 'title_deed'],
+    )
+    coOwnership: CoOwnership2 | None = Field(
+        None,
+        description='Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will',
     )
     culturalDisposition: CulturalDisposition | None = Field(
         None,
@@ -4085,7 +4109,7 @@ class PropertyType(Enum):
     other = 'other'
 
 
-class OwnershipType2(Enum):
+class OwnershipType3(Enum):
     sole = 'sole'
     joint_tenants = 'joint_tenants'
     tenants_in_common = 'tenants_in_common'
@@ -4543,7 +4567,7 @@ class Property(BaseModel):
         description="Whether this is the testator's primary residence. Relevant for residence nil rate band (UK), homestead exemption (US), and similar tax reliefs",
         examples=[True, False],
     )
-    ownershipType: OwnershipType2 | None = Field(
+    ownershipType: OwnershipType3 | None = Field(
         None,
         description='How ownership of this property is legally structured',
         examples=['sole', 'joint_tenants', 'tenants_in_common'],
@@ -18793,6 +18817,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                                 'beneficiaryDesignation',
                                                                 'brand',
                                                                 'category',
+                                                                'coOwnership',
                                                                 'comments',
                                                                 'communalAuthority',
                                                                 'comparableSearchProfile',
@@ -18867,6 +18892,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                        'assetCollectionId',
                                                        'beneficiaryDesignation',
                                                        'category',
+                                                       'coOwnership',
                                                        'comments',
                                                        'communalAuthority',
                                                        'comparableSearchProfile',

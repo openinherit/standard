@@ -112,6 +112,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `incidence-side`, `territory-granularity`). They were never on the proposals index. The
   questions they raise stay open in issues #12–#15. Accepted proposals in `proposals/` are
   unchanged.
+- `--coverage-report`, `--verify-denominator`, `--format` and `--corpus` from
+  `scripts/oracle_verify.py`. They imported a coverage-grading package that is not part of this
+  repository, so every one of them failed on import here. The oracle harness itself is unchanged:
+  the same oracles pass, and a missing rule or toolchain still fails closed. The script's version
+  moves to 2.0.0 because its command line has changed.
 
 ### Fixed
 

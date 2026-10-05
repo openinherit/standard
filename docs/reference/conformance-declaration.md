@@ -15,6 +15,7 @@ Schema `$id`: `https://openinherit.org/v3/conformance-declaration.json`
 | `implementation` | `string` | yes | Name of the implementation (product, service, or library) |
 | `implementationVersion` | `string` | yes | Version of the implementation being declared |
 | `inheritVersion` | `string` | yes | INHERIT schema version this declaration applies to |
+| `root` | one of `estate`, `catalogue` | | Which INHERIT document root the declared conformance applies to. 'estate' is the full estate document (schema.json); 'catalogue' is the catalogue-only document (catalogue.json) used by living collectors without the estate envelope. Absent means 'estate', which is what every declaration made before this field existed claimed |
 | `conformanceLevel` | one of `1`, `2`, `3` | yes | Overall conformance level achieved. The minimum across all declared entities |
 | `declaredAt` | `string` (date-time) | yes | ISO 8601 timestamp when this declaration was generated |
 | `validatorDetails` | `object` | | Details of the validator used to verify conformance |

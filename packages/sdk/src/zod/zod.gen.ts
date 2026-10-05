@@ -2,6 +2,7 @@
 // @ts-nocheck
 
 import * as z from 'zod';
+import { layer, register } from './conditionals';
 
 export const zValidationResult = z.object({
     valid: z.boolean(),
@@ -262,6 +263,7 @@ export const zFinancial = z.object({
         ]).optional()
     }).optional()
 });
+register('https://openinherit.org/v3/asset-categories/financial.json', zFinancial);
 
 /**
  * Financial asset category details (accounts, investments, pensions)
@@ -418,6 +420,7 @@ export const zVehicle = z.object({
         mileageAnomaly: z.boolean().optional()
     }).optional()
 });
+register('https://openinherit.org/v3/asset-categories/vehicle.json', zVehicle);
 
 /**
  * Vehicle asset category details (cars, boats, aircraft)
@@ -708,6 +711,7 @@ export const zDigital = z.object({
         termsOfServiceConstraints: z.string().max(500).optional()
     }).optional()
 });
+register('https://openinherit.org/v3/asset-categories/digital.json', zDigital);
 
 /**
  * Digital asset category details (crypto, accounts, domains)
@@ -787,6 +791,7 @@ export const zBusiness = z.object({
         severanceDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
     }).optional()
 });
+register('https://openinherit.org/v3/asset-categories/business.json', zBusiness);
 
 /**
  * Business asset category details (shares, partnerships, sole trader)
@@ -1120,7 +1125,7 @@ export const zServiceRecord = z.strictObject({
  *
  * A non-property asset: financial accounts, personal property, vehicles, digital assets, business interests, Islamic finance instruments, etc
  */
-export const zAsset = z.intersection(z.unknown(), z.object({
+const zAsset$generated = z.intersection(z.unknown(), z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     name: z.string().min(1).max(255),
     category: z.enum([
@@ -1542,6 +1547,7 @@ export const zAsset = z.intersection(z.unknown(), z.object({
         }).optional()
     }).optional()
 }));
+export const zAsset = layer('https://openinherit.org/v3/asset.json', zAsset$generated);
 
 /**
  * Non-property assets (bank accounts, investments, etc.)
@@ -1896,7 +1902,7 @@ export const zOrganisation2 = zOrganisation;
  *
  * Real estate. Supports individual ownership, communal/family property (Nigeria), HUF coparcenary (India), government-vested land (Land Use Act), US community property, and informal/unregistered holdings
  */
-export const zProperty = z.object({
+const zProperty$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     name: z.string().min(1).max(255),
     propertyType: z.enum([
@@ -2182,6 +2188,7 @@ export const zProperty = z.object({
         statute: z.string().max(500).optional()
     }).optional()
 });
+export const zProperty = layer('https://openinherit.org/v3/property.json', zProperty$generated);
 
 /**
  * Real property (land, buildings)
@@ -3126,7 +3133,7 @@ export const zAuditEvent2 = zAuditEvent;
  *
  * Entry point for catalogue-only documents — living collectors cataloguing items without the full estate envelope. Assets, collections, valuations, legacy contacts and allocation intent. This is the catalogue conformance profile of the INHERIT root: a document here that declares conformanceProfile 'catalogue' also conforms to schema.json as it stands, with nothing wrapped or moved. Do not wrap a catalogue inside an estate document — the estate profile carries assetInterests, legacyContacts and dealerInterests only inside applicationState, which is not part of the interchange standard. See proposal 0003
  */
-export const zCatalogue = z.object({
+const zCatalogue$generated = z.object({
     $schema: z.literal('https://openinherit.org/v3/catalogue.json').optional(),
     conformanceProfile: z.literal('catalogue').optional(),
     '@context': z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
@@ -3191,6 +3198,7 @@ export const zCatalogue = z.object({
     }).optional(),
     auditLog: z.array(zAuditEvent).max(10000).optional()
 });
+export const zCatalogue = layer('https://openinherit.org/v3/catalogue.json', zCatalogue$generated);
 
 /**
  * Dealer or platform asset catalogue (distinct from an individual estate)
@@ -5814,7 +5822,7 @@ export const zExternalReference = z.strictObject({
  *
  * The root estate record — will, intestacy, or trust-based succession plan. Contains testator details, jurisdiction, will formalities, forced heirship, probate grants, death record, multi-jurisdiction administration, and tax treaty positions
  */
-export const zEstate = z.object({
+const zEstate$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     testatorPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     testatorPersonIdDisplay: z.string().max(255).optional(),
@@ -6379,6 +6387,7 @@ export const zEstate = z.object({
         clauseReference: z.string().max(50).optional()
     })).max(50).optional()
 });
+export const zEstate = layer('https://openinherit.org/v3/estate.json', zEstate$generated);
 
 /**
  * The estate — links all entities together
@@ -6974,7 +6983,7 @@ export const zInheritanceResponse = z.strictObject({
  *
  * A disposition of property or money in a will. Supports 8 core types (specific, pecuniary, demonstrative, general, residuary, life_interest, class, debt_forgiveness) and extension types via x-inherit- prefix (e.g. x-inherit-wasiyya, x-inherit-halachic-matanah)
  */
-export const zBequest = z.intersection(z.unknown(), z.object({
+const zBequest$generated = z.intersection(z.unknown(), z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     bequestType: z.union([
         z.enum([
@@ -7122,6 +7131,7 @@ export const zBequest = z.intersection(z.unknown(), z.object({
         clauseReference: z.string().max(50).optional()
     })).max(10).optional()
 }));
+export const zBequest = layer('https://openinherit.org/v3/bequest.json', zBequest$generated);
 
 /**
  * A gift in a will
@@ -7681,7 +7691,7 @@ export const zConsentRecord = z.strictObject({
  *
  * Authorises a proxy to act on behalf of a testator — information gathering, communication, negotiation, or full decision-making. Includes consent record with cultural consent methods
  */
-export const zProxyAuthorisation = z.intersection(z.unknown(), z.object({
+const zProxyAuthorisation$generated = z.intersection(z.unknown(), z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     delegateType: z.enum([
         'person',
@@ -7807,6 +7817,7 @@ export const zProxyAuthorisation = z.intersection(z.unknown(), z.object({
     notes: z.string().max(2000).optional(),
     provenance: zProvenance.optional()
 }));
+export const zProxyAuthorisation = layer('https://openinherit.org/v3/proxy-authorisation.json', zProxyAuthorisation$generated);
 
 /**
  * Power of attorney or deputyship
@@ -8255,7 +8266,7 @@ export const zIntegrityConstraint = z.strictObject({
  *
  * Root entry point for an INHERIT v3 estate data interchange document. Contains a single estate and arrays of all entity types
  */
-export const zSchema = z.intersection(z.unknown(), z.object({
+const zSchema$generated = z.intersection(z.unknown(), z.object({
     $schema: z.enum(['https://openinherit.org/v3/schema.json', 'https://openinherit.org/v3/catalogue.json']).optional(),
     '@context': z.union([
         z.url(),
@@ -8610,6 +8621,7 @@ export const zSchema = z.intersection(z.unknown(), z.object({
         }
     ])
 }));
+export const zSchema = layer('https://openinherit.org/v3/schema.json', zSchema$generated);
 
 /**
  * The top-level INHERIT document envelope

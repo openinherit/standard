@@ -48,25 +48,17 @@ def resolve(bundle: Path, defined: set[str], prefix: str) -> list[tuple[str, str
 def zod(bundle: Path, out_dir: Path) -> None:
     gen = (out_dir / "zod.gen.ts").read_text()
     pairs = resolve(bundle, set(re.findall(r"^export const (z\w+)\b", gen, re.M)), "z")
-    # Schemas the conditional layer (write-conditional-layer.py) re-exports with
-    # the constraints the generator drops. The explicit re-export shadows the
-    # generated one from `export *`, so the package only ever hands out the
-    # layered schema under that name.
-    cond = out_dir / "conditionals.ts"
-    layered = sorted(re.findall(r"^export const (z\w+) = layer\(", cond.read_text(), re.M)) if cond.exists() else []
     lines = [
         f"// {HEADER}",
         "",
         "import type * as z from 'zod';",
         "import * as schemas from './zod.gen';",
-        *(["import * as layered from './conditionals';"] if layered else []),
         "",
         "export * from './zod.gen';",
-        *([f"export {{ {', '.join(layered)} }} from './conditionals';"] if layered else []),
         "",
         "/** Every v3 document schema's validator, keyed by the schema's $id. */",
         "export const schemasById: Readonly<Record<string, z.ZodType>> = {",
-        *[f"  '{sid}': {'layered' if name in layered else 'schemas'}.{name}," for sid, name in pairs],
+        *[f"  '{sid}': schemas.{name}," for sid, name in pairs],
         "};",
         "",
     ]

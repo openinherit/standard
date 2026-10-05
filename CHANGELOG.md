@@ -88,8 +88,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   pydantic `model_validator`. That covers a const-discriminated `if`/`then`/`else`, keywords
   beside a `$ref`, and the `unevaluatedProperties` those decide. It covers the root, catalogue,
   asset, bequest, estate, property and proxy-authorisation. A keyword the layer cannot evaluate
-  fails generation rather than being dropped. The divergence register shrinks: 15 Zod and 13
-  pydantic false accepts no longer reproduce, and there are still no false rejects.
+  fails generation rather than being dropped. In Zod, the layered schema replaces the generated
+  one in place, so it also applies where the schema is nested, as pydantic's class validators
+  already do. Both refuse `null` for a member that cannot be null. The generated pydantic models
+  also refuse keys they would otherwise discard unseen, such as `field_schema` beside `$schema`.
+  `tests/runtime-validators/agreement.test.json` holds 36 documents that probe exactly these
+  paths. JSON Schema, Zod and pydantic must give each the same verdict. The divergence register
+  shrinks: 15 Zod and 14 pydantic false accepts no longer reproduce, and there are still no false
+  rejects.
 - Referential integrity now checks `assets[].propertyId`. `asset.json` has always declared the
   field; the validator checked the other references that resolve against `properties[]` and not
   this one.

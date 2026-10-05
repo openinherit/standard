@@ -2,10 +2,8 @@
 
 import type * as z from 'zod';
 import * as schemas from './zod.gen';
-import * as layered from './conditionals';
 
 export * from './zod.gen';
-export { zAsset, zBequest, zCatalogue, zEstate, zProperty, zProxyAuthorisation, zSchema } from './conditionals';
 
 /** Every v3 document schema's validator, keyed by the schema's $id. */
 export const schemasById: Readonly<Record<string, z.ZodType>> = {
@@ -17,10 +15,10 @@ export const schemasById: Readonly<Record<string, z.ZodType>> = {
   'https://openinherit.org/v3/asset-categories/vehicle.json': schemas.zVehicle,
   'https://openinherit.org/v3/asset-collection.json': schemas.zAssetCollection,
   'https://openinherit.org/v3/asset-interest.json': schemas.zAssetInterest,
-  'https://openinherit.org/v3/asset.json': layered.zAsset,
+  'https://openinherit.org/v3/asset.json': schemas.zAsset,
   'https://openinherit.org/v3/attestation.json': schemas.zAttestation,
-  'https://openinherit.org/v3/bequest.json': layered.zBequest,
-  'https://openinherit.org/v3/catalogue.json': layered.zCatalogue,
+  'https://openinherit.org/v3/bequest.json': schemas.zBequest,
+  'https://openinherit.org/v3/catalogue.json': schemas.zCatalogue,
   'https://openinherit.org/v3/common/address.json': schemas.zAddress,
   'https://openinherit.org/v3/common/ai-provenance.json': schemas.zAiProvenance,
   'https://openinherit.org/v3/common/audit-event.json': schemas.zAuditEvent,
@@ -38,7 +36,7 @@ export const schemasById: Readonly<Record<string, z.ZodType>> = {
   'https://openinherit.org/v3/conformance-declaration.json': schemas.zConformanceDeclaration,
   'https://openinherit.org/v3/dealer-interest.json': schemas.zDealerInterest,
   'https://openinherit.org/v3/document.json': schemas.zDocument,
-  'https://openinherit.org/v3/estate.json': layered.zEstate,
+  'https://openinherit.org/v3/estate.json': schemas.zEstate,
   'https://openinherit.org/v3/event.json': schemas.zEvent,
   'https://openinherit.org/v3/executor.json': schemas.zExecutor,
   'https://openinherit.org/v3/extensions/africa-customary/africa-customary.json': schemas.zAfricaCustomary,
@@ -73,10 +71,10 @@ export const schemasById: Readonly<Record<string, z.ZodType>> = {
   'https://openinherit.org/v3/person.json': schemas.zPerson,
   'https://openinherit.org/v3/pet.json': schemas.zPet,
   'https://openinherit.org/v3/power-of-appointment.json': schemas.zPowerOfAppointment,
-  'https://openinherit.org/v3/property.json': layered.zProperty,
-  'https://openinherit.org/v3/proxy-authorisation.json': layered.zProxyAuthorisation,
+  'https://openinherit.org/v3/property.json': schemas.zProperty,
+  'https://openinherit.org/v3/proxy-authorisation.json': schemas.zProxyAuthorisation,
   'https://openinherit.org/v3/relationship.json': schemas.zRelationship,
-  'https://openinherit.org/v3/schema.json': layered.zSchema,
+  'https://openinherit.org/v3/schema.json': schemas.zSchema,
   'https://openinherit.org/v3/space.json': schemas.zSpace,
   'https://openinherit.org/v3/subscription.json': schemas.zSubscription,
   'https://openinherit.org/v3/trust.json': schemas.zTrust,

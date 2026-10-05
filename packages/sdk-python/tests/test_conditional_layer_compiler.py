@@ -64,3 +64,15 @@ def test_closed_is_left_to_the_generator_when_a_member_is_unknowable():
     doc = {"$id": A, "unevaluatedProperties": False,
            "allOf": [{"if": DISC, "then": {}}, {"$ref": "b.json#/$defs/x"}]}
     assert compiler({A: doc}).rule(A)["closed"] is None
+
+
+def test_nonnull_only_when_the_schema_certainly_refuses_null():
+    c = compiler({A: {"$id": A, "type": "object"}, B: {"$id": B}})
+    assert c.nonnull({"type": "object"}, A, set())
+    assert c.nonnull({"$ref": "a.json"}, A, set())
+    assert c.nonnull({"enum": ["x"]}, A, set())
+    assert not c.nonnull({"type": ["object", "null"]}, A, set())
+    assert not c.nonnull({"enum": ["x", None]}, A, set())
+    assert not c.nonnull({"description": "anything"}, A, set())
+    # An untyped target: unsure, so null is left to the generated validator.
+    assert not c.nonnull({"$ref": "b.json"}, A, set())

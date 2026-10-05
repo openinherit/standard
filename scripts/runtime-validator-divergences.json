@@ -623,12 +623,6 @@
         ]
       },
       {
-        "case": "tests/v3/estate/estate.test.json::invalid — integrity as null",
-        "json_schema_keywords": [
-          "type"
-        ]
-      },
-      {
         "case": "tests/v3/eu-succession/eu-succession.test.json::invalid — unknown root property",
         "json_schema_keywords": [
           "unevaluatedProperties"

@@ -15,15 +15,27 @@ Without this layer, a regenerated root validator accepts a document with no
 compiles exactly those constructs into rule data. It emits that data, with a
 small evaluator, into each validator:
 
-  zod       packages/sdk/src/zod/conditionals.ts. Each affected schema is
-            re-exported under its generated name as an intersection with a
-            superRefine, and index.ts maps its $id to the layered schema.
+  zod       packages/sdk/src/zod/conditionals.ts holds the rules and the
+            evaluator. zod.gen.ts is rewritten so that each affected schema,
+            straight after its generated definition, becomes an intersection
+            with a superRefine under its own name. Every later reference
+            (a parent's items, a nested member, index.ts) then gets the
+            layered schema, at any depth, the way pydantic's class
+            validators apply wherever a class is used.
   pydantic  packages/sdk-python/openinherit/models.py. Each affected class
             gains a model_validator(mode="after"). It checks the instance's
             JSON dump: by alias, unset members excluded, extras included. That
             is the members the document supplied. Not "before" or "wrap":
             under validate_json(strict=True), the dict those hand back is
             re-validated as Python input, which refuses ISO date strings.
+            pydantic also discards, before any validator sees it, an input key
+            equal to the Python name of an aliased field (field_schema for
+            $schema). For a closed class, its __pydantic_validator__ is
+            wrapped so those keys are refused on the raw input first.
+
+Both evaluators also refuse null for any top-level member whose schema
+cannot be null. The generated pydantic fields for members a branch requires
+are Optional, and "present" must not be satisfied by null.
 
 Inside a branch or overlay, the layer evaluates only: required, const, enum,
 minItems, maxItems, minimum, maximum, exclusiveMinimum, exclusiveMaximum,
@@ -155,7 +167,8 @@ class Compiler:
                     overlays[p] = self.compile(rest, sid, f"{sid} properties/{p} (next to $ref)")
         if not conds and not overlays:
             return None
-        rule = {"conditionals": conds, "overlays": overlays, "closed": None}
+        rule = {"conditionals": conds, "overlays": overlays, "closed": None,
+                "nonnull": sorted(p for p, sub in doc.get("properties", {}).items() if self.nonnull(sub, sid, set()))}
         if doc.get("unevaluatedProperties") is False or doc.get("additionalProperties") is False:
             names, patterns = set(doc.get("properties", {})), set(doc.get("patternProperties", {}))
             if all(self.reach(m, sid, names, patterns, set()) for m in others):
@@ -164,6 +177,30 @@ class Compiler:
                 print(f"write-conditional-layer: {sid}: unevaluatedProperties left to the generated validator "
                       "(a member it cannot resolve could evaluate any name)", file=sys.stderr)
         return rule
+
+    def nonnull(self, s, base, seen) -> bool:
+        """True only when s certainly refuses null. Unsure means False, which never refuses."""
+        if not isinstance(s, dict):
+            return s is False
+        t = s.get("type")
+        if t is not None:
+            return "null" not in (t if isinstance(t, list) else [t])
+        if "const" in s:
+            return s["const"] is not None
+        if "enum" in s:
+            return None not in s["enum"]
+        if any(self.nonnull(x, base, seen) for x in s.get("allOf", [])):
+            return True
+        if "$ref" in s:
+            target = urljoin(base, s["$ref"])
+            doc_id, _, frag = target.partition("#")
+            node = self.srcs.get(doc_id)
+            for part in [p for p in frag.split("/") if p]:
+                node = node.get(part.replace("~1", "/").replace("~0", "~")) if isinstance(node, dict) else None
+            if node is None or target in seen:
+                return False
+            return self.nonnull(node, doc_id, seen | {target})
+        return False
 
     def reach(self, s, base, names, patterns, seen) -> bool:
         """Every member name s could evaluate, added to names/patterns. False if unknowable."""
@@ -206,7 +243,7 @@ def build(bundle: Path):
 # ---------------------------------------------------------------- zod
 
 ZOD_EVAL = r"""
-type Rule = { conditionals: any[]; overlays: Record<string, any>; closed: { props: string[]; patterns: string[] } | null };
+type Rule = { conditionals: any[]; overlays: Record<string, any>; closed: { props: string[]; patterns: string[] } | null; nonnull: string[] };
 type Issue = { path: (string | number)[]; message: string };
 
 const isObj = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -276,6 +313,7 @@ function check(id: string, v: unknown): Issue[] {
       evaluated(branch, names, patterns);
     }
   }
+  for (const k of rule.nonnull) if (k in v && v[k] === null) out.push({ path: [k], message: `${k} must not be null` });
   for (const [k, sub] of Object.entries(rule.overlays)) if (k in v) evaluate(sub, v[k], [k], out);
   if (rule.closed) {
     const res = patterns.map((p) => new RegExp(p, 'u'));
@@ -286,46 +324,80 @@ function check(id: string, v: unknown): Issue[] {
   return out;
 }
 
-const layer = <T extends z.ZodType>(id: string, base: T) =>
-  z.intersection(base, z.unknown().superRefine((v, ctx) => {
+const REGISTRY: Record<string, z.ZodType> = {};
+
+function byId(id: string): z.ZodType {
+  const s = REGISTRY[id];
+  if (!s) throw new Error(`conditional layer: no validator registered for ${id}`);
+  return s;
+}
+
+/** Called by zod.gen.ts for a schema a branch delegates to by $ref. */
+export function register<T extends z.ZodType>(id: string, schema: T): T {
+  REGISTRY[id] = schema;
+  return schema;
+}
+
+/** Called by zod.gen.ts straight after each layered schema's generated definition. */
+export function layer<T extends z.ZodType>(id: string, base: T) {
+  if (!RULES[id]) throw new Error(`conditional layer: no rule for ${id}`);
+  return register(id, z.intersection(base, z.unknown().superRefine((v, ctx) => {
     for (const i of check(id, v)) ctx.addIssue({ code: 'custom', path: i.path, message: i.message });
-  }));
+  })));
+}
 """
 
 
 def zod(bundle: Path, out_dir: Path) -> None:
     ids, rules, refkeys = build(bundle)
-    gen = (out_dir / "zod.gen.ts").read_text()
-    defined = set(re.findall(r"^export const (z\w+)\b", gen, re.M))
-    for sid in {*rules, *refkeys}:
-        if "z" + ids[sid] not in defined:
-            fail(f"no generated Zod schema z{ids[sid]} for {sid}")
-    layered = sorted(rules, key=lambda s: ids[s])
-    lines = [
+    gen_path = out_dir / "zod.gen.ts"
+    lines = gen_path.read_text().split("\n")
+
+    def definition(name: str) -> tuple[int, int]:
+        heads = [i for i, l in enumerate(lines) if l.startswith(f"export const {name} = ")]
+        if len(heads) != 1:
+            fail(f"zod.gen.ts: expected one definition of {name}, found {len(heads)}")
+        i = heads[0]
+        for j in range(i, len(lines)):
+            if (j == i or not lines[j].startswith((" ", "\t"))) and lines[j].rstrip().endswith(";"):
+                return i, j
+        fail(f"zod.gen.ts: cannot find the end of {name}")
+
+    edits = []
+    for sid in sorted({*rules, *refkeys}):
+        name = "z" + ids[sid]
+        i, j = definition(name)
+        if sid in rules:
+            edits.append((i, j, name, f"export const {name} = layer('{sid}', {name}$generated);"))
+        else:
+            edits.append((i, j, None, f"register('{sid}', {name});"))
+    for i, j, name, after in sorted(edits, reverse=True):
+        lines.insert(j + 1, after)
+        if name:
+            lines[i] = lines[i].replace(f"export const {name} = ", f"const {name}$generated = ", 1)
+    imp = next((k for k, l in enumerate(lines) if l.startswith("import ") and "'zod'" in l), None)
+    if imp is None:
+        fail("zod.gen.ts has no zod import to follow")
+    lines.insert(imp + 1, "import { layer, register } from './conditionals';")
+    gen_path.write_text("\n".join(lines))
+
+    out = [
         f"// {HEADER}",
         "//",
-        "// The conditional layer. See scripts/lib/write-conditional-layer.py for what it",
-        "// evaluates and why the generated schemas cannot.",
+        "// The conditional layer's rules and evaluator. zod.gen.ts applies it; see",
+        "// scripts/lib/write-conditional-layer.py for what it evaluates and why the",
+        "// generated schemas cannot.",
         "",
         "import * as z from 'zod';",
-        "import * as gen from './zod.gen';",
         "",
         f"const RULES: Record<string, Rule> = {json.dumps(rules, indent=2, ensure_ascii=False)};",
         "",
         f"const REFKEYS: Record<string, {{ props: string[]; patterns: string[] }}> = {json.dumps(refkeys, indent=2, ensure_ascii=False)};",
         ZOD_EVAL,
-        *[f"export const z{ids[s]} = layer('{s}', gen.z{ids[s]});" for s in layered],
-        "",
-        "function byId(id: string): z.ZodType {",
-        "  switch (id) {",
-        *[f"    case '{s}': return {'' if s in rules else 'gen.'}z{ids[s]};" for s in sorted(refkeys)],
-        "  }",
-        "  throw new Error(`conditional layer: no validator for ${id}`);",
-        "}",
-        "",
     ]
-    (out_dir / "conditionals.ts").write_text("\n".join(lines))
-    print(f"write-conditional-layer: zod — {len(rules)} schemas layered ({', '.join('z' + ids[s] for s in layered)})")
+    (out_dir / "conditionals.ts").write_text("\n".join(out))
+    print(f"write-conditional-layer: zod — {len(rules)} schemas layered in place "
+          f"({', '.join('z' + ids[s] for s in sorted(rules, key=lambda s: ids[s]))})")
 
 
 # ---------------------------------------------------------------- pydantic
@@ -427,6 +499,9 @@ def _layer_check(sid, data):
         if branch is not None:
             _evaluate(branch, data, [], out)
             _evaluated(branch, names, patterns)
+    for k in rule["nonnull"]:
+        if k in data and data[k] is None:
+            out.append((k, f"{k} must not be null"))
     for k, sub in rule["overlays"].items():
         if k in data:
             _evaluate(sub, data[k], [k], out)
@@ -437,6 +512,50 @@ def _layer_check(sid, data):
     if out:
         raise ValueError("; ".join(f"{p or '(root)'}: {m}" for p, m in out))
     return data
+
+
+class _InheritRawKeyGuard:
+    """Wraps a model's __pydantic_validator__ to refuse, on the raw input, keys
+    that pydantic would otherwise discard unseen: the Python names of aliased
+    fields, which the schema does not allow at that level."""
+
+    def __init__(self, inner, title, names):
+        self._inner, self._title, self._names = inner, title, frozenset(names)
+
+    def _check(self, obj):
+        if isinstance(obj, dict):
+            bad = [k for k in obj if k in self._names]
+            if bad:
+                from pydantic_core import InitErrorDetails, PydanticCustomError
+                raise _ValidationError.from_exception_data(self._title, [
+                    InitErrorDetails(
+                        type=PydanticCustomError("unevaluated_property", "{key} is not allowed here (unevaluatedProperties)", {"key": k}),
+                        loc=(k,), input=obj[k],
+                    ) for k in bad
+                ])
+
+    def validate_json(self, data, *args, **kwargs):
+        try:
+            parsed = _json.loads(data)
+        except (TypeError, ValueError):
+            parsed = None
+        self._check(parsed)
+        return self._inner.validate_json(data, *args, **kwargs)
+
+    def validate_python(self, obj, *args, **kwargs):
+        self._check(obj)
+        return self._inner.validate_python(obj, *args, **kwargs)
+
+    def validate_strings(self, obj, *args, **kwargs):
+        self._check(obj)
+        return self._inner.validate_strings(obj, *args, **kwargs)
+
+    def __getattr__(self, name):
+        return getattr(self._inner, name)
+
+
+def _guard(cls, names):
+    cls.__pydantic_validator__ = _InheritRawKeyGuard(cls.__pydantic_validator__, cls.__name__, names)
 '''
 
 
@@ -464,14 +583,32 @@ def pydantic(bundle: Path, models: Path) -> None:
         if n != 1:
             fail(f"models.py: class {name}(BaseModel) not found once")
     models_map = {s: ids[s] for s in sorted({*rules, *refkeys})}
+    # Aliased fields whose Python name pydantic would silently discard, for
+    # every closed layered class, plus any RootModel wrapping one.
+    guards = {}
+    for sid, rule in sorted(rules.items()):
+        if not rule["closed"]:
+            continue
+        name = ids[sid]
+        body = re.search(rf"^class {name}\(BaseModel\):\n(.*?)(?=^\S)", text, re.M | re.S)
+        aliased = re.findall(r"^    (\w+): [^\n]*?(?:\n        [^\n]*?)*?alias='([^']+)'", body.group(1), re.M) if body else []
+        names = sorted(py for py, alias in aliased if py != alias and py not in rule["closed"]["props"]
+                       and not any(re.search(p, py) for p in rule["closed"]["patterns"]))
+        if names:
+            guards[name] = names
+    for outer, inner in re.findall(r"^class (\w+)\(RootModel\[(\w+)\]\):", text, re.M):
+        if inner in guards:
+            guards[outer] = guards[inner]
     text = (
         text.rstrip("\n") + "\n" + PY_EVAL
         + f"\n\n_LAYER_RULES = {pformat(rules, sort_dicts=False, width=100)}\n"
         + f"\n_REFKEYS = {pformat(refkeys, sort_dicts=False, width=100)}\n"
         + "\n_LAYER_MODELS = {\n" + "".join(f"    {s!r}: {n},\n" for s, n in models_map.items()) + "}\n"
+        + "\n" + "".join(f"_guard({n}, {v!r})\n" for n, v in guards.items())
     )
     models.write_text(text)
-    print(f"write-conditional-layer: pydantic — {len(rules)} models layered ({', '.join(ids[s] for s in sorted(rules))})")
+    print(f"write-conditional-layer: pydantic — {len(rules)} models layered ({', '.join(ids[s] for s in sorted(rules))}); "
+          f"raw-key guard on {', '.join(f'{n} {v}' for n, v in guards.items()) or 'none'}")
 
 
 if __name__ == "__main__":

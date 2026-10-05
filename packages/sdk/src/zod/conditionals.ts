@@ -456,6 +456,65 @@ const RULES: Record<string, Rule> = {
       "wishes"
     ]
   },
+  "https://openinherit.org/v3/conformance-declaration.json": {
+    "conditionals": [
+      {
+        "if": {
+          "properties": {
+            "root": {
+              "const": "catalogue"
+            }
+          },
+          "required": [
+            "root"
+          ]
+        },
+        "then": {
+          "properties": {
+            "entities": {
+              "not": {
+                "required": [
+                  "estate"
+                ]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "conformanceLevel",
+        "declaredAt",
+        "disclaimer",
+        "entities",
+        "extensions",
+        "implementation",
+        "implementationVersion",
+        "inheritVersion",
+        "notes",
+        "provenance",
+        "root",
+        "validatorDetails"
+      ],
+      "patterns": []
+    },
+    "nonnull": [
+      "conformanceLevel",
+      "declaredAt",
+      "disclaimer",
+      "entities",
+      "extensions",
+      "implementation",
+      "implementationVersion",
+      "inheritVersion",
+      "notes",
+      "provenance",
+      "root",
+      "validatorDetails"
+    ]
+  },
   "https://openinherit.org/v3/estate.json": {
     "conditionals": [],
     "overlays": {

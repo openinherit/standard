@@ -18409,6 +18409,11 @@ class ExtensionConformance(BaseModel):
     )
 
 
+class Root(Enum):
+    estate = 'estate'
+    catalogue = 'catalogue'
+
+
 class ConformanceLevel1(Enum):
     int_1 = 1
     int_2 = 2
@@ -18426,6 +18431,11 @@ class ValidatorDetails(BaseModel):
 
 
 class ConformanceDeclaration(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/conformance-declaration.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -18437,6 +18447,10 @@ class ConformanceDeclaration(BaseModel):
     )
     inheritVersion: constr(pattern=r'^\d+\.\d+\.\d+$', max_length=20) = Field(
         ..., description='INHERIT schema version this declaration applies to'
+    )
+    root: Root | None = Field(
+        'estate',
+        description="Which INHERIT document root the declared conformance applies to. 'estate' is the full estate document (schema.json); 'catalogue' is the catalogue-only document (catalogue.json) used by living collectors without the estate envelope. Absent means 'estate', which is what every declaration made before this field existed claimed",
     )
     conformanceLevel: ConformanceLevel1 = Field(
         ...,
@@ -19120,6 +19134,35 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                            'valuations',
                                                            'versionedAt',
                                                            'wishes']},
+ 'https://openinherit.org/v3/conformance-declaration.json': {'conditionals': [{'if': {'properties': {'root': {'const': 'catalogue'}},
+                                                                                      'required': ['root']},
+                                                                               'then': {'properties': {'entities': {'not': {'required': ['estate']}}}}}],
+                                                             'overlays': {},
+                                                             'closed': {'props': ['conformanceLevel',
+                                                                                  'declaredAt',
+                                                                                  'disclaimer',
+                                                                                  'entities',
+                                                                                  'extensions',
+                                                                                  'implementation',
+                                                                                  'implementationVersion',
+                                                                                  'inheritVersion',
+                                                                                  'notes',
+                                                                                  'provenance',
+                                                                                  'root',
+                                                                                  'validatorDetails'],
+                                                                        'patterns': []},
+                                                             'nonnull': ['conformanceLevel',
+                                                                         'declaredAt',
+                                                                         'disclaimer',
+                                                                         'entities',
+                                                                         'extensions',
+                                                                         'implementation',
+                                                                         'implementationVersion',
+                                                                         'inheritVersion',
+                                                                         'notes',
+                                                                         'provenance',
+                                                                         'root',
+                                                                         'validatorDetails']},
  'https://openinherit.org/v3/estate.json': {'conditionals': [],
                                             'overlays': {'netEstateEquity': {'properties': {'amount': {'minimum': 0}}}},
                                             'closed': {'props': ['adjudicatingBodies',
@@ -19630,6 +19673,7 @@ _LAYER_MODELS = {
     'https://openinherit.org/v3/asset.json': Asset,
     'https://openinherit.org/v3/bequest.json': Bequest,
     'https://openinherit.org/v3/catalogue.json': Catalogue,
+    'https://openinherit.org/v3/conformance-declaration.json': ConformanceDeclaration,
     'https://openinherit.org/v3/estate.json': Estate,
     'https://openinherit.org/v3/property.json': Property,
     'https://openinherit.org/v3/proxy-authorisation.json': ProxyAuthorisation,

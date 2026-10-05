@@ -21,3 +21,30 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+--------------------------------------------------------------------------
+
+UK public sector information
+
+Contains public sector information licensed under the Open Government
+Licence v3.0.
+https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+
+This applies to the text quoted from GOV.UK (www.gov.uk) and from UK
+legislation (www.legislation.gov.uk) in the following files, where it
+appears in citation and citation_quote fields and in the statute
+citations of the rule files:
+
+  tests/oracles/iht-death-charge.oracle.json
+  tests/oracles/iht-charity-reduced-rate.oracle.json
+  tests/oracles/intestacy-cascade-aea1925.oracle.json
+  tests/oracles/per-stirpes-aea1925.oracle.json
+  tests/oracles/insolvent-estate-abatement.oracle.json
+  catala/probate/IntestacyCascade.catala_en
+  catala/probate/InsolventEstateAbatement.catala_en
+
+The Irish and Pennsylvania material cited in
+tests/oracles/ie-cat-charge.oracle.json,
+tests/oracles/pa-inheritance-tax.oracle.json and the rule files under
+catala/transfer/ is not UK public sector information and is not covered
+by this notice.

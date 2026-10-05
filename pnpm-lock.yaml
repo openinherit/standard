@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@sourcemeta/blaze':
-        specifier: 16.11.0
-        version: 16.11.0
+        specifier: 17.0.0
+        version: 17.0.0
     devDependencies:
       '@hey-api/client-fetch':
         specifier: latest
@@ -27,10 +27,10 @@ importers:
         version: 1.17.5(@hyperjump/browser@1.3.1)
       '@redocly/cli':
         specifier: latest
-        version: 2.53.3
+        version: 2.57.0
       '@sourcemeta/jsonschema':
-        specifier: 16.11.0
-        version: 16.11.0
+        specifier: 17.0.0
+        version: 17.0.0
       ajv:
         specifier: ^8.17.1
         version: 8.18.0
@@ -294,8 +294,8 @@ packages:
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
     engines: {node: '>=8'}
 
-  '@redocly/cli@2.53.3':
-    resolution: {integrity: sha512-hzNAWzHCOZ05vwRx0ehTxNeJaxxizjGV505eKtfs9MR/8ieD/8lYhAK4GF5FaqRRwOEpLO0PvzQwBSKYXmxhRA==}
+  '@redocly/cli@2.57.0':
+    resolution: {integrity: sha512-1d5fVyUaYlMNgCHUoyE2vUyxBhs/jmOHgsX/kFmfWzESw4f/G/OV/SU9E55rU7aUNmw9rHj1vXmL6yUdIn+KKQ==}
     engines: {node: '>=22.12.0 || >=20.19.0 <21.0.0', npm: '>=10'}
     hasBin: true
 
@@ -437,12 +437,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@sourcemeta/blaze@16.11.0':
-    resolution: {integrity: sha512-3pnL0rXI2y5o7EOlbp2dQKZyTXAUZyiejfkGpGr6RiPjOmSlff39qjE0b4I16zTIjTQPgMsci3RwwImAAE6TRw==}
+  '@sourcemeta/blaze@17.0.0':
+    resolution: {integrity: sha512-ocxkuKx+8wRNPm9+f3bOHGHYOcWa5B3wDLBBNlzoAdPvA7SkwrE1B8bwvEPmE766Mv4LZhXxIgI8L9nuyQjdeQ==}
     engines: {node: '>=21.7'}
 
-  '@sourcemeta/jsonschema@16.11.0':
-    resolution: {integrity: sha512-wNPjOWimzbjL1+8bIi/Jl7NCXJnLjN5CTwO2ZXr53oirwiXIY6/8E/ovlTOVon5Ut5YzrPVgGLrrWKGDwP+gTQ==}
+  '@sourcemeta/jsonschema@17.0.0':
+    resolution: {integrity: sha512-jFPv9gDZtdfI2/Ubf2O6KfNOswU9O2Nx1t862XxSSFV8vjWXZfwNB96Cu+Y6Vt4XKSqcpleNRcsmpYNwZ+gODw==}
     engines: {node: '>=16'}
     cpu: [x64, arm64]
     os: [darwin, linux, win32]
@@ -803,8 +803,8 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
-  source-map-js@1.2.1:
-    resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
+  source-map-js@1.2.2:
+    resolution: {integrity: sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==}
     engines: {node: '>=0.10.0'}
 
   source-map@0.7.6:
@@ -1065,7 +1065,7 @@ snapshots:
 
   '@lukeed/ms@2.0.2': {}
 
-  '@redocly/cli@2.53.3': {}
+  '@redocly/cli@2.57.0': {}
 
   '@rollup/rollup-android-arm-eabi@4.60.1':
     optional: true
@@ -1142,9 +1142,9 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.60.1':
     optional: true
 
-  '@sourcemeta/blaze@16.11.0': {}
+  '@sourcemeta/blaze@17.0.0': {}
 
-  '@sourcemeta/jsonschema@16.11.0': {}
+  '@sourcemeta/jsonschema@17.0.0': {}
 
   '@types/estree@1.0.8': {}
 
@@ -1408,7 +1408,7 @@ snapshots:
     dependencies:
       nanoid: 3.3.19
       picocolors: 1.1.1
-      source-map-js: 1.2.1
+      source-map-js: 1.2.2
     optional: true
 
   powershell-utils@0.1.0: {}
@@ -1471,7 +1471,7 @@ snapshots:
 
   shebang-regex@3.0.0: {}
 
-  source-map-js@1.2.1:
+  source-map-js@1.2.2:
     optional: true
 
   source-map@0.7.6: {}

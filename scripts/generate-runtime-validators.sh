@@ -3,6 +3,7 @@
 #
 #   v3/*.json → openapi/openapi-bundled.yaml        (redocly bundle)
 #             → packages/sdk/src/zod/zod.gen.ts      (hey-api zod plugin)
+#             → packages/sdk/src/zod/conditionals.ts (the conditional layer, both validators)
 #             → packages/sdk/src/zod/index.ts        (schemasById, from the bundle's $ids)
 #             → packages/sdk-python/openinherit/models.py  (datamodel-codegen)
 #             → packages/sdk-python/openinherit/models_by_id.py (MODELS_BY_ID)
@@ -37,7 +38,12 @@ GEN=packages/sdk/src/zod/zod.gen.ts
 sed -i 's/z\.uuid()/z.guid()/g' "$GEN"
 sed -i '1a // @ts-nocheck' "$GEN"
 
-echo "3/4 index → packages/sdk/src/zod/index.ts"
+echo "3/4 conditional layer + index → packages/sdk/src/zod/{conditionals,index}.ts"
+# The generators drop const-discriminated if/then/else, keywords beside a $ref,
+# and the unevaluatedProperties those decide. Without this layer, the root
+# validator accepts a document with no estate, people or schemaVersion. See
+# scripts/lib/write-conditional-layer.py.
+"$PYTHON" scripts/lib/write-conditional-layer.py zod openapi/openapi-bundled.yaml packages/sdk/src/zod
 "$PYTHON" scripts/lib/write-validator-indexes.py zod openapi/openapi-bundled.yaml packages/sdk/src/zod
 
 echo "4/4 pydantic → packages/sdk-python/openinherit/models.py"
@@ -58,6 +64,8 @@ TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
   --output-model-type pydantic_v2.BaseModel --target-python-version 3.11 \
   --use-standard-collections --use-union-operator --use-subclass-enum \
   --formatters builtin --disable-timestamp 2>/dev/null
+"$PYTHON" scripts/lib/write-conditional-layer.py pydantic openapi/openapi-bundled.yaml \
+  packages/sdk-python/openinherit/models.py
 "$PYTHON" scripts/lib/write-validator-indexes.py pydantic openapi/openapi-bundled.yaml \
   packages/sdk-python/openinherit/models.py
 

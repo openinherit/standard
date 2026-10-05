@@ -45,33 +45,7 @@
         ]
       },
       {
-        "case": "tests/v3/asset/asset.test.json::invalid — fiduciary access with bad scope",
-        "json_schema_keywords": [
-          "anyOf",
-          "enum",
-          "if",
-          "pattern",
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/asset/asset.test.json::invalid — gemologicalCertificate with invalid laboratory enum",
-        "json_schema_keywords": [
-          "anyOf",
-          "enum",
-          "if",
-          "pattern",
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/asset/asset.test.json::invalid — netEquity with a negative amount",
-        "json_schema_keywords": [
-          "minimum"
-        ]
-      },
-      {
-        "case": "tests/v3/asset/asset.test.json::invalid — platform delegation with bad action",
         "json_schema_keywords": [
           "anyOf",
           "enum",
@@ -85,24 +59,6 @@
         "json_schema_keywords": [
           "additionalProperties",
           "if",
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/asset/asset.test.json::invalid — vehicleCheck missing required retrievedAt",
-        "json_schema_keywords": [
-          "if",
-          "required",
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/asset/asset.test.json::invalid — vehicleCheck with invalid writeOffCategory",
-        "json_schema_keywords": [
-          "anyOf",
-          "enum",
-          "if",
-          "pattern",
           "unevaluatedProperties"
         ]
       },
@@ -125,37 +81,11 @@
         ]
       },
       {
-        "case": "tests/v3/bequest/bequest.test.json::invalid — class bequest missing classDefinition",
-        "json_schema_keywords": [
-          "if",
-          "required"
-        ]
-      },
-      {
         "case": "tests/v3/bequest/bequest.test.json::invalid — debt_forgiveness without beneficiaryId or beneficiaryOrganisation",
         "json_schema_keywords": [
           "anyOf",
           "if",
           "required"
-        ]
-      },
-      {
-        "case": "tests/v3/bequest/bequest.test.json::invalid — life_interest bequest missing lifeInterest",
-        "json_schema_keywords": [
-          "if",
-          "required"
-        ]
-      },
-      {
-        "case": "tests/v3/bequest/bequest.test.json::invalid — unknown property at root level (unevaluatedProperties false)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/bequest/bequest.test.json::invalid: bequest with old extensionType field",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -212,18 +142,6 @@
         "case": "tests/v3/estate/estate.test.json::invalid — missing status",
         "json_schema_keywords": [
           "required"
-        ]
-      },
-      {
-        "case": "tests/v3/estate/estate.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/estate/estate.test.json::invalid: estate with old extensionWillType field",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -476,29 +394,9 @@
         ]
       },
       {
-        "case": "tests/v3/property/property.test.json::invalid — netEquity with a negative amount",
-        "json_schema_keywords": [
-          "minimum"
-        ]
-      },
-      {
         "case": "tests/v3/property/property.test.json::invalid — ownershipPercentage with more than 2 decimal places (multipleOf: 0.01)",
         "json_schema_keywords": [
           "multipleOf"
-        ]
-      },
-      {
-        "case": "tests/v3/proxy-authorisation/proxy-authorisation.test.json::invalid agent delegation — missing agentId",
-        "json_schema_keywords": [
-          "if",
-          "required"
-        ]
-      },
-      {
-        "case": "tests/v3/proxy-authorisation/proxy-authorisation.test.json::invalid person delegation — missing proxyPersonId",
-        "json_schema_keywords": [
-          "if",
-          "required"
         ]
       },
       {
@@ -517,12 +415,6 @@
       },
       {
         "case": "tests/v3/relationship/relationship.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/schema/schema.test.json::invalid — notifications at root level (must be in applicationState)",
         "json_schema_keywords": [
           "unevaluatedProperties"
         ]
@@ -643,27 +535,7 @@
         ]
       },
       {
-        "case": "tests/v3/asset/asset.test.json::invalid — fiduciary access with bad scope",
-        "json_schema_keywords": [
-          "anyOf",
-          "enum",
-          "if",
-          "pattern",
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/asset/asset.test.json::invalid — gemologicalCertificate with invalid laboratory enum",
-        "json_schema_keywords": [
-          "anyOf",
-          "enum",
-          "if",
-          "pattern",
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/asset/asset.test.json::invalid — platform delegation with bad action",
         "json_schema_keywords": [
           "anyOf",
           "enum",
@@ -677,24 +549,6 @@
         "json_schema_keywords": [
           "additionalProperties",
           "if",
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/asset/asset.test.json::invalid — vehicleCheck missing required retrievedAt",
-        "json_schema_keywords": [
-          "if",
-          "required",
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/asset/asset.test.json::invalid — vehicleCheck with invalid writeOffCategory",
-        "json_schema_keywords": [
-          "anyOf",
-          "enum",
-          "if",
-          "pattern",
           "unevaluatedProperties"
         ]
       },
@@ -717,37 +571,11 @@
         ]
       },
       {
-        "case": "tests/v3/bequest/bequest.test.json::invalid — class bequest missing classDefinition",
-        "json_schema_keywords": [
-          "if",
-          "required"
-        ]
-      },
-      {
         "case": "tests/v3/bequest/bequest.test.json::invalid — debt_forgiveness without beneficiaryId or beneficiaryOrganisation",
         "json_schema_keywords": [
           "anyOf",
           "if",
           "required"
-        ]
-      },
-      {
-        "case": "tests/v3/bequest/bequest.test.json::invalid — life_interest bequest missing lifeInterest",
-        "json_schema_keywords": [
-          "if",
-          "required"
-        ]
-      },
-      {
-        "case": "tests/v3/bequest/bequest.test.json::invalid — unknown property at root level (unevaluatedProperties false)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/bequest/bequest.test.json::invalid: bequest with old extensionType field",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -798,18 +626,6 @@
         "case": "tests/v3/estate/estate.test.json::invalid — integrity as null",
         "json_schema_keywords": [
           "type"
-        ]
-      },
-      {
-        "case": "tests/v3/estate/estate.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/estate/estate.test.json::invalid: estate with old extensionWillType field",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -1067,20 +883,6 @@
         ]
       },
       {
-        "case": "tests/v3/proxy-authorisation/proxy-authorisation.test.json::invalid agent delegation — missing agentId",
-        "json_schema_keywords": [
-          "if",
-          "required"
-        ]
-      },
-      {
-        "case": "tests/v3/proxy-authorisation/proxy-authorisation.test.json::invalid person delegation — missing proxyPersonId",
-        "json_schema_keywords": [
-          "if",
-          "required"
-        ]
-      },
-      {
         "case": "tests/v3/relationship/relationship.test.json::invalid — ketubah financialInstrument missing required ketubahDetails",
         "json_schema_keywords": [
           "if",
@@ -1096,12 +898,6 @@
       },
       {
         "case": "tests/v3/relationship/relationship.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/schema/schema.test.json::invalid — notifications at root level (must be in applicationState)",
         "json_schema_keywords": [
           "unevaluatedProperties"
         ]

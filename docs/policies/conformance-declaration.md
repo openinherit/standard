@@ -59,20 +59,20 @@ This is the schema's `$id`. The file itself is `v3/conformance-declaration.json`
 
 ## Declaring the document root
 
-INHERIT has two document roots, and every document is written against one of them. Conformance against one root says nothing about the other, so a declaration has to say which root it covers.
+INHERIT has one document root, `v3/schema.json`, which a document conforms to at one of two conformance profiles (proposal 0003). The estate profile is the default. A document declares the catalogue profile with `"conformanceProfile": "catalogue"`, and its rules are then exactly `v3/catalogue.json`, the profile's entry point. Conformance at one profile says nothing about the other, so a declaration has to say which one it covers. The declaration field is `root`, and its value names the schema the implementation's documents validate against at that profile.
 
-| Root | Root schema | Who it is for |
+| Root | Validates against | Who it is for |
 |------|-------------|---------------|
 | `estate` | `v3/schema.json` | Implementations that exchange a full estate document: the estate, its people, and everything attached to them |
-| `catalogue` | `v3/catalogue.json` | Catalogue-only implementations, e.g. living collectors cataloguing items, collections and valuations without the estate envelope |
+| `catalogue` | `v3/catalogue.json`, the catalogue profile of `v3/schema.json` | Catalogue-only implementations, e.g. living collectors cataloguing items, collections and valuations without the estate envelope |
 
 Rules:
 
 - **`root` is optional and defaults to `estate`.** Declarations written before the field existed claimed the estate root, and they are still valid.
 - **A catalogue-only implementation declares `"root": "catalogue"`.** Without it, the declaration claims the estate envelope, which a catalogue-only implementation does not produce. That claim would be false.
 - **A `catalogue` declaration cannot list `estate` under `entities`.** A catalogue document has no estate envelope, so there is no estate entity to have tested. The schema refuses such a declaration.
-- **Conformance levels apply to both roots.** Level 1 is schema validity against the declared root. Level 2 is referential integrity among the entities that root carries (e.g. assets to their collections, valuations and properties). Level 3 applies only where a jurisdiction extension is in scope.
-- **To claim both roots, publish two declarations,** one for each. A single declaration describes one root.
+- **Conformance levels apply to both profiles.** Level 1 is schema validity against the declared root. Level 2 is referential integrity among the entities that root carries (e.g. assets to their collections, valuations and properties). Level 3 applies only where a jurisdiction extension is in scope.
+- **To claim both profiles, publish two declarations,** one for each. A single declaration describes one profile.
 
 ## How to Generate a Declaration
 

@@ -30,8 +30,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   keeps all three identical. Proposal: `proposals/0002-asset-co-ownership.md`.
 
 - `root` on `conformance-declaration.json` (`estate` | `catalogue`, optional, default `estate`).
-  INHERIT has two document roots, `schema.json` and `catalogue.json`, but a declaration could not
-  say which one it covered. The only declaration available therefore claimed the full estate
+  A document conforms to the one root, `schema.json`, at the estate or the catalogue profile
+  (proposal 0003; the catalogue profile's rules are `catalogue.json`). A declaration could not say
+  which profile it covered. The only declaration available therefore claimed the full estate
   envelope, and a catalogue-only implementation could not declare conformance truthfully. A
   `catalogue` declaration cannot list `estate` under `entities`, because a catalogue document has
   no estate envelope. Optional, so every existing declaration stays valid.

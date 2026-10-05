@@ -38,6 +38,7 @@ Schema `$id`: `https://openinherit.org/v3/asset.json`
 | `acquisitionType` | one of `self_acquired`, `ancestral_joint`, `ancestral_severed`, `inherited`, `gifted`, `stridhan`, `communal`, `waqf_endowed` | | How this asset was acquired. Determines succession rules in Indian and other customary systems |
 | `registrationStatus` | one of `formally_registered`, `informally_held`, `community_acknowledged`, `disputed`, `undocumented` | | Whether ownership of this asset is formally registered or documented |
 | `ownershipEvidence` | one of `title_deed`, `certificate_of_occupancy`, `family_recognition`, `community_testimony`, `receipts_only`, `none` | | The type of evidence available to prove ownership of this asset |
+| `coOwnership` | `object` | | Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will |
 | `culturalDisposition` | [Cultural Disposition](common/cultural-disposition.md) | | Cultural, religious, and regulatory constraints on disposal of this asset |
 | `communalAuthority` | `object` | | The communal or family authority whose approval is required to dispose of this asset |
 | `successionRegime` | `object` | | The succession regime governing this specific asset. Overrides estate.defaultSuccessionRegime when present |

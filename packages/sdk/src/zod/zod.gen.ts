@@ -50,6 +50,846 @@ export const zProblemDetails = z.object({
 export const zIntegrityPath = z.string().max(200).regex(/^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)(\[\])?(\.[a-z][a-zA-Z0-9]*(\[\])?)*$/);
 
 /**
+ * Money
+ *
+ * Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+ */
+export const zMoney = z.strictObject({
+    amount: z.int().gte(-999999999999999).lte(999999999999999),
+    currency: z.string().regex(/^[A-Z]{3}$/),
+    exponent: z.int().gte(0).lte(4).optional().default(2)
+});
+
+/**
+ * Monetary amounts (integer minor units + currency)
+ */
+export const zMoney2 = zMoney;
+
+/**
+ * Financial Asset Properties
+ *
+ * Category-specific properties for financial assets: bank accounts, pensions, ISAs, shares, bonds, crypto wallets, insurance policies, debts receivable
+ */
+export const zFinancial = z.object({
+    shareholding: z.strictObject({
+        companyName: z.string().max(255).optional(),
+        companyNumber: z.string().max(255).optional(),
+        shareClass: z.string().max(255).optional(),
+        numberOfShares: z.int().gte(1).optional(),
+        totalSharesIssued: z.int().gte(1).optional(),
+        votingRights: z.boolean().optional(),
+        restrictedTransfer: z.boolean().optional(),
+        listedExchange: z.string().max(255).optional(),
+        ticker: z.string().max(255).optional(),
+        cusip: z.string().max(255).optional(),
+        isin: z.string().max(255).optional()
+    }).optional(),
+    businessInterest: z.strictObject({
+        businessName: z.string().max(255).optional(),
+        businessType: z.enum([
+            'sole_trader',
+            'partnership',
+            'llp',
+            'limited_company',
+            'plc',
+            'franchise',
+            'cooperative',
+            'other'
+        ]).optional(),
+        ownershipPercentage: z.number().gte(0).lte(100).optional(),
+        controllingInterest: z.boolean().optional(),
+        partnershipAgreement: z.boolean().optional(),
+        successionProvision: z.string().max(255).optional(),
+        annualTurnover: zMoney.optional(),
+        employees: z.int().gte(0).optional()
+    }).optional(),
+    pension: z.strictObject({
+        schemeType: z.enum([
+            'defined_benefit',
+            'defined_contribution',
+            'sipp',
+            'state_pension',
+            'annuity',
+            'drawdown',
+            'other'
+        ]).optional(),
+        provider: z.string().max(255).optional(),
+        policyReference: z.string().max(500).optional(),
+        nominatedBeneficiaries: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
+        nominationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        deathBenefitType: z.enum([
+            'lump_sum',
+            'dependants_pension',
+            'drawdown_transfer',
+            'annuity_guarantee',
+            'none'
+        ]).optional(),
+        crystallised: z.boolean().optional(),
+        lifetimeAllowanceUsed: z.number().gte(0).lte(100).optional(),
+        pensionType: z.union([
+            z.enum([
+                'occupational',
+                'personal',
+                'stakeholder',
+                'sipp',
+                'ssas',
+                'workplace',
+                'state',
+                'cpf',
+                'epf',
+                'other'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        pensionProviderOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        pensionMemberNumber: z.string().max(100).optional(),
+        deathBenefitNomination: z.strictObject({
+            nomineePersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+            nominationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+            nominationReviewDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+            nominationCurrent: z.boolean().optional(),
+            nominationExpiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+            benefitType: z.enum([
+                'lump_sum',
+                'income',
+                'pension',
+                'discretionary'
+            ]).optional(),
+            estimatedAmount: zMoney.optional()
+        }).optional(),
+        drawdownStartDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        pensionValuationAtDeath: z.strictObject({
+            estimatedValue: zMoney.optional(),
+            valuationMethod: z.string().max(255).optional(),
+            valuationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+        }).optional(),
+        annuityContinuation: z.strictObject({
+            annuityInForce: z.boolean().optional(),
+            annuityAmount: zMoney.optional(),
+            continuationOnDeath: z.enum([
+                'terminates',
+                'continues_to_spouse',
+                'continues_to_beneficiary',
+                'fixed_term'
+            ]).optional(),
+            continuationBeneficiaryPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
+        }).optional()
+    }).optional(),
+    insurancePolicy: z.strictObject({
+        policyType: z.enum([
+            'term_life',
+            'whole_life',
+            'endowment',
+            'critical_illness',
+            'income_protection',
+            'key_person',
+            'other'
+        ]).optional(),
+        provider: z.string().max(255).optional(),
+        policyReference: z.string().max(500).optional(),
+        sumAssured: zMoney.optional(),
+        writtenInTrust: z.boolean().optional(),
+        trusteeNames: z.array(z.string().max(500)).max(50).optional(),
+        beneficiaryPersonIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
+        premiumFrequency: z.enum([
+            'monthly',
+            'annual',
+            'single_premium',
+            'paid_up'
+        ]).optional(),
+        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+    }).optional(),
+    coOwnership: z.strictObject({
+        coOwnerPersonIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
+        ownershipType: z.enum([
+            'joint_tenants',
+            'tenants_in_common',
+            'community_property',
+            'partnership',
+            'other'
+        ]).optional(),
+        ownershipPercentage: z.number().gte(0).lte(100).optional(),
+        severanceDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+    }).optional(),
+    intellectualProperty: z.strictObject({
+        ipType: z.enum([
+            'patent',
+            'copyright',
+            'trademark',
+            'design_right',
+            'trade_secret',
+            'database_right',
+            'other'
+        ]).optional(),
+        registrationNumber: z.string().max(500).optional(),
+        registrationOffice: z.string().max(255).optional(),
+        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        annualRevenue: zMoney.optional(),
+        licensees: z.array(z.string().max(500)).max(50).optional()
+    }).optional(),
+    stockCompensation: z.strictObject({
+        compensationType: z.enum([
+            'iso',
+            'nso',
+            'rsu',
+            'espp',
+            'phantom_stock',
+            'sar',
+            'other'
+        ]).optional(),
+        grantDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        vestingSchedule: z.string().max(255).optional(),
+        vestedQuantity: z.int().gte(0).optional(),
+        unvestedQuantity: z.int().gte(0).optional(),
+        exercisePrice: zMoney.optional(),
+        expirationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        postDeathExerciseWindow: z.string().max(255).optional(),
+        acceleratesOnDeath: z.boolean().optional()
+    }).optional(),
+    debtReceivable: z.strictObject({
+        debtorName: z.string().max(255).optional(),
+        debtorPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        originalAmount: zMoney.optional(),
+        outstandingAmount: zMoney.optional(),
+        interestRate: z.number().gte(0).optional(),
+        secured: z.boolean().optional(),
+        documentRef: z.string().max(500).optional(),
+        collectibility: z.enum([
+            'likely',
+            'uncertain',
+            'doubtful',
+            'uncollectible'
+        ]).optional()
+    }).optional()
+});
+
+/**
+ * Financial asset category details (accounts, investments, pensions)
+ */
+export const zAssetCategoryFinancial = zFinancial;
+
+/**
+ * Vehicle Asset Properties
+ *
+ * Category-specific properties for vehicles: cars, motorcycles, boats, caravans, classic vehicles
+ */
+export const zVehicle = z.object({
+    vehicle: z.strictObject({
+        registrationNumber: z.string().max(20).optional(),
+        vin: z.string().regex(/^[A-HJ-NPR-Z0-9]{17}$/).optional(),
+        make: z.string().max(100).optional(),
+        model: z.string().max(255).optional(),
+        variant: z.string().max(255).optional(),
+        yearOfManufacture: z.int().gte(1886).lte(2100).optional(),
+        dateOfFirstRegistration: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        colour: z.string().max(50).optional(),
+        fuelType: z.union([
+            z.enum([
+                'petrol',
+                'diesel',
+                'electric',
+                'hybrid_petrol',
+                'hybrid_diesel',
+                'lpg',
+                'other'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        engineCapacity: z.int().gte(0).lte(20000).optional(),
+        co2Emissions: z.int().gte(0).optional(),
+        vehicleType: z.union([
+            z.enum([
+                'car',
+                'motorcycle',
+                'van',
+                'motorhome',
+                'trike',
+                'sidecar_outfit',
+                'other'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        isClassic: z.boolean().optional(),
+        keeperStatus: z.union([
+            z.enum([
+                'registered_keeper',
+                'not_registered_keeper',
+                'unknown'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        v5cStatus: z.union([
+            z.enum([
+                'held',
+                'missing',
+                'applied_for',
+                'with_dvla'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        financeType: z.union([
+            z.enum([
+                'none',
+                'hp',
+                'pcp',
+                'lease',
+                'loan',
+                'unknown'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        sornDeclared: z.boolean().optional(),
+        deathActions: z.strictObject({
+            dvlaNotified: z.boolean().optional(),
+            dvlaNotifiedAt: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+            insurerNotified: z.boolean().optional(),
+            insurerNotifiedAt: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+            financeCompanyNotified: z.boolean().optional(),
+            financeSettled: z.boolean().optional(),
+            taxRefundClaimed: z.boolean().optional(),
+            intendedDisposal: z.union([
+                z.enum([
+                    'transfer_to_beneficiary',
+                    'sell',
+                    'scrap',
+                    'sorn_and_store',
+                    'undecided'
+                ]),
+                z.string().max(100).regex(/^x-inherit-.+/)
+            ]).optional()
+        }).optional()
+    }).optional(),
+    vehicleCheck: z.strictObject({
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        motExpiry: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        motStatus: z.union([
+            z.enum([
+                'valid',
+                'expired',
+                'no_mot_required',
+                'sorn'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        lastMileage: z.int().gte(0).optional(),
+        lastMileageDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        advisoryCount: z.int().gte(0).optional(),
+        failureCount: z.int().gte(0).optional(),
+        taxStatus: z.union([
+            z.enum([
+                'taxed',
+                'untaxed',
+                'sorn',
+                'not_taxed_for_on_road_use'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        taxDueDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        insuranceStatus: z.union([
+            z.enum([
+                'insured',
+                'not_insured',
+                'unknown'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        financeOutstanding: z.boolean().optional(),
+        financeSettlementAmount: z.int().gte(0).optional(),
+        writeOffCategory: z.union([
+            z.enum([
+                'A',
+                'B',
+                'S',
+                'N',
+                'none'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        stolenStatus: z.union([
+            z.enum([
+                'clear',
+                'reported_stolen',
+                'unknown'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        previousKeepers: z.int().gte(0).optional(),
+        plateChanges: z.int().gte(0).optional(),
+        mileageAnomaly: z.boolean().optional()
+    }).optional()
+});
+
+/**
+ * Vehicle asset category details (cars, boats, aircraft)
+ */
+export const zAssetCategoryVehicle = zVehicle;
+
+/**
+ * Digital Asset Properties
+ *
+ * Category-specific properties for digital assets: domains, social media, subscriptions, crypto wallets, cloud storage, NFTs, gaming accounts
+ */
+export const zDigital = z.object({
+    digitalAccess: z.strictObject({
+        username: z.string().max(255).optional(),
+        passwordStorageLocation: z.string().max(500).optional(),
+        passwordManager: z.string().max(255).optional(),
+        twoFactorEnabled: z.boolean().optional(),
+        recoveryMethods: z.array(z.strictObject({
+            type: z.enum([
+                'backup_codes',
+                'email',
+                'phone',
+                'security_key'
+            ]).optional(),
+            location: z.string().max(500).optional()
+        })).max(20).optional(),
+        platformDeathPolicy: z.union([
+            z.enum([
+                'memorialise',
+                'delete',
+                'transfer',
+                'archive',
+                'unknown'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        legacyContactConfigured: z.boolean().optional(),
+        legacyContactPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
+    }).optional(),
+    socialMedia: z.strictObject({
+        platform: z.union([
+            z.enum([
+                'facebook',
+                'instagram',
+                'tiktok',
+                'twitter_x',
+                'linkedin',
+                'threads',
+                'youtube',
+                'pinterest',
+                'other'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        username: z.string().max(255).optional(),
+        url: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+        followerCount: z.int().gte(0).optional(),
+        monetised: z.boolean().optional(),
+        postDeathAction: z.union([
+            z.enum([
+                'memorialise',
+                'delete',
+                'transfer',
+                'archive',
+                'unknown'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        transferToPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
+    }).optional(),
+    cryptoAccess: z.strictObject({
+        blockchain: z.union([
+            z.enum([
+                'bitcoin',
+                'ethereum',
+                'solana',
+                'cardano',
+                'other'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        walletType: z.enum([
+            'hardware',
+            'software',
+            'exchange',
+            'custodian',
+            'paper'
+        ]).optional(),
+        walletAddress: z.string().max(255).optional(),
+        privateKeyLocation: z.string().max(500).optional(),
+        seedPhraseLocation: z.string().max(500).optional(),
+        exchangeOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        costBasis: zMoney.optional()
+    }).optional(),
+    cloudStorage: z.strictObject({
+        provider: z.union([
+            z.enum([
+                'google_drive',
+                'onedrive',
+                'icloud',
+                'dropbox',
+                'aws_s3',
+                'other'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        storageUsed: z.string().max(50).optional(),
+        importantFolders: z.array(z.strictObject({
+            name: z.string().max(255).optional(),
+            contents: z.string().max(500).optional(),
+            action: z.enum([
+                'archive',
+                'delete',
+                'transfer'
+            ]).optional()
+        })).max(50).optional(),
+        familyPhotoAccess: z.boolean().optional()
+    }).optional(),
+    domainNameAccess: z.strictObject({
+        domainName: z.string().max(255).optional(),
+        registrar: z.string().max(255).optional(),
+        registrantOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        autoRenew: z.boolean().optional(),
+        transferLocked: z.boolean().optional(),
+        authCodeLocation: z.string().max(500).optional(),
+        nameservers: z.array(z.string()).max(20).optional()
+    }).optional(),
+    nftAccess: z.strictObject({
+        blockchain: z.union([
+            z.enum([
+                'bitcoin',
+                'ethereum',
+                'solana',
+                'cardano',
+                'polygon',
+                'other'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        contractAddress: z.string().max(255).optional(),
+        tokenId: z.string().max(255).optional(),
+        tokenStandard: z.union([
+            z.enum([
+                'erc_721',
+                'erc_1155',
+                'other'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        marketplace: z.string().max(255).optional(),
+        marketplaceUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+        metadataUri: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional()
+    }).optional(),
+    monetisedContentAccess: z.strictObject({
+        platform: z.union([
+            z.enum([
+                'youtube',
+                'substack',
+                'etsy',
+                'patreon',
+                'twitch',
+                'spotify',
+                'medium',
+                'other'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        channelUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+        channelName: z.string().max(255).optional(),
+        subscriberCount: z.int().gte(0).optional(),
+        monthlyRevenue: zMoney.optional(),
+        monetisationStatus: z.union([
+            z.enum([
+                'active',
+                'suspended',
+                'demonetised',
+                'pending',
+                'none'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        contentType: z.union([
+            z.enum([
+                'video',
+                'audio',
+                'written',
+                'mixed',
+                'other'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        revenueModel: z.union([
+            z.enum([
+                'advertising',
+                'subscription',
+                'tips',
+                'affiliate',
+                'merchandise',
+                'mixed'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional()
+    }).optional(),
+    loyaltyAccess: z.strictObject({
+        programme: z.string().max(255).optional(),
+        programmeProvider: z.string().max(255).optional(),
+        pointsBalance: z.int().gte(0).optional(),
+        cashEquivalent: zMoney.optional(),
+        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        transferable: z.boolean().optional(),
+        transferUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional()
+    }).optional(),
+    gamingAccess: z.strictObject({
+        platform: z.union([
+            z.enum([
+                'steam',
+                'xbox',
+                'playstation',
+                'nintendo',
+                'epic',
+                'roblox',
+                'other'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        accountName: z.string().max(255).optional(),
+        virtualCurrencyBalance: z.int().gte(0).optional(),
+        virtualCurrencyName: z.string().max(100).optional(),
+        transferable: z.boolean().optional(),
+        estimatedRealValue: zMoney.optional()
+    }).optional(),
+    platformDelegation: z.strictObject({
+        action: z.union([
+            z.enum([
+                'memorialise',
+                'delete',
+                'transfer',
+                'archive',
+                'deactivate',
+                'preserve'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]),
+        delayDuration: z.string().regex(/^P(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$/).optional(),
+        transferToPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        specificInstructions: z.string().max(500).optional(),
+        platformToolConfigured: z.boolean().optional(),
+        platformToolType: z.union([
+            z.enum([
+                'inactive_account_manager',
+                'legacy_contact',
+                'digital_legacy',
+                'memorialisation_request',
+                'none',
+                'other'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        configuredDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+    }).optional(),
+    fiduciaryAccess: z.strictObject({
+        accessMethod: z.union([
+            z.enum([
+                'designated_recipient',
+                'legacy_contact',
+                'inactive_account_manager',
+                'court_order',
+                'rufadaa_request',
+                'platform_form',
+                'credential_sharing',
+                'none'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]),
+        accessConfigured: z.boolean().optional(),
+        designatedRecipientPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        accessScope: z.union([
+            z.enum([
+                'catalogue_only',
+                'full_content',
+                'restricted',
+                'unknown'
+            ]),
+            z.string().regex(/^x-inherit-.+/)
+        ]).optional(),
+        termsOfServiceUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+        termsOfServiceConstraints: z.string().max(500).optional()
+    }).optional()
+});
+
+/**
+ * Digital asset category details (crypto, accounts, domains)
+ */
+export const zAssetCategoryDigital = zDigital;
+
+/**
+ * Business Asset Properties
+ *
+ * Category-specific properties for business assets: partnerships, company holdings, intellectual property, stock compensation
+ */
+export const zBusiness = z.object({
+    businessInterest: z.strictObject({
+        businessName: z.string().max(255).optional(),
+        businessType: z.enum([
+            'sole_trader',
+            'partnership',
+            'llp',
+            'limited_company',
+            'plc',
+            'franchise',
+            'cooperative',
+            'other'
+        ]).optional(),
+        ownershipPercentage: z.number().gte(0).lte(100).optional(),
+        controllingInterest: z.boolean().optional(),
+        partnershipAgreement: z.boolean().optional(),
+        successionProvision: z.string().max(255).optional(),
+        annualTurnover: zMoney.optional(),
+        employees: z.int().gte(0).optional()
+    }).optional(),
+    intellectualProperty: z.strictObject({
+        ipType: z.enum([
+            'patent',
+            'copyright',
+            'trademark',
+            'design_right',
+            'trade_secret',
+            'database_right',
+            'other'
+        ]).optional(),
+        registrationNumber: z.string().max(500).optional(),
+        registrationOffice: z.string().max(255).optional(),
+        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        annualRevenue: zMoney.optional(),
+        licensees: z.array(z.string().max(500)).max(50).optional()
+    }).optional(),
+    stockCompensation: z.strictObject({
+        compensationType: z.enum([
+            'iso',
+            'nso',
+            'rsu',
+            'espp',
+            'phantom_stock',
+            'sar',
+            'other'
+        ]).optional(),
+        grantDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        vestingSchedule: z.string().max(255).optional(),
+        vestedQuantity: z.int().gte(0).optional(),
+        unvestedQuantity: z.int().gte(0).optional(),
+        exercisePrice: zMoney.optional(),
+        expirationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        postDeathExerciseWindow: z.string().max(255).optional(),
+        acceleratesOnDeath: z.boolean().optional()
+    }).optional(),
+    coOwnership: z.strictObject({
+        coOwnerPersonIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
+        ownershipType: z.enum([
+            'joint_tenants',
+            'tenants_in_common',
+            'community_property',
+            'partnership',
+            'other'
+        ]).optional(),
+        ownershipPercentage: z.number().gte(0).lte(100).optional(),
+        severanceDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+    }).optional()
+});
+
+/**
+ * Business asset category details (shares, partnerships, sole trader)
+ */
+export const zAssetCategoryBusiness = zBusiness;
+
+/**
+ * General Asset Properties
+ *
+ * Category-specific properties for general tangible assets: art, antiques, jewellery, collectibles, books, wine, clothing, firearms, musical instruments, property contents
+ */
+export const zGeneral = z.object({
+    stolenArtCheck: z.strictObject({
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        result: z.union([
+            z.enum([
+                'clear',
+                'flagged',
+                'inconclusive'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        certificateReference: z.string().max(100).optional(),
+        certificateUrl: z.url().max(2048).regex(/^https?:\/\//).optional(),
+        checkedBy: z.string().max(255).optional()
+    }).optional(),
+    gemologicalCertificate: z.strictObject({
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        laboratory: z.union([
+            z.enum([
+                'gia',
+                'ags',
+                'igi',
+                'hrd',
+                'egl'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        certificateNumber: z.string().max(100).optional(),
+        verificationUrl: z.url().max(2048).regex(/^https?:\/\//).optional(),
+        stoneType: z.string().max(100).optional(),
+        caratWeight: z.number().gte(0).optional(),
+        colourGrade: z.string().max(50).optional(),
+        clarityGrade: z.string().max(50).optional(),
+        cutGrade: z.string().max(50).optional()
+    }).optional()
+});
+
+/**
+ * General asset category details (personal property, collectibles)
+ */
+export const zAssetCategoryGeneral = zGeneral;
+
+/**
+ * Identifier
+ *
+ * A typed external identifier. Use 'system' to namespace identifiers and prevent collisions across jurisdictions and organisations
+ */
+export const zIdentifier = z.strictObject({
+    system: z.string().max(100).optional(),
+    value: z.string().min(1).max(255),
+    type: z.string().max(100).optional()
+});
+
+/**
+ * External identifiers (NI number, passport, etc.)
+ */
+export const zIdentifier2 = zIdentifier;
+
+/**
+ * Media
+ *
+ * A media attachment — photograph, video, or document scan. Used for identification, valuation, condition documentation, and provenance records
+ */
+export const zMedia = z.strictObject({
+    url: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//),
+    caption: z.string().max(255).optional(),
+    mediaType: z.string().max(100).optional(),
+    content: z.string().max(10485760).optional(),
+    viewType: z.enum([
+        'overview',
+        'identification',
+        'condition',
+        'provenance',
+        'maker_mark',
+        'serial_number',
+        'damage',
+        'scale_reference',
+        'label',
+        'certificate',
+        'receipt',
+        'environment'
+    ]).optional(),
+    takenAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+    thumbnailUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional()
+});
+
+/**
+ * Media attachments (images, documents, audio)
+ */
+export const zMedia2 = zMedia;
+
+/**
  * Jurisdiction
  *
  * A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
@@ -74,6 +914,2288 @@ export const zJurisdiction = z.strictObject({
  * ISO 3166-2 jurisdiction codes
  */
 export const zJurisdiction2 = zJurisdiction;
+
+/**
+ * Cultural Disposition
+ *
+ * Cultural, religious, and regulatory constraints on how an asset or property may be disposed of. Covers sacred status, disposal restrictions, export controls, and whether the item can be bequeathed
+ */
+export const zCulturalDisposition = z.strictObject({
+    sacredStatus: z.enum([
+        'secular',
+        'consecrated',
+        'ritually_significant',
+        'inalienable_endowment'
+    ]).optional(),
+    culturalSignificance: z.enum([
+        'personal',
+        'family_heirloom',
+        'community',
+        'national_heritage'
+    ]).optional(),
+    bequeathable: z.boolean().optional().default(true),
+    disposalRestrictions: z.array(z.strictObject({
+        authority: z.string().max(255).optional(),
+        authorityType: z.enum([
+            'religious_body',
+            'family_council',
+            'clan_association',
+            'tribal_council',
+            'government',
+            'heritage_authority'
+        ]).optional(),
+        requirement: z.string().min(1).max(255),
+        jurisdiction: zJurisdiction.optional()
+    })).max(100).optional(),
+    exportRestrictions: z.array(z.strictObject({
+        jurisdiction: zJurisdiction,
+        restrictionType: z.enum([
+            'cultural_property',
+            'national_treasure',
+            'antiquity',
+            'protected_species',
+            'controlled_goods'
+        ]),
+        authority: z.string().max(255).optional(),
+        licenceRequired: z.boolean().optional(),
+        notes: z.string().max(2000).optional()
+    })).max(100).optional()
+});
+
+/**
+ * Cultural and religious disposition preferences
+ */
+export const zCulturalDisposition2 = zCulturalDisposition;
+
+/**
+ * Visibility
+ *
+ * Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records
+ */
+export const zVisibility = z.enum([
+    'testator_only',
+    'proxy_visible',
+    'companion_visible',
+    'executor_visible',
+    'beneficiary_visible',
+    'all_parties'
+]).default('all_parties');
+
+/**
+ * Access control visibility rules for an entity
+ */
+export const zVisibility2 = zVisibility;
+
+/**
+ * FieldProvenance
+ *
+ * Records how a specific field's value was obtained — manual entry, AI extraction, import, OCR, or computation
+ */
+export const zFieldProvenance = z.strictObject({
+    field: z.string().min(1).max(255),
+    method: z.union([
+        z.enum([
+            'manual_entry',
+            'ai_extracted',
+            'imported',
+            'computed',
+            'ocr_scanned'
+        ]),
+        z.string().regex(/^x-inherit-.+/)
+    ]),
+    confidence: z.int().gte(0).lte(100).optional(),
+    verifiedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+    verifiedBy: z.string().max(255).optional(),
+    sourceDocumentId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    sourcePageNumber: z.int().gte(1).optional(),
+    sourceRegion: z.string().max(255).optional(),
+    originalText: z.string().max(2000).optional(),
+    originalScript: z.union([
+        z.enum([
+            'latin',
+            'kanji',
+            'hiragana',
+            'katakana',
+            'arabic',
+            'hebrew',
+            'devanagari',
+            'tamil',
+            'chinese_simplified',
+            'chinese_traditional',
+            'hangul',
+            'cyrillic',
+            'thai',
+            'mixed',
+            'other'
+        ]),
+        z.string().regex(/^x-inherit-.+/)
+    ]).optional(),
+    ocrEngine: z.string().max(255).optional(),
+    extractedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+    dataSource: z.strictObject({
+        source: z.string().max(100).optional(),
+        sourceUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional()
+    }).optional()
+});
+
+/**
+ * Field-level provenance tracking
+ */
+export const zFieldProvenance2 = zFieldProvenance;
+
+/**
+ * AiProvenance
+ *
+ * Records which AI model produced a piece of data and whether a human has verified it. Basic provenance is in INHERIT core; implementation-specific detail (exact model version, pipeline, reasoning, cost) should use x-inherit-* extension properties
+ */
+export const zAiProvenance = z.object({
+    model: z.union([
+        z.enum([
+            'claude',
+            'gpt',
+            'gemini',
+            'grok',
+            'llama',
+            'mistral',
+            'other'
+        ]),
+        z.string().regex(/^x-inherit-.+/)
+    ]).optional(),
+    confidence: z.int().gte(0).lte(100).optional(),
+    generatedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+    humanReviewed: z.boolean().optional(),
+    reviewedBy: z.string().max(255).optional(),
+    reviewedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional()
+});
+
+/**
+ * Provenance metadata for AI-generated content
+ */
+export const zAiProvenance2 = zAiProvenance;
+
+/**
+ * Provenance
+ *
+ * Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
+ */
+export const zProvenance = z.strictObject({
+    source: z.enum([
+        'import',
+        'manual',
+        'ai_generated'
+    ]).optional(),
+    confidence: z.number().gte(0).lte(1).optional(),
+    importSourceId: z.string().max(255).optional(),
+    aiProvenance: zAiProvenance.optional(),
+    humanVerdict: z.enum([
+        'approved',
+        'rejected',
+        'modified',
+        'pending_review'
+    ]).optional(),
+    rejectionReason: z.string().max(2000).optional(),
+    verdictAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+    agentTaskId: z.string().max(255).optional()
+});
+
+/**
+ * Document or asset provenance chain
+ */
+export const zProvenance2 = zProvenance;
+
+/**
+ * A single service, maintenance, or restoration record for a mechanical or valuable item. Used for watches, vehicles, clocks, musical instruments, and any item with a service lifecycle
+ */
+export const zServiceRecord = z.strictObject({
+    serviceDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/),
+    provider: z.string().max(255).optional(),
+    description: z.string().max(2000).optional(),
+    cost: zMoney.optional(),
+    documentReference: z.string().max(255).optional()
+});
+
+/**
+ * Asset
+ *
+ * A non-property asset: financial accounts, personal property, vehicles, digital assets, business interests, Islamic finance instruments, etc
+ */
+export const zAsset = z.intersection(z.unknown(), z.object({
+    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    name: z.string().min(1).max(255),
+    category: z.enum([
+        'financial',
+        'vehicle',
+        'digital',
+        'business',
+        'property_contents',
+        'jewellery_watches',
+        'art',
+        'antiques',
+        'collectibles',
+        'musical_instruments',
+        'books_manuscripts',
+        'wine_spirits',
+        'clothing_textiles',
+        'firearms_sporting',
+        'islamic_financial',
+        'other'
+    ]),
+    subcategory: z.string().max(100).optional(),
+    estimatedValue: zMoney.optional(),
+    professionalValuation: zMoney.optional(),
+    netEquity: zMoney.optional(),
+    inNegativeEquity: z.boolean().optional(),
+    valuationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    valuationConfidence: z.enum([
+        'estimated',
+        'professional',
+        'official',
+        'unknown'
+    ]).optional(),
+    condition: z.enum([
+        'excellent',
+        'good',
+        'fair',
+        'poor',
+        'unknown',
+        'not_applicable'
+    ]).optional(),
+    quantity: z.int().gte(1).optional(),
+    location: z.string().max(255).optional(),
+    propertyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    assetCollectionId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    spaceId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
+    identifiers: z.array(zIdentifier).max(100).optional(),
+    externalLinks: z.array(z.strictObject({
+        system: z.string().max(100).regex(/^[a-z][a-zA-Z0-9]*$/),
+        id: z.string().min(1).max(500),
+        url: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+        label: z.string().max(255).optional(),
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional()
+    })).max(50).optional(),
+    productPage: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+    provenanceChain: z.array(z.strictObject({
+        description: z.string().min(1).max(2000),
+        ownerName: z.string().max(255).optional(),
+        fromDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        toDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        acquisitionMethod: z.enum([
+            'purchase',
+            'inheritance',
+            'gift',
+            'commission',
+            'restitution',
+            'auction',
+            'unknown'
+        ]).optional(),
+        source: z.string().max(500).optional(),
+        evidenceUrl: z.url().max(2048).regex(/^https?:\/\//).optional()
+    })).max(100).optional(),
+    images: z.array(zMedia).max(100).optional(),
+    possessionStatus: z.enum([
+        'possessed_at_death',
+        'receivable',
+        'contingent'
+    ]).optional(),
+    mobilityType: z.enum([
+        'immoveable',
+        'moveable',
+        'mixed'
+    ]).optional(),
+    acquisitionType: z.enum([
+        'self_acquired',
+        'ancestral_joint',
+        'ancestral_severed',
+        'inherited',
+        'gifted',
+        'stridhan',
+        'communal',
+        'waqf_endowed'
+    ]).optional(),
+    registrationStatus: z.enum([
+        'formally_registered',
+        'informally_held',
+        'community_acknowledged',
+        'disputed',
+        'undocumented'
+    ]).optional(),
+    ownershipEvidence: z.enum([
+        'title_deed',
+        'certificate_of_occupancy',
+        'family_recognition',
+        'community_testimony',
+        'receipts_only',
+        'none'
+    ]).optional(),
+    culturalDisposition: zCulturalDisposition.optional(),
+    communalAuthority: z.strictObject({
+        authorityType: z.enum([
+            'family_council',
+            'clan_association',
+            'religious_body',
+            'tribal_council',
+            'government'
+        ]).optional(),
+        approvalRequired: z.boolean().optional(),
+        authorityName: z.string().max(255).optional(),
+        jurisdiction: zJurisdiction.optional()
+    }).optional(),
+    successionRegime: z.strictObject({
+        governingLaw: z.strictObject({
+            jurisdiction: zJurisdiction.optional(),
+            legalTradition: z.enum([
+                'common_law',
+                'civil_law',
+                'mixed',
+                'customary_law',
+                'islamic_law',
+                'hindu_law',
+                'jewish_law',
+                'canon_law'
+            ]).optional(),
+            statute: z.string().max(255).optional(),
+            section: z.string().max(255).optional()
+        }).optional(),
+        determinedBy: z.enum([
+            'domicile',
+            'situs',
+            'nationality',
+            'personal_status',
+            'choice_of_law',
+            'treaty'
+        ]).optional(),
+        binding: z.boolean().optional(),
+        extensions: z.array(z.string().max(500)).max(50).optional(),
+        notes: z.string().max(2000).optional()
+    }).optional(),
+    beneficiaryDesignation: z.strictObject({
+        primaryBeneficiaryPersonIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
+        contingentBeneficiaryPersonIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
+        designationType: z.enum([
+            'retirement_account',
+            'life_insurance',
+            'superannuation',
+            'pod_account',
+            'other'
+        ]).optional(),
+        linkedNonprobateTransferId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
+    }).optional(),
+    digitalAccessConsent: z.strictObject({
+        consentGiven: z.boolean().optional(),
+        scope: z.enum([
+            'full_access',
+            'limited_access',
+            'no_access'
+        ]).optional(),
+        designatedRecipientPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        designatedRecipientPersonIdDisplay: z.string().max(255).optional(),
+        onlineToolDirective: z.boolean().optional()
+    }).optional(),
+    passesOutsideEstate: z.boolean().optional(),
+    notes: z.string().max(2000).optional(),
+    description: z.string().max(2000).optional(),
+    brand: z.union([
+        z.string().max(255),
+        z.strictObject({
+            name: z.string().max(255),
+            wikidataId: z.string().max(20).regex(/^Q[1-9][0-9]*$/).optional(),
+            website: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional()
+        })
+    ]).optional(),
+    model: z.string().max(255).optional(),
+    purchaseDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    originalPackaging: z.enum([
+        'complete',
+        'partial',
+        'box_only',
+        'papers_only',
+        'none',
+        'unknown'
+    ]).optional(),
+    custodian: z.strictObject({
+        name: z.string().max(255).optional(),
+        contactEmail: z.email().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).optional(),
+        contactPhone: z.string().max(255).optional(),
+        relationship: z.string().max(255).optional(),
+        reference: z.string().max(500).optional()
+    }).optional(),
+    conditionSystem: z.union([
+        z.enum([
+            'goldmine',
+            'sheldon',
+            'ags',
+            'bsc',
+            'gia',
+            'watch_trade',
+            'classic_vehicle',
+            'book_trade'
+        ]),
+        z.string().max(100).regex(/^x-inherit-.+/)
+    ]).optional(),
+    conditionGrade: z.string().max(100).optional(),
+    conditionStandard: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+    urgency: z.enum([
+        'immediate',
+        'within_7_days',
+        'within_30_days',
+        'none'
+    ]).optional(),
+    urgencyReason: z.string().max(2000).optional(),
+    containedInAssetId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    insurance: z.strictObject({
+        provider: z.string().max(255).optional(),
+        policyReference: z.string().max(500).optional(),
+        insuredValue: zMoney.optional(),
+        renewalDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        notes: z.string().max(2000).optional()
+    }).optional(),
+    purchasedFrom: z.string().max(255).optional(),
+    splitFrom: z.strictObject({
+        entityType: z.enum(['asset', 'asset_collection']),
+        entityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+        splitAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        reason: z.string().max(2000).optional()
+    }).optional(),
+    dataProvenance: z.enum([
+        'manual_entry',
+        'ai_extracted',
+        'ocr_scanned',
+        'imported',
+        'migrated',
+        'system_generated'
+    ]).optional(),
+    searchTerms: z.array(z.string().max(500)).max(50).optional(),
+    comparableSearchProfile: z.strictObject({
+        platforms: z.array(z.string().max(500)).max(50).optional(),
+        searchQuery: z.string().max(255).optional(),
+        filters: z.record(z.string(), z.string().max(255)).optional(),
+        excludePlatforms: z.array(z.string().max(500)).max(50).optional(),
+        lastSearchedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+        searchFrequency: z.enum([
+            'once',
+            'weekly',
+            'monthly',
+            'on_demand'
+        ]).optional()
+    }).optional(),
+    suggestedSubcategory: z.string().max(255).optional(),
+    valuationReliability: z.int().gte(0).lte(100).optional(),
+    lastVerifiedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+    verifiedBy: z.string().max(255).optional(),
+    visibility: zVisibility.optional(),
+    fieldProvenance: z.array(zFieldProvenance).max(100).optional(),
+    comments: z.array(z.strictObject({
+        id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+        authorPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        authorPersonIdDisplay: z.string().max(255).optional(),
+        content: z.string().min(1).max(5000),
+        createdAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        visibility: zVisibility.optional()
+    })).max(100).optional(),
+    mergedInto: z.strictObject({
+        entityType: z.enum(['asset', 'asset_collection']).optional(),
+        entityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        mergedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+        reason: z.string().max(2000).optional()
+    }).optional(),
+    spaceIdDisplay: z.string().max(255).optional(),
+    provenance: zProvenance.optional(),
+    applicableLaw: zJurisdiction.optional(),
+    taxTreatment: z.strictObject({
+        jurisdiction: zJurisdiction.optional(),
+        assetType: z.enum([
+            'immoveable',
+            'moveable',
+            'mixed',
+            'exempt'
+        ]).optional(),
+        exemptions: z.array(z.string().max(100)).optional(),
+        reliefClaimed: z.array(z.string().max(100)).optional()
+    }).optional(),
+    accessInstructions: z.strictObject({
+        accessType: z.string().max(100).optional(),
+        platform: z.string().max(255).optional(),
+        visibility: zVisibility.optional(),
+        requiredRole: z.string().max(50).optional(),
+        steps: z.array(z.strictObject({
+            step: z.int().gte(1),
+            method: z.string().min(1).max(100),
+            description: z.string().max(500).optional(),
+            location: z.string().max(500).optional(),
+            holderPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
+        })).optional(),
+        memorialisation: z.strictObject({
+            preference: z.enum([
+                'transfer_to_beneficiary',
+                'memorialise',
+                'delete',
+                'archive',
+                'no_preference'
+            ]).optional(),
+            instructions: z.string().max(1000).optional()
+        }).optional(),
+        lastVerified: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        verifiedBy: z.string().max(255).optional()
+    }).optional(),
+    ownerIntent: z.enum([
+        'keeping',
+        'considering',
+        'thinning',
+        'listed',
+        'sold',
+        'allocated',
+        'donated'
+    ]).optional(),
+    listings: z.array(z.strictObject({
+        channel: z.enum([
+            'ebay',
+            'amazon',
+            'shopify',
+            'etsy',
+            'own_website',
+            'auction_house',
+            'other'
+        ]),
+        channelName: z.string().max(255).optional(),
+        listingId: z.string().max(255).optional(),
+        listingUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+        status: z.enum([
+            'draft',
+            'active',
+            'sold',
+            'withdrawn',
+            'expired'
+        ]),
+        askingPrice: zMoney.optional(),
+        listedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+        soldAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).nullish(),
+        soldPrice: zMoney.optional()
+    })).max(20).optional(),
+    serviceHistory: z.array(zServiceRecord).max(100).optional(),
+    insuranceCover: z.strictObject({
+        insurer: z.string().max(255).optional(),
+        policyNumber: z.string().max(100).optional(),
+        policyType: z.enum([
+            'home_contents',
+            'specialist_collectibles',
+            'classic_vehicle',
+            'individual_item',
+            'fine_art',
+            'jewellery',
+            'other'
+        ]).optional(),
+        agreedValue: zMoney.optional(),
+        coverConfirmedAt: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+    }).optional(),
+    shippingClass: z.enum([
+        'parcel',
+        'large_item',
+        'specialist_transport',
+        'collection_only'
+    ]).optional(),
+    includedDocuments: z.array(z.union([z.enum([
+            'outer_box',
+            'inner_box',
+            'warranty_card',
+            'cosc_certificate',
+            'instruction_manual',
+            'hang_tags',
+            'service_booklet',
+            'purchase_receipt',
+            'original_invoice',
+            'v5c_logbook',
+            'mot_certificate',
+            'provenance_letter',
+            'certificate_of_authenticity',
+            'appraisal_certificate',
+            'export_licence',
+            'customs_declaration'
+        ]), z.string().max(100).regex(/^x-inherit-.+/)])).max(30).optional(),
+    taxReliefEligibility: z.strictObject({
+        reliefType: z.enum([
+            'agricultural_property',
+            'business_property',
+            'woodland',
+            'heritage',
+            'charitable'
+        ]).optional(),
+        eligible: z.boolean().optional(),
+        percentage: z.int().gte(0).lte(100).optional(),
+        conditions: z.string().max(500).optional(),
+        jurisdiction: zJurisdiction.optional(),
+        statute: z.string().max(500).optional()
+    }).optional(),
+    significance: z.strictObject({
+        type: z.enum([
+            'sentimental',
+            'cultural',
+            'religious',
+            'historical',
+            'family_heirloom',
+            'professional'
+        ]).optional(),
+        description: z.string().max(1000).optional(),
+        restrictionOnDisposal: z.strictObject({
+            exists: z.boolean().optional(),
+            nature: z.string().max(500).optional()
+        }).optional()
+    }).optional()
+}));
+
+/**
+ * Non-property assets (bank accounts, investments, etc.)
+ */
+export const zAsset2 = zAsset;
+
+/**
+ * Asset Collection
+ *
+ * A named group of related assets — e.g. a model railway collection, vinyl record library, or art portfolio. Lets families and dealers understand which items belong together and should be considered as a set
+ */
+export const zAssetCollection = z.object({
+    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    rootDocumentId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    name: z.string().min(1).max(255),
+    description: z.string().max(2000).optional(),
+    category: z.enum([
+        'model_railways',
+        'vinyl_records',
+        'art',
+        'jewellery',
+        'wine',
+        'stamps',
+        'coins',
+        'books',
+        'musical_instruments',
+        'fishing_gear',
+        'handbags',
+        'power_tools',
+        'watches',
+        'ceramics',
+        'memorabilia',
+        'other'
+    ]).optional(),
+    estimatedValue: zMoney.optional(),
+    valuationSource: z.enum([
+        'self_estimated',
+        'dealer_valuation',
+        'auction_estimate',
+        'insurance_value'
+    ]).optional(),
+    valuationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    disposalWishes: z.string().max(255).optional(),
+    disposalStrategy: z.enum([
+        'keep_together',
+        'sell_as_collection',
+        'sell_individually',
+        'auction',
+        'donate',
+        'gift_to_person',
+        'dealer_bids',
+        'mixed',
+        'undecided'
+    ]).optional(),
+    minimumAcceptableValue: zMoney.optional(),
+    preferredDisposalMethod: z.enum([
+        'private_sale',
+        'auction_house',
+        'dealer_network',
+        'online_marketplace',
+        'specialist_fair',
+        'museum_acquisition',
+        'other'
+    ]).optional(),
+    specialistDealerNotes: z.string().max(2000).optional(),
+    notes: z.string().max(2000).optional(),
+    images: z.array(zMedia).max(100).optional(),
+    splitFrom: z.strictObject({
+        entityType: z.enum(['asset', 'asset_collection']),
+        entityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+        splitAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        reason: z.string().max(2000).optional()
+    }).optional(),
+    disposalHistory: z.array(z.strictObject({
+        assetId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        disposalMethod: z.enum([
+            'sold_as_collection',
+            'sold_individually',
+            'gifted_to_beneficiary',
+            'donated',
+            'kept',
+            'other'
+        ]).optional(),
+        proceeds: zMoney.optional(),
+        recipientPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        recipientPersonIdDisplay: z.string().max(255).optional(),
+        recipientOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        recipientOrganisationIdDisplay: z.string().max(255).optional(),
+        date: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        notes: z.string().max(2000).optional()
+    })).max(500).optional(),
+    mergedInto: z.strictObject({
+        entityType: z.enum(['asset', 'asset_collection']).optional(),
+        entityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        mergedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+        reason: z.string().max(2000).optional()
+    }).optional(),
+    valuationComparison: z.strictObject({
+        insuranceValue: zMoney.optional(),
+        insuranceDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        dealerEstimate: zMoney.optional(),
+        dealerDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        auctionEstimate: zMoney.optional(),
+        auctionDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        likelyRealisableAmount: zMoney.optional()
+    }).optional(),
+    provenance: zProvenance.optional()
+});
+
+/**
+ * A named grouping of assets within an estate or catalogue
+ */
+export const zAssetCollection2 = zAssetCollection;
+
+/**
+ * PostalAddress
+ *
+ * A physical address. Culturally neutral — supports any global addressing convention
+ */
+export const zAddress = z.strictObject({
+    formattedAddress: z.string().max(5000).optional(),
+    streetAddress: z.string().max(255).optional(),
+    addressLine2: z.string().max(255).optional(),
+    addressLocality: z.string().max(255).optional(),
+    addressRegion: z.string().max(255).optional(),
+    postalCode: z.string().max(255).optional(),
+    addressCountry: z.string().regex(/^[A-Z]{2}$/).optional(),
+    latitude: z.number().gte(-90).lte(90).optional(),
+    longitude: z.number().gte(-180).lte(180).optional(),
+    landmark: z.string().max(255).optional(),
+    directionNotes: z.string().max(2000).optional(),
+    addressOrder: z.enum([
+        'western',
+        'japanese',
+        'indian',
+        'arabic',
+        'custom'
+    ]).optional()
+});
+
+/**
+ * Postal addresses
+ */
+export const zAddress2 = zAddress;
+
+/**
+ * A registration with a regulatory body, professional association, or government registry
+ */
+export const zRegistration = z.object({
+    body: z.string().max(100),
+    number: z.string().max(100),
+    status: z.enum([
+        'active',
+        'suspended',
+        'revoked',
+        'voluntary',
+        'expired'
+    ]).optional(),
+    jurisdiction: z.string().max(10).optional(),
+    verificationUrl: z.url().max(2048).optional(),
+    verifiedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+    liveCheck: z.strictObject({
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        companyStatus: z.union([
+            z.enum([
+                'active',
+                'dissolved',
+                'liquidation',
+                'receivership',
+                'administration',
+                'voluntary-arrangement',
+                'converted-closed'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        sicCodes: z.array(z.string().max(10)).max(10).optional(),
+        incorporatedAt: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        accountsOverdue: z.boolean().optional(),
+        insolvencyFlag: z.boolean().optional(),
+        authorisationStatus: z.union([
+            z.enum([
+                'authorised',
+                'revoked',
+                'suspended',
+                'cancelled',
+                'no-longer-authorised'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        firmReference: z.string().max(50).optional(),
+        permissions: z.array(z.string().max(500)).max(50).optional(),
+        effectiveFrom: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        charityStatus: z.union([
+            z.enum([
+                'registered',
+                'removed',
+                'suspended',
+                'in-default'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        income: z.int().gte(0).optional(),
+        objects: z.string().max(2000).optional(),
+        dateRegistered: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        reportingStatus: z.union([
+            z.enum([
+                'up-to-date',
+                'overdue',
+                'not-required'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional()
+    }).optional()
+});
+
+/**
+ * Organisation
+ *
+ * An organisation that interacts with the estate — legal firms, financial institutions, charities, dealers, funeral providers, employers, government bodies, and others. Maps to schema:Organization in JSON-LD
+ */
+export const zOrganisation = z.object({
+    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    name: z.string().min(1).max(255),
+    organisationType: z.union([
+        z.enum([
+            'legal_firm',
+            'financial_institution',
+            'pension_provider',
+            'insurance_provider',
+            'dealer',
+            'auction_house',
+            'valuation_firm',
+            'funeral_provider',
+            'charity',
+            'religious_institution',
+            'employer',
+            'trust_corporation',
+            'accountancy_firm',
+            'government_body',
+            'retailer',
+            'manufacturer',
+            'property_management',
+            'storage_facility',
+            'digital_platform',
+            'utility_provider',
+            'other'
+        ]),
+        z.string().regex(/^x-inherit-.+/)
+    ]),
+    estateRoles: z.array(z.union([z.enum([
+            'beneficiary',
+            'will_writer',
+            'executor',
+            'trustee',
+            'asset_holder',
+            'liability_holder',
+            'insurer',
+            'valuer',
+            'recommended_dealer',
+            'funeral_provider',
+            'professional_adviser',
+            'regulatory_body',
+            'employer',
+            'retailer',
+            'service_provider'
+        ]), z.string().regex(/^x-inherit-.+/)])).max(20).optional(),
+    jurisdiction: z.string().max(10).optional(),
+    address: zAddress.optional(),
+    url: z.url().max(2048).regex(/^https?:\/\//).optional(),
+    email: z.email().max(255).regex(/^[^@\s]+@[^@\s]+\.[^@\s]+$/).optional(),
+    phone: z.string().max(50).optional(),
+    logo: z.url().max(2048).regex(/^https?:\/\//).optional(),
+    wikidataId: z.string().max(20).regex(/^Q[0-9]+$/).optional(),
+    description: z.string().max(2000).optional(),
+    registrations: z.array(zRegistration).max(20).optional(),
+    contactPerson: z.string().max(255).optional(),
+    notes: z.string().max(2000).optional(),
+    ratings: z.array(z.strictObject({
+        platform: z.union([
+            z.enum([
+                'trustpilot',
+                'google',
+                'feefo',
+                'reviews_io',
+                'funeral_guide',
+                'checkatrade'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]),
+        ratingValue: z.number().gte(0).lte(10),
+        bestRating: z.number().gte(0).lte(10).optional().default(5),
+        worstRating: z.number().gte(0).lte(10).optional().default(1),
+        reviewCount: z.int().gte(0).optional(),
+        profileUrl: z.url().max(2048).regex(/^https?:\/\//).optional(),
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
+    })).max(20).optional(),
+    sameAs: z.array(z.url()).optional(),
+    provenance: zProvenance.optional(),
+    vatConfiguration: z.strictObject({
+        vatRegistered: z.boolean().optional(),
+        vatScheme: z.enum([
+            'margin_scheme',
+            'global_accounting',
+            'standard_vat'
+        ]).optional(),
+        vatNumber: z.string().max(50).optional(),
+        vatCountry: z.string().max(2).regex(/^[A-Z]{2}$/).optional()
+    }).optional(),
+    internationalShipping: z.strictObject({
+        shipsToCountries: z.array(z.string().max(2).regex(/^[A-Z]{2}$/)).max(250).optional(),
+        receivesFromCountries: z.array(z.string().max(2).regex(/^[A-Z]{2}$/)).max(250).optional(),
+        customsHandling: z.boolean().optional(),
+        importDutyPolicy: z.enum([
+            'dealer_absorbs',
+            'buyer_pays',
+            'included_in_shipping'
+        ]).optional(),
+        currency: z.string().max(3).regex(/^[A-Z]{3}$/).optional()
+    }).optional(),
+    identifiers: z.array(zIdentifier).max(50).optional(),
+    dealerProfile: z.strictObject({
+        categories: z.array(z.string().max(100)).max(20).optional(),
+        dealerTier: z.enum([
+            'free',
+            'standard',
+            'professional'
+        ]).optional(),
+        fulfilmentCapabilities: z.array(z.enum([
+            'inspection',
+            'grading',
+            'photography',
+            'storage',
+            'shipping',
+            'restoration'
+        ])).max(10).optional(),
+        geographicReach: z.enum([
+            'local',
+            'national',
+            'international'
+        ]).optional(),
+        averageResponseTime: z.string().max(50).optional()
+    }).optional()
+});
+
+/**
+ * An organisation (charity, company, institution) referenced in the estate
+ */
+export const zOrganisation2 = zOrganisation;
+
+/**
+ * Property
+ *
+ * Real estate. Supports individual ownership, communal/family property (Nigeria), HUF coparcenary (India), government-vested land (Land Use Act), US community property, and informal/unregistered holdings
+ */
+export const zProperty = z.object({
+    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    name: z.string().min(1).max(255),
+    propertyType: z.enum([
+        'detached',
+        'attached',
+        'apartment',
+        'land',
+        'commercial',
+        'mixed_use',
+        'rural',
+        'mobile',
+        'watercraft',
+        'other'
+    ]).optional(),
+    address: zAddress.optional(),
+    estimatedValue: zMoney.optional(),
+    professionalValuation: zMoney.optional(),
+    netEquity: zMoney.optional(),
+    inNegativeEquity: z.boolean().optional(),
+    valuationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    valuationConfidence: z.enum([
+        'estimated',
+        'professional',
+        'official',
+        'unknown'
+    ]).optional(),
+    isPrimaryResidence: z.boolean().optional(),
+    ownershipType: z.enum([
+        'sole',
+        'joint_tenants',
+        'tenants_in_common',
+        'trust',
+        'tenancy_by_entirety'
+    ]).optional(),
+    ownershipPercentage: z.number().gte(0).lte(100).optional(),
+    ownershipModel: z.enum([
+        'individual',
+        'joint',
+        'communal_family',
+        'huf_coparcenary',
+        'tribal',
+        'government_vested',
+        'trust_held'
+    ]).optional(),
+    acquisitionType: z.enum([
+        'self_acquired',
+        'ancestral_joint',
+        'ancestral_severed',
+        'inherited',
+        'gifted',
+        'stridhan',
+        'communal',
+        'waqf_endowed'
+    ]).optional(),
+    tenureType: z.enum([
+        'ownership',
+        'lease',
+        'communal',
+        'customary',
+        'informal',
+        'government_allocated'
+    ]).optional(),
+    registrationStatus: z.enum([
+        'formally_registered',
+        'informally_held',
+        'community_acknowledged',
+        'disputed',
+        'undocumented'
+    ]).optional(),
+    ownershipEvidence: z.enum([
+        'title_deed',
+        'certificate_of_occupancy',
+        'family_recognition',
+        'community_testimony',
+        'receipts_only',
+        'none'
+    ]).optional(),
+    culturalDisposition: zCulturalDisposition.optional(),
+    communalAuthority: z.strictObject({
+        authorityType: z.enum([
+            'family_council',
+            'clan_association',
+            'religious_body',
+            'tribal_council',
+            'government'
+        ]).optional(),
+        approvalRequired: z.boolean().optional(),
+        authorityName: z.string().max(255).optional(),
+        jurisdiction: zJurisdiction.optional()
+    }).optional(),
+    successionRegime: z.strictObject({
+        governingLaw: z.strictObject({
+            jurisdiction: zJurisdiction.optional(),
+            legalTradition: z.enum([
+                'common_law',
+                'civil_law',
+                'mixed',
+                'customary_law',
+                'islamic_law',
+                'hindu_law',
+                'jewish_law',
+                'canon_law'
+            ]).optional(),
+            statute: z.string().max(255).optional(),
+            section: z.string().max(255).optional()
+        }).optional(),
+        determinedBy: z.enum([
+            'domicile',
+            'situs',
+            'nationality',
+            'personal_status',
+            'choice_of_law',
+            'treaty'
+        ]).optional(),
+        binding: z.boolean().optional(),
+        extensions: z.array(z.string().max(500)).max(50).optional(),
+        notes: z.string().max(2000).optional()
+    }).optional(),
+    custodianPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    custodianPersonIdDisplay: z.string().max(255).optional(),
+    governmentConsentRequired: z.boolean().optional(),
+    mobilityType: z.enum([
+        'immoveable',
+        'moveable',
+        'mixed'
+    ]).optional(),
+    mortgageOutstanding: zMoney.optional(),
+    characterClassification: z.enum([
+        'community',
+        'separate',
+        'quasi_community',
+        'mixed',
+        'not_applicable'
+    ]).optional(),
+    homesteadStatus: z.strictObject({
+        isHomestead: z.boolean().optional(),
+        exemptionAmount: zMoney.optional(),
+        exemptionUnlimited: z.boolean().optional(),
+        deviseRestriction: z.boolean().optional(),
+        notes: z.string().max(2000).optional()
+    }).optional(),
+    passesOutsideEstate: z.boolean().optional(),
+    statutoryLifeEstate: z.strictObject({
+        beneficiaryPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        beneficiaryPersonIdDisplay: z.string().max(255).optional(),
+        basis: z.string().max(500).optional(),
+        conditions: z.string().max(255).optional()
+    }).optional(),
+    notes: z.string().max(2000).optional(),
+    externalLinks: z.array(z.strictObject({
+        system: z.string().max(100).regex(/^[a-z][a-zA-Z0-9]*$/),
+        id: z.string().min(1).max(500),
+        url: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+        label: z.string().max(255).optional(),
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional()
+    })).max(50).optional(),
+    images: z.array(zMedia).max(100).optional(),
+    visibility: zVisibility.optional(),
+    fieldProvenance: z.array(zFieldProvenance).max(100).optional(),
+    comments: z.array(z.strictObject({
+        id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+        authorPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        authorPersonIdDisplay: z.string().max(255).optional(),
+        content: z.string().min(1).max(5000),
+        createdAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        visibility: zVisibility.optional()
+    })).max(100).optional(),
+    rentalIncome: z.strictObject({
+        monthlyAmount: zMoney.optional(),
+        tenantName: z.string().max(255).optional(),
+        leaseEndDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        managingAgentOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        managingAgentOrganisationIdDisplay: z.string().max(255).optional()
+    }).optional(),
+    epc: z.strictObject({
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        rating: z.enum([
+            'A',
+            'B',
+            'C',
+            'D',
+            'E',
+            'F',
+            'G'
+        ]).optional(),
+        energyEfficiencyScore: z.int().gte(1).lte(100).optional(),
+        environmentalImpactScore: z.int().gte(1).lte(100).optional(),
+        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        certificateNumber: z.string().max(100).optional(),
+        certificateUrl: z.url().max(2048).regex(/^https?:\/\//).optional(),
+        floorArea: z.number().gte(0).optional(),
+        heatingType: z.string().max(255).optional()
+    }).optional(),
+    landRegistry: z.strictObject({
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        titleNumber: z.string().max(50).optional(),
+        titleClass: z.union([
+            z.enum([
+                'absolute',
+                'qualified',
+                'possessory',
+                'good_leasehold'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        lastSalePrice: z.int().gte(0).optional(),
+        lastSaleDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        tenure: z.union([
+            z.enum(['freehold', 'leasehold']),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        registeredOwners: z.array(z.string().max(255)).max(10).optional(),
+        chargesCount: z.int().gte(0).optional()
+    }).optional(),
+    floodRisk: z.strictObject({
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        riverAndSeaRisk: z.union([
+            z.enum([
+                'high',
+                'medium',
+                'low',
+                'very_low'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        surfaceWaterRisk: z.union([
+            z.enum([
+                'high',
+                'medium',
+                'low',
+                'very_low'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        floodZone: z.union([
+            z.enum([
+                '1',
+                '2',
+                '3a',
+                '3b'
+            ]),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        nearestWatercourse: z.string().max(255).optional(),
+        historicalFlooding: z.boolean().optional()
+    }).optional(),
+    leasehold: z.strictObject({
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        leaseStartDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        leaseTerm: z.int().gte(1).lte(999).optional(),
+        yearsRemaining: z.int().gte(0).lte(999).optional(),
+        groundRent: z.int().gte(0).optional(),
+        groundRentReviewDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        serviceCharge: z.int().gte(0).optional(),
+        freeholderName: z.string().max(255).optional(),
+        managementCompany: z.string().max(255).optional()
+    }).optional(),
+    provenance: zProvenance.optional(),
+    applicableLaw: zJurisdiction.optional(),
+    taxTreatment: z.strictObject({
+        jurisdiction: zJurisdiction.optional(),
+        assetType: z.enum([
+            'immoveable',
+            'moveable',
+            'mixed',
+            'exempt'
+        ]).optional(),
+        exemptions: z.array(z.string().max(100)).optional(),
+        reliefClaimed: z.array(z.string().max(100)).optional()
+    }).optional(),
+    taxReliefEligibility: z.strictObject({
+        reliefType: z.enum([
+            'agricultural_property',
+            'business_property',
+            'woodland',
+            'heritage',
+            'charitable'
+        ]).optional(),
+        eligible: z.boolean().optional(),
+        percentage: z.int().gte(0).lte(100).optional(),
+        conditions: z.string().max(500).optional(),
+        jurisdiction: zJurisdiction.optional(),
+        statute: z.string().max(500).optional()
+    }).optional()
+});
+
+/**
+ * Real property (land, buildings)
+ */
+export const zProperty2 = zProperty;
+
+/**
+ * Space
+ *
+ * A distinguishable space within or associated with a property — rooms, outbuildings, storage areas, and outdoor zones where assets may be located. Maps to schema:Place in JSON-LD
+ */
+export const zSpace = z.intersection(z.unknown(), z.object({
+    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    propertyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    containedInSpaceId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
+    spaceType: z.union([
+        z.enum([
+            'living_room',
+            'dining_room',
+            'kitchen',
+            'kitchen_diner',
+            'breakfast_room',
+            'family_room',
+            'sitting_room',
+            'drawing_room',
+            'conservatory',
+            'sunroom',
+            'snug',
+            'bedroom',
+            'guest_bedroom',
+            'nursery',
+            'spare_room',
+            'dressing_room',
+            'bathroom',
+            'en_suite',
+            'shower_room',
+            'wet_room',
+            'cloakroom',
+            'wc',
+            'hallway',
+            'entrance_hall',
+            'landing',
+            'corridor',
+            'porch',
+            'vestibule',
+            'study',
+            'home_office',
+            'library',
+            'workshop',
+            'studio',
+            'music_room',
+            'craft_room',
+            'art_studio',
+            'games_room',
+            'home_cinema',
+            'gym',
+            'utility_room',
+            'laundry_room',
+            'boot_room',
+            'pantry',
+            'larder',
+            'airing_cupboard',
+            'boiler_room',
+            'loft',
+            'attic',
+            'basement',
+            'cellar',
+            'wine_cellar',
+            'walk_in_wardrobe',
+            'storage_room',
+            'cupboard_under_stairs',
+            'box_room',
+            'garage',
+            'double_garage',
+            'carport',
+            'shed',
+            'greenhouse',
+            'summerhouse',
+            'garden_room',
+            'outbuilding',
+            'barn',
+            'annex',
+            'stable',
+            'front_garden',
+            'rear_garden',
+            'side_garden',
+            'patio',
+            'terrace',
+            'balcony',
+            'roof_terrace',
+            'driveway',
+            'courtyard',
+            'yard',
+            'swimming_pool',
+            'prayer_room',
+            'puja_room',
+            'butsudan_room',
+            'tatami_room',
+            'genkan',
+            'majlis',
+            'helpers_room',
+            'gurdwara_room',
+            'meditation_room',
+            'gun_room',
+            'safe_room',
+            'safe',
+            'self_storage',
+            'safe_deposit_box',
+            'workplace',
+            'relatives_house',
+            'holiday_home',
+            'vehicle_car',
+            'vehicle_boat',
+            'vehicle_caravan',
+            'allotment',
+            'digital_storage',
+            'portable',
+            'other'
+        ]),
+        z.string().regex(/^x-inherit-.+/)
+    ]),
+    name: z.string().max(255).optional(),
+    floor: z.enum([
+        'basement',
+        'ground',
+        'first',
+        'second',
+        'third',
+        'fourth',
+        'fifth',
+        'attic',
+        'mezzanine',
+        'other'
+    ]).optional(),
+    notes: z.string().max(2000).optional(),
+    images: z.array(zMedia).max(50).optional(),
+    provenance: zProvenance.optional()
+}));
+
+/**
+ * A physical or virtual space associated with the estate
+ */
+export const zSpace2 = zSpace;
+
+/**
+ * A comparable sale or listing used to support the valuation. Capturing comparables with screenshots and metadata creates an auditable evidence trail for executors, HMRC, and probate courts
+ */
+export const zComparable = z.strictObject({
+    url: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+    screenshotUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+    title: z.string().max(255).optional(),
+    salePrice: zMoney.optional(),
+    saleDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    platform: z.string().max(255).optional(),
+    platformListingId: z.string().max(255).optional(),
+    auctionLotRef: z.string().max(500).optional(),
+    capturedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+    matchConfidence: z.enum([
+        'exact',
+        'close',
+        'approximate',
+        'weak'
+    ]).optional(),
+    matchFactors: z.array(z.string().max(500)).max(50).optional(),
+    matchNotes: z.string().max(2000).optional(),
+    matchScore: z.int().gte(0).lte(100).optional(),
+    humanVerdict: z.enum([
+        'accepted',
+        'rejected',
+        'adjusted',
+        'not_reviewed'
+    ]).optional(),
+    rejectionReason: z.string().max(255).optional()
+});
+
+/**
+ * Valuation
+ *
+ * A valuation of an estate asset, property, or asset collection. Supports multiple valuations per entity over time — owner estimates, professional valuations, AI analyses, dealer offers, and probate-agreed figures
+ */
+export const zValuation = z.object({
+    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    entityType: z.enum([
+        'asset',
+        'property',
+        'asset_collection'
+    ]),
+    entityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    valuedAmount: zMoney,
+    valuationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/),
+    provider: z.string().max(255).optional(),
+    providerType: z.enum([
+        'owner',
+        'professional_valuer',
+        'auction_house',
+        'dealer',
+        'insurance_assessor',
+        'tax_authority',
+        'ai_estimate',
+        'other'
+    ]).optional(),
+    valuerRegistration: z.strictObject({
+        body: z.string().max(255).optional(),
+        membershipId: z.string().max(255).optional(),
+        designation: z.string().max(100).optional(),
+        verificationUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional()
+    }).optional(),
+    method: z.enum([
+        'comparable_sales',
+        'replacement_cost',
+        'income_approach',
+        'market_listing',
+        'insurance_schedule',
+        'ai_analysis',
+        'expert_opinion',
+        'other'
+    ]).optional(),
+    valuationPurpose: z.enum([
+        'current_estimate',
+        'date_of_death',
+        'insurance',
+        'official',
+        'tax_return',
+        'dealer_offer',
+        'ai_estimate',
+        'pre_sale',
+        'probate'
+    ]).optional(),
+    confidence: z.enum([
+        'high',
+        'medium',
+        'low',
+        'unknown'
+    ]).optional(),
+    comparables: z.array(zComparable).max(100).optional(),
+    notes: z.string().max(2000).optional(),
+    fieldProvenance: z.array(zFieldProvenance).max(100).optional(),
+    auctionData: z.strictObject({
+        auctionHouseOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        auctionHouseOrganisationIdDisplay: z.string().max(255).optional(),
+        saleDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        lotNumber: z.string().max(100).optional(),
+        estimateLow: zMoney.optional(),
+        estimateHigh: zMoney.optional(),
+        hammerPrice: zMoney.optional(),
+        buyersPremiumPercentage: z.number().gte(0).lte(100).optional(),
+        totalRealised: zMoney.optional(),
+        sold: z.boolean().optional()
+    }).optional(),
+    validUntil: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).nullish(),
+    provenance: zProvenance.optional()
+});
+
+/**
+ * A formal or estimated valuation of an asset or estate
+ */
+export const zValuation2 = zValuation;
+
+export const zLegacyContact = z.strictObject({
+    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    personId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    personIdDisplay: z.string().max(255).optional(),
+    name: z.string().min(1).max(255),
+    relationship: z.string().max(255).optional(),
+    email: z.email().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).optional(),
+    phone: z.string().max(255).optional(),
+    notificationMethod: z.enum([
+        'email',
+        'phone',
+        'post',
+        'in_person'
+    ]).optional(),
+    accessLevel: z.enum([
+        'full',
+        'read_only',
+        'collection_only',
+        'financial_only'
+    ]),
+    letterGenerated: z.boolean().optional(),
+    letterGeneratedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+    letterDeliveryMethod: z.enum([
+        'printed',
+        'digital',
+        'both'
+    ]).optional(),
+    notes: z.string().max(2000).optional()
+});
+
+export const zAssetInterest = z.intersection(z.unknown(), z.object({
+    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    rootDocumentId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    assetId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
+    collectionId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
+    personId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    personIdDisplay: z.string().max(255).optional(),
+    interestLevel: z.enum([
+        'mentioned',
+        'expressed_interest',
+        'strongly_wants',
+        'agreed'
+    ]),
+    sourceType: z.enum([
+        'family_conversation',
+        'written_request',
+        'chat_message',
+        'platform_private_message',
+        'platform_group_message',
+        'proxy_reported',
+        'testator_observed',
+        'manual'
+    ]).optional(),
+    testatorAcknowledged: z.boolean().optional().default(false),
+    notes: z.string().max(2000).optional(),
+    organisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    organisationIdDisplay: z.string().max(255).optional(),
+    expressedByRole: z.union([
+        z.enum([
+            'testator',
+            'beneficiary',
+            'executor',
+            'proxy'
+        ]),
+        z.string().regex(/^x-inherit-.+/)
+    ]).optional(),
+    intentType: z.union([
+        z.enum([
+            'acquire',
+            'receive',
+            'allocate',
+            'sell',
+            'admire'
+        ]),
+        z.string().regex(/^x-inherit-.+/)
+    ]).optional(),
+    productMatch: z.strictObject({
+        identifierSystem: z.string().max(100).optional(),
+        identifierValue: z.string().max(255).optional(),
+        brand: z.string().max(255).optional(),
+        brandWikidataId: z.string().regex(/^Q\d+$/).optional(),
+        category: z.string().max(255).optional(),
+        subcategory: z.string().max(255).optional(),
+        minimumCondition: z.enum([
+            'excellent',
+            'good',
+            'fair',
+            'poor'
+        ]).optional(),
+        notes: z.string().max(2000).optional()
+    }).optional(),
+    quantity: z.int().gte(1).lte(1000).optional().default(1),
+    expressedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+    preOrderStatus: z.strictObject({
+        orderStatus: z.enum([
+            'wanted',
+            'pre_ordered_unpaid',
+            'pre_ordered_paid',
+            'dispatched',
+            'received'
+        ]).optional(),
+        orderedFrom: z.string().max(255).optional(),
+        orderReference: z.string().max(255).optional(),
+        orderDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        expectedDeliveryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).nullish(),
+        paymentStatus: z.enum([
+            'unpaid',
+            'deposit_paid',
+            'fully_paid',
+            'refunded'
+        ]).optional(),
+        amountPaid: zMoney.optional(),
+        paymentMethod: z.string().max(255).optional()
+    }).optional(),
+    provenance: zProvenance.optional()
+}));
+
+/**
+ * A fractional or beneficial interest in an asset
+ */
+export const zAssetInterest2 = zAssetInterest;
+
+/**
+ * Wish
+ *
+ * A non-binding (or culturally/religiously binding) wish — funeral, letter of wishes, care instructions, pet care, digital estate, distribution preferences
+ */
+export const zWish = z.object({
+    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    wishType: z.enum([
+        'funeral',
+        'letter',
+        'care',
+        'distribution',
+        'digital',
+        'pets',
+        'general',
+        'digital_likeness'
+    ]),
+    title: z.string().min(1).max(255),
+    content: z.string().max(5000).optional(),
+    bindingNature: z.enum([
+        'non_binding',
+        'culturally_obligatory',
+        'religiously_obligatory',
+        'legally_binding'
+    ]).optional(),
+    addresseePersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    addresseePersonIdDisplay: z.string().max(255).optional(),
+    relatedAssetId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    notes: z.string().max(2000).optional(),
+    visibility: zVisibility.optional(),
+    funeralArrangementType: z.union([
+        z.enum([
+            'burial',
+            'cremation',
+            'green_burial',
+            'sea_burial',
+            'sky_burial',
+            'donation_to_science',
+            'other'
+        ]),
+        z.string().regex(/^x-inherit-.+/)
+    ]).optional(),
+    funeralCeremonyType: z.enum([
+        'religious',
+        'secular',
+        'hybrid',
+        'none'
+    ]).optional(),
+    funeralCeremonyReligion: z.string().max(255).optional(),
+    funeralProviderOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    funeralProviderOrganisationIdDisplay: z.string().max(255).optional(),
+    funeralPrePaid: z.boolean().optional(),
+    funeralPrePaidPolicyNumber: z.string().max(100).optional(),
+    funeralBudgetMaximum: zMoney.optional(),
+    funeralBudgetSource: z.enum([
+        'estate',
+        'pre_paid',
+        'insurance',
+        'family',
+        'other'
+    ]).optional(),
+    funeralLocationPreference: z.string().max(500).optional(),
+    funeralMusicWishes: z.string().max(2000).optional(),
+    funeralReadingWishes: z.string().max(2000).optional(),
+    organDonation: z.strictObject({
+        consentGiven: z.boolean().optional(),
+        organs: z.array(z.string().max(100)).max(20).optional(),
+        coordinatingOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        coordinatingOrganisationIdDisplay: z.string().max(255).optional()
+    }).optional(),
+    medicalResearchDonation: z.strictObject({
+        consentGiven: z.boolean().optional(),
+        institutionOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        institutionOrganisationIdDisplay: z.string().max(255).optional(),
+        restrictions: z.string().max(2000).optional()
+    }).optional(),
+    autopsyPreference: z.enum([
+        'requested',
+        'declined',
+        'no_preference'
+    ]).optional(),
+    funeralBudgetNotes: z.string().max(2000).optional(),
+    likenessConsent: z.enum([
+        'permitted',
+        'prohibited',
+        'restricted',
+        'not_stated'
+    ]).optional(),
+    likenessScope: z.array(z.enum([
+        'voice',
+        'visual_appearance',
+        'writing_style',
+        'personality_model',
+        'full_avatar'
+    ])).optional(),
+    likenessPermittedUses: z.array(z.enum([
+        'memorial',
+        'family_private',
+        'educational',
+        'commercial',
+        'legal_proceedings',
+        'artistic'
+    ])).optional(),
+    likenessProhibitedUses: z.array(z.enum([
+        'memorial',
+        'family_private',
+        'educational',
+        'commercial',
+        'legal_proceedings',
+        'artistic'
+    ])).optional(),
+    likenessControllerPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    likenessControllerPersonIdDisplay: z.string().max(255).optional(),
+    likenessTimeLimit: z.string().regex(/^P(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$/).optional(),
+    likenessRevocationConditions: z.string().max(500).optional(),
+    syntheticMediaPolicy: z.enum([
+        'allow_with_attribution',
+        'allow_without_attribution',
+        'prohibit_all',
+        'family_decision',
+        'not_stated'
+    ]).optional(),
+    likenessEnforcement: z.array(z.strictObject({
+        platform: z.string().min(1).max(255),
+        requestType: z.enum([
+            'takedown',
+            'restrict',
+            'transfer_control',
+            'verify_consent',
+            'cease_training',
+            'other'
+        ]),
+        requestDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        requestedBy: z.string().max(255).optional(),
+        requestedByPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        requestedByPersonIdDisplay: z.string().max(255).optional(),
+        status: z.enum([
+            'pending',
+            'acknowledged',
+            'complied',
+            'refused',
+            'escalated',
+            'unknown'
+        ]).optional(),
+        responseDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        referenceNumber: z.string().max(255).optional(),
+        legalBasis: z.string().max(500).optional(),
+        notes: z.string().max(500).optional()
+    })).optional(),
+    existingDigitalModels: z.array(z.strictObject({
+        provider: z.string().max(255).optional(),
+        modelType: z.enum([
+            'chatbot',
+            'voice_clone',
+            'visual_avatar',
+            'full_replica',
+            'other'
+        ]).optional(),
+        action: z.enum([
+            'preserve',
+            'delete',
+            'transfer',
+            'restrict'
+        ]).optional(),
+        controllerPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        controllerPersonIdDisplay: z.string().max(255).optional()
+    })).optional(),
+    relatedTrustIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(50).optional(),
+    provenance: zProvenance.optional()
+});
+
+/**
+ * Non-binding wishes (funeral, organ donation, etc.)
+ */
+export const zWish2 = zWish;
+
+export const zImportSource = z.strictObject({
+    id: z.string().max(255),
+    systemName: z.string().max(255),
+    importDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    importMethod: z.enum([
+        'api',
+        'file_upload',
+        'manual_copy',
+        'ai_extraction',
+        'ocr',
+        'migration_script'
+    ]).optional(),
+    notes: z.string().max(2000).optional()
+});
+
+/**
+ * Completeness
+ *
+ * A completeness score derived from a weighted checklist of estate data categories, scoped to a specific jurisdiction and estate status
+ */
+export const zCompleteness = z.object({
+    score: z.int().gte(0).lte(100).readonly().default(0),
+    maxScore: z.int().gte(0).readonly(),
+    jurisdiction: z.string().max(255).optional(),
+    estateStatus: z.string().max(255).optional(),
+    calculatedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).readonly().optional(),
+    checklist: z.array(z.strictObject({
+        category: z.enum([
+            'personal_details',
+            'assets_and_valuations',
+            'liabilities',
+            'beneficiaries',
+            'executors',
+            'guardians',
+            'tax_information',
+            'legal_documents',
+            'lifetime_transfers',
+            'pension_and_insurance'
+        ]),
+        item: z.string().min(1).max(255),
+        weight: z.int().gte(1),
+        status: z.enum([
+            'complete',
+            'incomplete',
+            'not_applicable',
+            'unknown'
+        ]),
+        details: z.string().max(255).optional()
+    })).max(100)
+});
+
+/**
+ * Completeness scoring for an estate or entity
+ */
+export const zCompleteness2 = zCompleteness;
+
+export const zRecommendedAction = z.strictObject({
+    id: z.string().max(255),
+    category: z.enum([
+        'completeness',
+        'tax_planning',
+        'legal_requirement',
+        'valuation',
+        'transfer_history',
+        'beneficiary_review',
+        'document_update'
+    ]),
+    priority: z.enum([
+        'critical',
+        'high',
+        'medium',
+        'low'
+    ]),
+    title: z.string().max(255),
+    description: z.string().max(2000).optional(),
+    status: z.enum([
+        'pending',
+        'in_progress',
+        'completed',
+        'dismissed'
+    ]),
+    triggeredBy: z.string().max(255).optional(),
+    relatedEntityType: z.string().max(255).optional(),
+    relatedEntityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
+});
+
+export const zConformance = z.strictObject({
+    level: z.enum([
+        'level_1',
+        'level_2',
+        'level_3'
+    ]),
+    profile: z.enum(['estate', 'catalogue']).optional(),
+    validatedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+    validatedBy: z.string().max(255),
+    schemaVersion: z.string().max(255),
+    completenessScore: z.int().gte(0).lte(100).optional(),
+    entityCounts: z.record(z.string(), z.int()).optional(),
+    provenanceSummary: z.record(z.string(), z.int()).optional(),
+    warnings: z.array(z.string().max(500)).optional(),
+    validationEndpoint: z.url().optional()
+});
+
+/**
+ * Machine-readable conformance certificate — records the validation level, schema version, completeness score, and provenance summary at time of validation
+ */
+export const zConformance2 = zConformance;
+
+/**
+ * InsurancePolicy
+ *
+ * A standalone insurance policy entity — life, home, health, motor, travel, pet, or professional indemnity. Life insurance is often the single largest estate asset. Policies written in trust pass outside the estate
+ */
+export const zInsurancePolicy = z.object({
+    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    policyType: z.union([
+        z.enum([
+            'life',
+            'home',
+            'health',
+            'motor',
+            'travel',
+            'pet',
+            'professional_indemnity',
+            'other'
+        ]),
+        z.string().regex(/^x-inherit-.+/)
+    ]),
+    providerOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    providerOrganisationIdDisplay: z.string().max(255).optional(),
+    policyNumber: z.string().max(100).optional(),
+    coverAmount: zMoney.optional(),
+    premiumAmount: zMoney.optional(),
+    premiumFrequency: z.enum([
+        'monthly',
+        'annual',
+        'single_premium',
+        'paid_up',
+        'other'
+    ]).optional(),
+    renewalDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    maturityDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    deathBenefit: z.strictObject({
+        amount: zMoney.optional(),
+        nomineePersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        nomineePersonIdDisplay: z.string().max(255).optional(),
+        nomineeOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        nomineeOrganisationIdDisplay: z.string().max(255).optional(),
+        nominationCurrent: z.boolean().optional(),
+        benefitType: z.enum([
+            'lump_sum',
+            'income',
+            'pension',
+            'discretionary'
+        ]).optional(),
+        beneficiaryVerificationStatus: z.enum([
+            'unverified',
+            'identity_confirmed',
+            'entitlement_confirmed'
+        ]).optional()
+    }).optional(),
+    writtenInTrust: z.boolean().optional(),
+    trustDetails: z.strictObject({
+        trusteePersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        trusteePersonIdDisplay: z.string().max(255).optional(),
+        trusteeOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        trusteeOrganisationIdDisplay: z.string().max(255).optional(),
+        trustName: z.string().max(255).optional()
+    }).optional(),
+    claimStatus: z.enum([
+        'active',
+        'claim_submitted',
+        'claim_approved',
+        'claim_paid',
+        'claim_disputed',
+        'pending',
+        'approved',
+        'paid',
+        'declined'
+    ]).optional(),
+    externalPolicyRef: z.url().max(2048).regex(/^https?:\/\//).optional(),
+    nominationLifecycle: z.strictObject({
+        nominationStatus: z.enum([
+            'active',
+            'revoked',
+            'superseded',
+            'expired',
+            'disputed'
+        ]).optional(),
+        verifiedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+        lastUpdated: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+        supersedesNominationId: z.string().max(255).optional()
+    }).optional(),
+    policyConditions: z.array(z.strictObject({
+        condition: z.string().max(500).optional(),
+        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        impact: z.string().max(500).optional()
+    })).max(50).optional(),
+    notes: z.string().max(2000).optional(),
+    funeralPlanDetails: z.strictObject({
+        coveredFuneralProviderOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+        coveredFuneralProviderOrganisationIdDisplay: z.string().max(255).optional(),
+        transferableOnDeath: z.boolean().optional(),
+        advancePayments: zMoney.optional()
+    }).optional(),
+    depositorProtection: z.strictObject({
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+        scheme: z.union([
+            z.enum(['fscs', 'mib']),
+            z.string().max(100).regex(/^x-inherit-.+/)
+        ]).optional(),
+        protected: z.boolean().optional(),
+        protectionLimit: z.int().gte(0).optional(),
+        claimProcessUrl: z.url().max(2048).regex(/^https?:\/\//).optional()
+    }).optional(),
+    provenance: zProvenance.optional()
+});
+
+/**
+ * Life or other insurance policy linked to the estate
+ */
+export const zInsurancePolicy2 = zInsurancePolicy;
+
+/**
+ * A third party expressing interest in purchasing or acquiring estate assets
+ */
+export const zInterestedParty = z.strictObject({
+    personId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    personIdDisplay: z.string().max(255).optional(),
+    name: z.string().max(255),
+    type: z.enum([
+        'art_dealer',
+        'antique_dealer',
+        'property_investor',
+        'auction_house',
+        'gallery',
+        'private_collector',
+        'museum',
+        'institution',
+        'charity',
+        'developer',
+        'fund_manager',
+        'family_office',
+        'estate_agent',
+        'legal_practice',
+        'other'
+    ]),
+    contactDetails: z.string().max(255).optional(),
+    organisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    organisationIdDisplay: z.string().max(255).optional()
+});
+
+/**
+ * A specific asset or property that the interested party wants to acquire
+ */
+export const zAssetInterestItem = z.strictObject({
+    assetId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    propertyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    interestLevel: z.enum([
+        'exploratory',
+        'moderate',
+        'strong',
+        'committed'
+    ]).optional()
+});
+
+export const zCollectionInterest = z.intersection(z.unknown(), z.strictObject({
+    name: z.string().max(255).optional(),
+    assetIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
+    propertyIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
+    notes: z.string().max(2000).optional()
+}));
+
+/**
+ * Details of a specific offer made by the interested party
+ */
+export const zOfferDetails = z.strictObject({
+    amount: zMoney.optional(),
+    conditions: z.array(z.string().max(500)).max(50).optional(),
+    validUntil: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    offerDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    documentRef: z.string().max(500).optional(),
+    offerTerms: z.string().max(2000).optional(),
+    inspectionRequired: z.boolean().optional(),
+    inspectionDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+});
+
+/**
+ * Dealer Interest
+ *
+ * Level D data — records third-party interest in estate assets (art dealers, property investors, collectors). Privacy-controlled. Managed via proxy authorisation
+ */
+export const zDealerInterest = z.object({
+    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    interestedParty: zInterestedParty,
+    assets: z.array(zAssetInterestItem).max(100).optional(),
+    collection: zCollectionInterest.optional(),
+    offerStatus: z.enum([
+        'standing_interest',
+        'verbal_offer',
+        'written_offer',
+        'formal_valuation',
+        'conditional_offer',
+        'accepted',
+        'declined',
+        'expired',
+        'withdrawn'
+    ]),
+    offerDetails: zOfferDetails.optional(),
+    testatorDisposition: z.enum([
+        'willing_to_sell',
+        'prefer_not_to_sell',
+        'hold_for_executor',
+        'deferred_to_family',
+        'promised_to_institution',
+        'undecided'
+    ]).optional(),
+    linkedBequestId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    privacyLevel: z.enum([
+        'testator_only',
+        'proxy_visible',
+        'executor_visible',
+        'all_parties'
+    ]),
+    communicationInitiatedBy: z.enum([
+        'buyer',
+        'testator',
+        'proxy',
+        'executor'
+    ]).optional(),
+    managedByProxyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    notes: z.string().max(2000).optional(),
+    verificationResult: z.strictObject({
+        verified: z.boolean().optional(),
+        verifiedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+        conditionConfirmed: z.boolean().optional(),
+        adjustedAmount: zMoney.optional(),
+        discrepancyNotes: z.string().max(2000).optional(),
+        verifiedByOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
+    }).optional(),
+    provenance: zProvenance.optional()
+});
+
+/**
+ * Professional interest in the estate
+ */
+export const zDealerInterest2 = zDealerInterest;
+
+/**
+ * Audit Event
+ *
+ * A single audit event recording who changed what, when, and why. Designed for enterprise audit trail requirements, probate court compliance, and GDPR-compatible personal data handling
+ */
+export const zAuditEvent = z.strictObject({
+    action: z.enum([
+        'created',
+        'modified',
+        'deleted',
+        'accessed',
+        'exported',
+        'validated',
+        'version_created',
+        'granted',
+        'revoked',
+        'challenged'
+    ]),
+    performedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+    agentPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    agentDescription: z.string().max(255).optional(),
+    entityType: z.string().max(100).optional(),
+    entityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    detail: z.string().max(2000).optional(),
+    previousValue: z.string().max(5000).optional(),
+    newValue: z.string().max(5000).optional(),
+    redacted: z.boolean().optional(),
+    evidenceUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional()
+});
+
+/**
+ * An auditable event recorded against an entity
+ */
+export const zAuditEvent2 = zAuditEvent;
+
+/**
+ * INHERIT v2 Catalogue Schema
+ *
+ * Entry point for catalogue-only documents — living collectors cataloguing items without the full estate envelope. Assets, collections, valuations, legacy contacts and allocation intent. This is the catalogue conformance profile of the INHERIT root: a document here that declares conformanceProfile 'catalogue' also conforms to schema.json as it stands, with nothing wrapped or moved. Do not wrap a catalogue inside an estate document — the estate profile carries assetInterests, legacyContacts and dealerInterests only inside applicationState, which is not part of the interchange standard. See proposal 0003
+ */
+export const zCatalogue = z.object({
+    $schema: z.literal('https://openinherit.org/v3/catalogue.json').optional(),
+    conformanceProfile: z.literal('catalogue').optional(),
+    '@context': z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
+    schemaVersion: z.string().max(255).regex(/^\d+\.\d+\.\d+$/).optional(),
+    exportedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).readonly().optional(),
+    exportedBy: z.strictObject({
+        name: z.string().max(255).optional(),
+        email: z.email().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).optional()
+    }).readonly().optional(),
+    generator: z.strictObject({
+        name: z.string().min(1).max(255),
+        version: z.string().max(255).optional(),
+        url: z.string().max(2048).optional()
+    }).readonly().optional(),
+    documentVersion: z.int().gte(1).optional(),
+    versionedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+    previousVersionId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
+    changeDescription: z.string().max(2000).optional(),
+    assets: z.array(zAsset).max(10000),
+    assetCollections: z.array(zAssetCollection).max(500).optional(),
+    organisations: z.array(zOrganisation).max(200).optional(),
+    properties: z.array(zProperty).max(200).optional(),
+    spaces: z.array(zSpace).max(200).optional(),
+    valuations: z.array(zValuation).max(10000).optional(),
+    legacyContacts: z.array(zLegacyContact).max(100).optional(),
+    assetInterests: z.array(zAssetInterest).max(5000).optional(),
+    wishes: z.array(zWish).max(200).optional(),
+    dataProvenance: z.enum([
+        'manual_entry',
+        'ai_extracted',
+        'ocr_scanned',
+        'imported',
+        'migrated',
+        'system_generated'
+    ]).optional(),
+    importSources: z.array(zImportSource).max(100).optional(),
+    completeness: zCompleteness.optional(),
+    recommendedActions: z.array(zRecommendedAction).max(100).optional(),
+    conformance: zConformance2.optional(),
+    insurancePolicies: z.array(zInsurancePolicy).max(100).optional(),
+    dealerInterests: z.array(zDealerInterest).max(2000).optional(),
+    giftListSettings: z.strictObject({
+        enabled: z.boolean().optional(),
+        personalMessage: z.string().max(2000).optional(),
+        visibility: z.enum([
+            'public',
+            'link_only',
+            'private'
+        ]).optional(),
+        fulfilledItems: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(5000).optional()
+    }).optional(),
+    legacyLetter: z.strictObject({
+        lastGenerated: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
+        version: z.int().gte(1).optional(),
+        delivered: z.boolean().optional(),
+        deliveryMethod: z.enum([
+            'printed',
+            'digital',
+            'both'
+        ]).optional(),
+        itemCountAtGeneration: z.int().gte(0).optional()
+    }).optional(),
+    auditLog: z.array(zAuditEvent).max(10000).optional()
+});
+
+/**
+ * Dealer or platform asset catalogue (distinct from an individual estate)
+ */
+export const zCatalogue2 = zCatalogue;
 
 /**
  * TemporalRule
@@ -111,22 +3233,6 @@ export const zTemporalRule = z.strictObject({
  * Time-bound legislation rules
  */
 export const zTemporalRule2 = zTemporalRule;
-
-/**
- * Money
- *
- * Monetary value in integer minor currency units with ISO 4217 code. Never floating point
- */
-export const zMoney = z.strictObject({
-    amount: z.int().gte(-999999999999999).lte(999999999999999),
-    currency: z.string().regex(/^[A-Z]{3}$/),
-    exponent: z.int().gte(0).lte(4).optional().default(2)
-});
-
-/**
- * Monetary amounts (integer minor units + currency)
- */
-export const zMoney2 = zMoney;
 
 /**
  * UK England & Wales Extension
@@ -2416,66 +5522,6 @@ export const zUae = z.object({
 export const zExtensionUae = zUae;
 
 /**
- * AiProvenance
- *
- * Records which AI model produced a piece of data and whether a human has verified it. Basic provenance is in INHERIT core; implementation-specific detail (exact model version, pipeline, reasoning, cost) should use x-inherit-* extension properties
- */
-export const zAiProvenance = z.object({
-    model: z.union([
-        z.enum([
-            'claude',
-            'gpt',
-            'gemini',
-            'grok',
-            'llama',
-            'mistral',
-            'other'
-        ]),
-        z.string().regex(/^x-inherit-.+/)
-    ]).optional(),
-    confidence: z.int().gte(0).lte(100).optional(),
-    generatedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-    humanReviewed: z.boolean().optional(),
-    reviewedBy: z.string().max(255).optional(),
-    reviewedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional()
-});
-
-/**
- * Provenance metadata for AI-generated content
- */
-export const zAiProvenance2 = zAiProvenance;
-
-/**
- * Provenance
- *
- * Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
- */
-export const zProvenance = z.strictObject({
-    source: z.enum([
-        'import',
-        'manual',
-        'ai_generated'
-    ]).optional(),
-    confidence: z.number().gte(0).lte(1).optional(),
-    importSourceId: z.string().max(255).optional(),
-    aiProvenance: zAiProvenance.optional(),
-    humanVerdict: z.enum([
-        'approved',
-        'rejected',
-        'modified',
-        'pending_review'
-    ]).optional(),
-    rejectionReason: z.string().max(2000).optional(),
-    verdictAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-    agentTaskId: z.string().max(255).optional()
-});
-
-/**
- * Document or asset provenance chain
- */
-export const zProvenance2 = zProvenance;
-
-/**
  * Attestation
  *
  * A first-class attestation entity recording will execution formalities. Each attestation has its own identity — supports tracking multiple attestation events independently (original will, codicils, re-execution after marriage). Reused by estate, codicils, trusts, extensions. Supports written (E&W Wills Act s.9), oral (Islamic/customary), seal-based (Japanese inkan), kinyan-based (Jewish)
@@ -3340,130 +6386,6 @@ export const zEstate = z.object({
 export const zEstate2 = zEstate;
 
 /**
- * PostalAddress
- *
- * A physical address. Culturally neutral — supports any global addressing convention
- */
-export const zAddress = z.strictObject({
-    formattedAddress: z.string().max(5000).optional(),
-    streetAddress: z.string().max(255).optional(),
-    addressLine2: z.string().max(255).optional(),
-    addressLocality: z.string().max(255).optional(),
-    addressRegion: z.string().max(255).optional(),
-    postalCode: z.string().max(255).optional(),
-    addressCountry: z.string().regex(/^[A-Z]{2}$/).optional(),
-    latitude: z.number().gte(-90).lte(90).optional(),
-    longitude: z.number().gte(-180).lte(180).optional(),
-    landmark: z.string().max(255).optional(),
-    directionNotes: z.string().max(2000).optional(),
-    addressOrder: z.enum([
-        'western',
-        'japanese',
-        'indian',
-        'arabic',
-        'custom'
-    ]).optional()
-});
-
-/**
- * Postal addresses
- */
-export const zAddress2 = zAddress;
-
-/**
- * Identifier
- *
- * A typed external identifier. Use 'system' to namespace identifiers and prevent collisions across jurisdictions and organisations
- */
-export const zIdentifier = z.strictObject({
-    system: z.string().max(100).optional(),
-    value: z.string().min(1).max(255),
-    type: z.string().max(100).optional()
-});
-
-/**
- * External identifiers (NI number, passport, etc.)
- */
-export const zIdentifier2 = zIdentifier;
-
-/**
- * FieldProvenance
- *
- * Records how a specific field's value was obtained — manual entry, AI extraction, import, OCR, or computation
- */
-export const zFieldProvenance = z.strictObject({
-    field: z.string().min(1).max(255),
-    method: z.union([
-        z.enum([
-            'manual_entry',
-            'ai_extracted',
-            'imported',
-            'computed',
-            'ocr_scanned'
-        ]),
-        z.string().regex(/^x-inherit-.+/)
-    ]),
-    confidence: z.int().gte(0).lte(100).optional(),
-    verifiedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-    verifiedBy: z.string().max(255).optional(),
-    sourceDocumentId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    sourcePageNumber: z.int().gte(1).optional(),
-    sourceRegion: z.string().max(255).optional(),
-    originalText: z.string().max(2000).optional(),
-    originalScript: z.union([
-        z.enum([
-            'latin',
-            'kanji',
-            'hiragana',
-            'katakana',
-            'arabic',
-            'hebrew',
-            'devanagari',
-            'tamil',
-            'chinese_simplified',
-            'chinese_traditional',
-            'hangul',
-            'cyrillic',
-            'thai',
-            'mixed',
-            'other'
-        ]),
-        z.string().regex(/^x-inherit-.+/)
-    ]).optional(),
-    ocrEngine: z.string().max(255).optional(),
-    extractedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-    dataSource: z.strictObject({
-        source: z.string().max(100).optional(),
-        sourceUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional()
-    }).optional()
-});
-
-/**
- * Field-level provenance tracking
- */
-export const zFieldProvenance2 = zFieldProvenance;
-
-/**
- * Visibility
- *
- * Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records
- */
-export const zVisibility = z.enum([
-    'testator_only',
-    'proxy_visible',
-    'companion_visible',
-    'executor_visible',
-    'beneficiary_visible',
-    'all_parties'
-]).default('all_parties');
-
-/**
- * Access control visibility rules for an entity
- */
-export const zVisibility2 = zVisibility;
-
-/**
  * Person
  *
  * A person involved in the estate. Schema.org name alignment. Any Unicode script. Supports CJK phonetic readings, chieftaincy titles, clan/lineage identifiers, dual legal personalities, and tax residency across multiple jurisdictions
@@ -3887,1715 +6809,6 @@ export const zRelationship = z.object({
  * Relationship between two people
  */
 export const zRelationship2 = zRelationship;
-
-/**
- * Cultural Disposition
- *
- * Cultural, religious, and regulatory constraints on how an asset or property may be disposed of. Covers sacred status, disposal restrictions, export controls, and whether the item can be bequeathed
- */
-export const zCulturalDisposition = z.strictObject({
-    sacredStatus: z.enum([
-        'secular',
-        'consecrated',
-        'ritually_significant',
-        'inalienable_endowment'
-    ]).optional(),
-    culturalSignificance: z.enum([
-        'personal',
-        'family_heirloom',
-        'community',
-        'national_heritage'
-    ]).optional(),
-    bequeathable: z.boolean().optional().default(true),
-    disposalRestrictions: z.array(z.strictObject({
-        authority: z.string().max(255).optional(),
-        authorityType: z.enum([
-            'religious_body',
-            'family_council',
-            'clan_association',
-            'tribal_council',
-            'government',
-            'heritage_authority'
-        ]).optional(),
-        requirement: z.string().min(1).max(255),
-        jurisdiction: zJurisdiction.optional()
-    })).max(100).optional(),
-    exportRestrictions: z.array(z.strictObject({
-        jurisdiction: zJurisdiction,
-        restrictionType: z.enum([
-            'cultural_property',
-            'national_treasure',
-            'antiquity',
-            'protected_species',
-            'controlled_goods'
-        ]),
-        authority: z.string().max(255).optional(),
-        licenceRequired: z.boolean().optional(),
-        notes: z.string().max(2000).optional()
-    })).max(100).optional()
-});
-
-/**
- * Cultural and religious disposition preferences
- */
-export const zCulturalDisposition2 = zCulturalDisposition;
-
-/**
- * Media
- *
- * A media attachment — photograph, video, or document scan. Used for identification, valuation, condition documentation, and provenance records
- */
-export const zMedia = z.strictObject({
-    url: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//),
-    caption: z.string().max(255).optional(),
-    mediaType: z.string().max(100).optional(),
-    content: z.string().max(10485760).optional(),
-    viewType: z.enum([
-        'overview',
-        'identification',
-        'condition',
-        'provenance',
-        'maker_mark',
-        'serial_number',
-        'damage',
-        'scale_reference',
-        'label',
-        'certificate',
-        'receipt',
-        'environment'
-    ]).optional(),
-    takenAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-    thumbnailUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional()
-});
-
-/**
- * Media attachments (images, documents, audio)
- */
-export const zMedia2 = zMedia;
-
-/**
- * Property
- *
- * Real estate. Supports individual ownership, communal/family property (Nigeria), HUF coparcenary (India), government-vested land (Land Use Act), US community property, and informal/unregistered holdings
- */
-export const zProperty = z.object({
-    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    name: z.string().min(1).max(255),
-    propertyType: z.enum([
-        'detached',
-        'attached',
-        'apartment',
-        'land',
-        'commercial',
-        'mixed_use',
-        'rural',
-        'mobile',
-        'watercraft',
-        'other'
-    ]).optional(),
-    address: zAddress.optional(),
-    estimatedValue: zMoney.optional(),
-    professionalValuation: zMoney.optional(),
-    netEquity: zMoney.optional(),
-    inNegativeEquity: z.boolean().optional(),
-    valuationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    valuationConfidence: z.enum([
-        'estimated',
-        'professional',
-        'official',
-        'unknown'
-    ]).optional(),
-    isPrimaryResidence: z.boolean().optional(),
-    ownershipType: z.enum([
-        'sole',
-        'joint_tenants',
-        'tenants_in_common',
-        'trust',
-        'tenancy_by_entirety'
-    ]).optional(),
-    ownershipPercentage: z.number().gte(0).lte(100).optional(),
-    ownershipModel: z.enum([
-        'individual',
-        'joint',
-        'communal_family',
-        'huf_coparcenary',
-        'tribal',
-        'government_vested',
-        'trust_held'
-    ]).optional(),
-    acquisitionType: z.enum([
-        'self_acquired',
-        'ancestral_joint',
-        'ancestral_severed',
-        'inherited',
-        'gifted',
-        'stridhan',
-        'communal',
-        'waqf_endowed'
-    ]).optional(),
-    tenureType: z.enum([
-        'ownership',
-        'lease',
-        'communal',
-        'customary',
-        'informal',
-        'government_allocated'
-    ]).optional(),
-    registrationStatus: z.enum([
-        'formally_registered',
-        'informally_held',
-        'community_acknowledged',
-        'disputed',
-        'undocumented'
-    ]).optional(),
-    ownershipEvidence: z.enum([
-        'title_deed',
-        'certificate_of_occupancy',
-        'family_recognition',
-        'community_testimony',
-        'receipts_only',
-        'none'
-    ]).optional(),
-    culturalDisposition: zCulturalDisposition.optional(),
-    communalAuthority: z.strictObject({
-        authorityType: z.enum([
-            'family_council',
-            'clan_association',
-            'religious_body',
-            'tribal_council',
-            'government'
-        ]).optional(),
-        approvalRequired: z.boolean().optional(),
-        authorityName: z.string().max(255).optional(),
-        jurisdiction: zJurisdiction.optional()
-    }).optional(),
-    successionRegime: z.strictObject({
-        governingLaw: z.strictObject({
-            jurisdiction: zJurisdiction.optional(),
-            legalTradition: z.enum([
-                'common_law',
-                'civil_law',
-                'mixed',
-                'customary_law',
-                'islamic_law',
-                'hindu_law',
-                'jewish_law',
-                'canon_law'
-            ]).optional(),
-            statute: z.string().max(255).optional(),
-            section: z.string().max(255).optional()
-        }).optional(),
-        determinedBy: z.enum([
-            'domicile',
-            'situs',
-            'nationality',
-            'personal_status',
-            'choice_of_law',
-            'treaty'
-        ]).optional(),
-        binding: z.boolean().optional(),
-        extensions: z.array(z.string().max(500)).max(50).optional(),
-        notes: z.string().max(2000).optional()
-    }).optional(),
-    custodianPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    custodianPersonIdDisplay: z.string().max(255).optional(),
-    governmentConsentRequired: z.boolean().optional(),
-    mobilityType: z.enum([
-        'immoveable',
-        'moveable',
-        'mixed'
-    ]).optional(),
-    mortgageOutstanding: zMoney.optional(),
-    characterClassification: z.enum([
-        'community',
-        'separate',
-        'quasi_community',
-        'mixed',
-        'not_applicable'
-    ]).optional(),
-    homesteadStatus: z.strictObject({
-        isHomestead: z.boolean().optional(),
-        exemptionAmount: zMoney.optional(),
-        exemptionUnlimited: z.boolean().optional(),
-        deviseRestriction: z.boolean().optional(),
-        notes: z.string().max(2000).optional()
-    }).optional(),
-    passesOutsideEstate: z.boolean().optional(),
-    statutoryLifeEstate: z.strictObject({
-        beneficiaryPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        beneficiaryPersonIdDisplay: z.string().max(255).optional(),
-        basis: z.string().max(500).optional(),
-        conditions: z.string().max(255).optional()
-    }).optional(),
-    notes: z.string().max(2000).optional(),
-    externalLinks: z.array(z.strictObject({
-        system: z.string().max(100).regex(/^[a-z][a-zA-Z0-9]*$/),
-        id: z.string().min(1).max(500),
-        url: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-        label: z.string().max(255).optional(),
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional()
-    })).max(50).optional(),
-    images: z.array(zMedia).max(100).optional(),
-    visibility: zVisibility.optional(),
-    fieldProvenance: z.array(zFieldProvenance).max(100).optional(),
-    comments: z.array(z.strictObject({
-        id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-        authorPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        authorPersonIdDisplay: z.string().max(255).optional(),
-        content: z.string().min(1).max(5000),
-        createdAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        visibility: zVisibility.optional()
-    })).max(100).optional(),
-    rentalIncome: z.strictObject({
-        monthlyAmount: zMoney.optional(),
-        tenantName: z.string().max(255).optional(),
-        leaseEndDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        managingAgentOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        managingAgentOrganisationIdDisplay: z.string().max(255).optional()
-    }).optional(),
-    epc: z.strictObject({
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        rating: z.enum([
-            'A',
-            'B',
-            'C',
-            'D',
-            'E',
-            'F',
-            'G'
-        ]).optional(),
-        energyEfficiencyScore: z.int().gte(1).lte(100).optional(),
-        environmentalImpactScore: z.int().gte(1).lte(100).optional(),
-        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        certificateNumber: z.string().max(100).optional(),
-        certificateUrl: z.url().max(2048).regex(/^https?:\/\//).optional(),
-        floorArea: z.number().gte(0).optional(),
-        heatingType: z.string().max(255).optional()
-    }).optional(),
-    landRegistry: z.strictObject({
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        titleNumber: z.string().max(50).optional(),
-        titleClass: z.union([
-            z.enum([
-                'absolute',
-                'qualified',
-                'possessory',
-                'good_leasehold'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        lastSalePrice: z.int().gte(0).optional(),
-        lastSaleDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        tenure: z.union([
-            z.enum(['freehold', 'leasehold']),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        registeredOwners: z.array(z.string().max(255)).max(10).optional(),
-        chargesCount: z.int().gte(0).optional()
-    }).optional(),
-    floodRisk: z.strictObject({
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        riverAndSeaRisk: z.union([
-            z.enum([
-                'high',
-                'medium',
-                'low',
-                'very_low'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        surfaceWaterRisk: z.union([
-            z.enum([
-                'high',
-                'medium',
-                'low',
-                'very_low'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        floodZone: z.union([
-            z.enum([
-                '1',
-                '2',
-                '3a',
-                '3b'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        nearestWatercourse: z.string().max(255).optional(),
-        historicalFlooding: z.boolean().optional()
-    }).optional(),
-    leasehold: z.strictObject({
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        leaseStartDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        leaseTerm: z.int().gte(1).lte(999).optional(),
-        yearsRemaining: z.int().gte(0).lte(999).optional(),
-        groundRent: z.int().gte(0).optional(),
-        groundRentReviewDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        serviceCharge: z.int().gte(0).optional(),
-        freeholderName: z.string().max(255).optional(),
-        managementCompany: z.string().max(255).optional()
-    }).optional(),
-    provenance: zProvenance.optional(),
-    applicableLaw: zJurisdiction.optional(),
-    taxTreatment: z.strictObject({
-        jurisdiction: zJurisdiction.optional(),
-        assetType: z.enum([
-            'immoveable',
-            'moveable',
-            'mixed',
-            'exempt'
-        ]).optional(),
-        exemptions: z.array(z.string().max(100)).optional(),
-        reliefClaimed: z.array(z.string().max(100)).optional()
-    }).optional(),
-    taxReliefEligibility: z.strictObject({
-        reliefType: z.enum([
-            'agricultural_property',
-            'business_property',
-            'woodland',
-            'heritage',
-            'charitable'
-        ]).optional(),
-        eligible: z.boolean().optional(),
-        percentage: z.int().gte(0).lte(100).optional(),
-        conditions: z.string().max(500).optional(),
-        jurisdiction: zJurisdiction.optional(),
-        statute: z.string().max(500).optional()
-    }).optional()
-});
-
-/**
- * Real property (land, buildings)
- */
-export const zProperty2 = zProperty;
-
-/**
- * Financial Asset Properties
- *
- * Category-specific properties for financial assets: bank accounts, pensions, ISAs, shares, bonds, crypto wallets, insurance policies, debts receivable
- */
-export const zFinancial = z.object({
-    shareholding: z.strictObject({
-        companyName: z.string().max(255).optional(),
-        companyNumber: z.string().max(255).optional(),
-        shareClass: z.string().max(255).optional(),
-        numberOfShares: z.int().gte(1).optional(),
-        totalSharesIssued: z.int().gte(1).optional(),
-        votingRights: z.boolean().optional(),
-        restrictedTransfer: z.boolean().optional(),
-        listedExchange: z.string().max(255).optional(),
-        ticker: z.string().max(255).optional(),
-        cusip: z.string().max(255).optional(),
-        isin: z.string().max(255).optional()
-    }).optional(),
-    businessInterest: z.strictObject({
-        businessName: z.string().max(255).optional(),
-        businessType: z.enum([
-            'sole_trader',
-            'partnership',
-            'llp',
-            'limited_company',
-            'plc',
-            'franchise',
-            'cooperative',
-            'other'
-        ]).optional(),
-        ownershipPercentage: z.number().gte(0).lte(100).optional(),
-        controllingInterest: z.boolean().optional(),
-        partnershipAgreement: z.boolean().optional(),
-        successionProvision: z.string().max(255).optional(),
-        annualTurnover: zMoney.optional(),
-        employees: z.int().gte(0).optional()
-    }).optional(),
-    pension: z.strictObject({
-        schemeType: z.enum([
-            'defined_benefit',
-            'defined_contribution',
-            'sipp',
-            'state_pension',
-            'annuity',
-            'drawdown',
-            'other'
-        ]).optional(),
-        provider: z.string().max(255).optional(),
-        policyReference: z.string().max(500).optional(),
-        nominatedBeneficiaries: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
-        nominationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        deathBenefitType: z.enum([
-            'lump_sum',
-            'dependants_pension',
-            'drawdown_transfer',
-            'annuity_guarantee',
-            'none'
-        ]).optional(),
-        crystallised: z.boolean().optional(),
-        lifetimeAllowanceUsed: z.number().gte(0).lte(100).optional(),
-        pensionType: z.union([
-            z.enum([
-                'occupational',
-                'personal',
-                'stakeholder',
-                'sipp',
-                'ssas',
-                'workplace',
-                'state',
-                'cpf',
-                'epf',
-                'other'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        pensionProviderOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        pensionMemberNumber: z.string().max(100).optional(),
-        deathBenefitNomination: z.strictObject({
-            nomineePersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-            nominationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-            nominationReviewDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-            nominationCurrent: z.boolean().optional(),
-            nominationExpiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-            benefitType: z.enum([
-                'lump_sum',
-                'income',
-                'pension',
-                'discretionary'
-            ]).optional(),
-            estimatedAmount: zMoney.optional()
-        }).optional(),
-        drawdownStartDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        pensionValuationAtDeath: z.strictObject({
-            estimatedValue: zMoney.optional(),
-            valuationMethod: z.string().max(255).optional(),
-            valuationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
-        }).optional(),
-        annuityContinuation: z.strictObject({
-            annuityInForce: z.boolean().optional(),
-            annuityAmount: zMoney.optional(),
-            continuationOnDeath: z.enum([
-                'terminates',
-                'continues_to_spouse',
-                'continues_to_beneficiary',
-                'fixed_term'
-            ]).optional(),
-            continuationBeneficiaryPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
-        }).optional()
-    }).optional(),
-    insurancePolicy: z.strictObject({
-        policyType: z.enum([
-            'term_life',
-            'whole_life',
-            'endowment',
-            'critical_illness',
-            'income_protection',
-            'key_person',
-            'other'
-        ]).optional(),
-        provider: z.string().max(255).optional(),
-        policyReference: z.string().max(500).optional(),
-        sumAssured: zMoney.optional(),
-        writtenInTrust: z.boolean().optional(),
-        trusteeNames: z.array(z.string().max(500)).max(50).optional(),
-        beneficiaryPersonIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
-        premiumFrequency: z.enum([
-            'monthly',
-            'annual',
-            'single_premium',
-            'paid_up'
-        ]).optional(),
-        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
-    }).optional(),
-    coOwnership: z.strictObject({
-        coOwnerPersonIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
-        ownershipType: z.enum([
-            'joint_tenants',
-            'tenants_in_common',
-            'community_property',
-            'partnership',
-            'other'
-        ]).optional(),
-        ownershipPercentage: z.number().gte(0).lte(100).optional(),
-        severanceDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
-    }).optional(),
-    intellectualProperty: z.strictObject({
-        ipType: z.enum([
-            'patent',
-            'copyright',
-            'trademark',
-            'design_right',
-            'trade_secret',
-            'database_right',
-            'other'
-        ]).optional(),
-        registrationNumber: z.string().max(500).optional(),
-        registrationOffice: z.string().max(255).optional(),
-        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        annualRevenue: zMoney.optional(),
-        licensees: z.array(z.string().max(500)).max(50).optional()
-    }).optional(),
-    stockCompensation: z.strictObject({
-        compensationType: z.enum([
-            'iso',
-            'nso',
-            'rsu',
-            'espp',
-            'phantom_stock',
-            'sar',
-            'other'
-        ]).optional(),
-        grantDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        vestingSchedule: z.string().max(255).optional(),
-        vestedQuantity: z.int().gte(0).optional(),
-        unvestedQuantity: z.int().gte(0).optional(),
-        exercisePrice: zMoney.optional(),
-        expirationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        postDeathExerciseWindow: z.string().max(255).optional(),
-        acceleratesOnDeath: z.boolean().optional()
-    }).optional(),
-    debtReceivable: z.strictObject({
-        debtorName: z.string().max(255).optional(),
-        debtorPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        originalAmount: zMoney.optional(),
-        outstandingAmount: zMoney.optional(),
-        interestRate: z.number().gte(0).optional(),
-        secured: z.boolean().optional(),
-        documentRef: z.string().max(500).optional(),
-        collectibility: z.enum([
-            'likely',
-            'uncertain',
-            'doubtful',
-            'uncollectible'
-        ]).optional()
-    }).optional()
-});
-
-/**
- * Financial asset category details (accounts, investments, pensions)
- */
-export const zAssetCategoryFinancial = zFinancial;
-
-/**
- * Vehicle Asset Properties
- *
- * Category-specific properties for vehicles: cars, motorcycles, boats, caravans, classic vehicles
- */
-export const zVehicle = z.object({
-    vehicle: z.strictObject({
-        registrationNumber: z.string().max(20).optional(),
-        vin: z.string().regex(/^[A-HJ-NPR-Z0-9]{17}$/).optional(),
-        make: z.string().max(100).optional(),
-        model: z.string().max(255).optional(),
-        variant: z.string().max(255).optional(),
-        yearOfManufacture: z.int().gte(1886).lte(2100).optional(),
-        dateOfFirstRegistration: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        colour: z.string().max(50).optional(),
-        fuelType: z.union([
-            z.enum([
-                'petrol',
-                'diesel',
-                'electric',
-                'hybrid_petrol',
-                'hybrid_diesel',
-                'lpg',
-                'other'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        engineCapacity: z.int().gte(0).lte(20000).optional(),
-        co2Emissions: z.int().gte(0).optional(),
-        vehicleType: z.union([
-            z.enum([
-                'car',
-                'motorcycle',
-                'van',
-                'motorhome',
-                'trike',
-                'sidecar_outfit',
-                'other'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        isClassic: z.boolean().optional(),
-        keeperStatus: z.union([
-            z.enum([
-                'registered_keeper',
-                'not_registered_keeper',
-                'unknown'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        v5cStatus: z.union([
-            z.enum([
-                'held',
-                'missing',
-                'applied_for',
-                'with_dvla'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        financeType: z.union([
-            z.enum([
-                'none',
-                'hp',
-                'pcp',
-                'lease',
-                'loan',
-                'unknown'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        sornDeclared: z.boolean().optional(),
-        deathActions: z.strictObject({
-            dvlaNotified: z.boolean().optional(),
-            dvlaNotifiedAt: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-            insurerNotified: z.boolean().optional(),
-            insurerNotifiedAt: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-            financeCompanyNotified: z.boolean().optional(),
-            financeSettled: z.boolean().optional(),
-            taxRefundClaimed: z.boolean().optional(),
-            intendedDisposal: z.union([
-                z.enum([
-                    'transfer_to_beneficiary',
-                    'sell',
-                    'scrap',
-                    'sorn_and_store',
-                    'undecided'
-                ]),
-                z.string().max(100).regex(/^x-inherit-.+/)
-            ]).optional()
-        }).optional()
-    }).optional(),
-    vehicleCheck: z.strictObject({
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        motExpiry: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        motStatus: z.union([
-            z.enum([
-                'valid',
-                'expired',
-                'no_mot_required',
-                'sorn'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        lastMileage: z.int().gte(0).optional(),
-        lastMileageDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        advisoryCount: z.int().gte(0).optional(),
-        failureCount: z.int().gte(0).optional(),
-        taxStatus: z.union([
-            z.enum([
-                'taxed',
-                'untaxed',
-                'sorn',
-                'not_taxed_for_on_road_use'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        taxDueDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        insuranceStatus: z.union([
-            z.enum([
-                'insured',
-                'not_insured',
-                'unknown'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        financeOutstanding: z.boolean().optional(),
-        financeSettlementAmount: z.int().gte(0).optional(),
-        writeOffCategory: z.union([
-            z.enum([
-                'A',
-                'B',
-                'S',
-                'N',
-                'none'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        stolenStatus: z.union([
-            z.enum([
-                'clear',
-                'reported_stolen',
-                'unknown'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        previousKeepers: z.int().gte(0).optional(),
-        plateChanges: z.int().gte(0).optional(),
-        mileageAnomaly: z.boolean().optional()
-    }).optional()
-});
-
-/**
- * Vehicle asset category details (cars, boats, aircraft)
- */
-export const zAssetCategoryVehicle = zVehicle;
-
-/**
- * Digital Asset Properties
- *
- * Category-specific properties for digital assets: domains, social media, subscriptions, crypto wallets, cloud storage, NFTs, gaming accounts
- */
-export const zDigital = z.object({
-    digitalAccess: z.strictObject({
-        username: z.string().max(255).optional(),
-        passwordStorageLocation: z.string().max(500).optional(),
-        passwordManager: z.string().max(255).optional(),
-        twoFactorEnabled: z.boolean().optional(),
-        recoveryMethods: z.array(z.strictObject({
-            type: z.enum([
-                'backup_codes',
-                'email',
-                'phone',
-                'security_key'
-            ]).optional(),
-            location: z.string().max(500).optional()
-        })).max(20).optional(),
-        platformDeathPolicy: z.union([
-            z.enum([
-                'memorialise',
-                'delete',
-                'transfer',
-                'archive',
-                'unknown'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        legacyContactConfigured: z.boolean().optional(),
-        legacyContactPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
-    }).optional(),
-    socialMedia: z.strictObject({
-        platform: z.union([
-            z.enum([
-                'facebook',
-                'instagram',
-                'tiktok',
-                'twitter_x',
-                'linkedin',
-                'threads',
-                'youtube',
-                'pinterest',
-                'other'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        username: z.string().max(255).optional(),
-        url: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-        followerCount: z.int().gte(0).optional(),
-        monetised: z.boolean().optional(),
-        postDeathAction: z.union([
-            z.enum([
-                'memorialise',
-                'delete',
-                'transfer',
-                'archive',
-                'unknown'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        transferToPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
-    }).optional(),
-    cryptoAccess: z.strictObject({
-        blockchain: z.union([
-            z.enum([
-                'bitcoin',
-                'ethereum',
-                'solana',
-                'cardano',
-                'other'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        walletType: z.enum([
-            'hardware',
-            'software',
-            'exchange',
-            'custodian',
-            'paper'
-        ]).optional(),
-        walletAddress: z.string().max(255).optional(),
-        privateKeyLocation: z.string().max(500).optional(),
-        seedPhraseLocation: z.string().max(500).optional(),
-        exchangeOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        costBasis: zMoney.optional()
-    }).optional(),
-    cloudStorage: z.strictObject({
-        provider: z.union([
-            z.enum([
-                'google_drive',
-                'onedrive',
-                'icloud',
-                'dropbox',
-                'aws_s3',
-                'other'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        storageUsed: z.string().max(50).optional(),
-        importantFolders: z.array(z.strictObject({
-            name: z.string().max(255).optional(),
-            contents: z.string().max(500).optional(),
-            action: z.enum([
-                'archive',
-                'delete',
-                'transfer'
-            ]).optional()
-        })).max(50).optional(),
-        familyPhotoAccess: z.boolean().optional()
-    }).optional(),
-    domainNameAccess: z.strictObject({
-        domainName: z.string().max(255).optional(),
-        registrar: z.string().max(255).optional(),
-        registrantOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        autoRenew: z.boolean().optional(),
-        transferLocked: z.boolean().optional(),
-        authCodeLocation: z.string().max(500).optional(),
-        nameservers: z.array(z.string()).max(20).optional()
-    }).optional(),
-    nftAccess: z.strictObject({
-        blockchain: z.union([
-            z.enum([
-                'bitcoin',
-                'ethereum',
-                'solana',
-                'cardano',
-                'polygon',
-                'other'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        contractAddress: z.string().max(255).optional(),
-        tokenId: z.string().max(255).optional(),
-        tokenStandard: z.union([
-            z.enum([
-                'erc_721',
-                'erc_1155',
-                'other'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        marketplace: z.string().max(255).optional(),
-        marketplaceUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-        metadataUri: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional()
-    }).optional(),
-    monetisedContentAccess: z.strictObject({
-        platform: z.union([
-            z.enum([
-                'youtube',
-                'substack',
-                'etsy',
-                'patreon',
-                'twitch',
-                'spotify',
-                'medium',
-                'other'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        channelUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-        channelName: z.string().max(255).optional(),
-        subscriberCount: z.int().gte(0).optional(),
-        monthlyRevenue: zMoney.optional(),
-        monetisationStatus: z.union([
-            z.enum([
-                'active',
-                'suspended',
-                'demonetised',
-                'pending',
-                'none'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        contentType: z.union([
-            z.enum([
-                'video',
-                'audio',
-                'written',
-                'mixed',
-                'other'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        revenueModel: z.union([
-            z.enum([
-                'advertising',
-                'subscription',
-                'tips',
-                'affiliate',
-                'merchandise',
-                'mixed'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional()
-    }).optional(),
-    loyaltyAccess: z.strictObject({
-        programme: z.string().max(255).optional(),
-        programmeProvider: z.string().max(255).optional(),
-        pointsBalance: z.int().gte(0).optional(),
-        cashEquivalent: zMoney.optional(),
-        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        transferable: z.boolean().optional(),
-        transferUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional()
-    }).optional(),
-    gamingAccess: z.strictObject({
-        platform: z.union([
-            z.enum([
-                'steam',
-                'xbox',
-                'playstation',
-                'nintendo',
-                'epic',
-                'roblox',
-                'other'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        accountName: z.string().max(255).optional(),
-        virtualCurrencyBalance: z.int().gte(0).optional(),
-        virtualCurrencyName: z.string().max(100).optional(),
-        transferable: z.boolean().optional(),
-        estimatedRealValue: zMoney.optional()
-    }).optional(),
-    platformDelegation: z.strictObject({
-        action: z.union([
-            z.enum([
-                'memorialise',
-                'delete',
-                'transfer',
-                'archive',
-                'deactivate',
-                'preserve'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]),
-        delayDuration: z.string().regex(/^P(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$/).optional(),
-        transferToPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        specificInstructions: z.string().max(500).optional(),
-        platformToolConfigured: z.boolean().optional(),
-        platformToolType: z.union([
-            z.enum([
-                'inactive_account_manager',
-                'legacy_contact',
-                'digital_legacy',
-                'memorialisation_request',
-                'none',
-                'other'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        configuredDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
-    }).optional(),
-    fiduciaryAccess: z.strictObject({
-        accessMethod: z.union([
-            z.enum([
-                'designated_recipient',
-                'legacy_contact',
-                'inactive_account_manager',
-                'court_order',
-                'rufadaa_request',
-                'platform_form',
-                'credential_sharing',
-                'none'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]),
-        accessConfigured: z.boolean().optional(),
-        designatedRecipientPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        accessScope: z.union([
-            z.enum([
-                'catalogue_only',
-                'full_content',
-                'restricted',
-                'unknown'
-            ]),
-            z.string().regex(/^x-inherit-.+/)
-        ]).optional(),
-        termsOfServiceUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-        termsOfServiceConstraints: z.string().max(500).optional()
-    }).optional()
-});
-
-/**
- * Digital asset category details (crypto, accounts, domains)
- */
-export const zAssetCategoryDigital = zDigital;
-
-/**
- * Business Asset Properties
- *
- * Category-specific properties for business assets: partnerships, company holdings, intellectual property, stock compensation
- */
-export const zBusiness = z.object({
-    businessInterest: z.strictObject({
-        businessName: z.string().max(255).optional(),
-        businessType: z.enum([
-            'sole_trader',
-            'partnership',
-            'llp',
-            'limited_company',
-            'plc',
-            'franchise',
-            'cooperative',
-            'other'
-        ]).optional(),
-        ownershipPercentage: z.number().gte(0).lte(100).optional(),
-        controllingInterest: z.boolean().optional(),
-        partnershipAgreement: z.boolean().optional(),
-        successionProvision: z.string().max(255).optional(),
-        annualTurnover: zMoney.optional(),
-        employees: z.int().gte(0).optional()
-    }).optional(),
-    intellectualProperty: z.strictObject({
-        ipType: z.enum([
-            'patent',
-            'copyright',
-            'trademark',
-            'design_right',
-            'trade_secret',
-            'database_right',
-            'other'
-        ]).optional(),
-        registrationNumber: z.string().max(500).optional(),
-        registrationOffice: z.string().max(255).optional(),
-        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        annualRevenue: zMoney.optional(),
-        licensees: z.array(z.string().max(500)).max(50).optional()
-    }).optional(),
-    stockCompensation: z.strictObject({
-        compensationType: z.enum([
-            'iso',
-            'nso',
-            'rsu',
-            'espp',
-            'phantom_stock',
-            'sar',
-            'other'
-        ]).optional(),
-        grantDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        vestingSchedule: z.string().max(255).optional(),
-        vestedQuantity: z.int().gte(0).optional(),
-        unvestedQuantity: z.int().gte(0).optional(),
-        exercisePrice: zMoney.optional(),
-        expirationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        postDeathExerciseWindow: z.string().max(255).optional(),
-        acceleratesOnDeath: z.boolean().optional()
-    }).optional(),
-    coOwnership: z.strictObject({
-        coOwnerPersonIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
-        ownershipType: z.enum([
-            'joint_tenants',
-            'tenants_in_common',
-            'community_property',
-            'partnership',
-            'other'
-        ]).optional(),
-        ownershipPercentage: z.number().gte(0).lte(100).optional(),
-        severanceDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
-    }).optional()
-});
-
-/**
- * Business asset category details (shares, partnerships, sole trader)
- */
-export const zAssetCategoryBusiness = zBusiness;
-
-/**
- * General Asset Properties
- *
- * Category-specific properties for general tangible assets: art, antiques, jewellery, collectibles, books, wine, clothing, firearms, musical instruments, property contents
- */
-export const zGeneral = z.object({
-    stolenArtCheck: z.strictObject({
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        result: z.union([
-            z.enum([
-                'clear',
-                'flagged',
-                'inconclusive'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        certificateReference: z.string().max(100).optional(),
-        certificateUrl: z.url().max(2048).regex(/^https?:\/\//).optional(),
-        checkedBy: z.string().max(255).optional()
-    }).optional(),
-    gemologicalCertificate: z.strictObject({
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        laboratory: z.union([
-            z.enum([
-                'gia',
-                'ags',
-                'igi',
-                'hrd',
-                'egl'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        certificateNumber: z.string().max(100).optional(),
-        verificationUrl: z.url().max(2048).regex(/^https?:\/\//).optional(),
-        stoneType: z.string().max(100).optional(),
-        caratWeight: z.number().gte(0).optional(),
-        colourGrade: z.string().max(50).optional(),
-        clarityGrade: z.string().max(50).optional(),
-        cutGrade: z.string().max(50).optional()
-    }).optional()
-});
-
-/**
- * General asset category details (personal property, collectibles)
- */
-export const zAssetCategoryGeneral = zGeneral;
-
-/**
- * A single service, maintenance, or restoration record for a mechanical or valuable item. Used for watches, vehicles, clocks, musical instruments, and any item with a service lifecycle
- */
-export const zServiceRecord = z.strictObject({
-    serviceDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/),
-    provider: z.string().max(255).optional(),
-    description: z.string().max(2000).optional(),
-    cost: zMoney.optional(),
-    documentReference: z.string().max(255).optional()
-});
-
-/**
- * Asset
- *
- * A non-property asset: financial accounts, personal property, vehicles, digital assets, business interests, Islamic finance instruments, etc
- */
-export const zAsset = z.intersection(z.unknown(), z.object({
-    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    name: z.string().min(1).max(255),
-    category: z.enum([
-        'financial',
-        'vehicle',
-        'digital',
-        'business',
-        'property_contents',
-        'jewellery_watches',
-        'art',
-        'antiques',
-        'collectibles',
-        'musical_instruments',
-        'books_manuscripts',
-        'wine_spirits',
-        'clothing_textiles',
-        'firearms_sporting',
-        'islamic_financial',
-        'other'
-    ]),
-    subcategory: z.string().max(100).optional(),
-    estimatedValue: zMoney.optional(),
-    professionalValuation: zMoney.optional(),
-    netEquity: zMoney.optional(),
-    inNegativeEquity: z.boolean().optional(),
-    valuationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    valuationConfidence: z.enum([
-        'estimated',
-        'professional',
-        'official',
-        'unknown'
-    ]).optional(),
-    condition: z.enum([
-        'excellent',
-        'good',
-        'fair',
-        'poor',
-        'unknown',
-        'not_applicable'
-    ]).optional(),
-    quantity: z.int().gte(1).optional(),
-    location: z.string().max(255).optional(),
-    propertyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    assetCollectionId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    spaceId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
-    identifiers: z.array(zIdentifier).max(100).optional(),
-    externalLinks: z.array(z.strictObject({
-        system: z.string().max(100).regex(/^[a-z][a-zA-Z0-9]*$/),
-        id: z.string().min(1).max(500),
-        url: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-        label: z.string().max(255).optional(),
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional()
-    })).max(50).optional(),
-    productPage: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-    provenanceChain: z.array(z.strictObject({
-        description: z.string().min(1).max(2000),
-        ownerName: z.string().max(255).optional(),
-        fromDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        toDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        acquisitionMethod: z.enum([
-            'purchase',
-            'inheritance',
-            'gift',
-            'commission',
-            'restitution',
-            'auction',
-            'unknown'
-        ]).optional(),
-        source: z.string().max(500).optional(),
-        evidenceUrl: z.url().max(2048).regex(/^https?:\/\//).optional()
-    })).max(100).optional(),
-    images: z.array(zMedia).max(100).optional(),
-    possessionStatus: z.enum([
-        'possessed_at_death',
-        'receivable',
-        'contingent'
-    ]).optional(),
-    mobilityType: z.enum([
-        'immoveable',
-        'moveable',
-        'mixed'
-    ]).optional(),
-    acquisitionType: z.enum([
-        'self_acquired',
-        'ancestral_joint',
-        'ancestral_severed',
-        'inherited',
-        'gifted',
-        'stridhan',
-        'communal',
-        'waqf_endowed'
-    ]).optional(),
-    registrationStatus: z.enum([
-        'formally_registered',
-        'informally_held',
-        'community_acknowledged',
-        'disputed',
-        'undocumented'
-    ]).optional(),
-    ownershipEvidence: z.enum([
-        'title_deed',
-        'certificate_of_occupancy',
-        'family_recognition',
-        'community_testimony',
-        'receipts_only',
-        'none'
-    ]).optional(),
-    culturalDisposition: zCulturalDisposition.optional(),
-    communalAuthority: z.strictObject({
-        authorityType: z.enum([
-            'family_council',
-            'clan_association',
-            'religious_body',
-            'tribal_council',
-            'government'
-        ]).optional(),
-        approvalRequired: z.boolean().optional(),
-        authorityName: z.string().max(255).optional(),
-        jurisdiction: zJurisdiction.optional()
-    }).optional(),
-    successionRegime: z.strictObject({
-        governingLaw: z.strictObject({
-            jurisdiction: zJurisdiction.optional(),
-            legalTradition: z.enum([
-                'common_law',
-                'civil_law',
-                'mixed',
-                'customary_law',
-                'islamic_law',
-                'hindu_law',
-                'jewish_law',
-                'canon_law'
-            ]).optional(),
-            statute: z.string().max(255).optional(),
-            section: z.string().max(255).optional()
-        }).optional(),
-        determinedBy: z.enum([
-            'domicile',
-            'situs',
-            'nationality',
-            'personal_status',
-            'choice_of_law',
-            'treaty'
-        ]).optional(),
-        binding: z.boolean().optional(),
-        extensions: z.array(z.string().max(500)).max(50).optional(),
-        notes: z.string().max(2000).optional()
-    }).optional(),
-    beneficiaryDesignation: z.strictObject({
-        primaryBeneficiaryPersonIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
-        contingentBeneficiaryPersonIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
-        designationType: z.enum([
-            'retirement_account',
-            'life_insurance',
-            'superannuation',
-            'pod_account',
-            'other'
-        ]).optional(),
-        linkedNonprobateTransferId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
-    }).optional(),
-    digitalAccessConsent: z.strictObject({
-        consentGiven: z.boolean().optional(),
-        scope: z.enum([
-            'full_access',
-            'limited_access',
-            'no_access'
-        ]).optional(),
-        designatedRecipientPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        designatedRecipientPersonIdDisplay: z.string().max(255).optional(),
-        onlineToolDirective: z.boolean().optional()
-    }).optional(),
-    passesOutsideEstate: z.boolean().optional(),
-    notes: z.string().max(2000).optional(),
-    description: z.string().max(2000).optional(),
-    brand: z.union([
-        z.string().max(255),
-        z.strictObject({
-            name: z.string().max(255),
-            wikidataId: z.string().max(20).regex(/^Q[1-9][0-9]*$/).optional(),
-            website: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional()
-        })
-    ]).optional(),
-    model: z.string().max(255).optional(),
-    purchaseDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    originalPackaging: z.enum([
-        'complete',
-        'partial',
-        'box_only',
-        'papers_only',
-        'none',
-        'unknown'
-    ]).optional(),
-    custodian: z.strictObject({
-        name: z.string().max(255).optional(),
-        contactEmail: z.email().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).optional(),
-        contactPhone: z.string().max(255).optional(),
-        relationship: z.string().max(255).optional(),
-        reference: z.string().max(500).optional()
-    }).optional(),
-    conditionSystem: z.union([
-        z.enum([
-            'goldmine',
-            'sheldon',
-            'ags',
-            'bsc',
-            'gia',
-            'watch_trade',
-            'classic_vehicle',
-            'book_trade'
-        ]),
-        z.string().max(100).regex(/^x-inherit-.+/)
-    ]).optional(),
-    conditionGrade: z.string().max(100).optional(),
-    conditionStandard: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-    urgency: z.enum([
-        'immediate',
-        'within_7_days',
-        'within_30_days',
-        'none'
-    ]).optional(),
-    urgencyReason: z.string().max(2000).optional(),
-    containedInAssetId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    insurance: z.strictObject({
-        provider: z.string().max(255).optional(),
-        policyReference: z.string().max(500).optional(),
-        insuredValue: zMoney.optional(),
-        renewalDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        notes: z.string().max(2000).optional()
-    }).optional(),
-    purchasedFrom: z.string().max(255).optional(),
-    splitFrom: z.strictObject({
-        entityType: z.enum(['asset', 'asset_collection']),
-        entityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-        splitAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        reason: z.string().max(2000).optional()
-    }).optional(),
-    dataProvenance: z.enum([
-        'manual_entry',
-        'ai_extracted',
-        'ocr_scanned',
-        'imported',
-        'migrated',
-        'system_generated'
-    ]).optional(),
-    searchTerms: z.array(z.string().max(500)).max(50).optional(),
-    comparableSearchProfile: z.strictObject({
-        platforms: z.array(z.string().max(500)).max(50).optional(),
-        searchQuery: z.string().max(255).optional(),
-        filters: z.record(z.string(), z.string().max(255)).optional(),
-        excludePlatforms: z.array(z.string().max(500)).max(50).optional(),
-        lastSearchedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-        searchFrequency: z.enum([
-            'once',
-            'weekly',
-            'monthly',
-            'on_demand'
-        ]).optional()
-    }).optional(),
-    suggestedSubcategory: z.string().max(255).optional(),
-    valuationReliability: z.int().gte(0).lte(100).optional(),
-    lastVerifiedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-    verifiedBy: z.string().max(255).optional(),
-    visibility: zVisibility.optional(),
-    fieldProvenance: z.array(zFieldProvenance).max(100).optional(),
-    comments: z.array(z.strictObject({
-        id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-        authorPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        authorPersonIdDisplay: z.string().max(255).optional(),
-        content: z.string().min(1).max(5000),
-        createdAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        visibility: zVisibility.optional()
-    })).max(100).optional(),
-    mergedInto: z.strictObject({
-        entityType: z.enum(['asset', 'asset_collection']).optional(),
-        entityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        mergedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-        reason: z.string().max(2000).optional()
-    }).optional(),
-    spaceIdDisplay: z.string().max(255).optional(),
-    provenance: zProvenance.optional(),
-    applicableLaw: zJurisdiction.optional(),
-    taxTreatment: z.strictObject({
-        jurisdiction: zJurisdiction.optional(),
-        assetType: z.enum([
-            'immoveable',
-            'moveable',
-            'mixed',
-            'exempt'
-        ]).optional(),
-        exemptions: z.array(z.string().max(100)).optional(),
-        reliefClaimed: z.array(z.string().max(100)).optional()
-    }).optional(),
-    accessInstructions: z.strictObject({
-        accessType: z.string().max(100).optional(),
-        platform: z.string().max(255).optional(),
-        visibility: zVisibility.optional(),
-        requiredRole: z.string().max(50).optional(),
-        steps: z.array(z.strictObject({
-            step: z.int().gte(1),
-            method: z.string().min(1).max(100),
-            description: z.string().max(500).optional(),
-            location: z.string().max(500).optional(),
-            holderPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
-        })).optional(),
-        memorialisation: z.strictObject({
-            preference: z.enum([
-                'transfer_to_beneficiary',
-                'memorialise',
-                'delete',
-                'archive',
-                'no_preference'
-            ]).optional(),
-            instructions: z.string().max(1000).optional()
-        }).optional(),
-        lastVerified: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        verifiedBy: z.string().max(255).optional()
-    }).optional(),
-    ownerIntent: z.enum([
-        'keeping',
-        'considering',
-        'thinning',
-        'listed',
-        'sold',
-        'allocated',
-        'donated'
-    ]).optional(),
-    listings: z.array(z.strictObject({
-        channel: z.enum([
-            'ebay',
-            'amazon',
-            'shopify',
-            'etsy',
-            'own_website',
-            'auction_house',
-            'other'
-        ]),
-        channelName: z.string().max(255).optional(),
-        listingId: z.string().max(255).optional(),
-        listingUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-        status: z.enum([
-            'draft',
-            'active',
-            'sold',
-            'withdrawn',
-            'expired'
-        ]),
-        askingPrice: zMoney.optional(),
-        listedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-        soldAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).nullish(),
-        soldPrice: zMoney.optional()
-    })).max(20).optional(),
-    serviceHistory: z.array(zServiceRecord).max(100).optional(),
-    insuranceCover: z.strictObject({
-        insurer: z.string().max(255).optional(),
-        policyNumber: z.string().max(100).optional(),
-        policyType: z.enum([
-            'home_contents',
-            'specialist_collectibles',
-            'classic_vehicle',
-            'individual_item',
-            'fine_art',
-            'jewellery',
-            'other'
-        ]).optional(),
-        agreedValue: zMoney.optional(),
-        coverConfirmedAt: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
-    }).optional(),
-    shippingClass: z.enum([
-        'parcel',
-        'large_item',
-        'specialist_transport',
-        'collection_only'
-    ]).optional(),
-    includedDocuments: z.array(z.union([z.enum([
-            'outer_box',
-            'inner_box',
-            'warranty_card',
-            'cosc_certificate',
-            'instruction_manual',
-            'hang_tags',
-            'service_booklet',
-            'purchase_receipt',
-            'original_invoice',
-            'v5c_logbook',
-            'mot_certificate',
-            'provenance_letter',
-            'certificate_of_authenticity',
-            'appraisal_certificate',
-            'export_licence',
-            'customs_declaration'
-        ]), z.string().max(100).regex(/^x-inherit-.+/)])).max(30).optional(),
-    taxReliefEligibility: z.strictObject({
-        reliefType: z.enum([
-            'agricultural_property',
-            'business_property',
-            'woodland',
-            'heritage',
-            'charitable'
-        ]).optional(),
-        eligible: z.boolean().optional(),
-        percentage: z.int().gte(0).lte(100).optional(),
-        conditions: z.string().max(500).optional(),
-        jurisdiction: zJurisdiction.optional(),
-        statute: z.string().max(500).optional()
-    }).optional(),
-    significance: z.strictObject({
-        type: z.enum([
-            'sentimental',
-            'cultural',
-            'religious',
-            'historical',
-            'family_heirloom',
-            'professional'
-        ]).optional(),
-        description: z.string().max(1000).optional(),
-        restrictionOnDisposal: z.strictObject({
-            exists: z.boolean().optional(),
-            nature: z.string().max(500).optional()
-        }).optional()
-    }).optional()
-}));
-
-/**
- * Non-property assets (bank accounts, investments, etc.)
- */
-export const zAsset2 = zAsset;
-
-/**
- * Asset Collection
- *
- * A named group of related assets — e.g. a model railway collection, vinyl record library, or art portfolio. Lets families and dealers understand which items belong together and should be considered as a set
- */
-export const zAssetCollection = z.object({
-    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    rootDocumentId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    name: z.string().min(1).max(255),
-    description: z.string().max(2000).optional(),
-    category: z.enum([
-        'model_railways',
-        'vinyl_records',
-        'art',
-        'jewellery',
-        'wine',
-        'stamps',
-        'coins',
-        'books',
-        'musical_instruments',
-        'fishing_gear',
-        'handbags',
-        'power_tools',
-        'watches',
-        'ceramics',
-        'memorabilia',
-        'other'
-    ]).optional(),
-    estimatedValue: zMoney.optional(),
-    valuationSource: z.enum([
-        'self_estimated',
-        'dealer_valuation',
-        'auction_estimate',
-        'insurance_value'
-    ]).optional(),
-    valuationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    disposalWishes: z.string().max(255).optional(),
-    disposalStrategy: z.enum([
-        'keep_together',
-        'sell_as_collection',
-        'sell_individually',
-        'auction',
-        'donate',
-        'gift_to_person',
-        'dealer_bids',
-        'mixed',
-        'undecided'
-    ]).optional(),
-    minimumAcceptableValue: zMoney.optional(),
-    preferredDisposalMethod: z.enum([
-        'private_sale',
-        'auction_house',
-        'dealer_network',
-        'online_marketplace',
-        'specialist_fair',
-        'museum_acquisition',
-        'other'
-    ]).optional(),
-    specialistDealerNotes: z.string().max(2000).optional(),
-    notes: z.string().max(2000).optional(),
-    images: z.array(zMedia).max(100).optional(),
-    splitFrom: z.strictObject({
-        entityType: z.enum(['asset', 'asset_collection']),
-        entityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-        splitAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        reason: z.string().max(2000).optional()
-    }).optional(),
-    disposalHistory: z.array(z.strictObject({
-        assetId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        disposalMethod: z.enum([
-            'sold_as_collection',
-            'sold_individually',
-            'gifted_to_beneficiary',
-            'donated',
-            'kept',
-            'other'
-        ]).optional(),
-        proceeds: zMoney.optional(),
-        recipientPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        recipientPersonIdDisplay: z.string().max(255).optional(),
-        recipientOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        recipientOrganisationIdDisplay: z.string().max(255).optional(),
-        date: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        notes: z.string().max(2000).optional()
-    })).max(500).optional(),
-    mergedInto: z.strictObject({
-        entityType: z.enum(['asset', 'asset_collection']).optional(),
-        entityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        mergedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-        reason: z.string().max(2000).optional()
-    }).optional(),
-    valuationComparison: z.strictObject({
-        insuranceValue: zMoney.optional(),
-        insuranceDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        dealerEstimate: zMoney.optional(),
-        dealerDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        auctionEstimate: zMoney.optional(),
-        auctionDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        likelyRealisableAmount: zMoney.optional()
-    }).optional(),
-    provenance: zProvenance.optional()
-});
-
-/**
- * A named grouping of assets within an estate or catalogue
- */
-export const zAssetCollection2 = zAssetCollection;
 
 /**
  * Liability
@@ -6222,182 +7435,6 @@ export const zGuardian = z.intersection(z.unknown(), z.object({
 export const zGuardian2 = zGuardian;
 
 /**
- * Wish
- *
- * A non-binding (or culturally/religiously binding) wish — funeral, letter of wishes, care instructions, pet care, digital estate, distribution preferences
- */
-export const zWish = z.object({
-    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    wishType: z.enum([
-        'funeral',
-        'letter',
-        'care',
-        'distribution',
-        'digital',
-        'pets',
-        'general',
-        'digital_likeness'
-    ]),
-    title: z.string().min(1).max(255),
-    content: z.string().max(5000).optional(),
-    bindingNature: z.enum([
-        'non_binding',
-        'culturally_obligatory',
-        'religiously_obligatory',
-        'legally_binding'
-    ]).optional(),
-    addresseePersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    addresseePersonIdDisplay: z.string().max(255).optional(),
-    relatedAssetId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    notes: z.string().max(2000).optional(),
-    visibility: zVisibility.optional(),
-    funeralArrangementType: z.union([
-        z.enum([
-            'burial',
-            'cremation',
-            'green_burial',
-            'sea_burial',
-            'sky_burial',
-            'donation_to_science',
-            'other'
-        ]),
-        z.string().regex(/^x-inherit-.+/)
-    ]).optional(),
-    funeralCeremonyType: z.enum([
-        'religious',
-        'secular',
-        'hybrid',
-        'none'
-    ]).optional(),
-    funeralCeremonyReligion: z.string().max(255).optional(),
-    funeralProviderOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    funeralProviderOrganisationIdDisplay: z.string().max(255).optional(),
-    funeralPrePaid: z.boolean().optional(),
-    funeralPrePaidPolicyNumber: z.string().max(100).optional(),
-    funeralBudgetMaximum: zMoney.optional(),
-    funeralBudgetSource: z.enum([
-        'estate',
-        'pre_paid',
-        'insurance',
-        'family',
-        'other'
-    ]).optional(),
-    funeralLocationPreference: z.string().max(500).optional(),
-    funeralMusicWishes: z.string().max(2000).optional(),
-    funeralReadingWishes: z.string().max(2000).optional(),
-    organDonation: z.strictObject({
-        consentGiven: z.boolean().optional(),
-        organs: z.array(z.string().max(100)).max(20).optional(),
-        coordinatingOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        coordinatingOrganisationIdDisplay: z.string().max(255).optional()
-    }).optional(),
-    medicalResearchDonation: z.strictObject({
-        consentGiven: z.boolean().optional(),
-        institutionOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        institutionOrganisationIdDisplay: z.string().max(255).optional(),
-        restrictions: z.string().max(2000).optional()
-    }).optional(),
-    autopsyPreference: z.enum([
-        'requested',
-        'declined',
-        'no_preference'
-    ]).optional(),
-    funeralBudgetNotes: z.string().max(2000).optional(),
-    likenessConsent: z.enum([
-        'permitted',
-        'prohibited',
-        'restricted',
-        'not_stated'
-    ]).optional(),
-    likenessScope: z.array(z.enum([
-        'voice',
-        'visual_appearance',
-        'writing_style',
-        'personality_model',
-        'full_avatar'
-    ])).optional(),
-    likenessPermittedUses: z.array(z.enum([
-        'memorial',
-        'family_private',
-        'educational',
-        'commercial',
-        'legal_proceedings',
-        'artistic'
-    ])).optional(),
-    likenessProhibitedUses: z.array(z.enum([
-        'memorial',
-        'family_private',
-        'educational',
-        'commercial',
-        'legal_proceedings',
-        'artistic'
-    ])).optional(),
-    likenessControllerPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    likenessControllerPersonIdDisplay: z.string().max(255).optional(),
-    likenessTimeLimit: z.string().regex(/^P(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$/).optional(),
-    likenessRevocationConditions: z.string().max(500).optional(),
-    syntheticMediaPolicy: z.enum([
-        'allow_with_attribution',
-        'allow_without_attribution',
-        'prohibit_all',
-        'family_decision',
-        'not_stated'
-    ]).optional(),
-    likenessEnforcement: z.array(z.strictObject({
-        platform: z.string().min(1).max(255),
-        requestType: z.enum([
-            'takedown',
-            'restrict',
-            'transfer_control',
-            'verify_consent',
-            'cease_training',
-            'other'
-        ]),
-        requestDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        requestedBy: z.string().max(255).optional(),
-        requestedByPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        requestedByPersonIdDisplay: z.string().max(255).optional(),
-        status: z.enum([
-            'pending',
-            'acknowledged',
-            'complied',
-            'refused',
-            'escalated',
-            'unknown'
-        ]).optional(),
-        responseDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        referenceNumber: z.string().max(255).optional(),
-        legalBasis: z.string().max(500).optional(),
-        notes: z.string().max(500).optional()
-    })).optional(),
-    existingDigitalModels: z.array(z.strictObject({
-        provider: z.string().max(255).optional(),
-        modelType: z.enum([
-            'chatbot',
-            'voice_clone',
-            'visual_avatar',
-            'full_replica',
-            'other'
-        ]).optional(),
-        action: z.enum([
-            'preserve',
-            'delete',
-            'transfer',
-            'restrict'
-        ]).optional(),
-        controllerPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        controllerPersonIdDisplay: z.string().max(255).optional()
-    })).optional(),
-    relatedTrustIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(50).optional(),
-    provenance: zProvenance.optional()
-});
-
-/**
- * Non-binding wishes (funeral, organ donation, etc.)
- */
-export const zWish2 = zWish;
-
-/**
  * A single clause within a will or testamentary document
  */
 export const zWillClause = z.strictObject({
@@ -6811,120 +7848,6 @@ export const zPowerOfAppointment = z.object({
 export const zPowerOfAppointment2 = zPowerOfAppointment;
 
 /**
- * A comparable sale or listing used to support the valuation. Capturing comparables with screenshots and metadata creates an auditable evidence trail for executors, HMRC, and probate courts
- */
-export const zComparable = z.strictObject({
-    url: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-    screenshotUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-    title: z.string().max(255).optional(),
-    salePrice: zMoney.optional(),
-    saleDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    platform: z.string().max(255).optional(),
-    platformListingId: z.string().max(255).optional(),
-    auctionLotRef: z.string().max(500).optional(),
-    capturedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-    matchConfidence: z.enum([
-        'exact',
-        'close',
-        'approximate',
-        'weak'
-    ]).optional(),
-    matchFactors: z.array(z.string().max(500)).max(50).optional(),
-    matchNotes: z.string().max(2000).optional(),
-    matchScore: z.int().gte(0).lte(100).optional(),
-    humanVerdict: z.enum([
-        'accepted',
-        'rejected',
-        'adjusted',
-        'not_reviewed'
-    ]).optional(),
-    rejectionReason: z.string().max(255).optional()
-});
-
-/**
- * Valuation
- *
- * A valuation of an estate asset, property, or asset collection. Supports multiple valuations per entity over time — owner estimates, professional valuations, AI analyses, dealer offers, and probate-agreed figures
- */
-export const zValuation = z.object({
-    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    entityType: z.enum([
-        'asset',
-        'property',
-        'asset_collection'
-    ]),
-    entityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    valuedAmount: zMoney,
-    valuationDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/),
-    provider: z.string().max(255).optional(),
-    providerType: z.enum([
-        'owner',
-        'professional_valuer',
-        'auction_house',
-        'dealer',
-        'insurance_assessor',
-        'tax_authority',
-        'ai_estimate',
-        'other'
-    ]).optional(),
-    valuerRegistration: z.strictObject({
-        body: z.string().max(255).optional(),
-        membershipId: z.string().max(255).optional(),
-        designation: z.string().max(100).optional(),
-        verificationUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional()
-    }).optional(),
-    method: z.enum([
-        'comparable_sales',
-        'replacement_cost',
-        'income_approach',
-        'market_listing',
-        'insurance_schedule',
-        'ai_analysis',
-        'expert_opinion',
-        'other'
-    ]).optional(),
-    valuationPurpose: z.enum([
-        'current_estimate',
-        'date_of_death',
-        'insurance',
-        'official',
-        'tax_return',
-        'dealer_offer',
-        'ai_estimate',
-        'pre_sale',
-        'probate'
-    ]).optional(),
-    confidence: z.enum([
-        'high',
-        'medium',
-        'low',
-        'unknown'
-    ]).optional(),
-    comparables: z.array(zComparable).max(100).optional(),
-    notes: z.string().max(2000).optional(),
-    fieldProvenance: z.array(zFieldProvenance).max(100).optional(),
-    auctionData: z.strictObject({
-        auctionHouseOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        auctionHouseOrganisationIdDisplay: z.string().max(255).optional(),
-        saleDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        lotNumber: z.string().max(100).optional(),
-        estimateLow: zMoney.optional(),
-        estimateHigh: zMoney.optional(),
-        hammerPrice: zMoney.optional(),
-        buyersPremiumPercentage: z.number().gte(0).lte(100).optional(),
-        totalRealised: zMoney.optional(),
-        sold: z.boolean().optional()
-    }).optional(),
-    validUntil: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).nullish(),
-    provenance: zProvenance.optional()
-});
-
-/**
- * A formal or estimated valuation of an asset or estate
- */
-export const zValuation2 = zValuation;
-
-/**
  * Lifetime Transfer
  *
  * A gift or transfer made during the testator's lifetime, relevant for tax calculations such as the UK 7-year rule, US unified gift/estate tax, and similar lookback provisions in other jurisdictions
@@ -6995,494 +7918,6 @@ export const zLifetimeTransfer = z.object({
 export const zLifetimeTransfer2 = zLifetimeTransfer;
 
 /**
- * A registration with a regulatory body, professional association, or government registry
- */
-export const zRegistration = z.object({
-    body: z.string().max(100),
-    number: z.string().max(100),
-    status: z.enum([
-        'active',
-        'suspended',
-        'revoked',
-        'voluntary',
-        'expired'
-    ]).optional(),
-    jurisdiction: z.string().max(10).optional(),
-    verificationUrl: z.url().max(2048).optional(),
-    verifiedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-    liveCheck: z.strictObject({
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        companyStatus: z.union([
-            z.enum([
-                'active',
-                'dissolved',
-                'liquidation',
-                'receivership',
-                'administration',
-                'voluntary-arrangement',
-                'converted-closed'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        sicCodes: z.array(z.string().max(10)).max(10).optional(),
-        incorporatedAt: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        accountsOverdue: z.boolean().optional(),
-        insolvencyFlag: z.boolean().optional(),
-        authorisationStatus: z.union([
-            z.enum([
-                'authorised',
-                'revoked',
-                'suspended',
-                'cancelled',
-                'no-longer-authorised'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        firmReference: z.string().max(50).optional(),
-        permissions: z.array(z.string().max(500)).max(50).optional(),
-        effectiveFrom: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        charityStatus: z.union([
-            z.enum([
-                'registered',
-                'removed',
-                'suspended',
-                'in-default'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        income: z.int().gte(0).optional(),
-        objects: z.string().max(2000).optional(),
-        dateRegistered: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        reportingStatus: z.union([
-            z.enum([
-                'up-to-date',
-                'overdue',
-                'not-required'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional()
-    }).optional()
-});
-
-/**
- * Organisation
- *
- * An organisation that interacts with the estate — legal firms, financial institutions, charities, dealers, funeral providers, employers, government bodies, and others. Maps to schema:Organization in JSON-LD
- */
-export const zOrganisation = z.object({
-    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    name: z.string().min(1).max(255),
-    organisationType: z.union([
-        z.enum([
-            'legal_firm',
-            'financial_institution',
-            'pension_provider',
-            'insurance_provider',
-            'dealer',
-            'auction_house',
-            'valuation_firm',
-            'funeral_provider',
-            'charity',
-            'religious_institution',
-            'employer',
-            'trust_corporation',
-            'accountancy_firm',
-            'government_body',
-            'retailer',
-            'manufacturer',
-            'property_management',
-            'storage_facility',
-            'digital_platform',
-            'utility_provider',
-            'other'
-        ]),
-        z.string().regex(/^x-inherit-.+/)
-    ]),
-    estateRoles: z.array(z.union([z.enum([
-            'beneficiary',
-            'will_writer',
-            'executor',
-            'trustee',
-            'asset_holder',
-            'liability_holder',
-            'insurer',
-            'valuer',
-            'recommended_dealer',
-            'funeral_provider',
-            'professional_adviser',
-            'regulatory_body',
-            'employer',
-            'retailer',
-            'service_provider'
-        ]), z.string().regex(/^x-inherit-.+/)])).max(20).optional(),
-    jurisdiction: z.string().max(10).optional(),
-    address: zAddress.optional(),
-    url: z.url().max(2048).regex(/^https?:\/\//).optional(),
-    email: z.email().max(255).regex(/^[^@\s]+@[^@\s]+\.[^@\s]+$/).optional(),
-    phone: z.string().max(50).optional(),
-    logo: z.url().max(2048).regex(/^https?:\/\//).optional(),
-    wikidataId: z.string().max(20).regex(/^Q[0-9]+$/).optional(),
-    description: z.string().max(2000).optional(),
-    registrations: z.array(zRegistration).max(20).optional(),
-    contactPerson: z.string().max(255).optional(),
-    notes: z.string().max(2000).optional(),
-    ratings: z.array(z.strictObject({
-        platform: z.union([
-            z.enum([
-                'trustpilot',
-                'google',
-                'feefo',
-                'reviews_io',
-                'funeral_guide',
-                'checkatrade'
-            ]),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]),
-        ratingValue: z.number().gte(0).lte(10),
-        bestRating: z.number().gte(0).lte(10).optional().default(5),
-        worstRating: z.number().gte(0).lte(10).optional().default(1),
-        reviewCount: z.int().gte(0).optional(),
-        profileUrl: z.url().max(2048).regex(/^https?:\/\//).optional(),
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
-    })).max(20).optional(),
-    sameAs: z.array(z.url()).optional(),
-    provenance: zProvenance.optional(),
-    vatConfiguration: z.strictObject({
-        vatRegistered: z.boolean().optional(),
-        vatScheme: z.enum([
-            'margin_scheme',
-            'global_accounting',
-            'standard_vat'
-        ]).optional(),
-        vatNumber: z.string().max(50).optional(),
-        vatCountry: z.string().max(2).regex(/^[A-Z]{2}$/).optional()
-    }).optional(),
-    internationalShipping: z.strictObject({
-        shipsToCountries: z.array(z.string().max(2).regex(/^[A-Z]{2}$/)).max(250).optional(),
-        receivesFromCountries: z.array(z.string().max(2).regex(/^[A-Z]{2}$/)).max(250).optional(),
-        customsHandling: z.boolean().optional(),
-        importDutyPolicy: z.enum([
-            'dealer_absorbs',
-            'buyer_pays',
-            'included_in_shipping'
-        ]).optional(),
-        currency: z.string().max(3).regex(/^[A-Z]{3}$/).optional()
-    }).optional(),
-    identifiers: z.array(zIdentifier).max(50).optional(),
-    dealerProfile: z.strictObject({
-        categories: z.array(z.string().max(100)).max(20).optional(),
-        dealerTier: z.enum([
-            'free',
-            'standard',
-            'professional'
-        ]).optional(),
-        fulfilmentCapabilities: z.array(z.enum([
-            'inspection',
-            'grading',
-            'photography',
-            'storage',
-            'shipping',
-            'restoration'
-        ])).max(10).optional(),
-        geographicReach: z.enum([
-            'local',
-            'national',
-            'international'
-        ]).optional(),
-        averageResponseTime: z.string().max(50).optional()
-    }).optional()
-});
-
-/**
- * An organisation (charity, company, institution) referenced in the estate
- */
-export const zOrganisation2 = zOrganisation;
-
-/**
- * Space
- *
- * A distinguishable space within or associated with a property — rooms, outbuildings, storage areas, and outdoor zones where assets may be located. Maps to schema:Place in JSON-LD
- */
-export const zSpace = z.intersection(z.unknown(), z.object({
-    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    propertyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    containedInSpaceId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
-    spaceType: z.union([
-        z.enum([
-            'living_room',
-            'dining_room',
-            'kitchen',
-            'kitchen_diner',
-            'breakfast_room',
-            'family_room',
-            'sitting_room',
-            'drawing_room',
-            'conservatory',
-            'sunroom',
-            'snug',
-            'bedroom',
-            'guest_bedroom',
-            'nursery',
-            'spare_room',
-            'dressing_room',
-            'bathroom',
-            'en_suite',
-            'shower_room',
-            'wet_room',
-            'cloakroom',
-            'wc',
-            'hallway',
-            'entrance_hall',
-            'landing',
-            'corridor',
-            'porch',
-            'vestibule',
-            'study',
-            'home_office',
-            'library',
-            'workshop',
-            'studio',
-            'music_room',
-            'craft_room',
-            'art_studio',
-            'games_room',
-            'home_cinema',
-            'gym',
-            'utility_room',
-            'laundry_room',
-            'boot_room',
-            'pantry',
-            'larder',
-            'airing_cupboard',
-            'boiler_room',
-            'loft',
-            'attic',
-            'basement',
-            'cellar',
-            'wine_cellar',
-            'walk_in_wardrobe',
-            'storage_room',
-            'cupboard_under_stairs',
-            'box_room',
-            'garage',
-            'double_garage',
-            'carport',
-            'shed',
-            'greenhouse',
-            'summerhouse',
-            'garden_room',
-            'outbuilding',
-            'barn',
-            'annex',
-            'stable',
-            'front_garden',
-            'rear_garden',
-            'side_garden',
-            'patio',
-            'terrace',
-            'balcony',
-            'roof_terrace',
-            'driveway',
-            'courtyard',
-            'yard',
-            'swimming_pool',
-            'prayer_room',
-            'puja_room',
-            'butsudan_room',
-            'tatami_room',
-            'genkan',
-            'majlis',
-            'helpers_room',
-            'gurdwara_room',
-            'meditation_room',
-            'gun_room',
-            'safe_room',
-            'safe',
-            'self_storage',
-            'safe_deposit_box',
-            'workplace',
-            'relatives_house',
-            'holiday_home',
-            'vehicle_car',
-            'vehicle_boat',
-            'vehicle_caravan',
-            'allotment',
-            'digital_storage',
-            'portable',
-            'other'
-        ]),
-        z.string().regex(/^x-inherit-.+/)
-    ]),
-    name: z.string().max(255).optional(),
-    floor: z.enum([
-        'basement',
-        'ground',
-        'first',
-        'second',
-        'third',
-        'fourth',
-        'fifth',
-        'attic',
-        'mezzanine',
-        'other'
-    ]).optional(),
-    notes: z.string().max(2000).optional(),
-    images: z.array(zMedia).max(50).optional(),
-    provenance: zProvenance.optional()
-}));
-
-/**
- * A physical or virtual space associated with the estate
- */
-export const zSpace2 = zSpace;
-
-export const zImportSource = z.strictObject({
-    id: z.string().max(255),
-    systemName: z.string().max(255),
-    importDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    importMethod: z.enum([
-        'api',
-        'file_upload',
-        'manual_copy',
-        'ai_extraction',
-        'ocr',
-        'migration_script'
-    ]).optional(),
-    notes: z.string().max(2000).optional()
-});
-
-export const zConformance = z.strictObject({
-    level: z.enum([
-        'level_1',
-        'level_2',
-        'level_3'
-    ]),
-    validatedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-    validatedBy: z.string().max(255),
-    schemaVersion: z.string().max(255),
-    completenessScore: z.int().gte(0).lte(100).optional(),
-    entityCounts: z.record(z.string(), z.int()).optional(),
-    provenanceSummary: z.record(z.string(), z.int()).optional(),
-    warnings: z.array(z.string().max(500)).optional(),
-    validationEndpoint: z.url().optional()
-});
-
-/**
- * InsurancePolicy
- *
- * A standalone insurance policy entity — life, home, health, motor, travel, pet, or professional indemnity. Life insurance is often the single largest estate asset. Policies written in trust pass outside the estate
- */
-export const zInsurancePolicy = z.object({
-    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    policyType: z.union([
-        z.enum([
-            'life',
-            'home',
-            'health',
-            'motor',
-            'travel',
-            'pet',
-            'professional_indemnity',
-            'other'
-        ]),
-        z.string().regex(/^x-inherit-.+/)
-    ]),
-    providerOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    providerOrganisationIdDisplay: z.string().max(255).optional(),
-    policyNumber: z.string().max(100).optional(),
-    coverAmount: zMoney.optional(),
-    premiumAmount: zMoney.optional(),
-    premiumFrequency: z.enum([
-        'monthly',
-        'annual',
-        'single_premium',
-        'paid_up',
-        'other'
-    ]).optional(),
-    renewalDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    maturityDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    deathBenefit: z.strictObject({
-        amount: zMoney.optional(),
-        nomineePersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        nomineePersonIdDisplay: z.string().max(255).optional(),
-        nomineeOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        nomineeOrganisationIdDisplay: z.string().max(255).optional(),
-        nominationCurrent: z.boolean().optional(),
-        benefitType: z.enum([
-            'lump_sum',
-            'income',
-            'pension',
-            'discretionary'
-        ]).optional(),
-        beneficiaryVerificationStatus: z.enum([
-            'unverified',
-            'identity_confirmed',
-            'entitlement_confirmed'
-        ]).optional()
-    }).optional(),
-    writtenInTrust: z.boolean().optional(),
-    trustDetails: z.strictObject({
-        trusteePersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        trusteePersonIdDisplay: z.string().max(255).optional(),
-        trusteeOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        trusteeOrganisationIdDisplay: z.string().max(255).optional(),
-        trustName: z.string().max(255).optional()
-    }).optional(),
-    claimStatus: z.enum([
-        'active',
-        'claim_submitted',
-        'claim_approved',
-        'claim_paid',
-        'claim_disputed',
-        'pending',
-        'approved',
-        'paid',
-        'declined'
-    ]).optional(),
-    externalPolicyRef: z.url().max(2048).regex(/^https?:\/\//).optional(),
-    nominationLifecycle: z.strictObject({
-        nominationStatus: z.enum([
-            'active',
-            'revoked',
-            'superseded',
-            'expired',
-            'disputed'
-        ]).optional(),
-        verifiedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-        lastUpdated: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-        supersedesNominationId: z.string().max(255).optional()
-    }).optional(),
-    policyConditions: z.array(z.strictObject({
-        condition: z.string().max(500).optional(),
-        expiryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        impact: z.string().max(500).optional()
-    })).max(50).optional(),
-    notes: z.string().max(2000).optional(),
-    funeralPlanDetails: z.strictObject({
-        coveredFuneralProviderOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-        coveredFuneralProviderOrganisationIdDisplay: z.string().max(255).optional(),
-        transferableOnDeath: z.boolean().optional(),
-        advancePayments: zMoney.optional()
-    }).optional(),
-    depositorProtection: z.strictObject({
-        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-        scheme: z.union([
-            z.enum(['fscs', 'mib']),
-            z.string().max(100).regex(/^x-inherit-.+/)
-        ]).optional(),
-        protected: z.boolean().optional(),
-        protectionLimit: z.int().gte(0).optional(),
-        claimProcessUrl: z.url().max(2048).regex(/^https?:\/\//).optional()
-    }).optional(),
-    provenance: zProvenance.optional()
-});
-
-/**
- * Life or other insurance policy linked to the estate
- */
-export const zInsurancePolicy2 = zInsurancePolicy;
-
-/**
  * Pet
  *
  * A pet or animal requiring care arrangements after the owner's death
@@ -7542,41 +7977,6 @@ export const zPet = z.object({
 export const zPet2 = zPet;
 
 /**
- * Audit Event
- *
- * A single audit event recording who changed what, when, and why. Designed for enterprise audit trail requirements, probate court compliance, and GDPR-compatible personal data handling
- */
-export const zAuditEvent = z.strictObject({
-    action: z.enum([
-        'created',
-        'modified',
-        'deleted',
-        'accessed',
-        'exported',
-        'validated',
-        'version_created',
-        'granted',
-        'revoked',
-        'challenged'
-    ]),
-    performedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
-    agentPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    agentDescription: z.string().max(255).optional(),
-    entityType: z.string().max(100).optional(),
-    entityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    detail: z.string().max(2000).optional(),
-    previousValue: z.string().max(5000).optional(),
-    newValue: z.string().max(5000).optional(),
-    redacted: z.boolean().optional(),
-    evidenceUrl: z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional()
-});
-
-/**
- * An auditable event recorded against an entity
- */
-export const zAuditEvent2 = zAuditEvent;
-
-/**
  * Notification
  *
  * A notification sent to a person or organisation during estate administration — beneficiary notifications, executor appointments, probate grants, document requests
@@ -7624,77 +8024,6 @@ export const zNotification = z.object({
  */
 export const zNotification2 = zNotification;
 
-export const zRecommendedAction = z.strictObject({
-    id: z.string().max(255),
-    category: z.enum([
-        'completeness',
-        'tax_planning',
-        'legal_requirement',
-        'valuation',
-        'transfer_history',
-        'beneficiary_review',
-        'document_update'
-    ]),
-    priority: z.enum([
-        'critical',
-        'high',
-        'medium',
-        'low'
-    ]),
-    title: z.string().max(255),
-    description: z.string().max(2000).optional(),
-    status: z.enum([
-        'pending',
-        'in_progress',
-        'completed',
-        'dismissed'
-    ]),
-    triggeredBy: z.string().max(255).optional(),
-    relatedEntityType: z.string().max(255).optional(),
-    relatedEntityId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
-});
-
-/**
- * Completeness
- *
- * A completeness score derived from a weighted checklist of estate data categories, scoped to a specific jurisdiction and estate status
- */
-export const zCompleteness = z.object({
-    score: z.int().gte(0).lte(100).readonly().default(0),
-    maxScore: z.int().gte(0).readonly(),
-    jurisdiction: z.string().max(255).optional(),
-    estateStatus: z.string().max(255).optional(),
-    calculatedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).readonly().optional(),
-    checklist: z.array(z.strictObject({
-        category: z.enum([
-            'personal_details',
-            'assets_and_valuations',
-            'liabilities',
-            'beneficiaries',
-            'executors',
-            'guardians',
-            'tax_information',
-            'legal_documents',
-            'lifetime_transfers',
-            'pension_and_insurance'
-        ]),
-        item: z.string().min(1).max(255),
-        weight: z.int().gte(1),
-        status: z.enum([
-            'complete',
-            'incomplete',
-            'not_applicable',
-            'unknown'
-        ]),
-        details: z.string().max(255).optional()
-    })).max(100)
-});
-
-/**
- * Completeness scoring for an estate or entity
- */
-export const zCompleteness2 = zCompleteness;
-
 /**
  * TaxPosition
  *
@@ -7730,36 +8059,6 @@ export const zTaxPosition = z.object({
  * Tax liability or exemption position
  */
 export const zTaxPosition2 = zTaxPosition;
-
-export const zLegacyContact = z.strictObject({
-    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    personId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    personIdDisplay: z.string().max(255).optional(),
-    name: z.string().min(1).max(255),
-    relationship: z.string().max(255).optional(),
-    email: z.email().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).optional(),
-    phone: z.string().max(255).optional(),
-    notificationMethod: z.enum([
-        'email',
-        'phone',
-        'post',
-        'in_person'
-    ]).optional(),
-    accessLevel: z.enum([
-        'full',
-        'read_only',
-        'collection_only',
-        'financial_only'
-    ]),
-    letterGenerated: z.boolean().optional(),
-    letterGeneratedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-    letterDeliveryMethod: z.enum([
-        'printed',
-        'digital',
-        'both'
-    ]).optional(),
-    notes: z.string().max(2000).optional()
-});
 
 export const zDataSharing = z.strictObject({
     anonymisedAggregates: z.boolean().optional(),
@@ -7892,223 +8191,6 @@ export const zAcknowledgement = z.object({
  */
 export const zAcknowledgement2 = zAcknowledgement;
 
-export const zAssetInterest = z.intersection(z.unknown(), z.object({
-    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    rootDocumentId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    assetId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
-    collectionId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
-    personId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    personIdDisplay: z.string().max(255).optional(),
-    interestLevel: z.enum([
-        'mentioned',
-        'expressed_interest',
-        'strongly_wants',
-        'agreed'
-    ]),
-    sourceType: z.enum([
-        'family_conversation',
-        'written_request',
-        'chat_message',
-        'platform_private_message',
-        'platform_group_message',
-        'proxy_reported',
-        'testator_observed',
-        'manual'
-    ]).optional(),
-    testatorAcknowledged: z.boolean().optional().default(false),
-    notes: z.string().max(2000).optional(),
-    organisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    organisationIdDisplay: z.string().max(255).optional(),
-    expressedByRole: z.union([
-        z.enum([
-            'testator',
-            'beneficiary',
-            'executor',
-            'proxy'
-        ]),
-        z.string().regex(/^x-inherit-.+/)
-    ]).optional(),
-    intentType: z.union([
-        z.enum([
-            'acquire',
-            'receive',
-            'allocate',
-            'sell',
-            'admire'
-        ]),
-        z.string().regex(/^x-inherit-.+/)
-    ]).optional(),
-    productMatch: z.strictObject({
-        identifierSystem: z.string().max(100).optional(),
-        identifierValue: z.string().max(255).optional(),
-        brand: z.string().max(255).optional(),
-        brandWikidataId: z.string().regex(/^Q\d+$/).optional(),
-        category: z.string().max(255).optional(),
-        subcategory: z.string().max(255).optional(),
-        minimumCondition: z.enum([
-            'excellent',
-            'good',
-            'fair',
-            'poor'
-        ]).optional(),
-        notes: z.string().max(2000).optional()
-    }).optional(),
-    quantity: z.int().gte(1).lte(1000).optional().default(1),
-    expressedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-    preOrderStatus: z.strictObject({
-        orderStatus: z.enum([
-            'wanted',
-            'pre_ordered_unpaid',
-            'pre_ordered_paid',
-            'dispatched',
-            'received'
-        ]).optional(),
-        orderedFrom: z.string().max(255).optional(),
-        orderReference: z.string().max(255).optional(),
-        orderDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-        expectedDeliveryDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).nullish(),
-        paymentStatus: z.enum([
-            'unpaid',
-            'deposit_paid',
-            'fully_paid',
-            'refunded'
-        ]).optional(),
-        amountPaid: zMoney.optional(),
-        paymentMethod: z.string().max(255).optional()
-    }).optional(),
-    provenance: zProvenance.optional()
-}));
-
-/**
- * A fractional or beneficial interest in an asset
- */
-export const zAssetInterest2 = zAssetInterest;
-
-/**
- * A third party expressing interest in purchasing or acquiring estate assets
- */
-export const zInterestedParty = z.strictObject({
-    personId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    personIdDisplay: z.string().max(255).optional(),
-    name: z.string().max(255),
-    type: z.enum([
-        'art_dealer',
-        'antique_dealer',
-        'property_investor',
-        'auction_house',
-        'gallery',
-        'private_collector',
-        'museum',
-        'institution',
-        'charity',
-        'developer',
-        'fund_manager',
-        'family_office',
-        'estate_agent',
-        'legal_practice',
-        'other'
-    ]),
-    contactDetails: z.string().max(255).optional(),
-    organisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    organisationIdDisplay: z.string().max(255).optional()
-});
-
-/**
- * A specific asset or property that the interested party wants to acquire
- */
-export const zAssetInterestItem = z.strictObject({
-    assetId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    propertyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    interestLevel: z.enum([
-        'exploratory',
-        'moderate',
-        'strong',
-        'committed'
-    ]).optional()
-});
-
-export const zCollectionInterest = z.intersection(z.unknown(), z.strictObject({
-    name: z.string().max(255).optional(),
-    assetIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
-    propertyIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
-    notes: z.string().max(2000).optional()
-}));
-
-/**
- * Details of a specific offer made by the interested party
- */
-export const zOfferDetails = z.strictObject({
-    amount: zMoney.optional(),
-    conditions: z.array(z.string().max(500)).max(50).optional(),
-    validUntil: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    offerDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    documentRef: z.string().max(500).optional(),
-    offerTerms: z.string().max(2000).optional(),
-    inspectionRequired: z.boolean().optional(),
-    inspectionDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
-});
-
-/**
- * Dealer Interest
- *
- * Level D data — records third-party interest in estate assets (art dealers, property investors, collectors). Privacy-controlled. Managed via proxy authorisation
- */
-export const zDealerInterest = z.object({
-    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
-    interestedParty: zInterestedParty,
-    assets: z.array(zAssetInterestItem).max(100).optional(),
-    collection: zCollectionInterest.optional(),
-    offerStatus: z.enum([
-        'standing_interest',
-        'verbal_offer',
-        'written_offer',
-        'formal_valuation',
-        'conditional_offer',
-        'accepted',
-        'declined',
-        'expired',
-        'withdrawn'
-    ]),
-    offerDetails: zOfferDetails.optional(),
-    testatorDisposition: z.enum([
-        'willing_to_sell',
-        'prefer_not_to_sell',
-        'hold_for_executor',
-        'deferred_to_family',
-        'promised_to_institution',
-        'undecided'
-    ]).optional(),
-    linkedBequestId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    privacyLevel: z.enum([
-        'testator_only',
-        'proxy_visible',
-        'executor_visible',
-        'all_parties'
-    ]),
-    communicationInitiatedBy: z.enum([
-        'buyer',
-        'testator',
-        'proxy',
-        'executor'
-    ]).optional(),
-    managedByProxyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    notes: z.string().max(2000).optional(),
-    verificationResult: z.strictObject({
-        verified: z.boolean().optional(),
-        verifiedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-        conditionConfirmed: z.boolean().optional(),
-        adjustedAmount: zMoney.optional(),
-        discrepancyNotes: z.string().max(2000).optional(),
-        verifiedByOrganisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional()
-    }).optional(),
-    provenance: zProvenance.optional()
-});
-
-/**
- * Professional interest in the estate
- */
-export const zDealerInterest2 = zDealerInterest;
-
 /**
  * Subscription
  *
@@ -8174,13 +8256,14 @@ export const zIntegrityConstraint = z.strictObject({
  * Root entry point for an INHERIT v3 estate data interchange document. Contains a single estate and arrays of all entity types
  */
 export const zSchema = z.intersection(z.unknown(), z.object({
-    $schema: z.literal('https://openinherit.org/v3/schema.json').optional(),
+    $schema: z.enum(['https://openinherit.org/v3/schema.json', 'https://openinherit.org/v3/catalogue.json']).optional(),
     '@context': z.union([
         z.url(),
         z.record(z.string(), z.unknown())
     ]).optional(),
     '@type': z.string().optional(),
-    schemaVersion: z.string().max(255).regex(/^\d+\.\d+\.\d+$/),
+    conformanceProfile: z.enum(['estate', 'catalogue']).optional().default('estate'),
+    schemaVersion: z.string().max(255).regex(/^\d+\.\d+\.\d+$/).optional(),
     exportedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).readonly().optional(),
     exportedBy: z.strictObject({
         name: z.string().max(255).optional(),
@@ -8196,24 +8279,24 @@ export const zSchema = z.intersection(z.unknown(), z.object({
     versionedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
     previousVersionId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
     changeDescription: z.string().max(2000).optional(),
-    estate: zEstate,
-    people: z.array(zPerson).min(1).max(500),
+    estate: zEstate.optional(),
+    people: z.array(zPerson).min(1).max(500).optional(),
     kinships: z.array(zKinship).max(1000).optional(),
     relationships: z.array(zRelationship).max(200).optional(),
     properties: z.array(zProperty).max(200).optional(),
-    assets: z.array(zAsset).max(2000).optional(),
-    assetCollections: z.array(zAssetCollection).max(200).optional(),
+    assets: z.array(zAsset).optional(),
+    assetCollections: z.array(zAssetCollection).optional(),
     liabilities: z.array(zLiability).max(200).optional(),
     bequests: z.array(zBequest).max(500).optional(),
     trusts: z.array(zTrust).max(50).optional(),
     executors: z.array(zExecutor).max(20).optional(),
     guardians: z.array(zGuardian).max(20).optional(),
-    wishes: z.array(zWish).max(100).optional(),
+    wishes: z.array(zWish).optional(),
     documents: z.array(zDocument).max(200).optional(),
     nonprobateTransfers: z.array(zNonprobateTransfer).max(500).optional(),
     proxyAuthorisations: z.array(zProxyAuthorisation).max(50).optional(),
     powersOfAppointment: z.array(zPowerOfAppointment).max(100).optional(),
-    valuations: z.array(zValuation).max(5000).optional(),
+    valuations: z.array(zValuation).optional(),
     lifetimeTransfers: z.array(zLifetimeTransfer).max(1000).optional(),
     organisations: z.array(zOrganisation).max(500).optional(),
     spaces: z.array(zSpace).max(500).optional(),
@@ -8231,7 +8314,7 @@ export const zSchema = z.intersection(z.unknown(), z.object({
         'collection',
         'transaction'
     ]).optional(),
-    importSources: z.array(zImportSource).max(50).optional(),
+    importSources: z.array(zImportSource).optional(),
     conformance: zConformance.optional(),
     extensions: z.array(z.strictObject({
         id: z.string().min(1).max(100),
@@ -8240,7 +8323,7 @@ export const zSchema = z.intersection(z.unknown(), z.object({
         scope: z.array(z.string().max(50)).optional(),
         dataBlock: z.string().max(100).regex(/^x-inherit-[a-z][a-z0-9-]*$/).optional()
     })).max(30).optional(),
-    insurancePolicies: z.array(zInsurancePolicy).max(50).optional(),
+    insurancePolicies: z.array(zInsurancePolicy).optional(),
     pets: z.array(zPet).max(50).optional(),
     integrity: z.strictObject({
         algorithm: z.string().min(1),
@@ -8532,86 +8615,6 @@ export const zSchema = z.intersection(z.unknown(), z.object({
  * The top-level INHERIT document envelope
  */
 export const zInheritDocument = zSchema;
-
-/**
- * Machine-readable conformance certificate — records the validation level, schema version, completeness score, and provenance summary at time of validation
- */
-export const zConformance2 = zConformance;
-
-/**
- * INHERIT v2 Catalogue Schema
- *
- * Lightweight root schema for catalogue-only documents — living collectors cataloguing items without the full estate envelope. Assets, collections, valuations, and legacy contacts. Upgrade path: wrap in a full estate document (schema.json) when needed
- */
-export const zCatalogue = z.object({
-    $schema: z.literal('https://openinherit.org/v3/catalogue.json').optional(),
-    '@context': z.url().max(2048).regex(/^[a-z][a-z0-9+.-]*:\/\//).optional(),
-    schemaVersion: z.string().max(255).regex(/^\d+\.\d+\.\d+$/).optional(),
-    exportedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).readonly().optional(),
-    exportedBy: z.strictObject({
-        name: z.string().max(255).optional(),
-        email: z.email().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).optional()
-    }).readonly().optional(),
-    generator: z.strictObject({
-        name: z.string().min(1).max(255),
-        version: z.string().max(255).optional(),
-        url: z.string().max(2048).optional()
-    }).readonly().optional(),
-    documentVersion: z.int().gte(1).optional(),
-    versionedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-    previousVersionId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
-    changeDescription: z.string().max(2000).optional(),
-    assets: z.array(zAsset).max(10000),
-    assetCollections: z.array(zAssetCollection).max(500).optional(),
-    organisations: z.array(zOrganisation).max(200).optional(),
-    properties: z.array(zProperty).max(200).optional(),
-    spaces: z.array(zSpace).max(200).optional(),
-    valuations: z.array(zValuation).max(10000).optional(),
-    legacyContacts: z.array(zLegacyContact).max(100).optional(),
-    assetInterests: z.array(zAssetInterest).max(5000).optional(),
-    wishes: z.array(zWish).max(200).optional(),
-    dataProvenance: z.enum([
-        'manual_entry',
-        'ai_extracted',
-        'ocr_scanned',
-        'imported',
-        'migrated',
-        'system_generated'
-    ]).optional(),
-    importSources: z.array(zImportSource).max(100).optional(),
-    completeness: zCompleteness.optional(),
-    recommendedActions: z.array(zRecommendedAction).max(100).optional(),
-    conformance: zConformance2.optional(),
-    insurancePolicies: z.array(zInsurancePolicy).max(100).optional(),
-    dealerInterests: z.array(zDealerInterest).max(2000).optional(),
-    giftListSettings: z.strictObject({
-        enabled: z.boolean().optional(),
-        personalMessage: z.string().max(2000).optional(),
-        visibility: z.enum([
-            'public',
-            'link_only',
-            'private'
-        ]).optional(),
-        fulfilledItems: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(5000).optional()
-    }).optional(),
-    legacyLetter: z.strictObject({
-        lastGenerated: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
-        version: z.int().gte(1).optional(),
-        delivered: z.boolean().optional(),
-        deliveryMethod: z.enum([
-            'printed',
-            'digital',
-            'both'
-        ]).optional(),
-        itemCountAtGeneration: z.int().gte(0).optional()
-    }).optional(),
-    auditLog: z.array(zAuditEvent).max(10000).optional()
-});
-
-/**
- * Dealer or platform asset catalogue (distinct from an individual estate)
- */
-export const zCatalogue2 = zCatalogue;
 
 /**
  * Conformance result for a single entity schema

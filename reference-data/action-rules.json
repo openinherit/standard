@@ -256,7 +256,7 @@
         "entityType": "asset",
         "field": "coOwnership",
         "operator": "exists",
-        "and": { "field": "coOwnership.ownershipShare", "operator": "empty" }
+        "and": { "field": "coOwnership.ownershipPercentage", "operator": "empty" }
       },
       "relatedEntityType": "asset"
     }

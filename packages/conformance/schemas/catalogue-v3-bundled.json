@@ -4304,6 +4304,50 @@
             "none"
           ]
         },
+        "coOwnership": {
+          "description": "Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will",
+          "$comment": "Declared on the core asset so that every category can express it: a painting, watch or vehicle is co-owned as often as a bank account. asset-categories/financial.json and asset-categories/business.json carry the identical shape, which they declared first; under allOf both apply, so the copies must stay identical (scripts/test-co-ownership-shape.mjs). In an estate document the sole owner is the testator (estate.testatorPersonId) and ownershipPercentage is the testator's share; coOwnerPersonIds names everyone else who holds an interest. See proposals/0002-asset-co-ownership.md",
+          "type": "object",
+          "properties": {
+            "coOwnerPersonIds": {
+              "description": "Person IDs of co-owners",
+              "type": "array",
+              "maxItems": 100,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                "format": "uuid"
+              }
+            },
+            "ownershipType": {
+              "description": "How ownership is structured between co-owners",
+              "$comment": "joint_tenants: right of survivorship — passes automatically to survivor(s). tenants_in_common: no survivorship — each owner's share passes under their will. community_property: marital community property (US). partnership: business partnership asset. other: other arrangement.",
+              "enum": [
+                "joint_tenants",
+                "tenants_in_common",
+                "community_property",
+                "partnership",
+                "other"
+              ]
+            },
+            "ownershipPercentage": {
+              "description": "The testator's ownership percentage",
+              "examples": [ 50, 33.33 ],
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            },
+            "severanceDate": {
+              "description": "Date joint tenancy was severed to become tenants in common (if applicable)",
+              "examples": [ "2024-06-15" ],
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "format": "date"
+            }
+          },
+          "additionalProperties": false
+        },
         "culturalDisposition": {
           "description": "Cultural, religious, and regulatory constraints on disposal of this asset",
           "$ref": "https://openinherit.org/v3/common/cultural-disposition.json"

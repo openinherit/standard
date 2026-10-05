@@ -29,6 +29,7 @@
     "test:cascade": "python3 scripts/check-jurisdiction-cascade.py --tree . --min-tokens 69",
     "validate:refs": "node scripts/validate-refs.mjs",
     "validate:net-equity": "node scripts/validate-net-equity.mjs",
+    "test:co-ownership": "node scripts/test-co-ownership-shape.mjs",
     "test:refs": "node scripts/test-referential-integrity.mjs",
     "graph:data": "node scripts/generate-graph-data.mjs",
     "docs:reference": "node scripts/generate-reference-docs.mjs",

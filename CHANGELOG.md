@@ -20,6 +20,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   the wrap. Additive: documents with no declaration are held to exactly the root's previous
   requirements; the estate array caps move into the estate branch unchanged. Gate: `pnpm run test:catalogue-profile`, run in
   `run-tests.yml`.
+- `coOwnership` on the core `asset.json`, so every asset category can record who else owns an
+  item and in what form. It was declared on the `financial` and `business` categories only, and
+  `asset.json`'s `unevaluatedProperties: false` rejected it everywhere else — a painting, watch or
+  car held jointly with a spouse could only be recorded as though the testator owned all of it,
+  which decides whether the item passes by survivorship or under the will. The shape is the one
+  already published, unchanged; the two category declarations stay, and
+  `pnpm run test:co-ownership` (`scripts/test-co-ownership-shape.mjs`, wired into the Test Suite)
+  keeps all three identical. Proposal: `proposals/0002-asset-co-ownership.md`.
+
 - `liabilities[].securedAgainst` is now a checked reference. It had no referential-integrity
   rule at all: a mortgage could name an asset or property that did not exist and every check in
   the repository stayed green. Two rules, not one — `securedAgainst` is documented as
@@ -96,6 +105,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   paths. JSON Schema, Zod and pydantic must give each the same verdict. The divergence register
   shrinks: 15 Zod and 14 pydantic false accepts no longer reproduce, and there are still no false
   rejects.
+- Action rule `asset_missing_ownership_details` tested `coOwnership.ownershipShare`, a field no
+  schema declares, so it fired on every co-owned asset whether or not a share was recorded. It now
+  tests `coOwnership.ownershipPercentage`. `scripts/test-co-ownership-shape.mjs` refuses any
+  `coOwnership.<field>` path in reference data that no schema declares.
+
 - Referential integrity now checks `assets[].propertyId`. `asset.json` has always declared the
   field; the validator checked the other references that resolve against `properties[]` and not
   this one.

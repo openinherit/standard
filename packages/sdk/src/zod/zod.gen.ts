@@ -1233,6 +1233,18 @@ const zAsset$generated = z.intersection(z.unknown(), z.object({
         'receipts_only',
         'none'
     ]).optional(),
+    coOwnership: z.strictObject({
+        coOwnerPersonIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
+        ownershipType: z.enum([
+            'joint_tenants',
+            'tenants_in_common',
+            'community_property',
+            'partnership',
+            'other'
+        ]).optional(),
+        ownershipPercentage: z.number().gte(0).lte(100).optional(),
+        severanceDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+    }).optional(),
     culturalDisposition: zCulturalDisposition.optional(),
     communalAuthority: z.strictObject({
         authorityType: z.enum([

@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Open Government Licence v3.0 attribution in `THIRD-PARTY-NOTICES`, for the GOV.UK and UK
+  legislation text quoted in the UK gov-oracle cases under `tests/oracles/` and the statute
+  citations in `catala/probate/`. The notice names the files it covers.
 - **Conformance profiles** (proposal 0003). `conformanceProfile` (`estate` | `catalogue`,
   default `estate`) on `v3/schema.json`, and `profile` on its conformance certificate. A
   catalogue-only document that declares `"catalogue"` now conforms to the root with no estate

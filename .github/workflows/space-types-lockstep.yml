@@ -1,4 +1,4 @@
-# TT-1671 D2b — reference-data/space-types.json must stay in lockstep with the
+# Space-types lockstep — reference-data/space-types.json must stay in lockstep with the
 # spaceType enum in v3/space.json.
 #
 # ⚠️ WHAT THIS CHECK IS NOT. scripts/validate-schemas.mjs excludes reference-data/

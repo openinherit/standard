@@ -14,7 +14,7 @@ s.184 general commorientes presumption; AEA 1925 s.46(2A) spouse-specific 28-day
 survival period, which displaces s.184 for the intestate's spouse or civil partner).
 
 Legal correctness is asserted **outside this file** by the T032 per-heir gov-oracle
-harness (TT-463 pattern): `code-inherit-test-suite/scripts/oracle_verify.py` runs the
+harness (per-heir pattern): `scripts/oracle_verify.py` runs the
 `Distribute` scope, reads `per_member_amounts`, expands each element by the matching
 `member_counts` integer into the per-heir multiset, and compares it against
 `tests/oracles/intestacy-cascade-aea1925.oracle.json` — including a committed
@@ -26,7 +26,7 @@ its own per-heir assertions.
 statutory quotation is kept inline.)
 
 **Both scopes live in this one module** because clerk 1.2.0 does not resolve
-cross-module `output of Mod.Scope` calls (TT-478 finding) — only intra-module
+cross-module `output of Mod.Scope` calls — only intra-module
 `output of Scope` does. `Distribute` does not itself call `Survivorship`; it takes
 the survival outcome as a **boolean** input, `spouse_survives_statutory_period`,
 because the T032 per-heir harness can only render boolean/list/money case inputs (an
@@ -34,7 +34,7 @@ integer `days_survived` would emit an unrenderable `$28` literal). The day-based
 28-day arithmetic is therefore isolated in `Survivorship` and proven separately by
 the in-file `#[test]` scopes below.
 
-**G6 certification floor (TT-427/TT-1079).** Every `Distribute` input is a
+**G6 certification floor.** Every `Distribute` input is a
 characterisation judgement (who is a spouse, who counts as issue, what the estate is
 worth — see `registry/governance-layers.yaml`, all L3), so each is declared with the
 matching `ComputedOrNeedsHuman.Certified<Type>` enum, not a bare scalar. A caller must
@@ -362,7 +362,7 @@ declaration scope TestUncertifiedRoutesNeedsHuman:
   output member_count content integer
 
 scope TestUncertifiedRoutesNeedsHuman:
-  # G6 (TT-1079): ONE uncertified characterisation (here the estate valuation)
+  # G6: ONE uncertified characterisation (here the estate valuation)
   # routes the whole cascade to NeedsHuman — no number is reachable, and the
   # sibling outputs are neutral ([] / $0), never a meaning-bearing figure.
   definition routed equals

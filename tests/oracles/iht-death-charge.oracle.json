@@ -1,5 +1,5 @@
 {
-  "_doc": "T032 LEGAL gov-oracle (TT-478). Each case asserts that the Catala-computed IHT death charge equals the AUTHORITATIVE published gov.uk figure cited inline — not just a structurally-valid shape. scripts/oracle_verify.py runs the rule's scope with `inputs` and requires the Computed-arm money to equal `expected_money_gbp`; a mismatch (e.g. a wrong rule literal) turns the harness RED. Figures sourced from gov.uk on `sourced_at` and must be re-verified against the live page if edited (HALT fork 2: never assert a tax figure from memory).",
+  "_doc": "T032 LEGAL gov-oracle. Each case asserts that the Catala-computed IHT death charge equals the AUTHORITATIVE published gov.uk figure cited inline — not just a structurally-valid shape. scripts/oracle_verify.py runs the rule's scope with `inputs` and requires the Computed-arm money to equal `expected_money_gbp`; a mismatch (e.g. a wrong rule literal) turns the harness RED. Figures sourced from gov.uk on `sourced_at` and must be re-verified against the live page if edited (HALT fork 2: never assert a tax figure from memory).",
   "rule": {
     "repo": "code-inherit-standard",
     "rule_file": "catala/transfer/IhtDeathCharge.catala_en",
@@ -25,7 +25,7 @@
       "expected_money_gbp": "0",
       "citation_url": "https://www.gov.uk/inheritance-tax/passing-on-home",
       "citation_quote": "If you own your home (or a share in it) your tax-free threshold can increase to £500,000 if: you leave it to your children (including adopted, foster or stepchildren) or grandchildren",
-      "note": "Threshold £325,000 + RNRB min(£200,000, £175,000) = £500,000; estate £500,000 ≤ £500,000 → £0. Quote refreshed 2026-07-11 (TT-883) after gov.uk reworded the passing-on-home page; no-substance determination: £500,000 threshold + closely-inherited-by-descendants eligibility unchanged (FA 2015 s.8D–8E), only wording restructured."
+      "note": "Threshold £325,000 + RNRB min(£200,000, £175,000) = £500,000; estate £500,000 ≤ £500,000 → £0. Quote refreshed 2026-07-11 after gov.uk reworded the passing-on-home page; no-substance determination: £500,000 threshold + closely-inherited-by-descendants eligibility unchanged (FA 2015 s.8D–8E), only wording restructured."
     },
     {
       "label": "v3-taper-2_1m",

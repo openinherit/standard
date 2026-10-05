@@ -1142,7 +1142,7 @@
       "valid": true
     },
     {
-      "description": "valid — a Space nested inside another Space (TT-1313 AC2; loft inside a house)",
+      "description": "valid — a Space nested inside another Space (loft inside a house)",
       "data": {
         "id": "5a6b7c8d-9e0f-4a1b-8c2d-3e4f5a6b7c8d",
         "propertyId": "4f4c49f6-9645-4978-a4e5-4d9c80d7b953",

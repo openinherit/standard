@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Hermetic harness for scripts/check-jurisdiction-cascade.py (TT-735 / ICP-0060).
+# Hermetic harness for scripts/check-jurisdiction-cascade.py (jurisdiction cascade check).
 #
 # Every case builds a SYNTHETIC tree in a temp dir. Nothing here reads the real
 # reference data, so the harness cannot go green because the repo happens to be
@@ -185,12 +185,12 @@ t "malformed cascade JSON is CANNOT ANSWER, never clear"         2 "$TMP/bad-jso
 
 t "an absent tree is CANNOT ANSWER"                              2 "$TMP/does-not-exist"
 
-# --- 9. the anti-vacuity floor (TT-1456 13.6) ------------------------------
+# --- 9. the anti-vacuity floor ---------------------------------------------
 build "$TMP/floor" "$PROF" "$RATES" "$REG_OK" "$(cascade)"
 t "discovering fewer tokens than the pinned floor is CANNOT ANSWER" 2 "$TMP/floor" --min-tokens 99
 t "discovering at least the pinned floor is clear"                  0 "$TMP/floor" --min-tokens 4
 
-# --- 10. DW-5: membership is CONSUMED from TT-1456's authority -------------
+# --- 10. DW-5: membership is CONSUMED from the derived authority ----------
 printf 'XA\tcountry\tAlpha\nXA-N\tsubdivision\tNorth\nXA-S\tsubdivision\tSouth\nXB\tcountry\tBravo\nXA-NS\tlegal-extension\tNorth and South\n' > "$TMP/authority.txt"
 build "$TMP/auth" "$PROF" "$RATES" "$REG_OK" "$(cascade)"
 t "every cascade token in the authority is clear"        0 "$TMP/auth" --authority "$TMP/authority.txt"

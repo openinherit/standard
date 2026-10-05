@@ -1,4 +1,4 @@
-# space-types-policy — the machine-readable form of TT-1671's D0 verdict.
+# space-types-policy — the machine-readable form of the space-types D0 verdict.
 #
 # ⚠️ VENDORED COPY. Source of truth: testatetech/docs-strategy at
 # scripts/data/space-types-policy.txt. Edit there and re-copy.
@@ -19,7 +19,7 @@
 #
 # V-OPEN ratifies the WHOLE file as open standard vocabulary, so open-fields
 # lists all EIGHT keys — including `label` and `locales`, which are named in
-# none of the three verdict shapes TT-1671's body offers and would otherwise
+# none of the three verdict shapes the original question offered and would otherwise
 # have been left for a later session to guess. (Plan Task 5's example header
 # omitted `locales`; that omission is not the verdict.)
 #

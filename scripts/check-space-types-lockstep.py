@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""TT-1671 lockstep gate for reference-data/space-types.json.
+"""Lockstep gate for reference-data/space-types.json.
 
 exit 0 = clean · 1 = REFUSED · 2 = CANNOT ANSWER. Never read 2 as clean.
 
@@ -12,7 +12,7 @@ Reads a policy file whose `verdict:` line selects the contract:
 COVERAGE runs under ALL THREE answered verdicts, not just V-OPEN: every
 spaceType enum value has an entry (minus declared exclusions) and every entry's
 id is an enum value. It was fenced inside V-OPEN until 2026-09-29, which meant
-the 28 September flip to V-SPLIT silently turned TT-1671 D2b off.
+the 28 September flip to V-SPLIT silently turned the D2b coverage check off.
 
 Single file with no local imports on purpose: it is vendored into the public
 repo openinherit/standard, where docs-strategy is not on the path.
@@ -37,7 +37,7 @@ VERDICTS = {"UNANSWERED", "V-OPEN", "V-COMMERCIAL", "V-SPLIT"}
 #   * a coordinator decision record -- `coordinator-decision:<n>`, a row in the
 #     coordinator's state.db `pending_decisions` carrying prompt, options,
 #     chosen_option and answered_at.
-# ⚠️ The Linear form ALONE made the gate unsatisfiable. TT-1671's verdict was
+# ⚠️ The Linear form ALONE made the gate unsatisfiable. The space-types verdict was
 # taken through decision record 535 and was never posted as a Linear comment,
 # and agents are forbidden to write to Linear (the API key posts as Josh). So
 # the only accepted evidence was evidence no permitted party could produce.
@@ -361,7 +361,7 @@ def main():
         refuse(
             [
                 f"verdict {verdict} carries no decided-by citation (expected "
-                f"https://linear.app/.../TT-1671#comment-<id> or "
+                f"https://linear.app/.../<issue>#comment-<id> or "
                 f"coordinator-decision:<n> — the issue URL alone, or a sentence "
                 f"saying who decided, is not evidence of a verdict)"
             ]
@@ -416,7 +416,7 @@ def main():
                 problems.append(
                     f"entry '{t.get('id', '?')}' field-set drift — "
                     f"added {added or '[]'}, removed {gone or '[]'}; "
-                    f"TT-1671 D0 is unanswered, so this file is frozen"
+                    f"the space-types verdict (D0) is unanswered, so this file is frozen"
                 )
         # ⚠️ The COUNT alone does not pin WHICH entries. Swapping `loft` out for a
         # newly-authored `portable` leaves the count at 100 -- and authoring
@@ -434,7 +434,7 @@ def main():
             )
             problems.append(
                 f"entry-set drift — added {added or '[]'}, removed {gone or '[]'}; "
-                f"TT-1671 D0 is unanswered, so this file is frozen"
+                f"the space-types verdict (D0) is unanswered, so this file is frozen"
             )
     else:
         # A mode's field lists are REQUIRED input, not optional decoration. With

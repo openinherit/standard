@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
 // SPDX-License-Identifier: Apache-2.0
-// FORBIDDEN-REGION ORACLE (TT-626 seed; TT-624 full E&W deny-set) — the
+// FORBIDDEN-REGION ORACLE (service-eligibility seed; full E&W deny-set) — the
 // frozen definition of "disallowed in E&W".
 // disjoint(standard's ew.cedar, this) VERIFIED <=> no disallowed service
 // reachable. Lives in the TEST-SUITE so a standard PR cannot weaken

@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
 // SPDX-License-Identifier: Apache-2.0
-// TT-626 unit-test fixture — conformant policy (disjoint from forbidden.cedar).
+// Service-eligibility unit-test fixture — conformant policy (disjoint from forbidden.cedar).
 permit (
   principal,
   action == Action::"OfferService",

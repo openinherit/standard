@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Cross-border expressiveness test suite (TT-1455).
+ * Cross-border expressiveness test suite.
  *
  * examples/fixtures/cross-border-estate.json is validated for SHAPE by
  * scripts/validate-examples.sh. Shape is not the claim being made about it.

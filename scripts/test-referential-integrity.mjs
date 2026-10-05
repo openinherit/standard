@@ -436,7 +436,7 @@ test('trusts[].petId — broken ref detected', () => {
   if (broken.length === 0) throw new Error('Should have found broken trust petId ref');
 });
 
-// === Containment (ICP-0057) — every containment link must resolve ===
+// === Containment — every containment link must resolve ===
 
 test('assets[].containedInAssetId — broken ref detected', () => {
   const doc = JSON.parse(JSON.stringify(validDoc));
@@ -465,7 +465,7 @@ test('spaces[].propertyId — broken ref detected', () => {
   if (broken.length === 0) throw new Error('Should have found broken space propertyId ref');
 });
 
-// === Containment (ICP-0057) — the chain must terminate and must not loop ===
+// === Containment cycle check — the chain must terminate and must not loop ===
 
 const SP_A = 'ss00000a-0000-4000-a000-00000000000a';
 const SP_B = 'ss00000b-0000-4000-a000-00000000000b';
@@ -570,7 +570,7 @@ test('the acyclic row is not satisfiable by its existence sibling (grouping is b
 // carries a single space with neither propertyId nor containedInSpaceId, so the
 // auto-generated positive rows for those two fields pass on ZERO values — a
 // validator that rejected every containment chain ever written would still be
-// green here. TT-1313 D1 and D2 ask for the positive case on a REAL example
+// green here. Spatial containment (proposal 0001) needs the positive case on a REAL example
 // document: Asset -> Space -> Space -> Property, resolving and terminating.
 //
 // The fixture is a tracked example, so `pnpm run validate:examples` schema-checks
@@ -686,7 +686,7 @@ test('an asset reaches its property by walking the space chain (D1)', () => {
 });
 
 
-// === The declared list and the shipped validator must agree (TT-1517) ===
+// === The declared list and the shipped validator must agree ===
 //
 // schema.json's referentialIntegrity default is the normative list of
 // cross-reference constraints. scripts/validate-refs.mjs is the only thing

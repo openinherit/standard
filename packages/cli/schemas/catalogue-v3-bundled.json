@@ -102,7 +102,7 @@
       "type": "array",
       "maxItems": 10000,
       "items": {
-        "$ref": "asset.json"
+        "$ref": "https://openinherit.org/v3/asset.json"
       }
     },
     "assetCollections": {
@@ -110,7 +110,7 @@
       "type": "array",
       "maxItems": 500,
       "items": {
-        "$ref": "asset-collection.json"
+        "$ref": "https://openinherit.org/v3/asset-collection.json"
       }
     },
     "organisations": {
@@ -118,7 +118,7 @@
       "type": "array",
       "maxItems": 200,
       "items": {
-        "$ref": "organisation.json"
+        "$ref": "https://openinherit.org/v3/organisation.json"
       }
     },
     "properties": {
@@ -126,7 +126,7 @@
       "type": "array",
       "maxItems": 200,
       "items": {
-        "$ref": "property.json"
+        "$ref": "https://openinherit.org/v3/property.json"
       }
     },
     "spaces": {
@@ -134,7 +134,7 @@
       "type": "array",
       "maxItems": 200,
       "items": {
-        "$ref": "space.json"
+        "$ref": "https://openinherit.org/v3/space.json"
       }
     },
     "valuations": {
@@ -142,7 +142,7 @@
       "type": "array",
       "maxItems": 10000,
       "items": {
-        "$ref": "valuation.json"
+        "$ref": "https://openinherit.org/v3/valuation.json"
       }
     },
     "legacyContacts": {
@@ -150,7 +150,7 @@
       "type": "array",
       "maxItems": 100,
       "items": {
-        "$ref": "schema.json#/properties/applicationState/properties/legacyContacts/items"
+        "$ref": "https://openinherit.org/v3/schema.json#/properties/applicationState/properties/legacyContacts/items"
       }
     },
     "assetInterests": {
@@ -158,7 +158,7 @@
       "type": "array",
       "maxItems": 5000,
       "items": {
-        "$ref": "asset-interest.json"
+        "$ref": "https://openinherit.org/v3/asset-interest.json"
       }
     },
     "wishes": {
@@ -166,7 +166,7 @@
       "type": "array",
       "maxItems": 200,
       "items": {
-        "$ref": "wish.json"
+        "$ref": "https://openinherit.org/v3/wish.json"
       }
     },
     "dataProvenance": {
@@ -185,21 +185,21 @@
       "type": "array",
       "maxItems": 100,
       "items": {
-        "$ref": "schema.json#/properties/importSources/items"
+        "$ref": "https://openinherit.org/v3/schema.json#/properties/importSources/items"
       }
     },
     "completeness": {
-      "$ref": "common/completeness.json"
+      "$ref": "https://openinherit.org/v3/common/completeness.json"
     },
     "recommendedActions": {
       "type": "array",
       "maxItems": 100,
       "items": {
-        "$ref": "schema.json#/properties/applicationState/properties/recommendedActions/items"
+        "$ref": "https://openinherit.org/v3/schema.json#/properties/applicationState/properties/recommendedActions/items"
       }
     },
     "conformance": {
-      "$ref": "schema.json#/properties/conformance",
+      "$ref": "https://openinherit.org/v3/schema.json#/properties/conformance",
       "properties": {
         "profile": {
           "const": "catalogue"
@@ -211,7 +211,7 @@
       "type": "array",
       "maxItems": 100,
       "items": {
-        "$ref": "insurance-policy.json"
+        "$ref": "https://openinherit.org/v3/insurance-policy.json"
       }
     },
     "dealerInterests": {
@@ -219,7 +219,7 @@
       "type": "array",
       "maxItems": 2000,
       "items": {
-        "$ref": "dealer-interest.json"
+        "$ref": "https://openinherit.org/v3/dealer-interest.json"
       }
     },
     "giftListSettings": {
@@ -288,7 +288,7 @@
       "type": "array",
       "maxItems": 10000,
       "items": {
-        "$ref": "common/audit-event.json"
+        "$ref": "https://openinherit.org/v3/common/audit-event.json"
       }
     }
   },
@@ -533,7 +533,7 @@
         },
         "aiProvenance": {
           "description": "AI provenance metadata — which AI model produced this data and whether a human has verified it",
-          "$ref": "ai-provenance.json"
+          "$ref": "https://openinherit.org/v3/common/ai-provenance.json"
         },
         "humanVerdict": {
           "description": "Human review verdict on AI-generated or imported data",
@@ -634,7 +634,7 @@
               "currency": "GBP"
             }
           ],
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "valuationSource": {
           "description": "How the estimated value was determined",
@@ -680,7 +680,7 @@
         },
         "minimumAcceptableValue": {
           "description": "The minimum total value the testator or executor will accept for the collection. Prevents fire-sale disposal. In minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "preferredDisposalMethod": {
           "description": "Preferred channel for disposing of the collection",
@@ -717,7 +717,7 @@
           "type": "array",
           "maxItems": 100,
           "items": {
-            "$ref": "common/media.json"
+            "$ref": "https://openinherit.org/v3/common/media.json"
           }
         },
         "splitFrom": {
@@ -775,7 +775,7 @@
               },
               "proceeds": {
                 "description": "Sale proceeds",
-                "$ref": "common/money.json"
+                "$ref": "https://openinherit.org/v3/common/money.json"
               },
               "recipientPersonId": {
                 "description": "Person.id of the recipient",
@@ -851,7 +851,7 @@
           "properties": {
             "insuranceValue": {
               "description": "Insurance valuation",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "insuranceDate": {
               "description": "Date of insurance valuation",
@@ -861,7 +861,7 @@
             },
             "dealerEstimate": {
               "description": "Dealer's estimate",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "dealerDate": {
               "description": "Date of dealer estimate",
@@ -871,7 +871,7 @@
             },
             "auctionEstimate": {
               "description": "Auction house estimate",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "auctionDate": {
               "description": "Date of auction estimate",
@@ -881,14 +881,14 @@
             },
             "likelyRealisableAmount": {
               "description": "Most likely realisable amount considering all sources",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             }
           },
           "additionalProperties": false
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -1154,7 +1154,7 @@
             },
             "amountPaid": {
               "description": "The amount paid so far, in minor currency units",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "paymentMethod": {
               "description": "How the payment was made",
@@ -1166,7 +1166,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -1321,7 +1321,7 @@
             },
             "annualTurnover": {
               "description": "Approximate annual turnover — helps with BPR qualification and valuation",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "employees": {
               "description": "Number of employees",
@@ -1489,7 +1489,7 @@
                 },
                 "estimatedAmount": {
                   "description": "Estimated death benefit amount, in minor currency units",
-                  "$ref": "../common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 }
               },
               "additionalProperties": false
@@ -1507,7 +1507,7 @@
               "properties": {
                 "estimatedValue": {
                   "description": "Estimated value at death",
-                  "$ref": "../common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "valuationMethod": {
                   "description": "Method used",
@@ -1535,7 +1535,7 @@
                 },
                 "annuityAmount": {
                   "description": "Annual annuity amount in minor currency units",
-                  "$ref": "../common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "continuationOnDeath": {
                   "description": "What happens to the annuity on the holder's death",
@@ -1595,7 +1595,7 @@
             },
             "sumAssured": {
               "description": "The amount payable on death, in minor currency units",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "writtenInTrust": {
               "description": "Whether the policy is written in trust. If true, proceeds pass outside the estate and are not subject to inheritance tax",
@@ -1722,7 +1722,7 @@
             },
             "annualRevenue": {
               "description": "Approximate annual revenue generated from this IP (licensing, royalties, etc.)",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "licensees": {
               "description": "Current licensees of this IP",
@@ -1788,7 +1788,7 @@
             },
             "exercisePrice": {
               "description": "Strike/exercise price per share for options",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "expirationDate": {
               "description": "Date the options expire. Estate typically has limited window to exercise after death",
@@ -1834,11 +1834,11 @@
             },
             "originalAmount": {
               "description": "Original amount of the debt",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "outstandingAmount": {
               "description": "Amount currently outstanding",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "interestRate": {
               "description": "Annual interest rate on the debt, as a percentage",
@@ -2476,7 +2476,7 @@
             },
             "costBasis": {
               "description": "Original cost basis for CGT",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             }
           },
           "additionalProperties": false
@@ -2712,7 +2712,7 @@
             },
             "monthlyRevenue": {
               "description": "Approximate monthly revenue from the platform, in minor currency units",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "monetisationStatus": {
               "description": "Current monetisation status of the content",
@@ -2791,7 +2791,7 @@
             },
             "cashEquivalent": {
               "description": "Approximate cash equivalent of the points balance, in minor currency units",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "expiryDate": {
               "description": "Date when the points expire if not used",
@@ -2861,7 +2861,7 @@
             },
             "estimatedRealValue": {
               "description": "Estimated real-world value of the account's digital assets, in minor currency units",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             }
           },
           "additionalProperties": false
@@ -3079,7 +3079,7 @@
             },
             "annualTurnover": {
               "description": "Approximate annual turnover — helps with BPR qualification and valuation",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "employees": {
               "description": "Number of employees",
@@ -3129,7 +3129,7 @@
             },
             "annualRevenue": {
               "description": "Approximate annual revenue generated from this IP (licensing, royalties, etc.)",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "licensees": {
               "description": "Current licensees of this IP",
@@ -3195,7 +3195,7 @@
             },
             "exercisePrice": {
               "description": "Strike/exercise price per share for options",
-              "$ref": "../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "expirationDate": {
               "description": "Date the options expire. Estate typically has limited window to exercise after death",
@@ -3551,7 +3551,7 @@
               },
               "jurisdiction": {
                 "description": "Jurisdiction where this restriction applies",
-                "$ref": "jurisdiction.json"
+                "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
               }
             },
             "additionalProperties": false
@@ -3567,7 +3567,7 @@
             "properties": {
               "jurisdiction": {
                 "description": "Jurisdiction imposing the export restriction",
-                "$ref": "jurisdiction.json"
+                "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
               },
               "restrictionType": {
                 "description": "Category of export restriction",
@@ -3828,7 +3828,7 @@
             }
           },
           "then": {
-            "$ref": "asset-categories/financial.json"
+            "$ref": "https://openinherit.org/v3/asset-categories/financial.json"
           }
         },
         {
@@ -3841,7 +3841,7 @@
             }
           },
           "then": {
-            "$ref": "asset-categories/vehicle.json"
+            "$ref": "https://openinherit.org/v3/asset-categories/vehicle.json"
           }
         },
         {
@@ -3854,7 +3854,7 @@
             }
           },
           "then": {
-            "$ref": "asset-categories/digital.json"
+            "$ref": "https://openinherit.org/v3/asset-categories/digital.json"
           }
         },
         {
@@ -3867,7 +3867,7 @@
             }
           },
           "then": {
-            "$ref": "asset-categories/business.json"
+            "$ref": "https://openinherit.org/v3/asset-categories/business.json"
           }
         },
         {
@@ -3893,7 +3893,7 @@
             }
           },
           "then": {
-            "$ref": "asset-categories/general.json"
+            "$ref": "https://openinherit.org/v3/asset-categories/general.json"
           }
         }
       ],
@@ -3964,16 +3964,16 @@
         },
         "estimatedValue": {
           "description": "Owner's estimate of the asset's current value, in minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "professionalValuation": {
           "description": "Professional valuation of the asset, in minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "netEquity": {
           "description": "Value of this asset net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored",
           "$comment": "Derivation: netEquity = max(0, assetValue - SUM(liability.settlementAmount ?? liability.amount) over every liability whose securedAgainst is this asset.id AND whose chargeStatus is 'active'), where assetValue is professionalValuation if present, else estimatedValue. Floored at zero — where the charges exceed the value, netEquity is zero and inNegativeEquity is true. Producers MUST keep this consistent with the liabilities array. Consumers SHOULD derive it themselves when liabilities are present rather than trusting the stored value. Only the equity, not the gross value, is chargeable to inheritance tax in jurisdictions that tax the net estate. scripts/validate-net-equity.mjs enforces this arithmetic",
-          "$ref": "common/money.json",
+          "$ref": "https://openinherit.org/v3/common/money.json",
           "properties": {
             "amount": {
               "minimum": 0
@@ -4068,7 +4068,7 @@
           "maxItems": 100,
           "uniqueItems": true,
           "items": {
-            "$ref": "common/identifier.json"
+            "$ref": "https://openinherit.org/v3/common/identifier.json"
           }
         },
         "externalLinks": {
@@ -4249,7 +4249,7 @@
           "type": "array",
           "maxItems": 100,
           "items": {
-            "$ref": "common/media.json"
+            "$ref": "https://openinherit.org/v3/common/media.json"
           }
         },
         "possessionStatus": {
@@ -4306,7 +4306,7 @@
         },
         "culturalDisposition": {
           "description": "Cultural, religious, and regulatory constraints on disposal of this asset",
-          "$ref": "common/cultural-disposition.json"
+          "$ref": "https://openinherit.org/v3/common/cultural-disposition.json"
         },
         "communalAuthority": {
           "description": "The communal or family authority whose approval is required to dispose of this asset",
@@ -4338,7 +4338,7 @@
             },
             "jurisdiction": {
               "description": "Jurisdiction where this communal authority has legal standing",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             }
           },
           "additionalProperties": false
@@ -4353,7 +4353,7 @@
               "properties": {
                 "jurisdiction": {
                   "description": "Jurisdiction whose succession law applies",
-                  "$ref": "common/jurisdiction.json"
+                  "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
                 },
                 "legalTradition": {
                   "description": "Which legal tradition applies",
@@ -4755,7 +4755,7 @@
             },
             "insuredValue": {
               "description": "The insured value in minor currency units",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "renewalDate": {
               "description": "Next renewal date. Important — cover may lapse if not renewed after death",
@@ -4930,14 +4930,14 @@
         },
         "visibility": {
           "description": "Controls who can see this asset. Some assets (firearms, digital accounts, sensitive collections) may need restricted visibility",
-          "$ref": "common/visibility.json"
+          "$ref": "https://openinherit.org/v3/common/visibility.json"
         },
         "fieldProvenance": {
           "description": "Per-field provenance records — how each field's value was obtained",
           "type": "array",
           "maxItems": 100,
           "items": {
-            "$ref": "common/field-provenance.json"
+            "$ref": "https://openinherit.org/v3/common/field-provenance.json"
           }
         },
         "comments": {
@@ -4978,7 +4978,7 @@
                 "format": "date-time"
               },
               "visibility": {
-                "$ref": "common/visibility.json"
+                "$ref": "https://openinherit.org/v3/common/visibility.json"
               }
             },
             "additionalProperties": false
@@ -5022,18 +5022,18 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "applicableLaw": {
           "description": "The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile",
-          "$ref": "common/jurisdiction.json"
+          "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
         },
         "taxTreatment": {
           "description": "Per-asset tax treatment — how this asset is classified for tax purposes in a specific jurisdiction",
           "type": "object",
           "properties": {
             "jurisdiction": {
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "assetType": {
               "enum": [ "immoveable", "moveable", "mixed", "exempt" ]
@@ -5068,7 +5068,7 @@
               "maxLength": 255
             },
             "visibility": {
-              "$ref": "common/visibility.json"
+              "$ref": "https://openinherit.org/v3/common/visibility.json"
             },
             "requiredRole": {
               "description": "The estate role required to follow these instructions",
@@ -5195,7 +5195,7 @@
               },
               "askingPrice": {
                 "description": "The listed asking price",
-                "$ref": "common/money.json"
+                "$ref": "https://openinherit.org/v3/common/money.json"
               },
               "listedAt": {
                 "description": "When this listing was created or last activated",
@@ -5211,7 +5211,7 @@
               },
               "soldPrice": {
                 "description": "The actual sale price, if sold",
-                "$ref": "common/money.json"
+                "$ref": "https://openinherit.org/v3/common/money.json"
               }
             },
             "additionalProperties": false
@@ -5253,7 +5253,7 @@
             },
             "agreedValue": {
               "description": "The agreed or insured value, in minor currency units. May differ from market value",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "coverConfirmedAt": {
               "description": "When the insurance cover for this item was last confirmed or reviewed",
@@ -5340,7 +5340,7 @@
               "maxLength": 500
             },
             "jurisdiction": {
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "statute": {
               "examples": [ "IHTA 1984 s.115-124C" ],
@@ -5422,7 +5422,7 @@
             },
             "cost": {
               "description": "Cost of the service, in minor currency units",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "documentReference": {
               "description": "Reference to a service certificate, receipt, or MOT certificate",
@@ -5727,7 +5727,7 @@
         },
         "jurisdiction": {
           "description": "The jurisdiction this temporal rule applies to. Enables different thresholds for different jurisdictions (e.g. UK IHT vs Scottish IHT)",
-          "$ref": "jurisdiction.json"
+          "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
         }
       },
       "additionalProperties": false
@@ -5746,15 +5746,15 @@
       "properties": {
         "intestacyStatutoryLegacy": {
           "$comment": "Statutory legacy amount under Administration of Estates Act 1925. As of 2023: £322,000.",
-          "$ref": "../../common/temporal-rule.json"
+          "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
         },
         "nilRateBand": {
           "$comment": "IHT nil-rate band. Frozen at £325,000 since 2009.",
-          "$ref": "../../common/temporal-rule.json"
+          "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
         },
         "residenceNilRateBand": {
           "$comment": "RNRB (main residence). Currently £175,000.",
-          "$ref": "../../common/temporal-rule.json"
+          "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
         },
         "transferableNilRateBand": {
           "$comment": "Whether the unused NRB of a predeceased spouse is available for transfer.",
@@ -5768,7 +5768,7 @@
         },
         "inheritanceTaxRate": {
           "$comment": "Main IHT rate. Currently 40%.",
-          "$ref": "../../common/temporal-rule.json"
+          "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
         },
         "cohabitantRights": {
           "type": "object",
@@ -5987,7 +5987,7 @@
           "type": "object",
           "properties": {
             "amount": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "effectiveFrom": {
               "type": "string",
@@ -6083,15 +6083,15 @@
           "properties": {
             "dwellinghouseRight": {
               "description": "Right to dwellinghouse (s.8) — value threshold is a temporal rule",
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             },
             "furnitureRight": {
               "description": "Right to furniture and plenishings (s.8) — value threshold",
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             },
             "financialProvision": {
               "description": "Right to financial provision (s.9) — value threshold",
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             }
           },
           "additionalProperties": false
@@ -6137,11 +6137,11 @@
             },
             "inventoryValue": {
               "description": "Total value of estate for inventory purposes",
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "smallEstateThreshold": {
               "description": "Threshold below which simplified procedure applies",
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             }
           },
           "additionalProperties": false
@@ -6196,7 +6196,7 @@
                     "maxLength": 500
                   },
                   "amount": {
-                    "$ref": "../../common/money.json"
+                    "$ref": "https://openinherit.org/v3/common/money.json"
                   }
                 },
                 "additionalProperties": false
@@ -6207,7 +6207,7 @@
               "enum": [ "capital_sum", "property_transfer", "none", "pending" ]
             },
             "awardAmount": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "courtReference": {
               "type": "string",
@@ -6239,7 +6239,7 @@
           "description": "Tracked changes to Scottish succession legislation",
           "type": "array",
           "items": {
-            "$ref": "../../common/temporal-rule.json"
+            "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
           }
         },
         "notes": {
@@ -6266,16 +6266,16 @@
               "type": "object",
               "properties": {
                 "dwellinghouseValue": {
-                  "$ref": "../../common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "dwellinghouseCapped": {
                   "type": "boolean"
                 },
                 "furnitureValue": {
-                  "$ref": "../../common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "financialProvision": {
-                  "$ref": "../../common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "financialProvisionRate": {
                   "type": "string",
@@ -6288,13 +6288,13 @@
               "type": "object",
               "properties": {
                 "jusRelictaeAmount": {
-                  "$ref": "../../common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "legitimAmount": {
-                  "$ref": "../../common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "legitimPerChild": {
-                  "$ref": "../../common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "numberOfEligibleChildren": {
                   "type": "integer",
@@ -6304,10 +6304,10 @@
               "additionalProperties": false
             },
             "netMoveableEstate": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "freeEstate": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "freeEstateDistribution": {
               "$comment": "Mapping of Scottish intestacy ranks to core kinship types: Rank 1: children (parent_child_*). Rank 2: parents and siblings equally (parent_child_*, sibling, half_sibling). Rank 3: surviving spouse (if no rank 1 or 2 — spouse gets prior rights regardless but free estate only if no descendants/siblings/parents). Rank 4: uncles/aunts (uncle_aunt). Rank 5: grandparents (grandparent_grandchild). Rank 6: Crown (Crown Office/King's and Lord Treasurer's Remembrancer)",
@@ -6331,7 +6331,7 @@
                     "maxLength": 20
                   },
                   "amount": {
-                    "$ref": "../../common/money.json"
+                    "$ref": "https://openinherit.org/v3/common/money.json"
                   }
                 },
                 "additionalProperties": false
@@ -6378,11 +6378,11 @@
         },
         "totalHeritableValue": {
           "description": "Sum of all heritable items",
-          "$ref": "../../common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "totalMoveableValue": {
           "description": "Sum of all moveable items",
-          "$ref": "../../common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "executryAppointments": {
           "description": "Scottish-specific executor appointment details — nominate (by will), dative (by court), creditor (by creditor petition)",
@@ -6419,7 +6419,7 @@
                     "maxLength": 255
                   },
                   "amount": {
-                    "$ref": "../../common/money.json"
+                    "$ref": "https://openinherit.org/v3/common/money.json"
                   },
                   "reference": {
                     "type": "string",
@@ -6728,19 +6728,19 @@
           "properties": {
             "groupAThreshold": {
               "description": "Group A: child from parent",
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             },
             "groupBThreshold": {
               "description": "Group B: sibling, niece/nephew, grandchild",
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             },
             "groupCThreshold": {
               "description": "Group C: all others",
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             },
             "taxRate": {
               "description": "Current CAT rate (33%)",
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             }
           },
           "additionalProperties": false
@@ -6889,7 +6889,7 @@
                     "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
                   },
                   "amount": {
-                    "$ref": "../../common/money.json"
+                    "$ref": "https://openinherit.org/v3/common/money.json"
                   },
                   "description": {
                     "type": "string",
@@ -6911,7 +6911,7 @@
           "type": "array",
           "maxItems": 50,
           "items": {
-            "$ref": "../../common/temporal-rule.json"
+            "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
           }
         },
         "notes": {
@@ -6998,7 +6998,7 @@
                 "format": "uuid"
               },
               "exemptionAmount": {
-                "$ref": "../../common/money.json"
+                "$ref": "https://openinherit.org/v3/common/money.json"
               },
               "constitutional": {
                 "type": "boolean"
@@ -7081,7 +7081,7 @@
           "properties": {
             "basicExclusionAmount": {
               "description": "Unified credit equivalent, currently $13.61M (2024), TCJA sunset 2026",
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             },
             "topMarginalRate": {
               "description": "Currently 40%",
@@ -7094,10 +7094,10 @@
               "type": "boolean"
             },
             "dsueAmount": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "gsttExemption": {
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             },
             "gsttRate": {
               "type": "number",
@@ -7128,7 +7128,7 @@
               "type": "boolean"
             },
             "estateExemption": {
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             },
             "topEstateRate": {
               "type": "number",
@@ -7153,7 +7153,7 @@
                     "maxLength": 500
                   },
                   "exemption": {
-                    "$ref": "../../common/money.json"
+                    "$ref": "https://openinherit.org/v3/common/money.json"
                   },
                   "topRate": {
                     "type": "number",
@@ -7187,10 +7187,10 @@
               "maxLength": 50
             },
             "smallEstateAffidavitThreshold": {
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             },
             "simplifiedProbateThreshold": {
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             },
             "administrationType": {
               "type": "string",
@@ -7264,7 +7264,7 @@
             },
             "rmdAge": {
               "description": "Required minimum distribution age (73 from 2023, 75 from 2033)",
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             },
             "eligibleDesignatedBeneficiaries": {
               "type": "array",
@@ -7608,7 +7608,7 @@
             },
             "preferentialShare": {
               "description": "Amount the surviving spouse receives before sharing with children. Varies by province (e.g. ON $350,000, BC $300,000, AB $150,000)",
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "notes": {
               "type": "string",
@@ -7658,7 +7658,7 @@
               "type": "boolean"
             },
             "patrimonyValue": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "equalisation": {
               "type": "string",
@@ -7675,10 +7675,10 @@
           "type": "object",
           "properties": {
             "netFamilyProperty": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "equalizationPayment": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "canBeNegative": {
               "$comment": "Ontario equalization can result in negative NFP",
@@ -7927,10 +7927,10 @@
               }
             },
             "taxableComponent": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "taxFreeComponent": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "notes": {
               "type": "string",
@@ -8050,10 +8050,10 @@
               "type": "boolean"
             },
             "relationshipProperty": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "separateProperty": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "optingOutAgreement": {
               "type": "boolean"
@@ -8231,13 +8231,13 @@
           "type": "object",
           "properties": {
             "habitualResidence": {
-              "$ref": "../../common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "nationalityElection": {
               "type": "boolean"
             },
             "electedNationality": {
-              "$ref": "../../common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "electionDate": {
               "type": "string",
@@ -8336,7 +8336,7 @@
               "maxLength": 255
             },
             "temporalRule": {
-              "$ref": "../../common/temporal-rule.json"
+              "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             }
           },
           "additionalProperties": false
@@ -8691,7 +8691,7 @@
               "maxLength": 255
             },
             "actuarialValue": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "registeredAtLegalAffairsBureau": {
               "type": "boolean"
@@ -9441,7 +9441,7 @@
           "type": "array",
           "maxItems": 50,
           "items": {
-            "$ref": "../../common/temporal-rule.json"
+            "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
           }
         },
         "notes": {
@@ -9880,7 +9880,7 @@
           "properties": {
             "amount": {
               "description": "Mahr amount in minor currency units",
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "agreed": {
               "description": "Whether the mahr amount was agreed and documented",
@@ -9892,7 +9892,7 @@
             },
             "outstandingAmount": {
               "description": "Outstanding (unpaid) mahr amount in minor currency units",
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "creditorPersonId": {
               "description": "Reference to the Person.id of the spouse to whom the mahr is owed",
@@ -10110,7 +10110,7 @@
               ]
             },
             "amount": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "creditorPersonId": {
               "type": "string",
@@ -10292,7 +10292,7 @@
               "type": "boolean"
             },
             "amount": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "duration": {
               "type": "string",
@@ -10531,7 +10531,7 @@
               "type": "boolean"
             },
             "foreignJurisdiction": {
-              "$ref": "../../common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "taxImplications": {
               "type": "string",
@@ -10768,10 +10768,10 @@
           "type": "object",
           "properties": {
             "totalAgreed": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "paidToDate": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "includesLivestock": {
               "type": "boolean"
@@ -11064,7 +11064,7 @@
             },
             "communityPropertyValue": {
               "description": "Total value of community property subject to meação split, in minor currency units",
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "notes": {
               "type": "string",
@@ -11133,7 +11133,7 @@
             },
             "estimatedValue": {
               "description": "Estimated value of the disponível portion in minor currency units",
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "notes": {
               "type": "string",
@@ -11376,7 +11376,7 @@
             },
             "accruedBenefitEstimate": {
               "description": "Estimated total accrued MPF benefit at date of death, in minor currency units (HKD cents)",
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "notes": {
               "type": "string",
@@ -11428,7 +11428,7 @@
                 },
                 "statutoryLegacy": {
                   "description": "The fixed statutory legacy payable to the surviving spouse before the residue is divided, in minor currency units (HKD cents)",
-                  "$ref": "../../common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "residueShare": {
                   "description": "The surviving spouse's share of the residue as a fraction (e.g. 1/2), applicable where there are surviving issue",
@@ -11465,11 +11465,11 @@
             },
             "estateValue": {
               "description": "Gross value of the estate as assessed for small estate purposes, in minor currency units (HKD cents)",
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "threshold": {
               "description": "Prescribed small estate threshold in force at the date of death, in minor currency units (HKD cents)",
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "confirmationDate": {
               "description": "Date on which the small estate grant or confirmation was issued",
@@ -11659,7 +11659,7 @@
                 },
                 "estimatedValue": {
                   "description": "Estimated monetary value of the available quota in minor currency units",
-                  "$ref": "../../common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 }
               },
               "additionalProperties": false
@@ -11907,7 +11907,7 @@
             },
             "personalPropertyValue": {
               "description": "Estimated value of the deceased's personal property held outside communal ownership, in minor currency units",
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             }
           },
           "additionalProperties": false
@@ -11942,7 +11942,7 @@
             },
             "estimatedValue": {
               "description": "Estimated value of known restitution assets or settled claims in minor currency units",
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             }
           },
           "additionalProperties": false
@@ -12053,7 +12053,7 @@
               "type": "boolean"
             },
             "repatriationLimit": {
-              "$ref": "../../common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "dtaa": {
               "description": "Applicable Double Taxation Avoidance Agreement",
@@ -12334,7 +12334,7 @@
               "type": "boolean"
             },
             "homeCountry": {
-              "$ref": "../../common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "decreeApplicable": {
               "description": "Whether Decree-Law 41/2022 applies",
@@ -12358,7 +12358,7 @@
                 "maxLength": 255
               },
               "estimatedValue": {
-                "$ref": "../../common/money.json"
+                "$ref": "https://openinherit.org/v3/common/money.json"
               }
             },
             "additionalProperties": false
@@ -12626,7 +12626,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -12764,7 +12764,7 @@
             },
             "jurisdiction": {
               "description": "Jurisdiction of the actor",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             }
           },
           "additionalProperties": false
@@ -12780,7 +12780,7 @@
             },
             "grantValue": {
               "description": "Gross estate value on the grant",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "issuingCourt": {
               "description": "Court that issued the grant",
@@ -12796,7 +12796,7 @@
             },
             "valuedAmount": {
               "description": "The valuation amount",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "recipientPersonId": {
               "description": "Person.id of distribution recipient (for distribution_made events)",
@@ -12822,7 +12822,7 @@
             },
             "distributionAmount": {
               "description": "Amount distributed",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             }
           },
           "additionalProperties": {
@@ -12832,7 +12832,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "additionalProperties": false
@@ -12924,7 +12924,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -12965,7 +12965,7 @@
         },
         "cost": {
           "description": "Subscription cost per billing period",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "billingFrequency": {
           "description": "How often the subscription is billed",
@@ -13059,7 +13059,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -13108,15 +13108,15 @@
         },
         "grossEstateValue": {
           "description": "Total gross value of the estate before deducting liabilities, in minor currency units",
-          "$ref": "money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "netEstateValue": {
           "description": "Net estate value after deducting liabilities, in minor currency units",
-          "$ref": "money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "lifetimeTransfersInLookback": {
           "description": "Total value of lifetime transfers (gifts, settlements) made within the lookback period, in minor currency units",
-          "$ref": "money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "lookbackPeriod": {
           "description": "The lookback period for lifetime transfers in this jurisdiction, expressed as a human-readable duration",
@@ -13148,7 +13148,7 @@
               },
               "amount": {
                 "description": "The monetary value of this exemption, in minor currency units",
-                "$ref": "money.json"
+                "$ref": "https://openinherit.org/v3/common/money.json"
               },
               "applied": {
                 "description": "Whether this exemption has been applied in the current calculation",
@@ -13170,11 +13170,11 @@
         },
         "taxableEstate": {
           "description": "The estate value subject to tax after applying exemptions, in minor currency units",
-          "$ref": "money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "estimatedLiability": {
           "description": "The estimated tax due, in minor currency units. This is an estimate and should not be treated as a final liability",
-          "$ref": "money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "effectiveRate": {
           "description": "The effective tax rate as a percentage of the gross estate value",
@@ -13235,7 +13235,7 @@
         },
         "charitableGiftsTotal": {
           "description": "Total value of all charitable gifts in this estate, in minor currency units",
-          "$ref": "money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "charitableGiftsAsPercentage": {
           "description": "Charitable gifts as a percentage of the net estate value",
@@ -13390,7 +13390,7 @@
         },
         "amount": {
           "description": "Cash amount for pecuniary and demonstrative bequests, in minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "sharePercentage": {
           "description": "Percentage share of the residuary estate or a specified fund",
@@ -13582,7 +13582,7 @@
           "maxLength": 2000
         },
         "visibility": {
-          "$ref": "common/visibility.json"
+          "$ref": "https://openinherit.org/v3/common/visibility.json"
         },
         "assetIds": {
           "description": "References to Asset.id(s) being bequeathed as individual items. A bequest may reference either assetIds (individual items) or assetCollectionId (entire collection), not both",
@@ -13680,7 +13680,7 @@
             },
             "pledgeAmount": {
               "description": "Pledged amount in minor currency units",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "pledgeDocumentId": {
               "description": "Reference to a Document.id recording the pledge",
@@ -13764,7 +13764,7 @@
                 "format": "date-time"
               },
               "visibility": {
-                "$ref": "common/visibility.json"
+                "$ref": "https://openinherit.org/v3/common/visibility.json"
               }
             },
             "additionalProperties": false
@@ -13772,11 +13772,11 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "applicableLaw": {
           "description": "The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile",
-          "$ref": "common/jurisdiction.json"
+          "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
         },
         "powerOfAppointmentId": {
           "description": "Reference to a PowerOfAppointment.id — indicates this bequest's distribution is subject to a power of appointment",
@@ -13948,7 +13948,7 @@
             },
             "jurisdiction": {
               "description": "Jurisdiction where the organisation is registered",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             }
           },
           "additionalProperties": false
@@ -14099,7 +14099,7 @@
                   "format": "uuid"
                 },
                 "redirectedAmount": {
-                  "$ref": "common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "reason": {
                   "enum": [
@@ -14315,7 +14315,7 @@
           "type": "array",
           "maxItems": 100,
           "items": {
-            "$ref": "common/media.json"
+            "$ref": "https://openinherit.org/v3/common/media.json"
           }
         },
         "clauses": {
@@ -14349,7 +14349,7 @@
           "format": "date"
         },
         "formalityJurisdiction": {
-          "$ref": "common/jurisdiction.json"
+          "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
         },
         "formalityNotes": {
           "description": "Circumstances of informal execution",
@@ -14389,7 +14389,7 @@
               "format": "date"
             },
             "registryJurisdiction": {
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "verificationUrl": {
               "type": "string",
@@ -14441,7 +14441,7 @@
                 "format": "date"
               },
               "jurisdiction": {
-                "$ref": "common/jurisdiction.json"
+                "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
               },
               "registryUrl": {
                 "description": "URL of the registry for verification",
@@ -14466,7 +14466,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -14531,7 +14531,7 @@
                   "properties": {
                     "jurisdiction": {
                       "description": "Jurisdiction whose succession law applies",
-                      "$ref": "common/jurisdiction.json"
+                      "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
                     },
                     "legalTradition": {
                       "description": "Which legal tradition applies",
@@ -14639,7 +14639,7 @@
                 },
                 "jurisdiction": {
                   "description": "Jurisdiction of the validating authority",
-                  "$ref": "common/jurisdiction.json"
+                  "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
                 }
               },
               "additionalProperties": false
@@ -14976,7 +14976,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "pageCount": {
           "description": "Total number of pages in the executed document",
@@ -15065,7 +15065,7 @@
         },
         "domicile": {
           "description": "The testator's domicile — the jurisdiction whose succession law governs moveable property by default. For cross-border estates, individual assets may declare their own applicableLaw",
-          "$ref": "common/jurisdiction.json"
+          "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
         },
         "willType": {
           "description": "The type of will. Extension types use x-inherit- prefix",
@@ -15146,12 +15146,12 @@
         },
         "totalEstimatedValue": {
           "description": "Estimated total value of the estate before liabilities. In minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "netEstateEquity": {
           "description": "Total value of the estate after netting secured charges against the assets they charge and subtracting unsecured liabilities, in minor currency units. The after-liabilities counterpart to totalEstimatedValue. A convenience denormalisation: the authoritative figure is derived, not stored",
           "$comment": "Derivation: netEstateEquity = SUM(asset.netEquity over all assets) + SUM(property.netEquity over all properties) - SUM(liability.amount over every liability with no securedAgainst). Properties are summed alongside assets because a mortgage — the paradigm secured liability — is charged against a property, so omitting them would leave the commonest charge unnetted. Secured liabilities are excluded from the final sum because they have already been netted at entity level by netEquity — counting them again would double-subtract. Producers MUST keep this consistent with the assets and liabilities arrays. Consumers SHOULD derive it themselves when those arrays are present. scripts/validate-net-equity.mjs enforces this arithmetic",
-          "$ref": "common/money.json",
+          "$ref": "https://openinherit.org/v3/common/money.json",
           "properties": {
             "amount": {
               "minimum": 0
@@ -15160,7 +15160,7 @@
         },
         "attestation": {
           "description": "Will execution formalities — witnesses, signing method, and compliance checks",
-          "$ref": "attestation.json"
+          "$ref": "https://openinherit.org/v3/attestation.json"
         },
         "testamentaryCapacity": {
           "description": "Record of testamentary capacity assessment for the testator",
@@ -15236,7 +15236,7 @@
           "properties": {
             "chosenLaw": {
               "description": "The jurisdiction whose law the testator has chosen to govern succession",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "basis": {
               "description": "Legal basis for the choice of law",
@@ -15268,7 +15268,7 @@
             },
             "electedAmount": {
               "description": "The amount elected by the surviving spouse, if the election has been made",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "statute": {
               "description": "The statute governing elective share in this jurisdiction",
@@ -15496,7 +15496,7 @@
             },
             "jurisdiction": {
               "description": "Jurisdiction whose commorientes rule applies",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "notes": {
               "description": "Additional context — e.g. specific facts of the case",
@@ -15544,7 +15544,7 @@
             "properties": {
               "jurisdiction": {
                 "description": "The jurisdiction where ancillary probate is needed",
-                "$ref": "common/jurisdiction.json"
+                "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
               },
               "fiduciaryPersonId": {
                 "description": "Reference to the Person.id of the local fiduciary or administrator",
@@ -15719,7 +15719,7 @@
               },
               "primaryTaxingJurisdiction": {
                 "description": "The jurisdiction with primary taxing rights under this treaty",
-                "$ref": "common/jurisdiction.json"
+                "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
               },
               "claimedCredits": {
                 "description": "Tax credits claimed under this treaty",
@@ -15837,19 +15837,19 @@
             },
             "grossEstateValue": {
               "description": "Gross value of the estate at date of death, before deducting liabilities",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "netEstateValue": {
               "description": "Net value of the estate after deducting liabilities",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "taxLiability": {
               "description": "Total inheritance/estate tax liability",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "taxPaid": {
               "description": "Amount of inheritance/estate tax paid so far",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "taxClearance": {
               "description": "Tax clearance status — confirmation from the tax authority that no further tax is owed",
@@ -15920,7 +15920,7 @@
                   },
                   "cashAmount": {
                     "description": "Cash amount distributed, in minor currency units",
-                    "$ref": "common/money.json"
+                    "$ref": "https://openinherit.org/v3/common/money.json"
                   },
                   "receipt": {
                     "description": "Whether a receipt/acknowledgement has been obtained from the beneficiary",
@@ -15965,7 +15965,7 @@
               "properties": {
                 "jurisdiction": {
                   "description": "Jurisdiction whose succession law applies by default",
-                  "$ref": "common/jurisdiction.json"
+                  "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
                 },
                 "legalTradition": {
                   "description": "Which legal tradition applies",
@@ -16114,7 +16114,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "jurisdictionRules": {
           "description": "Conflict of laws rules governing this estate — determines which jurisdiction's succession law applies to which assets",
@@ -16141,7 +16141,7 @@
               "type": "object",
               "properties": {
                 "chosenJurisdiction": {
-                  "$ref": "common/jurisdiction.json"
+                  "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
                 },
                 "basis": {
                   "enum": [ "nationality", "habitual_residence", "domicile" ]
@@ -16198,7 +16198,7 @@
                     ]
                   },
                   "jurisdiction": {
-                    "$ref": "common/jurisdiction.json"
+                    "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
                   },
                   "legalTest": {
                     "type": "string",
@@ -16343,7 +16343,7 @@
               "maxLength": 255
             },
             "jurisdiction": {
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "referenceNumber": {
               "type": "string",
@@ -16398,7 +16398,7 @@
           "properties": {
             "jurisdiction": {
               "description": "Jurisdiction whose escheatment laws apply",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "dormancyPeriodYears": {
               "description": "Statutory dormancy period in years before escheatment",
@@ -16489,7 +16489,7 @@
                       "maxLength": 100
                     },
                     "jurisdiction": {
-                      "$ref": "common/jurisdiction.json"
+                      "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
                     },
                     "presumption": {
                       "type": "string",
@@ -16589,7 +16589,7 @@
             "required": [ "jurisdiction", "scope" ],
             "properties": {
               "jurisdiction": {
-                "$ref": "common/jurisdiction.json"
+                "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
               },
               "scope": {
                 "description": "Whether this jurisdiction applies to the whole estate or specific assets",
@@ -16737,7 +16737,7 @@
                 "format": "uuid"
               },
               "annualEstimatedCost": {
-                "$ref": "common/money.json"
+                "$ref": "https://openinherit.org/v3/common/money.json"
               },
               "careNeeds": {
                 "type": "string",
@@ -16770,7 +16770,7 @@
                 ]
               },
               "jurisdiction": {
-                "$ref": "common/jurisdiction.json"
+                "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
               },
               "statute": {
                 "type": "string",
@@ -16780,7 +16780,7 @@
                 "enum": [ "potential", "filed", "settled", "dismissed" ]
               },
               "amount": {
-                "$ref": "common/money.json"
+                "$ref": "https://openinherit.org/v3/common/money.json"
               },
               "notes": {
                 "type": "string",
@@ -16993,7 +16993,7 @@
                 "maxLength": 100
               },
               "jurisdiction": {
-                "$ref": "common/jurisdiction.json"
+                "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
               },
               "effect": {
                 "description": "What the exclusion means in practice",
@@ -17053,7 +17053,7 @@
             },
             "attestation": {
               "description": "Execution formalities for this codicil",
-              "$ref": "attestation.json"
+              "$ref": "https://openinherit.org/v3/attestation.json"
             },
             "documentId": {
               "description": "Reference to the Document entity storing the codicil text",
@@ -17182,7 +17182,7 @@
             },
             "jurisdiction": {
               "description": "The jurisdiction whose forced heirship rules apply",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "claimNature": {
               "description": "The legal nature of the forced heir's claim — whether they receive property, cash, or a court-determined provision",
@@ -17286,7 +17286,7 @@
             },
             "jurisdiction": {
               "description": "Jurisdiction this adjudicating body operates in",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "caseReference": {
               "description": "Case or filing reference number",
@@ -17319,7 +17319,7 @@
             },
             "jurisdiction": {
               "description": "Jurisdiction where this parallel distribution applies",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "description": {
               "description": "Summary of how this system distributes the estate",
@@ -17380,7 +17380,7 @@
             },
             "jurisdiction": {
               "description": "Jurisdiction that issued this grant",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "notes": {
               "description": "Additional notes about the grant",
@@ -17420,7 +17420,7 @@
             },
             "domicileAtDeath": {
               "description": "The testator's domicile at the time of death. This determines which succession law governs moveable property",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "notes": {
               "description": "Additional notes about the death record",
@@ -17494,7 +17494,7 @@
           "properties": {
             "jurisdiction": {
               "description": "The jurisdiction this assessment applies to",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "targetForm": {
               "description": "Form identifier from form-requirements.json",
@@ -17811,7 +17811,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "conflictsOfInterest": {
           "description": "Declared conflicts of interest — executor/trustee who is also a beneficiary, drafter, or family member",
@@ -17984,7 +17984,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "dependantType": {
           "description": "The type of dependant this guardian is appointed for. Extends guardian beyond minors to cover adult dependants",
@@ -18161,7 +18161,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "effectiveFrom": {
           "description": "Date this family relationship became effective (e.g. date of marriage for step-child, date of adoption order)",
@@ -18198,7 +18198,7 @@
             "required": [ "jurisdiction", "recognised" ],
             "properties": {
               "jurisdiction": {
-                "$ref": "common/jurisdiction.json"
+                "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
               },
               "recognised": {
                 "type": "boolean"
@@ -18308,7 +18308,7 @@
         },
         "amount": {
           "description": "Outstanding balance of this liability in minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "securedAgainst": {
           "description": "Reference to a Property.id or Asset.id that this liability is secured against. Unsecured debts should omit this field",
@@ -18324,7 +18324,7 @@
         },
         "settlementAmount": {
           "description": "Redemption or early-settlement figure to clear this liability, in minor currency units. May differ from amount — a PCP or hire-purchase settlement typically includes unpaid interest and fees, and a mortgage redemption may include an early-repayment charge. Where present this is the figure that nets against the secured asset's value",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "chargeRegisteredDate": {
           "description": "Date the charge was registered against the secured property or asset",
@@ -18341,7 +18341,7 @@
         },
         "monthlyPayment": {
           "description": "Regular monthly payment amount in minor currency units, if applicable",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "interestRate": {
           "description": "Annual interest rate as a percentage (e.g. 4.5 means 4.5% per annum). Zero for interest-free debts",
@@ -18384,7 +18384,7 @@
           "maxLength": 2000
         },
         "visibility": {
-          "$ref": "common/visibility.json"
+          "$ref": "https://openinherit.org/v3/common/visibility.json"
         },
         "studentLoanInfo": {
           "description": "Student loan plan details. All UK student loans (Plans 1, 2, 4, 5, and Postgraduate) are written off on death — the estate does not need to repay. Confirming this prevents executors from incorrectly paying the balance",
@@ -18436,7 +18436,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -18528,7 +18528,7 @@
         },
         "value": {
           "description": "Value of the transfer at the date it was made, in minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "assetId": {
           "description": "Reference to the Asset.id of the asset transferred, if it is still recorded in the document",
@@ -18582,7 +18582,7 @@
               },
               "amount": {
                 "description": "Amount of the exemption claimed, in minor currency units",
-                "$ref": "common/money.json"
+                "$ref": "https://openinherit.org/v3/common/money.json"
               },
               "notes": {
                 "description": "Free-text notes about this exemption claim",
@@ -18604,7 +18604,7 @@
         },
         "taxPaid": {
           "description": "Amount of tax paid on this transfer, in minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "lookbackRelevant": {
           "description": "Whether this transfer falls within the jurisdiction's lookback period for tax purposes (e.g. 7 years in the UK, 3 years in the US for certain gifts)",
@@ -18626,7 +18626,7 @@
         },
         "jurisdiction": {
           "description": "Jurisdiction governing this lifetime transfer",
-          "$ref": "common/jurisdiction.json"
+          "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
         },
         "notes": {
           "description": "Free-text notes about this lifetime transfer",
@@ -18650,7 +18650,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "lookbackPeriod": {
           "description": "Jurisdiction-specific lookback period for this lifetime transfer — determines tax liability based on proximity to date of death",
@@ -18833,7 +18833,7 @@
         },
         "jurisdiction": {
           "description": "Jurisdiction governing this nonprobate transfer",
-          "$ref": "common/jurisdiction.json"
+          "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
         },
         "notes": {
           "description": "Free-text notes about this nonprobate transfer",
@@ -18896,7 +18896,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -19233,7 +19233,7 @@
         "domicile": {
           "description": "The person's legal domicile. Domicile — not nationality or residence — determines which succession law governs moveable property",
           "$comment": "Domicile (not residence/nationality) determines succession law for moveables in conflict-of-laws. A British citizen domiciled in France has moveables governed by French forced heirship.",
-          "$ref": "common/jurisdiction.json"
+          "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
         },
         "roles": {
           "description": "The roles this person plays in the estate. A person may hold multiple roles simultaneously (e.g. beneficiary and executor)",
@@ -19294,7 +19294,7 @@
             },
             "address": {
               "description": "Postal address for this person",
-              "$ref": "common/address.json"
+              "$ref": "https://openinherit.org/v3/common/address.json"
             }
           },
           "additionalProperties": false
@@ -19334,7 +19334,7 @@
           "maxItems": 100,
           "uniqueItems": true,
           "items": {
-            "$ref": "common/identifier.json"
+            "$ref": "https://openinherit.org/v3/common/identifier.json"
           }
         },
         "ritualName": {
@@ -19425,7 +19425,7 @@
               },
               "jurisdiction": {
                 "description": "The jurisdiction where this legal personality is recognised",
-                "$ref": "common/jurisdiction.json"
+                "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
               },
               "notes": {
                 "description": "Additional context about this legal personality",
@@ -19450,7 +19450,7 @@
             "properties": {
               "jurisdiction": {
                 "description": "The jurisdiction where this person is tax-resident",
-                "$ref": "common/jurisdiction.json"
+                "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
               },
               "taxpayerIdentifier": {
                 "description": "The person's tax identification number in this jurisdiction",
@@ -19506,7 +19506,7 @@
           "type": "array",
           "maxItems": 100,
           "items": {
-            "$ref": "common/field-provenance.json"
+            "$ref": "https://openinherit.org/v3/common/field-provenance.json"
           }
         },
         "comments": {
@@ -19547,7 +19547,7 @@
                 "format": "date-time"
               },
               "visibility": {
-                "$ref": "common/visibility.json"
+                "$ref": "https://openinherit.org/v3/common/visibility.json"
               }
             },
             "additionalProperties": false
@@ -19600,7 +19600,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "jurisdictionRoles": {
           "description": "Extension-specific roles that the core roles enum cannot cover — e.g. faraid_heir, karta, okpara",
@@ -19913,11 +19913,11 @@
         },
         "estimatedMonthlyCareCost": {
           "description": "Estimated monthly care cost",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "fundingForCare": {
           "description": "Amount set aside for ongoing care",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "immediateActionRequired": {
           "description": "Urgent actions needed after death",
@@ -19939,7 +19939,7 @@
           "type": "array",
           "maxItems": 20,
           "items": {
-            "$ref": "common/media.json"
+            "$ref": "https://openinherit.org/v3/common/media.json"
           }
         },
         "notes": {
@@ -19949,7 +19949,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "petCareArrangement": {
           "description": "Links this pet to the trust or bequest funding its care. Pets cannot be beneficiaries — money flows to a trust or nominated carer",
@@ -20118,7 +20118,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -20349,7 +20349,7 @@
             },
             "revocationJurisdiction": {
               "description": "Which jurisdiction's authority governs this revocation",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "challengePeriodDays": {
               "description": "Number of days during which the revocation can be challenged",
@@ -20392,7 +20392,7 @@
           "properties": {
             "maxTransactionValue": {
               "description": "Financial limit per delegated action",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "requiresCoApproval": {
               "description": "Whether another person must approve actions",
@@ -20568,7 +20568,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -20752,7 +20752,7 @@
         },
         "jurisdiction": {
           "description": "Primary jurisdiction where this relationship was formed or registered",
-          "$ref": "common/jurisdiction.json"
+          "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
         },
         "jurisdictionalRecognition": {
           "description": "How other jurisdictions recognise (or do not recognise) this relationship. Essential for cross-border estates",
@@ -20802,7 +20802,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -20885,7 +20885,7 @@
             },
             "jurisdiction": {
               "description": "Jurisdiction where this event took place or was registered",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "notes": {
               "description": "Additional context about this event",
@@ -20946,7 +20946,7 @@
             },
             "value": {
               "description": "Monetary value of the instrument, in minor currency units",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "status": {
               "description": "Payment status of this financial instrument",
@@ -21032,17 +21032,17 @@
                 "principalAmount": {
                   "description": "The ikkar ketubah — the standard principal amount",
                   "$comment": "Ikkar ketubah — standard amount (200 zuz for virgin, 100 for widow/divorcee)",
-                  "$ref": "common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "tosefetAmount": {
                   "description": "The tosefet ketubah — the groom's voluntary additional amount",
                   "$comment": "Tosefet ketubah — groom's additional amount",
-                  "$ref": "common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "nedunya": {
                   "description": "The nedunya — dowry brought by the bride into the marriage",
                   "$comment": "Dowry brought by the bride",
-                  "$ref": "common/money.json"
+                  "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "brideStatus": {
                   "description": "The bride's status at the time of marriage, which determines the ikkar amount",
@@ -21114,7 +21114,7 @@
           "properties": {
             "jurisdiction": {
               "description": "The jurisdiction whose recognition status is recorded",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "recognised": {
               "description": "Whether this jurisdiction recognises the relationship",
@@ -21315,7 +21315,7 @@
         },
         "governingLaw": {
           "description": "The jurisdiction whose law governs this trust",
-          "$ref": "common/jurisdiction.json"
+          "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
         },
         "reservedPowers": {
           "description": "Powers reserved by the settlor or granted to a third party. Offshore trusts frequently include reserved powers over investment or distributions",
@@ -21391,7 +21391,7 @@
             },
             "destinationJurisdiction": {
               "description": "The jurisdiction the trust flees to when triggered",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "automaticOrDiscretionary": {
               "description": "Whether the flee is triggered automatically or at trustee discretion",
@@ -21459,7 +21459,7 @@
             "properties": {
               "jurisdiction": {
                 "description": "The jurisdiction whose recognition status is recorded",
-                "$ref": "common/jurisdiction.json"
+                "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
               },
               "recognised": {
                 "description": "Whether this jurisdiction recognises the trust",
@@ -21540,7 +21540,7 @@
           "maxLength": 2000
         },
         "visibility": {
-          "$ref": "common/visibility.json"
+          "$ref": "https://openinherit.org/v3/common/visibility.json"
         },
         "trusteePersonIds": {
           "description": "Person IDs of the trustees. A trust may have multiple trustees",
@@ -21587,7 +21587,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "petId": {
           "description": "If this trust exists for the care of a specific pet, reference to Pet.id",
@@ -21612,7 +21612,7 @@
             },
             "gstExemptionAllocated": {
               "description": "GST exemption amount allocated to this trust",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "notes": {
               "type": "string",
@@ -21663,7 +21663,7 @@
               "minimum": 1
             },
             "taxDeductionClaimed": {
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             }
           },
           "additionalProperties": false
@@ -21856,7 +21856,7 @@
             }
           },
           "then": {
-            "$ref": "catalogue.json"
+            "$ref": "https://openinherit.org/v3/catalogue.json"
           },
           "else": {
             "required": [ "schemaVersion", "estate", "people" ],
@@ -21902,7 +21902,7 @@
           "then": {
             "properties": {
               "x-inherit-uk-england-wales": {
-                "$ref": "extensions/uk-england-wales/uk-england-wales.json"
+                "$ref": "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json"
               }
             }
           }
@@ -21914,7 +21914,7 @@
           "then": {
             "properties": {
               "x-inherit-scotland": {
-                "$ref": "extensions/scotland/scotland.json"
+                "$ref": "https://openinherit.org/v3/extensions/scotland/scotland.json"
               }
             }
           }
@@ -21926,7 +21926,7 @@
           "then": {
             "properties": {
               "x-inherit-ireland": {
-                "$ref": "extensions/ireland/ireland.json"
+                "$ref": "https://openinherit.org/v3/extensions/ireland/ireland.json"
               }
             }
           }
@@ -21938,7 +21938,7 @@
           "then": {
             "properties": {
               "x-inherit-us-estate": {
-                "$ref": "extensions/us-estate/us-estate.json"
+                "$ref": "https://openinherit.org/v3/extensions/us-estate/us-estate.json"
               }
             }
           }
@@ -21950,7 +21950,7 @@
           "then": {
             "properties": {
               "x-inherit-canada": {
-                "$ref": "extensions/canada/canada.json"
+                "$ref": "https://openinherit.org/v3/extensions/canada/canada.json"
               }
             }
           }
@@ -21962,7 +21962,7 @@
           "then": {
             "properties": {
               "x-inherit-australia-nz": {
-                "$ref": "extensions/australia-nz/australia-nz.json"
+                "$ref": "https://openinherit.org/v3/extensions/australia-nz/australia-nz.json"
               }
             }
           }
@@ -21974,7 +21974,7 @@
           "then": {
             "properties": {
               "x-inherit-eu-succession": {
-                "$ref": "extensions/eu-succession/eu-succession.json"
+                "$ref": "https://openinherit.org/v3/extensions/eu-succession/eu-succession.json"
               }
             }
           }
@@ -21986,7 +21986,7 @@
           "then": {
             "properties": {
               "x-inherit-japan": {
-                "$ref": "extensions/japan/japan.json"
+                "$ref": "https://openinherit.org/v3/extensions/japan/japan.json"
               }
             }
           }
@@ -21998,7 +21998,7 @@
           "then": {
             "properties": {
               "x-inherit-prc-china": {
-                "$ref": "extensions/prc-china/prc-china.json"
+                "$ref": "https://openinherit.org/v3/extensions/prc-china/prc-china.json"
               }
             }
           }
@@ -22010,7 +22010,7 @@
           "then": {
             "properties": {
               "x-inherit-singapore-malaysia": {
-                "$ref": "extensions/singapore-malaysia/singapore-malaysia.json"
+                "$ref": "https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json"
               }
             }
           }
@@ -22022,7 +22022,7 @@
           "then": {
             "properties": {
               "x-inherit-latin-america": {
-                "$ref": "extensions/latin-america/latin-america.json"
+                "$ref": "https://openinherit.org/v3/extensions/latin-america/latin-america.json"
               }
             }
           }
@@ -22034,7 +22034,7 @@
           "then": {
             "properties": {
               "x-inherit-islamic-succession": {
-                "$ref": "extensions/islamic-succession/islamic-succession.json"
+                "$ref": "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json"
               }
             }
           }
@@ -22046,7 +22046,7 @@
           "then": {
             "properties": {
               "x-inherit-jewish-succession": {
-                "$ref": "extensions/jewish-succession/jewish-succession.json"
+                "$ref": "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json"
               }
             }
           }
@@ -22058,7 +22058,7 @@
           "then": {
             "properties": {
               "x-inherit-hindu-succession": {
-                "$ref": "extensions/hindu-succession/hindu-succession.json"
+                "$ref": "https://openinherit.org/v3/extensions/hindu-succession/hindu-succession.json"
               }
             }
           }
@@ -22070,7 +22070,7 @@
           "then": {
             "properties": {
               "x-inherit-africa-customary": {
-                "$ref": "extensions/africa-customary/africa-customary.json"
+                "$ref": "https://openinherit.org/v3/extensions/africa-customary/africa-customary.json"
               }
             }
           }
@@ -22082,7 +22082,7 @@
           "then": {
             "properties": {
               "x-inherit-brazil": {
-                "$ref": "extensions/brazil/brazil.json"
+                "$ref": "https://openinherit.org/v3/extensions/brazil/brazil.json"
               }
             }
           }
@@ -22094,7 +22094,7 @@
           "then": {
             "properties": {
               "x-inherit-hong-kong": {
-                "$ref": "extensions/hong-kong/hong-kong.json"
+                "$ref": "https://openinherit.org/v3/extensions/hong-kong/hong-kong.json"
               }
             }
           }
@@ -22106,7 +22106,7 @@
           "then": {
             "properties": {
               "x-inherit-switzerland": {
-                "$ref": "extensions/switzerland/switzerland.json"
+                "$ref": "https://openinherit.org/v3/extensions/switzerland/switzerland.json"
               }
             }
           }
@@ -22118,7 +22118,7 @@
           "then": {
             "properties": {
               "x-inherit-israel": {
-                "$ref": "extensions/israel/israel.json"
+                "$ref": "https://openinherit.org/v3/extensions/israel/israel.json"
               }
             }
           }
@@ -22130,7 +22130,7 @@
           "then": {
             "properties": {
               "x-inherit-india": {
-                "$ref": "extensions/india/india.json"
+                "$ref": "https://openinherit.org/v3/extensions/india/india.json"
               }
             }
           }
@@ -22142,7 +22142,7 @@
           "then": {
             "properties": {
               "x-inherit-uae": {
-                "$ref": "extensions/uae/uae.json"
+                "$ref": "https://openinherit.org/v3/extensions/uae/uae.json"
               }
             }
           }
@@ -22292,7 +22292,7 @@
         },
         "estate": {
           "description": "The single estate record for this document",
-          "$ref": "estate.json"
+          "$ref": "https://openinherit.org/v3/estate.json"
         },
         "people": {
           "description": "All people involved in the estate — testator, beneficiaries, executors, witnesses, guardians, etc",
@@ -22300,7 +22300,7 @@
           "maxItems": 500,
           "minItems": 1,
           "items": {
-            "$ref": "person.json"
+            "$ref": "https://openinherit.org/v3/person.json"
           }
         },
         "kinships": {
@@ -22308,7 +22308,7 @@
           "type": "array",
           "maxItems": 1000,
           "items": {
-            "$ref": "kinship.json"
+            "$ref": "https://openinherit.org/v3/kinship.json"
           }
         },
         "relationships": {
@@ -22316,7 +22316,7 @@
           "type": "array",
           "maxItems": 200,
           "items": {
-            "$ref": "relationship.json"
+            "$ref": "https://openinherit.org/v3/relationship.json"
           }
         },
         "properties": {
@@ -22324,21 +22324,21 @@
           "type": "array",
           "maxItems": 200,
           "items": {
-            "$ref": "property.json"
+            "$ref": "https://openinherit.org/v3/property.json"
           }
         },
         "assets": {
           "description": "Non-property assets — financial accounts, personal property, vehicles, digital assets, etc",
           "type": "array",
           "items": {
-            "$ref": "asset.json"
+            "$ref": "https://openinherit.org/v3/asset.json"
           }
         },
         "assetCollections": {
           "description": "Named groups of related assets — collections (model railways, art, wine, etc.) that have collective significance and value",
           "type": "array",
           "items": {
-            "$ref": "asset-collection.json"
+            "$ref": "https://openinherit.org/v3/asset-collection.json"
           }
         },
         "liabilities": {
@@ -22346,7 +22346,7 @@
           "type": "array",
           "maxItems": 200,
           "items": {
-            "$ref": "liability.json"
+            "$ref": "https://openinherit.org/v3/liability.json"
           }
         },
         "bequests": {
@@ -22354,7 +22354,7 @@
           "type": "array",
           "maxItems": 500,
           "items": {
-            "$ref": "bequest.json"
+            "$ref": "https://openinherit.org/v3/bequest.json"
           }
         },
         "trusts": {
@@ -22362,7 +22362,7 @@
           "type": "array",
           "maxItems": 50,
           "items": {
-            "$ref": "trust.json"
+            "$ref": "https://openinherit.org/v3/trust.json"
           }
         },
         "executors": {
@@ -22370,7 +22370,7 @@
           "type": "array",
           "maxItems": 20,
           "items": {
-            "$ref": "executor.json"
+            "$ref": "https://openinherit.org/v3/executor.json"
           }
         },
         "guardians": {
@@ -22378,14 +22378,14 @@
           "type": "array",
           "maxItems": 20,
           "items": {
-            "$ref": "guardian.json"
+            "$ref": "https://openinherit.org/v3/guardian.json"
           }
         },
         "wishes": {
           "description": "Non-binding (or culturally binding) wishes — funeral, letters, pet care, digital estate",
           "type": "array",
           "items": {
-            "$ref": "wish.json"
+            "$ref": "https://openinherit.org/v3/wish.json"
           }
         },
         "documents": {
@@ -22393,7 +22393,7 @@
           "type": "array",
           "maxItems": 200,
           "items": {
-            "$ref": "document.json"
+            "$ref": "https://openinherit.org/v3/document.json"
           }
         },
         "nonprobateTransfers": {
@@ -22401,7 +22401,7 @@
           "type": "array",
           "maxItems": 500,
           "items": {
-            "$ref": "nonprobate-transfer.json"
+            "$ref": "https://openinherit.org/v3/nonprobate-transfer.json"
           }
         },
         "proxyAuthorisations": {
@@ -22409,7 +22409,7 @@
           "type": "array",
           "maxItems": 50,
           "items": {
-            "$ref": "proxy-authorisation.json"
+            "$ref": "https://openinherit.org/v3/proxy-authorisation.json"
           }
         },
         "powersOfAppointment": {
@@ -22418,14 +22418,14 @@
           "maxItems": 100,
           "uniqueItems": true,
           "items": {
-            "$ref": "power-of-appointment.json"
+            "$ref": "https://openinherit.org/v3/power-of-appointment.json"
           }
         },
         "valuations": {
           "description": "Valuations of assets, properties, and collections. Multiple valuations per entity are supported — owner estimates, professional valuations, AI estimates, dealer offers",
           "type": "array",
           "items": {
-            "$ref": "valuation.json"
+            "$ref": "https://openinherit.org/v3/valuation.json"
           }
         },
         "lifetimeTransfers": {
@@ -22433,7 +22433,7 @@
           "type": "array",
           "maxItems": 1000,
           "items": {
-            "$ref": "lifetime-transfer.json"
+            "$ref": "https://openinherit.org/v3/lifetime-transfer.json"
           }
         },
         "organisations": {
@@ -22441,7 +22441,7 @@
           "type": "array",
           "maxItems": 500,
           "items": {
-            "$ref": "organisation.json"
+            "$ref": "https://openinherit.org/v3/organisation.json"
           }
         },
         "spaces": {
@@ -22449,7 +22449,7 @@
           "type": "array",
           "maxItems": 500,
           "items": {
-            "$ref": "space.json"
+            "$ref": "https://openinherit.org/v3/space.json"
           }
         },
         "dataProvenance": {
@@ -22535,7 +22535,7 @@
           "description": "Insurance policies associated with the estate — life, home, health, motor, travel, pet, and professional indemnity",
           "type": "array",
           "items": {
-            "$ref": "insurance-policy.json"
+            "$ref": "https://openinherit.org/v3/insurance-policy.json"
           }
         },
         "pets": {
@@ -22543,7 +22543,7 @@
           "type": "array",
           "maxItems": 50,
           "items": {
-            "$ref": "pet.json"
+            "$ref": "https://openinherit.org/v3/pet.json"
           }
         },
         "integrity": {
@@ -22597,7 +22597,7 @@
           "type": "array",
           "maxItems": 10000,
           "items": {
-            "$ref": "common/audit-event.json"
+            "$ref": "https://openinherit.org/v3/common/audit-event.json"
           }
         },
         "applicationState": {
@@ -22609,7 +22609,7 @@
               "type": "array",
               "maxItems": 1000,
               "items": {
-                "$ref": "notification.json"
+                "$ref": "https://openinherit.org/v3/notification.json"
               }
             },
             "deathNotifications": {
@@ -22706,11 +22706,11 @@
             },
             "completeness": {
               "description": "Estate completeness score — jurisdiction-aware checklist tracking what data has been captured, what's missing, and how complete the estate plan is",
-              "$ref": "common/completeness.json"
+              "$ref": "https://openinherit.org/v3/common/completeness.json"
             },
             "taxPosition": {
               "description": "Estimated tax position summary computed from valuations, lifetime transfers, exemptions, and jurisdiction-specific thresholds. Always includes a disclaimer — this is informational, not tax advice",
-              "$ref": "common/tax-position.json"
+              "$ref": "https://openinherit.org/v3/common/tax-position.json"
             },
             "legacyContacts": {
               "description": "People nominated to receive access to the estate data or catalogue when the account owner dies or becomes incapacitated. This is a digital inheritance concept, not a legal role — legacy contacts are notified and given access, not granted legal authority. The 'Please open when I have passed away' letter is generated by the application, not stored here",
@@ -22729,7 +22729,7 @@
               "type": "array",
               "maxItems": 1000,
               "items": {
-                "$ref": "event.json"
+                "$ref": "https://openinherit.org/v3/event.json"
               }
             },
             "transmissions": {
@@ -22799,7 +22799,7 @@
               "type": "array",
               "maxItems": 1000,
               "items": {
-                "$ref": "acknowledgement.json"
+                "$ref": "https://openinherit.org/v3/acknowledgement.json"
               }
             },
             "assetInterests": {
@@ -22807,7 +22807,7 @@
               "type": "array",
               "maxItems": 500,
               "items": {
-                "$ref": "asset-interest.json"
+                "$ref": "https://openinherit.org/v3/asset-interest.json"
               }
             },
             "dealerInterests": {
@@ -22815,7 +22815,7 @@
               "type": "array",
               "maxItems": 500,
               "items": {
-                "$ref": "dealer-interest.json"
+                "$ref": "https://openinherit.org/v3/dealer-interest.json"
               }
             },
             "subscriptions": {
@@ -22823,7 +22823,7 @@
               "type": "array",
               "maxItems": 500,
               "items": {
-                "$ref": "subscription.json"
+                "$ref": "https://openinherit.org/v3/subscription.json"
               }
             }
           },
@@ -23564,7 +23564,7 @@
             },
             "adjustedAmount": {
               "description": "The adjusted price if condition differed from listed. Null if no adjustment needed",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "discrepancyNotes": {
               "description": "Details of any condition discrepancy found during verification",
@@ -23582,7 +23582,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -23758,7 +23758,7 @@
           "properties": {
             "amount": {
               "description": "The offer amount in minor currency units",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "conditions": {
               "description": "Conditions attached to the offer",
@@ -23878,11 +23878,11 @@
         },
         "coverAmount": {
           "description": "Total cover amount (sum assured for life, rebuild cost for home, etc.) in minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "premiumAmount": {
           "description": "Premium amount per payment period, in minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "premiumFrequency": {
           "description": "How often premiums are paid",
@@ -23910,7 +23910,7 @@
           "properties": {
             "amount": {
               "description": "Death benefit amount in minor currency units",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "nomineePersonId": {
               "description": "Reference to the Person.id of the nominated death benefit recipient",
@@ -24120,7 +24120,7 @@
             },
             "advancePayments": {
               "description": "Total advance payments made",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             }
           },
           "additionalProperties": false
@@ -24171,7 +24171,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -24291,7 +24291,7 @@
         },
         "address": {
           "description": "The organisation's address",
-          "$ref": "common/address.json"
+          "$ref": "https://openinherit.org/v3/common/address.json"
         },
         "url": {
           "description": "The organisation's website",
@@ -24446,7 +24446,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "vatConfiguration": {
           "description": "The organisation's VAT registration status and scheme. Affects how VAT is calculated on transactions involving this organisation",
@@ -24520,7 +24520,7 @@
           "type": "array",
           "maxItems": 50,
           "items": {
-            "$ref": "common/identifier.json"
+            "$ref": "https://openinherit.org/v3/common/identifier.json"
           }
         },
         "dealerProfile": {
@@ -24845,20 +24845,20 @@
         },
         "address": {
           "description": "Physical address of the property",
-          "$ref": "common/address.json"
+          "$ref": "https://openinherit.org/v3/common/address.json"
         },
         "estimatedValue": {
           "description": "Owner's estimate of the property's current market value, in minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "professionalValuation": {
           "description": "Professional surveyor or valuer's assessment of the property value, in minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "netEquity": {
           "description": "Value of this property net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored",
           "$comment": "Derivation: netEquity = max(0, propertyValue - SUM(liability.settlementAmount ?? liability.amount) over every liability whose securedAgainst is this property.id AND whose chargeStatus is 'active'), where propertyValue is professionalValuation if present, else estimatedValue. A mortgage is the paradigm secured liability and it is charged against a property, not an asset, so the figure has to exist here as well as on Asset. Floored at zero — where the charges exceed the value, netEquity is zero and inNegativeEquity is true. mortgageOutstanding is NOT used in the derivation: it is an unreferenced convenience figure, whereas the liabilities array is the one that names which charge is still active. Producers MUST keep this consistent with the liabilities array. Consumers SHOULD derive it themselves when liabilities are present. scripts/validate-net-equity.mjs enforces this arithmetic",
-          "$ref": "common/money.json",
+          "$ref": "https://openinherit.org/v3/common/money.json",
           "properties": {
             "amount": {
               "minimum": 0
@@ -24979,7 +24979,7 @@
         },
         "culturalDisposition": {
           "description": "Cultural, religious, and regulatory constraints on disposal of this property",
-          "$ref": "common/cultural-disposition.json"
+          "$ref": "https://openinherit.org/v3/common/cultural-disposition.json"
         },
         "communalAuthority": {
           "description": "The communal or family authority whose approval is required to dispose of this property",
@@ -25011,7 +25011,7 @@
             },
             "jurisdiction": {
               "description": "Jurisdiction where this communal authority has legal standing",
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             }
           },
           "additionalProperties": false
@@ -25026,7 +25026,7 @@
               "properties": {
                 "jurisdiction": {
                   "description": "Jurisdiction whose succession law applies",
-                  "$ref": "common/jurisdiction.json"
+                  "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
                 },
                 "legalTradition": {
                   "description": "Which legal tradition applies",
@@ -25122,7 +25122,7 @@
         },
         "mortgageOutstanding": {
           "description": "Outstanding mortgage balance in minor currency units. If the property is mortgage-free, omit this field",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "characterClassification": {
           "description": "Marital property character classification for US community property states. Determines whether the testator may dispose of the entire property or only their half",
@@ -25148,7 +25148,7 @@
             },
             "exemptionAmount": {
               "description": "Dollar value of the homestead exemption, if capped",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "exemptionUnlimited": {
               "description": "Whether the homestead exemption has no dollar cap. True in Florida, Texas (rural), and several other states",
@@ -25288,19 +25288,19 @@
           "type": "array",
           "maxItems": 100,
           "items": {
-            "$ref": "common/media.json"
+            "$ref": "https://openinherit.org/v3/common/media.json"
           }
         },
         "visibility": {
           "description": "Controls who can see this property record",
-          "$ref": "common/visibility.json"
+          "$ref": "https://openinherit.org/v3/common/visibility.json"
         },
         "fieldProvenance": {
           "description": "Per-field provenance records — how each field's value was obtained",
           "type": "array",
           "maxItems": 100,
           "items": {
-            "$ref": "common/field-provenance.json"
+            "$ref": "https://openinherit.org/v3/common/field-provenance.json"
           }
         },
         "comments": {
@@ -25341,7 +25341,7 @@
                 "format": "date-time"
               },
               "visibility": {
-                "$ref": "common/visibility.json"
+                "$ref": "https://openinherit.org/v3/common/visibility.json"
               }
             },
             "additionalProperties": false
@@ -25353,7 +25353,7 @@
           "properties": {
             "monthlyAmount": {
               "description": "Monthly rental income",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "tenantName": {
               "description": "Name of the current tenant",
@@ -25639,18 +25639,18 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         },
         "applicableLaw": {
           "description": "The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile",
-          "$ref": "common/jurisdiction.json"
+          "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
         },
         "taxTreatment": {
           "description": "Per-property tax treatment — how this property is classified for tax purposes",
           "type": "object",
           "properties": {
             "jurisdiction": {
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "assetType": {
               "enum": [ "immoveable", "moveable", "mixed", "exempt" ]
@@ -25704,7 +25704,7 @@
               "maxLength": 500
             },
             "jurisdiction": {
-              "$ref": "common/jurisdiction.json"
+              "$ref": "https://openinherit.org/v3/common/jurisdiction.json"
             },
             "statute": {
               "examples": [ "IHTA 1984 s.115-124C" ],
@@ -25943,12 +25943,12 @@
           "type": "array",
           "maxItems": 50,
           "items": {
-            "$ref": "common/media.json"
+            "$ref": "https://openinherit.org/v3/common/media.json"
           }
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -26002,7 +26002,7 @@
         },
         "valuedAmount": {
           "description": "The valuation amount, in minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "valuationDate": {
           "description": "Date the valuation was performed or assessed",
@@ -26132,7 +26132,7 @@
           "type": "array",
           "maxItems": 100,
           "items": {
-            "$ref": "common/field-provenance.json"
+            "$ref": "https://openinherit.org/v3/common/field-provenance.json"
           }
         },
         "auctionData": {
@@ -26164,15 +26164,15 @@
             },
             "estimateLow": {
               "description": "Low estimate",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "estimateHigh": {
               "description": "High estimate",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "hammerPrice": {
               "description": "Hammer price (winning bid before premium)",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "buyersPremiumPercentage": {
               "description": "Buyer's premium as a percentage",
@@ -26182,7 +26182,7 @@
             },
             "totalRealised": {
               "description": "Total amount realised including premium",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "sold": {
               "description": "Whether the lot was sold",
@@ -26199,7 +26199,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {
@@ -26250,7 +26250,7 @@
             },
             "salePrice": {
               "description": "The sale price of the comparable item, in minor currency units",
-              "$ref": "common/money.json"
+              "$ref": "https://openinherit.org/v3/common/money.json"
             },
             "saleDate": {
               "description": "Date the comparable item sold",
@@ -26454,7 +26454,7 @@
           "maxLength": 2000
         },
         "visibility": {
-          "$ref": "common/visibility.json"
+          "$ref": "https://openinherit.org/v3/common/visibility.json"
         },
         "funeralArrangementType": {
           "description": "Type of funeral arrangement preferred",
@@ -26520,7 +26520,7 @@
         },
         "funeralBudgetMaximum": {
           "description": "Maximum budget for the funeral, in minor currency units",
-          "$ref": "common/money.json"
+          "$ref": "https://openinherit.org/v3/common/money.json"
         },
         "funeralBudgetSource": {
           "description": "How the funeral is to be funded",
@@ -26826,7 +26826,7 @@
         },
         "provenance": {
           "description": "Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it",
-          "$ref": "common/provenance.json"
+          "$ref": "https://openinherit.org/v3/common/provenance.json"
         }
       },
       "patternProperties": {

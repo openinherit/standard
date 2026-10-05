@@ -45,7 +45,7 @@ A financial instrument associated with the relationship — mahr, ketubah, lobol
 | `documentRef` | `string` | | Reference to a Document.id storing the instrument |
 | `instrumentDate` | `string` (date) | | Date the instrument was signed or executed |
 | `inheritanceImpact` | `string` | | How this instrument affects inheritance distribution |
-| `maharDetails` | `object` | | Structured mahr details. Required when the financial instrument type is MAHR |
+| `maharDetails` | `object` | when `type` is `mahr` | Structured mahr details. Required when the financial instrument type is MAHR |
 | `ketubahDetails` | `object` | | Structured ketubah details. Required when the financial instrument type is KETUBAH |
 | `lobolaDetails` | `object` | | Structured lobola details for African customary marriages |
 

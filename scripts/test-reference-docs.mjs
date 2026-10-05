@@ -294,3 +294,72 @@ test('a pipe inside an enum value cannot split the table cell', () => {
     assert.match(page, /one of `a\\\|b`/);
   } finally { rmSync(root, { recursive: true }); }
 });
+
+test('a requirement gated on a profile discriminator is shown with its condition, not dropped', () => {
+  // The shape v3/schema.json uses for conformance profiles: required in the
+  // else branch of an if on a const. Reading top-level `required` alone would
+  // render `estate` as optional — wrong for every document at the default.
+  const root = tree({
+    'v3/doc.json': {
+      $id: 'https://openinherit.org/v3/doc.json',
+      title: 'Doc',
+      type: 'object',
+      required: ['id'],
+      properties: {
+        id: { type: 'string' },
+        profile: { enum: ['full', 'lite'] },
+        estate: { type: 'object' },
+        extra: { type: 'string' },
+        free: { type: 'string' },
+      },
+      allOf: [
+        {
+          if: { required: ['profile'], properties: { profile: { const: 'lite' } } },
+          then: { required: ['extra'] },
+          else: { required: ['estate'] },
+        },
+      ],
+    },
+  });
+  try {
+    const page = generateAll(root).get('docs/reference/doc.md');
+    assert.match(page, /\| `id` \| `string` \| yes \|/);
+    assert.match(page, /\| `estate` \| `object` \| yes, unless `profile` is `lite` \|/);
+    assert.match(page, /\| `extra` \| `string` \| when `profile` is `lite` \|/);
+    assert.match(page, /\| `free` \| `string` \| \|/);
+  } finally { rmSync(root, { recursive: true }); }
+});
+
+test('a then-branch that is only a $ref adds no row-level condition', () => {
+  const root = tree({
+    'v3/doc.json': {
+      $id: 'https://openinherit.org/v3/doc.json',
+      title: 'Doc',
+      type: 'object',
+      properties: { p: { const: 'x' }, a: { type: 'string' } },
+      allOf: [{ if: { required: ['p'], properties: { p: { const: 'x' } } }, then: { $ref: 'other.json' } }],
+    },
+  });
+  try {
+    const page = generateAll(root).get('docs/reference/doc.md');
+    assert.match(page, /\| `a` \| `string` \| \|/);
+  } finally { rmSync(root, { recursive: true }); }
+});
+
+test('a property required under several discriminator values names every one of them', () => {
+  const gate = (v) => ({ if: { required: ['kind'], properties: { kind: { const: v } } }, then: { required: ['ref'] } });
+  const root = tree({
+    'v3/doc.json': {
+      $id: 'https://openinherit.org/v3/doc.json',
+      title: 'Doc',
+      type: 'object',
+      properties: { kind: { enum: ['person', 'agent', 'organisation'] }, ref: { type: 'string' } },
+      allOf: [gate('person'), gate('agent'), gate('organisation')].map((g, i) =>
+        i === 1 ? { ...g, then: { required: ['other'] } } : g),
+    },
+  });
+  try {
+    const page = generateAll(root).get('docs/reference/doc.md');
+    assert.match(page, /\| `ref` \| `string` \| when `kind` is `person` or `organisation` \|/);
+  } finally { rmSync(root, { recursive: true }); }
+});

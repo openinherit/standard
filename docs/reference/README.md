@@ -21,7 +21,7 @@ One page per JSON Schema in `v3/`, generated from the schemas themselves. For a 
 | [Executor](executor.md) | A person appointed to administer an estate. |
 | [Guardian](guardian.md) | A guardian appointment for a minor child. |
 | [INHERIT Conformance Declaration](conformance-declaration.md) | Machine-readable declaration of an implementation's conformance to the INHERIT standard. |
-| [INHERIT v2 Catalogue Schema](catalogue.md) | Lightweight root schema for catalogue-only documents — living collectors cataloguing items without the full estate envelope. |
+| [INHERIT v2 Catalogue Schema](catalogue.md) | Entry point for catalogue-only documents — living collectors cataloguing items without the full estate envelope. |
 | [INHERIT v3 Root Schema](schema.md) | Root entry point for an INHERIT v3 estate data interchange document. |
 | [InsurancePolicy](insurance-policy.md) | A standalone insurance policy entity — life, home, health, motor, travel, pet, or professional indemnity. |
 | [Kinship](kinship.md) | A familial bond between two people. |

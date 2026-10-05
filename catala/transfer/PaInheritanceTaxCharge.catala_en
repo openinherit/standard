@@ -17,8 +17,8 @@ parameter layer (`linkml/parameters/parameters.yaml` `TaxIncidenceEnum`), not in
 The scope returns the `ComputedOrNeedsHuman.Verdict` contract (doctrine §1a; Constitution
 Principle XIII): a definite legal figure travels in the `Computed` arm.
 
-Legal-correctness is asserted **outside this file** by the T032 gov-oracle harness (TT-478):
-`code-inherit-test-suite/scripts/oracle_verify.py` runs this scope and checks the computed
+Legal-correctness is asserted **outside this file** by the T032 gov-oracle harness:
+`scripts/oracle_verify.py` runs this scope and checks the computed
 figure against the published revenue.pa.gov figure cited in
 `tests/oracles/pa-inheritance-tax.oracle.json`. This file therefore carries the law, not its
 own assertions.
@@ -45,7 +45,7 @@ jurisdiction parameter layer; the literals below are the overridable defaults. T
 are structural (not merely a zero-valued context parameter) because they are exemptions in
 their own right, not a rate that happens to be zero.
 
-G6 certification floor (TT-427/TT-1079): every input is a characterisation judgement
+G6 certification floor: every input is a characterisation judgement
 (`registry/governance-layers.yaml`, all L3 — the share valuation, the beneficiary-class
 relationship classification, and the deduction/exemption claim), so each arrives as a
 `Certified<Type> | NotCharacterised` enum; any uncertified input routes `NeedsHuman`

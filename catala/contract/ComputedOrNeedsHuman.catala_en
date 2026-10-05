@@ -8,7 +8,7 @@ SPDX-License-Identifier: Apache-2.0
 This module declares the **single, canonical, non-droppable return contract** that the ②
 Catala Boundary Principle requires every law-computing rule to return — *"Every rule returns a
 non-droppable sum type `Computed<scalar> | NeedsHuman` (omit an arm ⇒ compile error)"*
-(doctrine §1a v0.7; Constitution Principle XIII v1.11.0; locked TT-455).
+(doctrine §1a v0.7; Constitution Principle XIII v1.11.0).
 
 (Prose note: lines in a Catala literate file must not begin with `>` — that prefix is reserved for
 `> Module` / `> Using` directives — so quotations here are kept inline.)
@@ -21,7 +21,7 @@ later host consumers (the standard's T037, the SDK's T038, the app's T039) proje
 across the seam; this module is its Catala-side origin.
 
 **Why `money` (not a generic).** `Computed<scalar>` in the doctrine is shorthand — Catala has no
-generics (and no strings, TT-443). The contract is therefore *monomorphic per scalar*: this module
+generics (and no strings). The contract is therefore *monomorphic per scalar*: this module
 pins the `money` variant, which the foundational legal-charge rules need. `decimal` / `date`
 variants, when those rules land, are the same shape monomorphised (their own arms / modules).
 
@@ -29,7 +29,7 @@ variants, when those rules land, are the same shape monomorphised (their own arm
 must handle BOTH arms or `catala typecheck` refuses to compile it ("The constructor NeedsHuman …
 is missing from this pattern matching"). That compile error — proven by the committed broken twin
 and the `make catala-contract-check` gate — is what makes ② *enforceable, not emergent*: the SOTA
-finding (TT-455 §1) is that frontier LLMs will not self-abstain, so the gate must be a typed
+finding is that frontier LLMs will not self-abstain, so the gate must be a typed
 structural constraint, never a model instruction.
 
 ```catala-metadata
@@ -42,7 +42,7 @@ declaration enumeration Verdict:
   -- NeedsHuman
 ```
 
-## The certification floor — `Certified<Type> | NotCharacterised` (G6, TT-427/TT-1079)
+## The certification floor — `Certified<Type> | NotCharacterised` (G6)
 
 Every **L3 (characterisation-judgement)** input of a `Verdict`-returning rule is declared with
 one of the monomorphic certification enums below (the G6 gap-detector's C3 typed floor,

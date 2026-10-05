@@ -6,7 +6,7 @@ Per-primitive **SSSOM** (Simple Standard for Sharing Ontological Mappings) mappi
 bridge the INHERIT v2 canonical primitives and classifier-scheme values to external legal
 substrate, statutes, standards, and reference ontologies (BFO / PROV-O).
 
-Authored under **TT-367** (P10-1) by harvesting the frozen spike TSVs on `docs-strategy`
+Authored by harvesting the frozen spike TSVs on `docs-strategy`
 `origin/main` (`docs/superpowers/specs/**/spike-references/**`) — see each file's
 `mapping_set_id` and the `source:` field in `manifest.yaml` for provenance. Validated by the
 `sssom-py-validate` gate (**G-05**), un-orphaned here (P10-10).
@@ -21,7 +21,7 @@ Authored under **TT-367** (P10-1) by harvesting the frozen spike TSVs on `docs-s
 ## Authoring conventions (uniform across every set)
 
 - **Namespace** — all internal INHERIT terms use the flat `inherit:` prefix
-  (`https://openinherit.org/schemas/`, TT-751 / A-328). Source module prefixes
+  (`https://openinherit.org/schemas/`, A-328). Source module prefixes
   (`inherit_assets:`, `inherit_core:`, `inherit_transfer:`, …) are collapsed to `inherit:`.
 - **Columns** — exactly the canonical 7, in order: `subject_id`, `subject_label`,
   `predicate_id`, `object_id`, `object_label`, `mapping_justification`, `confidence`, with an
@@ -62,8 +62,8 @@ untouched).
 ## OWL-DL safety — standing rule
 
 These mapping-sets are **TSV data only**. Nothing here materialises OWL / `.ttl`, so the
-ROBOT `validate-profile` DL gate never sees a mapping row and DL-conformance (TT-750's
-140 → 0) cannot regress.
+ROBOT `validate-profile` DL gate never sees a mapping row and DL-conformance (from
+140 failures to 0) cannot regress.
 
 **If these mappings are ever materialised to OWL**, SKOS mapping properties asserted between
 **classes** MUST be emitted as **annotation assertions only**: `skos:exactMatch` (and the

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Declared jurisdiction containment, and the per-axis resolution over it (ICP-0060).
+"""Declared jurisdiction containment, and the per-axis resolution over it.
 
 The standard keys succession law at one granularity and death taxation at another:
 `jurisdiction-profiles.json` knows GB-ENG and GB-SCT; `tax-rates.json` knows GB. Nothing
@@ -24,7 +24,7 @@ What it checks:
                    list CONSTITUTES one jurisdiction or lists jurisdictions it applies
                    WITHIN, and a `constitutes` row must match a declared union exactly.
   6. Membership -- optional, --authority: every token is a member of the derived
-                   jurisdiction authority. CONSUMED from TT-1456, never minted here.
+                   jurisdiction authority. CONSUMED from the derived authority, never minted here.
 
 Exit: 0 clear - 1 REFUSED - 2 CANNOT ANSWER. 2 is NEVER a pass.
 
@@ -216,7 +216,7 @@ def check(tree, authority_path, min_tokens):
                     f"extension {name!r}: declares it CONSTITUTES "
                     f"{sorted(listed)}, but no cascade union has exactly those constituents")
 
-    # 6. Membership, consumed from TT-1456's derived authority.
+    # 6. Membership, consumed from the derived jurisdiction authority.
     if authority_path is not None:
         if not authority_path.is_file():
             raise CannotAnswer(f"--authority {authority_path} does not exist -- an absent "
@@ -240,7 +240,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--tree", required=True, help="path to a checkout of the standard")
     ap.add_argument("--authority", default=None,
-                    help="jurisdiction-authority.txt to check membership against (TT-1456)")
+                    help="jurisdiction-authority.txt to check membership against")
     ap.add_argument("--min-tokens", type=int, default=0,
                     help="floor on discovered tokens; below it the run is CANNOT ANSWER")
     args = ap.parse_args(argv)

@@ -1,5 +1,5 @@
 {
-  "$comment": "Catala rule test inputs for CatInheritanceCharge per ICP-0017 (TT-682). Ireland Capital Acquisitions Tax charge, CATCA 2003. Scope returns ComputedOrNeedsHuman.Verdict (money), not a bespoke verdict enum, so expected_output records the arm + (for Computed) the amount. Mirrors the oracle cases authored for the code-inherit-test-suite T032 gov-oracle follow-up (tests/oracles/ie-cat-charge.oracle.json) — figures live-sourced revenue.ie 2026-07-02.",
+  "$comment": "Catala rule test inputs for CatInheritanceCharge. Ireland Capital Acquisitions Tax charge, CATCA 2003. Scope returns ComputedOrNeedsHuman.Verdict (money), not a bespoke verdict enum, so expected_output records the arm + (for Computed) the amount. Mirrors the oracle cases authored for the code-inherit-test-suite T032 gov-oracle follow-up (tests/oracles/ie-cat-charge.oracle.json) — figures live-sourced revenue.ie 2026-07-02.",
   "rule_name": "CatInheritanceCharge",
   "scope": "Charge",
   "positive": [

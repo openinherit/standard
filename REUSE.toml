@@ -5,7 +5,7 @@ SPDX-PackageDownloadLocation = "https://github.com/openinherit/standard"
 
 # Why this file exists.
 #
-# The statute-derived content harvested under TT-1508 arrives from a repository
+# The statute-derived content harvested into this repository arrives from a repository
 # whose licence assertion was carried by ITS REUSE.toml, not by its files:
 # `catala/**` and `ontology/**` were globbed as LicenseRef-TT-Pre-Public-Release,
 # and of 186 files under catala/ exactly ONE carried an inline SPDX header.

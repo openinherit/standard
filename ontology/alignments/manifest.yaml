@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
 # SPDX-License-Identifier: Apache-2.0
-# Row-count manifest for ontology/alignments/*.sssom.tsv — TT-367, gate G-05 (sssom-py-validate).
+# Row-count manifest for ontology/alignments/*.sssom.tsv — gate G-05 (sssom-py-validate).
 #
 # Machine-verified by scripts/validate_sssom.py (`make sssom-validate`): each file's actual
 # data-row count MUST equal the `rows` value here. Do NOT hand-edit a count to match a
@@ -110,5 +110,5 @@ mapping_sets:
       (dcterms:relation, prov:wasInfluencedBy, 2x dcat:relation) which the per-primitive SKOS
       predicate policy forbids — they are relationship/dataset annotations belonging to the
       deferred Layer-2 catalog (A-131), so they are NOT harvested here (19 SKOS rows retained).
-      Flagged for coordinator review (TT-367 PR).
+      Flagged for maintainer review in the authoring PR.
     source: docs/superpowers/specs/2026-04-29-multi-phase-audit/spike-references/2026-05-20-q044-cryptocurrency-or-digital-asset/cryptocurrency-or-digital-asset-mapping-set.sssom.tsv

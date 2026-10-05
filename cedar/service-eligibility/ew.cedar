@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
 // SPDX-License-Identifier: Apache-2.0
-// England & Wales service-eligibility pack (TT-624; extends the TT-626 seed).
+// England & Wales service-eligibility pack (extends the service-eligibility seed).
 // CONSERVATIVE encoding: P permits ONLY the counsel-safe minimum; everything
 // else is default-deny. Encoding is ai-drafted — activation gated by
 // fixtures/parameters/legal-assurance-ai-drafted-ew-service-eligibility.yaml
-// (counsel-signed-off is the ICP-0015 launch-eligibility floor).
+// (counsel-signed-off is the launch-eligibility floor).
 // serviceType strings = linkml/people/people.yaml RegulatedServiceTypeScheme
 // values VERBATIM. Capability modes per the locked postures (issue comments):
 // quote_estimation = professional-authored-only  => quoteMode ceiling
@@ -50,7 +50,7 @@ permit (
 // will writer may not carry on ANY of the six reserved legal activities —
 // LSA 2007 s.12(1)(a)-(f) + Sch 2 (paras 1-8); s.14 makes it an offence.
 // Default-deny already covers this; the forbid documents the deny-line.
-// NOTE (TT-626 lesson): this forbid means a leak-test permit for
+// NOTE (lesson from the seed): this forbid means a leak-test permit for
 // unregulated_will_writer x reserved_* is NEUTRALISED (forbid wins) — a true
 // negative fixture must use a category no forbid covers (e.g. tax_adviser).
 forbid (
@@ -67,7 +67,7 @@ forbid (
 // - fee-sharing: LAWFUL in E&W with written agreement + disclosure (SRA Code
 //   5.1(a)-(c)); the compliance conditions are computed by
 //   catala/services/FeeShareDisclosureCheck.catala_en, not forbidden here.
-//   (Contrast ROI s.62 Solicitors Act 1954 — TT-625 adds that forbid.)
+//   (Contrast ROI s.62 Solicitors Act 1954 — the ROI pack adds that forbid.)
 // - LASPO 2012 ss.56-60 referral-fee ban: personal-injury only (s.56(4); no
 //   extension regulations made) — does not reach wills/probate.
 // - will_drafting by non-solicitors: UNRESERVED in E&W. P's silence = MFI

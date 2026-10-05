@@ -17,8 +17,8 @@ proportion abatement across a single rank of unsecured creditors: each creditor 
 claim multiplied by the ratio of available assets to total claims (capped at payment in full
 when the estate is solvent).
 
-Legal correctness is asserted outside this file by the T032 per-heir gov-oracle harness
-(TT-478 pattern): code-inherit-test-suite/scripts/oracle_verify.py runs the Abate scope, reads
+Legal correctness is asserted outside this file by the T032 per-heir gov-oracle harness:
+scripts/oracle_verify.py runs the Abate scope, reads
 the per-creditor list per_member field abated_payments, and compares it against
 tests/oracles/insolvent-estate-abatement.oracle.json — including a wrong_split negative case
 that must turn the harness RED if a right-total/wrong-split answer ever matched. This file
@@ -38,7 +38,7 @@ inputs alone and the scope returns NeedsHuman. Interest on the debts (s.328(4)-(
 statutory order of application of assets for a SOLVENT estate (AEA 1925 s.34(3), Part II
 Schedule 1) are out of MVP scope.
 
-G6 certification floor (TT-427/TT-1079): every input is a characterisation judgement
+G6 certification floor: every input is a characterisation judgement
 (`registry/governance-layers.yaml`, all L3 — claim validity, asset valuation, debt-rank
 classification), so each arrives as a `ComputedOrNeedsHuman.Certified<Type>` enum; any
 uncertified input routes `NeedsHuman` via the `uncertified_inputs` gate before a split is

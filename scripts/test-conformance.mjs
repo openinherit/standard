@@ -355,7 +355,7 @@ test('Level 2 valid — constraint count is 26', () => {
   assertEqual(constraints.length, 26, 'Constraint count');
 });
 
-// ICP-0057 — a containment cycle whose every link resolves is still a Level 2 failure.
+// Containment cycle check — a containment cycle whose every link resolves is still a Level 2 failure.
 // This is the grouping trap: if checkAllConstraints groups by field alone, the acyclic
 // row lands in a group with its existence sibling and is satisfied by it.
 test('Level 2 broken — a containment cycle whose links all resolve is flagged', () => {

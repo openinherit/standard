@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
 # SPDX-License-Identifier: Apache-2.0
 #
-# oracle_verify.py — the T032 LEGAL gov-oracle harness (TT-478).
+# oracle_verify.py — the T032 LEGAL gov-oracle harness.
 #
 # Asserts that a Catala-computed legal answer equals the AUTHORITATIVE published
 # gov.uk/HMRC figure cited in tests/oracles/*.oracle.json — not merely that the
@@ -17,7 +17,7 @@
 #      its filename), then APPEND a generated #[test] driver scope INTO A COPY of
 #      the rule file. The driver must live in the SAME module as the rule because
 #      cross-module sub-scope calls (`output of Mod.Scope`) do not resolve in
-#      clerk 1.2.0 — only intra-module `output of Scope` does (TT-478 finding).
+#      clerk 1.2.0 — only intra-module `output of Scope` does.
 #   3. Per case, the driver computes the rule for the case `inputs` and, from the
 #      ComputedOrNeedsHuman.Verdict, asserts BOTH that the arm is `Computed` AND
 #      that its money equals `expected_money_gbp`. (Asserting the arm too stops a
@@ -66,7 +66,7 @@ def fail_closed(msg: str) -> NoReturn:
     sys.exit(EXIT_FAILCLOSED)
 
 
-# --- TT-463 per-heir multiset helpers ------------------------------------------
+# --- per-heir multiset helpers ------------------------------------------------
 #
 # The per_heir result_kind asserts the *allocation* of a distribution rule, not
 # just the conserved total — closing the C1 gameable-conservation hole (a wrong
@@ -74,7 +74,7 @@ def fail_closed(msg: str) -> NoReturn:
 # The harness extracts the rule's per-branch money list, expands it to the
 # per-heir multiset, and compares value->count (collections.Counter), which is
 # the only comparison that distinguishes {£300k,£300k,£150k,£150k} from
-# {£300k,£300k,£200k,£100k} (same sum £900k, same length 4). Mirrors TT-472.
+# {£300k,£300k,£200k,£100k} (same sum £900k, same length 4).
 
 _MONEY_RE = re.compile(r"\$\s*([\d,]+(?:\.\d+)?)")
 
@@ -91,7 +91,7 @@ def parse_money_list(text: str, field: str) -> list[int]:
     """Extract the money list printed for `field` from clerk output, in pence.
 
     Primary path: clerk's `-F json` output is a `{ "<field>": [pounds, ...] }`
-    object (TT-463 Task 1 probe) — located and JSON-decoded. Fallback: the
+    object — located and JSON-decoded. Fallback: the
     `clerk run` pretty form (`field = [ $a; $b; ... ]`, possibly multi-line with
     box-drawing prefixes) is bracket-scanned for `$` money tokens. Fail-closed if
     neither surfaces the list (a missing rule output must never pass vacuously)."""
@@ -151,7 +151,7 @@ def format_money_display(value: str | int) -> str:
 
     This is the single money-parsing point shared by `money_literal` (the
     driver-generation path, which prepends Catala's `$` marker) and `main()`'s
-    PASS-line reporting. Keeping them on one code path is load-bearing: the TT-863
+    PASS-line reporting. Keeping them on one code path is load-bearing: the
     regression was `main()` formatting the amount with a hard-coded
     `int(str(value).replace(",", ""))`, which raised `ValueError` on the fractional
     `0.40` boundary-probe figure that `money_literal` already accepted — a green
@@ -178,7 +178,7 @@ def money_literal(value: str | int) -> str:
     value with up to 2 decimal places).
 
     Whole-pound behaviour is unchanged for every existing whole-pound oracle fixture.
-    Fractional-pence support (TT-863) is needed for boundary-probe fixtures whose
+    Fractional-pence support is needed for boundary-probe fixtures whose
     expected figure is genuinely fractional (Catala's money type supports
     pence-precision natively). Trade-off, stated explicitly: fractional support is
     also MORE PERMISSIVE than the old whole-pound-only parse — a typo like
@@ -251,7 +251,7 @@ def input_literal(value) -> str:
     return money_literal(value)
 
 
-# --- G6 certification floor (TT-1079) -----------------------------------------
+# --- G6 certification floor -------------------------------------------------
 # After code-inherit-standard's G6 gate, an L3 characterisation input's declared
 # type is a `Certified<Type> | NotCharacterised` enum, so a bare literal no
 # longer typechecks. The renderer wraps each case literal iff the RULE SOURCE
@@ -333,7 +333,7 @@ def build_driver(
         asserts.append(f"  assertion {amt_field} = {money_literal(case_expected_money(case))}")
 
     return (
-        "\n# --- generated T032 oracle driver (TT-478) ---\n\n"
+        "\n# --- generated T032 oracle driver ---\n\n"
         "```catala\n"
         "#[test]\n"
         "declaration scope OracleVerifyDriver:\n"
@@ -352,7 +352,7 @@ def build_per_heir_driver(
     """Generate a non-#[test] driver scope (same module as the rule) that exposes
     the rule's per-branch money list for the case inputs, so `clerk run -F json`
     prints it. Intra-module `output of <scope>` resolves (cross-module sub-scope
-    calls do not, in clerk 1.2.0 — TT-478 finding), so the driver is appended into
+    calls do not, in clerk 1.2.0), so the driver is appended into
     a copy of the rule file."""
     types = input_types or {}
     record = " ".join(
@@ -360,7 +360,7 @@ def build_per_heir_driver(
         for k, v in case["inputs"].items()
     )
     return (
-        "\n# --- generated TT-463 per-heir driver ---\n\n"
+        "\n# --- generated per-heir driver ---\n\n"
         "```catala\n"
         "declaration scope OraclePerHeirDriver:\n"
         "  output per_member content list of money\n"
@@ -443,7 +443,7 @@ def _run_clerk_check(
     """Write rule_text + a generated #[test] assertion driver into a temp clerk project; run
     clerk start + clerk test; return (passed, raw_output). Shared by verify_one (original rule
     text) and scripts.mutation.mutate_rule (mutated rule text) — ONE clerk-invocation code path,
-    not two (TT-863)."""
+    not two."""
     with tempfile.TemporaryDirectory() as work:
         workdir = Path(work)
         # Copy contract modules (filename == module name; keep basenames).
@@ -505,7 +505,7 @@ def verify_one(oracle_path: Path, standard_root: Path) -> tuple[bool, str]:
 
 
 def _coverage_dispatch(args) -> int:
-    """TT-497 Tier-0: --verify-denominator / --coverage-report.
+    """Tier-0: --verify-denominator / --coverage-report.
 
     Resolves the coverage_grader package by inserting the repo root on sys.path —
     when run as `python scripts/oracle_verify.py`, sys.path[0] is scripts/, not the
@@ -580,7 +580,7 @@ def _coverage_dispatch(args) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="T032 gov-oracle harness (TT-478)")
+    ap = argparse.ArgumentParser(description="T032 gov-oracle harness")
     ap.add_argument(
         "--oracle",
         default="tests/oracles/*.oracle.json",
@@ -591,7 +591,7 @@ def main() -> int:
         default=os.environ.get("CODE_INHERIT_STANDARD", "../code-inherit-standard"),
         help="path to code-inherit-standard root (env CODE_INHERIT_STANDARD)",
     )
-    # TT-497 Tier-0 coverage grader (toolchain-optional; runs before the clerk/catala
+    # Tier-0 coverage grader (toolchain-optional; runs before the clerk/catala
     # check below so --coverage-report works without opam present).
     ap.add_argument(
         "--coverage-report",
@@ -614,7 +614,7 @@ def main() -> int:
     if args.coverage_report or args.verify_denominator:
         return _coverage_dispatch(args)
 
-    print(f"oracle_verify.py v{VERSION} — T032 LEGAL gov-oracle harness (TT-478)")
+    print(f"oracle_verify.py v{VERSION} — T032 LEGAL gov-oracle harness")
 
     for tool in ("clerk", "catala"):
         if shutil.which(tool) is None:

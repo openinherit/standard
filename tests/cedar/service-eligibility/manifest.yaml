@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
 # SPDX-License-Identifier: Apache-2.0
-# TT-626 Cedar service-eligibility analysis manifest. Adding a jurisdiction = add a
+# Cedar service-eligibility analysis manifest. Adding a jurisdiction = add a
 # checks[] row (P in the standard) + its forbidden_oracle (Q here). No harness change.
 schema: cedar/service-eligibility/service-eligibility.cedarschema # standard-relative
 principal_type: Professional

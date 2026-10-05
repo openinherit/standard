@@ -1,5 +1,5 @@
 {
-  "$comment": "Expected-output baseline for CatInheritanceCharge per ICP-0017 (TT-682). Unlike the PETClawbackCheck / QSRChainCheck twins in this directory, this file does NOT claim a Mopsa-c PROVEN-VIA-BRIDGE verdict — no mopsa-c bridge script exists in this repo (grepped 2026-07-02: no Makefile/script references), so that claim would be unverified. What IS verified and recorded here: catala typecheck (clean, via the ComputedOrNeedsHuman clerk-build composition) and a clerk-test sanity-check driver run over exactly these fixture cases.",
+  "$comment": "Expected-output baseline for CatInheritanceCharge (Ireland CAT charge). Unlike the PETClawbackCheck / QSRChainCheck twins in this directory, this file does NOT claim a Mopsa-c PROVEN-VIA-BRIDGE verdict — no mopsa-c bridge script exists in this repo (grepped 2026-07-02: no Makefile/script references), so that claim would be unverified. What IS verified and recorded here: catala typecheck (clean, via the ComputedOrNeedsHuman clerk-build composition) and a clerk-test sanity-check driver run over exactly these fixture cases.",
   "rule_name": "CatInheritanceCharge",
   "rule_source_path": "code-inherit-standard/catala/transfer/CatInheritanceCharge.catala_en",
   "rule_authored_under_tt682": true,

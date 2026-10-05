@@ -101,6 +101,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   described `portable` as *"not fixed to a single address"* and then required it to name one.
   `x-inherit-` extension space types are not exempt. Purely relaxing: no document that validated
   before fails now, and all 117 existing `space.json` test assertions keep their verdict.
+- Internal tracker identifiers are removed from comments, `_doc` / `$comment` / `note` fields,
+  test descriptions and READMEs across `catala/`, `cedar/`, `ontology/`, `scripts/`, `tests/` and
+  the workflows, replaced with plain descriptions of what they referred to. Wording only: no
+  schema, rule, fixture value or check changes behaviour.
+
+### Removed
+
+- The four draft proposals under `docs/proposals/` (`death-tax-levied`, `faith-binding-join`,
+  `incidence-side`, `territory-granularity`). They were never on the proposals index. The
+  questions they raise stay open in issues #12–#15. Accepted proposals in `proposals/` are
+  unchanged.
 
 ### Fixed
 

@@ -27353,6 +27353,12 @@ components:
           type: string
           pattern: ^\d+\.\d+\.\d+$
           maxLength: 20
+        root:
+          description: Which INHERIT document root the declared conformance applies to. 'estate' is the full estate document (schema.json); 'catalogue' is the catalogue-only document (catalogue.json) used by living collectors without the estate envelope. Absent means 'estate', which is what every declaration made before this field existed claimed
+          enum:
+            - estate
+            - catalogue
+          default: estate
         conformanceLevel:
           description: Overall conformance level achieved. The minimum across all declared entities
           enum:
@@ -27399,6 +27405,19 @@ components:
           description: Legal disclaimer on validation results. Validation checks JSON Schema conformance and referential integrity. It does not verify legal accuracy, completeness, or suitability for any jurisdiction's requirements
           const: Validation results are informational. They verify schema conformance and data structure, not legal accuracy or completeness. Do not rely on validation results as the sole basis for legal or financial decisions.
       additionalProperties: false
+      if:
+        properties:
+          root:
+            const: catalogue
+        required:
+          - root
+      then:
+        properties:
+          entities:
+            description: A catalogue document has no estate envelope, so a catalogue-root declaration cannot claim conformance for the estate entity
+            not:
+              required:
+                - estate
       $defs:
         EntityConformance:
           description: Conformance result for a single entity schema

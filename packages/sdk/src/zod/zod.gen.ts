@@ -8677,10 +8677,11 @@ export const zExtensionConformance = z.strictObject({
  *
  * Machine-readable declaration of an implementation's conformance to the INHERIT standard. Governance requires two independent Level 2 implementations to promote schemas from draft to stable
  */
-export const zConformanceDeclaration = z.strictObject({
+const zConformanceDeclaration$generated = z.strictObject({
     implementation: z.string().min(1).max(255),
     implementationVersion: z.string().min(1).max(50),
     inheritVersion: z.string().max(20).regex(/^\d+\.\d+\.\d+$/),
+    root: z.enum(['estate', 'catalogue']).optional().default('estate'),
     conformanceLevel: z.union([
         z.literal(1),
         z.literal(2),
@@ -8697,6 +8698,7 @@ export const zConformanceDeclaration = z.strictObject({
     provenance: zProvenance.optional(),
     disclaimer: z.literal('Validation results are informational. They verify schema conformance and data structure, not legal accuracy or completeness. Do not rely on validation results as the sole basis for legal or financial decisions.').optional()
 });
+export const zConformanceDeclaration = layer('https://openinherit.org/v3/conformance-declaration.json', zConformanceDeclaration$generated);
 
 /**
  * A declaration that an implementation conforms to the INHERIT standard

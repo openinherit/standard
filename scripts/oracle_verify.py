@@ -54,7 +54,7 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import NoReturn
 
-VERSION = "1.2.0"
+VERSION = "2.0.0"
 
 EXIT_OK = 0
 EXIT_RED = 1
@@ -504,81 +504,6 @@ def verify_one(oracle_path: Path, standard_root: Path) -> tuple[bool, str]:
     return _run_clerk_check(rule_text, rule_src.name, cases, scope, result_field, dep_srcs)
 
 
-def _coverage_dispatch(args) -> int:
-    """Tier-0: --verify-denominator / --coverage-report.
-
-    Resolves the coverage_grader package by inserting the repo root on sys.path —
-    when run as `python scripts/oracle_verify.py`, sys.path[0] is scripts/, not the
-    root, so `from scripts.coverage_grader…` would not otherwise resolve."""
-    repo_root = Path(__file__).resolve().parent.parent
-    sys.path.insert(0, str(repo_root))
-    from scripts.coverage_grader.checked_coverage import (  # noqa: E402
-        CoverageError as CheckedCoverageError,
-    )
-    from scripts.coverage_grader.checked_coverage import (  # noqa: E402
-        checked_coverage,
-        drift_fail_report,
-    )
-    from scripts.coverage_grader.denominator import (  # noqa: E402
-        CoverageError,
-        load_denominator,
-        verify_manifest,
-    )
-    from scripts.coverage_grader.grader import grade  # noqa: E402
-
-    corpus_dir = (repo_root / args.corpus).resolve()
-
-    if args.verify_denominator:
-        try:
-            ok, mism = verify_manifest(corpus_dir)
-        except CoverageError as e:
-            fail_closed(str(e))
-        if ok:
-            print("DENOMINATOR OK — every ground-truth file matches MANIFEST.json")
-            return EXIT_OK
-        print("DENOMINATOR MISMATCH:\n  " + "\n  ".join(mism))
-        return EXIT_FAILCLOSED
-
-    # --coverage-report
-    try:
-        ok, mism = verify_manifest(corpus_dir)
-        if not ok:
-            fail_closed("denominator manifest mismatch: " + "; ".join(mism))
-        n, wills = load_denominator(corpus_dir)
-    except CoverageError as e:
-        fail_closed(str(e))
-
-    toolchain = shutil.which("clerk") is not None
-    standard_root = Path(args.standard).expanduser().resolve()
-    try:
-        checked = checked_coverage(
-            snapshot_path=repo_root / "coverage-floor" / "rule-universe.json",
-            oracle_glob=str(repo_root / "tests" / "oracles" / "*.oracle.json"),
-            verdict_glob=str(standard_root / "catala" / "**" / "*.test-fixtures.json"),
-            standard_root=standard_root if standard_root.is_dir() else None,
-            toolchain_available=toolchain,
-        )
-    except CheckedCoverageError as e:
-        # Drift vs the live sibling ⇒ FAIL, surfaced legibly, never a crashed report.
-        # (checked_coverage's CoverageError is a DISTINCT class from denominator's above.)
-        checked = drift_fail_report(str(e))
-    report = grade(wills, checked=checked)
-
-    if args.format == "json":
-        print(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False))
-    else:
-        tc = "on" if toolchain else "MISSING"
-        print(f"Coverage report — N={report['N']} wills  (gov-oracle toolchain: {tc})")
-        for d in report["dimensions"]:
-            print(f"  {d['dimension']:<19}{d['coverage_pct']:>3}%  [{d['band']:>6}]  {d['status']}")
-        print(
-            f"  checked-coverage: {checked['status']} {checked['covered']}/{checked['total']} "
-            f"({checked['pct']}%) [oracle {len(checked['covered_oracle_grade'])} / "
-            f"verdict {len(checked['covered_verdict_grade'])}]"
-        )
-    return EXIT_OK
-
-
 def main() -> int:
     ap = argparse.ArgumentParser(description="T032 gov-oracle harness")
     ap.add_argument(
@@ -591,28 +516,7 @@ def main() -> int:
         default=os.environ.get("CODE_INHERIT_STANDARD", "../code-inherit-standard"),
         help="path to code-inherit-standard root (env CODE_INHERIT_STANDARD)",
     )
-    # Tier-0 coverage grader (toolchain-optional; runs before the clerk/catala
-    # check below so --coverage-report works without opam present).
-    ap.add_argument(
-        "--coverage-report",
-        action="store_true",
-        help="emit the §7 per-dimension coverage record over the committed denominator",
-    )
-    ap.add_argument(
-        "--verify-denominator",
-        action="store_true",
-        help="re-hash the committed denominator vs MANIFEST.json (sha256)",
-    )
-    ap.add_argument("--format", choices=("json", "table"), default="table")
-    ap.add_argument(
-        "--corpus",
-        default="corpus/synthetic-uk-will-v0.2-seed42-n200",
-        help="denominator dir, relative to repo root",
-    )
     args = ap.parse_args()
-
-    if args.coverage_report or args.verify_denominator:
-        return _coverage_dispatch(args)
 
     print(f"oracle_verify.py v{VERSION} — T032 LEGAL gov-oracle harness")
 

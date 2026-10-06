@@ -1,7 +1,7 @@
 {
   "_doc": "T032 LEGAL gov-oracle. Pennsylvania inheritance tax charge (72 P.S. § 9116(a)), beneficiary-side (rate keyed to the beneficiary's relationship). Each case asserts the Catala-computed tax equals the AUTHORITATIVE figure live-sourced from revenue.pa.gov on `sourced_at` — never from memory. scripts/oracle_verify.py runs PaInheritanceTaxCharge.Charge with `inputs` and requires the Computed-arm money to equal `expected_money` (USD). There is no threshold — PA tax is charged from the first dollar. NeedsHuman cases (deduction_or_exemption_claimed) are covered by the standard's own *.test-fixtures.json, not here.",
   "rule": {
-    "repo": "code-inherit-standard",
+    "repo": "openinherit/standard",
     "rule_file": "catala/transfer/PaInheritanceTaxCharge.catala_en",
     "module": "PaInheritanceTaxCharge",
     "scope": "Charge",

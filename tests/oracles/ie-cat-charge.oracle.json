@@ -1,7 +1,7 @@
 {
   "_doc": "T032 LEGAL gov-oracle. Ireland Capital Acquisitions Tax charge (CATCA 2003), beneficiary-side. Each case asserts the Catala-computed CAT equals the AUTHORITATIVE figure live-sourced from revenue.ie on `sourced_at` — never from memory (HALT fork 2). scripts/oracle_verify.py runs CatInheritanceCharge.Charge with `inputs` and requires the Computed-arm money to equal `expected_money` (EUR). Group classification from kinship is out-of-scope for the rule (supplied by the caller); each case fixes `cat_group` directly. NeedsHuman cases (relief_claimed) are covered by the standard's own *.test-fixtures.json, not here (the scalar harness asserts the Computed arm).",
   "rule": {
-    "repo": "code-inherit-standard",
+    "repo": "openinherit/standard",
     "rule_file": "catala/transfer/CatInheritanceCharge.catala_en",
     "module": "CatInheritanceCharge",
     "scope": "Charge",

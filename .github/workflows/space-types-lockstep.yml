@@ -36,5 +36,5 @@ jobs:
           # about -- still runs, here, from this tree.
           python3 scripts/check-space-types-lockstep.py \
             --tree . --policy scripts/data/space-types-policy.txt \
-            --carrier-elsewhere "testatetech/docs-strategy .github/workflows/space-types-carrier.yml"
+            --carrier-elsewhere "an upstream CI job that can see the engine"
           echo "Space types lockstep: OK"

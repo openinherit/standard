@@ -24,7 +24,7 @@ sampled — see the gate below.
 
 ## The un-fakeable gate (mirrors gov-oracle)
 
-The proof lives in **`code-inherit-test-suite`**, not here — exactly as the gov-oracle gate keeps
+The proof lives in **a separate test suite**, not here — exactly as the gov-oracle gate keeps
 the authoritative gov.uk figure test-suite-side so a standard PR cannot edit it to pass:
 
 - **P** (here, `ew.cedar`) — the eligibility policy under test.

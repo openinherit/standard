@@ -15,12 +15,11 @@ id is an enum value. It was fenced inside V-OPEN until 2026-09-29, which meant
 the 28 September flip to V-SPLIT silently turned the D2b coverage check off.
 
 Single file with no local imports on purpose: it is vendored into the public
-repo openinherit/standard, where docs-strategy is not on the path.
+repo openinherit/standard, where none of its upstream's other modules exist.
 
-⚠️ VENDORED COPY. The source of truth is testatetech/docs-strategy at
-scripts/check-space-types-lockstep.py, together with its 54 hermetic assertions
-in scripts/test-check-space-types-lockstep.sh. Fix it there and re-copy; a fix
-made only here has no test covering it.
+⚠️ VENDORED COPY. The source of truth is an upstream copy maintained together
+with its 54 hermetic assertions. Fix it there and re-copy; a fix made only here
+has no test covering it.
 """
 
 import argparse
@@ -31,16 +30,15 @@ from pathlib import Path
 
 VERDICTS = {"UNANSWERED", "V-OPEN", "V-COMMERCIAL", "V-SPLIT"}
 # A verdict must cite a LOOKUP-ABLE record, not a session's recollection. Two
-# forms are accepted because the estate has two decision surfaces:
+# forms are accepted because decisions are recorded in two places:
 #   * a Linear COMMENT -- the #comment-<id> fragment is required, because the
-#     issue URL alone is one every session already knows; and
-#   * a coordinator decision record -- `coordinator-decision:<n>`, a row in the
-#     coordinator's state.db `pending_decisions` carrying prompt, options,
-#     chosen_option and answered_at.
-# ⚠️ The Linear form ALONE made the gate unsatisfiable. The space-types verdict was
-# taken through decision record 535 and was never posted as a Linear comment,
-# and agents are forbidden to write to Linear (the API key posts as Josh). So
-# the only accepted evidence was evidence no permitted party could produce.
+#     issue URL alone does not identify a decision; and
+#   * a numbered decision record -- `coordinator-decision:<n>`, an entry in the
+#     maintainers' decision log carrying the prompt, the options, the chosen
+#     option and when it was answered.
+# ⚠️ The Linear form ALONE made the gate unsatisfiable: the space-types verdict
+# was taken as a numbered decision record and was never posted as a Linear
+# comment, so the only accepted evidence was evidence that did not exist.
 # Free text stays REFUSED: widening the forms must not admit recollection.
 DECIDED_BY = re.compile(
     r"^(?:https://linear\.app/\S*#comment-\S+|coordinator-decision:\d+)$"

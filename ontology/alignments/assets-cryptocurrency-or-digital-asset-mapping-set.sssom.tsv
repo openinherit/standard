@@ -20,7 +20,7 @@
 #   aaoifi: https://aaoifi.com/standard/sharia-standards/
 # mapping_set_id: https://openinherit.org/mappings/assets/cryptocurrency-or-digital-asset/v1.0
 # mapping_set_version: '1.0'
-# mapping_set_title: Cryptocurrency or Digital Asset (Q-044 A-204) ↔ BFO+SKOS alignment + cross-jurisdictional substrate
+# mapping_set_title: Cryptocurrency or Digital Asset ↔ BFO+SKOS alignment + cross-jurisdictional substrate
 # license: https://creativecommons.org/publicdomain/zero/1.0/
 # creator_id: https://openinherit.org
 subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence	comment

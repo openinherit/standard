@@ -1,7 +1,7 @@
 # space-types-policy — the machine-readable form of the space-types D0 verdict.
 #
-# ⚠️ VENDORED COPY. Source of truth: testatetech/docs-strategy at
-# scripts/data/space-types-policy.txt. Edit there and re-copy.
+# ⚠️ VENDORED COPY. The source of truth is an upstream copy maintained
+# alongside the gate's test suite. Edit it there and re-copy.
 #
 # ⛔ DO NOT EDIT verdict: TO MAKE A RED GATE GREEN. A verdict other than
 # UNANSWERED requires a decided-by: line citing a lookup-able decision record —
@@ -9,78 +9,38 @@
 # The gate REFUSES a verdict without one, and REFUSES free text (tests T9,
 # T22b, T22c).
 #
-# ── D0 IS ANSWERED. V-OPEN. ──────────────────────────────────────────────
-# Josh, 2026-09-25 15:13 UTC, coordinator decision record 535, option (a):
-#   "V-OPEN — promptText, tier and urgencyFlag stay legitimate open-standard
-#    vocabulary."
-# ⚠️ An earlier record, 523, answered the same question at 13:16 UTC, before the
-# measured brief existed. 535 re-put it with the brief attached and is the later,
-# informed answer: 535 governs, and the verdict must not be re-derived from 523.
+# ── THE VERDICT: V-SPLIT ─────────────────────────────────────────────────
+# Each entry in reference-data/space-types.json is split into two halves:
 #
-# V-OPEN ratifies the WHOLE file as open standard vocabulary, so open-fields
-# lists all EIGHT keys — including `label` and `locales`, which are named in
-# none of the three verdict shapes the original question offered and would otherwise
-# have been left for a later session to guess. (Plan Task 5's example header
-# omitted `locales`; that omission is not the verdict.)
+#   open-fields        id, label, aliases, category, locales. The published
+#                      vocabulary: every entry carries all five.
+#   commercial-fields  tier, urgencyFlag, promptText. The elicitation
+#                      experience (the ordering, the prompts and the nudges
+#                      that help someone finish listing their possessions).
+#                      These are not part of the open vocabulary, and no
+#                      entry may carry them.
+#
+# V-SPLIT supersedes an earlier V-OPEN verdict, under which all eight keys were
+# published as open vocabulary. The earlier verdict is recorded here rather than
+# erased so that the history shows a reversal, not a verdict that never existed.
+# The three commercial fields are maintained outside this repository.
+#
+# ── COVERAGE ─────────────────────────────────────────────────────────────
+# Every spaceType enum value in v3/space.json has an entry, and every entry's id
+# is an enum value (or a schema-permitted extension). Measured at 101 enum
+# values and 101 entries. reference-data/space-types.json:6 -- "Every enum value
+# in space.json has a corresponding entry here" -- is TRUE as published.
+#
+# NO `exclusions:` LINE IS SET, and that is correct rather than an omission:
+# coverage is complete, so there is nothing to exclude.
+#
+# ⛔ Do not add an `exclusions:` line to silence a future red: a new enum value
+# with no entry is the gate working, and the remedy is the row, not the
+# carve-out.
 #
 # The UNANSWERED freeze pins (frozen-entry-count / frozen-fields / frozen-ids)
-# are DELETED rather than left inert: D2a's remedy is an additive change to
-# this very file, so a pin that forbids it would contradict the verdict it
-# sits under. The published shape they recorded is in git — 3ff5f29a.
-#
-# ── D2a IS ANSWERED. REMEDY 1. ─────────────────────────────────
-# Josh, 2026-09-25 21:07 UTC, coordinator decision record 557, option (a):
-#   "Author the `portable` row." Ten of the eleven off-site spaceTypes already
-#   carried entries in an identical shape, so excluding this one would have
-#   carved out a single value while every sibling stayed in.
-#
-# NO `exclusions:` LINE IS SET, and after remedy 1 that is correct rather than
-# an omission: coverage is complete, so there is nothing to exclude. The gate
-# is GREEN at 101/101. reference-data/space-types.json:6 -- "Every enum value
-# in space.json has a corresponding entry here" -- is now TRUE as published.
-#
-# ⛔ An `exclusions:` line added here would re-open D2a, which is answered.
-# Do not add one to silence a future red: a new enum value with no entry is
-# the gate working, and the remedy is the row, not the carve-out.
-#
-# Measured against openinherit/standard 02a9889 on 2026-09-25, BEFORE the row:
-# 101 enum values, 100 entries, all 8 keys present on all 100. After: 101/101.
-#
-# ── D0 RE-ANSWERED, 28 September 2026. V-SPLIT SUPERSEDES V-OPEN. ────────
-# Josh, coordinator decision record 588:
-#   "Regardless of previous decisions I have made I want to make sure we are
-#    staying true to any decisions Rich has made previously."
-#
-# The 25 September V-OPEN verdict (record 535) is WITHDRAWN. It is preserved
-# above rather than deleted, per the dated-layer discipline: it was a real
-# decision, taken on a real brief, and the record should show a verdict that
-# was reversed rather than one that never existed.
-#
-# ⛔ WHAT V-OPEN MISSED, and it was not a close call. Rich's 28 July moat
-# boundary (brand-architecture.md §1.10 item 7) splits the asset-listing core
-# -- "its vocabulary open, its elicitation experience proprietary" -- and his
-# own worked case 5, in the three-launch design §2, spells out what the
-# elicitation experience is:
-#
-#     "flow, ORDERING, PROMPTS, progress mechanics, the NUDGES that get an
-#      ordinary person to finish listing 200 possessions"
-#
-# tier is the ordering. promptText is the prompts. urgencyFlag is the nudge.
-# All three, named by Rich, published in an Apache-2.0 repo.
-#
-# ⛔ AND THE LEAN-APACHE DEFAULT DOES NOT RESCUE IT. §2's callout keeps that
-# default in force -- "where they disagree, or where either is uncertain,
-# lean Apache wins" -- but it breaks UNCERTAINTY, and worked case 5 leaves
-# none: it names these three things, in these words, as the proprietary half
-# of this exact split.
-#
-# Removal rather than an amendment to the rule because the standard has not
-# been publicly utilised yet (Josh, 28 September). Apache distribution is
-# one-way: this stops future copies, not any already taken, and the window in
-# which removal is still the cheaper answer is open now and will not reopen.
-#
-# The three fields are not lost -- they are the elicitation experience and
-# belong with it, in the proprietary engine, not in the published vocabulary.
+# are deliberately absent: they apply only while the verdict is UNANSWERED, and
+# a pin forbidding additive rows would contradict the coverage rule above.
 verdict: V-SPLIT
 decided-by: coordinator-decision:588
 open-fields: id,label,aliases,category,locales

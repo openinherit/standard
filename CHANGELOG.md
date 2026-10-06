@@ -8,6 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Three statute-cited gov-oracles of a new `verdict` kind under `tests/oracles/`, for rules whose
+  answer is a classification rather than an amount: will validity (Wills Act 1837 s.9 and
+  s.18(1); Banks v Goodfellow), the trustees' power of advancement ceiling (Trustee Act 1925
+  s.32(1)(a) as amended, with Inheritance and Trustees' Powers Act 2014 s.10(4)), and real
+  property title (Land Registration Act 2002 s.27(1) and s.58(1); Land Registration Rules 2003
+  r.4(1)). `scripts/oracle_verify.py` (2.1.0) runs `result_kind: "verdict"`: one `#[test]` scope
+  per case asserting the rule's enum output equals `expected_verdict`, which must be a bare
+  constructor name. The three files are added to the Open Government Licence v3.0 notice in
+  `THIRD-PARTY-NOTICES`.
 - Open Government Licence v3.0 attribution in `THIRD-PARTY-NOTICES`, for the GOV.UK and UK
   legislation text quoted in the UK gov-oracle cases under `tests/oracles/` and the statute
   citations in `catala/probate/`. The notice names the files it covers.

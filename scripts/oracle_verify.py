@@ -22,6 +22,9 @@
 #      ComputedOrNeedsHuman.Verdict, asserts BOTH that the arm is `Computed` AND
 #      that its money equals `expected_money_gbp`. (Asserting the arm too stops a
 #      NeedsHuman result spuriously passing the £0 case.)
+#      Two other kinds, chosen by `rule.result_kind`: "per_heir" compares a whole
+#      per-heir allocation; "verdict" asserts an enum output equals the case's
+#      `expected_verdict`, one #[test] scope per case so a failure names the case.
 #   4. clerk start + clerk test. Success == rc 0 AND output contains
 #      "ALL TESTS PASSED" (the same predicate as scripts/check-catala-contract.sh
 #      in code-inherit-standard).
@@ -54,7 +57,7 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import NoReturn
 
-VERSION = "2.0.0"
+VERSION = "2.1.0"
 
 EXIT_OK = 0
 EXIT_RED = 1
@@ -286,6 +289,28 @@ def scope_input_types(rule_text: str, scope: str) -> dict:
     return types
 
 
+_OUTPUT_DECL_RE = re.compile(r"^\s+output\s+(\w+)\s+content\s+(.+?)\s*$")
+
+
+def scope_output_types(rule_text: str, scope: str) -> dict:
+    """{output_name: declared_type} for one `declaration scope <scope>:` block."""
+    types: dict = {}
+    current = None
+    for line in rule_text.splitlines():
+        m = _DECL_SCOPE_RE.match(line)
+        if m:
+            current = m.group(1)
+            continue
+        if line and not line[0].isspace():
+            current = None
+            continue
+        if current == scope:
+            d = _OUTPUT_DECL_RE.match(line)
+            if d:
+                types[d.group(1)] = d.group(2)
+    return types
+
+
 def wrap_certified(literal: str, declared_type) -> str:
     """Wrap a rendered literal in `<DeclaredType>.Certified content ...` iff the
     declared input type is a certification enum; otherwise pass through (bare
@@ -343,6 +368,50 @@ def build_driver(
         + "\n"
         + "\n".join(asserts)
         + "\n```\n"
+    )
+
+
+_SCOPE_SAFE_RE = re.compile(r"[^A-Za-z0-9_]+")
+
+
+def build_verdict_driver(
+    cases: list[dict],
+    scope: str,
+    result_field: str,
+    verdict_type: str,
+    input_types: dict | None = None,
+) -> str:
+    """The `verdict` oracle kind: one `#[test]` scope PER CASE (so a clerk failure names
+    the case that broke) asserting the rule's enum output equals the oracle's
+    `expected_verdict`. Same module as the rule, for the same clerk 1.2.0 reason as
+    build_driver. `expected_verdict` must be a bare constructor identifier: anything else
+    would be text injected into generated Catala, so it fails closed."""
+    types = input_types or {}
+    blocks: list[str] = []
+    for i, case in enumerate(cases):
+        expected = case.get("expected_verdict")
+        if not isinstance(expected, str) or not _ENUM_RE.fullmatch(expected.strip()):
+            fail_closed(
+                f"case {case.get('label')!r}: expected_verdict must be a bare enum "
+                f"constructor, got {expected!r}"
+            )
+        safe = _SCOPE_SAFE_RE.sub("_", str(case.get("label", ""))).strip("_")
+        record = " ".join(
+            f"-- {k}: {wrap_certified(input_literal(v), types.get(k))}"
+            for k, v in case["inputs"].items()
+        )
+        blocks.append(
+            "#[test]\n"
+            f"declaration scope OracleVerdict_{i}_{safe}:\n"
+            f"  output v content {verdict_type}\n"
+            f"scope OracleVerdict_{i}_{safe}:\n"
+            f"  definition v equals\n"
+            f"    (output of {scope} with {{ {record} }}).{result_field}\n"
+            f"  assertion v = {expected.strip()}"
+        )
+    return (
+        "\n# --- generated verdict oracle driver ---\n\n"
+        "```catala\n" + "\n\n".join(blocks) + "\n```\n"
     )
 
 
@@ -444,6 +513,16 @@ def _run_clerk_check(
     clerk start + clerk test; return (passed, raw_output). Shared by verify_one (original rule
     text) and scripts.mutation.mutate_rule (mutated rule text) — ONE clerk-invocation code path,
     not two."""
+    driver = build_driver(
+        cases, scope, result_field, input_types=scope_input_types(rule_text, scope)
+    )
+    return _run_clerk_driver(rule_text, rule_filename, driver, dep_srcs)
+
+
+def _run_clerk_driver(
+    rule_text: str, rule_filename: str, driver: str, dep_srcs: list[Path]
+) -> tuple[bool, str]:
+    """The one clerk start + clerk test code path, for every assertion-driver kind."""
     with tempfile.TemporaryDirectory() as work:
         workdir = Path(work)
         # Copy contract modules (filename == module name; keep basenames).
@@ -451,9 +530,6 @@ def _run_clerk_check(
             shutil.copy(dp, workdir / dp.name)
         # Write the rule file and APPEND the generated driver (same module).
         rule_dst = workdir / rule_filename
-        driver = build_driver(
-            cases, scope, result_field, input_types=scope_input_types(rule_text, scope)
-        )
         rule_dst.write_text(rule_text + "\n" + driver, encoding="utf-8")
 
         # clerk start scaffolds the project + stdlib (tolerate non-zero, mirror
@@ -501,6 +577,18 @@ def verify_one(oracle_path: Path, standard_root: Path) -> tuple[bool, str]:
         dep_srcs.append(dp)
 
     rule_text = rule_src.read_text(encoding="utf-8")
+    if result_kind == "verdict":
+        verdict_type = scope_output_types(rule_text, scope).get(result_field)
+        if not verdict_type:
+            fail_closed(
+                f"{oracle_path}: scope {scope!r} declares no output {result_field!r} in {rule_file}"
+            )
+        driver = build_verdict_driver(
+            cases, scope, result_field, verdict_type, scope_input_types(rule_text, scope)
+        )
+        return _run_clerk_driver(rule_text, rule_src.name, driver, dep_srcs)
+    if result_kind != "scalar":
+        fail_closed(f"{oracle_path}: unknown result_kind {result_kind!r}")
     return _run_clerk_check(rule_text, rule_src.name, cases, scope, result_field, dep_srcs)
 
 
@@ -559,6 +647,21 @@ def main() -> int:
             if not passed:
                 any_red = True
                 print("   (a per-heir multiset does NOT match the oracle — see lines above)")
+        elif result_kind == "verdict":
+            head = "GREEN " if passed else "RED   "
+            print(f"{head} {op.name}  ({len(cases)} verdict case(s))  [verdict]")
+            for c in cases:
+                tag = "PASS " if passed else "case "
+                print(
+                    f"   {tag} {c['label']}: expected {c.get('expected_verdict')}  "
+                    f"[{c.get('citation_url', '')}]"
+                )
+            if not passed:
+                any_red = True
+                print("   ---- clerk output ----")
+                for line in out.splitlines():
+                    if any(k in line for k in ("FAILED", "Assertion", "OracleVerdict", "error")):
+                        print(f"   {line}")
         elif passed:
             print(f"GREEN  {op.name}  ({len(cases)} case(s))")
             for c in cases:
@@ -581,10 +684,12 @@ def main() -> int:
 
     if any_red:
         print(
-            "GATE FAILED: a computed legal figure or per-heir allocation does not match its oracle."
+            "GATE FAILED: a computed legal figure, per-heir allocation or verdict does not match its oracle."
         )
         return EXIT_RED
-    print("GATE PASSED: every computed legal figure and per-heir allocation matches its oracle.")
+    print(
+        "GATE PASSED: every computed legal figure, per-heir allocation and verdict matches its oracle."
+    )
     return EXIT_OK
 
 

@@ -1,7 +1,7 @@
 {
   "_doc": "T032 per-heir allocation oracle, class-gift shape. Equal division of a fund among a class of beneficiaries — the flat no-repeat_by case (per_member_amounts is already one amount per heir, so no per-branch expansion). Proves the per_heir harness path generalises beyond the per-stirpes repeat_by shape. WARNING — INVERTED CASE: a case with \"expect\": \"wrong_split\" carries a DELIBERATELY WRONG expected_per_heir_gbp (right total, right count, wrong split); it is NOT the correct answer. The harness PASSES that case iff it correctly detects the split differs, and goes RED if the wrong split somehow matched (non-vacuous teeth). Equal-division shares are general-law arithmetic (fund / n); the oracle is the division rule itself, not an external published figure.",
   "rule": {
-    "repo": "code-inherit-standard",
+    "repo": "openinherit/standard",
     "rule_file": "catala/probate/ClassGift.catala_en",
     "module": "ClassGift",
     "scope": "Distribute",

@@ -6,8 +6,7 @@ Per-primitive **SSSOM** (Simple Standard for Sharing Ontological Mappings) mappi
 bridge the INHERIT v2 canonical primitives and classifier-scheme values to external legal
 substrate, statutes, standards, and reference ontologies (BFO / PROV-O).
 
-Authored by harvesting the frozen spike TSVs on `docs-strategy`
-`origin/main` (`docs/superpowers/specs/**/spike-references/**`) — see each file's
+Authored by harvesting earlier frozen draft TSVs — see each file's
 `mapping_set_id` and the `source:` field in `manifest.yaml` for provenance. Validated by the
 `sssom-py-validate` gate (**G-05**), un-orphaned here (P10-10).
 
@@ -21,7 +20,7 @@ Authored by harvesting the frozen spike TSVs on `docs-strategy`
 ## Authoring conventions (uniform across every set)
 
 - **Namespace** — all internal INHERIT terms use the flat `inherit:` prefix
-  (`https://openinherit.org/schemas/`, A-328). Source module prefixes
+  (`https://openinherit.org/schemas/`). Source module prefixes
   (`inherit_assets:`, `inherit_core:`, `inherit_transfer:`, …) are collapsed to `inherit:`.
 - **Columns** — exactly the canonical 7, in order: `subject_id`, `subject_label`,
   `predicate_id`, `object_id`, `object_label`, `mapping_justification`, `confidence`, with an
@@ -73,8 +72,8 @@ artifact with its own ROBOT `validate-profile` run.
 
 ## Deferred — Layer-2 catalog
 
-The Layer-2 external-ontology catalog `inherit.sssom.tsv` (A-131), the 23 SKOS-scheme
-alignments (A-23.3), and the Role rows (A-20.2) are a **separate** deliverable (its inputs —
+The Layer-2 external-ontology catalog `inherit.sssom.tsv`, the 23 SKOS-scheme
+alignments, and the Role rows are a **separate** deliverable (its inputs —
 the 23 schemes and the IRI lock — do not yet exist) tracked as its own follow-up issue. The
 four non-SKOS relationship rows dropped from the cryptocurrency spike (`dcat:` / `dcterms:` /
 `prov:`) belong to that Layer-2 catalog, not to a per-primitive SKOS set (see

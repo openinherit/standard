@@ -1,7 +1,7 @@
 {
   "_doc": "T032 per-creditor pari-passu abatement oracle. Asserts the per-CREDITOR abatement of an insolvent estate's same-rank unsecured debts, not just the conserved total — closing the gameable-conservation hole: a wrong split with the right total AND right creditor-count would pass a sum/length check. scripts/oracle_verify.py runs catala/probate/InsolventEstateAbatement.catala_en (scope Abate), reads abated_payments, and compares it (collections.Counter) to expected_per_heir_gbp. WARNING — INVERTED CASE: a case with \"expect\": \"wrong_split\" carries a DELIBERATELY WRONG expected_per_heir_gbp (right total, right count, wrong split). It is NOT the correct answer; the harness PASSES that case iff it correctly detects the split differs (and FAILS — gate RED — if the wrong split somehow matched, proving the teeth are non-vacuous). Pari-passu abatement is statutory arithmetic (Insolvency Act 1986 s.328(3) applied to a deceased insolvent estate by SI 1986/1999), not an external published figure — the oracle cites the statute, not a gov.uk worked example.",
   "rule": {
-    "repo": "code-inherit-standard",
+    "repo": "openinherit/standard",
     "rule_file": "catala/probate/InsolventEstateAbatement.catala_en",
     "module": "InsolventEstateAbatement",
     "scope": "Abate",

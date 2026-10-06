@@ -24,7 +24,7 @@
 #      NeedsHuman result spuriously passing the £0 case.)
 #   4. clerk start + clerk test. Success == rc 0 AND output contains
 #      "ALL TESTS PASSED" (the same predicate as scripts/check-catala-contract.sh
-#      in code-inherit-standard).
+#      in this repository).
 #
 # Fail-closed: a missing toolchain, a missing rule/contract file, a malformed or
 # empty oracle, or a clean build that is not GREEN all exit non-zero. The teeth:
@@ -35,7 +35,7 @@
 #
 # Usage:
 #   python scripts/oracle_verify.py [--oracle 'tests/oracles/*.oracle.json'] \
-#                                   [--standard /path/to/code-inherit-standard]
+#                                   [--standard /path/to/standard-checkout]
 #   (run inside `opam exec --` or after `eval $(opam env)` so clerk is on PATH).
 
 from __future__ import annotations
@@ -252,7 +252,7 @@ def input_literal(value) -> str:
 
 
 # --- G6 certification floor -------------------------------------------------
-# After code-inherit-standard's G6 gate, an L3 characterisation input's declared
+# After the standard's G6 gate, an L3 characterisation input's declared
 # type is a `Certified<Type> | NotCharacterised` enum, so a bare literal no
 # longer typechecks. The renderer wraps each case literal iff the RULE SOURCE
 # declares that input with a certification enum — the declared type text is the
@@ -513,8 +513,10 @@ def main() -> int:
     )
     ap.add_argument(
         "--standard",
-        default=os.environ.get("CODE_INHERIT_STANDARD", "../code-inherit-standard"),
-        help="path to code-inherit-standard root (env CODE_INHERIT_STANDARD)",
+        default=os.environ.get(
+            "CODE_INHERIT_STANDARD", str(Path(__file__).resolve().parent.parent)
+        ),
+        help="path to the standard repository root (default: this checkout; env CODE_INHERIT_STANDARD)",
     )
     args = ap.parse_args()
 

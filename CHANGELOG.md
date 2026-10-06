@@ -105,6 +105,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   test descriptions and READMEs across `catala/`, `cedar/`, `ontology/`, `scripts/`, `tests/` and
   the workflows, replaced with plain descriptions of what they referred to. Wording only: no
   schema, rule, fixture value or check changes behaviour.
+- Comments and provenance notes are reworded neutrally: the space-types policy file and lockstep
+  gate describe the policy rather than its decision history, the Catala baselines, oracle files,
+  Cedar README and ontology alignments no longer name repositories outside this one or internal
+  record numbers, and `rule_source_path` / oracle `rule.repo` point at this repository. The
+  policy fields the lockstep gate parses are unchanged. `scripts/oracle_verify.py --standard` now
+  defaults to this checkout, where the Catala rules live. No schema, field name or test value
+  changes.
 
 ### Removed
 

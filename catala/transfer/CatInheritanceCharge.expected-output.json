@@ -1,7 +1,7 @@
 {
   "$comment": "Expected-output baseline for CatInheritanceCharge (Ireland CAT charge). Unlike the PETClawbackCheck / QSRChainCheck twins in this directory, this file does NOT claim a Mopsa-c PROVEN-VIA-BRIDGE verdict — no mopsa-c bridge script exists in this repo (grepped 2026-07-02: no Makefile/script references), so that claim would be unverified. What IS verified and recorded here: catala typecheck (clean, via the ComputedOrNeedsHuman clerk-build composition) and a clerk-test sanity-check driver run over exactly these fixture cases.",
   "rule_name": "CatInheritanceCharge",
-  "rule_source_path": "code-inherit-standard/catala/transfer/CatInheritanceCharge.catala_en",
+  "rule_source_path": "catala/transfer/CatInheritanceCharge.catala_en",
   "rule_authored_under_tt682": true,
   "applicable_classes": ["inherit_transfer:AssetTransferEvent"],
   "applicable_scope": "Invoked per beneficiary x taxable benefit under an Irish inheritance (beneficiary-side incidence, CATCA 2003 s.45) — NOT once per estate. Caller supplies cat_group from a kinship->group mapping (out of scope here) and prior_same_group_benefits from lifetime aggregation since 5 December 1991.",

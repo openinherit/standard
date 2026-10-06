@@ -1,0 +1,64 @@
+{
+  "_doc": "Independent reference oracle, VERDICT kind. Asserts WillValidityCheck classifies an instrument as the Wills Act 1837 says, for the cases the statute decides on its face. Inputs are the rule's three certified characterisations (the oracle harness wraps each in ComputedOrNeedsHuman.CertifiedBool.Certified because the rule declares them so). Statute text verified on legislation.gov.uk on sourced_at. Not asserted, deliberately: the rule's precedence among SIMULTANEOUS defects (e.g. revoked AND one witness) — the statute does not rank defects, so no independent reference exists for it.",
+  "rule": {
+    "rule_file": "catala/wills/WillValidityCheck.catala_en",
+    "module": "WillValidityCheck",
+    "scope": "WillFormCapacityRevocationValidityCheckScope",
+    "result_field": "verdict",
+    "result_kind": "verdict",
+    "depends_modules": [
+      "catala/contract/ComputedOrNeedsHuman.catala_en"
+    ]
+  },
+  "statute": "Wills Act 1837 s.9 (signing and attestation) + s.18(1) (revocation by marriage); Banks v Goodfellow (1870) LR 5 QB 549 (testamentary capacity)",
+  "sourced_at": "2026-10-05",
+  "cases": [
+    {
+      "label": "s9-two-witnesses-capacity-not-revoked",
+      "inputs": {
+        "witnessed_by_2_per_wa1837_s9": true,
+        "testator_capacity_per_banks_v_goodfellow": true,
+        "revocation_event_present": false
+      },
+      "expected_verdict": "Valid",
+      "citation_url": "https://www.legislation.gov.uk/ukpga/Will4and1Vict/7/26/section/9",
+      "citation_quote": "No will shall be valid unless— (a) it is in writing, and signed by the testator, or by some other person in his presence and by his direction; and (b) it appears that the testator intended by his signature to give effect to the will; and (c) the signature is made or acknowledged by the testator in the presence of two or more witnesses present at the same time; and (d) each witness either— (i) attests and signs the will; or (ii) acknowledges his signature, in the presence of the testator (but not necessarily in the presence of any other witness), but no form of attestation shall be necessary.",
+      "note": "Every s.9(1) limb met, capacity established, no revocation event: the will is valid."
+    },
+    {
+      "label": "s9-one-witness-only",
+      "inputs": {
+        "witnessed_by_2_per_wa1837_s9": false,
+        "testator_capacity_per_banks_v_goodfellow": true,
+        "revocation_event_present": false
+      },
+      "expected_verdict": "InvalidForm",
+      "citation_url": "https://www.legislation.gov.uk/ukpga/Will4and1Vict/7/26/section/9",
+      "citation_quote": "No will shall be valid unless— (a) it is in writing, and signed by the testator, or by some other person in his presence and by his direction; and (b) it appears that the testator intended by his signature to give effect to the will; and (c) the signature is made or acknowledged by the testator in the presence of two or more witnesses present at the same time; and (d) each witness either— (i) attests and signs the will; or (ii) acknowledges his signature, in the presence of the testator (but not necessarily in the presence of any other witness), but no form of attestation shall be necessary.",
+      "note": "s.9(1)(c) requires two or more witnesses present at the same time; one witness fails the form requirement, nothing else is wrong."
+    },
+    {
+      "label": "s18-revoked-by-later-marriage",
+      "inputs": {
+        "witnessed_by_2_per_wa1837_s9": true,
+        "testator_capacity_per_banks_v_goodfellow": true,
+        "revocation_event_present": true
+      },
+      "expected_verdict": "Revoked",
+      "citation_url": "https://www.legislation.gov.uk/ukpga/Will4and1Vict/7/26/section/18",
+      "citation_quote": "Subject to subsections (2) to (5) below, a will shall be revoked by the testator's marriage.",
+      "note": "A formally valid will made with capacity, followed by the testator's marriage (no s.18(3)/(4) contemplation-of-marriage saving): revoked."
+    },
+    {
+      "label": "banks-v-goodfellow-capacity-not-established",
+      "inputs": {
+        "witnessed_by_2_per_wa1837_s9": true,
+        "testator_capacity_per_banks_v_goodfellow": false,
+        "revocation_event_present": false
+      },
+      "expected_verdict": "InvalidCapacity",
+      "citation": "Banks v Goodfellow (1870) LR 5 QB 549 (QB): a testator must understand the nature of the act and its effects, the extent of the property disposed of, and the claims to which they ought to give effect, with no disorder of the mind poisoning their affections or perverting their sense of right. A will executed without that capacity is invalid however correctly it was attested.",
+      "note": "Form correct, no revocation, capacity not established: invalid for want of capacity."
+    }
+  ]
+}

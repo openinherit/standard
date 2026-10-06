@@ -1,0 +1,51 @@
+{
+  "_doc": "Independent reference oracle, VERDICT kind. Asserts RealPropertyTitleValidityCheck's title_verdict for the three registration states the Land Registration Act 2002 and the Land Registration Rules 2003 decide on their face. Statute text verified on legislation.gov.uk on sourced_at. Not asserted, deliberately: TitleConditionallyValid (unregistered title) — that label is the rule's own classification of title deduced from deeds, not a statutory category.",
+  "rule": {
+    "rule_file": "catala/assets/RealPropertyTitleValidityCheck.catala_en",
+    "module": "RealPropertyTitleValidityCheck",
+    "scope": "RealPropertyTitleValidityCheckScope",
+    "result_field": "title_verdict",
+    "result_kind": "verdict",
+    "depends_modules": []
+  },
+  "statute": "Land Registration Act 2002 s.27(1) (registrable dispositions do not operate at law until registered) + s.58(1) (conclusiveness of the register); Land Registration Rules 2003 r.4(1) (title number)",
+  "sourced_at": "2026-10-05",
+  "cases": [
+    {
+      "label": "registered-with-title-number",
+      "inputs": {
+        "registration_is_registered": true,
+        "registration_is_pending": false,
+        "title_number_set": true
+      },
+      "expected_verdict": "TitleValid",
+      "citation_url": "https://www.legislation.gov.uk/ukpga/2002/9/section/58",
+      "citation_quote": "If, on the entry of a person in the register as the proprietor of a legal estate, the legal estate would not otherwise be vested in him, it shall be deemed to be vested in him as a result of the registration.",
+      "note": "Entered on the register under a title number: the legal estate is vested by registration."
+    },
+    {
+      "label": "registration-pending",
+      "inputs": {
+        "registration_is_registered": false,
+        "registration_is_pending": true,
+        "title_number_set": false
+      },
+      "expected_verdict": "TitlePending",
+      "citation_url": "https://www.legislation.gov.uk/ukpga/2002/9/section/27",
+      "citation_quote": "If a disposition of a registered estate or registered charge is required to be completed by registration, it does not operate at law until the relevant registration requirements are met.",
+      "note": "Application lodged but not completed: the disposition does not yet operate at law."
+    },
+    {
+      "label": "registered-without-title-number",
+      "inputs": {
+        "registration_is_registered": true,
+        "registration_is_pending": false,
+        "title_number_set": false
+      },
+      "expected_verdict": "TitleInvalid",
+      "citation_url": "https://www.legislation.gov.uk/uksi/2003/1417/rule/4",
+      "citation_quote": "Each individual register must have a distinguishing number, or series of letters and numbers, known as the title number.",
+      "note": "A record claiming registration with no title number contradicts r.4(1); the claim cannot be a registered title."
+    }
+  ]
+}

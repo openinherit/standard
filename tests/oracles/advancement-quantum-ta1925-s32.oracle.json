@@ -1,0 +1,51 @@
+{
+  "_doc": "Independent reference oracle, VERDICT kind. Asserts AdvancementQuantumWithinStatutoryLimitCheck applies the Trustee Act 1925 s.32(1)(a) ceiling as amended by the Inheritance and Trustees' Powers Act 2014 (whole share for trusts created after commencement on 1 October 2014; one-half before, because ITPA 2014 s.10(4) confines the amendment to later trusts). Statute text verified on legislation.gov.uk on sourced_at. Not asserted, deliberately: the rule's RequiresLifeTenantConsent arm (exceeds default + consent given). s.32(1)(c)'s consent protects a prior interest from prejudice; it does not lift the s.32(1)(a) quantum ceiling, so the statute is no reference for that arm and a vector here would assert the rule's reading rather than the law.",
+  "rule": {
+    "rule_file": "catala/trusts/AdvancementQuantumWithinStatutoryLimitCheck.catala_en",
+    "module": "AdvancementQuantumWithinStatutoryLimitCheck",
+    "scope": "AdvancementQuantumWithinStatutoryLimitCheckScope",
+    "result_field": "verdict",
+    "result_kind": "verdict",
+    "depends_modules": []
+  },
+  "statute": "Trustee Act 1925 s.32(1)(a) as amended by Inheritance and Trustees' Powers Act 2014 s.9(3)(a); ITPA 2014 s.10(4) (application to trusts created or arising after commencement)",
+  "sourced_at": "2026-10-05",
+  "cases": [
+    {
+      "label": "post-2014-trust-advance-within-whole-share",
+      "inputs": {
+        "trust_created_post_2014_10_01": true,
+        "advancement_exceeds_default_quantum": false,
+        "life_tenant_consent_given": false
+      },
+      "expected_verdict": "WithinDefault100Pct",
+      "citation_url": "https://www.legislation.gov.uk/ukpga/Geo5/15-16/19/section/32",
+      "citation_quote": "property (including any money) so paid, transferred or applied for the advancement or benefit of any person must not, altogether, represent more than the presumptive or vested share or interest of that person in the trust property",
+      "note": "Trust created after 1 Oct 2014: the ceiling is the whole presumptive share; an advance within it is permitted."
+    },
+    {
+      "label": "pre-2014-trust-advance-within-half-share",
+      "inputs": {
+        "trust_created_post_2014_10_01": false,
+        "advancement_exceeds_default_quantum": false,
+        "life_tenant_consent_given": false
+      },
+      "expected_verdict": "WithinDefault50Pct",
+      "citation_url": "https://www.legislation.gov.uk/ukpga/2014/16/section/10",
+      "citation_quote": "Subject to subsection (5), the provisions mentioned in subsections (1) and (3) apply only in relation to trusts created or arising after the coming into force of those provisions.",
+      "note": "The 2014 amendment (s.9(3)(a), which removed the one-half limit) does not reach a pre-commencement trust, so the unamended one-half ceiling governs; an advance within it is permitted."
+    },
+    {
+      "label": "advance-exceeds-statutory-ceiling",
+      "inputs": {
+        "trust_created_post_2014_10_01": true,
+        "advancement_exceeds_default_quantum": true,
+        "life_tenant_consent_given": false
+      },
+      "expected_verdict": "ExceedsLimit",
+      "citation_url": "https://www.legislation.gov.uk/ukpga/Geo5/15-16/19/section/32",
+      "citation_quote": "property (including any money) so paid, transferred or applied for the advancement or benefit of any person must not, altogether, represent more than the presumptive or vested share or interest of that person in the trust property",
+      "note": "An advance representing more than the beneficiary's share 'must not' be made under s.32."
+    }
+  ]
+}

@@ -40,6 +40,9 @@ citations of the rule files:
   tests/oracles/intestacy-cascade-aea1925.oracle.json
   tests/oracles/per-stirpes-aea1925.oracle.json
   tests/oracles/insolvent-estate-abatement.oracle.json
+  tests/oracles/will-validity-wa1837.oracle.json
+  tests/oracles/advancement-quantum-ta1925-s32.oracle.json
+  tests/oracles/real-property-title-lra2002.oracle.json
   catala/probate/IntestacyCascade.catala_en
   catala/probate/InsolventEstateAbatement.catala_en
 

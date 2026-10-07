@@ -1,0 +1,39 @@
+{
+  "name": "Northern Ireland",
+  "id": "https://openinherit.org/v3/extensions/northern-ireland/extension.json",
+  "version": "1.0.0",
+  "inherit": ">=3.0.0 <4.0.0",
+  "maturity": "draft",
+  "extensionType": "geographic",
+  "applicableJurisdictions": [
+    "GB-NIR"
+  ],
+  "providesOwnProcedure": false,
+  "compatibleWith": [
+    "islamic-succession",
+    "jewish-succession"
+  ],
+  "legalSystems": [
+    "common_law"
+  ],
+  "maintainers": [
+    {
+      "name": "Testate Technologies",
+      "organisation": "Testate Technologies Ltd",
+      "role": "lead"
+    }
+  ],
+  "lastVerified": "2026-10-07",
+  "dataProvenance": "Land Registration Act (Northern Ireland) 1970, Registration of Deeds Act (Northern Ireland) 1970, Ground Rents Act (Northern Ireland) 2001",
+  "responsibleOrganisation": "Testate Technologies Ltd",
+  "description": "Northern Ireland real property — local tenure including fee farm grants, the Land Registry folio and Registry of Deeds registers, and classes of registered title. Succession, probate and tax are not yet modelled.",
+  "conformanceRules": [],
+  "certifiedBy": "OpenInherit",
+  "certificationDate": "2026-10-07",
+  "successionCoverage": "none",
+  "taxCoverage": "none",
+  "keyFeatures": "Local tenure (freehold, leasehold, fee farm grant), land registry folio vs Registry of Deeds, classes of registered title including good fee farm grant",
+  "legalTradition": "Common law",
+  "seeking": "Northern Ireland property and probate practitioner",
+  "tier": "core"
+}

@@ -7939,6 +7939,59 @@ class Section56Advancement(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
+class LocalType3(StrEnum):
+    freehold = 'freehold'
+    leasehold = 'leasehold'
+    fee_farm_grant = 'fee_farm_grant'
+
+
+class LocalTenureType1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    propertyId: UUID
+    localType: LocalType3
+
+
+class Register(StrEnum):
+    land_registry = 'land_registry'
+    registry_of_deeds = 'registry_of_deeds'
+
+
+class TitleClass1(StrEnum):
+    absolute = 'absolute'
+    qualified = 'qualified'
+    possessory = 'possessory'
+    good_leasehold = 'good_leasehold'
+
+
+class LandRegistrationItem(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    propertyId: UUID
+    register_: Register = Field(
+        ...,
+        alias='register',
+        description='land_registry: title registered in a folio at the Land Registry (Tailte Éireann). registry_of_deeds: unregistered title, with deeds recorded in the Registry of Deeds (Tailte Éireann)',
+    )
+    folioNumber: constr(max_length=50) | None = Field(
+        None,
+        description='Land registry folio number, including the county prefix',
+        examples=['DN12345F', 'CK6789L'],
+    )
+    titleClass: TitleClass1 | None = Field(
+        None, description='Class of title registered on the folio'
+    )
+    deedsReference: constr(max_length=100) | None = Field(
+        None,
+        description='Registry of Deeds reference — the serial number, or year, book and number for an older memorial',
+    )
+    retrievedAt: AwareDatetime | None = Field(
+        None, description='When this registration data was retrieved or last verified'
+    )
+
+
 class Ireland(BaseModel):
     model_config = ConfigDict(
         extra='allow',
@@ -7979,9 +8032,79 @@ class Ireland(BaseModel):
         None,
         description='Advancement provisions under Section 56 of the Succession Act 1965 — lifetime gifts to children brought into account on intestacy',
     )
+    localTenureTypes: list[LocalTenureType1] | None = Field(
+        None,
+        description='Maps each property to its local Irish tenure. The core property tenureType holds the territory-neutral value (ownership, lease); this records the local term',
+        max_length=50,
+    )
+    landRegistration: list[LandRegistrationItem] | None = Field(
+        None,
+        description="Which Irish register each property's title is recorded on, and with what class of title. Land Registry (Tailte Éireann) registers title in folios; unregistered title is evidenced by deeds recorded in the Registry of Deeds (Tailte Éireann)",
+        max_length=50,
+    )
     legislativeChanges: list[TemporalRule] | None = Field(
         None,
         description='Tracked changes to Irish succession legislation',
+        max_length=50,
+    )
+    notes: constr(max_length=2000) | None = None
+
+
+class LocalTenureType2(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    propertyId: UUID
+    localType: LocalType3
+
+
+class TitleClass2(StrEnum):
+    absolute = 'absolute'
+    qualified = 'qualified'
+    possessory = 'possessory'
+    good_leasehold = 'good_leasehold'
+    good_fee_farm_grant = 'good_fee_farm_grant'
+
+
+class LandRegistrationItem1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    propertyId: UUID
+    register_: Register = Field(
+        ...,
+        alias='register',
+        description='land_registry: title registered in a folio at the Land Registry of Northern Ireland (Land & Property Services). registry_of_deeds: unregistered title, with deeds recorded in the Registry of Deeds (Land & Property Services)',
+    )
+    folioNumber: constr(max_length=50) | None = Field(
+        None,
+        description='Land registry folio number, including the county prefix',
+        examples=['AN12345', 'DN6789L'],
+    )
+    titleClass: TitleClass2 | None = Field(
+        None, description='Class of title registered on the folio'
+    )
+    deedsReference: constr(max_length=100) | None = Field(
+        None,
+        description='Registry of Deeds memorial reference (year, book and number, or serial number)',
+    )
+    retrievedAt: AwareDatetime | None = Field(
+        None, description='When this registration data was retrieved or last verified'
+    )
+
+
+class NorthernIreland(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    localTenureTypes: list[LocalTenureType2] | None = Field(
+        None,
+        description='Maps each property to its local Northern Ireland tenure. The core property tenureType holds the territory-neutral value (ownership, lease); this records the local term',
+        max_length=50,
+    )
+    landRegistration: list[LandRegistrationItem1] | None = Field(
+        None,
+        description="Which Northern Ireland register each property's title is recorded on, and with what class of title. Land Registry of Northern Ireland (Land & Property Services) registers title in folios; unregistered title is evidenced by deeds whose memorials are recorded in the Registry of Deeds (Land & Property Services)",
         max_length=50,
     )
     notes: constr(max_length=2000) | None = None
@@ -10242,7 +10365,7 @@ class Brazil(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class LocalType3(Enum):
+class LocalType5(Enum):
     probate_grant = 'probate_grant'
     letters_of_administration = 'letters_of_administration'
     small_estate_grant = 'small_estate_grant'
@@ -10257,7 +10380,7 @@ class LocalGrantType1(BaseModel):
         ...,
         description='Reference to the Executor.id of the person or organisation holding this grant',
     )
-    localType: LocalType3 = Field(
+    localType: LocalType5 = Field(
         ..., description='Type of grant issued by the Hong Kong Probate Registry'
     )
     grantDate: date_aliased | None = Field(
@@ -18644,6 +18767,13 @@ class ExtensionIreland(RootModel[Ireland]):
     )
 
 
+class ExtensionNorthernIreland(RootModel[NorthernIreland]):
+    root: NorthernIreland = Field(
+        ...,
+        description='Northern Ireland real property — local tenure, land registry folio and Registry of Deeds',
+    )
+
+
 class ExtensionIndia(RootModel[India]):
     root: India = Field(
         ...,
@@ -19553,6 +19683,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                                  'x-inherit-japan',
                                                                  'x-inherit-jewish-succession',
                                                                  'x-inherit-latin-america',
+                                                                 'x-inherit-northern-ireland',
                                                                  'x-inherit-prc-china',
                                                                  'x-inherit-scotland',
                                                                  'x-inherit-singapore-malaysia',

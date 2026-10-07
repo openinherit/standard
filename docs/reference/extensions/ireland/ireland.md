@@ -21,6 +21,8 @@ Schema `$id`: `https://openinherit.org/v3/extensions/ireland/ireland.json`
 | `dwellingHouseExemption` | `object` | | CAT Section 86 dwelling house exemption — inherited home exempt if beneficiary lived there 3+ years prior and continues 6 years after |
 | `civilPartnershipProvisions` | `object` | | Civil Partnership and Certain Rights and Obligations of Cohabitants Act 2010 |
 | `section56Advancement` | `object` | | Advancement provisions under Section 56 of the Succession Act 1965 — lifetime gifts to children brought into account on intestacy |
+| `localTenureTypes` | array of `object` | | Maps each property to its local Irish tenure. The core property tenureType holds the territory-neutral value (ownership, lease); this records the local term |
+| `landRegistration` | array of `object` | | Which Irish register each property's title is recorded on, and with what class of title. Land Registry (Tailte Éireann) registers title in folios; unregistered title is evidenced by deeds recorded in the Registry of Deeds (Tailte Éireann) |
 | `legislativeChanges` | array of [TemporalRule](../../common/temporal-rule.md) | | Tracked changes to Irish succession legislation |
 | `notes` | `string` | | |
 

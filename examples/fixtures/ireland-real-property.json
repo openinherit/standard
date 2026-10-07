@@ -1,0 +1,226 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.6.0",
+  "exportedAt": "2026-10-07T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "3c9d2b41-6e5f-4a7b-9c8d-1e2f3a4b5c6d",
+    "testatorPersonId": "3c9d2b41-0000-4000-8000-000000000001",
+    "status": "confirmed",
+    "notes": "An Irish estate with three properties: a Dublin house owned as joint tenants on a freehold folio with absolute title, a leasehold apartment owned as tenants in common on a leasehold folio, and a Galway shop held under a fee farm grant whose title is unregistered and evidenced through the Registry of Deeds.",
+    "createdAt": "2026-10-07T00:00:00Z",
+    "lastModifiedAt": "2026-10-07T00:00:00Z",
+    "domicile": {
+      "country": "IE",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "Ireland"
+    }
+  },
+  "people": [
+    {
+      "id": "3c9d2b41-0000-4000-8000-000000000001",
+      "givenName": "Declan",
+      "familyName": "Byrne",
+      "dateOfBirth": "1955-06-03",
+      "roles": [
+        "testator"
+      ]
+    },
+    {
+      "id": "3c9d2b41-0000-4000-8000-000000000002",
+      "givenName": "Aoife",
+      "familyName": "Byrne",
+      "dateOfBirth": "1957-12-21",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ]
+    }
+  ],
+  "kinships": [],
+  "relationships": [
+    {
+      "id": "3c9d2b41-0000-4000-8000-000000000003",
+      "type": "marriage_civil",
+      "partners": [
+        {
+          "personId": "3c9d2b41-0000-4000-8000-000000000001",
+          "ordinal": 1
+        },
+        {
+          "personId": "3c9d2b41-0000-4000-8000-000000000002",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "IE"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "3c9d2b41-0000-4000-8000-0000000000a1",
+      "name": "Semi-detached house, Dublin",
+      "propertyType": "attached",
+      "tenureType": "ownership",
+      "ownershipType": "joint_tenants",
+      "registrationStatus": "formally_registered",
+      "ownershipEvidence": "title_deed",
+      "estimatedValue": {
+        "amount": 62000000,
+        "currency": "EUR"
+      },
+      "address": {
+        "addressLocality": "Dublin",
+        "addressRegion": "County Dublin",
+        "postalCode": "D06 X2Y3",
+        "addressCountry": "IE"
+      },
+      "isPrimaryResidence": true
+    },
+    {
+      "id": "3c9d2b41-0000-4000-8000-0000000000a2",
+      "name": "Apartment, Cork",
+      "propertyType": "apartment",
+      "tenureType": "lease",
+      "ownershipType": "tenants_in_common",
+      "registrationStatus": "formally_registered",
+      "ownershipEvidence": "title_deed",
+      "estimatedValue": {
+        "amount": 31000000,
+        "currency": "EUR"
+      },
+      "address": {
+        "addressLocality": "Cork",
+        "addressRegion": "County Cork",
+        "postalCode": "T12 AB34",
+        "addressCountry": "IE"
+      }
+    },
+    {
+      "id": "3c9d2b41-0000-4000-8000-0000000000a3",
+      "name": "Shop, Galway",
+      "propertyType": "commercial",
+      "tenureType": "ownership",
+      "ownershipType": "sole",
+      "ownershipEvidence": "title_deed",
+      "estimatedValue": {
+        "amount": 28000000,
+        "currency": "EUR"
+      },
+      "address": {
+        "addressLocality": "Galway",
+        "addressRegion": "County Galway",
+        "addressCountry": "IE"
+      }
+    }
+  ],
+  "assets": [],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "3c9d2b41-0000-4000-8000-000000000004",
+      "bequestType": "residuary",
+      "beneficiaryId": "3c9d2b41-0000-4000-8000-000000000002",
+      "description": "I give the residue of my estate to my wife."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "3c9d2b41-0000-4000-8000-000000000005",
+      "personId": "3c9d2b41-0000-4000-8000-000000000002",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [
+    {
+      "id": "ireland",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/ireland/ireland.json",
+      "scope": [
+        "estate"
+      ],
+      "dataBlock": "x-inherit-ireland"
+    }
+  ],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-10-07T00:00:00Z",
+    "validatedBy": "INHERIT Examples",
+    "schemaVersion": "6.6.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 0,
+      "maxScore": 100,
+      "checklist": [],
+      "jurisdiction": "IE",
+      "estateStatus": "confirmed"
+    },
+    "taxPosition": {
+      "jurisdiction": "IE",
+      "calculatedAt": "2026-10-07T00:00:00Z",
+      "grossEstateValue": {
+        "amount": 0,
+        "currency": "EUR"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    },
+    "recommendedActions": []
+  },
+  "x-inherit-ireland": {
+    "localTenureTypes": [
+      {
+        "propertyId": "3c9d2b41-0000-4000-8000-0000000000a1",
+        "localType": "freehold"
+      },
+      {
+        "propertyId": "3c9d2b41-0000-4000-8000-0000000000a2",
+        "localType": "leasehold"
+      },
+      {
+        "propertyId": "3c9d2b41-0000-4000-8000-0000000000a3",
+        "localType": "fee_farm_grant"
+      }
+    ],
+    "landRegistration": [
+      {
+        "propertyId": "3c9d2b41-0000-4000-8000-0000000000a1",
+        "register": "land_registry",
+        "folioNumber": "DN12345F",
+        "titleClass": "absolute",
+        "retrievedAt": "2026-10-07T09:00:00Z"
+      },
+      {
+        "propertyId": "3c9d2b41-0000-4000-8000-0000000000a2",
+        "register": "land_registry",
+        "folioNumber": "CK6789L",
+        "titleClass": "good_leasehold",
+        "retrievedAt": "2026-10-07T09:00:00Z"
+      },
+      {
+        "propertyId": "3c9d2b41-0000-4000-8000-0000000000a3",
+        "register": "registry_of_deeds",
+        "deedsReference": "2004/012/089"
+      }
+    ]
+  }
+}

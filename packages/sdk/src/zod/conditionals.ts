@@ -1038,6 +1038,7 @@ const RULES: Record<string, Rule> = {
         "x-inherit-japan",
         "x-inherit-jewish-succession",
         "x-inherit-latin-america",
+        "x-inherit-northern-ireland",
         "x-inherit-prc-china",
         "x-inherit-scotland",
         "x-inherit-singapore-malaysia",

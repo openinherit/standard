@@ -133,6 +133,77 @@
         }
       },
       "valid": false
+    },
+    {
+      "description": "valid — England & Wales tenure freehold",
+      "data": {
+        "localTenureTypes": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "localType": "freehold"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — England & Wales tenure leasehold",
+      "data": {
+        "localTenureTypes": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "localType": "leasehold"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — England & Wales tenure commonhold",
+      "data": {
+        "localTenureTypes": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "localType": "commonhold"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — England & Wales tenure share_of_freehold",
+      "data": {
+        "localTenureTypes": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "localType": "share_of_freehold"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — England & Wales tenure not in the local vocabulary",
+      "data": {
+        "localTenureTypes": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "localType": "feuhold"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — England & Wales tenure row without propertyId",
+      "data": {
+        "localTenureTypes": [
+          {
+            "localType": "freehold"
+          }
+        ]
+      },
+      "valid": false
     }
   ]
 }

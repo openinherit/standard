@@ -54,6 +54,7 @@ MODELS_BY_ID: dict[str, type] = {
     "https://openinherit.org/v3/extensions/japan/japan.json": models.Japan,
     "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json": models.JewishSuccession,
     "https://openinherit.org/v3/extensions/latin-america/latin-america.json": models.LatinAmerica,
+    "https://openinherit.org/v3/extensions/northern-ireland/northern-ireland.json": models.NorthernIreland,
     "https://openinherit.org/v3/extensions/prc-china/prc-china.json": models.PrcChina,
     "https://openinherit.org/v3/extensions/scotland/scotland.json": models.Scotland,
     "https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json": models.SingaporeMalaysia,

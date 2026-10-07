@@ -33,6 +33,13 @@ jobs:
       - name: Death-tax-levied flag is declared and consistent
         run: pnpm run test:death-tax-levied
 
+      # The UK and Irish extensions say what real property is held under: local
+      # tenure, and for Northern Ireland and Ireland which register (land registry
+      # folio or Registry of Deeds) and what class of title. Every value must have
+      # a valid test case, and none can be removed silently.
+      - name: Real-property vocabulary is declared and exercised
+        run: pnpm run test:real-property-vocabulary
+
       # Level 2 — referential integrity. Nothing in CI ran this until now, so
       # every cross-reference rule in scripts/validate-refs.mjs was advisory:
       # deleting one left the build green.

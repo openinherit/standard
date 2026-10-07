@@ -1,0 +1,260 @@
+{
+  "target": "../../../v3/extensions/northern-ireland/northern-ireland.json",
+  "tests": [
+    {
+      "description": "invalid — empty object (minProperties: 1 requires at least one property)",
+      "data": {},
+      "valid": false
+    },
+    {
+      "description": "valid — Northern Ireland tenure freehold",
+      "data": {
+        "localTenureTypes": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "localType": "freehold"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Northern Ireland tenure leasehold",
+      "data": {
+        "localTenureTypes": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "localType": "leasehold"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Northern Ireland tenure fee_farm_grant",
+      "data": {
+        "localTenureTypes": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "localType": "fee_farm_grant"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — Northern Ireland tenure not in the local vocabulary",
+      "data": {
+        "localTenureTypes": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "localType": "feuhold"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — Northern Ireland tenure row without propertyId",
+      "data": {
+        "localTenureTypes": [
+          {
+            "localType": "freehold"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — Northern Ireland land registry folio, absolute title",
+      "data": {
+        "landRegistration": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "register": "land_registry",
+            "folioNumber": "AN12345",
+            "titleClass": "absolute",
+            "retrievedAt": "2026-10-07T09:00:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Northern Ireland land registry folio, qualified title",
+      "data": {
+        "landRegistration": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "register": "land_registry",
+            "folioNumber": "AN12345",
+            "titleClass": "qualified",
+            "retrievedAt": "2026-10-07T09:00:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Northern Ireland land registry folio, possessory title",
+      "data": {
+        "landRegistration": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "register": "land_registry",
+            "folioNumber": "AN12345",
+            "titleClass": "possessory",
+            "retrievedAt": "2026-10-07T09:00:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Northern Ireland land registry folio, good_leasehold title",
+      "data": {
+        "landRegistration": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "register": "land_registry",
+            "folioNumber": "AN12345",
+            "titleClass": "good_leasehold",
+            "retrievedAt": "2026-10-07T09:00:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Northern Ireland land registry folio, good_fee_farm_grant title",
+      "data": {
+        "landRegistration": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "register": "land_registry",
+            "folioNumber": "AN12345",
+            "titleClass": "good_fee_farm_grant",
+            "retrievedAt": "2026-10-07T09:00:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — Northern Ireland unregistered title on the Registry of Deeds",
+      "data": {
+        "landRegistration": [
+          {
+            "propertyId": "9c8b7a6d-5e4f-4a3b-9c2d-1e0f2a3b4c5d",
+            "register": "registry_of_deeds",
+            "deedsReference": "1998/123/45"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — Northern Ireland register not recognised",
+      "data": {
+        "landRegistration": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "register": "hm_land_registry"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — Northern Ireland class of title on a Registry of Deeds row",
+      "data": {
+        "landRegistration": [
+          {
+            "propertyId": "9c8b7a6d-5e4f-4a3b-9c2d-1e0f2a3b4c5d",
+            "register": "registry_of_deeds",
+            "titleClass": "absolute"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — Northern Ireland folio number on a Registry of Deeds row",
+      "data": {
+        "landRegistration": [
+          {
+            "propertyId": "9c8b7a6d-5e4f-4a3b-9c2d-1e0f2a3b4c5d",
+            "register": "registry_of_deeds",
+            "folioNumber": "AN12345"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — Northern Ireland deeds reference on a land registry row",
+      "data": {
+        "landRegistration": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "register": "land_registry",
+            "deedsReference": "1998/123/45"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — Northern Ireland class of title not in the vocabulary",
+      "data": {
+        "landRegistration": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "register": "land_registry",
+            "titleClass": "provisional"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — Northern Ireland registration row without register",
+      "data": {
+        "landRegistration": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "folioNumber": "AN12345"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "valid — a fee farm grant property registered with good fee farm grant title",
+      "data": {
+        "localTenureTypes": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "localType": "fee_farm_grant"
+          }
+        ],
+        "landRegistration": [
+          {
+            "propertyId": "4b0d7c1e-2f3a-4c5d-8e9f-0a1b2c3d4e5f",
+            "register": "land_registry",
+            "folioNumber": "AN12345",
+            "titleClass": "good_fee_farm_grant"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — unknown property at root",
+      "data": {
+        "inheritanceTax": {}
+      },
+      "valid": false
+    }
+  ]
+}

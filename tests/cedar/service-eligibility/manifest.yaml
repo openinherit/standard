@@ -10,6 +10,12 @@ checks:
   - jurisdiction: "E&W"
     policy: cedar/service-eligibility/ew.cedar # standard-relative (P)
     forbidden_oracle: tests/cedar/service-eligibility/ew.forbidden.cedar # test-suite-relative (Q)
+  - jurisdiction: "GB-SCT"
+    policy: cedar/service-eligibility/sct.cedar
+    forbidden_oracle: tests/cedar/service-eligibility/sct.forbidden.cedar
+  - jurisdiction: "GB-NIR"
+    policy: cedar/service-eligibility/nir.cedar
+    forbidden_oracle: tests/cedar/service-eligibility/nir.forbidden.cedar
 selftest:
   leaky_policy: tests/cedar/service-eligibility/ew.LEAKY.cedar # must be DOES-NOT-HOLD vs its oracle
   forbidden_oracle: tests/cedar/service-eligibility/ew.forbidden.cedar

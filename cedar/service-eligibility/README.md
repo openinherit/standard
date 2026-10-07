@@ -21,6 +21,8 @@ sampled — see the gate below.
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `service-eligibility.cedarschema` | The domain schema: `Professional{category}`, `ServiceRequest{serviceType,jurisdiction,quoteMode?,proximityMode?}`, action `OfferService`.           |
 | `ew.cedar`                        | **P** — the England & Wales eligibility policy (the "rule under test"). E&W pack: 2 capability-guarded permits + the reserved-activities forbid. |
+| `sct.cedar`                       | **P** — Scotland (`GB-SCT`). Reserved line: Solicitors (Scotland) Act 1980 s.32 (confirmation papers, estate writs; testamentary writings excepted). Ai-drafted, `[MUST confirm]` items pending Scottish solicitor sign-off. |
+| `nir.cedar`                       | **P** — Northern Ireland (`GB-NIR`). Reserved line: Solicitors (Northern Ireland) Order 1976 art.23 (probate papers, estate instruments; testamentary instruments excepted). Ai-drafted, `[MUST confirm]` items pending NI solicitor sign-off. |
 
 ## The un-fakeable gate (mirrors gov-oracle)
 

@@ -3,7 +3,7 @@
   "$id": "https://openinherit.org/reference-data/tax-rates.json",
   "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal or tax advice. Tax laws change frequently — always verify with current legislation and qualified professionals. Data current as of March 2026.",
   "title": "Inheritance & Estate Tax Rates",
-  "description": "Tax rates, rate bands, and taper relief schedules for inheritance and estate taxes by jurisdiction. All rate values are wrapped in the temporal-rule pattern from v2/common/temporal-rule.json to enable date-of-death lookups.",
+  "description": "Tax rates, rate bands, and taper relief schedules for inheritance and estate taxes by jurisdiction. All rate values are wrapped in the temporal-rule pattern from v2/common/temporal-rule.json to enable date-of-death lookups. Every jurisdiction carries deathTaxLevied (boolean): false means the jurisdiction levies no inheritance or estate tax, so empty rates and thresholds are a complete answer rather than a gap; true means a death tax exists and its rates are modelled.",
   "lastUpdated": "2026-03-30",
   "_metadata": {
     "lastVerified": "2026-04-06",
@@ -20,6 +20,7 @@
     "GB": {
       "name": "United Kingdom",
       "taxName": "Inheritance Tax (IHT)",
+      "deathTaxLevied": true,
       "currency": "GBP",
       "standardRate": [
         {
@@ -116,6 +117,7 @@
     "US": {
       "name": "United States",
       "taxName": "Federal Estate Tax",
+      "deathTaxLevied": true,
       "currency": "USD",
       "standardRate": [
         {
@@ -285,6 +287,7 @@
     "AU": {
       "name": "Australia",
       "taxName": "N/A — No inheritance tax",
+      "deathTaxLevied": false,
       "rates": [],
       "description": "No inheritance or estate tax. Capital gains tax applies on disposal of inherited assets at the beneficiary's marginal income tax rate. A 50% CGT discount is available for assets held longer than 12 months by the deceased.",
       "source": "Income Tax Assessment Act 1997 (Cth), Division 115",
@@ -293,6 +296,7 @@
     "CA": {
       "name": "Canada",
       "taxName": "N/A — No inheritance tax",
+      "deathTaxLevied": false,
       "rates": [],
       "description": "No inheritance or estate tax. Deemed disposition at death triggers capital gains tax at the deceased's marginal income tax rate. The 2024 capital gains inclusion rate is 50% on the first $250,000 and 66.67% thereafter.",
       "source": "Income Tax Act (R.S.C., 1985, c. 1 (5th Supp.)), s. 70(5)",
@@ -301,6 +305,7 @@
     "FR": {
       "name": "France",
       "taxName": "Droits de succession",
+      "deathTaxLevied": true,
       "currency": "EUR",
       "rates": [
         {
@@ -408,6 +413,7 @@
     "DE": {
       "name": "Germany",
       "taxName": "Erbschaftsteuer",
+      "deathTaxLevied": true,
       "currency": "EUR",
       "rates": [
         {
@@ -573,6 +579,7 @@
     "IN": {
       "name": "India",
       "taxName": "N/A — No inheritance tax",
+      "deathTaxLevied": false,
       "rates": [],
       "description": "No inheritance or estate tax since 1985. Income from inherited assets is taxed at normal income tax rates.",
       "source": "Estate Duty (Amendment) Act 1985",
@@ -581,6 +588,7 @@
     "JP": {
       "name": "Japan",
       "taxName": "Sōzokuzei (相続税)",
+      "deathTaxLevied": true,
       "currency": "JPY",
       "rates": [
         {
@@ -648,6 +656,7 @@
     "SG": {
       "name": "Singapore",
       "taxName": "N/A — No estate duty",
+      "deathTaxLevied": false,
       "rates": [],
       "description": "No estate duty, inheritance tax, or capital gains tax.",
       "source": "Estate Duty (Abolition) Act 2008",
@@ -656,6 +665,7 @@
     "IE": {
       "name": "Ireland",
       "taxName": "Capital Acquisitions Tax (CAT)",
+      "deathTaxLevied": true,
       "currency": "EUR",
       "standardRate": [
         {
@@ -712,6 +722,7 @@
     "NZ": {
       "name": "New Zealand",
       "taxName": "N/A — No inheritance tax",
+      "deathTaxLevied": false,
       "rates": [],
       "description": "No inheritance tax, estate tax, or general capital gains tax.",
       "source": "Estate Duty Abolition Act 1993",

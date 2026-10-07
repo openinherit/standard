@@ -28,6 +28,11 @@ jobs:
       - name: Co-ownership declarations agree
         run: pnpm run test:co-ownership
 
+      # Every tax jurisdiction says whether it levies a death tax, so an empty
+      # rates array can be told apart from a jurisdiction nobody has modelled.
+      - name: Death-tax-levied flag is declared and consistent
+        run: pnpm run test:death-tax-levied
+
       # Level 2 — referential integrity. Nothing in CI ran this until now, so
       # every cross-reference rule in scripts/validate-refs.mjs was advisory:
       # deleting one left the build green.

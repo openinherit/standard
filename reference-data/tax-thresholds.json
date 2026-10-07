@@ -3,7 +3,7 @@
   "$id": "https://openinherit.org/reference-data/tax-thresholds.json",
   "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal or tax advice. Tax laws change frequently — always verify with current legislation and qualified professionals. Data current as of March 2026.",
   "title": "Inheritance & Estate Tax Thresholds",
-  "description": "Tax-free thresholds, nil rate bands, and exemption amounts for inheritance and estate taxes by jurisdiction. These determine the value below which no tax is payable. All threshold values are wrapped in the temporal-rule pattern from v2/common/temporal-rule.json to enable date-of-death lookups.",
+  "description": "Tax-free thresholds, nil rate bands, and exemption amounts for inheritance and estate taxes by jurisdiction. These determine the value below which no tax is payable. All threshold values are wrapped in the temporal-rule pattern from v2/common/temporal-rule.json to enable date-of-death lookups. Every jurisdiction carries deathTaxLevied (boolean): false means the jurisdiction levies no inheritance or estate tax, so empty rates and thresholds are a complete answer rather than a gap; true means a death tax exists and its rates are modelled.",
   "lastUpdated": "2026-03-30",
   "_metadata": {
     "lastVerified": "2026-04-06",
@@ -20,6 +20,7 @@
     "GB": {
       "name": "United Kingdom",
       "taxName": "Inheritance Tax (IHT)",
+      "deathTaxLevied": true,
       "currency": "GBP",
       "thresholds": [
         {
@@ -150,6 +151,7 @@
     "US": {
       "name": "United States",
       "taxName": "Federal Estate Tax",
+      "deathTaxLevied": true,
       "currency": "USD",
       "thresholds": [
         {
@@ -268,6 +270,7 @@
     "AU": {
       "name": "Australia",
       "taxName": "N/A — No inheritance or estate tax",
+      "deathTaxLevied": false,
       "currency": "AUD",
       "thresholds": [],
       "description": "Australia abolished federal estate duty in 1979 and state-level death duties by 1984. There is no inheritance tax. However, capital gains tax (CGT) may apply when beneficiaries dispose of inherited assets. The deceased's cost base transfers to the beneficiary.",
@@ -278,6 +281,7 @@
     "CA": {
       "name": "Canada",
       "taxName": "N/A — No inheritance or estate tax",
+      "deathTaxLevied": false,
       "currency": "CAD",
       "thresholds": [],
       "description": "Canada has no inheritance or estate tax. However, there is a deemed disposition at fair market value on death, triggering capital gains tax. The first $250,000 of capital gains above the annual exemption is taxed at 50% inclusion; amounts above $250,000 are taxed at 66.67% inclusion (from 2024).",
@@ -289,6 +293,7 @@
     "FR": {
       "name": "France",
       "taxName": "Droits de succession",
+      "deathTaxLevied": true,
       "currency": "EUR",
       "thresholds": [
         {
@@ -375,6 +380,7 @@
     "DE": {
       "name": "Germany",
       "taxName": "Erbschaftsteuer",
+      "deathTaxLevied": true,
       "currency": "EUR",
       "thresholds": [
         {
@@ -479,6 +485,7 @@
     "IN": {
       "name": "India",
       "taxName": "N/A — No inheritance or estate tax",
+      "deathTaxLevied": false,
       "currency": "INR",
       "thresholds": [],
       "description": "India abolished estate duty in 1985 via the Estate Duty (Amendment) Act 1985. There is currently no inheritance tax, estate tax, or gift tax on inheritances. However, income earned from inherited assets is taxable as normal income.",
@@ -489,6 +496,7 @@
     "JP": {
       "name": "Japan",
       "taxName": "Sōzokuzei (相続税)",
+      "deathTaxLevied": true,
       "currency": "JPY",
       "thresholds": [
         {
@@ -546,6 +554,7 @@
     "SG": {
       "name": "Singapore",
       "taxName": "N/A — No estate duty",
+      "deathTaxLevied": false,
       "currency": "SGD",
       "thresholds": [],
       "description": "Singapore abolished estate duty on 15 February 2008. There is no inheritance tax, estate tax, or capital gains tax on inherited assets.",
@@ -555,6 +564,7 @@
     "IE": {
       "name": "Ireland",
       "taxName": "Capital Acquisitions Tax (CAT)",
+      "deathTaxLevied": true,
       "currency": "EUR",
       "thresholds": [
         {
@@ -623,6 +633,7 @@
     "NZ": {
       "name": "New Zealand",
       "taxName": "N/A — No inheritance or estate tax",
+      "deathTaxLevied": false,
       "currency": "NZD",
       "thresholds": [],
       "description": "New Zealand abolished estate duty on 1 January 1993 and gift duty on 1 October 2011. There is no inheritance tax, estate tax, or capital gains tax (with limited exceptions for certain property transactions).",

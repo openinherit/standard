@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- `deathTaxLevied` (boolean) on every jurisdiction in `reference-data/tax-thresholds.json` and
+  `reference-data/tax-rates.json` (#12). `false` for AU, CA, IN, NZ and SG, which levy no
+  inheritance or estate tax; `true` for the other six. Before, the absence of a death tax was
+  recorded only as prose in the `taxName` display field plus an empty `rates` array, and an empty
+  array is also what an unmodelled jurisdiction looks like. `scripts/check-death-tax-levied.mjs`
+  (run in the test workflow, with hermetic tests in `scripts/test-check-death-tax-levied.mjs`)
+  refuses an entry without the flag, the two files disagreeing, tax data on a jurisdiction that
+  levies none, a levied tax with no rates, and a `taxName` that contradicts the flag.
 - Three statute-cited gov-oracles of a new `verdict` kind under `tests/oracles/`, for rules whose
   answer is a classification rather than an amount: will validity (Wills Act 1837 s.9 and
   s.18(1); Banks v Goodfellow), the trustees' power of advancement ceiling (Trustee Act 1925

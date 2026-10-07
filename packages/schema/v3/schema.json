@@ -947,7 +947,7 @@
       }
     },
     {
-      "$comment": "Core extension validation: when a document contains an x-inherit-{name} property matching one of the 21 core extensions, the data block is validated against the extension schema via $ref. Community extensions (not listed here) fall through to the patternProperties generic object validation. This means core extensions get strict enum/required/type enforcement at Level 1, while community extensions only get property name and type validation."
+      "$comment": "Core extension validation: when a document contains an x-inherit-{name} property matching one of the 22 core extensions, the data block is validated against the extension schema via $ref. Community extensions (not listed here) fall through to the patternProperties generic object validation. This means core extensions get strict enum/required/type enforcement at Level 1, while community extensions only get property name and type validation."
     },
     {
       "if": {
@@ -981,6 +981,18 @@
         "properties": {
           "x-inherit-ireland": {
             "$ref": "extensions/ireland/ireland.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [ "x-inherit-northern-ireland" ]
+      },
+      "then": {
+        "properties": {
+          "x-inherit-northern-ireland": {
+            "$ref": "extensions/northern-ireland/northern-ireland.json"
           }
         }
       }

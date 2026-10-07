@@ -362,6 +362,25 @@
       "jurisdictionRelation": "applies-within"
     },
     {
+      "id": "https://openinherit.org/v3/extensions/northern-ireland/northern-ireland.json",
+      "name": "Northern Ireland",
+      "tier": "core",
+      "maturity": "draft",
+      "seeking": "Northern Ireland property and probate practitioner",
+      "legalTradition": "Common law",
+      "keyFeatures": "Local tenure (freehold, leasehold, fee farm grant), land registry folio vs Registry of Deeds, classes of registered title including good fee farm grant",
+      "legalReviewStatus": "self_verified",
+      "extensionType": "geographic",
+      "applicableJurisdictions": [
+        "GB-NIR"
+      ],
+      "repo": "openinherit/standard",
+      "path": "v3/extensions/northern-ireland/",
+      "successionCoverage": "none",
+      "taxCoverage": "none",
+      "jurisdictionRelation": "applies-within"
+    },
+    {
       "id": "https://openinherit.org/v3/extensions/latin-america/latin-america.json",
       "name": "Latin America",
       "tier": "core",

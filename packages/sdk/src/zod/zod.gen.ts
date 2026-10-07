@@ -3635,6 +3635,27 @@ export const zIreland = z.object({
         })).max(50).optional(),
         notes: z.string().max(2000).optional()
     }).optional(),
+    localTenureTypes: z.array(z.strictObject({
+        propertyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+        localType: z.enum([
+            'freehold',
+            'leasehold',
+            'fee_farm_grant'
+        ])
+    })).max(50).optional(),
+    landRegistration: z.array(z.intersection(z.unknown(), z.strictObject({
+        propertyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+        register: z.enum(['land_registry', 'registry_of_deeds']),
+        folioNumber: z.string().max(50).optional(),
+        titleClass: z.enum([
+            'absolute',
+            'qualified',
+            'possessory',
+            'good_leasehold'
+        ]).optional(),
+        deedsReference: z.string().max(100).optional(),
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional()
+    }))).max(50).optional(),
     legislativeChanges: z.array(zTemporalRule).max(50).optional(),
     notes: z.string().max(2000).optional()
 });
@@ -3643,6 +3664,42 @@ export const zIreland = z.object({
  * Irish succession — legal right share, Section 117, CAT
  */
 export const zExtensionIreland = zIreland;
+
+/**
+ * Northern Ireland Extension
+ *
+ * Northern Ireland real property — local tenure (including fee farm grants) and the two land registers, the Land Registry of folios and the Registry of Deeds, with classes of registered title. Northern Ireland succession, probate and tax are not yet modelled in this extension
+ */
+export const zNorthernIreland = z.object({
+    localTenureTypes: z.array(z.strictObject({
+        propertyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+        localType: z.enum([
+            'freehold',
+            'leasehold',
+            'fee_farm_grant'
+        ])
+    })).max(50).optional(),
+    landRegistration: z.array(z.intersection(z.unknown(), z.strictObject({
+        propertyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+        register: z.enum(['land_registry', 'registry_of_deeds']),
+        folioNumber: z.string().max(50).optional(),
+        titleClass: z.enum([
+            'absolute',
+            'qualified',
+            'possessory',
+            'good_leasehold',
+            'good_fee_farm_grant'
+        ]).optional(),
+        deedsReference: z.string().max(100).optional(),
+        retrievedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional()
+    }))).max(50).optional(),
+    notes: z.string().max(2000).optional()
+});
+
+/**
+ * Northern Ireland real property — local tenure, land registry folio and Registry of Deeds
+ */
+export const zExtensionNorthernIreland = zNorthernIreland;
 
 /**
  * US Estate Extension

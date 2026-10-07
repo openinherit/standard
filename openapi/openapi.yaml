@@ -407,6 +407,10 @@ components:
       description: Irish succession — legal right share, Section 117, CAT
       x-inherit-maturity: draft
       $ref: '../v3/extensions/ireland/ireland.json'
+    ExtensionNorthernIreland:
+      description: Northern Ireland real property — local tenure, land registry folio and Registry of Deeds
+      x-inherit-maturity: draft
+      $ref: '../v3/extensions/northern-ireland/northern-ireland.json'
     ExtensionIndia:
       description: Indian succession — Hindu Succession Act, personal law plurality
       x-inherit-maturity: draft

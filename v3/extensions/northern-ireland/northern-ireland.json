@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinherit.org/v3/extensions/northern-ireland/northern-ireland.json",
+  "title": "Northern Ireland Extension",
+  "description": "Northern Ireland real property — local tenure (including fee farm grants) and the two land registers, the Land Registry of folios and the Registry of Deeds, with classes of registered title. Northern Ireland succession, probate and tax are not yet modelled in this extension",
+  "$comment": "Northern Ireland is a legal jurisdiction separate from England & Wales and from Scotland. Its land law and land registration differ from both; this extension starts with real property, the gap that stopped a Northern Ireland estate recording what its land is held under.",
+  "type": "object",
+  "properties": {
+    "localTenureTypes": {
+      "description": "Maps each property to its local Northern Ireland tenure. The core property tenureType holds the territory-neutral value (ownership, lease); this records the local term",
+      "$comment": "freehold: fee simple. leasehold: a term of years, including the long leases at a ground rent common on Northern Ireland housing. fee_farm_grant: a fee simple subject to a perpetual fee farm rent — a live tenure in Northern Ireland, widely used for urban housing; the Ground Rents Act (Northern Ireland) 2001 lets the owner redeem the rent. Northern Ireland has no commonhold.",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "localType": {
+            "type": "string",
+            "enum": [
+              "freehold",
+              "leasehold",
+              "fee_farm_grant"
+            ]
+          }
+        },
+        "required": [
+          "propertyId",
+          "localType"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "landRegistration": {
+      "description": "Which Northern Ireland register each property's title is recorded on, and with what class of title. Land Registry of Northern Ireland (Land & Property Services) registers title in folios; unregistered title is evidenced by deeds whose memorials are recorded in the Registry of Deeds (Land & Property Services)",
+      "$comment": "Northern Ireland runs two registers, both administered by Land & Property Services. Land Registration Act (Northern Ireland) 1970: title registered in a folio in one of the classes in titleClass, which include good_fee_farm_grant, a class with no England & Wales equivalent. Registration of Deeds Act (Northern Ireland) 1970: unregistered title, where the deeds are the title and the Registry of Deeds records memorials of them. folioNumber and titleClass apply only to land_registry; deedsReference only to registry_of_deeds. HM Land Registry, which the core property landRegistry block describes, does not operate in Northern Ireland.",
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "register": {
+            "description": "land_registry: title registered in a folio at the Land Registry of Northern Ireland (Land & Property Services). registry_of_deeds: unregistered title, with deeds recorded in the Registry of Deeds (Land & Property Services)",
+            "type": "string",
+            "enum": [
+              "land_registry",
+              "registry_of_deeds"
+            ]
+          },
+          "folioNumber": {
+            "description": "Land registry folio number, including the county prefix",
+            "examples": [
+              "AN12345",
+              "DN6789L"
+            ],
+            "type": "string",
+            "maxLength": 50
+          },
+          "titleClass": {
+            "description": "Class of title registered on the folio",
+            "type": "string",
+            "enum": [
+              "absolute",
+              "qualified",
+              "possessory",
+              "good_leasehold",
+              "good_fee_farm_grant"
+            ]
+          },
+          "deedsReference": {
+            "description": "Registry of Deeds memorial reference (year, book and number, or serial number)",
+            "type": "string",
+            "maxLength": 100
+          },
+          "retrievedAt": {
+            "description": "When this registration data was retrieved or last verified",
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"
+          }
+        },
+        "required": [
+          "propertyId",
+          "register"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "register": {
+                  "const": "registry_of_deeds"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "folioNumber": false,
+                "titleClass": false
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "register": {
+                  "const": "land_registry"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "deedsReference": false
+              }
+            }
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "minProperties": 1,
+  "patternProperties": {
+    "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+      "type": "object",
+      "maxProperties": 50,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+        "maxLength": 64
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "propertyNames": {
+    "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
+  }
+}

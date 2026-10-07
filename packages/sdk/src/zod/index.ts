@@ -53,6 +53,7 @@ export const schemasById: Readonly<Record<string, z.ZodType>> = {
   'https://openinherit.org/v3/extensions/japan/japan.json': schemas.zJapan,
   'https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json': schemas.zJewishSuccession,
   'https://openinherit.org/v3/extensions/latin-america/latin-america.json': schemas.zLatinAmerica,
+  'https://openinherit.org/v3/extensions/northern-ireland/northern-ireland.json': schemas.zNorthernIreland,
   'https://openinherit.org/v3/extensions/prc-china/prc-china.json': schemas.zPrcChina,
   'https://openinherit.org/v3/extensions/scotland/scotland.json': schemas.zScotland,
   'https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json': schemas.zSingaporeMalaysia,

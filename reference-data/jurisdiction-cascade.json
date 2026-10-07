@@ -369,6 +369,21 @@
         }
       }
     },
+    "GB-NIR": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "Northern Ireland succession law is distinct (Wills and Administration Proceedings (Northern Ireland) Order 1994, Administration of Estates Act (Northern Ireland) 1955) and there is no UK-wide succession law to resolve to. The standard ships no Northern Ireland succession profile row yet; the northern-ireland extension carries real property only."
+        },
+        "tax": {
+          "resolvesTo": "GB",
+          "reason": "Inheritance tax is a single fiscal territory across the whole United Kingdom (IHTA 1984); the UK's separate succession jurisdictions share one death-tax regime, so a UK subdivision key resolves to the GB tax rows.",
+          "authority": "Inheritance Tax Act 1984 ss.1-6 — a single charge to inheritance tax across the whole United Kingdom"
+        }
+      }
+    },
     "GB-WLS": {
       "kind": "atom",
       "constituents": [],

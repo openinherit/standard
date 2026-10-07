@@ -1,0 +1,229 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "@context": "https://openinherit.org/v3/context/inherit-v1.jsonld",
+  "schemaVersion": "6.6.0",
+  "exportedAt": "2026-10-07T00:00:00Z",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "7a1e0c52-3b4d-4e6f-8a9b-0c1d2e3f4a5b",
+    "testatorPersonId": "7a1e0c52-0000-4000-8000-000000000001",
+    "status": "confirmed",
+    "notes": "A Northern Ireland estate with three properties: a Belfast house held under a fee farm grant and owned as joint tenants (it passes to the survivor outside the will), a leasehold apartment owned as tenants in common, and farmland whose title is still unregistered and evidenced through the Registry of Deeds.",
+    "createdAt": "2026-10-07T00:00:00Z",
+    "lastModifiedAt": "2026-10-07T00:00:00Z",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-NIR",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "Northern Ireland"
+    }
+  },
+  "people": [
+    {
+      "id": "7a1e0c52-0000-4000-8000-000000000001",
+      "givenName": "Ciaran",
+      "familyName": "Doherty",
+      "dateOfBirth": "1958-02-14",
+      "roles": [
+        "testator"
+      ]
+    },
+    {
+      "id": "7a1e0c52-0000-4000-8000-000000000002",
+      "givenName": "Siobhan",
+      "familyName": "Doherty",
+      "dateOfBirth": "1960-09-30",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ]
+    }
+  ],
+  "kinships": [],
+  "relationships": [
+    {
+      "id": "7a1e0c52-0000-4000-8000-000000000003",
+      "type": "marriage_civil",
+      "partners": [
+        {
+          "personId": "7a1e0c52-0000-4000-8000-000000000001",
+          "ordinal": 1
+        },
+        {
+          "personId": "7a1e0c52-0000-4000-8000-000000000002",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "active",
+      "jurisdiction": {
+        "country": "GB",
+        "subdivision": "GB-NIR"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "7a1e0c52-0000-4000-8000-0000000000a1",
+      "name": "Terraced house, Belfast",
+      "propertyType": "attached",
+      "tenureType": "ownership",
+      "ownershipType": "joint_tenants",
+      "registrationStatus": "formally_registered",
+      "ownershipEvidence": "title_deed",
+      "estimatedValue": {
+        "amount": 21000000,
+        "currency": "GBP"
+      },
+      "address": {
+        "addressLocality": "Belfast",
+        "addressRegion": "County Antrim",
+        "postalCode": "BT9 6AA",
+        "addressCountry": "GB"
+      },
+      "isPrimaryResidence": true
+    },
+    {
+      "id": "7a1e0c52-0000-4000-8000-0000000000a2",
+      "name": "Apartment, Derry",
+      "propertyType": "apartment",
+      "tenureType": "lease",
+      "ownershipType": "tenants_in_common",
+      "registrationStatus": "formally_registered",
+      "ownershipEvidence": "title_deed",
+      "estimatedValue": {
+        "amount": 14500000,
+        "currency": "GBP"
+      },
+      "address": {
+        "addressLocality": "Derry",
+        "addressRegion": "County Londonderry",
+        "postalCode": "BT48 6AA",
+        "addressCountry": "GB"
+      }
+    },
+    {
+      "id": "7a1e0c52-0000-4000-8000-0000000000a3",
+      "name": "Grazing land, County Fermanagh",
+      "propertyType": "land",
+      "tenureType": "ownership",
+      "ownershipType": "sole",
+      "registrationStatus": "formally_registered",
+      "ownershipEvidence": "title_deed",
+      "estimatedValue": {
+        "amount": 9000000,
+        "currency": "GBP"
+      },
+      "address": {
+        "addressLocality": "Enniskillen",
+        "addressRegion": "County Fermanagh",
+        "addressCountry": "GB"
+      }
+    }
+  ],
+  "assets": [],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "7a1e0c52-0000-4000-8000-000000000004",
+      "bequestType": "residuary",
+      "beneficiaryId": "7a1e0c52-0000-4000-8000-000000000002",
+      "description": "I give the residue of my estate to my wife."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "7a1e0c52-0000-4000-8000-000000000005",
+      "personId": "7a1e0c52-0000-4000-8000-000000000002",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "extensions": [
+    {
+      "id": "northern-ireland",
+      "version": "1.0.0",
+      "schema": "https://openinherit.org/v3/extensions/northern-ireland/northern-ireland.json",
+      "scope": [
+        "estate"
+      ],
+      "dataBlock": "x-inherit-northern-ireland"
+    }
+  ],
+  "assetCollections": [],
+  "valuations": [],
+  "lifetimeTransfers": [],
+  "conformance": {
+    "level": "level_1",
+    "validatedAt": "2026-10-07T00:00:00Z",
+    "validatedBy": "INHERIT Examples",
+    "schemaVersion": "6.6.0"
+  },
+  "applicationState": {
+    "dealerInterests": [],
+    "assetInterests": [],
+    "completeness": {
+      "score": 0,
+      "maxScore": 100,
+      "checklist": [],
+      "jurisdiction": "GB-NIR",
+      "estateStatus": "confirmed"
+    },
+    "taxPosition": {
+      "jurisdiction": "GB-NIR",
+      "calculatedAt": "2026-10-07T00:00:00Z",
+      "grossEstateValue": {
+        "amount": 0,
+        "currency": "GBP"
+      },
+      "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax advisor."
+    },
+    "recommendedActions": []
+  },
+  "x-inherit-northern-ireland": {
+    "localTenureTypes": [
+      {
+        "propertyId": "7a1e0c52-0000-4000-8000-0000000000a1",
+        "localType": "fee_farm_grant"
+      },
+      {
+        "propertyId": "7a1e0c52-0000-4000-8000-0000000000a2",
+        "localType": "leasehold"
+      },
+      {
+        "propertyId": "7a1e0c52-0000-4000-8000-0000000000a3",
+        "localType": "freehold"
+      }
+    ],
+    "landRegistration": [
+      {
+        "propertyId": "7a1e0c52-0000-4000-8000-0000000000a1",
+        "register": "land_registry",
+        "folioNumber": "AN12345",
+        "titleClass": "good_fee_farm_grant",
+        "retrievedAt": "2026-10-07T09:00:00Z"
+      },
+      {
+        "propertyId": "7a1e0c52-0000-4000-8000-0000000000a2",
+        "register": "land_registry",
+        "folioNumber": "LY6789L",
+        "titleClass": "good_leasehold",
+        "retrievedAt": "2026-10-07T09:00:00Z"
+      },
+      {
+        "propertyId": "7a1e0c52-0000-4000-8000-0000000000a3",
+        "register": "registry_of_deeds",
+        "deedsReference": "1987/45/112"
+      }
+    ]
+  }
+}

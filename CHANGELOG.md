@@ -8,6 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Real property in Northern Ireland and Ireland (proposal 0004). The Ireland extension gains
+  `localTenureTypes` (`freehold`, `leasehold`, `fee_farm_grant`) and `landRegistration`: which
+  register the title is on (`land_registry` folio or `registry_of_deeds`), the folio number, the
+  class of title (`absolute`, `qualified`, `possessory`, `good_leasehold`) and the Registry of Deeds
+  reference. A new core extension, `northern-ireland` (`GB-NIR`, draft, real property only), carries
+  the same two properties, with `good_fee_farm_grant` as an extra class of title. `GB-NIR` gains a
+  jurisdiction-cascade entry. `scripts/check-real-property-vocabulary.mjs` (run in the test
+  workflow, with hermetic tests in `scripts/test-check-real-property-vocabulary.mjs`) refuses a
+  missing tenure or registration vocabulary, a removed value, a value with no valid test case, and
+  an extension that names more than its one legal jurisdiction. England & Wales `localTenureTypes`
+  values gain test cases. Two example estates: `examples/fixtures/northern-ireland-real-property.json`
+  and `examples/fixtures/ireland-real-property.json`.
 - `deathTaxLevied` (boolean) on every jurisdiction in `reference-data/tax-thresholds.json` and
   `reference-data/tax-rates.json` (#12). `false` for AU, CA, IN, NZ and SG, which levy no
   inheritance or estate tax; `true` for the other six. Before, the absence of a death tax was

@@ -74,6 +74,7 @@ const cases = [
   ['C3 a GPC mapping is repeated', editJson('reference-data/gpc-category-mapping.json', (d) => d.mappings.push(d.mappings[0])), 1, 'C3 reference-data/gpc-category-mapping.json'],
 
   ['C4 brand-registry names an unknown category', editJson('reference-data/brand-registry.json', (d) => { d.brands.ceramics = {}; }), 1, 'C4 reference-data/brand-registry.json'],
+  ['C4 an empty subset companion cannot be answered', editJson('reference-data/brand-registry.json', (d) => { d.brands = {}; }), 2, 'CANNOT ANSWER'],
   ['C4 the GPC reverse index names an unknown category', editJson('reference-data/gpc-category-mapping.json', (d) => {
     const k = Object.keys(d._reverseIndex).find((x) => Array.isArray(d._reverseIndex[x]));
     d._reverseIndex[k][0].inheritCategory = 'ceramics';
@@ -101,6 +102,19 @@ const cases = [
     walk(d);
     return JSON.stringify(d);
   }), 1, 'C5 packages/sdk-go/schemas/inherit-v3-bundled.json'],
+  ['C5 a bundle full enum is cut to the general branch', editText('packages/cli/schemas/inherit-v3-bundled.json', (s) => {
+    const d = JSON.parse(s);
+    const cut = ['financial', 'vehicle', 'digital', 'business'];
+    const walk = (o) => {
+      if (Array.isArray(o)) {
+        if (o.length === 16 && o.includes('islamic_financial')) { for (const v of cut) o.splice(o.indexOf(v), 1); return true; }
+        return o.some(walk);
+      }
+      return o && typeof o === 'object' ? Object.values(o).some(walk) : false;
+    };
+    walk(d);
+    return JSON.stringify(d);
+  }), 2, 'expected 1 full and 1 general, found 0 full and 2 general'],
   ['C5 a TypeScript union is stale', editText('generated/typescript/types.gen.ts', (s) => s.replace("| 'islamic_financial' ", '')), 1, 'C5 generated/typescript/types.gen.ts'],
   ['C5 the zod enum is stale', editText('packages/sdk/src/zod/zod.gen.ts', (s) => s.replace("        'islamic_financial',\n", '')), 1, 'C5 packages/sdk/src/zod/zod.gen.ts'],
   ['C5 the Python enum is stale', editText('packages/sdk-python/openinherit/models.py', (s) => s.replace("    islamic_financial = 'islamic_financial'\n", '')), 1, 'C5 packages/sdk-python/openinherit/models.py'],
@@ -112,6 +126,12 @@ const cases = [
   ['C6 the category $comment stops describing a value', editJson(ASSET, (d) => {
     d.properties.category.$comment = d.properties.category.$comment.replace('wine_spirits:', 'wine and spirits:');
   }), 1, 'C6 v3/asset.json: the category $comment does not describe "wine_spirits"'],
+  ['C6 a value description goes but the name survives inside another word', editJson(ASSET, (d) => {
+    d.properties.category.$comment = d.properties.category.$comment.replace('art: paintings', 'paintings').replace('mixed media.', 'mixed media, martial art: swords.');
+  }), 1, 'C6 v3/asset.json: the category $comment does not describe "art"'],
+  ['C6 a category schema names a retired category in double quotes', editJson('v3/asset-categories/vehicle.json', (d) => {
+    d.$comment = 'Use when category is "pension".';
+  }), 1, 'C6 v3/asset-categories/vehicle.json: names category "pension"'],
   ['C6 a category schema names a retired category', editJson('v3/asset-categories/vehicle.json', (d) => {
     d.$comment = "Use when category is 'pension'.";
   }), 1, 'C6 v3/asset-categories/vehicle.json: names category "pension"'],
@@ -123,6 +143,7 @@ const cases = [
   ['C8 a new file copies the vocabulary unregistered', (dir) => put(dir, 'reference-data/new-copy.json', JSON.stringify({ c: ['jewellery_watches'] })), 1, 'C8 reference-data/new-copy.json'],
   ['C8 a registered file has gone', (dir) => unlinkSync(join(dir, 'docs/policies/taxonomy-provenance.md')), 2, 'CANNOT ANSWER'],
 
+  ['a malformed register cannot be answered', editJson('scripts/data/asset-category-copies.json', (d) => delete d.keyed), 2, 'CANNOT ANSWER'],
   ['an unparsable copy cannot be answered', (dir) => put(dir, 'reference-data/category-guidance.json', '{'), 2, 'CANNOT ANSWER'],
 ];
 

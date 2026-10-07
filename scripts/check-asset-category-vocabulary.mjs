@@ -37,6 +37,7 @@
  */
 import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'fs';
 import { join, resolve, dirname, relative, sep } from 'path';
+import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const REGISTER = 'scripts/data/asset-category-copies.json';
@@ -95,6 +96,7 @@ const show = ({ missing, extra }) =>
     .filter(Boolean)
     .join(', ');
 
+try {
 const reg = load(REGISTER);
 const findings = [];
 const cannot = [];
@@ -168,6 +170,7 @@ for (const k of reg.keyed) {
     const extra = [...new Set(vals.filter((v) => !source.includes(v)))];
     if (extra.length) refuse(`C4 ${where}: ${k.field} names ${JSON.stringify(extra)}, not in the source`);
   } else if (k.match === 'keys-subset') {
+    if (!Object.keys(node).length) cannot.push(`${where}: holds no keys, so a subset check would be vacuous`);
     const extra = Object.keys(node).filter((v) => !source.includes(v));
     if (extra.length) refuse(`C4 ${where}: names ${JSON.stringify(extra)}, not in the source`);
   } else cannotAnswer(`${REGISTER}: unknown match "${k.match}" for ${k.file}`);
@@ -244,8 +247,14 @@ for (const [file, spec] of Object.entries(reg.generated.files)) {
   // A list is a copy when it holds more than half the source; a different
   // vocabulary that shares a value or two (asset-collection) is not.
   const copies = lists.filter((l) => l.filter((v) => source.includes(v)).length > source.length / 2);
-  if (copies.length !== spec.copies) {
-    cannot.push(`${file}: expected ${spec.copies} copies of the vocabulary, found ${copies.length} — the generator's output changed shape; re-measure and re-pin in ${REGISTER}`);
+  // Pinned per kind: a full copy cut down to the general branch would
+  // otherwise still look like a valid copy.
+  const full = copies.filter((l) => same(l, source)).length;
+  const gen = copies.filter((l) => same(l, derivedGeneral)).length;
+  const wantFull = spec.full ?? 0;
+  const wantGen = spec.general ?? 0;
+  if (copies.length !== wantFull + wantGen || (copies.length === full + gen && (full !== wantFull || gen !== wantGen))) {
+    cannot.push(`${file}: expected ${wantFull} full and ${wantGen} general, found ${full} full and ${gen} general (${copies.length} copies in all) — the generator's output changed shape; re-measure and re-pin in ${REGISTER}`);
   }
   copies.forEach((l, i) => {
     if (same(l, source) || same(l, derivedGeneral)) return;
@@ -257,12 +266,15 @@ for (const [file, spec] of Object.entries(reg.generated.files)) {
 // ── C6 prose that names categories ───────────────────────────────────────────
 const comment = asset.properties?.category?.$comment ?? '';
 for (const v of source) {
-  if (!new RegExp(`(^|[\\s.(])${v}:`).test(comment)) refuse(`C6 ${SRC}: the category $comment does not describe "${v}"`);
+  if (!new RegExp(`(^|[.;]\\s+)${v}:`).test(comment)) refuse(`C6 ${SRC}: the category $comment does not describe "${v}"`);
 }
 for (const f of reg.routingSchemas.files) {
   const raw = readText(f);
-  for (const m of raw.matchAll(/(?<![A-Za-z])category (?:is|=|==) ((?:'[^']*'(?:,? or |, )?)+)/g)) {
-    for (const name of m[1].match(/'[^']*'/g).map((q) => q.slice(1, -1))) {
+  // Quoted with ' or with \" (a double quote escaped inside a JSON string).
+  const Q = `(?:'[^'\\\\]*'|\\\\"[^"\\\\]*\\\\")`;
+  const phrase = new RegExp(`(?<![A-Za-z])category (?:is|=|==)(?: one of)? ((?:${Q}(?:,? or |, )?)+)`, 'g');
+  for (const m of raw.matchAll(phrase)) {
+    for (const name of m[1].match(new RegExp(Q, 'g')).map((q) => q.replace(/^\\?['"]|\\?['"]$/g, ''))) {
       if (!source.includes(name)) refuse(`C6 ${f}: names category "${name}", which is not in the source`);
     }
   }
@@ -300,8 +312,19 @@ const walk = (dir, out = []) => {
   }
   return out;
 };
+// In a git checkout, scan what git would commit (tracked plus untracked, not
+// ignored), so build output in CI cannot red the gate. Outside one (the
+// hermetic tests), walk the tree.
+const listFiles = () => {
+  const g = spawnSync('git', ['-C', root, 'ls-files', '-z', '--cached', '--others', '--exclude-standard'], { encoding: 'utf8' });
+  const top = spawnSync('git', ['-C', root, 'rev-parse', '--show-toplevel'], { encoding: 'utf8' });
+  if (g.status === 0 && top.status === 0 && resolve(top.stdout.trim()) === resolve(root)) {
+    return g.stdout.split('\0').filter((f) => f && existsSync(join(root, f)) && statSync(join(root, f)).isFile());
+  }
+  return walk(root);
+};
 let scanned = 0;
-for (const f of walk(root)) {
+for (const f of listFiles()) {
   scanned++;
   if (registered.has(f)) continue;
   const text = readFileSync(join(root, f), 'utf8');
@@ -324,10 +347,15 @@ if (findings.length) {
   for (const f of findings) console.error(`  ${f}`);
   process.exit(1);
 }
-const nGenerated = Object.values(reg.generated.files).reduce((a, s) => a + s.copies, 0);
+const nGenerated = Object.values(reg.generated.files).reduce((a, s) => a + (s.full ?? 0) + (s.general ?? 0), 0);
 console.log(
   `OK — asset category vocabulary: ${source.length} values from ${SRC}\n` +
     `  routing partitions the source (${constRouted.length} const branches + general ${derivedGeneral.length})\n` +
     `  ${reg.keyed.length} companion checks, ${reg.consumers.length} consumer, ${nGenerated} generated copies in ${Object.keys(reg.generated.files).length} files\n` +
     `  ${scanned} files scanned, ${registered.size} registered`,
 );
+} catch (e) {
+  // Any surprise (a malformed register, an unreadable file) is a question the
+  // gate cannot answer, never a refusal and never a pass.
+  cannotAnswer(`unexpected ${e?.name ?? 'error'}: ${e?.message ?? e}`);
+}

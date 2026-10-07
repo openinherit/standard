@@ -214,6 +214,30 @@
         ]
       },
       {
+        "case": "tests/v3/ireland/ireland.test.json::invalid — Ireland class of title on a Registry of Deeds row",
+        "json_schema_keywords": [
+          "if",
+          "properties",
+          "then"
+        ]
+      },
+      {
+        "case": "tests/v3/ireland/ireland.test.json::invalid — Ireland deeds reference on a land registry row",
+        "json_schema_keywords": [
+          "if",
+          "properties",
+          "then"
+        ]
+      },
+      {
+        "case": "tests/v3/ireland/ireland.test.json::invalid — Ireland folio number on a Registry of Deeds row",
+        "json_schema_keywords": [
+          "if",
+          "properties",
+          "then"
+        ]
+      },
+      {
         "case": "tests/v3/ireland/ireland.test.json::invalid — empty object (minProperties: 1 requires at least one property)",
         "json_schema_keywords": [
           "minProperties"
@@ -353,6 +377,42 @@
       },
       {
         "case": "tests/v3/nonprobate-transfer/nonprobate-transfer.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — Northern Ireland class of title on a Registry of Deeds row",
+        "json_schema_keywords": [
+          "if",
+          "properties",
+          "then"
+        ]
+      },
+      {
+        "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — Northern Ireland deeds reference on a land registry row",
+        "json_schema_keywords": [
+          "if",
+          "properties",
+          "then"
+        ]
+      },
+      {
+        "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — Northern Ireland folio number on a Registry of Deeds row",
+        "json_schema_keywords": [
+          "if",
+          "properties",
+          "then"
+        ]
+      },
+      {
+        "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — empty object (minProperties: 1 requires at least one property)",
+        "json_schema_keywords": [
+          "minProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — unknown property at root",
         "json_schema_keywords": [
           "unevaluatedProperties"
         ]
@@ -685,6 +745,30 @@
         ]
       },
       {
+        "case": "tests/v3/ireland/ireland.test.json::invalid — Ireland class of title on a Registry of Deeds row",
+        "json_schema_keywords": [
+          "if",
+          "properties",
+          "then"
+        ]
+      },
+      {
+        "case": "tests/v3/ireland/ireland.test.json::invalid — Ireland deeds reference on a land registry row",
+        "json_schema_keywords": [
+          "if",
+          "properties",
+          "then"
+        ]
+      },
+      {
+        "case": "tests/v3/ireland/ireland.test.json::invalid — Ireland folio number on a Registry of Deeds row",
+        "json_schema_keywords": [
+          "if",
+          "properties",
+          "then"
+        ]
+      },
+      {
         "case": "tests/v3/ireland/ireland.test.json::invalid — empty object (minProperties: 1 requires at least one property)",
         "json_schema_keywords": [
           "minProperties"
@@ -836,6 +920,42 @@
       },
       {
         "case": "tests/v3/nonprobate-transfer/nonprobate-transfer.test.json::invalid — unknown property at root level",
+        "json_schema_keywords": [
+          "unevaluatedProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — Northern Ireland class of title on a Registry of Deeds row",
+        "json_schema_keywords": [
+          "if",
+          "properties",
+          "then"
+        ]
+      },
+      {
+        "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — Northern Ireland deeds reference on a land registry row",
+        "json_schema_keywords": [
+          "if",
+          "properties",
+          "then"
+        ]
+      },
+      {
+        "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — Northern Ireland folio number on a Registry of Deeds row",
+        "json_schema_keywords": [
+          "if",
+          "properties",
+          "then"
+        ]
+      },
+      {
+        "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — empty object (minProperties: 1 requires at least one property)",
+        "json_schema_keywords": [
+          "minProperties"
+        ]
+      },
+      {
+        "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — unknown property at root",
         "json_schema_keywords": [
           "unevaluatedProperties"
         ]

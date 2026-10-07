@@ -1,0 +1,93 @@
+{
+  "_comment": "Register for scripts/check-asset-category-vocabulary.mjs. The asset category vocabulary has ONE source: v3/asset.json#/properties/category/enum. Every file that mentions a distinctive category value (one containing an underscore) must appear below, either as a copy the gate checks or as a usage with a reason. An unlisted file is refused, so a new copy cannot appear unchecked. Edit this file by hand; it is the classification, not a measurement.",
+  "source": {
+    "file": "v3/asset.json",
+    "pointer": "/properties/category/enum",
+    "tests": "tests/v3/asset/asset.test.json"
+  },
+  "routingSchemas": {
+    "_comment": "Schemas whose prose may name a category ('Use when category is ...'). Every name quoted that way must be a member of the source.",
+    "files": [
+      "v3/asset.json",
+      "v3/asset-categories/business.json",
+      "v3/asset-categories/digital.json",
+      "v3/asset-categories/financial.json",
+      "v3/asset-categories/general.json",
+      "v3/asset-categories/vehicle.json"
+    ]
+  },
+  "keyed": [
+    { "file": "reference-data/category-guidance.json", "pointer": "/categories", "match": "keys-equal" },
+    { "file": "reference-data/enum-descriptions.json", "pointer": "/enums/asset.category", "match": "keys-equal" },
+    { "file": "reference-data/local-term-mappings.json", "pointer": "/mappings/categoryType", "match": "keys-equal" },
+    { "file": "reference-data/gpc-category-mapping.json", "pointer": "/mappings", "field": "inheritCategory", "match": "values-each-once" },
+    { "file": "reference-data/gpc-category-mapping.json", "pointer": "/_reverseIndex", "field": "inheritCategory", "match": "values-subset" },
+    { "file": "reference-data/brand-registry.json", "pointer": "/brands", "match": "keys-subset" }
+  ],
+  "consumers": [
+    {
+      "file": "reference-data/agent-task-definitions.json",
+      "field": "applicableCategories",
+      "_comment": "Mixes categories and subcategories by design. Each value must be a category or a subcategory in reference-data/category-guidance.json. The pinned values are neither; they predate this gate. A new one is refused, and a pinned one that has been fixed must be removed from this list (the floor only tightens).",
+      "subcategoriesFrom": "reference-data/category-guidance.json",
+      "pinnedOffenders": ["clothing_accessories", "coins_medals", "financial_assets", "property", "vehicles", "watches_clocks"]
+    }
+  ],
+  "generated": {
+    "_comment": "Copies produced from the source by a generator. Each must carry the source list (or the general-branch subset of it) exactly, and exactly the number of copies pinned here: a different count means the generator output changed shape, so the gate cannot answer (exit 2). Regenerate with the command named; never edit by hand.",
+    "files": {
+      "packages/schema/v3/asset.json": { "copies": 2, "regenerate": "rsync -a --delete v3/ packages/schema/v3/" },
+      "packages/cli/schemas/inherit-v3-bundled.json": { "copies": 2, "regenerate": "pnpm bundle, then copy dist/inherit-v3-bundled.json over it" },
+      "packages/cli/schemas/catalogue-v3-bundled.json": { "copies": 2, "regenerate": "pnpm bundle:catalogue, then copy dist/catalogue-v3-bundled.json over it" },
+      "packages/conformance/schemas/inherit-v3-bundled.json": { "copies": 2, "regenerate": "pnpm bundle, then copy dist/inherit-v3-bundled.json over it" },
+      "packages/conformance/schemas/catalogue-v3-bundled.json": { "copies": 2, "regenerate": "pnpm bundle:catalogue, then copy dist/catalogue-v3-bundled.json over it" },
+      "packages/sdk-go/schemas/inherit-v3-bundled.json": { "copies": 2, "regenerate": "pnpm bundle, then copy dist/inherit-v3-bundled.json over it" },
+      "packages/sdk-go/schemas/catalogue-v3-bundled.json": { "copies": 2, "regenerate": "pnpm bundle:catalogue, then copy dist/catalogue-v3-bundled.json over it" },
+      "packages/sdk-python/openinherit/schemas/inherit-v3-bundled.json": { "copies": 2, "regenerate": "pnpm bundle, then copy dist/inherit-v3-bundled.json over it" },
+      "packages/sdk-python/openinherit/schemas/catalogue-v3-bundled.json": { "copies": 2, "regenerate": "pnpm bundle:catalogue, then copy dist/catalogue-v3-bundled.json over it" },
+      "packages/sdk-java/src/main/resources/inherit-v3-bundled.json": { "copies": 2, "regenerate": "pnpm bundle, then copy dist/inherit-v3-bundled.json over it" },
+      "packages/sdk-java/src/main/resources/catalogue-v3-bundled.json": { "copies": 2, "regenerate": "pnpm bundle:catalogue, then copy dist/catalogue-v3-bundled.json over it" },
+      "packages/sdk-csharp/OpenInherit.Sdk/Schemas/inherit-v3-bundled.json": { "copies": 2, "regenerate": "pnpm bundle, then copy dist/inherit-v3-bundled.json over it" },
+      "packages/sdk-csharp/OpenInherit.Sdk/Schemas/catalogue-v3-bundled.json": { "copies": 2, "regenerate": "pnpm bundle:catalogue, then copy dist/catalogue-v3-bundled.json over it" },
+      "examples/compiled/schema-template.json": { "copies": 1, "regenerate": "jsonschema compile v3/schema.json (see examples/compiled/)" },
+      "examples/compiled/catalogue-template.json": { "copies": 1, "regenerate": "jsonschema compile v3/catalogue.json (see examples/compiled/)" },
+      "openapi/openapi-bundled.yaml": { "copies": 2, "regenerate": "pnpm bundle:openapi" },
+      "openapi/reference-api-bundled.yaml": { "copies": 2, "regenerate": "pnpm bundle:reference-api" },
+      "generated/typescript/types.gen.ts": { "copies": 4, "regenerate": "pnpm generate" },
+      "packages/sdk/src/estate/types.gen.ts": { "copies": 4, "regenerate": "the @openinherit/sdk codegen" },
+      "packages/sdk/src/estate-v2/types.gen.ts": { "copies": 4, "regenerate": "the @openinherit/sdk codegen" },
+      "packages/sdk/src/reference/types.gen.ts": { "copies": 4, "regenerate": "the @openinherit/sdk codegen" },
+      "packages/sdk/src/zod/zod.gen.ts": { "copies": 1, "regenerate": "the @openinherit/sdk codegen (scripts/openapi-ts.zod.config.mjs)" },
+      "packages/sdk-python/openinherit/models.py": { "copies": 1, "regenerate": "the openinherit Python models codegen" },
+      "docs/reference/asset.md": { "copies": 1, "regenerate": "pnpm run docs:reference" },
+      "docs/releases/enum-reference.md": { "copies": 1, "regenerate": "hand-maintained enum catalogue: update the Asset category table" }
+    }
+  },
+  "usage": {
+    "_comment": "Files that mention a category value without holding a copy of the vocabulary. Not checked; listed so that the discovery rule can tell a new copy from a known use.",
+    "files": {
+      "tests/v3/asset/asset.test.json": "the source's own test suite — checked separately: every value needs a valid case",
+      "tests/v3/asset-collection/asset-collection.test.json": "collection vocabulary (a different enum); shares musical_instruments",
+      "tests/v3/catalogue/catalogue.test.json": "catalogue test data using individual values",
+      "v3/asset-collection.json": "collection vocabulary (a different enum); shares musical_instruments",
+      "packages/schema/v3/asset-collection.json": "generated mirror of v3/asset-collection.json (staleness-check.yml)",
+      "docs/reference/asset-collection.md": "generated reference for the collection vocabulary",
+      "docs/_archive_/category-migration.md": "archived record of the v5 to v6 category migration",
+      "docs/releases/asset-location-classes.md": "release note: groups categories into location classes as at its release",
+      "docs/releases/canonical-ordering.md": "release note: example document",
+      "docs/implement/concept-map.md": "implementer guide: maps real-world assets to individual values",
+      "docs/implement/item-capture.md": "implementer guide: example document",
+      "docs/integrations/wealth-com/README.md": "integration guide: maps a partner's values to individual categories",
+      "docs/policies/taxonomy-provenance.md": "policy: names the categories added to the upstream taxonomy",
+      "examples/create-catalogue.ts": "example code using individual values",
+      "examples/fixtures/broken-references.json": "fixture using an individual value",
+      "examples/fixtures/fatima-al-rashid-islamic-digital-estate.json": "fixture using individual values",
+      "examples/fixtures/mumbai-estate.json": "fixture using individual values",
+      "examples/wills/england-wales/mark-richardson/mark-richardson-inherit-v0001.json": "will fixture using individual values",
+      "examples/wills/singapore/katrina-tan/katrina-tan-inherit-v0001.json": "will fixture using individual values",
+      "scripts/data/asset-category-copies.json": "this register",
+      "scripts/check-asset-category-vocabulary.mjs": "the gate",
+      "scripts/test-check-asset-category-vocabulary.mjs": "the gate's tests"
+    }
+  }
+}

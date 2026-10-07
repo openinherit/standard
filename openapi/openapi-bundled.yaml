@@ -41,7 +41,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/schema'
+              $ref: '#/components/schemas/InheritDocument'
       responses:
         '200':
           description: Validation result
@@ -81,7 +81,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/catalogue'
+              $ref: '#/components/schemas/Catalogue'
       responses:
         '200':
           description: Validation result
@@ -8219,6 +8219,9 @@ components:
           type: string
           format: uri
       additionalProperties: false
+    conformance:
+      description: Machine-readable conformance certificate — records the validation level, schema version, completeness score, and provenance summary at time of validation
+      $ref: '#/components/schemas/Conformance'
     insurance-policy:
       $schema: https://json-schema.org/draft/2020-12/schema
       $id: https://openinherit.org/v3/insurance-policy.json
@@ -9300,7 +9303,7 @@ components:
           items:
             $ref: '#/components/schemas/RecommendedAction'
         conformance:
-          $ref: '#/components/schemas/Conformance'
+          $ref: '#/components/schemas/conformance'
           properties:
             profile:
               const: catalogue

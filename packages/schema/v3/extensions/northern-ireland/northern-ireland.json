@@ -8,7 +8,7 @@
   "properties": {
     "localTenureTypes": {
       "description": "Maps each property to its local Northern Ireland tenure. The core property tenureType holds the territory-neutral value (ownership, lease); this records the local term",
-      "$comment": "freehold: fee simple. leasehold: a term of years, including the long leases at a ground rent common on Northern Ireland housing. fee_farm_grant: a fee simple subject to a perpetual fee farm rent — a live tenure in Northern Ireland, widely used for urban housing; the Ground Rents Act (Northern Ireland) 2001 lets the owner redeem the rent. Northern Ireland has no commonhold.",
+      "$comment": "freehold: fee simple. leasehold: a term of years, including the long leases at a ground rent common on Northern Ireland housing. fee_farm_grant: a fee simple subject to a perpetual fee farm rent — a live tenure in Northern Ireland, widely found on older urban housing; the Ground Rents Act (Northern Ireland) 2001 lets the owner redeem the rent. Northern Ireland has no commonhold.",
       "type": "array",
       "maxItems": 50,
       "items": {

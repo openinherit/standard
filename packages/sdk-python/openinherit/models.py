@@ -7985,7 +7985,7 @@ class LandRegistrationItem(BaseModel):
     )
     deedsReference: constr(max_length=100) | None = Field(
         None,
-        description='Registry of Deeds memorial reference (year, book and number, or serial number)',
+        description='Registry of Deeds reference — the serial number, or year, book and number for an older memorial',
     )
     retrievedAt: AwareDatetime | None = Field(
         None, description='When this registration data was retrieved or last verified'
@@ -8039,7 +8039,7 @@ class Ireland(BaseModel):
     )
     landRegistration: list[LandRegistrationItem] | None = Field(
         None,
-        description="Which Irish register each property's title is recorded on, and with what class of title. Land Registry (Tailte Éireann) registers title in folios; unregistered title is evidenced by deeds whose memorials are recorded in the Registry of Deeds (Tailte Éireann)",
+        description="Which Irish register each property's title is recorded on, and with what class of title. Land Registry (Tailte Éireann) registers title in folios; unregistered title is evidenced by deeds recorded in the Registry of Deeds (Tailte Éireann)",
         max_length=50,
     )
     legislativeChanges: list[TemporalRule] | None = Field(

@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   jurisdiction-cascade entry. `scripts/check-real-property-vocabulary.mjs` (run in the test
   workflow, with hermetic tests in `scripts/test-check-real-property-vocabulary.mjs`) refuses a
   missing tenure or registration vocabulary, a removed value, a value with no valid test case, and
-  an extension that names more than its one legal jurisdiction. England & Wales `localTenureTypes`
+  an extension whose `applicableJurisdictions` is not exactly its pinned legal jurisdiction. England & Wales `localTenureTypes`
   values gain test cases. Two example estates: `examples/fixtures/northern-ireland-real-property.json`
   and `examples/fixtures/ireland-real-property.json`.
 - `deathTaxLevied` (boolean) on every jurisdiction in `reference-data/tax-thresholds.json` and
@@ -123,6 +123,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Python SDK (generated): the code generator numbers same-named enums in file order, so
+  `openinherit.models.LocalType3` is now the Ireland tenure enum, and the Hong Kong
+  `localGrantTypes` enum it used to be is `LocalType5`. An import of `LocalType3` still succeeds and
+  silently yields different members.
 - `space.propertyId` is now required only where a space is inside a property. Eleven `spaceType`
   values are, by the definitions in `spaceType`'s own comment, not inside one — `portable`,
   `self_storage`, `safe_deposit_box`, `workplace`, `relatives_house`, `holiday_home`,

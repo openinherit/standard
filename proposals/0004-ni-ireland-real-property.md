@@ -5,8 +5,9 @@ change it describes. Merging that pull request is acceptance; closing it is reje
 **Author:** Testate Technologies
 **Date:** 2026-10-07
 **Change class:** additive. Two optional properties on the Ireland extension, and one new core
-extension (`northern-ireland`). No existing document becomes invalid, and no existing field changes
-meaning.
+extension (`northern-ireland`). No existing field changes meaning, and no document that uses only
+core extensions becomes invalid. The one exception is under Backwards Compatibility: an
+`x-inherit-northern-ireland` block that was previously validated only as a community extension.
 
 ## Summary
 
@@ -39,9 +40,9 @@ Two of the four UK and Irish jurisdictions could not record their own real prope
 |---|---|---|
 | `property.json` | `ownershipType` | `joint_tenants` (passes by survivorship) and `tenants_in_common` (passes under the will or intestacy) are the two forms of co-ownership in both jurisdictions. Already expressible |
 | `property.json` | `tenureType` | `ownership` / `lease` — the territory-neutral layer. Already expressible |
-| `property.json` | `registrationStatus` | whether title is formally registered at all. Already expressible |
+| `property.json` | `registrationStatus` | whether ownership is formally registered or informally held. Expressible for folio land (`formally_registered`). It has no value for *title unregistered, deeds recorded in the Registry of Deeds* — that is what `landRegistration.register` now says, so the example estates leave `registrationStatus` off those properties rather than mislabel them |
 
-The two new example estates use all three, unchanged.
+The two new example estates use `ownershipType` and `tenureType` unchanged.
 
 ## Design
 
@@ -85,7 +86,9 @@ The two new example estates use all three, unchanged.
 ```
 
 A folio number and a class of title belong to registered land only, and a Registry of Deeds
-memorial reference to unregistered land only. The `if`/`then` pair rejects the mixed row.
+reference to unregistered land only. The `if`/`then` pair rejects the mixed row under JSON Schema
+validation. The generated Zod and pydantic validators cannot express it, and those eight cases are
+declared in `scripts/runtime-validator-divergences.json`.
 
 ### Northern Ireland — `v3/extensions/northern-ireland/`
 
@@ -119,9 +122,13 @@ Additive. `x-inherit-ireland` documents without the two new properties validate 
 document that already carried an `x-inherit-northern-ireland` block was validated only as a
 community extension (generic object). It is now validated strictly against the new schema.
 
-Generated code: the Python models are numbered by the code generator, so an existing generated enum
-class name shifts (`LocalType3` becomes `LocalType5`). Code that imports that generated class by
-name will need updating; the schema it describes is unchanged.
+Generated code: the Python code generator numbers same-named enums in file order, so the new
+Ireland tenure enum takes the name `LocalType3` and the Hong Kong `localGrantTypes` enum that held it
+moves to `LocalType5`. The schemas are unchanged, but **`from openinherit.models import LocalType3`
+still imports and now yields the tenure members** (`freehold`, `leasehold`, `fee_farm_grant`)
+instead of the grant types. Code that imported the generated enum by its numbered name should import
+it through the model field (`LocalGrantType1.model_fields['localType'].annotation`) or switch to
+`LocalType5`.
 
 ## Alternatives Considered
 

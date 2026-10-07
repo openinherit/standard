@@ -10436,8 +10436,8 @@ components:
               - localType
             additionalProperties: false
         landRegistration:
-          description: Which Irish register each property's title is recorded on, and with what class of title. Land Registry (Tailte Éireann) registers title in folios; unregistered title is evidenced by deeds whose memorials are recorded in the Registry of Deeds (Tailte Éireann)
-          $comment: 'Ireland runs two registers. Registration of Title Act 1964: title registered in a folio, guaranteed by the State, in one of the classes in titleClass (good_leasehold applies to leasehold folios only). Registration of Deeds and Title Act 2006: unregistered title, where the deeds are the title and the Registry of Deeds records memorials of them. First registration has been compulsory on every sale throughout the State since 2011, so much property is still on the Registry of Deeds until it next changes hands. folioNumber and titleClass apply only to land_registry; deedsReference only to registry_of_deeds.'
+          description: Which Irish register each property's title is recorded on, and with what class of title. Land Registry (Tailte Éireann) registers title in folios; unregistered title is evidenced by deeds recorded in the Registry of Deeds (Tailte Éireann)
+          $comment: 'Ireland runs two registers. Registration of Title Act 1964: title registered in a folio, guaranteed by the State, in one of the classes in titleClass (good_leasehold applies to leasehold folios only). Registration of Deeds and Title Act 2006: unregistered title, where the deeds are the title and the Registry of Deeds records them (by memorial for older deeds, by application form under the current rules). First registration has been compulsory on every sale throughout the State since 2011, so much property is still on the Registry of Deeds until it next changes hands. folioNumber and titleClass apply only to land_registry; deedsReference only to registry_of_deeds.'
           type: array
           maxItems: 50
           items:
@@ -10469,7 +10469,7 @@ components:
                   - possessory
                   - good_leasehold
               deedsReference:
-                description: Registry of Deeds memorial reference (year, book and number, or serial number)
+                description: Registry of Deeds reference — the serial number, or year, book and number for an older memorial
                 type: string
                 maxLength: 100
               retrievedAt:
@@ -10527,7 +10527,7 @@ components:
       properties:
         localTenureTypes:
           description: Maps each property to its local Northern Ireland tenure. The core property tenureType holds the territory-neutral value (ownership, lease); this records the local term
-          $comment: 'freehold: fee simple. leasehold: a term of years, including the long leases at a ground rent common on Northern Ireland housing. fee_farm_grant: a fee simple subject to a perpetual fee farm rent — a live tenure in Northern Ireland, widely used for urban housing; the Ground Rents Act (Northern Ireland) 2001 lets the owner redeem the rent. Northern Ireland has no commonhold.'
+          $comment: 'freehold: fee simple. leasehold: a term of years, including the long leases at a ground rent common on Northern Ireland housing. fee_farm_grant: a fee simple subject to a perpetual fee farm rent — a live tenure in Northern Ireland, widely found on older urban housing; the Ground Rents Act (Northern Ireland) 2001 lets the owner redeem the rent. Northern Ireland has no commonhold.'
           type: array
           maxItems: 50
           items:

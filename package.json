@@ -31,6 +31,7 @@
     "validate:net-equity": "node scripts/validate-net-equity.mjs",
     "test:co-ownership": "node scripts/test-co-ownership-shape.mjs",
     "test:death-tax-levied": "node scripts/check-death-tax-levied.mjs && node scripts/test-check-death-tax-levied.mjs",
+    "test:real-property-vocabulary": "node scripts/check-real-property-vocabulary.mjs && node scripts/test-check-real-property-vocabulary.mjs",
     "test:refs": "node scripts/test-referential-integrity.mjs",
     "test:conformance-declaration-policy": "node scripts/check-conformance-declaration-policy.mjs && node scripts/test-check-conformance-declaration-policy.mjs",
     "graph:data": "node scripts/generate-graph-data.mjs",

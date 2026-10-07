@@ -41,7 +41,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InheritDocument'
+              $ref: '#/components/schemas/schema'
       responses:
         '200':
           description: Validation result
@@ -81,7 +81,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Catalogue'
+              $ref: '#/components/schemas/catalogue'
       responses:
         '200':
           description: Validation result
@@ -567,7 +567,7 @@ components:
       properties:
         shareholding:
           description: Detailed shareholding information — company, share class, voting rights, restrictions. Relevant for BPR (UK), stepped-up basis (US), and controlling interest calculations
-          $comment: Category-specific sub-object for shares and shareholdings. Use when category is 'shares' or 'investment'.
+          $comment: Category-specific sub-object for shares and shareholdings. Use when category is 'financial' and subcategory is 'shares' or 'investment'.
           type: object
           properties:
             companyName:
@@ -652,7 +652,7 @@ components:
           additionalProperties: false
         businessInterest:
           description: Detailed business interest information — partnership shares, LLP membership, sole trader business. Relevant for BPR (UK), QFOBI (US), and succession planning
-          $comment: Category-specific sub-object for business interests. Use when category is 'business_interest'.
+          $comment: Category-specific sub-object for business interests. Use when category is 'business' and subcategory is 'business_interest'.
           type: object
           properties:
             businessName:
@@ -714,7 +714,7 @@ components:
           additionalProperties: false
         pension:
           description: Detailed pension information — scheme type, nominated beneficiaries, death benefits. Pensions often pass outside the estate via nomination
-          $comment: Category-specific sub-object for pension and retirement accounts. Use when category is 'pension'.
+          $comment: Category-specific sub-object for pension and retirement accounts. Use when category is 'financial' and subcategory is 'pension'.
           type: object
           properties:
             schemeType:
@@ -918,7 +918,7 @@ components:
           additionalProperties: false
         insurancePolicy:
           description: Life insurance policy details — type, sum assured, beneficiaries, trust status. Policies written in trust pass outside the estate
-          $comment: Category-specific sub-object for life insurance and endowment policies. Use when category is 'insurance'.
+          $comment: Category-specific sub-object for life insurance and endowment policies. Use when category is 'financial' and subcategory is 'insurance'.
           type: object
           properties:
             policyType:
@@ -1031,7 +1031,7 @@ components:
           additionalProperties: false
         intellectualProperty:
           description: Intellectual property details — patents, copyrights, trademarks, trade secrets. IP succession varies by jurisdiction and type
-          $comment: Category-specific sub-object for IP assets. Use when category is 'intellectual_property'.
+          $comment: Category-specific sub-object for IP assets. Use when category is 'business' and subcategory is 'intellectual_property'.
           type: object
           properties:
             ipType:
@@ -2137,7 +2137,7 @@ components:
       properties:
         businessInterest:
           description: Detailed business interest information — partnership shares, LLP membership, sole trader business. Relevant for BPR (UK), QFOBI (US), and succession planning
-          $comment: Category-specific sub-object for business interests. Use when category is 'business_interest'.
+          $comment: Category-specific sub-object for business interests. Use when category is 'business' and subcategory is 'business_interest'.
           type: object
           properties:
             businessName:
@@ -2199,7 +2199,7 @@ components:
           additionalProperties: false
         intellectualProperty:
           description: Intellectual property details — patents, copyrights, trademarks, trade secrets. IP succession varies by jurisdiction and type
-          $comment: Category-specific sub-object for IP assets. Use when category is 'intellectual_property'.
+          $comment: Category-specific sub-object for IP assets. Use when category is 'business' and subcategory is 'intellectual_property'.
           type: object
           properties:
             ipType:
@@ -8219,9 +8219,6 @@ components:
           type: string
           format: uri
       additionalProperties: false
-    conformance:
-      description: Machine-readable conformance certificate — records the validation level, schema version, completeness score, and provenance summary at time of validation
-      $ref: '#/components/schemas/Conformance'
     insurance-policy:
       $schema: https://json-schema.org/draft/2020-12/schema
       $id: https://openinherit.org/v3/insurance-policy.json
@@ -9303,7 +9300,7 @@ components:
           items:
             $ref: '#/components/schemas/RecommendedAction'
         conformance:
-          $ref: '#/components/schemas/conformance'
+          $ref: '#/components/schemas/Conformance'
           properties:
             profile:
               const: catalogue

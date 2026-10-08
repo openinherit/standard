@@ -40,6 +40,14 @@ jobs:
       - name: Real-property vocabulary is declared and exercised
         run: pnpm run test:real-property-vocabulary
 
+      # The asset category vocabulary has one source, v3/asset.json's category
+      # enum. Its copies (allOf routing, reference-data, vendored bundles,
+      # generated SDK types, docs) must agree with it, and every file that
+      # mentions it must be in scripts/data/asset-category-copies.json.
+      # Exit 2 (cannot answer) fails the step.
+      - name: Asset category vocabulary copies agree with the schema
+        run: pnpm run test:asset-category-vocabulary
+
       # Level 2 — referential integrity. Nothing in CI ran this until now, so
       # every cross-reference rule in scripts/validate-refs.mjs was advisory:
       # deleting one left the build green.

@@ -2092,6 +2092,34 @@
         }
       },
       "valid": false
+    },
+    {
+      "description": "valid — business interest: partnership share routed to the business category schema",
+      "data": {
+        "id": "5f0c2b7e-8d41-4a6e-b3c9-7e2d1a4f6b08",
+        "name": "Davies & Sons Builders — partnership share",
+        "category": "business",
+        "subcategory": "partnership",
+        "businessInterest": {
+          "businessName": "Davies & Sons Builders",
+          "businessType": "partnership",
+          "ownershipPercentage": 50,
+          "controllingInterest": false
+        }
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — business interest: businessType outside the business schema's enum",
+      "data": {
+        "id": "5f0c2b7e-8d41-4a6e-b3c9-7e2d1a4f6b09",
+        "name": "Davies & Sons Builders — partnership share",
+        "category": "business",
+        "businessInterest": {
+          "businessType": "guild"
+        }
+      },
+      "valid": false
     }
   ]
 }

@@ -67,6 +67,12 @@ const cases = [
   ['an id in the registry but not the schema', registry((r) => {
     r.algorithms.push({ id: 'sha-999', kind: 'digest', name: 'x', lifecycle: [{ status: 'approved', from: '2020-01-01', source: 'x', sourceStatus: 'final' }] });
   }), 1],
+  ['a digest id with no value-length branch', schema((s) => {
+    s.$defs.digest.anyOf[1].properties.algorithm.enum = ['sha-256'];
+  }), 1],
+  ['a digest id in two value-length branches', schema((s) => {
+    s.$defs.digest.anyOf[2].properties.algorithm.enum.push('sha-256');
+  }), 1],
   ['an id in the schema but not the registry', schema((s) => { s.$defs.signatureAlgorithmId.enum.push('rsa-pkcs1v15-1024'); }), 1],
 
   // R3 — chain order and internal agreement (RFC 4998 §5.1).

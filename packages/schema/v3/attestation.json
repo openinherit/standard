@@ -172,6 +172,10 @@
       "type": "string",
       "maxLength": 1000
     },
+    "archiveTimestampChain": {
+      "description": "RFC 4998 Evidence Record Syntax renewal chain for this attestation's signed document, so that it can still be verified after the algorithms it was signed and timestamped with are no longer secure. Complements tamperEvidenceMethod and tamperEvidenceValue, which record a single hash or signature",
+      "$ref": "common/archive-timestamp-chain.json"
+    },
     "ronSessionId": {
       "description": "Remote Online Notarisation session identifier",
       "type": "string",

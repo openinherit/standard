@@ -14,7 +14,8 @@
  *      lifecycle starts `approved`, dates strictly ascending, every step sourced,
  *      every profile declared
  *   R2 the schema's digestAlgorithmId / signatureAlgorithmId enums equal the
- *      registry's ids of that kind, both ways
+ *      registry's ids of that kind, both ways, and the per-length branches of
+ *      $defs.digest name each digest id exactly once
  *   R3 chain order (RFC 4998 §5.1): sequence 0..n-1, timestamps strictly
  *      ascending, only the first link is `initial`, each coveredDigest uses its
  *      link's digestAlgorithm, and the protected object hash uses the initial's
@@ -119,6 +120,21 @@ for (const [kind, def] of [['digest', 'digestAlgorithmId'], ['signature', 'signa
   for (const id of inRegistry) if (!inSchema.has(id)) refuse(`R2 ${kind} ${id}: in the registry but not in schema $defs.${def}`);
   for (const id of inSchema) if (!inRegistry.has(id)) refuse(`R2 ${kind} ${id}: in schema $defs.${def} but not in the registry`);
 }
+
+// R2 — the digest shape's per-length branches name exactly the digest ids,
+// each once, so every registered hash has a value length and no other does.
+const branches = schema?.$defs?.digest?.anyOf;
+if (!Array.isArray(branches) || !branches.length) cannotAnswer(`${opts.schema} has no $defs.digest.anyOf`);
+const inBranches = branches.flatMap((b) => {
+  const a = b?.properties?.algorithm;
+  return a?.const !== undefined ? [a.const] : a?.enum ?? [];
+});
+const digestIds = new Set(schemaEnum('digestAlgorithmId'));
+for (const id of new Set(inBranches)) {
+  if (!digestIds.has(id)) refuse(`R2 digest ${id}: in a $defs.digest branch but not in $defs.digestAlgorithmId`);
+  if (inBranches.filter((x) => x === id).length > 1) refuse(`R2 digest ${id}: in more than one $defs.digest branch`);
+}
+for (const id of digestIds) if (!inBranches.includes(id)) refuse(`R2 digest ${id}: in $defs.digestAlgorithmId but in no $defs.digest branch, so it has no value length`);
 
 // The status of an algorithm at a moment (ms since epoch); null if unknown.
 const statusAt = (id, t) => {

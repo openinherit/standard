@@ -47,6 +47,7 @@ One page per JSON Schema in `v3/`, generated from the schemas themselves. For a 
 | Schema | Summary |
 | --- | --- |
 | [AiProvenance](common/ai-provenance.md) | Records which AI model produced a piece of data and whether a human has verified it. |
+| [Archive Timestamp Chain](common/archive-timestamp-chain.md) | The renewal history of an RFC 4998 Evidence Record Syntax (ERS) evidence record for a signed or attested document, so that it can still be verified after the hash or signature algorithms it was created with are no longer secure. |
 | [Audit Event](common/audit-event.md) | A single audit event recording who changed what, when, and why. |
 | [Completeness](common/completeness.md) | A completeness score derived from a weighted checklist of estate data categories, scoped to a specific jurisdiction and estate status |
 | [Cultural Disposition](common/cultural-disposition.md) | Cultural, religious, and regulatory constraints on how an asset or property may be disposed of. |

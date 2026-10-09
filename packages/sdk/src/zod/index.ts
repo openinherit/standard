@@ -21,6 +21,7 @@ export const schemasById: Readonly<Record<string, z.ZodType>> = {
   'https://openinherit.org/v3/catalogue.json': schemas.zCatalogue,
   'https://openinherit.org/v3/common/address.json': schemas.zAddress,
   'https://openinherit.org/v3/common/ai-provenance.json': schemas.zAiProvenance,
+  'https://openinherit.org/v3/common/archive-timestamp-chain.json': schemas.zArchiveTimestampChain,
   'https://openinherit.org/v3/common/audit-event.json': schemas.zAuditEvent,
   'https://openinherit.org/v3/common/completeness.json': schemas.zCompleteness,
   'https://openinherit.org/v3/common/cultural-disposition.json': schemas.zCulturalDisposition,

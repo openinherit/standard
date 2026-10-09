@@ -8,6 +8,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Archive timestamp chains for attestations. `v3/common/archive-timestamp-chain.json` records the
+  renewal history of an RFC 4998 Evidence Record Syntax evidence record: the protected document's
+  hash, then every archive timestamp in time order (the initial one, each timestamp renewal and
+  each hash-tree renewal), with the hash and signature algorithm of each. `v3/attestation.json`
+  gains an optional `archiveTimestampChain`. Algorithm ids come from the new
+  `reference-data/algorithm-lifecycle-registry.json`, which dates when each digest and signature
+  algorithm was approved, deprecated or disallowed, with its source (FIPS 180, 186, 202, 204 and
+  205, NIST SP 800-131A, and the NIST IR 8547 draft, marked as draft). The schema checks shape and
+  algorithm membership. `scripts/check-archive-timestamp-chain.mjs` (run in the test workflow, with
+  hermetic tests in `scripts/test-check-archive-timestamp-chain.mjs`) keeps the schema's algorithm
+  lists and the registry in step, and refuses a fixture chain that is out of time order, changes
+  hash algorithm on a timestamp renewal, or uses an algorithm that was disallowed when the link was
+  made or before it was renewed; `--as-of <date>` reports a chain whose newest link needs renewal.
+  Cryptographic verification of evidence records is outside the schema.
 - Every rule body and verdict fixture declares the one jurisdiction it is written for (#27). A
   Catala body carries a `Jurisdiction: <KEY>` line beside its SPDX lines; every Cedar policy
   carries a `@jurisdiction("<KEY>")` annotation; a `*.test-fixtures.json`,

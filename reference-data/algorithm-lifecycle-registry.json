@@ -1,0 +1,307 @@
+{
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It records published approval and transition dates for cryptographic algorithms; it is not a security assessment. Dates sourced from a draft publication are marked sourceStatus: draft and may change.",
+  "version": "1.0.0",
+  "lastUpdated": "2026-10-09",
+  "description": "Algorithm-lifecycle registry for archive timestamp chains (v3/common/archive-timestamp-chain.json). Every digest and signature algorithm id the chain schema accepts is listed here with a dated lifecycle: approved, then optionally deprecated, then disallowed. A step applies from its 'from' date inclusive. An RFC 4998 evidence record stays verifiable only while its newest archive timestamp uses algorithms that are not disallowed, so this registry is what a renewal check reads. scripts/check-archive-timestamp-chain.mjs keeps the schema's enums and this file in lockstep.",
+  "statuses": {
+    "approved": "Approved for generating new archive timestamps.",
+    "deprecated": "Still allowed, but a renewal onto a stronger algorithm should be planned.",
+    "disallowed": "Must not be used for a new archive timestamp. A chain whose newest link uses it needs renewal before it can be relied on."
+  },
+  "profiles": {
+    "cnsa-2.0": "Listed in the NSA Commercial National Security Algorithm Suite 2.0 (September 2022): ML-DSA-87 for signatures, SHA-384 or SHA-512 for hashing. CNSA 2.0 expects exclusive use for web, cloud and operating-system categories by 2033 and full transition of national security systems by 2035."
+  },
+  "algorithms": [
+    {
+      "id": "sha-1",
+      "kind": "digest",
+      "name": "SHA-1",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "1995-04-17",
+          "source": "FIPS 180-1, Secure Hash Standard (17 April 1995)",
+          "sourceStatus": "final"
+        },
+        {
+          "status": "disallowed",
+          "from": "2014-01-01",
+          "source": "NIST SP 800-131A (January 2011; Rev 2, March 2019), Table 9: SHA-1 is disallowed for digital signature generation after 2013",
+          "sourceStatus": "final"
+        }
+      ]
+    },
+    {
+      "id": "sha-256",
+      "kind": "digest",
+      "name": "SHA-256",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2002-08-01",
+          "source": "FIPS 180-2, Secure Hash Standard (1 August 2002); current text FIPS 180-4",
+          "sourceStatus": "final"
+        }
+      ]
+    },
+    {
+      "id": "sha-384",
+      "kind": "digest",
+      "name": "SHA-384",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2002-08-01",
+          "source": "FIPS 180-2, Secure Hash Standard (1 August 2002); current text FIPS 180-4",
+          "sourceStatus": "final"
+        }
+      ],
+      "profiles": [
+        "cnsa-2.0"
+      ]
+    },
+    {
+      "id": "sha-512",
+      "kind": "digest",
+      "name": "SHA-512",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2002-08-01",
+          "source": "FIPS 180-2, Secure Hash Standard (1 August 2002); current text FIPS 180-4",
+          "sourceStatus": "final"
+        }
+      ],
+      "profiles": [
+        "cnsa-2.0"
+      ]
+    },
+    {
+      "id": "sha3-256",
+      "kind": "digest",
+      "name": "SHA3-256",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2015-08-05",
+          "source": "FIPS 202, SHA-3 Standard (5 August 2015)",
+          "sourceStatus": "final"
+        }
+      ]
+    },
+    {
+      "id": "sha3-384",
+      "kind": "digest",
+      "name": "SHA3-384",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2015-08-05",
+          "source": "FIPS 202, SHA-3 Standard (5 August 2015)",
+          "sourceStatus": "final"
+        }
+      ]
+    },
+    {
+      "id": "sha3-512",
+      "kind": "digest",
+      "name": "SHA3-512",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2015-08-05",
+          "source": "FIPS 202, SHA-3 Standard (5 August 2015)",
+          "sourceStatus": "final"
+        }
+      ]
+    },
+    {
+      "id": "rsa-pkcs1v15-2048",
+      "kind": "signature",
+      "name": "RSA PKCS #1 v1.5, 2048-bit modulus",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2000-01-27",
+          "source": "FIPS 186-2, Digital Signature Standard (27 January 2000); current text FIPS 186-5",
+          "sourceStatus": "final"
+        },
+        {
+          "status": "deprecated",
+          "from": "2031-01-01",
+          "source": "NIST IR 8547 initial public draft (12 November 2024), Transition to Post-Quantum Cryptography Standards: 112-bit-security quantum-vulnerable signatures deprecated after 2030",
+          "sourceStatus": "draft"
+        },
+        {
+          "status": "disallowed",
+          "from": "2036-01-01",
+          "source": "NIST IR 8547 initial public draft (12 November 2024), Transition to Post-Quantum Cryptography Standards: quantum-vulnerable signatures disallowed after 2035",
+          "sourceStatus": "draft"
+        }
+      ]
+    },
+    {
+      "id": "rsa-pkcs1v15-3072",
+      "kind": "signature",
+      "name": "RSA PKCS #1 v1.5, 3072-bit modulus",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2000-01-27",
+          "source": "FIPS 186-2, Digital Signature Standard (27 January 2000); current text FIPS 186-5",
+          "sourceStatus": "final"
+        },
+        {
+          "status": "disallowed",
+          "from": "2036-01-01",
+          "source": "NIST IR 8547 initial public draft (12 November 2024), Transition to Post-Quantum Cryptography Standards: quantum-vulnerable signatures disallowed after 2035",
+          "sourceStatus": "draft"
+        }
+      ]
+    },
+    {
+      "id": "rsa-pkcs1v15-4096",
+      "kind": "signature",
+      "name": "RSA PKCS #1 v1.5, 4096-bit modulus",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2000-01-27",
+          "source": "FIPS 186-2, Digital Signature Standard (27 January 2000); current text FIPS 186-5",
+          "sourceStatus": "final"
+        },
+        {
+          "status": "disallowed",
+          "from": "2036-01-01",
+          "source": "NIST IR 8547 initial public draft (12 November 2024), Transition to Post-Quantum Cryptography Standards: quantum-vulnerable signatures disallowed after 2035",
+          "sourceStatus": "draft"
+        }
+      ]
+    },
+    {
+      "id": "ecdsa-p256",
+      "kind": "signature",
+      "name": "ECDSA over NIST P-256",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2000-01-27",
+          "source": "FIPS 186-2, Digital Signature Standard (27 January 2000); current text FIPS 186-5",
+          "sourceStatus": "final"
+        },
+        {
+          "status": "disallowed",
+          "from": "2036-01-01",
+          "source": "NIST IR 8547 initial public draft (12 November 2024), Transition to Post-Quantum Cryptography Standards: quantum-vulnerable signatures disallowed after 2035",
+          "sourceStatus": "draft"
+        }
+      ]
+    },
+    {
+      "id": "ecdsa-p384",
+      "kind": "signature",
+      "name": "ECDSA over NIST P-384",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2000-01-27",
+          "source": "FIPS 186-2, Digital Signature Standard (27 January 2000); current text FIPS 186-5",
+          "sourceStatus": "final"
+        },
+        {
+          "status": "disallowed",
+          "from": "2036-01-01",
+          "source": "NIST IR 8547 initial public draft (12 November 2024), Transition to Post-Quantum Cryptography Standards: quantum-vulnerable signatures disallowed after 2035",
+          "sourceStatus": "draft"
+        }
+      ]
+    },
+    {
+      "id": "ed25519",
+      "kind": "signature",
+      "name": "EdDSA over edwards25519",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2023-02-03",
+          "source": "FIPS 186-5, Digital Signature Standard (3 February 2023)",
+          "sourceStatus": "final"
+        },
+        {
+          "status": "disallowed",
+          "from": "2036-01-01",
+          "source": "NIST IR 8547 initial public draft (12 November 2024), Transition to Post-Quantum Cryptography Standards: quantum-vulnerable signatures disallowed after 2035",
+          "sourceStatus": "draft"
+        }
+      ]
+    },
+    {
+      "id": "ml-dsa-44",
+      "kind": "signature",
+      "name": "ML-DSA-44",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2024-08-13",
+          "source": "FIPS 204, Module-Lattice-Based Digital Signature Standard (13 August 2024)",
+          "sourceStatus": "final"
+        }
+      ]
+    },
+    {
+      "id": "ml-dsa-65",
+      "kind": "signature",
+      "name": "ML-DSA-65",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2024-08-13",
+          "source": "FIPS 204, Module-Lattice-Based Digital Signature Standard (13 August 2024)",
+          "sourceStatus": "final"
+        }
+      ]
+    },
+    {
+      "id": "ml-dsa-87",
+      "kind": "signature",
+      "name": "ML-DSA-87",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2024-08-13",
+          "source": "FIPS 204, Module-Lattice-Based Digital Signature Standard (13 August 2024)",
+          "sourceStatus": "final"
+        }
+      ],
+      "profiles": [
+        "cnsa-2.0"
+      ]
+    },
+    {
+      "id": "slh-dsa-sha2-128s",
+      "kind": "signature",
+      "name": "SLH-DSA-SHA2-128s",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2024-08-13",
+          "source": "FIPS 205, Stateless Hash-Based Digital Signature Standard (13 August 2024)",
+          "sourceStatus": "final"
+        }
+      ]
+    },
+    {
+      "id": "slh-dsa-sha2-256s",
+      "kind": "signature",
+      "name": "SLH-DSA-SHA2-256s",
+      "lifecycle": [
+        {
+          "status": "approved",
+          "from": "2024-08-13",
+          "source": "FIPS 205, Stateless Hash-Based Digital Signature Standard (13 August 2024)",
+          "sourceStatus": "final"
+        }
+      ]
+    }
+  ]
+}

@@ -48,6 +48,14 @@ jobs:
       - name: Asset category vocabulary copies agree with the schema
         run: pnpm run test:asset-category-vocabulary
 
+      # Archive timestamp chains (RFC 4998 evidence records on attestations):
+      # the schema's algorithm enums match reference-data/algorithm-lifecycle-
+      # registry.json, and every fixture chain is in time order, keeps its hash
+      # on a timestamp renewal and used only algorithms allowed at the time.
+      # The hermetic suite proves each rule can still go red. Exit 2 fails.
+      - name: Archive timestamp chains follow RFC 4998 and the algorithm lifecycle
+        run: pnpm run test:archive-timestamp-chain
+
       # Every Catala body, Cedar policy and verdict fixture declares the one
       # jurisdiction it is written for, as a key of jurisdiction-profiles.json
       # (or jurisdiction-neutral). A filename or a comment is not a declaration.

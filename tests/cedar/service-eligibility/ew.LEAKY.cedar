@@ -5,6 +5,7 @@
 // ever VERIFIES, the analysis wiring is broken. The leak is a reachable
 // ALLOW into oracle Region 1 (tax_adviser is outside the authorised-category
 // whitelist and no forbid neutralises it — the seed's reachable-ALLOW lesson).
+@jurisdiction("GB-ENG")
 permit (
   principal,
   action == Action::"OfferService",
@@ -14,6 +15,7 @@ permit (
   resource.serviceType == "will_drafting" &&
   resource.jurisdiction == "E&W"
 };
+@jurisdiction("GB-ENG")
 permit (
   principal,
   action == Action::"OfferService",

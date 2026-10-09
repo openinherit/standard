@@ -1,5 +1,6 @@
 {
   "rule_name": "InsolventEstateAbatement",
+  "jurisdiction": "GB-ENG",
   "scope": "Abate",
   "positive": [
     {

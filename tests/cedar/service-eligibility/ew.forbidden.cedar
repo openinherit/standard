@@ -11,6 +11,7 @@
 // categories with an LSA-approved regulator for reserved activities
 // (solicitor/barrister/CILEX/licensed conveyancer/notary); the standard's P
 // may still permit FEWER than these (conservative), never more.
+@jurisdiction("GB-ENG")
 permit (
   principal,
   action == Action::"OfferService",
@@ -23,6 +24,7 @@ permit (
 
 // Region 2 — platform-computed quote display (quote_estimation posture is
 // professional-authored-only in E&W; Avvo 5.4(c) "who sets the price").
+@jurisdiction("GB-ENG")
 permit (
   principal,
   action == Action::"OfferService",
@@ -35,6 +37,7 @@ permit (
 
 // Region 3 — opaque proximity routing (proximity_matching posture is
 // user-sort-ok in E&W; sort/filter only, never an opaque match/route — L19/L10).
+@jurisdiction("GB-ENG")
 permit (
   principal,
   action == Action::"OfferService",

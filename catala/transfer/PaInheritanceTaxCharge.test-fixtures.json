@@ -1,6 +1,7 @@
 {
   "$comment": "Catala rule test inputs for PaInheritanceTaxCharge. Pennsylvania inheritance tax charge, 72 P.S. § 9116(a). Scope returns ComputedOrNeedsHuman.Verdict (money), not a bespoke verdict enum, so expected_output records the arm + (for Computed) the amount. Mirrors the oracle cases authored for the T032 gov-oracle follow-up (tests/oracles/pa-inheritance-tax.oracle.json) — figures live-sourced revenue.pa.gov / 20 Pa.C.S. § 3121 2026-07-02.",
   "rule_name": "PaInheritanceTaxCharge",
+  "jurisdiction": "US-PA",
   "scope": "Charge",
   "positive": [
     {

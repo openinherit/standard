@@ -48,6 +48,13 @@ jobs:
       - name: Asset category vocabulary copies agree with the schema
         run: pnpm run test:asset-category-vocabulary
 
+      # Every Catala body, Cedar policy and verdict fixture declares the one
+      # jurisdiction it is written for, as a key of jurisdiction-profiles.json
+      # (or jurisdiction-neutral). A filename or a comment is not a declaration.
+      # The hermetic suite proves the check can still go red. Exit 2 fails.
+      - name: Rule bodies and verdict fixtures declare their jurisdiction
+        run: pnpm run test:rule-jurisdiction
+
       # Level 2 — referential integrity. Nothing in CI ran this until now, so
       # every cross-reference rule in scripts/validate-refs.mjs was advisory:
       # deleting one left the build green.

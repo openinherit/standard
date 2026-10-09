@@ -8,6 +8,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Every rule body and verdict fixture declares the one jurisdiction it is written for (#27). A
+  Catala body carries a `Jurisdiction: <KEY>` line beside its SPDX lines; every Cedar policy
+  carries a `@jurisdiction("<KEY>")` annotation; a `*.test-fixtures.json`,
+  `*.expected-output.json` or `*.verdict.json` carries a top-level `"jurisdiction"` key. `<KEY>`
+  is a non-deprecated key of `reference-data/jurisdiction-profiles.json`, or
+  `jurisdiction-neutral` for a module with no jurisdiction by design (the shared
+  `ComputedOrNeedsHuman` contract). The eleven rule bodies and eight fixtures now declare
+  `GB-ENG`, `IE`, `US-PA` or `jurisdiction-neutral`. `scripts/check-rule-jurisdiction.py` (run in
+  the test workflow, with hermetic tests in `scripts/test-check-rule-jurisdiction.sh`) refuses a
+  missing or duplicated slot, a key that is not a live profile key (so a composite such as
+  `uk-eng-wales-and-scotland` is refused), Cedar policies in one file that disagree, and a fixture
+  that disagrees with its rule body. Before, the jurisdiction was in a filename, a module name or
+  a comment.
+- A Pennsylvania (`US-PA`) jurisdiction profile, so `PaInheritanceTaxCharge` has a key to declare,
+  and its jurisdiction-cascade entry. Tax resolution up to the federal `US` rows is refused,
+  because they would silently drop Pennsylvania's inheritance tax (72 P.S. § 9116).
 - Real property in Northern Ireland and Ireland (proposal 0004). The Ireland extension gains
   `localTenureTypes` (`freehold`, `leasehold`, `fee_farm_grant`) and `landRegistration`: which
   register the title is on (`land_registry` folio or `registry_of_deeds`), the folio number, the

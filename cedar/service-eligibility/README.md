@@ -52,7 +52,11 @@ required check on `main-protection`.
 
 1. **Standard (here):** add `cedar/service-eligibility/<jur>.cedar` (P — the `permit`/`forbid`
    set), drawing service-types from the `RegulatedServiceTypeScheme` SKOS vocabulary those issues
-   own.
+   own. Every policy in it, and in its oracle and mutant, carries `@jurisdiction("<KEY>")`, where
+   `<KEY>` is a key of `reference-data/jurisdiction-profiles.json` (`GB-ENG` for the E&W pack).
+   The filename and the comments do not count; `scripts/check-rule-jurisdiction.py` refuses a
+   policy without the annotation. The annotation declares the policy's own scope. It is not the
+   `resource.jurisdiction` value a request carries, which stays `"E&W"` for this pack.
 2. **Test-suite:** add `tests/cedar/service-eligibility/<jur>.forbidden.cedar` (Q — the deny-set
    oracle) + a `checks[]` row in `tests/cedar/service-eligibility/manifest.yaml`. The harness picks
    it up with **no code change**.

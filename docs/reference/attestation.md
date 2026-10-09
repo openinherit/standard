@@ -31,6 +31,7 @@ Schema `$id`: `https://openinherit.org/v3/attestation.json`
 | `authoritativeCopyHolder` | `string` | | Name or identifier of the entity holding the authoritative copy of the electronic will |
 | `tamperEvidenceMethod` | `string` | | e.g. SHA-256, blockchain notarisation |
 | `tamperEvidenceValue` | `string` | | The hash or signature value |
+| `archiveTimestampChain` | [Archive Timestamp Chain](common/archive-timestamp-chain.md) | | RFC 4998 Evidence Record Syntax renewal chain for this attestation's signed document, so that it can still be verified after the algorithms it was signed and timestamped with are no longer secure. Complements tamperEvidenceMethod and tamperEvidenceValue, which record a single hash or signature |
 | `ronSessionId` | `string` | | Remote Online Notarisation session identifier |
 | `ronPlatform` | `string` | | RON platform, e.g. Notarize, DocVerify |
 | `ronRecordingContentUrl` | `string` (uri) | | URL of the uninterrupted audio-video recording of the RON session |

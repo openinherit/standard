@@ -477,6 +477,92 @@
         "id": "a0000022-0000-4000-a000-000000000022",
         "attestationDate": "2023-08-22T14:30:00+08:00"
       }
+    },
+    {
+      "description": "valid — electronic attestation with an archive timestamp chain",
+      "valid": true,
+      "data": {
+        "id": "6f1c2a3b-4d5e-4f60-8a7b-9c0d1e2f3a4b",
+        "attestationDate": "2026-03-28T10:00:00Z",
+        "tamperEvidenceMethod": "SHA-256",
+        "tamperEvidenceValue": "3333333333333333333333333333333333333333333333333333333333333333",
+        "archiveTimestampChain": {
+          "evidenceRecordFormat": "rfc4998",
+          "protectedObjectDigest": {
+            "algorithm": "sha-256",
+            "value": "3333333333333333333333333333333333333333333333333333333333333333"
+          },
+          "archiveTimestamps": [
+            {
+              "sequence": 0,
+              "renewalType": "initial",
+              "timestamp": "2026-03-28T10:00:00Z",
+              "digestAlgorithm": "sha-256",
+              "signatureAlgorithm": "rsa-pkcs1v15-3072",
+              "coveredDigest": {
+                "algorithm": "sha-256",
+                "value": "3333333333333333333333333333333333333333333333333333333333333333"
+              },
+              "timestampTokenRef": "urn:example:archive:will-2026-03-28:ats-0",
+              "timestampAuthorityName": "Example Qualified TSA"
+            },
+            {
+              "sequence": 1,
+              "renewalType": "timestamp_renewal",
+              "timestamp": "2030-03-28T10:00:00Z",
+              "digestAlgorithm": "sha-256",
+              "signatureAlgorithm": "ecdsa-p384",
+              "coveredDigest": {
+                "algorithm": "sha-256",
+                "value": "7777777777777777777777777777777777777777777777777777777777777777"
+              },
+              "timestampTokenRef": "urn:example:archive:will-2026-03-28:ats-1"
+            },
+            {
+              "sequence": 2,
+              "renewalType": "hash_tree_renewal",
+              "timestamp": "2033-03-28T10:00:00Z",
+              "digestAlgorithm": "sha-512",
+              "signatureAlgorithm": "ml-dsa-87",
+              "coveredDigest": {
+                "algorithm": "sha-512",
+                "value": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+              },
+              "timestampTokenRef": "urn:example:archive:will-2026-03-28:ats-2"
+            }
+          ],
+          "evidenceRecordContentUrl": "https://archive.example.org/evidence/will-2026-03-28.ers"
+        }
+      }
+    },
+    {
+      "description": "invalid — archive timestamp chain with an algorithm outside the lifecycle registry",
+      "valid": false,
+      "data": {
+        "id": "7a2b3c4d-5e6f-4a70-8b9c-0d1e2f3a4b5c",
+        "archiveTimestampChain": {
+          "evidenceRecordFormat": "rfc4998",
+          "protectedObjectDigest": {
+            "algorithm": "md5",
+            "value": "3333333333333333333333333333333333333333333333333333333333333333"
+          },
+          "archiveTimestamps": [
+            {
+              "sequence": 0,
+              "renewalType": "initial",
+              "timestamp": "2026-03-28T10:00:00Z",
+              "digestAlgorithm": "sha-256",
+              "signatureAlgorithm": "rsa-pkcs1v15-3072",
+              "coveredDigest": {
+                "algorithm": "sha-256",
+                "value": "3333333333333333333333333333333333333333333333333333333333333333"
+              },
+              "timestampTokenRef": "urn:example:archive:will-2026-03-28:ats-0",
+              "timestampAuthorityName": "Example Qualified TSA"
+            }
+          ]
+        }
+      }
     }
   ]
 }

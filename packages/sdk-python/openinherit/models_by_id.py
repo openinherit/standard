@@ -22,6 +22,7 @@ MODELS_BY_ID: dict[str, type] = {
     "https://openinherit.org/v3/catalogue.json": models.Catalogue,
     "https://openinherit.org/v3/common/address.json": models.Address,
     "https://openinherit.org/v3/common/ai-provenance.json": models.AiProvenance,
+    "https://openinherit.org/v3/common/archive-timestamp-chain.json": models.ArchiveTimestampChain,
     "https://openinherit.org/v3/common/audit-event.json": models.AuditEvent,
     "https://openinherit.org/v3/common/completeness.json": models.Completeness,
     "https://openinherit.org/v3/common/cultural-disposition.json": models.CulturalDisposition,

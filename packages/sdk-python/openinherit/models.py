@@ -11394,6 +11394,114 @@ class Uae(BaseModel):
     )
 
 
+class DigestAlgorithmId(Enum):
+    sha_1 = 'sha-1'
+    sha_256 = 'sha-256'
+    sha_384 = 'sha-384'
+    sha_512 = 'sha-512'
+    sha3_256 = 'sha3-256'
+    sha3_384 = 'sha3-384'
+    sha3_512 = 'sha3-512'
+
+
+class SignatureAlgorithmId(Enum):
+    rsa_pkcs1v15_2048 = 'rsa-pkcs1v15-2048'
+    rsa_pkcs1v15_3072 = 'rsa-pkcs1v15-3072'
+    rsa_pkcs1v15_4096 = 'rsa-pkcs1v15-4096'
+    ecdsa_p256 = 'ecdsa-p256'
+    ecdsa_p384 = 'ecdsa-p384'
+    ed25519 = 'ed25519'
+    ml_dsa_44 = 'ml-dsa-44'
+    ml_dsa_65 = 'ml-dsa-65'
+    ml_dsa_87 = 'ml-dsa-87'
+    slh_dsa_sha2_128s = 'slh-dsa-sha2-128s'
+    slh_dsa_sha2_256s = 'slh-dsa-sha2-256s'
+
+
+class Digest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    algorithm: DigestAlgorithmId = Field(
+        ..., description='Hash algorithm that produced the value'
+    )
+    value: constr(pattern=r'^[0-9a-f]+$', min_length=40, max_length=128) = (
+        Field(
+            ...,
+            description='The hash value, lowercase hexadecimal, of the length the algorithm produces',
+        )
+    )
+
+
+class RenewalType(Enum):
+    initial = 'initial'
+    timestamp_renewal = 'timestamp_renewal'
+    hash_tree_renewal = 'hash_tree_renewal'
+
+
+class ArchiveTimestamp(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    sequence: conint(ge=0, le=999) = Field(
+        ...,
+        description='Position in the chain, starting at 0 for the initial archive timestamp and increasing by one',
+    )
+    renewalType: RenewalType = Field(
+        ...,
+        description='initial: the first archive timestamp over the protected object. timestamp_renewal: covers the previous timestamp with the same hash algorithm, added to the current chain (RFC 4998 section 5.2). hash_tree_renewal: re-hashes the object and all previous chains, normally with a stronger hash algorithm, and starts a new chain',
+    )
+    timestamp: AwareDatetime = Field(
+        ..., description="The time-stamp token's generation time (RFC 3161 genTime)"
+    )
+    digestAlgorithm: DigestAlgorithmId = Field(
+        ...,
+        description="Hash algorithm of this archive timestamp's hash tree. Within one chain every archive timestamp uses the same one",
+    )
+    signatureAlgorithm: SignatureAlgorithmId = Field(
+        ...,
+        description="Signature algorithm of the time-stamping authority's signature on the token",
+    )
+    coveredDigest: Digest = Field(
+        ...,
+        description="The hash this archive timestamp covers: the protected object hash for the initial one, the previous timestamp's hash for a timestamp renewal, or the combined object-and-chains hash for a hash-tree renewal. Its algorithm is this archive timestamp's digestAlgorithm",
+    )
+    timestampTokenRef: constr(min_length=1, max_length=2000) = Field(
+        ...,
+        description='Reference to the RFC 3161 time-stamp token, such as a URI or URN in the archive',
+    )
+    timestampAuthorityName: constr(max_length=500) | None = Field(
+        None, description='Name of the time-stamping authority that issued the token'
+    )
+
+
+class ArchiveTimestampChain(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    evidenceRecordFormat: Literal['rfc4998'] = Field(
+        ...,
+        description='The evidence record syntax the chain follows. Only RFC 4998 Evidence Record Syntax is defined',
+    )
+    protectedObjectDigest: Digest = Field(
+        ...,
+        description="Hash of the protected data object (the signed will, codicil or other attested document) as covered by the initial archive timestamp. Its algorithm is the initial archive timestamp's digest algorithm",
+    )
+    archiveTimestamps: list[ArchiveTimestamp] = Field(
+        ...,
+        description="Every archive timestamp, ascending by time (RFC 4998 section 5.1). The first is the initial archive timestamp (sequence 0, renewalType initial); each later one is a renewal. Only the newest one's algorithms need to remain secure for the record to verify. Order and the initial-first rule are checked by scripts/check-archive-timestamp-chain.mjs, since JSON Schema cannot compare one item with the next",
+        max_length=1000,
+        min_length=1,
+    )
+    evidenceRecordContentUrl: constr(max_length=2000) | None = Field(
+        None, description='Where the DER-encoded RFC 4998 EvidenceRecord is held'
+    )
+    notes: constr(max_length=2000) | None = Field(
+        None,
+        description='Free-text notes about the chain, such as the archive service that maintains it',
+    )
+
+
 class Witness(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -11585,6 +11693,10 @@ class Attestation(BaseModel):
     )
     tamperEvidenceValue: constr(max_length=1000) | None = Field(
         None, description='The hash or signature value'
+    )
+    archiveTimestampChain: ArchiveTimestampChain | None = Field(
+        None,
+        description="RFC 4998 Evidence Record Syntax renewal chain for this attestation's signed document, so that it can still be verified after the algorithms it was signed and timestamped with are no longer secure. Complements tamperEvidenceMethod and tamperEvidenceValue, which record a single hash or signature",
     )
     ronSessionId: constr(max_length=255) | None = Field(
         None, description='Remote Online Notarisation session identifier'

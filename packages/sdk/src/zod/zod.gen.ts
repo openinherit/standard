@@ -5599,6 +5599,75 @@ export const zUae = z.object({
 export const zExtensionUae = zUae;
 
 /**
+ * A hash algorithm id from reference-data/algorithm-lifecycle-registry.json (kind: digest)
+ */
+export const zDigestAlgorithmId = z.enum([
+    'sha-1',
+    'sha-256',
+    'sha-384',
+    'sha-512',
+    'sha3-256',
+    'sha3-384',
+    'sha3-512'
+]);
+
+/**
+ * A signature algorithm id from reference-data/algorithm-lifecycle-registry.json (kind: signature)
+ */
+export const zSignatureAlgorithmId = z.enum([
+    'rsa-pkcs1v15-2048',
+    'rsa-pkcs1v15-3072',
+    'rsa-pkcs1v15-4096',
+    'ecdsa-p256',
+    'ecdsa-p384',
+    'ed25519',
+    'ml-dsa-44',
+    'ml-dsa-65',
+    'ml-dsa-87',
+    'slh-dsa-sha2-128s',
+    'slh-dsa-sha2-256s'
+]);
+
+/**
+ * A hash value with the algorithm that produced it, as lowercase hexadecimal
+ */
+export const zDigest = z.intersection(z.unknown(), z.strictObject({
+    algorithm: zDigestAlgorithmId,
+    value: z.string().min(40).max(128).regex(/^[0-9a-f]+$/)
+}));
+
+/**
+ * One RFC 4998 ArchiveTimeStamp: an RFC 3161 time-stamp token over a hash tree that covers the protected object or the previous archive timestamps
+ */
+export const zArchiveTimestamp = z.strictObject({
+    sequence: z.int().gte(0).lte(999),
+    renewalType: z.enum([
+        'initial',
+        'timestamp_renewal',
+        'hash_tree_renewal'
+    ]),
+    timestamp: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/),
+    digestAlgorithm: zDigestAlgorithmId,
+    signatureAlgorithm: zSignatureAlgorithmId,
+    coveredDigest: zDigest,
+    timestampTokenRef: z.string().min(1).max(2000),
+    timestampAuthorityName: z.string().max(500).optional()
+});
+
+/**
+ * Archive Timestamp Chain
+ *
+ * The renewal history of an RFC 4998 Evidence Record Syntax (ERS) evidence record for a signed or attested document, so that it can still be verified after the hash or signature algorithms it was created with are no longer secure. Records the shape of the chain: the hash of the protected document, then every archive timestamp in time order — the initial one, each Timestamp Renewal (same hash algorithm, new timestamp) and each Hash-Tree Renewal (new hash algorithm, starts a new chain). Cryptographic verification of the evidence record itself is done outside the schema; this object carries what that verification and a renewal schedule need. Algorithm ids are the ids in reference-data/algorithm-lifecycle-registry.json
+ */
+export const zArchiveTimestampChain = z.strictObject({
+    evidenceRecordFormat: z.literal('rfc4998'),
+    protectedObjectDigest: zDigest,
+    archiveTimestamps: z.array(zArchiveTimestamp).min(1).max(1000),
+    evidenceRecordContentUrl: z.string().max(2000).optional(),
+    notes: z.string().max(2000).optional()
+});
+
+/**
  * Attestation
  *
  * A first-class attestation entity recording will execution formalities. Each attestation has its own identity — supports tracking multiple attestation events independently (original will, codicils, re-execution after marriage). Reused by estate, codicils, trusts, extensions. Supports written (E&W Wills Act s.9), oral (Islamic/customary), seal-based (Japanese inkan), kinyan-based (Jewish)
@@ -5653,6 +5722,7 @@ export const zAttestation = z.object({
     authoritativeCopyHolder: z.string().max(255).optional(),
     tamperEvidenceMethod: z.string().max(255).optional(),
     tamperEvidenceValue: z.string().max(1000).optional(),
+    archiveTimestampChain: zArchiveTimestampChain.optional(),
     ronSessionId: z.string().max(255).optional(),
     ronPlatform: z.string().max(255).optional(),
     ronRecordingContentUrl: z.url().optional(),

@@ -41,12 +41,9 @@ One RFC 4998 ArchiveTimeStamp: an RFC 3161 time-stamp token over a hash tree tha
 
 ### digest
 
-A hash value with the algorithm that produced it, as lowercase hexadecimal
+A hash value with the algorithm that produced it, as lowercase hexadecimal of the length that algorithm produces. The algorithm is one of $defs/digestAlgorithmId
 
-| Property | Type | Required | Description |
-| --- | --- | --- | --- |
-| `algorithm` | [digestAlgorithmId](#def-digestAlgorithmId) | yes | Hash algorithm that produced the value |
-| `value` | `string` | yes | The hash value, lowercase hexadecimal, of the length the algorithm produces |
+Type: `object` or `object` or `object` or `object`
 
 <a id="def-digestAlgorithmId"></a>
 

@@ -5629,12 +5629,26 @@ export const zSignatureAlgorithmId = z.enum([
 ]);
 
 /**
- * A hash value with the algorithm that produced it, as lowercase hexadecimal
+ * A hash value with the algorithm that produced it, as lowercase hexadecimal of the length that algorithm produces. The algorithm is one of $defs/digestAlgorithmId
  */
-export const zDigest = z.intersection(z.unknown(), z.strictObject({
-    algorithm: zDigestAlgorithmId,
-    value: z.string().min(40).max(128).regex(/^[0-9a-f]+$/)
-}));
+export const zDigest = z.union([
+    z.strictObject({
+        algorithm: z.literal('sha-1'),
+        value: z.string().regex(/^[0-9a-f]{40}$/)
+    }),
+    z.strictObject({
+        algorithm: z.enum(['sha-256', 'sha3-256']),
+        value: z.string().regex(/^[0-9a-f]{64}$/)
+    }),
+    z.strictObject({
+        algorithm: z.enum(['sha-384', 'sha3-384']),
+        value: z.string().regex(/^[0-9a-f]{96}$/)
+    }),
+    z.strictObject({
+        algorithm: z.enum(['sha-512', 'sha3-512']),
+        value: z.string().regex(/^[0-9a-f]{128}$/)
+    })
+]);
 
 /**
  * One RFC 4998 ArchiveTimeStamp: an RFC 3161 time-stamp token over a hash tree that covers the protected object or the previous archive timestamps

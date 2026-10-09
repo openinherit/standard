@@ -11418,18 +11418,73 @@ class SignatureAlgorithmId(Enum):
     slh_dsa_sha2_256s = 'slh-dsa-sha2-256s'
 
 
-class Digest(BaseModel):
+class Digest1(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    algorithm: DigestAlgorithmId = Field(
+    algorithm: Literal['sha-1'] = Field(
         ..., description='Hash algorithm that produced the value'
     )
-    value: constr(pattern=r'^[0-9a-f]+$', min_length=40, max_length=128) = (
-        Field(
-            ...,
-            description='The hash value, lowercase hexadecimal, of the length the algorithm produces',
-        )
+    value: constr(pattern=r'^[0-9a-f]{40}$') = Field(
+        ..., description='The hash value, 40 lowercase hexadecimal characters'
+    )
+
+
+class Algorithm(Enum):
+    sha_256 = 'sha-256'
+    sha3_256 = 'sha3-256'
+
+
+class Digest2(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    algorithm: Algorithm = Field(
+        ..., description='Hash algorithm that produced the value'
+    )
+    value: constr(pattern=r'^[0-9a-f]{64}$') = Field(
+        ..., description='The hash value, 64 lowercase hexadecimal characters'
+    )
+
+
+class Algorithm1(Enum):
+    sha_384 = 'sha-384'
+    sha3_384 = 'sha3-384'
+
+
+class Digest3(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    algorithm: Algorithm1 = Field(
+        ..., description='Hash algorithm that produced the value'
+    )
+    value: constr(pattern=r'^[0-9a-f]{96}$') = Field(
+        ..., description='The hash value, 96 lowercase hexadecimal characters'
+    )
+
+
+class Algorithm2(Enum):
+    sha_512 = 'sha-512'
+    sha3_512 = 'sha3-512'
+
+
+class Digest4(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    algorithm: Algorithm2 = Field(
+        ..., description='Hash algorithm that produced the value'
+    )
+    value: constr(pattern=r'^[0-9a-f]{128}$') = Field(
+        ..., description='The hash value, 128 lowercase hexadecimal characters'
+    )
+
+
+class Digest(RootModel[Digest1 | Digest2 | Digest3 | Digest4]):
+    root: Digest1 | Digest2 | Digest3 | Digest4 = Field(
+        ...,
+        description='A hash value with the algorithm that produced it, as lowercase hexadecimal of the length that algorithm produces. The algorithm is one of $defs/digestAlgorithmId',
     )
 
 
@@ -13087,7 +13142,7 @@ class TestamentaryScenario(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Algorithm(Enum):
+class Algorithm3(Enum):
     sha_256 = 'sha-256'
     sha_384 = 'sha-384'
     sha_512 = 'sha-512'
@@ -13097,7 +13152,7 @@ class Integrity(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    algorithm: Algorithm = Field(
+    algorithm: Algorithm3 = Field(
         ..., description='Hash algorithm used to compute the digest'
     )
     digest: constr(pattern=r'^[0-9a-f]+$', min_length=64, max_length=128) = (

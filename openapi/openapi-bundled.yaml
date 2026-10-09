@@ -16870,65 +16870,70 @@ components:
         - slh-dsa-sha2-128s
         - slh-dsa-sha2-256s
     digest:
-      description: A hash value with the algorithm that produced it, as lowercase hexadecimal
-      type: object
-      required:
-        - algorithm
-        - value
-      properties:
-        algorithm:
-          description: Hash algorithm that produced the value
-          $ref: '#/components/schemas/digestAlgorithmId'
-        value:
-          description: The hash value, lowercase hexadecimal, of the length the algorithm produces
-          type: string
-          pattern: ^[0-9a-f]+$
-          maxLength: 128
-          minLength: 40
-      additionalProperties: false
-      allOf:
-        - if:
-            properties:
-              algorithm:
-                const: sha-1
-          then:
-            properties:
-              value:
-                maxLength: 40
-                minLength: 40
-        - if:
-            properties:
-              algorithm:
-                enum:
-                  - sha-256
-                  - sha3-256
-          then:
-            properties:
-              value:
-                maxLength: 64
-                minLength: 64
-        - if:
-            properties:
-              algorithm:
-                enum:
-                  - sha-384
-                  - sha3-384
-          then:
-            properties:
-              value:
-                maxLength: 96
-                minLength: 96
-        - if:
-            properties:
-              algorithm:
-                enum:
-                  - sha-512
-                  - sha3-512
-          then:
-            properties:
-              value:
-                maxLength: 128
-                minLength: 128
+      description: A hash value with the algorithm that produced it, as lowercase hexadecimal of the length that algorithm produces. The algorithm is one of $defs/digestAlgorithmId
+      anyOf:
+        - description: 'A 160-bit hash: sha-1'
+          type: object
+          required:
+            - algorithm
+            - value
+          properties:
+            algorithm:
+              description: Hash algorithm that produced the value
+              const: sha-1
+            value:
+              description: The hash value, 40 lowercase hexadecimal characters
+              type: string
+              pattern: ^[0-9a-f]{40}$
+          additionalProperties: false
+        - description: 'A 256-bit hash: sha-256, sha3-256'
+          type: object
+          required:
+            - algorithm
+            - value
+          properties:
+            algorithm:
+              description: Hash algorithm that produced the value
+              enum:
+                - sha-256
+                - sha3-256
+            value:
+              description: The hash value, 64 lowercase hexadecimal characters
+              type: string
+              pattern: ^[0-9a-f]{64}$
+          additionalProperties: false
+        - description: 'A 384-bit hash: sha-384, sha3-384'
+          type: object
+          required:
+            - algorithm
+            - value
+          properties:
+            algorithm:
+              description: Hash algorithm that produced the value
+              enum:
+                - sha-384
+                - sha3-384
+            value:
+              description: The hash value, 96 lowercase hexadecimal characters
+              type: string
+              pattern: ^[0-9a-f]{96}$
+          additionalProperties: false
+        - description: 'A 512-bit hash: sha-512, sha3-512'
+          type: object
+          required:
+            - algorithm
+            - value
+          properties:
+            algorithm:
+              description: Hash algorithm that produced the value
+              enum:
+                - sha-512
+                - sha3-512
+            value:
+              description: The hash value, 128 lowercase hexadecimal characters
+              type: string
+              pattern: ^[0-9a-f]{128}$
+          additionalProperties: false
     archiveTimestamp:
       description: 'One RFC 4998 ArchiveTimeStamp: an RFC 3161 time-stamp token over a hash tree that covers the protected object or the previous archive timestamps'
       type: object
@@ -17036,65 +17041,70 @@ components:
             - slh-dsa-sha2-128s
             - slh-dsa-sha2-256s
         digest:
-          description: A hash value with the algorithm that produced it, as lowercase hexadecimal
-          type: object
-          required:
-            - algorithm
-            - value
-          properties:
-            algorithm:
-              description: Hash algorithm that produced the value
-              $ref: '#/components/schemas/digestAlgorithmId'
-            value:
-              description: The hash value, lowercase hexadecimal, of the length the algorithm produces
-              type: string
-              pattern: ^[0-9a-f]+$
-              maxLength: 128
-              minLength: 40
-          additionalProperties: false
-          allOf:
-            - if:
-                properties:
-                  algorithm:
-                    const: sha-1
-              then:
-                properties:
-                  value:
-                    maxLength: 40
-                    minLength: 40
-            - if:
-                properties:
-                  algorithm:
-                    enum:
-                      - sha-256
-                      - sha3-256
-              then:
-                properties:
-                  value:
-                    maxLength: 64
-                    minLength: 64
-            - if:
-                properties:
-                  algorithm:
-                    enum:
-                      - sha-384
-                      - sha3-384
-              then:
-                properties:
-                  value:
-                    maxLength: 96
-                    minLength: 96
-            - if:
-                properties:
-                  algorithm:
-                    enum:
-                      - sha-512
-                      - sha3-512
-              then:
-                properties:
-                  value:
-                    maxLength: 128
-                    minLength: 128
+          description: A hash value with the algorithm that produced it, as lowercase hexadecimal of the length that algorithm produces. The algorithm is one of $defs/digestAlgorithmId
+          anyOf:
+            - description: 'A 160-bit hash: sha-1'
+              type: object
+              required:
+                - algorithm
+                - value
+              properties:
+                algorithm:
+                  description: Hash algorithm that produced the value
+                  const: sha-1
+                value:
+                  description: The hash value, 40 lowercase hexadecimal characters
+                  type: string
+                  pattern: ^[0-9a-f]{40}$
+              additionalProperties: false
+            - description: 'A 256-bit hash: sha-256, sha3-256'
+              type: object
+              required:
+                - algorithm
+                - value
+              properties:
+                algorithm:
+                  description: Hash algorithm that produced the value
+                  enum:
+                    - sha-256
+                    - sha3-256
+                value:
+                  description: The hash value, 64 lowercase hexadecimal characters
+                  type: string
+                  pattern: ^[0-9a-f]{64}$
+              additionalProperties: false
+            - description: 'A 384-bit hash: sha-384, sha3-384'
+              type: object
+              required:
+                - algorithm
+                - value
+              properties:
+                algorithm:
+                  description: Hash algorithm that produced the value
+                  enum:
+                    - sha-384
+                    - sha3-384
+                value:
+                  description: The hash value, 96 lowercase hexadecimal characters
+                  type: string
+                  pattern: ^[0-9a-f]{96}$
+              additionalProperties: false
+            - description: 'A 512-bit hash: sha-512, sha3-512'
+              type: object
+              required:
+                - algorithm
+                - value
+              properties:
+                algorithm:
+                  description: Hash algorithm that produced the value
+                  enum:
+                    - sha-512
+                    - sha3-512
+                value:
+                  description: The hash value, 128 lowercase hexadecimal characters
+                  type: string
+                  pattern: ^[0-9a-f]{128}$
+              additionalProperties: false
         archiveTimestamp:
           description: 'One RFC 4998 ArchiveTimeStamp: an RFC 3161 time-stamp token over a hash tree that covers the protected object or the previous archive timestamps'
           type: object

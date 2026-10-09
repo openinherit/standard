@@ -39,8 +39,12 @@ RULE_SUFFIXES = (".catala_en", ".cedar")
 FIXTURE_SUFFIXES = (".test-fixtures.json", ".verdict.json", ".expected-output.json")
 
 CATALA_SLOT = re.compile(r"^Jurisdiction:\s*(\S+)\s*$")
-CEDAR_ANNOTATION = re.compile(r'@([A-Za-z_]\w*)\s*(?:\(\s*"((?:[^"\\]|\\.)*)"\s*\))?\s*')
+CEDAR_ANNOTATION = re.compile(r'@\s*([A-Za-z_]\w*)\s*(?:\(\s*"((?:[^"\\]|\\.)*)"\s*\))?\s*')
 CEDAR_EFFECT = re.compile(r"(permit|forbid)\s*\(")
+CEDAR_STRING = re.compile(r'"(?:[^"\\]|\\.)*"')
+# A second effect inside one statement means a `;` is missing, so the second
+# policy would otherwise be read as part of the first and never checked.
+CEDAR_ANOTHER_EFFECT = re.compile(r"(?<![\w.:])(permit|forbid)\s*\(")
 
 
 class CannotAnswer(Exception):
@@ -131,8 +135,11 @@ def cedar_slot(text):
                 break
             annotations[match.group(1)] = match.group(2)
             pos = match.end()
-        if not CEDAR_EFFECT.match(stmt, pos):
+        effect = CEDAR_EFFECT.match(stmt, pos)
+        if not effect:
             problems.append(f"statement {n} is not a permit/forbid policy")
+        elif CEDAR_ANOTHER_EFFECT.search(CEDAR_STRING.sub('""', stmt[effect.end():])):
+            problems.append(f"statement {n} holds more than one policy (a `;` is missing)")
         elif annotations.get("jurisdiction") is None:
             problems.append(f'policy {n} has no @jurisdiction("<KEY>") annotation')
         else:

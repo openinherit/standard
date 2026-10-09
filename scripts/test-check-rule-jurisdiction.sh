@@ -90,9 +90,9 @@ catala "$D/catala/probate/Contract.catala_en" 'Jurisdiction: jurisdiction-neutra
 t      "a body may declare itself jurisdiction-neutral"         0 "$D"
 
 D="$(good_tree outside)"
-mkdir -p "$D/examples/fixtures"
+mkdir -p "$D/examples"
 printf 'permit (principal, action, resource);' > "$D/examples/x.cedar"
-printf '{"estate":{}}' > "$D/examples/fixtures/estate.json"
+printf '{"estate":{}}' > "$D/examples/estate.verdict.json"
 t      "files outside the rule directories are not scanned"     0 "$D" --min-files 4
 t      "...and are not counted"                                 2 "$D" --min-files 5
 
@@ -148,6 +148,18 @@ D="$(good_tree ced-string)"
 { policy '@jurisdiction("XA")' permit
   printf '@jurisdiction("XA")\nforbid (principal, action, resource) when { resource.k == "a;b // c" };\n'; } > "$D/cedar/pack/p.cedar"
 t      "a ; or // inside a string literal does not split"       0 "$D"
+
+D="$(good_tree ced-nosemi)"
+{ printf '@jurisdiction("XA")\npermit (principal, action, resource)\n'; policy '' forbid; } > "$D/cedar/pack/p.cedar"
+t      "two policies with no ; between them are refused"        1 "$D"
+
+D="$(good_tree ced-strword)"
+{ printf '@jurisdiction("XA")\npermit (principal, action, resource) when { resource.k == "forbid (" };\n'; } > "$D/cedar/pack/p.cedar"
+t      "an effect keyword inside a string is not a policy"      0 "$D"
+
+D="$(good_tree ced-space)"
+{ printf '@ jurisdiction ("XA")\n'; policy '' permit; } > "$D/cedar/pack/p.cedar"
+t      "whitespace inside an annotation is accepted"            0 "$D"
 
 D="$(good_tree ced-empty)"
 printf '// nothing but a comment\n' > "$D/tests/cedar/pack/empty.cedar"

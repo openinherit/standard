@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
 // SPDX-License-Identifier: Apache-2.0
 // Service-eligibility unit-test fixture — LEAKY policy (overlaps forbidden.cedar; disjoint DOES NOT HOLD).
+@jurisdiction("GB-ENG")
 permit (
   principal,
   action == Action::"OfferService",

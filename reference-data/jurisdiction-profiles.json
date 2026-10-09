@@ -90,6 +90,21 @@
       "deprecatedReason": null,
       "supersededBy": null
     },
+    "US-PA": {
+      "name": "Pennsylvania",
+      "currencyCode": "USD",
+      "locale": "en-US",
+      "direction": "ltr",
+      "professionalTerm": "attorney",
+      "testamentaryFreedom": "Common law (separate property) state with an elective share — the surviving spouse may elect to take one-third of the property specified in 20 Pa.C.S. § 2203 in place of the will.",
+      "probateCourtName": "Register of Wills of the county (contested matters: Orphans' Court Division of the Court of Common Pleas)",
+      "deathRegistrationBody": "Pennsylvania Department of Health, Division of Vital Records",
+      "typicalTimelineMonths": 12,
+      "deprecated": false,
+      "deprecatedAt": null,
+      "deprecatedReason": null,
+      "supersededBy": null
+    },
     "US-TX": {
       "name": "Texas",
       "currencyCode": "USD",

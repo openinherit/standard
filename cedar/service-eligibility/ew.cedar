@@ -18,6 +18,7 @@
 // Solicitors are authorised persons for reserved probate activities:
 // LSA 2007 s.18 + Sch 4 (SRA the approved regulator); will_drafting,
 // estate_administration, trust_administration are UNRESERVED (Sch 2).
+@jurisdiction("GB-ENG")
 permit (
   principal,
   action == Action::"OfferService",
@@ -34,6 +35,7 @@ permit (
 // UNREGULATED in E&W; the vetting floor (HMRC registration from 18 May 2026
 // + CIOT/ATT/ICAEW/STEP + PII + AML, posture §5d) is a data-plane
 // requirement on the app's vetting flow, not a service prohibition here.
+@jurisdiction("GB-ENG")
 permit (
   principal,
   action == Action::"OfferService",
@@ -53,6 +55,7 @@ permit (
 // NOTE (lesson from the seed): this forbid means a leak-test permit for
 // unregulated_will_writer x reserved_* is NEUTRALISED (forbid wins) — a true
 // negative fixture must use a category no forbid covers (e.g. tax_adviser).
+@jurisdiction("GB-ENG")
 forbid (
   principal,
   action == Action::"OfferService",

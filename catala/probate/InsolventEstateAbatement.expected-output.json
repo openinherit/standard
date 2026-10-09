@@ -1,5 +1,6 @@
 {
   "rule_name": "InsolventEstateAbatement",
+  "jurisdiction": "GB-ENG",
   "rule_source_path": "catala/probate/InsolventEstateAbatement.catala_en",
   "applicable_classes": ["inherit_probate:ProbateAdministration"],
   "applicable_scope": "Abate",

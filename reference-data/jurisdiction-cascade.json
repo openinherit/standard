@@ -973,6 +973,20 @@
         }
       }
     },
+    "US-PA": {
+      "kind": "atom",
+      "constituents": [],
+      "resolution": {
+        "succession": {
+          "resolvesTo": null,
+          "reason": "US succession law is a state matter; there is no federal succession law to resolve to."
+        },
+        "tax": {
+          "resolvesTo": null,
+          "reason": "REFUSAL, not absence. Pennsylvania levies its own inheritance tax on each beneficiary's share (72 P.S. s.9116) alongside the federal estate tax, and the US tax rows carry the federal estate tax only, so resolving US-PA up to them would silently drop the state charge. The standard ships no Pennsylvania tax rows; the charge is computed by catala/transfer/PaInheritanceTaxCharge.catala_en."
+        }
+      }
+    },
     "US-TX": {
       "kind": "atom",
       "constituents": [],

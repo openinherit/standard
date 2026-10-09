@@ -1,6 +1,7 @@
 {
   "$comment": "Catala rule test inputs for IntestacyCascade. AEA 1925 s.46 intestacy cascade + s.46(2A)/LPA 1925 s.184 commorientes. Scope Distribute returns ComputedOrNeedsHuman.Verdict (money) PLUS a per-member money list (per_member_amounts) — the per-heir allocation authority lives in tests/oracles/intestacy-cascade-aea1925.oracle.json (T032 per-heir gov-oracle harness, per-heir pattern), which these fixtures mirror 1:1 (same inputs, same expected per-member split). This twin is a human-readable record, NOT gate-exercised (no Makefile target consumes *.test-fixtures.json, mirroring the CatInheritanceCharge precedent). The oracle's locked wrong_split anti-hack negative case is deliberately NOT mirrored here — it is not a real answer and its home is the oracle file alone.",
   "rule_name": "IntestacyCascade",
+  "jurisdiction": "GB-ENG",
   "scope": "Distribute",
   "positive": [
     {

@@ -63,6 +63,15 @@ jobs:
       - name: Rule bodies and verdict fixtures declare their jurisdiction
         run: pnpm run test:rule-jurisdiction
 
+      # The Cedar service-eligibility packs key on serviceType strings defined in
+      # reference-data/regulated-service-types.json, with a statutory status per
+      # jurisdiction; each jurisdiction with a pack has a will-requirements profile.
+      # The two must agree, the reserved lines cannot be downgraded and pinned
+      # requirements (Scotland's prior and legal rights) cannot be dropped. The
+      # hermetic suite proves each rule can still go red. Exit 2 fails.
+      - name: Service-eligibility packs agree with their reference data
+        run: pnpm run test:service-eligibility-reference-data
+
       # Level 2 — referential integrity. Nothing in CI ran this until now, so
       # every cross-reference rule in scripts/validate-refs.mjs was advisory:
       # deleting one left the build green.

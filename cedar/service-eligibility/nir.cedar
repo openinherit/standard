@@ -32,6 +32,7 @@
 // profile, not here.
 
 // PERMIT: a solicitor may offer the four NI estate service categories.
+@jurisdiction("GB-NIR")
 permit (
   principal,
   action == Action::"OfferService",
@@ -46,6 +47,7 @@ permit (
 
 // PERMIT: a vetted tax adviser may offer IHT advice. Inheritance Tax is a
 // UK-wide tax (IHTA 1984); tax advice is unregulated in NI as in E&W.
+@jurisdiction("GB-NIR")
 permit (
   principal,
   action == Action::"OfferService",
@@ -61,6 +63,7 @@ permit (
 // FORBID (defensive documentation of the statutory ceiling): an unregulated
 // will writer may not prepare probate papers or estate instruments for reward
 // (art.23). Default-deny already covers this; the forbid documents the line.
+@jurisdiction("GB-NIR")
 forbid (
   principal,
   action == Action::"OfferService",

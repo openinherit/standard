@@ -8,6 +8,7 @@
 // papers: probate / letters-of-administration papers and instruments relating
 // to real or personal estate, offered by anyone who is not a solicitor.
 // P may permit FEWER than this, never more.
+@jurisdiction("GB-NIR")
 permit (
   principal,
   action == Action::"OfferService",
@@ -19,6 +20,7 @@ permit (
 };
 
 // Region 2 — platform-computed quote display (as E&W [MUST confirm]).
+@jurisdiction("GB-NIR")
 permit (
   principal,
   action == Action::"OfferService",
@@ -30,6 +32,7 @@ permit (
 };
 
 // Region 3 — opaque proximity routing (as E&W [MUST confirm]).
+@jurisdiction("GB-NIR")
 permit (
   principal,
   action == Action::"OfferService",

@@ -29,6 +29,7 @@
 //   reserved_instrument_activities   = s.32(1)(a) writs relating to estate.
 
 // PERMIT: a solicitor may offer the four Scottish estate service categories.
+@jurisdiction("GB-SCT")
 permit (
   principal,
   action == Action::"OfferService",
@@ -44,6 +45,7 @@ permit (
 // PERMIT: a vetted tax adviser may offer IHT advice. Inheritance Tax is a
 // UK-wide tax (IHTA 1984) and tax advice is unregulated in Scotland as in E&W;
 // vetting is a data-plane requirement on the app, not a prohibition here.
+@jurisdiction("GB-SCT")
 permit (
   principal,
   action == Action::"OfferService",
@@ -60,6 +62,7 @@ permit (
 // will writer may not prepare confirmation papers or estate writs for reward —
 // s.32(1)(a) and (c). Default-deny already covers this; the forbid documents
 // the deny-line.
+@jurisdiction("GB-SCT")
 forbid (
   principal,
   action == Action::"OfferService",

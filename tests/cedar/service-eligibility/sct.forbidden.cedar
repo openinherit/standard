@@ -8,6 +8,7 @@
 // confirmation papers (s.32(1)(c)) and writs relating to heritable or moveable
 // estate (s.32(1)(a)), offered by anyone who is not a solicitor (s.65(1)
 // "unqualified person"). P may permit FEWER than this, never more.
+@jurisdiction("GB-SCT")
 permit (
   principal,
   action == Action::"OfferService",
@@ -20,6 +21,7 @@ permit (
 
 // Region 2 — platform-computed quote display (quote_estimation posture
 // professional-authored-only, as E&W [MUST confirm]).
+@jurisdiction("GB-SCT")
 permit (
   principal,
   action == Action::"OfferService",
@@ -32,6 +34,7 @@ permit (
 
 // Region 3 — opaque proximity routing (proximity_matching posture
 // user-sort-ok, as E&W [MUST confirm]).
+@jurisdiction("GB-SCT")
 permit (
   principal,
   action == Action::"OfferService",

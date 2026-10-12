@@ -4,6 +4,7 @@
 // "DOES NOT HOLD"; if it ever VERIFIES, the Scotland analysis does not bite.
 // The leak: a tax adviser preparing confirmation papers — oracle Region 1, and
 // no forbid in this file neutralises it.
+@jurisdiction("GB-SCT")
 permit (
   principal,
   action == Action::"OfferService",
@@ -13,6 +14,7 @@ permit (
   resource.serviceType == "will_drafting" &&
   resource.jurisdiction == "GB-SCT"
 };
+@jurisdiction("GB-SCT")
 permit (
   principal,
   action == Action::"OfferService",

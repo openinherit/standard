@@ -8,6 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Scotland (`GB-SCT`) and Northern Ireland (`GB-NIR`) service-eligibility packs in
+  `cedar/service-eligibility/`, each with its forbidden-region oracle and leaky mutant under
+  `tests/cedar/service-eligibility/` and a row in its `manifest.yaml`. Every policy in the six
+  files carries `@jurisdiction("GB-SCT")` or `@jurisdiction("GB-NIR")`, and the rule-jurisdiction
+  discovery floor rises from 19 to 25. The encoding is ai-drafted; every `[MUST confirm]` item
+  still waits on sign-off from a solicitor in that jurisdiction. `reference-data/jurisdiction-profiles.json`
+  gains a `GB-NIR` row in the same shape as `GB-SCT`: family provision under the Inheritance
+  (Provision for Family and Dependants) (Northern Ireland) Order 1979, the Probate Office of the
+  Chancery Division of the High Court, and the General Register Office for Northern Ireland.
 - Archive timestamp chains for attestations. `v3/common/archive-timestamp-chain.json` records the
   renewal history of an RFC 4998 Evidence Record Syntax evidence record: the protected document's
   hash, then every archive timestamp in time order (the initial one, each timestamp renewal and

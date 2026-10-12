@@ -45,6 +45,21 @@
       "deprecatedReason": null,
       "supersededBy": null
     },
+    "GB-NIR": {
+      "name": "Northern Ireland",
+      "currencyCode": "GBP",
+      "locale": "en-GB",
+      "direction": "ltr",
+      "professionalTerm": "solicitor",
+      "testamentaryFreedom": "Broad testamentary freedom with no fixed shares, but family and dependants may claim reasonable financial provision under the Inheritance (Provision for Family and Dependants) (Northern Ireland) Order 1979.",
+      "probateCourtName": "Probate Office (Chancery Division of the High Court of Justice in Northern Ireland)",
+      "deathRegistrationBody": "General Register Office for Northern Ireland",
+      "typicalTimelineMonths": 9,
+      "deprecated": false,
+      "deprecatedAt": null,
+      "deprecatedReason": null,
+      "supersededBy": null
+    },
     "US": {
       "name": "United States (federal/general)",
       "currencyCode": "USD",

@@ -1,0 +1,375 @@
+{
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal, tax, or regulatory advice. Always verify with current legislation and qualified professionals.",
+  "version": "1.0.0",
+  "description": "Will-requirements profiles: per jurisdiction, the information needed to make a valid will there, so an app can render a progressive intake. Keyed by jurisdiction-profiles.json key; there is one profile for each jurisdiction that has a Cedar service-eligibility pack.",
+  "lastUpdated": "2026-10-12",
+  "_metadata": {
+    "lastVerified": "2026-10-12",
+    "source": "Wills Act 1837; Age of Legal Capacity (Scotland) Act 1991; Requirements of Writing (Scotland) Act 1995; Succession (Scotland) Acts 1964 and 2016; Wills and Administration Proceedings (Northern Ireland) Order 1994",
+    "jurisdiction": "multi",
+    "assurance": "ai-drafted",
+    "assuranceNote": "Encoded conservatively and not yet signed off. Each jurisdiction's entries need confirmation by a solicitor qualified in that jurisdiction before a consumer app relies on them.",
+    "disclaimer": "This data is provided for interoperability purposes. It does not constitute legal, tax, or financial advice. Users must verify independently before relying on it for official purposes.",
+    "deprecated": false,
+    "deprecatedAt": null,
+    "deprecatedReason": null,
+    "supersededBy": null
+  },
+  "categories": {
+    "capacity": "Who may make a will.",
+    "formal_validity": "How the will must be made and signed.",
+    "intention": "The testator's intention and freedom.",
+    "revocation_trigger": "Events that revoke or change the will.",
+    "fixed_share": "Claims on the estate the will cannot fully exclude, or rules that apply to any part the will does not dispose of.",
+    "practical_guidance": "Non-statutory guidance for a complete intake."
+  },
+  "intakeStages": {
+    "light": "Identity, age and jurisdiction.",
+    "standard": "People and assets, and the rules that act on them.",
+    "will_grade": "Execution formalities and capacity."
+  },
+  "profiles": {
+    "GB-ENG": {
+      "name": "England & Wales",
+      "intakeNotes": "Practical grouping, not normative: light = identity, age, jurisdiction; standard = people and assets; will_grade = witness and signature plan, capacity, revocation review.",
+      "requirements": [
+        {
+          "id": "testator_minimum_age",
+          "name": "Testator is 18 or over",
+          "statement": "You must be at least 18 years old to make a valid will.",
+          "legislativeReference": "Wills Act 1837 s.7 (as amended by Family Law Reform Act 1969 s.3(1)(a))",
+          "category": "capacity",
+          "intakeStage": "light",
+          "blocking": true
+        },
+        {
+          "id": "will_in_writing",
+          "name": "Will is in writing",
+          "statement": "The will must be in writing; a spoken promise is not a will.",
+          "legislativeReference": "Wills Act 1837 s.9(a) (as substituted by Administration of Justice Act 1982 s.17)",
+          "category": "formal_validity",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "testator_signature",
+          "name": "Signed by the testator",
+          "statement": "You must sign the will yourself, or someone else may sign it in your presence and at your direction.",
+          "legislativeReference": "Wills Act 1837 s.9(a) (as substituted by Administration of Justice Act 1982 s.17)",
+          "category": "formal_validity",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "intention_to_give_effect",
+          "name": "Intention to make a will",
+          "statement": "It must appear that you intended your signature to give effect to the will.",
+          "legislativeReference": "Wills Act 1837 s.9(b) (as substituted by Administration of Justice Act 1982 s.17)",
+          "category": "intention",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "two_witnesses_present",
+          "name": "Two witnesses, present at the same time",
+          "statement": "Two or more witnesses must be present together when you sign or acknowledge your signature, and each must then attest and sign (or acknowledge their signature) in your presence.",
+          "legislativeReference": "Wills Act 1837 s.9(c)-(d) (as substituted by Administration of Justice Act 1982 s.17)",
+          "category": "formal_validity",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "testamentary_capacity",
+          "name": "Testamentary capacity",
+          "statement": "You must understand what making a will means, what you own, and who might expect to benefit, and no condition may distort those judgements.",
+          "legislativeReference": "Banks v Goodfellow (1870) LR 5 QB 549",
+          "category": "capacity",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "witness_beneficiary_gift_void",
+          "name": "A witness (or their spouse) should not be a beneficiary",
+          "statement": "A gift in the will to a witness, or to a witness's spouse or civil partner, is void, so choose independent witnesses.",
+          "legislativeReference": "Wills Act 1837 s.15",
+          "category": "formal_validity",
+          "intakeStage": "will_grade",
+          "blocking": false
+        },
+        {
+          "id": "revocation_by_marriage",
+          "name": "Marriage or civil partnership revokes a will",
+          "statement": "Marrying or entering a civil partnership revokes an existing will, unless the will was made in expectation of that marriage or partnership.",
+          "legislativeReference": "Wills Act 1837 s.18 (including s.18(3)-(4))",
+          "category": "revocation_trigger",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "divorce_effect",
+          "name": "Divorce changes how a will works",
+          "statement": "Divorce or dissolution does not revoke the will, but gifts to and appointments of the former spouse or civil partner take effect as if they had died.",
+          "legislativeReference": "Wills Act 1837 s.18A (inserted by Administration of Justice Act 1982 s.18)",
+          "category": "revocation_trigger",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "revocation_by_destruction",
+          "name": "Destroying a will revokes it",
+          "statement": "Burning, tearing or otherwise destroying the will with the intention of revoking it, by you or at your direction, revokes it.",
+          "legislativeReference": "Wills Act 1837 s.20",
+          "category": "revocation_trigger",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "family_provision",
+          "name": "Family and dependants may claim provision",
+          "statement": "You may leave your estate as you choose, but certain family members and dependants may ask the court for reasonable financial provision.",
+          "legislativeReference": "Inheritance (Provision for Family and Dependants) Act 1975 s.1",
+          "category": "fixed_share",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "people_and_assets_capture",
+          "name": "Record your people and assets",
+          "statement": "Recording your family, beneficiaries, executors, guardians and assets gives the will-drafting professional everything needed to draft.",
+          "legislativeReference": "Non-statutory (practical guidance)",
+          "category": "practical_guidance",
+          "intakeStage": "light",
+          "blocking": false
+        }
+      ]
+    },
+    "GB-SCT": {
+      "name": "Scotland",
+      "intakeNotes": "Scotland differs from England & Wales in three ways an intake must show: capacity from 12, a will is valid with no witness (one witness makes it probative), and legal rights reserve a fixed share of the moveable estate for spouse and children.",
+      "requirements": [
+        {
+          "id": "testator_minimum_age",
+          "name": "Testator is 12 or over",
+          "statement": "In Scotland you may make a valid will from the age of 12.",
+          "legislativeReference": "Age of Legal Capacity (Scotland) Act 1991 s.2(2)",
+          "category": "capacity",
+          "intakeStage": "light",
+          "blocking": true
+        },
+        {
+          "id": "testamentary_capacity",
+          "name": "Testamentary capacity",
+          "statement": "You must be of sound mind: aware of the nature of the document, the property involved and the people who may inherit.",
+          "legislativeReference": "Common law (case law)",
+          "category": "capacity",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "will_in_writing",
+          "name": "Will is in writing",
+          "statement": "The will must be in writing.",
+          "legislativeReference": "Requirements of Writing (Scotland) Act 1995 s.1(2)(c)",
+          "category": "formal_validity",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "testator_subscription",
+          "name": "Subscribed by the testator",
+          "statement": "You must sign the will at the end of its last page (subscription).",
+          "legislativeReference": "Requirements of Writing (Scotland) Act 1995 s.2(1)",
+          "category": "formal_validity",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "probative_witness",
+          "name": "One witness makes the will probative",
+          "statement": "A will signed by you on every page and witnessed by one person is presumed validly executed. Without that, an executor must prove your signature before confirmation.",
+          "legislativeReference": "Requirements of Writing (Scotland) Act 1995 s.3(1)(a)-(b) and s.3(2)",
+          "category": "formal_validity",
+          "intakeStage": "will_grade",
+          "blocking": false
+        },
+        {
+          "id": "undue_influence_and_facility",
+          "name": "Made freely",
+          "statement": "A will may be challenged if it was made under undue influence, or through facility and circumvention.",
+          "legislativeReference": "Common law (case law)",
+          "category": "intention",
+          "intakeStage": "will_grade",
+          "blocking": false
+        },
+        {
+          "id": "legal_rights",
+          "name": "Spouse, civil partner and children cannot be disinherited",
+          "statement": "A surviving spouse or civil partner and children (including adult children) are entitled to legal rights: a fixed share of the moveable estate (one third, or one half where there is no spouse or no children respectively) that a will cannot remove. Heritable property such as the home is outside legal rights. A person entitled under the will must choose between the legacy and legal rights.",
+          "legislativeReference": "Common law (jus relicti, jus relictae and legitim) as regulated by Succession (Scotland) Act 1964 s.10ff, including s.11 (representation in legitim)",
+          "category": "fixed_share",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "prior_rights",
+          "name": "Prior rights apply to any part not disposed of by the will",
+          "statement": "Where any of the estate passes on intestacy, the surviving spouse or civil partner first takes prior rights in it: the dwelling-house, its furniture and plenishings, and a financial provision, each up to limits set by order. Prior rights come before legal rights in that part.",
+          "legislativeReference": "Succession (Scotland) Act 1964 ss.8-9; limits set by the Prior Rights of Surviving Spouse and Civil Partner (Scotland) Order in force",
+          "category": "fixed_share",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "divorce_effect",
+          "name": "Divorce changes how a will works",
+          "statement": "Divorce or dissolution means provisions in favour of the former spouse or civil partner do not apply, unless the will says they should.",
+          "legislativeReference": "Succession (Scotland) Act 2016 s.1",
+          "category": "revocation_trigger",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "revocation_no_revival",
+          "name": "Revoking a will does not revive an earlier one",
+          "statement": "If you revoke a will without making a new one, an earlier will does not come back into effect.",
+          "legislativeReference": "Succession (Scotland) Act 2016 s.5",
+          "category": "revocation_trigger",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "revocation_by_destruction",
+          "name": "Destroying a will revokes it",
+          "statement": "The usual way to revoke a will is to destroy it; a later will that says so also revokes an earlier one.",
+          "legislativeReference": "Common law",
+          "category": "revocation_trigger",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "people_and_assets_capture",
+          "name": "Record your people and assets",
+          "statement": "Recording your family, beneficiaries, executors, guardians and assets, including which assets are heritable (land and buildings) and which are moveable, gives the will-drafting professional everything needed to draft.",
+          "legislativeReference": "Non-statutory (practical guidance)",
+          "category": "practical_guidance",
+          "intakeStage": "light",
+          "blocking": false
+        }
+      ]
+    },
+    "GB-NIR": {
+      "name": "Northern Ireland",
+      "intakeNotes": "Formalities mirror England & Wales under the 1994 Order; a married minor may make a will.",
+      "requirements": [
+        {
+          "id": "testator_minimum_age",
+          "name": "Testator is 18 or over (or married)",
+          "statement": "You must be at least 18 to make a valid will, unless you are or have been married or in a civil partnership.",
+          "legislativeReference": "Wills and Administration Proceedings (Northern Ireland) Order 1994 art.4(1)",
+          "category": "capacity",
+          "intakeStage": "light",
+          "blocking": true
+        },
+        {
+          "id": "testamentary_capacity",
+          "name": "Testamentary capacity",
+          "statement": "You must understand what making a will means, what you own, and who might expect to benefit, and no condition may distort those judgements.",
+          "legislativeReference": "Banks v Goodfellow (1870) LR 5 QB 549",
+          "category": "capacity",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "will_in_writing",
+          "name": "Will is in writing",
+          "statement": "The will must be in writing.",
+          "legislativeReference": "Wills and Administration Proceedings (Northern Ireland) Order 1994 art.5(1)",
+          "category": "formal_validity",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "testator_signature",
+          "name": "Signed by the testator",
+          "statement": "You must sign the will yourself, or someone else may sign it in your presence and at your direction.",
+          "legislativeReference": "Wills and Administration Proceedings (Northern Ireland) Order 1994 art.5(1)(a)",
+          "category": "formal_validity",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "intention_to_give_effect",
+          "name": "Intention to make a will",
+          "statement": "It must appear that you intended your signature to give effect to the will.",
+          "legislativeReference": "Wills and Administration Proceedings (Northern Ireland) Order 1994 art.5(1)(b)",
+          "category": "intention",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "two_witnesses_present",
+          "name": "Two witnesses, present at the same time",
+          "statement": "Two or more witnesses must be present together when you sign or acknowledge your signature, and each must then attest and sign (or acknowledge their signature) in your presence.",
+          "legislativeReference": "Wills and Administration Proceedings (Northern Ireland) Order 1994 art.5(1)(c)-(d)",
+          "category": "formal_validity",
+          "intakeStage": "will_grade",
+          "blocking": true
+        },
+        {
+          "id": "witness_beneficiary_gift_void",
+          "name": "A witness (or their spouse) should not be a beneficiary",
+          "statement": "A gift in the will to a witness, or to a witness's spouse or civil partner, fails, so choose independent witnesses.",
+          "legislativeReference": "Wills and Administration Proceedings (Northern Ireland) Order 1994 art.8",
+          "category": "formal_validity",
+          "intakeStage": "will_grade",
+          "blocking": false
+        },
+        {
+          "id": "revocation_by_marriage",
+          "name": "Marriage or civil partnership revokes a will",
+          "statement": "Marrying or entering a civil partnership revokes an existing will, unless the will shows it was made expecting that marriage or partnership and meant to survive it.",
+          "legislativeReference": "Wills and Administration Proceedings (Northern Ireland) Order 1994 arts 12 and 13A",
+          "category": "revocation_trigger",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "divorce_effect",
+          "name": "Divorce changes how a will works",
+          "statement": "Divorce, annulment or dissolution does not revoke the will, but appointments of and gifts to the former spouse or civil partner take effect as if they had died, unless the will says otherwise.",
+          "legislativeReference": "Wills and Administration Proceedings (Northern Ireland) Order 1994 arts 13 and 13B",
+          "category": "revocation_trigger",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "revocation_by_destruction",
+          "name": "Destroying a will revokes it",
+          "statement": "Burning, tearing or otherwise destroying the will with the intention of revoking it, by you or by someone in your presence at your direction, revokes it.",
+          "legislativeReference": "Wills and Administration Proceedings (Northern Ireland) Order 1994 art.14(1)",
+          "category": "revocation_trigger",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "family_provision",
+          "name": "Family and dependants may claim provision",
+          "statement": "You may leave your estate as you choose, but certain family members and dependants may ask the court for reasonable financial provision.",
+          "legislativeReference": "Inheritance (Provision for Family and Dependants) (Northern Ireland) Order 1979",
+          "category": "fixed_share",
+          "intakeStage": "standard",
+          "blocking": false
+        },
+        {
+          "id": "people_and_assets_capture",
+          "name": "Record your people and assets",
+          "statement": "Recording your family, beneficiaries, executors, guardians and assets gives the will-drafting professional everything needed to draft.",
+          "legislativeReference": "Non-statutory (practical guidance)",
+          "category": "practical_guidance",
+          "intakeStage": "light",
+          "blocking": false
+        }
+      ]
+    }
+  }
+}

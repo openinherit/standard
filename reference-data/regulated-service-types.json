@@ -1,0 +1,179 @@
+{
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal, tax, or regulatory advice. Always verify with current legislation and qualified professionals.",
+  "version": "1.0.0",
+  "description": "Regulated service types: the vocabulary the Cedar service-eligibility packs (cedar/service-eligibility/) key on. A pack's serviceType strings are these keys verbatim. Each entry says, per jurisdiction-profiles.json key, whether the activity is reserved to authorised persons, unreserved, or unregulated, and on what statutory basis. A jurisdiction absent from an entry means no pack uses that value there yet, not that the activity is unregulated.",
+  "lastUpdated": "2026-10-12",
+  "_metadata": {
+    "lastVerified": "2026-10-12",
+    "source": "Legal Services Act 2007; Solicitors (Scotland) Act 1980; Solicitors (Northern Ireland) Order 1976",
+    "jurisdiction": "multi",
+    "assurance": "ai-drafted",
+    "assuranceNote": "Encoded conservatively and not yet signed off. Each jurisdiction's entries need confirmation by a solicitor qualified in that jurisdiction before a consumer app relies on them.",
+    "disclaimer": "This data is provided for interoperability purposes. It does not constitute legal, tax, or financial advice. Users must verify independently before relying on it for official purposes.",
+    "deprecated": false,
+    "deprecatedAt": null,
+    "deprecatedReason": null,
+    "supersededBy": null
+  },
+  "statuses": {
+    "reserved": "Only an authorised or qualified person may carry it on (for reward, where the statute says so).",
+    "unreserved": "Anyone may carry it on; it is not a reserved legal activity.",
+    "unregulated": "Not a legal activity at all; professional vetting is a matter for the consuming app."
+  },
+  "serviceTypes": {
+    "rights_of_audience": {
+      "label": "Rights of audience",
+      "description": "Exercising a right of audience before a court.",
+      "jurisdictions": {
+        "GB-ENG": {
+          "status": "reserved",
+          "basis": "Legal Services Act 2007 s.12(1)(a) and Sch 2 paras 1-3"
+        }
+      }
+    },
+    "conduct_of_litigation": {
+      "label": "Conduct of litigation",
+      "description": "Issuing, commencing, prosecuting or defending court proceedings.",
+      "jurisdictions": {
+        "GB-ENG": {
+          "status": "reserved",
+          "basis": "Legal Services Act 2007 s.12(1)(b) and Sch 2 para 4"
+        }
+      }
+    },
+    "reserved_instrument_activities": {
+      "label": "Instruments relating to estate",
+      "description": "Preparing, for reward, instruments or writs relating to land or other property (transfers, charges and the like).",
+      "jurisdictions": {
+        "GB-ENG": {
+          "status": "reserved",
+          "basis": "Legal Services Act 2007 s.12(1)(c) and Sch 2 para 5"
+        },
+        "GB-SCT": {
+          "status": "reserved",
+          "basis": "Solicitors (Scotland) Act 1980 s.32(1)(a): writs relating to heritable or moveable estate"
+        },
+        "GB-NIR": {
+          "status": "reserved",
+          "basis": "Solicitors (Northern Ireland) Order 1976 art.23: instruments relating to real or personal estate"
+        }
+      }
+    },
+    "reserved_probate_activities": {
+      "label": "Probate and administration papers",
+      "description": "Preparing the papers on which to found or oppose a grant of probate or letters of administration. This is the deny-line for consumer apps: will-writing is not reserved, grant papers are.",
+      "jurisdictions": {
+        "GB-ENG": {
+          "status": "reserved",
+          "basis": "Legal Services Act 2007 s.12(1)(d) and Sch 2 para 6"
+        },
+        "GB-NIR": {
+          "status": "reserved",
+          "basis": "Solicitors (Northern Ireland) Order 1976 art.23: papers on which to found or oppose a grant of probate or of letters of administration"
+        }
+      }
+    },
+    "reserved_confirmation_activities": {
+      "label": "Confirmation papers",
+      "description": "Preparing, for reward, the papers on which to found or oppose an application for confirmation in favour of executors. The Scottish counterpart of probate papers, under a different statute, so a separate value.",
+      "jurisdictions": {
+        "GB-SCT": {
+          "status": "reserved",
+          "basis": "Solicitors (Scotland) Act 1980 s.32(1)(c)"
+        }
+      }
+    },
+    "notarial_activities": {
+      "label": "Notarial activities",
+      "description": "Activities of a notary.",
+      "jurisdictions": {
+        "GB-ENG": {
+          "status": "reserved",
+          "basis": "Legal Services Act 2007 s.12(1)(e) and Sch 2 para 7"
+        }
+      }
+    },
+    "administration_of_oaths": {
+      "label": "Administration of oaths",
+      "description": "Administering oaths and taking affidavits or statutory declarations.",
+      "jurisdictions": {
+        "GB-ENG": {
+          "status": "reserved",
+          "basis": "Legal Services Act 2007 s.12(1)(f) and Sch 2 para 8"
+        }
+      }
+    },
+    "will_drafting": {
+      "label": "Will drafting",
+      "description": "Helping someone prepare a will.",
+      "jurisdictions": {
+        "GB-ENG": {
+          "status": "unreserved",
+          "basis": "Not listed in Legal Services Act 2007 Sch 2"
+        },
+        "GB-SCT": {
+          "status": "unreserved",
+          "basis": "Solicitors (Scotland) Act 1980 s.32(2)(a) excepts a will or other testamentary writing"
+        },
+        "GB-NIR": {
+          "status": "unreserved",
+          "basis": "Solicitors (Northern Ireland) Order 1976 art.23 excepts a will or other testamentary instrument"
+        }
+      }
+    },
+    "estate_administration": {
+      "label": "Estate administration",
+      "description": "Administering an estate after a death, short of preparing the reserved grant or confirmation papers.",
+      "jurisdictions": {
+        "GB-ENG": {
+          "status": "unreserved",
+          "basis": "Reserved only as to the grant papers (Legal Services Act 2007 Sch 2 para 6)"
+        },
+        "GB-SCT": {
+          "status": "unreserved",
+          "basis": "Reserved only as to the confirmation papers and estate writs (Solicitors (Scotland) Act 1980 s.32(1))"
+        },
+        "GB-NIR": {
+          "status": "unreserved",
+          "basis": "Reserved only as to the grant papers and estate instruments (Solicitors (Northern Ireland) Order 1976 art.23)"
+        }
+      }
+    },
+    "iht_advice": {
+      "label": "Inheritance Tax advice",
+      "description": "Advice on Inheritance Tax, a UK-wide tax under the Inheritance Tax Act 1984. Not a reserved activity anywhere in the UK; a consumer app should still require vetting (professional-body membership, indemnity insurance, AML supervision).",
+      "jurisdictions": {
+        "GB-ENG": {
+          "status": "unregulated",
+          "basis": "Tax advice is not a reserved legal activity; Inheritance Tax Act 1984 applies UK-wide"
+        },
+        "GB-SCT": {
+          "status": "unregulated",
+          "basis": "Tax advice is not a reserved legal activity; Inheritance Tax Act 1984 applies UK-wide"
+        },
+        "GB-NIR": {
+          "status": "unregulated",
+          "basis": "Tax advice is not a reserved legal activity; Inheritance Tax Act 1984 applies UK-wide"
+        }
+      }
+    },
+    "trust_administration": {
+      "label": "Trust administration",
+      "description": "Administering a trust.",
+      "jurisdictions": {
+        "GB-ENG": {
+          "status": "unreserved",
+          "basis": "Not listed in Legal Services Act 2007 Sch 2"
+        },
+        "GB-SCT": {
+          "status": "unreserved",
+          "basis": "Not named in Solicitors (Scotland) Act 1980 s.32(1); whether preparing a trust deed for reward falls within s.32(1)(a) is to be confirmed by a Scottish solicitor"
+        },
+        "GB-NIR": {
+          "status": "unreserved",
+          "basis": "Not named in Solicitors (Northern Ireland) Order 1976 art.23; whether preparing a trust instrument for reward falls within it is to be confirmed by a Northern Ireland solicitor"
+        }
+      }
+    }
+  }
+}

@@ -8,6 +8,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Service-eligibility reference data. `reference-data/regulated-service-types.json` defines the
+  `serviceType` values the Cedar service-eligibility packs key on (eleven, including Scotland's
+  `reserved_confirmation_activities`), each with its status per jurisdiction (`reserved`,
+  `unreserved` or `unregulated`) and statutory basis: the Legal Services Act 2007 for England &
+  Wales, the Solicitors (Scotland) Act 1980 s.32 and the Solicitors (Northern Ireland) Order 1976
+  art.23. `reference-data/will-requirements-profiles.json` gives, for `GB-ENG`, `GB-SCT` and
+  `GB-NIR`, the requirements for a valid will there, grouped for a progressive intake. Scotland's
+  profile records capacity from 12, subscription and the probative witness, legal rights (Succession
+  (Scotland) Act 1964 s.10ff) and prior rights (ss.8-9); Northern Ireland's follows the Wills and
+  Administration Proceedings (Northern Ireland) Order 1994. Both files are ai-drafted and wait on
+  solicitor sign-off per jurisdiction. `scripts/check-service-eligibility-reference-data.mjs` (run in
+  the test workflow, with hermetic tests in `scripts/test-check-service-eligibility-reference-data.mjs`)
+  refuses a pack `serviceType` the vocabulary lacks or has no status for in the policy's
+  jurisdiction, a pack jurisdiction with no profile (or the reverse), a reserved line downgraded,
+  and a pinned requirement removed.
 - Scotland (`GB-SCT`) and Northern Ireland (`GB-NIR`) service-eligibility packs in
   `cedar/service-eligibility/`, each with its forbidden-region oracle and leaky mutant under
   `tests/cedar/service-eligibility/` and a row in its `manifest.yaml`. Every policy in the six

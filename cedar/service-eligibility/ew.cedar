@@ -5,8 +5,8 @@
 // else is default-deny. Encoding is ai-drafted — activation gated by
 // fixtures/parameters/legal-assurance-ai-drafted-ew-service-eligibility.yaml
 // (counsel-signed-off is the launch-eligibility floor).
-// serviceType strings = linkml/people/people.yaml RegulatedServiceTypeScheme
-// values VERBATIM. Capability modes per the locked postures (issue comments):
+// serviceType strings = reference-data/regulated-service-types.json keys
+// VERBATIM. Capability modes per the locked postures (issue comments):
 // quote_estimation = professional-authored-only  => quoteMode ceiling
 //   {professional-authored, typical-range}; platform-computed UNREACHABLE.
 // proximity_matching = user-sort-ok              => proximityMode ceiling

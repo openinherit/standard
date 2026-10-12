@@ -53,8 +53,9 @@ required check on `main-protection`.
 ## Seam for E&W / ROI — adding a jurisdiction is data, not code
 
 1. **Standard (here):** add `cedar/service-eligibility/<jur>.cedar` (P — the `permit`/`forbid`
-   set), drawing service-types from the `RegulatedServiceTypeScheme` SKOS vocabulary those issues
-   own. Every policy in it, and in its oracle and mutant, carries `@jurisdiction("<KEY>")`, where
+   set), drawing service-types from `reference-data/regulated-service-types.json`, and give each one a
+   status for `<KEY>` there. Add a `<KEY>` profile to `reference-data/will-requirements-profiles.json`.
+   `scripts/check-service-eligibility-reference-data.mjs` refuses a pack that does either half alone. Every policy in it, and in its oracle and mutant, carries `@jurisdiction("<KEY>")`, where
    `<KEY>` is a key of `reference-data/jurisdiction-profiles.json` (`GB-ENG` for the E&W pack).
    The filename and the comments do not count; `scripts/check-rule-jurisdiction.py` refuses a
    policy without the annotation. The annotation declares the policy's own scope. It is not the
@@ -81,7 +82,9 @@ required check on `main-protection`.
 | ------------ | --------------------------------------------------------------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | E&W          | `professional-authored-only` → modes {professional-authored, typical-range} | `user-sort-ok` → modes {user-sort, filter} | solicitor × {will_drafting, estate_administration, reserved_probate_activities, trust_administration}; tax_adviser × {iht_advice} | six reserved activities × non-authorised categories; `platform-computed` quotes; `opaque-routing` | `ai-drafted` — activation requires counsel sign-off (`fixtures/parameters/legal-assurance-ai-drafted-ew-service-eligibility.yaml`, launch-eligibility floor) |
 
-- `serviceType` strings = `RegulatedServiceTypeScheme` values verbatim (`linkml/people/people.yaml`).
+- `serviceType` strings = keys of `reference-data/regulated-service-types.json` verbatim, each with
+  its statutory status per jurisdiction. The will-requirements profile for each pack's jurisdiction is
+  in `reference-data/will-requirements-profiles.json`.
 - App-readable postures: `fixtures/parameters/service-capability-postures-ew.yaml` (locked enums,
   schema-closed). Drift check: `scripts/slice1/test_posture_cedar_consistency.py`.
 - **Guard form (symcc strict mode):** optional-attribute guards MUST be

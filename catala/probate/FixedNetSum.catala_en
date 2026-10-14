@@ -1,0 +1,67 @@
+> Module FixedNetSum
+> Using ComputedOrNeedsHuman
+
+SPDX-FileCopyrightText: 2026 Testate Technologies Ltd
+SPDX-License-Identifier: Apache-2.0
+Jurisdiction: GB-ENG
+
+# FixedNetSum — the statutory legacy as at the date of death (AEA 1925 s.46, Sch 1A)
+
+The fixed net sum is the statutory legacy a surviving spouse or civil partner takes ahead of the
+issue on intestacy (Administration of Estates Act 1925 s.46(1)(i), Table Case (2)(B)). The Act does
+not state the figure: Schedule 1A delegates it to a Fixed Net Sum Order, and each Order replaces the
+last from its own commencement date. So the answer depends on **when the intestate died**:
+
+- **£270,000** for a death on or after 6 February 2020 — SI 2020/33, the Administration of Estates
+  Act 1925 (Fixed Net Sum) Order 2020.
+- **£322,000** for a death on or after 26 July 2023 — SI 2023/758, the Administration of Estates Act
+  1925 (Fixed Net Sum) Order 2023.
+
+The later Order **defeats** the earlier figure from its commencement date. That is written as a Catala
+`exception`, not as an `if`, because it is genuine defeasibility: the base definition stays true for
+every date the exception does not cover.
+
+A death **before** 6 February 2020 returns `NeedsHuman`. Earlier figures are not modelled here, and
+returning £270,000 for such a date would be a wrong answer presented as a computed one.
+
+## Point-in-time citations
+
+Every dated definition carries an `# eli:` line directly above it. The line is data, not prose:
+
+- `value` must equal the money literal on the definition line below it;
+- `effective` must equal the commencement date the definition is conditioned on, and every date
+  literal in this file must be the `effective` date of some citation;
+- `instrument` is the legislation.gov.uk identifier of the Order that sets the figure, as made;
+- `pit` is the point-in-time ELI of the delegating provision (AEA 1925 s.46) on a date when the
+  figure was in force, ending in that date.
+
+`scripts/check-eli-point-in-time.py` enforces all four, and with `--resolve` it re-fetches each
+identifier's machine-readable data from legislation.gov.uk: a withdrawn or moved version, a
+commencement date that disagrees with `effective`, or an Order whose text no longer contains `value`
+fails the build. The as-at figures themselves are asserted by the gov-oracle harness against
+`tests/oracles/fixed-net-sum-aea1925.oracle.json`.
+
+`IntestacyCascade` still takes the statutory legacy as a `context` default of £322,000. Feeding it
+from this scope is separate work: clerk 1.2.0 does not resolve cross-module sub-scope calls.
+
+```catala
+declaration scope AsAt:
+  input date_of_death content date
+  internal fixed_net_sum content money
+  output verdict content ComputedOrNeedsHuman.Verdict
+
+scope AsAt:
+  # eli: value=$270,000 effective=2020-02-06 instrument=https://www.legislation.gov.uk/uksi/2020/33/made pit=https://www.legislation.gov.uk/ukpga/Geo5/15-16/23/section/46/2022-06-01
+  definition fixed_net_sum equals $270,000
+
+  # eli: value=$322,000 effective=2023-07-26 instrument=https://www.legislation.gov.uk/uksi/2023/758/made pit=https://www.legislation.gov.uk/ukpga/Geo5/15-16/23/section/46/2024-06-01
+  exception definition fixed_net_sum
+    under condition date_of_death >= |2023-07-26|
+    consequence equals $322,000
+
+  definition verdict equals
+    if date_of_death < |2020-02-06| then
+      NeedsHuman
+    else
+      Computed content fixed_net_sum
+```

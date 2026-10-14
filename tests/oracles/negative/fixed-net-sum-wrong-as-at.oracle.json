@@ -1,0 +1,26 @@
+{
+  "_doc": "NEGATIVE CONTROL — DELIBERATELY WRONG. Claims the 2023 figure (£322,000) for a 1 June 2022 death, when SI 2023/758 was not yet in force and the correct as-at figure is £270,000. scripts/test-l6-temporal-oracle.sh runs scripts/oracle_verify.py on this file and PASSES only if the harness exits 1 (RED). If this file ever goes green, the as-at binding has no teeth. It lives outside tests/oracles/*.oracle.json so the default glob never picks it up as a real oracle.",
+  "rule": {
+    "repo": "openinherit/standard",
+    "rule_file": "catala/probate/FixedNetSum.catala_en",
+    "module": "FixedNetSum",
+    "scope": "AsAt",
+    "result_field": "verdict",
+    "depends_modules": [
+      "catala/contract/ComputedOrNeedsHuman.catala_en"
+    ]
+  },
+  "statute": "Administration of Estates Act 1925 s.46(1)(i) Table Case (2)(B) and Schedule 1A; SI 2020/33 (Fixed Net Sum Order 2020); SI 2023/758 (Fixed Net Sum Order 2023)",
+  "currency": "GBP",
+  "sourced_at": "2026-10-14",
+  "cases": [
+    {
+      "label": "wrong-as-at-death-2022-06-01-claims-2023-figure",
+      "inputs": {
+        "date_of_death": "2022-06-01"
+      },
+      "expected_money": "322000",
+      "citation": "WRONG ON PURPOSE: £322,000 applies only from 26 July 2023 (SI 2023/758)."
+    }
+  ]
+}

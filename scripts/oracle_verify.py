@@ -44,6 +44,7 @@
 from __future__ import annotations
 
 import argparse
+import datetime as _dt
 import glob
 import json
 import os
@@ -57,7 +58,7 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import NoReturn
 
-VERSION = "2.1.0"
+VERSION = "2.2.0"
 
 EXIT_OK = 0
 EXIT_RED = 1
@@ -241,10 +242,29 @@ def case_expected_money(case: dict):
     fail_closed(f"case {case.get('label')!r} has neither expected_money nor expected_money_gbp")
 
 
+_ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def date_literal(value: str) -> str:
+    """Render an ISO `YYYY-MM-DD` string as a Catala date literal `|YYYY-MM-DD|`.
+    Fail-closed on a string of that shape that is not a real calendar date, so
+    `2023-02-30` cannot reach the generated source."""
+    try:
+        _dt.date.fromisoformat(value)
+    except ValueError:
+        fail_closed(f"not a calendar date: {value!r}")
+    return f"|{value}|"
+
+
 def input_literal(value) -> str:
     """Money inputs arrive as numeric strings; booleans as JSON booleans; integer
     lists (e.g. branch_sizes / members) as a Catala list literal `[a; b; c]`; enum
-    inputs as a {"enum": "<Constructor>"} wrapper rendering the bare constructor."""
+    inputs as a {"enum": "<Constructor>"} wrapper rendering the bare constructor;
+    dates (e.g. date_of_death, for an L6 as-at rule) as an ISO `YYYY-MM-DD` string
+    rendering `|YYYY-MM-DD|`. A money string can never match the date shape, so the
+    two cannot be confused."""
+    if isinstance(value, str) and _ISO_DATE_RE.fullmatch(value.strip()):
+        return date_literal(value.strip())
     if isinstance(value, bool):
         return bool_literal(value)
     if isinstance(value, dict):

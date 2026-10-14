@@ -31,9 +31,8 @@ jobs:
           # prints 'D3c NOT asserted here' on success, so a green run here
           # can never be read as a pass.
           #
-          # The ABSENCE half -- no entry still carrying a commercial field,
-          # which is the leak direction and the one the moat boundary is
-          # about -- still runs, here, from this tree.
+          # The ABSENCE half -- no entry still carrying a field that is not
+          # part of the standard -- still runs, here, from this tree.
           python3 scripts/check-space-types-lockstep.py \
             --tree . --policy scripts/data/space-types-policy.txt \
             --carrier-elsewhere "an upstream CI job that can see the engine"

@@ -51,7 +51,7 @@
   "devDependencies": {
     "@hey-api/client-fetch": "latest",
     "@hey-api/openapi-ts": "latest",
-    "@hyperjump/json-schema": "^1.17.5",
+    "@hyperjump/json-schema": "^1.18.0",
     "@redocly/cli": "latest",
     "@sourcemeta/jsonschema": "17.0.0",
     "ajv": "^8.17.1",

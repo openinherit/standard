@@ -68,7 +68,7 @@ check_out 1 "condition date differs from the cited effective date" "a condition 
   python3 "$GATE" --tree "$(mk cond "${GOOD_RULE/d >= |2022-01-01|/d >= |2022-02-01|}")" --min-citations 2
 check_out 1 "|2019-05-05|" "an uncited date literal is refused" \
   python3 "$GATE" --tree "$(mk undated "${GOOD_RULE/if d < |2020-01-01|/if d < |2019-05-05|}")" --min-citations 2
-check_out 1 "point-in-time" "a pit ELI with no @date is refused" \
+check_out 1 "pit has no point-in-time /YYYY-MM-DD date" "a pit ELI with no @date is refused" \
   python3 "$GATE" --tree "$(mk nodate "${GOOD_RULE/section\/1\/2023-06-01/section/1}")" --min-citations 2
 check_out 1 "legislation.gov.uk" "an instrument off legislation.gov.uk is refused" \
   python3 "$GATE" --tree "$(mk offsite "${GOOD_RULE/https:\/\/www.legislation.gov.uk\/uksi\/2022\/2\/made/https://example.org/si}")" --min-citations 2
@@ -83,6 +83,27 @@ check_out 1 "not followed by a definition" "a dangling citation is refused" \
 NOCITE_RULE="$(sed '/# eli:/d' <<<"$GOOD_RULE")"
 check_out 1 "|2022-01-01|" "a dated rule with its citations stripped is refused" \
   python3 "$GATE" --tree "$(mk stripped "$NOCITE_RULE")" --min-citations 0
+# an uncited definition of a cited name, reusing a cited date
+UNCITED_EXC="${GOOD_RULE/  definition v equals/  exception definition x
+    under condition d >= |2022-01-01|
+    consequence equals \$999
+
+  definition v equals}"
+check_out 1 "definition x has no \`# eli:\` citation" "an uncited exception reusing a cited date is refused" \
+  python3 "$GATE" --tree "$(mk uncexc "$UNCITED_EXC")" --min-citations 2
+# a citation must not bind past the end of its own definition
+NOBLANK="${GOOD_RULE/  definition x equals \$100/  definition x equals \$1
+  definition y equals \$100}"
+check_out 1 "literal differs from the cited value" "a citation binds only to its own definition" \
+  python3 "$GATE" --tree "$(mk noblank "$NOBLANK")" --min-citations 2
+check_out 1 "exactly one money literal" "a cited definition with two figures is refused" \
+  python3 "$GATE" --tree "$(mk twomoney "${GOOD_RULE/consequence equals \$200/consequence equals if d >= |2022-01-01| then \$5 else \$200}")" --min-citations 2
+check_out 1 "literal differs from the cited value" "a negated figure is refused" \
+  python3 "$GATE" --tree "$(mk neg "${GOOD_RULE/consequence equals \$200/consequence equals -\$200}")" --min-citations 2
+check_out 1 "no date literal in its condition" "an exception whose condition has no cited date is refused" \
+  python3 "$GATE" --tree "$(mk nodatecond "${GOOD_RULE/d >= |2022-01-01|/d >= cutoff}")" --min-citations 2
+check_out 1 "condition date differs from the cited effective date" "a date in the consequence must also be the cited one" \
+  python3 "$GATE" --tree "$(mk consdate "${GOOD_RULE/consequence equals \$200/consequence equals if d >= |2020-01-01| then \$200 else \$200}")" --min-citations 2
 check 2 "fewer citations than the floor cannot answer" python3 "$GATE" --tree "$G" --min-citations 3
 check 2 "a tree with no catala/ cannot answer" python3 "$GATE" --tree "$WORK/empty-$$" --min-citations 0
 # prose outside a code block may mention dates and `# eli:` freely
@@ -168,6 +189,9 @@ echo 'not xml' > "$STUB/bad.xml"; route /uksi/2020/1/made/data.xml 200 bad.xml
 check_out 1 "machine-readable" "a 200 that is not legislation XML is refused" live; reset
 route /uksi/2020/1/made/data.xml 503 x
 check_out 2 "not a withdrawal" "a 503 outage cannot answer (and is not called a withdrawal)" live; reset
+inst i1.xml "http://www.legislation.gov.uk/uksi/2020/1/made" 2020-01-01 '£1000'
+check_out 1 "does not contain the cited figure" "a figure that is only a prefix of the stated one is refused" live
+inst i1.xml "http://www.legislation.gov.uk/uksi/2020/1/made" 2020-01-01 '£100'
 check 0 "restored stub is clean again" live
 kill "$STUB_PID" 2>/dev/null; wait "$STUB_PID" 2>/dev/null
 check 2 "an unreachable server cannot answer" live

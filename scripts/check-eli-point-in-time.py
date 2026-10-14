@@ -14,8 +14,13 @@ convention is one `# eli:` comment directly above each dated `definition`:
 
 STATIC checks (always run, no network), over every `*.catala_en` under <tree>/catala:
   - each `# eli:` line carries value, effective, instrument and pit, and is followed by a definition;
-  - the definition's money literal equals `value`;
-  - a date in the definition's `under condition` equals `effective`;
+  - the definition carries exactly one money literal, and it equals `value` (sign included);
+  - every date literal in the definition equals `effective`, and a dated `exception` has one in
+    its `under condition`;
+  - a citation binds only to its own definition (the block ends at the next blank line,
+    definition, `# eli:` line or scope);
+  - every other definition of a cited name, and every definition with a dated condition, is
+    itself cited — an uncited version of a dated figure is refused;
   - instrument and pit are legislation.gov.uk identifiers, and pit ends in a /YYYY-MM-DD date;
   - pit's date is on or after `effective`, and before the next commencement for the same definition;
   - every date literal inside a ```catala block is the `effective` date of a citation in that file.
@@ -24,7 +29,8 @@ STATIC checks (always run, no network), over every `*.catala_en` under <tree>/ca
 LIVE checks (--resolve), per citation, against legislation.gov.uk's machine-readable data
 (`<identifier>/data.xml`; redirects are NOT followed):
   - instrument: HTTP 200, DocumentURI is the cited identifier, ukm:ComingIntoForce includes
-    `effective`, and the text contains the cited figure (e.g. £322,000);
+    `effective`, and the text states the cited figure as a whole number (e.g. £322,000 — and
+    £270 does not match £270,000);
   - pit: HTTP 200, DocumentURI ends in the cited date (not silently the current version),
     dct:valid is on or before that date, and RestrictEndDate (if any) is not before it.
   A 404/410 is a withdrawn version and a 3xx is a moved one; both fail.
@@ -48,6 +54,7 @@ import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 EXIT_OK, EXIT_REFUSED, EXIT_CANNOT = 0, 1, 2
@@ -56,7 +63,7 @@ FIELDS = ("value", "effective", "instrument", "pit")
 
 ELI_LINE = re.compile(r"^\s*#\s*eli:\s*(.*)$")
 DATE_LIT = re.compile(r"\|(\d{4}-\d{2}-\d{2})\|")
-MONEY_LIT = re.compile(r"\$\s*([\d,]+(?:\.\d+)?)")
+MONEY_LIT = re.compile(r"(-\s*)?\$\s*([\d,]+(?:\.\d+)?)")
 DEF_LINE = re.compile(r"^\s*(?:exception\s+(?:\w+\s+)?)?definition\s+(\w+)")
 PIT_DATE = re.compile(r"/(\d{4}-\d{2}-\d{2})$")
 
@@ -72,13 +79,38 @@ class CannotAnswer(Exception):
 
 
 @dataclass
+class Definition:
+    file: Path
+    line: int
+    name: str
+    exception: bool
+    text: str  # the definition's own lines, comments stripped
+
+    @property
+    def money(self) -> list:
+        return ["-" + m if sign else m for sign, m in MONEY_LIT.findall(self.text)]
+
+    @property
+    def dates(self) -> list:
+        return DATE_LIT.findall(self.text)
+
+    @property
+    def condition_dates(self) -> list:
+        if "under condition" not in self.text:
+            return []
+        return DATE_LIT.findall(self.text.split("under condition", 1)[1].split("consequence", 1)[0])
+
+
+@dataclass
 class Citation:
     file: Path
     line: int
-    definition: str
     fields: dict
-    literal: str | None
-    condition_dates: list
+    defn: Definition
+
+    @property
+    def definition(self) -> str:
+        return self.defn.name
 
     @property
     def where(self) -> str:
@@ -86,7 +118,12 @@ class Citation:
 
 
 def money_key(s: str) -> str:
-    return s.replace("$", "").replace("£", "").replace(",", "").strip()
+    """Canonical signed amount: `-$1,000.50` -> `-1000.50`, `$322,000` -> `322000`."""
+    t = s.replace("$", "").replace("£", "").replace(",", "").replace(" ", "").strip()
+    try:
+        return str(Decimal(t).normalize())
+    except InvalidOperation:
+        return t
 
 
 def iso(s: str) -> dt.date | None:
@@ -108,14 +145,37 @@ def code_lines(text: str):
             yield n, line
 
 
-def parse_file(path: Path, rel: Path, errors: list) -> tuple[list, list, int]:
-    """Return (citations, [(lineno, date) for every date literal in code], `# eli:` lines seen).
-    The last counts malformed lines too: a broken citation is REFUSED, never discounted."""
+def _ends_block(line: str) -> bool:
+    s = line.strip()
+    return (not s or bool(DEF_LINE.match(line)) or bool(ELI_LINE.match(line))
+            or s.startswith(("scope ", "declaration ", "assertion ")))
+
+
+def parse_file(path: Path, rel: Path, errors: list) -> tuple[list, list, list, int]:
+    """Return (citations, definitions, [(lineno, date) for every date literal in code],
+    `# eli:` lines seen). The last counts malformed lines too: a broken citation is
+    REFUSED, never discounted.
+
+    A definition's block is its own line plus the lines after it, up to the next blank
+    line, definition, `# eli:` line or scope/declaration/assertion — so a citation can
+    never reach into a neighbouring definition."""
     lines = list(code_lines(path.read_text(encoding="utf-8")))
-    citations, dates, seen = [], [], 0
+    defs: dict = {}  # index into lines -> Definition
+    dates: list = []
     for idx, (n, line) in enumerate(lines):
-        code = line.split("#", 1)[0]
-        dates += [(n, d) for d in DATE_LIT.findall(code)]
+        dates += [(n, d) for d in DATE_LIT.findall(line.split("#", 1)[0])]
+        m = DEF_LINE.match(line)
+        if not m:
+            continue
+        block = [line.split("#", 1)[0]]
+        k = idx + 1
+        while k < len(lines) and not _ends_block(lines[k][1]):
+            block.append(lines[k][1].split("#", 1)[0])
+            k += 1
+        defs[idx] = Definition(rel, n, m.group(1), line.lstrip().startswith("exception"),
+                               "\n".join(block))
+    citations, seen = [], 0
+    for idx, (n, line) in enumerate(lines):
         m = ELI_LINE.match(line)
         if not m:
             continue
@@ -125,30 +185,17 @@ def parse_file(path: Path, rel: Path, errors: list) -> tuple[list, list, int]:
         if missing:
             errors.append(f"{rel}:{n}: `# eli:` missing field(s) {', '.join(missing)}")
             continue
-        # bind to the next non-blank code line, which must open a definition
         j = idx + 1
         while j < len(lines) and not lines[j][1].strip():
             j += 1
-        d = DEF_LINE.match(lines[j][1]) if j < len(lines) else None
-        if not d:
+        if j not in defs:
             errors.append(f"{rel}:{n}: `# eli:` is not followed by a definition")
             continue
-        # the definition's block runs to the next blank line
-        block = []
-        k = j
-        while k < len(lines) and lines[k][1].strip():
-            block.append(lines[k][1].split("#", 1)[0])
-            k += 1
-        text = "\n".join(block)
-        money = MONEY_LIT.findall(text)
-        cond = []
-        if "under condition" in text:
-            cond = DATE_LIT.findall(text.split("under condition", 1)[1].split("consequence", 1)[0])
-        citations.append(Citation(rel, n, d.group(1), fields, money[-1] if money else None, cond))
-    return citations, dates, seen
+        citations.append(Citation(rel, n, fields, defs[j]))
+    return citations, list(defs.values()), dates, seen
 
 
-def static_check(citations: list, dates_by_file: dict, errors: list) -> None:
+def static_check(citations: list, definitions: list, dates_by_file: dict, errors: list) -> None:
     by_def: dict = {}
     for c in citations:
         f = c.fields
@@ -156,12 +203,23 @@ def static_check(citations: list, dates_by_file: dict, errors: list) -> None:
         if eff is None:
             errors.append(f"{c.where}: effective={f['effective']!r} is not a date")
             continue
-        if c.literal is None or money_key(c.literal) != money_key(f["value"]):
+        money = c.defn.money
+        if len(money) != 1:
+            errors.append(
+                f"{c.where}: definition {c.definition}: a cited definition must carry exactly one "
+                f"money literal, found {len(money)} ({', '.join('$' + m for m in money) or 'none'})"
+            )
+        elif money_key(money[0]) != money_key(f["value"]):
             errors.append(
                 f"{c.where}: definition {c.definition}: literal differs from the cited value "
-                f"(rule ${c.literal}, citation {f['value']})"
+                f"(rule ${money[0]}, citation {f['value']})"
             )
-        for cd in c.condition_dates:
+        if c.defn.exception and not c.defn.condition_dates:
+            errors.append(
+                f"{c.where}: definition {c.definition}: dated exception has no date literal in its "
+                f"condition, so its commencement cannot be bound to effective {f['effective']}"
+            )
+        for cd in c.defn.dates:
             if cd != f["effective"]:
                 errors.append(
                     f"{c.where}: definition {c.definition}: condition date differs from the cited "
@@ -187,6 +245,18 @@ def static_check(citations: list, dates_by_file: dict, errors: list) -> None:
                     f"{cur.where}: pit date {m.group(1)} is on or after the next commencement "
                     f"({nxt.fields['effective']}) — after the next commencement the figure is superseded"
                 )
+    # every definition of a cited name, and every date-conditioned definition, is cited
+    cited_defs = {id(c.defn) for c in citations}
+    cited_names = {(c.file, c.definition) for c in citations}
+    for d in definitions:
+        if id(d) in cited_defs:
+            continue
+        if (d.file, d.name) in cited_names or d.condition_dates:
+            errors.append(
+                f"{d.file}:{d.line}: definition {d.name} has no `# eli:` citation, but it is "
+                f"{'a dated condition' if d.condition_dates else 'a cited figure'} — every version "
+                f"of a dated figure must name its source"
+            )
     for rel, dates in dates_by_file.items():
         cited = {c.fields["effective"] for c in citations if c.file == rel}
         for n, d in dates:
@@ -245,7 +315,10 @@ def get_xml(ident: str, base: str, timeout: float, where: str, errors: list):
 def live_check(citations: list, base: str, timeout: float, errors: list, log) -> None:
     for c in citations:
         f = c.fields
-        figure = "£" + f"{int(float(money_key(f['value']))):,}"
+        amount = Decimal(money_key(f["value"]))
+        figure = f"£{amount:,.0f}" if amount == amount.to_integral_value() else f"£{amount:,.2f}"
+        # the figure as a whole number, not the start of a bigger one (£270 is not £270,000)
+        stated = re.compile(re.escape(figure) + r"(?![\d,.]*\d)")
         root = get_xml(f["instrument"], base, timeout, c.where, errors)
         if root is not None:
             doc = root.get("DocumentURI", "")
@@ -258,7 +331,7 @@ def live_check(citations: list, base: str, timeout: float, errors: list, log) ->
                     f"{c.where}: instrument ukm:ComingIntoForce {sorted(d for d in cif if d)} "
                     f"does not include effective {f['effective']}"
                 )
-            elif figure not in text:
+            elif not stated.search(text):
                 errors.append(f"{c.where}: instrument text does not contain the cited figure {figure}")
             else:
                 log(f"  ok  {f['instrument']}  in force {f['effective']}, states {figure}")
@@ -298,13 +371,15 @@ def main(argv=None) -> int:
         return EXIT_CANNOT
     errors: list = []
     citations: list = []
+    definitions: list = []
     seen = 0
     dates_by_file: dict = {}
     files = sorted(root.rglob("*.catala_en"))
     for p in files:
         rel = p.relative_to(a.tree)
-        cs, ds, n = parse_file(p, rel, errors)
+        cs, defs, ds, n = parse_file(p, rel, errors)
         citations += cs
+        definitions += defs
         seen += n
         if ds:
             dates_by_file[rel] = ds
@@ -312,7 +387,7 @@ def main(argv=None) -> int:
     if seen < a.min_citations:
         print(f"CANNOT ANSWER: {seen} citation(s), floor is {a.min_citations}")
         return EXIT_CANNOT
-    static_check(citations, dates_by_file, errors)
+    static_check(citations, definitions, dates_by_file, errors)
     if a.resolve and not errors:
         try:
             live_check(citations, a.base_url.rstrip("/"), a.timeout, errors, print)

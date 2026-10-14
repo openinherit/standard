@@ -1,0 +1,77 @@
+name: L6 temporal — point-in-time ELI binding
+
+# A dated figure in a Catala rule is only as good as the version of the law it
+# came from. This workflow holds two things to that:
+#
+#   eli-binding   every dated definition carries a `# eli:` citation bound to its
+#                 money literal and commencement date, and every cited
+#                 legislation.gov.uk identifier is RE-RESOLVED live: a withdrawn
+#                 (404/410) or moved (3xx) version, a commencement date that
+#                 disagrees, or an Order whose text no longer states the figure
+#                 fails the build. The hermetic suite proves each of those can
+#                 still go red before the live check is trusted.
+#   as-at-oracle  the statutory legacy resolves to the right figure AS AT the
+#                 date of death (2022-06-01 -> £270,000, 2024-06-01 -> £322,000),
+#                 and the two negative controls (a wrong as-at figure; a date
+#                 before the modelled window) must turn the gov-oracle RED.
+#
+# Weekly as well as on change, because the failure this exists for happens
+# upstream: a version can be withdrawn while nothing in this repository moves.
+#
+# Exit 2 from the checker (cannot answer — e.g. the source is down) fails the
+# job. It is never read as a pass.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  eli-binding:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Red-proofs (hermetic — synthetic trees, local stub, no network)
+        run: bash scripts/test-check-eli-point-in-time.sh
+      - name: Every dated figure is cited (static)
+        run: python3 scripts/check-eli-point-in-time.py --tree . --min-citations 2
+      - name: Every cited version still resolves (live, legislation.gov.uk)
+        run: python3 scripts/check-eli-point-in-time.py --tree . --min-citations 2 --resolve
+
+  as-at-oracle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: "4.14"
+      # setup-ocaml caches the compiler switch only, not the catala build below.
+      - name: Cache the Catala opam switch
+        uses: actions/cache@v4
+        with:
+          path: _opam
+          key: catala-switch-1.2.0-ocaml-4.14-${{ runner.os }}
+      - name: Install catala + clerk (pinned 1.2.0)
+        run: opam install catala.1.2.0 -y
+      - name: Toolchain present
+        run: eval "$(opam env)" && command -v clerk && command -v catala
+      - name: As-at figures GREEN, negative controls RED
+        run: eval "$(opam env)" && bash scripts/test-l6-temporal-oracle.sh

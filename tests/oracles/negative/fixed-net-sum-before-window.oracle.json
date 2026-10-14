@@ -1,0 +1,26 @@
+{
+  "_doc": "NEGATIVE CONTROL — DELIBERATELY WRONG. Claims £270,000 for a 31 December 2019 death. SI 2020/33 was not yet in force and earlier figures are not modelled, so the rule must return NeedsHuman, and the harness (which requires the Computed arm) must go RED. scripts/test-l6-temporal-oracle.sh PASSES only if this exits 1. If it ever goes green, the rule is presenting a figure it does not have authority for.",
+  "rule": {
+    "repo": "openinherit/standard",
+    "rule_file": "catala/probate/FixedNetSum.catala_en",
+    "module": "FixedNetSum",
+    "scope": "AsAt",
+    "result_field": "verdict",
+    "depends_modules": [
+      "catala/contract/ComputedOrNeedsHuman.catala_en"
+    ]
+  },
+  "statute": "Administration of Estates Act 1925 s.46(1)(i) Table Case (2)(B) and Schedule 1A; SI 2020/33 (Fixed Net Sum Order 2020); SI 2023/758 (Fixed Net Sum Order 2023)",
+  "currency": "GBP",
+  "sourced_at": "2026-10-14",
+  "cases": [
+    {
+      "label": "before-modelled-window-death-2019-12-31",
+      "inputs": {
+        "date_of_death": "2019-12-31"
+      },
+      "expected_money": "270000",
+      "citation": "WRONG ON PURPOSE: £270,000 applies only from 6 February 2020 (SI 2020/33); before that the rule routes to a human."
+    }
+  ]
+}

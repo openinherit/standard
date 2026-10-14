@@ -1,0 +1,50 @@
+{
+  "_doc": "T032 gov-oracle, L6 temporal. The statutory legacy as at the date of death. scripts/oracle_verify.py runs FixedNetSum.AsAt for each date_of_death and requires the Computed arm to equal expected_money. The two primary cases are the 22 June 2026 L6 spike's dates; the two boundary cases sit either side of SI 2023/758's commencement, so a condition written > instead of >= fails. Figures and commencement dates were read from legislation.gov.uk's machine-readable data on sourced_at. The wrong-as-at negative control is tests/oracles/negative/fixed-net-sum-wrong-as-at.oracle.json; scripts/test-l6-temporal-oracle.sh requires it to go RED.",
+  "rule": {
+    "repo": "openinherit/standard",
+    "rule_file": "catala/probate/FixedNetSum.catala_en",
+    "module": "FixedNetSum",
+    "scope": "AsAt",
+    "result_field": "verdict",
+    "depends_modules": [
+      "catala/contract/ComputedOrNeedsHuman.catala_en"
+    ]
+  },
+  "statute": "Administration of Estates Act 1925 s.46(1)(i) Table Case (2)(B) and Schedule 1A; SI 2020/33 (Fixed Net Sum Order 2020); SI 2023/758 (Fixed Net Sum Order 2023)",
+  "currency": "GBP",
+  "sourced_at": "2026-10-14",
+  "cases": [
+    {
+      "label": "death-2022-06-01",
+      "inputs": {
+        "date_of_death": "2022-06-01"
+      },
+      "expected_money": "270000",
+      "citation": "SI 2020/33 art.2: the fixed net sum is £270,000, in force 6 February 2020 (https://www.legislation.gov.uk/uksi/2020/33/made, ukm:ComingIntoForce 2020-02-06)."
+    },
+    {
+      "label": "death-2024-06-01",
+      "inputs": {
+        "date_of_death": "2024-06-01"
+      },
+      "expected_money": "322000",
+      "citation": "SI 2023/758 art.2: the fixed net sum is £322,000, in force 26 July 2023 (https://www.legislation.gov.uk/uksi/2023/758/made, ukm:ComingIntoForce 2023-07-26)."
+    },
+    {
+      "label": "death-2023-07-25-day-before",
+      "inputs": {
+        "date_of_death": "2023-07-25"
+      },
+      "expected_money": "270000",
+      "citation": "SI 2020/33 art.2: the fixed net sum is £270,000, in force 6 February 2020 (https://www.legislation.gov.uk/uksi/2020/33/made, ukm:ComingIntoForce 2020-02-06). SI 2023/758 not yet in force."
+    },
+    {
+      "label": "death-2023-07-26-commencement-day",
+      "inputs": {
+        "date_of_death": "2023-07-26"
+      },
+      "expected_money": "322000",
+      "citation": "SI 2023/758 art.2: the fixed net sum is £322,000, in force 26 July 2023 (https://www.legislation.gov.uk/uksi/2023/758/made, ukm:ComingIntoForce 2023-07-26)."
+    }
+  ]
+}

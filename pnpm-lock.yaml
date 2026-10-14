@@ -23,11 +23,11 @@ importers:
         specifier: latest
         version: 0.99.0(typescript@6.0.2)
       '@hyperjump/json-schema':
-        specifier: ^1.17.5
-        version: 1.17.5(@hyperjump/browser@1.3.1)
+        specifier: ^1.18.0
+        version: 1.18.0(@hyperjump/browser@1.3.1)
       '@redocly/cli':
         specifier: latest
-        version: 2.57.0
+        version: 2.62.1
       '@sourcemeta/jsonschema':
         specifier: 17.0.0
         version: 17.0.0
@@ -254,25 +254,22 @@ packages:
     resolution: {integrity: sha512-Le5XZUjnVqVjkgLYv6yyWgALat/0HpB1XaCPuCZ+GCFki9NvXloSZITIJ0H+wRW7mb9At1SxvohKBbNQbrr/cw==}
     engines: {node: '>=18.0.0'}
 
-  '@hyperjump/json-pointer@1.1.2':
-    resolution: {integrity: sha512-zPNgu1zdhtjQHFNLGzvEsLDsLOEvhRj6u6ktIQmlz7YPESv5uF8SnAe3Dq0oL6gZ6OGWSLq2n7pphRNF6Hpg6w==}
+  '@hyperjump/json-pointer@1.1.3':
+    resolution: {integrity: sha512-GVSs+wzefSO5VOEVMuOz118MDJrJtMdm8h+2vlghzMG/5QpboTSQ12gaMKvGQo7S4oPMw9rCyFWNAJ9DUEdA5Q==}
 
-  '@hyperjump/json-schema-formats@1.0.1':
-    resolution: {integrity: sha512-qvcIxysnMfcPxyPSFFzzo28o2BN1CNT5b0tQXNUP0kaFpvptQNDg8SCLvlnMg2sYxuiuqna8+azGBaBthiskAw==}
+  '@hyperjump/json-schema-formats@1.0.8':
+    resolution: {integrity: sha512-iE+U2Jbe4m3k7t6YXrQe9VhhTgCg6rTL7I1Pdc5soGCvXGFfuaNvzlWaeQI2CnGFscnEAvM2jkas5g1QfTdrTw==}
 
-  '@hyperjump/json-schema@1.17.5':
-    resolution: {integrity: sha512-f/yM4hQsBQYNEDu8zxmAZNfa/GxquWoC1FzUY0ADbSjsN8B3ICagdCPg4F2rrRET+/MJp/qKecgIF7GtdjX0sg==}
+  '@hyperjump/json-schema@1.18.0':
+    resolution: {integrity: sha512-YPLJsCosW6pHhulKrFogUsl1WxQVRy+fY0pROt66FDFygjIWZkMxXyiy8HLRR1JKeAd5OE6NSZs0NVjSBNwb2Q==}
     peerDependencies:
       '@hyperjump/browser': ^1.1.0
 
   '@hyperjump/pact@1.4.0':
     resolution: {integrity: sha512-01Q7VY6BcAkp9W31Fv+ciiZycxZHGlR2N6ba9BifgyclHYHdbaZgITo0U6QMhYRlem4k8pf8J31/tApxvqAz8A==}
 
-  '@hyperjump/uri@1.3.3':
-    resolution: {integrity: sha512-rUqeUdL2aW7lzvSnCL6yUetXYzqxhsBEw9Z7Y1bEhgiRzcfO3kjY0UdD6c4H/bzxe0fXIjYuocjWQzinio8JTQ==}
-
-  '@hyperjump/uri@1.3.6':
-    resolution: {integrity: sha512-9a2/wOIp666Veq1a8QctYPRtyFHH0p1yw8Nt/DEf06M+eDpwBpeuc2rGqqjBthENTOy1NyJ/xhSiDtkjU5LfKA==}
+  '@hyperjump/uri@1.3.9':
+    resolution: {integrity: sha512-cxG5vyIdx3gUb/OQD/FDruQQcGNzF2aKTXWJ6LzlAC1kh97YZQSRsF3hL274xlTDJ1nWGJGRtknlW6ZpU3Ch+A==}
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -294,8 +291,8 @@ packages:
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
     engines: {node: '>=8'}
 
-  '@redocly/cli@2.57.0':
-    resolution: {integrity: sha512-1d5fVyUaYlMNgCHUoyE2vUyxBhs/jmOHgsX/kFmfWzESw4f/G/OV/SU9E55rU7aUNmw9rHj1vXmL6yUdIn+KKQ==}
+  '@redocly/cli@2.62.1':
+    resolution: {integrity: sha512-KdhRvUGkaom19U83mlRJE10T4svPf8EHCn9AGLgIHxqHgVTyjQMLyrOoIU46pV6Gtvbe3t035ckIDVYeqXC4VQ==}
     engines: {node: '>=22.12.0 || >=20.19.0 <21.0.0', npm: '>=10'}
     hasBin: true
 
@@ -617,8 +614,9 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  idn-hostname@15.1.8:
-    resolution: {integrity: sha512-MmLwddtSVyMtzYxx+xs2IFEbfyg/facubL/mEaAoJX/XIfjt1ly5QhPByihf4yrxZYbkQfRZVEnBgISv/e2ZWw==}
+  idn-hostname@15.1.19:
+    resolution: {integrity: sha512-pRGRbFpQWCptOBWw9Gn5DXtPdern5/XtdkcXdoEavjd+sh72jNm2eVI1eeysp64UisXPfaqoQrnLUKpSN4hJWw==}
+    engines: {node: '>=20.12.0 <21 || >=22.0.0'}
 
   is-docker@3.0.0:
     resolution: {integrity: sha512-eljcgEDlEns/7AXFosB5K/2nCM4P7FQPkGc/DWLy5rmFEWvZayGrik1d9/QIY5nJ4f9YsVvBkA6kJpHn9rISdQ==}
@@ -656,10 +654,6 @@ packages:
   json-schema-traverse@1.0.0:
     resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==}
 
-  json-stringify-deterministic@1.0.12:
-    resolution: {integrity: sha512-q3PN0lbUdv0pmurkBNdJH3pfFvOTL/Zp0lquqpvcjfKzt6Y0j49EPHAmVHCAS4Ceq/Y+PejWTzyiVpoY71+D6g==}
-    engines: {node: '>= 4'}
-
   just-curry-it@5.3.0:
     resolution: {integrity: sha512-silMIRiFjUWlfaDhkgSzpuAyQ6EX/o09Eu8ZBfmFwQMbax7+LQzeIU2CBrICT6Ne4l86ITCGvUCBpCubWYy0Yw==}
 
@@ -686,8 +680,8 @@ packages:
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
 
-  nanoid@3.3.19:
-    resolution: {integrity: sha512-Y2tUNy4ouw6tq5oDSKeQYGOyhkUBhNOcGV/02KC+6kd9eDGqdZd++mjMiIDilrBYvjEnCYvVtsuHCuP+okSfug==}
+  nanoid@3.3.20:
+    resolution: {integrity: sha512-uKdg2G3GNCKQn9byYOpxbGqrT2fGO5KRt5J/8b3pok8rT6qxGWF6hxMyJiEYtAf+FVyYuD9hRaDqX5uPFYJ4ZQ==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -864,9 +858,8 @@ packages:
   ufo@1.6.3:
     resolution: {integrity: sha512-yDJTmhydvl5lJzBmy/hyOAA0d+aqCBuwl818haVdYCRrWV84o7YyeVm4QlVHStqNrrJSTb6jKuFAVqAFsr+K3Q==}
 
-  uuid@9.0.1:
-    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+  uuid@14.0.3:
+    resolution: {integrity: sha512-Sc5u1VVln93y1Xnz4R+CunOZc7R9LUcTmhj7Rc7Eg3HVcf7rVn2FOoa812fe0W8p3jD7xeoGSYbfqCGGH2B6xw==}
     hasBin: true
 
   which@2.0.2:
@@ -1017,35 +1010,32 @@ snapshots:
 
   '@hyperjump/browser@1.3.1':
     dependencies:
-      '@hyperjump/json-pointer': 1.1.2
-      '@hyperjump/uri': 1.3.6
+      '@hyperjump/json-pointer': 1.1.3
+      '@hyperjump/uri': 1.3.9
       content-type: 1.0.5
       just-curry-it: 5.3.0
 
-  '@hyperjump/json-pointer@1.1.2': {}
+  '@hyperjump/json-pointer@1.1.3': {}
 
-  '@hyperjump/json-schema-formats@1.0.1':
+  '@hyperjump/json-schema-formats@1.0.8':
     dependencies:
-      '@hyperjump/uri': 1.3.3
-      idn-hostname: 15.1.8
+      '@hyperjump/uri': 1.3.9
+      idn-hostname: 15.1.19
 
-  '@hyperjump/json-schema@1.17.5(@hyperjump/browser@1.3.1)':
+  '@hyperjump/json-schema@1.18.0(@hyperjump/browser@1.3.1)':
     dependencies:
       '@hyperjump/browser': 1.3.1
-      '@hyperjump/json-pointer': 1.1.2
-      '@hyperjump/json-schema-formats': 1.0.1
+      '@hyperjump/json-pointer': 1.1.3
+      '@hyperjump/json-schema-formats': 1.0.8
       '@hyperjump/pact': 1.4.0
-      '@hyperjump/uri': 1.3.3
+      '@hyperjump/uri': 1.3.9
       content-type: 1.0.5
-      json-stringify-deterministic: 1.0.12
       just-curry-it: 5.3.0
-      uuid: 9.0.1
+      uuid: 14.0.3
 
   '@hyperjump/pact@1.4.0': {}
 
-  '@hyperjump/uri@1.3.3': {}
-
-  '@hyperjump/uri@1.3.6': {}
+  '@hyperjump/uri@1.3.9': {}
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -1065,7 +1055,7 @@ snapshots:
 
   '@lukeed/ms@2.0.2': {}
 
-  '@redocly/cli@2.57.0': {}
+  '@redocly/cli@2.62.1': {}
 
   '@rollup/rollup-android-arm-eabi@4.60.1':
     optional: true
@@ -1300,7 +1290,7 @@ snapshots:
 
   husky@9.1.7: {}
 
-  idn-hostname@15.1.8:
+  idn-hostname@15.1.19:
     dependencies:
       punycode: 2.3.1
 
@@ -1327,8 +1317,6 @@ snapshots:
       argparse: 2.0.1
 
   json-schema-traverse@1.0.0: {}
-
-  json-stringify-deterministic@1.0.12: {}
 
   just-curry-it@5.3.0: {}
 
@@ -1357,7 +1345,7 @@ snapshots:
       object-assign: 4.1.1
       thenify-all: 1.6.0
 
-  nanoid@3.3.19:
+  nanoid@3.3.20:
     optional: true
 
   object-assign@4.1.1: {}
@@ -1406,7 +1394,7 @@ snapshots:
 
   postcss@8.4.49:
     dependencies:
-      nanoid: 3.3.19
+      nanoid: 3.3.20
       picocolors: 1.1.1
       source-map-js: 1.2.2
     optional: true
@@ -1537,7 +1525,7 @@ snapshots:
 
   ufo@1.6.3: {}
 
-  uuid@9.0.1: {}
+  uuid@14.0.3: {}
 
   which@2.0.2:
     dependencies:

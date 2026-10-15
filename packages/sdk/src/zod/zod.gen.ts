@@ -5682,6 +5682,11 @@ export const zArchiveTimestampChain = z.strictObject({
 });
 
 /**
+ * RFC 4998 evidence-record renewal history for a signed or attested document
+ */
+export const zArchiveTimestampChain2 = zArchiveTimestampChain;
+
+/**
  * Attestation
  *
  * A first-class attestation entity recording will execution formalities. Each attestation has its own identity — supports tracking multiple attestation events independently (original will, codicils, re-execution after marriage). Reused by estate, codicils, trusts, extensions. Supports written (E&W Wills Act s.9), oral (Islamic/customary), seal-based (Japanese inkan), kinyan-based (Jewish)

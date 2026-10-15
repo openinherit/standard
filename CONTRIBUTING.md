@@ -96,6 +96,8 @@ Publishing needs an `NPM_TOKEN` repository secret with publish rights on the `@o
 
 `pnpm run check:release-wiring` asserts that this paragraph is still true: that a tag-triggered publishing workflow exists, that every publishable package is wired into it, and that each package still meets npm provenance's preconditions. It runs in CI on every push, so the promise and the machinery cannot drift apart again.
 
+Before the first publish step, `publish.yml` runs `scripts/check-release-contents.mjs --tag <tag>`. It packs `@openinherit/schema` and `@openinherit/conformance` exactly as publishing would and checks the tarballs: every package is at the tag's version, the packed `v3/` schemas and `extensions-registry.json` are byte-identical to the root copies, every reference-data file the schema package ships matches the root copy, and the catalogue room-gap fix (`catalogue.properties[]`, the conditional `space.propertyId`, the catalogue-only conformance fixture) is present. If any check fails, nothing is published. Run `pnpm run check:release-contents` locally before tagging. `check:release-wiring` fails if the step is removed or moved after a publish.
+
 ```bash
 ./scripts/release.sh 6.1.0
 ```

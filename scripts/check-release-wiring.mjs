@@ -142,6 +142,30 @@ for (const [path, pattern] of PROMISES) {
   }
 }
 
+// ---- A6: the publish workflow checks the tarball before it publishes it ----
+// check-release-contents.mjs packs the packages and verifies their contents.
+// It only protects a release if it runs, and runs BEFORE the first publish:
+// after it, a refusal arrives too late to stop anything.
+if (publishWorkflow) {
+  const lines = publishWorkflow.text.split("\n");
+  const firstPublish = lines.findIndex((l) => publishLineRe().test(l));
+  const contentsCheck = lines.findIndex((l) =>
+    /^[^#]*\bnode\s+scripts\/check-release-contents\.mjs\b[^#]*--tag\b/.test(l));
+  if (contentsCheck === -1) {
+    fail(
+      "A6",
+      `${publishWorkflow.name} never runs \`node scripts/check-release-contents.mjs --tag ...\` -- ` +
+        `nothing checks what is inside the tarballs before they reach the public registry.`,
+    );
+  } else if (firstPublish !== -1 && contentsCheck > firstPublish) {
+    fail(
+      "A6",
+      `${publishWorkflow.name} runs check-release-contents.mjs after its first publish step; ` +
+        `a refusal there cannot un-publish anything. Move it before the first publish.`,
+    );
+  }
+}
+
 // ---- report ----------------------------------------------------------------
 if (failures.length > 0) {
   for (const { id, message } of failures) console.error(`::error::[${id}] ${message}`);

@@ -46,7 +46,10 @@
     "contract-test": "bash scripts/contract-test.sh",
     "validate:refs:all": "bash scripts/validate-refs-all.sh",
     "compat": "echo 'Usage: python3 scripts/check-schema-compat.py <old-v3-dir> <new-v3-dir>'",
-    "check:release-wiring": "node scripts/check-release-wiring.mjs"
+    "check:release-wiring": "node scripts/check-release-wiring.mjs",
+    "test:release-wiring": "node scripts/test-check-release-wiring.mjs",
+    "check:release-contents": "node scripts/check-release-contents.mjs",
+    "test:release-contents": "node scripts/test-check-release-contents.mjs"
   },
   "devDependencies": {
     "@hey-api/client-fetch": "latest",

@@ -18,3 +18,11 @@ jobs:
       # runs when the lockfile is what broke.
       - name: The repository can release what it promises to release
         run: node scripts/check-release-wiring.mjs
+
+      - name: The wiring check can go red
+        run: node scripts/test-check-release-wiring.mjs
+
+      # The contents check itself runs in publish.yml, against the tag. Here we
+      # prove each of its assertions can refuse, on synthetic trees.
+      - name: The release contents check can go red
+        run: node scripts/test-check-release-contents.mjs

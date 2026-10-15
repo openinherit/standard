@@ -48,6 +48,13 @@ jobs:
       - name: Build SDK
         run: pnpm --filter @openinherit/sdk run build
 
+      # Pack the packages exactly as publish would and check what is IN them:
+      # versions match the tag, the packed schemas are the standard's schemas
+      # byte for byte, and the catalogue room-gap fix is present. A tag can sit
+      # on any commit, so the PR-time staleness check is not enough on its own.
+      - name: Refuse to publish a tarball that is not the standard
+        run: node scripts/check-release-contents.mjs --tag "${GITHUB_REF_NAME}"
+
       - name: Publish @openinherit/schema
         run: pnpm --filter @openinherit/schema publish --provenance --no-git-checks
         env:

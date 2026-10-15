@@ -1,0 +1,36 @@
+name: OpenAPI Drift
+
+# openapi/openapi.yaml is the document the SDK clients are generated from. This
+# keeps it honest against v3/ and keeps what is generated from it current:
+#   components — every v3/ JSON Schema is a component, or is excluded with a reason
+#   fresh      — regenerating the bundle and generated/typescript reproduces the commit
+#
+# No path filter, on purpose: a v3/ change is exactly what makes the generated
+# client stale, and a filter on openapi/** would never see it.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pnpm install --frozen-lockfile
+      - run: pip install pyyaml
+      - name: The gates go red when they should (hermetic)
+        run: bash scripts/test-check-openapi-drift.sh
+      - name: OpenAPI component list matches v3/
+        run: python3 scripts/check-openapi-components.py
+      - name: Bundle and generated client match what regenerating produces
+        run: bash scripts/check-openapi-fresh.sh

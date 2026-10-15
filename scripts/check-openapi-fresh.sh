@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
-# RED when the OpenAPI bundle or the generated TypeScript client is not what
-# regenerating from openapi/openapi.yaml (and the v3/ schemas it references)
-# produces. Catches both a hand edit to a generated file and an upstream change
-# committed without regenerating.
+# RED when an OpenAPI bundle or a generated TypeScript client is not what
+# regenerating from openapi/openapi.yaml (and the v3/ schemas it references) and
+# openapi/reference-api.yaml produces. Covers the published @openinherit/sdk
+# clients (packages/sdk/src/estate and /reference) as well as generated/typescript.
+# Catches both a hand edit to a generated file and an upstream change committed
+# without regenerating.
 #
-# The two commands are read from package.json (bundle:openapi, generate), so
+# packages/sdk/src/estate-v2 (@openinherit/sdk/v2) is not here: its source
+# document is not in this repo, so it cannot be regenerated.
+#
+# The commands are read from package.json (the SCRIPTS below), so
 # there is one home for how these files are made. Generators must already be
 # installed (pnpm install --frozen-lockfile): the lockfile is what pins them, so
 # this refuses to fall back to fetching whatever npx would download.
@@ -16,9 +21,13 @@
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
+SCRIPTS=(bundle:openapi generate generate:sdk bundle:reference-api generate:sdk:reference)
 GENERATED=(
   openapi/openapi-bundled.yaml
   generated/typescript
+  packages/sdk/src/estate
+  openapi/reference-api-bundled.yaml
+  packages/sdk/src/reference
 )
 
 cannot() { echo "CANNOT ANSWER — $*" >&2; exit 2; }
@@ -29,7 +38,7 @@ for bin in redocly openapi-ts; do
 done
 
 export PATH="$ROOT/node_modules/.bin:$PATH" npm_config_offline=true
-for script in bundle:openapi generate; do
+for script in "${SCRIPTS[@]}"; do
   cmd="$(node -p "require('./package.json').scripts['$script'] || ''")" \
     || cannot "could not read package.json"
   [ -n "$cmd" ] || cannot "package.json has no '$script' script"
@@ -42,10 +51,10 @@ done
 
 STALE="$(git diff --name-only -- "${GENERATED[@]}"; git ls-files --others --exclude-standard -- "${GENERATED[@]}")"
 if [ -n "$STALE" ]; then
-  echo "STALE — these files do not match what openapi/openapi.yaml and v3/ regenerate:" >&2
+  echo "STALE — these files do not match what openapi/*.yaml and v3/ regenerate:" >&2
   echo "$STALE" >&2
   git --no-pager diff --stat -- "${GENERATED[@]}" >&2
-  echo "Run 'pnpm bundle:openapi && pnpm generate' and commit the result. Do not edit these files by hand." >&2
+  echo "Run 'pnpm bundle:openapi && pnpm generate && pnpm generate:sdk && pnpm bundle:reference-api && pnpm generate:sdk:reference' and commit the result. Do not edit these files by hand." >&2
   exit 1
 fi
-echo "OpenAPI bundle and generated client: fresh"
+echo "OpenAPI bundles and generated clients: fresh"

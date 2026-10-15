@@ -240,6 +240,11 @@ export type Provenance = Provenance2;
 export type AuditEvent = AuditEvent2;
 
 /**
+ * RFC 4998 evidence-record renewal history for a signed or attested document
+ */
+export type ArchiveTimestampChain = ArchiveTimestampChain2;
+
+/**
  * Financial asset category details (accounts, investments, pensions)
  */
 export type AssetCategoryFinancial = Financial;
@@ -360,6 +365,11 @@ export type ExtensionScotland = Scotland;
 export type ExtensionIreland = Ireland;
 
 /**
+ * Northern Ireland real property — local tenure, land registry folio and Registry of Deeds
+ */
+export type ExtensionNorthernIreland = NorthernIreland;
+
+/**
  * Indian succession — Hindu Succession Act, personal law plurality
  */
 export type ExtensionIndia = India;
@@ -445,6 +455,1251 @@ export type ProblemDetails = {
 export type IntegrityPath = string;
 
 /**
+ * Money
+ *
+ * Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+ */
+export type Money2 = {
+    /**
+     * Value in the smallest currency unit (pence, cents, sen). The consumer must apply the ISO 4217 exponent to convert to a display value
+     */
+    amount: number;
+    /**
+     * ISO 4217 three-letter currency code. Use the code for the currency of the amount, not the reporting currency
+     */
+    currency: string;
+    /**
+     * Number of decimal places for this currency. Display value = amount / 10^exponent. Most currencies use 2 (default). JPY/KRW use 0. KWD/BHD/OMR use 3
+     */
+    exponent?: number;
+};
+
+/**
+ * Financial Asset Properties
+ *
+ * Category-specific properties for financial assets: bank accounts, pensions, ISAs, shares, bonds, crypto wallets, insurance policies, debts receivable
+ */
+export type Financial = {
+    /**
+     * Detailed shareholding information — company, share class, voting rights, restrictions. Relevant for BPR (UK), stepped-up basis (US), and controlling interest calculations
+     */
+    shareholding?: {
+        /**
+         * Name of the company in which shares are held
+         */
+        companyName?: string;
+        /**
+         * Company registration number
+         */
+        companyNumber?: string;
+        /**
+         * Class of shares held
+         */
+        shareClass?: string;
+        /**
+         * Number of shares held
+         */
+        numberOfShares?: number;
+        /**
+         * Total shares issued by the company (for calculating percentage ownership)
+         */
+        totalSharesIssued?: number;
+        /**
+         * Whether these shares carry voting rights
+         */
+        votingRights?: boolean;
+        /**
+         * Whether transfer of these shares is restricted (e.g. pre-emption rights, shareholder agreement)
+         */
+        restrictedTransfer?: boolean;
+        /**
+         * Stock exchange where shares are listed, if publicly traded. Null/absent for private companies
+         */
+        listedExchange?: string;
+        /**
+         * Stock ticker symbol
+         */
+        ticker?: string;
+        /**
+         * CUSIP identifier (US/Canada). 9-character alphanumeric
+         */
+        cusip?: string;
+        /**
+         * International Securities Identification Number
+         */
+        isin?: string;
+    };
+    /**
+     * Detailed business interest information — partnership shares, LLP membership, sole trader business. Relevant for BPR (UK), QFOBI (US), and succession planning
+     */
+    businessInterest?: {
+        /**
+         * Trading name of the business
+         */
+        businessName?: string;
+        /**
+         * Legal structure of the business
+         */
+        businessType?: 'sole_trader' | 'partnership' | 'llp' | 'limited_company' | 'plc' | 'franchise' | 'cooperative' | 'other';
+        /**
+         * The testator's ownership percentage
+         */
+        ownershipPercentage?: number;
+        /**
+         * Whether the testator holds a controlling interest. Affects BPR eligibility and valuation discounts
+         */
+        controllingInterest?: boolean;
+        /**
+         * Whether a written partnership/operating agreement exists
+         */
+        partnershipAgreement?: boolean;
+        /**
+         * What the partnership/operating agreement says about succession on death
+         */
+        successionProvision?: string;
+        /**
+         * Approximate annual turnover — helps with BPR qualification and valuation
+         */
+        annualTurnover?: Money2;
+        /**
+         * Number of employees
+         */
+        employees?: number;
+    };
+    /**
+     * Detailed pension information — scheme type, nominated beneficiaries, death benefits. Pensions often pass outside the estate via nomination
+     */
+    pension?: {
+        /**
+         * The type of pension scheme
+         */
+        schemeType?: 'defined_benefit' | 'defined_contribution' | 'sipp' | 'state_pension' | 'annuity' | 'drawdown' | 'other';
+        /**
+         * Pension provider name
+         */
+        provider?: string;
+        /**
+         * Policy or membership reference number
+         */
+        policyReference?: string;
+        /**
+         * Person IDs of nominated beneficiaries. Pension trustees usually have discretion but will consider nominations
+         */
+        nominatedBeneficiaries?: Array<string>;
+        /**
+         * Date the beneficiary nomination was last updated
+         */
+        nominationDate?: string;
+        /**
+         * Type of death benefit payable from this pension
+         */
+        deathBenefitType?: 'lump_sum' | 'dependants_pension' | 'drawdown_transfer' | 'annuity_guarantee' | 'none';
+        /**
+         * Whether the pension has been accessed/crystallised. Affects tax treatment on death (UK: pre-75 tax-free, post-75 taxed as income)
+         */
+        crystallised?: boolean;
+        /**
+         * Percentage of lifetime allowance used (UK). Abolished April 2024 but transitional protections remain
+         */
+        lifetimeAllowanceUsed?: number;
+        /**
+         * The broad pension category, covering international pension types
+         */
+        pensionType?: 'occupational' | 'personal' | 'stakeholder' | 'sipp' | 'ssas' | 'workplace' | 'state' | 'cpf' | 'epf' | 'other' | string;
+        /**
+         * Reference to the Organisation.id of the pension provider
+         */
+        pensionProviderOrganisationId?: string;
+        /**
+         * Membership or scheme reference number
+         */
+        pensionMemberNumber?: string;
+        /**
+         * Structured death benefit nomination — who receives pension benefits on death, and the terms
+         */
+        deathBenefitNomination?: {
+            /**
+             * Reference to the Person.id of the nominated beneficiary
+             */
+            nomineePersonId?: string;
+            /**
+             * Date the nomination was made or last updated
+             */
+            nominationDate?: string;
+            /**
+             * Date the nomination should next be reviewed
+             */
+            nominationReviewDate?: string;
+            /**
+             * Whether the nomination is believed to be current and valid
+             */
+            nominationCurrent?: boolean;
+            /**
+             * Date the nomination expires, if applicable
+             */
+            nominationExpiryDate?: string;
+            /**
+             * Type of death benefit the nominee would receive
+             */
+            benefitType?: 'lump_sum' | 'income' | 'pension' | 'discretionary';
+            /**
+             * Estimated death benefit amount, in minor currency units
+             */
+            estimatedAmount?: Money2;
+        };
+        /**
+         * Date drawdown commenced, if the pension is in drawdown
+         */
+        drawdownStartDate?: string;
+        /**
+         * Pension fund valuation at date of death
+         */
+        pensionValuationAtDeath?: {
+            /**
+             * Estimated value at death
+             */
+            estimatedValue?: Money2;
+            /**
+             * Method used
+             */
+            valuationMethod?: string;
+            /**
+             * Date of valuation
+             */
+            valuationDate?: string;
+        };
+        /**
+         * Details of annuity continuation on death — whether payments continue and to whom
+         */
+        annuityContinuation?: {
+            /**
+             * Whether an annuity is currently in force
+             */
+            annuityInForce?: boolean;
+            /**
+             * Annual annuity amount in minor currency units
+             */
+            annuityAmount?: Money2;
+            /**
+             * What happens to the annuity on the holder's death
+             */
+            continuationOnDeath?: 'terminates' | 'continues_to_spouse' | 'continues_to_beneficiary' | 'fixed_term';
+            /**
+             * Person.id of the beneficiary who receives continuation payments
+             */
+            continuationBeneficiaryPersonId?: string;
+        };
+    };
+    /**
+     * Life insurance policy details — type, sum assured, beneficiaries, trust status. Policies written in trust pass outside the estate
+     */
+    insurancePolicy?: {
+        /**
+         * Type of insurance policy
+         */
+        policyType?: 'term_life' | 'whole_life' | 'endowment' | 'critical_illness' | 'income_protection' | 'key_person' | 'other';
+        /**
+         * Insurance company name
+         */
+        provider?: string;
+        /**
+         * Policy reference number
+         */
+        policyReference?: string;
+        /**
+         * The amount payable on death, in minor currency units
+         */
+        sumAssured?: Money2;
+        /**
+         * Whether the policy is written in trust. If true, proceeds pass outside the estate and are not subject to inheritance tax
+         */
+        writtenInTrust?: boolean;
+        /**
+         * Names of the policy trustees, if written in trust
+         */
+        trusteeNames?: Array<string>;
+        /**
+         * Person IDs of named beneficiaries
+         */
+        beneficiaryPersonIds?: Array<string>;
+        /**
+         * How often premiums are paid
+         */
+        premiumFrequency?: 'monthly' | 'annual' | 'single_premium' | 'paid_up';
+        /**
+         * Policy expiry date (for term policies)
+         */
+        expiryDate?: string;
+    };
+    /**
+     * Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will
+     */
+    coOwnership?: {
+        /**
+         * Person IDs of co-owners
+         */
+        coOwnerPersonIds?: Array<string>;
+        /**
+         * How ownership is structured between co-owners
+         */
+        ownershipType?: 'joint_tenants' | 'tenants_in_common' | 'community_property' | 'partnership' | 'other';
+        /**
+         * The testator's ownership percentage
+         */
+        ownershipPercentage?: number;
+        /**
+         * Date joint tenancy was severed to become tenants in common (if applicable)
+         */
+        severanceDate?: string;
+    };
+    /**
+     * Intellectual property details — patents, copyrights, trademarks, trade secrets. IP succession varies by jurisdiction and type
+     */
+    intellectualProperty?: {
+        /**
+         * Type of intellectual property
+         */
+        ipType?: 'patent' | 'copyright' | 'trademark' | 'design_right' | 'trade_secret' | 'database_right' | 'other';
+        /**
+         * Registration or application number
+         */
+        registrationNumber?: string;
+        /**
+         * Intellectual property office where registered
+         */
+        registrationOffice?: string;
+        /**
+         * Date the IP right expires
+         */
+        expiryDate?: string;
+        /**
+         * Approximate annual revenue generated from this IP (licensing, royalties, etc.)
+         */
+        annualRevenue?: Money2;
+        /**
+         * Current licensees of this IP
+         */
+        licensees?: Array<string>;
+    };
+    /**
+     * Employee stock compensation details — options, RSUs, ESPPs. Vesting schedules and exercise windows are critical on death
+     */
+    stockCompensation?: {
+        /**
+         * Type of stock compensation
+         */
+        compensationType?: 'iso' | 'nso' | 'rsu' | 'espp' | 'phantom_stock' | 'sar' | 'other';
+        /**
+         * Date the award was granted
+         */
+        grantDate?: string;
+        /**
+         * Description of the vesting schedule
+         */
+        vestingSchedule?: string;
+        /**
+         * Number of shares/units currently vested
+         */
+        vestedQuantity?: number;
+        /**
+         * Number of shares/units not yet vested. May be forfeited on death depending on plan terms
+         */
+        unvestedQuantity?: number;
+        /**
+         * Strike/exercise price per share for options
+         */
+        exercisePrice?: Money2;
+        /**
+         * Date the options expire. Estate typically has limited window to exercise after death
+         */
+        expirationDate?: string;
+        /**
+         * Time allowed for estate to exercise options after death
+         */
+        postDeathExerciseWindow?: string;
+        /**
+         * Whether unvested awards accelerate (fully vest) on death
+         */
+        acceleratesOnDeath?: boolean;
+    };
+    /**
+     * Details of money owed to the testator by others. These are estate assets that the executor must collect
+     */
+    debtReceivable?: {
+        /**
+         * Name of the person or organisation that owes the debt
+         */
+        debtorName?: string;
+        /**
+         * Reference to Person.id if the debtor is in the people array
+         */
+        debtorPersonId?: string;
+        /**
+         * Original amount of the debt
+         */
+        originalAmount?: Money2;
+        /**
+         * Amount currently outstanding
+         */
+        outstandingAmount?: Money2;
+        /**
+         * Annual interest rate on the debt, as a percentage
+         */
+        interestRate?: number;
+        /**
+         * Whether the debt is secured against collateral
+         */
+        secured?: boolean;
+        /**
+         * Reference to any loan agreement or promissory note
+         */
+        documentRef?: string;
+        /**
+         * Likelihood of collecting this debt
+         */
+        collectibility?: 'likely' | 'uncertain' | 'doubtful' | 'uncollectible';
+    };
+};
+
+/**
+ * Vehicle Asset Properties
+ *
+ * Category-specific properties for vehicles: cars, motorcycles, boats, caravans, classic vehicles
+ */
+export type Vehicle = {
+    /**
+     * Structured vehicle data — identity, registration, and estate administration tracking. Present when category is 'vehicle'. Maps to schema:Vehicle in JSON-LD
+     */
+    vehicle?: {
+        /**
+         * Vehicle registration number (number plate). Primary UK identifier. Format varies by jurisdiction
+         */
+        registrationNumber?: string;
+        /**
+         * 17-character Vehicle Identification Number. International standard, globally unique per vehicle
+         */
+        vin?: string;
+        /**
+         * Vehicle manufacturer. Use the DVLA-registered name where available
+         */
+        make?: string;
+        /**
+         * Vehicle model name. DVLA VES API does not return this — must come from user input or VIN decode
+         */
+        model?: string;
+        /**
+         * Trim level, edition, or variant
+         */
+        variant?: string;
+        /**
+         * Four-digit year of manufacture
+         */
+        yearOfManufacture?: number;
+        /**
+         * Date of first registration in the UK (or equivalent jurisdiction)
+         */
+        dateOfFirstRegistration?: string;
+        /**
+         * DVLA-registered colour
+         */
+        colour?: string;
+        /**
+         * Fuel type as reported by DVLA
+         */
+        fuelType?: 'petrol' | 'diesel' | 'electric' | 'hybrid_petrol' | 'hybrid_diesel' | 'lpg' | 'other' | string;
+        /**
+         * Engine capacity in cubic centimetres (cc). Zero for electric vehicles
+         */
+        engineCapacity?: number;
+        /**
+         * CO2 emissions in grams per kilometre
+         */
+        co2Emissions?: number;
+        /**
+         * Type of vehicle
+         */
+        vehicleType?: 'car' | 'motorcycle' | 'van' | 'motorhome' | 'trike' | 'sidecar_outfit' | 'other' | string;
+        /**
+         * Whether the vehicle is considered a classic or historic vehicle. In the UK, vehicles manufactured before 1 January 1977 are exempt from vehicle excise duty. Classic vehicles may need specialist valuation (Hagerty, auction houses) rather than standard guides
+         */
+        isClassic?: boolean;
+        /**
+         * Whether the deceased was the registered keeper of this vehicle
+         */
+        keeperStatus?: 'registered_keeper' | 'not_registered_keeper' | 'unknown' | string;
+        /**
+         * Status of the V5C registration document (logbook)
+         */
+        v5cStatus?: 'held' | 'missing' | 'applied_for' | 'with_dvla' | string;
+        /**
+         * Type of finance arrangement on the vehicle. If HP or PCP, the vehicle is owned by the finance company, not the estate
+         */
+        financeType?: 'none' | 'hp' | 'pcp' | 'lease' | 'loan' | 'unknown' | string;
+        /**
+         * Whether a Statutory Off Road Notification (SORN) is currently in effect
+         */
+        sornDeclared?: boolean;
+        /**
+         * Tracks which estate administration steps have been completed for this vehicle
+         */
+        deathActions?: {
+            /**
+             * Whether DVLA has been notified of the keeper's death
+             */
+            dvlaNotified?: boolean;
+            /**
+             * When DVLA was notified
+             */
+            dvlaNotifiedAt?: string;
+            /**
+             * Whether the vehicle insurer has been notified
+             */
+            insurerNotified?: boolean;
+            /**
+             * When the insurer was notified
+             */
+            insurerNotifiedAt?: string;
+            /**
+             * Whether the finance company has been notified (if applicable)
+             */
+            financeCompanyNotified?: boolean;
+            /**
+             * Whether the finance has been settled or the vehicle returned
+             */
+            financeSettled?: boolean;
+            /**
+             * Whether a refund has been claimed for remaining full months of vehicle tax
+             */
+            taxRefundClaimed?: boolean;
+            /**
+             * What the executor intends to do with the vehicle
+             */
+            intendedDisposal?: 'transfer_to_beneficiary' | 'sell' | 'scrap' | 'sorn_and_store' | 'undecided' | string;
+        };
+    };
+    /**
+     * Live vehicle check data from DVLA VES, DVSA MOT History, and HPI/finance check APIs. Point-in-time snapshot at retrievedAt
+     */
+    vehicleCheck?: {
+        /**
+         * When this check data was fetched
+         */
+        retrievedAt: string;
+        /**
+         * Current MOT expiry date
+         */
+        motExpiry?: string;
+        /**
+         * Current MOT status
+         */
+        motStatus?: 'valid' | 'expired' | 'no_mot_required' | 'sorn' | string;
+        /**
+         * Mileage at last MOT test
+         */
+        lastMileage?: number;
+        /**
+         * Date of the last MOT mileage reading
+         */
+        lastMileageDate?: string;
+        /**
+         * Number of advisory items at last MOT
+         */
+        advisoryCount?: number;
+        /**
+         * Number of failure items at last MOT
+         */
+        failureCount?: number;
+        /**
+         * DVLA vehicle tax status
+         */
+        taxStatus?: 'taxed' | 'untaxed' | 'sorn' | 'not_taxed_for_on_road_use' | string;
+        /**
+         * When vehicle tax expires
+         */
+        taxDueDate?: string;
+        /**
+         * Whether the vehicle appears insured on the Motor Insurance Database
+         */
+        insuranceStatus?: 'insured' | 'not_insured' | 'unknown' | string;
+        /**
+         * Whether there is outstanding finance on the vehicle
+         */
+        financeOutstanding?: boolean;
+        /**
+         * Finance settlement figure in minor units (pennies). The amount needed to clear the finance and take ownership
+         */
+        financeSettlementAmount?: number;
+        /**
+         * Insurance write-off category, if applicable
+         */
+        writeOffCategory?: 'A' | 'B' | 'S' | 'N' | 'none' | string;
+        /**
+         * Whether the vehicle is reported stolen
+         */
+        stolenStatus?: 'clear' | 'reported_stolen' | 'unknown' | string;
+        /**
+         * Number of previous registered keepers
+         */
+        previousKeepers?: number;
+        /**
+         * Number of registration plate changes in the vehicle's history
+         */
+        plateChanges?: number;
+        /**
+         * Whether MOT mileage readings show a discrepancy (clocking indicator)
+         */
+        mileageAnomaly?: boolean;
+    };
+};
+
+/**
+ * Digital Asset Properties
+ *
+ * Category-specific properties for digital assets: domains, social media, subscriptions, crypto wallets, cloud storage, NFTs, gaming accounts
+ */
+export type Digital = {
+    /**
+     * Structured access information for digital assets — login credentials, 2FA, recovery methods, and platform death policies. Critical for executors managing the digital estate
+     */
+    digitalAccess?: {
+        /**
+         * Username or login identifier for this account
+         */
+        username?: string;
+        /**
+         * Where the password is stored — a password manager, physical location, or person who holds it
+         */
+        passwordStorageLocation?: string;
+        /**
+         * Name of the password manager holding credentials for this account
+         */
+        passwordManager?: string;
+        /**
+         * Whether two-factor authentication is enabled on this account
+         */
+        twoFactorEnabled?: boolean;
+        /**
+         * Methods available to recover access to this account if the primary credentials are unavailable
+         */
+        recoveryMethods?: Array<{
+            /**
+             * Type of recovery method
+             */
+            type?: 'backup_codes' | 'email' | 'phone' | 'security_key';
+            /**
+             * Where this recovery method or device is stored
+             */
+            location?: string;
+        }>;
+        /**
+         * The platform's policy for handling accounts after the holder's death
+         */
+        platformDeathPolicy?: 'memorialise' | 'delete' | 'transfer' | 'archive' | 'unknown' | string;
+        /**
+         * Whether a legacy contact has been configured on the platform (e.g. Google Inactive Account Manager, Facebook Legacy Contact)
+         */
+        legacyContactConfigured?: boolean;
+        /**
+         * Reference to the Person.id configured as the platform's legacy contact
+         */
+        legacyContactPersonId?: string;
+    };
+    /**
+     * Social media account details for digital assets
+     */
+    socialMedia?: {
+        /**
+         * The social media platform
+         */
+        platform?: 'facebook' | 'instagram' | 'tiktok' | 'twitter_x' | 'linkedin' | 'threads' | 'youtube' | 'pinterest' | 'other' | string;
+        /**
+         * Username or handle
+         */
+        username?: string;
+        /**
+         * Direct URL to the profile
+         */
+        url?: string;
+        /**
+         * Number of followers
+         */
+        followerCount?: number;
+        /**
+         * Whether the account generates revenue
+         */
+        monetised?: boolean;
+        /**
+         * Preferred action after death
+         */
+        postDeathAction?: 'memorialise' | 'delete' | 'transfer' | 'archive' | 'unknown' | string;
+        /**
+         * Person.id to transfer the account to
+         */
+        transferToPersonId?: string;
+    };
+    /**
+     * Cryptocurrency wallet and key access information
+     */
+    cryptoAccess?: {
+        /**
+         * The blockchain network
+         */
+        blockchain?: 'bitcoin' | 'ethereum' | 'solana' | 'cardano' | 'other' | string;
+        /**
+         * Type of wallet
+         */
+        walletType?: 'hardware' | 'software' | 'exchange' | 'custodian' | 'paper';
+        /**
+         * Public wallet address
+         */
+        walletAddress?: string;
+        /**
+         * Where the private key is stored — DO NOT store the key itself
+         */
+        privateKeyLocation?: string;
+        /**
+         * Where the seed phrase is stored — DO NOT store it
+         */
+        seedPhraseLocation?: string;
+        /**
+         * Organisation.id of the exchange
+         */
+        exchangeOrganisationId?: string;
+        /**
+         * Original cost basis for CGT
+         */
+        costBasis?: Money2;
+    };
+    /**
+     * Cloud storage account details for digital assets — provider, usage, important folders, family photo access
+     */
+    cloudStorage?: {
+        /**
+         * Cloud storage provider
+         */
+        provider?: 'google_drive' | 'onedrive' | 'icloud' | 'dropbox' | 'aws_s3' | 'other' | string;
+        /**
+         * Amount of storage used
+         */
+        storageUsed?: string;
+        /**
+         * Important folders that need attention during estate administration
+         */
+        importantFolders?: Array<{
+            /**
+             * Folder name
+             */
+            name?: string;
+            /**
+             * Description of folder contents
+             */
+            contents?: string;
+            /**
+             * What should happen to this folder
+             */
+            action?: 'archive' | 'delete' | 'transfer';
+        }>;
+        /**
+         * Whether the account contains family photos that should be preserved and shared
+         */
+        familyPhotoAccess?: boolean;
+    };
+    /**
+     * Domain name registration details — registrar, expiry, transfer locks. Critical for executors managing digital estates with web properties
+     */
+    domainNameAccess?: {
+        /**
+         * The registered domain name
+         */
+        domainName?: string;
+        /**
+         * Domain registrar name
+         */
+        registrar?: string;
+        /**
+         * Organisation.id of the registrant, if the domain is held by an organisation
+         */
+        registrantOrganisationId?: string;
+        /**
+         * Domain registration expiry date
+         */
+        expiryDate?: string;
+        /**
+         * Whether automatic renewal is enabled
+         */
+        autoRenew?: boolean;
+        /**
+         * Whether the domain has a transfer lock (registrar lock / clientTransferProhibited)
+         */
+        transferLocked?: boolean;
+        /**
+         * Where the transfer auth code is stored — reference only, never the code itself
+         */
+        authCodeLocation?: string;
+        /**
+         * Nameservers currently assigned to the domain
+         */
+        nameservers?: Array<string>;
+    };
+    /**
+     * Non-fungible token (NFT) details — blockchain, contract, token identifier, and marketplace information
+     */
+    nftAccess?: {
+        /**
+         * The blockchain network hosting the NFT
+         */
+        blockchain?: 'bitcoin' | 'ethereum' | 'solana' | 'cardano' | 'polygon' | 'other' | string;
+        /**
+         * Smart contract address for the NFT collection
+         */
+        contractAddress?: string;
+        /**
+         * Token identifier — string because can be very large integers
+         */
+        tokenId?: string;
+        /**
+         * The token standard used by the NFT contract
+         */
+        tokenStandard?: 'erc_721' | 'erc_1155' | 'other' | string;
+        /**
+         * Primary marketplace where this NFT is listed or was purchased
+         */
+        marketplace?: string;
+        /**
+         * Direct URL to the NFT listing on the marketplace
+         */
+        marketplaceUrl?: string;
+        /**
+         * Points to off-chain metadata JSON (tokenURI)
+         */
+        metadataUri?: string;
+    };
+    /**
+     * Monetised online content — YouTube channels, Substack newsletters, Patreon pages, and similar revenue-generating content platforms
+     */
+    monetisedContentAccess?: {
+        /**
+         * Content platform
+         */
+        platform?: 'youtube' | 'substack' | 'etsy' | 'patreon' | 'twitch' | 'spotify' | 'medium' | 'other' | string;
+        /**
+         * Direct URL to the channel or storefront
+         */
+        channelUrl?: string;
+        /**
+         * Display name of the channel or storefront
+         */
+        channelName?: string;
+        /**
+         * Number of subscribers or followers on the platform
+         */
+        subscriberCount?: number;
+        /**
+         * Approximate monthly revenue from the platform, in minor currency units
+         */
+        monthlyRevenue?: Money2;
+        /**
+         * Current monetisation status of the content
+         */
+        monetisationStatus?: 'active' | 'suspended' | 'demonetised' | 'pending' | 'none' | string;
+        /**
+         * Primary type of content produced
+         */
+        contentType?: 'video' | 'audio' | 'written' | 'mixed' | 'other' | string;
+        /**
+         * How the content generates revenue
+         */
+        revenueModel?: 'advertising' | 'subscription' | 'tips' | 'affiliate' | 'merchandise' | 'mixed' | string;
+    };
+    /**
+     * Loyalty programme points and rewards — airline miles, hotel points, retailer schemes. Some programmes permit post-death transfer; others forfeit on death
+     */
+    loyaltyAccess?: {
+        /**
+         * Name of the loyalty programme
+         */
+        programme?: string;
+        /**
+         * Organisation that operates the programme
+         */
+        programmeProvider?: string;
+        /**
+         * Current points balance
+         */
+        pointsBalance?: number;
+        /**
+         * Approximate cash equivalent of the points balance, in minor currency units
+         */
+        cashEquivalent?: Money2;
+        /**
+         * Date when the points expire if not used
+         */
+        expiryDate?: string;
+        /**
+         * Whether the programme permits transfer of points after death
+         */
+        transferable?: boolean;
+        /**
+         * URL to the programme's transfer or bereavement page
+         */
+        transferUrl?: string;
+    };
+    /**
+     * Gaming platform account details — Steam, Xbox, PlayStation, and similar platforms with virtual currencies and digital game libraries
+     */
+    gamingAccess?: {
+        /**
+         * Gaming platform
+         */
+        platform?: 'steam' | 'xbox' | 'playstation' | 'nintendo' | 'epic' | 'roblox' | 'other' | string;
+        /**
+         * Account name or gamertag on the platform
+         */
+        accountName?: string;
+        /**
+         * Balance of virtual currency on the platform
+         */
+        virtualCurrencyBalance?: number;
+        /**
+         * Name of the virtual currency
+         */
+        virtualCurrencyName?: string;
+        /**
+         * Whether the platform permits account or library transfer after death
+         */
+        transferable?: boolean;
+        /**
+         * Estimated real-world value of the account's digital assets, in minor currency units
+         */
+        estimatedRealValue?: Money2;
+    };
+    /**
+     * Instructions for what should happen to a digital asset or account after death — memorialise, delete, transfer, archive, or preserve
+     */
+    platformDelegation?: {
+        /**
+         * Desired post-death action for this digital asset
+         */
+        action: 'memorialise' | 'delete' | 'transfer' | 'archive' | 'deactivate' | 'preserve' | string;
+        /**
+         * How long to wait before executing the action, as an ISO 8601 duration
+         */
+        delayDuration?: string;
+        /**
+         * Person.id to transfer the asset to (when action is 'transfer')
+         */
+        transferToPersonId?: string;
+        /**
+         * Free-text instructions for the executor regarding this digital asset
+         */
+        specificInstructions?: string;
+        /**
+         * Whether the platform's native death/inactivity tool has been set up
+         */
+        platformToolConfigured?: boolean;
+        /**
+         * Which platform tool has been configured, if any
+         */
+        platformToolType?: 'inactive_account_manager' | 'legacy_contact' | 'digital_legacy' | 'memorialisation_request' | 'none' | 'other' | string;
+        /**
+         * Date when the platform tool was configured
+         */
+        configuredDate?: string;
+    };
+    /**
+     * How a fiduciary (executor, personal representative) can gain lawful access to this digital asset after death
+     */
+    fiduciaryAccess?: {
+        /**
+         * The method by which a fiduciary can access this digital asset
+         */
+        accessMethod: 'designated_recipient' | 'legacy_contact' | 'inactive_account_manager' | 'court_order' | 'rufadaa_request' | 'platform_form' | 'credential_sharing' | 'none' | string;
+        /**
+         * Whether the chosen access method has been set up with the platform
+         */
+        accessConfigured?: boolean;
+        /**
+         * Person.id of the designated recipient for this digital asset
+         */
+        designatedRecipientPersonId?: string;
+        /**
+         * RUFADAA catalogue vs content distinction
+         */
+        accessScope?: 'catalogue_only' | 'full_content' | 'restricted' | 'unknown' | string;
+        /**
+         * URL to the platform's terms of service or bereavement policy
+         */
+        termsOfServiceUrl?: string;
+        /**
+         * Summary of key constraints from the platform's terms of service that affect fiduciary access
+         */
+        termsOfServiceConstraints?: string;
+    };
+};
+
+/**
+ * Business Asset Properties
+ *
+ * Category-specific properties for business assets: partnerships, company holdings, intellectual property, stock compensation
+ */
+export type Business = {
+    /**
+     * Detailed business interest information — partnership shares, LLP membership, sole trader business. Relevant for BPR (UK), QFOBI (US), and succession planning
+     */
+    businessInterest?: {
+        /**
+         * Trading name of the business
+         */
+        businessName?: string;
+        /**
+         * Legal structure of the business
+         */
+        businessType?: 'sole_trader' | 'partnership' | 'llp' | 'limited_company' | 'plc' | 'franchise' | 'cooperative' | 'other';
+        /**
+         * The testator's ownership percentage
+         */
+        ownershipPercentage?: number;
+        /**
+         * Whether the testator holds a controlling interest. Affects BPR eligibility and valuation discounts
+         */
+        controllingInterest?: boolean;
+        /**
+         * Whether a written partnership/operating agreement exists
+         */
+        partnershipAgreement?: boolean;
+        /**
+         * What the partnership/operating agreement says about succession on death
+         */
+        successionProvision?: string;
+        /**
+         * Approximate annual turnover — helps with BPR qualification and valuation
+         */
+        annualTurnover?: Money2;
+        /**
+         * Number of employees
+         */
+        employees?: number;
+    };
+    /**
+     * Intellectual property details — patents, copyrights, trademarks, trade secrets. IP succession varies by jurisdiction and type
+     */
+    intellectualProperty?: {
+        /**
+         * Type of intellectual property
+         */
+        ipType?: 'patent' | 'copyright' | 'trademark' | 'design_right' | 'trade_secret' | 'database_right' | 'other';
+        /**
+         * Registration or application number
+         */
+        registrationNumber?: string;
+        /**
+         * Intellectual property office where registered
+         */
+        registrationOffice?: string;
+        /**
+         * Date the IP right expires
+         */
+        expiryDate?: string;
+        /**
+         * Approximate annual revenue generated from this IP (licensing, royalties, etc.)
+         */
+        annualRevenue?: Money2;
+        /**
+         * Current licensees of this IP
+         */
+        licensees?: Array<string>;
+    };
+    /**
+     * Employee stock compensation details — options, RSUs, ESPPs. Vesting schedules and exercise windows are critical on death
+     */
+    stockCompensation?: {
+        /**
+         * Type of stock compensation
+         */
+        compensationType?: 'iso' | 'nso' | 'rsu' | 'espp' | 'phantom_stock' | 'sar' | 'other';
+        /**
+         * Date the award was granted
+         */
+        grantDate?: string;
+        /**
+         * Description of the vesting schedule
+         */
+        vestingSchedule?: string;
+        /**
+         * Number of shares/units currently vested
+         */
+        vestedQuantity?: number;
+        /**
+         * Number of shares/units not yet vested. May be forfeited on death depending on plan terms
+         */
+        unvestedQuantity?: number;
+        /**
+         * Strike/exercise price per share for options
+         */
+        exercisePrice?: Money2;
+        /**
+         * Date the options expire. Estate typically has limited window to exercise after death
+         */
+        expirationDate?: string;
+        /**
+         * Time allowed for estate to exercise options after death
+         */
+        postDeathExerciseWindow?: string;
+        /**
+         * Whether unvested awards accelerate (fully vest) on death
+         */
+        acceleratesOnDeath?: boolean;
+    };
+    /**
+     * Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will
+     */
+    coOwnership?: {
+        /**
+         * Person IDs of co-owners
+         */
+        coOwnerPersonIds?: Array<string>;
+        /**
+         * How ownership is structured between co-owners
+         */
+        ownershipType?: 'joint_tenants' | 'tenants_in_common' | 'community_property' | 'partnership' | 'other';
+        /**
+         * The testator's ownership percentage
+         */
+        ownershipPercentage?: number;
+        /**
+         * Date joint tenancy was severed to become tenants in common (if applicable)
+         */
+        severanceDate?: string;
+    };
+};
+
+/**
+ * General Asset Properties
+ *
+ * Category-specific properties for general tangible assets: art, antiques, jewellery, collectibles, books, wine, clothing, firearms, musical instruments, property contents
+ */
+export type General = {
+    /**
+     * Result of a stolen art check against the Art Loss Register (ALR) or equivalent database. Required by auction houses before sale of art, antiques, and high-value collectibles
+     */
+    stolenArtCheck?: {
+        /**
+         * When the check was performed
+         */
+        retrievedAt: string;
+        /**
+         * Outcome of the stolen art check
+         */
+        result?: 'clear' | 'flagged' | 'inconclusive' | string;
+        /**
+         * ALR certificate or search reference number
+         */
+        certificateReference?: string;
+        /**
+         * URL to the ALR certificate or search result
+         */
+        certificateUrl?: string;
+        /**
+         * Who performed the check — person name, organisation, or system identifier
+         */
+        checkedBy?: string;
+    };
+    /**
+     * Structured gemological certificate data from GIA, AGS, or other grading laboratory. Confirms stone identity, quality grades, and weight — essential for insurance and sale valuation
+     */
+    gemologicalCertificate?: {
+        /**
+         * When this certificate data was retrieved or verified
+         */
+        retrievedAt: string;
+        /**
+         * The grading laboratory that issued the certificate
+         */
+        laboratory?: 'gia' | 'ags' | 'igi' | 'hrd' | 'egl' | string;
+        /**
+         * Certificate or report number
+         */
+        certificateNumber?: string;
+        /**
+         * URL to verify the certificate online with the issuing laboratory
+         */
+        verificationUrl?: string;
+        /**
+         * Type of gemstone
+         */
+        stoneType?: string;
+        /**
+         * Weight in carats
+         */
+        caratWeight?: number;
+        /**
+         * Colour grade as assigned by the laboratory
+         */
+        colourGrade?: string;
+        /**
+         * Clarity grade as assigned by the laboratory
+         */
+        clarityGrade?: string;
+        /**
+         * Cut grade as assigned by the laboratory (diamonds only — not all labs grade cut for coloured stones)
+         */
+        cutGrade?: string;
+    };
+};
+
+/**
+ * Identifier
+ *
+ * A typed external identifier. Use 'system' to namespace identifiers and prevent collisions across jurisdictions and organisations
+ */
+export type Identifier2 = {
+    /**
+     * Namespace URI or name identifying the issuing authority or system. Use URN format where possible for unambiguous identification
+     */
+    system?: string;
+    /**
+     * Human-readable type label describing what kind of identifier this is
+     */
+    type?: string;
+};
+
+/**
+ * Media
+ *
+ * A media attachment — photograph, video, or document scan. Used for identification, valuation, condition documentation, and provenance records
+ */
+export type Media2 = {
+    /**
+     * URI pointing to the media file. May be an HTTPS URL, S3 URI, or other storage reference
+     */
+    url: string;
+    /**
+     * Human-readable description of what this media shows
+     */
+    caption?: string;
+    /**
+     * MIME type of the media file. Maps to Schema.org encodingFormat
+     */
+    mediaType?: string;
+    /**
+     * Base64-encoded media content for self-contained documents. Use for small files (attestation scans, signatures, certificates) that must travel with the estate plan. For large files (photos, videos), use url instead
+     */
+    content?: string;
+    /**
+     * The purpose of this media — what question does it answer? Enables executors and dealers to find specific documentation without scrolling through galleries
+     */
+    viewType?: 'overview' | 'identification' | 'condition' | 'provenance' | 'maker_mark' | 'serial_number' | 'damage' | 'scale_reference' | 'label' | 'certificate' | 'receipt' | 'environment';
+    /**
+     * When this media was captured. Useful for establishing condition at a point in time
+     */
+    takenAt?: string;
+    /**
+     * URI for a smaller preview version of the media. Maps to Schema.org thumbnail
+     */
+    thumbnailUrl?: string;
+};
+
+/**
  * Jurisdiction
  *
  * A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
@@ -466,6 +1721,4843 @@ export type Jurisdiction2 = {
      * Human-readable jurisdiction name for display purposes. Not authoritative — the country and subdivision codes are the canonical identifiers
      */
     name?: string;
+};
+
+/**
+ * Cultural Disposition
+ *
+ * Cultural, religious, and regulatory constraints on how an asset or property may be disposed of. Covers sacred status, disposal restrictions, export controls, and whether the item can be bequeathed
+ */
+export type CulturalDisposition2 = {
+    /**
+     * Whether this item has religious or spiritual significance that restricts disposal
+     */
+    sacredStatus?: 'secular' | 'consecrated' | 'ritually_significant' | 'inalienable_endowment';
+    /**
+     * The cultural weight of this item — determines who should be consulted about its disposition
+     */
+    culturalSignificance?: 'personal' | 'family_heirloom' | 'community' | 'national_heritage';
+    /**
+     * Whether this item can be willed to another person. False for waqf endowments, some ancestral property, and inalienable cultural artefacts
+     */
+    bequeathable?: boolean;
+    /**
+     * Specific restrictions on how this item may be disposed of, with the authority that imposes each restriction
+     */
+    disposalRestrictions?: Array<{
+        /**
+         * Name of the authority imposing this restriction
+         */
+        authority?: string;
+        /**
+         * Category of the authority
+         */
+        authorityType?: 'religious_body' | 'family_council' | 'clan_association' | 'tribal_council' | 'government' | 'heritage_authority';
+        /**
+         * What the restriction requires
+         */
+        requirement: string;
+        /**
+         * Jurisdiction where this restriction applies
+         */
+        jurisdiction?: Jurisdiction2;
+    }>;
+    /**
+     * Legal restrictions on exporting this item from its current jurisdiction
+     */
+    exportRestrictions?: Array<{
+        /**
+         * Jurisdiction imposing the export restriction
+         */
+        jurisdiction: Jurisdiction2;
+        /**
+         * Category of export restriction
+         */
+        restrictionType: 'cultural_property' | 'national_treasure' | 'antiquity' | 'protected_species' | 'controlled_goods';
+        /**
+         * The government body or agency that controls export
+         */
+        authority?: string;
+        /**
+         * Whether a licence or permit is required for export
+         */
+        licenceRequired?: boolean;
+        /**
+         * Additional details about the restriction
+         */
+        notes?: string;
+    }>;
+};
+
+/**
+ * Visibility
+ *
+ * Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records
+ */
+export type Visibility2 = 'testator_only' | 'proxy_visible' | 'companion_visible' | 'executor_visible' | 'beneficiary_visible' | 'all_parties';
+
+/**
+ * FieldProvenance
+ *
+ * Records how a specific field's value was obtained — manual entry, AI extraction, import, OCR, or computation
+ */
+export type FieldProvenance2 = {
+    /**
+     * The field name this provenance record applies to
+     */
+    field: string;
+    /**
+     * How the field value was obtained
+     */
+    method: 'manual_entry' | 'ai_extracted' | 'imported' | 'computed' | 'ocr_scanned' | string;
+    /**
+     * Confidence in the field value (0-100)
+     */
+    confidence?: number;
+    /**
+     * When this field was last verified
+     */
+    verifiedAt?: string;
+    /**
+     * Who verified this field
+     */
+    verifiedBy?: string;
+    /**
+     * Reference to the document.json entity this value was extracted from
+     */
+    sourceDocumentId?: string;
+    /**
+     * Page number in the source document where this value was found
+     */
+    sourcePageNumber?: number;
+    /**
+     * Location within the page where this value was found
+     */
+    sourceRegion?: string;
+    /**
+     * The raw text as extracted before any normalisation or structuring. Preserves exactly what the source document said
+     */
+    originalText?: string;
+    /**
+     * Writing system of the source document. Critical for handwritten wills in non-Latin scripts
+     */
+    originalScript?: 'latin' | 'kanji' | 'hiragana' | 'katakana' | 'arabic' | 'hebrew' | 'devanagari' | 'tamil' | 'chinese_simplified' | 'chinese_traditional' | 'hangul' | 'cyrillic' | 'thai' | 'mixed' | 'other' | string;
+    /**
+     * OCR engine or extraction tool used to obtain this value
+     */
+    ocrEngine?: string;
+    /**
+     * When this value was extracted from the source document
+     */
+    extractedAt: string;
+    /**
+     * The third-party source that provided this field value. Enables attribution credits and the data source kill switch
+     */
+    dataSource?: {
+        /**
+         * Short identifier for the data source
+         */
+        source?: string;
+        /**
+         * URL to the source's website or the specific page this data came from
+         */
+        sourceUrl?: string;
+        /**
+         * When this data was retrieved from the source
+         */
+        retrievedAt?: string;
+    };
+};
+
+/**
+ * AiProvenance
+ *
+ * Records which AI model produced a piece of data and whether a human has verified it. Basic provenance is in INHERIT core; implementation-specific detail (exact model version, pipeline, reasoning, cost) should use x-inherit-* extension properties
+ */
+export type AiProvenance2 = {
+    /**
+     * AI model family that generated this data
+     */
+    model?: 'claude' | 'gpt' | 'gemini' | 'grok' | 'llama' | 'mistral' | 'other' | string;
+    /**
+     * Confidence score 0–100 indicating how certain the AI is about the generated data
+     */
+    confidence?: number;
+    /**
+     * When the AI produced this data
+     */
+    generatedAt?: string;
+    /**
+     * Whether a human has verified this AI-generated data
+     */
+    humanReviewed?: boolean;
+    /**
+     * Person ID or role of the reviewer who verified this data
+     */
+    reviewedBy?: string;
+    /**
+     * When the human review occurred
+     */
+    reviewedAt?: string;
+    [key: string]: {
+        [key: string]: unknown;
+    } | 'claude' | 'gpt' | 'gemini' | 'grok' | 'llama' | 'mistral' | 'other' | string | number | string | boolean | string | undefined;
+};
+
+/**
+ * Provenance
+ *
+ * Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
+ */
+export type Provenance2 = {
+    /**
+     * How this entity's data was originally created
+     */
+    source?: 'import' | 'manual' | 'ai_generated';
+    /**
+     * Overall confidence score for this entity's data (0.0 = no confidence, 1.0 = fully verified)
+     */
+    confidence?: number;
+    /**
+     * References importSources[].id on the root document — identifies which import source produced this entity's data. Plain string, not UUID
+     */
+    importSourceId?: string;
+    /**
+     * AI provenance metadata — which AI model produced this data and whether a human has verified it
+     */
+    aiProvenance?: AiProvenance2;
+    /**
+     * Human review verdict on AI-generated or imported data
+     */
+    humanVerdict?: 'approved' | 'rejected' | 'modified' | 'pending_review';
+    /**
+     * Reason for rejecting or modifying data
+     */
+    rejectionReason?: string;
+    /**
+     * When the human verdict was recorded
+     */
+    verdictAt?: string;
+    /**
+     * ID of the agent task that created or modified this entity — links to the agent orchestration system
+     */
+    agentTaskId?: string;
+};
+
+/**
+ * A single service, maintenance, or restoration record for a mechanical or valuable item. Used for watches, vehicles, clocks, musical instruments, and any item with a service lifecycle
+ */
+export type ServiceRecord = {
+    /**
+     * When the service was performed
+     */
+    serviceDate: string;
+    /**
+     * Who performed the service (manufacturer service centre, independent specialist, etc.)
+     */
+    provider?: string;
+    /**
+     * What was done
+     */
+    description?: string;
+    /**
+     * Cost of the service, in minor currency units
+     */
+    cost?: Money2;
+    /**
+     * Reference to a service certificate, receipt, or MOT certificate
+     */
+    documentReference?: string;
+};
+
+/**
+ * Asset
+ *
+ * A non-property asset: financial accounts, personal property, vehicles, digital assets, business interests, Islamic finance instruments, etc
+ */
+export type Asset2 = unknown & {
+    /**
+     * Unique identifier for this asset within the INHERIT document
+     */
+    id: string;
+    /**
+     * Display name for this asset. Should be specific enough to identify the item during probate
+     */
+    name: string;
+    /**
+     * Top-level category from the INHERIT Product Taxonomy. Use the `subcategory` field for finer classification. See `reference-data/category-guidance.json` for valid subcategories, recommended identifiers, and photography guidance per category
+     */
+    category: 'financial' | 'vehicle' | 'digital' | 'business' | 'property_contents' | 'jewellery_watches' | 'art' | 'antiques' | 'collectibles' | 'musical_instruments' | 'books_manuscripts' | 'wine_spirits' | 'clothing_textiles' | 'firearms_sporting' | 'islamic_financial' | 'other';
+    /**
+     * Finer classification within the top-level category. Values are defined in reference-data/category-guidance.json but the field is freeform to accommodate jurisdiction-specific asset types. Examples: financial → 'pension', collectibles → 'model_railways', vehicle → 'classic_vehicle'
+     */
+    subcategory?: string;
+    /**
+     * Owner's estimate of the asset's current value, in minor currency units
+     */
+    estimatedValue?: Money2;
+    /**
+     * Professional valuation of the asset, in minor currency units
+     */
+    professionalValuation?: Money2;
+    /**
+     * Value of this asset net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored
+     */
+    netEquity?: Money2;
+    /**
+     * True when the active charges secured against this asset exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall
+     */
+    inNegativeEquity?: boolean;
+    /**
+     * Date of the most recent valuation
+     */
+    valuationDate?: string;
+    /**
+     * Level of confidence in the stated valuation
+     */
+    valuationConfidence?: 'estimated' | 'professional' | 'official' | 'unknown';
+    /**
+     * Physical condition of the asset. Affects resale value — dealers use this to price items. Pair with conditionSystem and conditionGrade for domain-specific grading. Use 'not_applicable' for financial assets where condition is meaningless
+     */
+    condition?: 'excellent' | 'good' | 'fair' | 'poor' | 'unknown' | 'not_applicable';
+    /**
+     * Number of items if this represents multiple identical or similar items
+     */
+    quantity?: number;
+    /**
+     * Where this asset is physically stored or held — a bank, safe, property, or institution
+     */
+    location?: string;
+    /**
+     * Reference to a Property.id if this asset is located at a specific property in the estate
+     */
+    propertyId?: string;
+    /**
+     * Reference to the AssetCollection.id this asset belongs to. An asset may belong to at most one collection. If set, this asset's value contributes to the collection's total
+     */
+    assetCollectionId?: string;
+    /**
+     * Reference to a Space.id representing where this item is physically stored. Critical for collections spread across multiple properties or countries — affects probate jurisdiction and dealer collection logistics
+     */
+    spaceId?: string | null;
+    /**
+     * External identifiers — serial numbers, account numbers, policy references, registration numbers, etc
+     */
+    identifiers?: Array<Identifier2>;
+    /**
+     * Links to this asset in external databases, marketplaces, and registries. The universal connector — any external system can be referenced without a schema change. Use identifiers for formal identifier schemes (ISBN, VIN, NINO); use externalLinks for platform-specific references, product pages, and database entries
+     */
+    externalLinks?: Array<{
+        /**
+         * The external system or platform name. Use lowercase, no spaces
+         */
+        system: string;
+        /**
+         * The platform-specific identifier for this asset
+         */
+        id: string;
+        /**
+         * Direct URL to the asset's page on the external platform. Optional — some systems are API-only
+         */
+        url?: string;
+        /**
+         * Human-readable label for display. Optional — defaults to the system name
+         */
+        label?: string;
+        /**
+         * Timestamp when this link was last verified or data was last retrieved
+         */
+        retrievedAt?: string;
+    }>;
+    /**
+     * URI pointing to the manufacturer's or retailer's official product page for this exact item. Distinct from storageRef (document storage) and externalLinks (database references). Enables direct linking to manufacturer specifications, manuals, and warranty information
+     */
+    productPage?: string;
+    /**
+     * Prior ownership records — establishes the chain of provenance for the asset. Critical for art, antiques, and high-value collectibles
+     */
+    provenanceChain?: Array<{
+        /**
+         * Description of this provenance record
+         */
+        description: string;
+        /**
+         * Name of the previous owner (may be anonymised)
+         */
+        ownerName?: string;
+        /**
+         * Approximate start date of this ownership period
+         */
+        fromDate?: string;
+        /**
+         * Approximate end date of this ownership period
+         */
+        toDate?: string;
+        /**
+         * How the owner acquired the asset
+         */
+        acquisitionMethod?: 'purchase' | 'inheritance' | 'gift' | 'commission' | 'restitution' | 'auction' | 'unknown';
+        /**
+         * Where this provenance information came from
+         */
+        source?: string;
+        /**
+         * Link to supporting evidence (sale record, catalogue entry, etc.)
+         */
+        evidenceUrl?: string;
+    }>;
+    /**
+     * Photographs, videos, and document scans. Vision-capable AI agents use these to identify items, assess condition, and find visual matches on marketplaces. Use viewType from media.json to categorize each media item
+     */
+    images?: Array<Media2>;
+    /**
+     * Whether the asset was held at death, is receivable post-death, or is contingent on a future event
+     */
+    possessionStatus?: 'possessed_at_death' | 'receivable' | 'contingent';
+    /**
+     * Whether this asset is classified as immoveable or moveable property. Affects which conflict-of-laws rules apply in cross-border estates
+     */
+    mobilityType?: 'immoveable' | 'moveable' | 'mixed';
+    /**
+     * How this asset was acquired. Determines succession rules in Indian and other customary systems
+     */
+    acquisitionType?: 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed';
+    /**
+     * Whether ownership of this asset is formally registered or documented
+     */
+    registrationStatus?: 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented';
+    /**
+     * The type of evidence available to prove ownership of this asset
+     */
+    ownershipEvidence?: 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none';
+    /**
+     * Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will
+     */
+    coOwnership?: {
+        /**
+         * Person IDs of co-owners
+         */
+        coOwnerPersonIds?: Array<string>;
+        /**
+         * How ownership is structured between co-owners
+         */
+        ownershipType?: 'joint_tenants' | 'tenants_in_common' | 'community_property' | 'partnership' | 'other';
+        /**
+         * The testator's ownership percentage
+         */
+        ownershipPercentage?: number;
+        /**
+         * Date joint tenancy was severed to become tenants in common (if applicable)
+         */
+        severanceDate?: string;
+    };
+    /**
+     * Cultural, religious, and regulatory constraints on disposal of this asset
+     */
+    culturalDisposition?: CulturalDisposition2;
+    /**
+     * The communal or family authority whose approval is required to dispose of this asset
+     */
+    communalAuthority?: {
+        /**
+         * Category of communal authority
+         */
+        authorityType?: 'family_council' | 'clan_association' | 'religious_body' | 'tribal_council' | 'government';
+        /**
+         * Whether approval from this authority is legally required before disposal
+         */
+        approvalRequired?: boolean;
+        /**
+         * Name of the specific authority or person
+         */
+        authorityName?: string;
+        /**
+         * Jurisdiction where this communal authority has legal standing
+         */
+        jurisdiction?: Jurisdiction2;
+    };
+    /**
+     * The succession regime governing this specific asset. Overrides estate.defaultSuccessionRegime when present
+     */
+    successionRegime?: {
+        /**
+         * The law governing succession for this asset
+         */
+        governingLaw?: {
+            /**
+             * Jurisdiction whose succession law applies
+             */
+            jurisdiction?: Jurisdiction2;
+            /**
+             * Which legal tradition applies
+             */
+            legalTradition?: 'common_law' | 'civil_law' | 'mixed' | 'customary_law' | 'islamic_law' | 'hindu_law' | 'jewish_law' | 'canon_law';
+            /**
+             * Name of the governing statute
+             */
+            statute?: string;
+            /**
+             * Specific section of the statute
+             */
+            section?: string;
+        };
+        /**
+         * How the governing law was determined
+         */
+        determinedBy?: 'domicile' | 'situs' | 'nationality' | 'personal_status' | 'choice_of_law' | 'treaty';
+        /**
+         * Whether this succession regime is legally binding
+         */
+        binding?: boolean;
+        /**
+         * INHERIT extension IDs that apply to this asset's succession
+         */
+        extensions?: Array<string>;
+        /**
+         * Additional context about the succession regime
+         */
+        notes?: string;
+    };
+    /**
+     * Named beneficiary designation for this asset. Assets with beneficiary designations pass outside the probate estate — the will does not control their distribution
+     */
+    beneficiaryDesignation?: {
+        /**
+         * Person IDs of the primary beneficiaries
+         */
+        primaryBeneficiaryPersonIds?: Array<string>;
+        /**
+         * Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)
+         */
+        contingentBeneficiaryPersonIds?: Array<string>;
+        /**
+         * The type of beneficiary designation
+         */
+        designationType?: 'retirement_account' | 'life_insurance' | 'superannuation' | 'pod_account' | 'other';
+        /**
+         * Reference to the NonprobateTransfer entity that tracks this designation
+         */
+        linkedNonprobateTransferId?: string;
+    };
+    /**
+     * Digital access consent under RUFADAA or equivalent legislation. Governs whether executors and fiduciaries can access the deceased's digital accounts and assets
+     */
+    digitalAccessConsent?: {
+        /**
+         * Whether the account holder has given consent for fiduciary access
+         */
+        consentGiven?: boolean;
+        /**
+         * The scope of access granted to fiduciaries
+         */
+        scope?: 'full_access' | 'limited_access' | 'no_access';
+        /**
+         * Reference to the Person.id designated to receive access to this digital asset
+         */
+        designatedRecipientPersonId?: string;
+        /**
+         * Human-readable display name for the referenced designated recipient person
+         */
+        designatedRecipientPersonIdDisplay?: string;
+        /**
+         * Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA
+         */
+        onlineToolDirective?: boolean;
+    };
+    /**
+     * Whether this asset passes outside the probate estate. Beneficiary designations, POD accounts, and jointly held assets typically bypass the will
+     */
+    passesOutsideEstate?: boolean;
+    /**
+     * Free-text notes about this asset. Use for provenance, sentimental value, special handling instructions, or anything not captured by structured fields
+     */
+    notes?: string;
+    /**
+     * Structured description of the asset — what it is, its significance, and key details a dealer or executor would need. Distinct from 'notes' which is free-form
+     */
+    description?: string;
+    /**
+     * The manufacturer or brand name. Accepts a plain string (backwards compatible) or a structured object with Wikidata linkage for rich product data. AI agents should use this as a primary search dimension when finding comparables
+     */
+    brand?: string | {
+        /**
+         * Brand or manufacturer name
+         */
+        name: string;
+        /**
+         * Wikidata Q-number for this brand. Resolves to structured data via the Wikidata API — founding year, country, parent company, logo, official website, product categories
+         */
+        wikidataId?: string;
+        /**
+         * Official brand website
+         */
+        website?: string;
+    };
+    /**
+     * The specific model, product line, or range name. Combined with brand and identifiers, this is the primary key for marketplace search. AI agents construct search queries from brand + model + subcategory
+     */
+    model?: string;
+    /**
+     * Date the asset was acquired by the current owner. Used for capital gains tax calculations, insurance claims, and provenance. Maps to Schema.org purchaseDate
+     */
+    purchaseDate?: string;
+    /**
+     * Whether original packaging, documentation, and accessories are present. Affects value by 20–40% across watches, model railways, jewellery, and many other domains
+     */
+    originalPackaging?: 'complete' | 'partial' | 'box_only' | 'papers_only' | 'none' | 'unknown';
+    /**
+     * Third party currently holding this asset — a bank (safe deposit), storage facility (bonded wine), repairer (watch at jeweller), gallery (art on loan), or institution. The executor needs to know who to contact
+     */
+    custodian?: {
+        /**
+         * Name of the person or organisation holding the asset
+         */
+        name?: string;
+        /**
+         * Email address for the custodian
+         */
+        contactEmail?: string;
+        /**
+         * Phone number for the custodian
+         */
+        contactPhone?: string;
+        /**
+         * The nature of the custodial relationship
+         */
+        relationship?: string;
+        /**
+         * Account or reference number with the custodian
+         */
+        reference?: string;
+    };
+    /**
+     * The grading system used for the conditionGrade value. Allows domain-specific condition assessment alongside the generic condition field
+     */
+    conditionSystem?: 'goldmine' | 'sheldon' | 'ags' | 'bsc' | 'gia' | 'watch_trade' | 'classic_vehicle' | 'book_trade' | string;
+    /**
+     * The specific grade within the conditionSystem. Meaningful only when conditionSystem is set
+     */
+    conditionGrade?: string;
+    /**
+     * URI pointing to the official documentation of the grading standard used. Enables tools to display the correct grading scale and interpret the conditionGrade value
+     */
+    conditionStandard?: string;
+    /**
+     * How urgently this asset needs attention after the testator's death. Drives the executor's priority list
+     */
+    urgency?: 'immediate' | 'within_7_days' | 'within_30_days' | 'none';
+    /**
+     * Explanation of why this asset is urgent. Particularly important for 'immediate' items
+     */
+    urgencyReason?: string;
+    /**
+     * Reference to another Asset.id if this asset is physically contained within or logically part of another asset. Enables hierarchical asset nesting — e.g. a watch inside a safe, tools inside a toolbox
+     */
+    containedInAssetId?: string;
+    /**
+     * Insurance coverage for this asset. The executor needs to know what's insured, by whom, and whether cover continues after death
+     */
+    insurance?: {
+        /**
+         * Name of the insurance provider
+         */
+        provider?: string;
+        /**
+         * Policy reference number
+         */
+        policyReference?: string;
+        /**
+         * The insured value in minor currency units
+         */
+        insuredValue?: Money2;
+        /**
+         * Next renewal date. Important — cover may lapse if not renewed after death
+         */
+        renewalDate?: string;
+        /**
+         * Additional insurance notes
+         */
+        notes?: string;
+    };
+    /**
+     * Where the asset was purchased or acquired from. Collectors track provenance — valuable for dealers and for establishing authenticity
+     */
+    purchasedFrom?: string;
+    /**
+     * Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split
+     */
+    splitFrom?: {
+        /**
+         * The type of entity that was split
+         */
+        entityType: 'asset' | 'asset_collection';
+        /**
+         * The id of the original entity that was split
+         */
+        entityId: string;
+        /**
+         * When the split occurred
+         */
+        splitAt: string;
+        /**
+         * Why the split was requested
+         */
+        reason?: string;
+    };
+    /**
+     * How this specific entity's data was captured. Overrides the document-level default if set
+     */
+    dataProvenance?: 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated';
+    /**
+     * Keywords for marketplace search — AI-generated or human-curated. Memoization: once derived, cached here so subsequent agents reuse them instantly rather than re-deriving
+     */
+    searchTerms?: Array<string>;
+    /**
+     * Structured search instructions for comparable-finding agents. Acts as agent memory — the item teaches future agents how to find its peers
+     */
+    comparableSearchProfile?: {
+        /**
+         * Marketplaces and platforms to search
+         */
+        platforms?: Array<string>;
+        /**
+         * Natural-language query an agent should use
+         */
+        searchQuery?: string;
+        /**
+         * Key-value filters to narrow results. Agents map to platform-specific parameters
+         */
+        filters?: {
+            [key: string]: string;
+        };
+        /**
+         * Platforms explicitly excluded
+         */
+        excludePlatforms?: Array<string>;
+        /**
+         * When an agent last executed this search profile
+         */
+        lastSearchedAt?: string;
+        /**
+         * How often this item should be re-searched
+         */
+        searchFrequency?: 'once' | 'weekly' | 'monthly' | 'on_demand';
+    };
+    /**
+     * AI-suggested subcategory refinement, kept separate from the human-set subcategory. Accepted when the user confirms. Provenance: always AI-generated
+     */
+    suggestedSubcategory?: string;
+    /**
+     * Numeric reliability score (0-100) for the current valuation. Computed from: recency, method, corroborating comparables, variance between estimates. Companion to the categorical valuationConfidence enum — the enum captures source, this number captures trustworthiness now. Agents use this to prioritise which assets need re-valuation
+     */
+    valuationReliability?: number;
+    /**
+     * When this entity's data was last verified by a human or authoritative source. Agents use this to decide whether to trust existing values or re-derive them
+     */
+    lastVerifiedAt?: string;
+    /**
+     * Who or what verified this entity — a person's name, a tool, or 'owner'
+     */
+    verifiedBy?: string;
+    /**
+     * Controls who can see this asset. Some assets (firearms, digital accounts, sensitive collections) may need restricted visibility
+     */
+    visibility?: Visibility2;
+    /**
+     * Per-field provenance records — how each field's value was obtained
+     */
+    fieldProvenance?: Array<FieldProvenance2>;
+    /**
+     * Discussion comments on this entity
+     */
+    comments?: Array<{
+        /**
+         * Unique identifier for this comment
+         */
+        id: string;
+        /**
+         * Person.id of the comment author
+         */
+        authorPersonId?: string;
+        /**
+         * Human-readable display name for the referenced author person
+         */
+        authorPersonIdDisplay?: string;
+        /**
+         * Comment text
+         */
+        content: string;
+        /**
+         * When the comment was created
+         */
+        createdAt: string;
+        visibility?: Visibility2;
+    }>;
+    /**
+     * Records that this entity was merged into another entity — the target entity is the canonical version
+     */
+    mergedInto?: {
+        /**
+         * Type of the target entity
+         */
+        entityType?: 'asset' | 'asset_collection';
+        /**
+         * ID of the target entity
+         */
+        entityId?: string;
+        /**
+         * When the merge occurred
+         */
+        mergedAt?: string;
+        /**
+         * Why the entities were merged
+         */
+        reason?: string;
+    };
+    /**
+     * Human-readable display name for the referenced storage location
+     */
+    spaceIdDisplay?: string;
+    /**
+     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
+     */
+    provenance?: Provenance2;
+    /**
+     * The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile
+     */
+    applicableLaw?: Jurisdiction2;
+    /**
+     * Per-asset tax treatment — how this asset is classified for tax purposes in a specific jurisdiction
+     */
+    taxTreatment?: {
+        jurisdiction?: Jurisdiction2;
+        assetType?: 'immoveable' | 'moveable' | 'mixed' | 'exempt';
+        exemptions?: Array<string>;
+        reliefClaimed?: Array<string>;
+    };
+    /**
+     * Instructions for accessing this asset after death — steps, locations, holders. No secrets in the document, just instructions for finding them. Available for all asset categories (digital: crypto wallets, social media; physical: safes, storage units)
+     */
+    accessInstructions?: {
+        accessType?: string;
+        platform?: string;
+        visibility?: Visibility2;
+        /**
+         * The estate role required to follow these instructions
+         */
+        requiredRole?: string;
+        steps?: Array<{
+            step: number;
+            method: string;
+            description?: string;
+            location?: string;
+            holderPersonId?: string;
+        }>;
+        memorialisation?: {
+            preference?: 'transfer_to_beneficiary' | 'memorialise' | 'delete' | 'archive' | 'no_preference';
+            instructions?: string;
+        };
+        lastVerified?: string;
+        verifiedBy?: string;
+    };
+    /**
+     * The owner's current intention for this item. Absent means keeping (the default). Used by catalogue applications to track whether items are being actively managed, offered for sale, or allocated to specific people
+     */
+    ownerIntent?: 'keeping' | 'considering' | 'thinning' | 'listed' | 'sold' | 'allocated' | 'donated';
+    /**
+     * Active or historical listings of this item for sale on external channels. Tracks where the item is listed, its status, and sale outcome. Application-level data — not part of the estate interchange but carried alongside it for catalogue and dealer workflows
+     */
+    listings?: Array<{
+        /**
+         * The sales channel where this item is listed
+         */
+        channel: 'ebay' | 'amazon' | 'shopify' | 'etsy' | 'own_website' | 'auction_house' | 'other';
+        /**
+         * Human-readable name of the channel, especially when channel is other
+         */
+        channelName?: string;
+        /**
+         * The platform-specific listing identifier
+         */
+        listingId?: string;
+        /**
+         * Direct URL to the listing on the external platform
+         */
+        listingUrl?: string;
+        /**
+         * Current status of this listing
+         */
+        status: 'draft' | 'active' | 'sold' | 'withdrawn' | 'expired';
+        /**
+         * The listed asking price
+         */
+        askingPrice?: Money2;
+        /**
+         * When this listing was created or last activated
+         */
+        listedAt?: string;
+        /**
+         * When the item was sold via this listing, if applicable
+         */
+        soldAt?: string | null;
+        /**
+         * The actual sale price, if sold
+         */
+        soldPrice?: Money2;
+    }>;
+    /**
+     * Service, maintenance, and restoration records. Critical for watches (service intervals affect value), vehicles (MOT history, restoration), clocks, and musical instruments
+     */
+    serviceHistory?: Array<ServiceRecord>;
+    /**
+     * Insurance details for this item. Tracks which policy covers it, the agreed value, and when cover was last confirmed. Essential for executors who need to claim on the correct policy
+     */
+    insuranceCover?: {
+        /**
+         * Name of the insurance company
+         */
+        insurer?: string;
+        /**
+         * The insurance policy number
+         */
+        policyNumber?: string;
+        /**
+         * The type of insurance policy covering this item
+         */
+        policyType?: 'home_contents' | 'specialist_collectibles' | 'classic_vehicle' | 'individual_item' | 'fine_art' | 'jewellery' | 'other';
+        /**
+         * The agreed or insured value, in minor currency units. May differ from market value
+         */
+        agreedValue?: Money2;
+        /**
+         * When the insurance cover for this item was last confirmed or reviewed
+         */
+        coverConfirmedAt?: string;
+    };
+    /**
+     * How this item can be transported for selling or verification. Determines which logistics path the Deal Comparison uses
+     */
+    shippingClass?: 'parcel' | 'large_item' | 'specialist_transport' | 'collection_only';
+    /**
+     * Original documents, certificates, and packaging elements present with this item. Affects value significantly across many categories. Cross-category: watches, vehicles, books, art, and collectibles share some document types
+     */
+    includedDocuments?: Array<'outer_box' | 'inner_box' | 'warranty_card' | 'cosc_certificate' | 'instruction_manual' | 'hang_tags' | 'service_booklet' | 'purchase_receipt' | 'original_invoice' | 'v5c_logbook' | 'mot_certificate' | 'provenance_letter' | 'certificate_of_authenticity' | 'appraisal_certificate' | 'export_licence' | 'customs_declaration' | string>;
+    /**
+     * Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)
+     */
+    taxReliefEligibility?: {
+        /**
+         * The type of tax relief claimed
+         */
+        reliefType?: 'agricultural_property' | 'business_property' | 'woodland' | 'heritage' | 'charitable';
+        eligible?: boolean;
+        /**
+         * Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
+         */
+        percentage?: number;
+        /**
+         * Conditions for maintaining eligibility
+         */
+        conditions?: string;
+        jurisdiction?: Jurisdiction2;
+        statute?: string;
+    };
+    /**
+     * Cultural, religious, sentimental, or professional significance beyond monetary value
+     */
+    significance?: {
+        type?: 'sentimental' | 'cultural' | 'religious' | 'historical' | 'family_heirloom' | 'professional';
+        description?: string;
+        /**
+         * Whether and how the testator has restricted disposal of this asset
+         */
+        restrictionOnDisposal?: {
+            exists?: boolean;
+            nature?: string;
+        };
+    };
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | string | 'financial' | 'vehicle' | 'digital' | 'business' | 'property_contents' | 'jewellery_watches' | 'art' | 'antiques' | 'collectibles' | 'musical_instruments' | 'books_manuscripts' | 'wine_spirits' | 'clothing_textiles' | 'firearms_sporting' | 'islamic_financial' | 'other' | string | Money2 | boolean | string | 'estimated' | 'professional' | 'official' | 'unknown' | 'excellent' | 'good' | 'fair' | 'poor' | 'unknown' | 'not_applicable' | number | string | string | null | Array<Identifier2> | Array<{
+        /**
+         * The external system or platform name. Use lowercase, no spaces
+         */
+        system: string;
+        /**
+         * The platform-specific identifier for this asset
+         */
+        id: string;
+        /**
+         * Direct URL to the asset's page on the external platform. Optional — some systems are API-only
+         */
+        url?: string;
+        /**
+         * Human-readable label for display. Optional — defaults to the system name
+         */
+        label?: string;
+        /**
+         * Timestamp when this link was last verified or data was last retrieved
+         */
+        retrievedAt?: string;
+    }> | string | Array<{
+        /**
+         * Description of this provenance record
+         */
+        description: string;
+        /**
+         * Name of the previous owner (may be anonymised)
+         */
+        ownerName?: string;
+        /**
+         * Approximate start date of this ownership period
+         */
+        fromDate?: string;
+        /**
+         * Approximate end date of this ownership period
+         */
+        toDate?: string;
+        /**
+         * How the owner acquired the asset
+         */
+        acquisitionMethod?: 'purchase' | 'inheritance' | 'gift' | 'commission' | 'restitution' | 'auction' | 'unknown';
+        /**
+         * Where this provenance information came from
+         */
+        source?: string;
+        /**
+         * Link to supporting evidence (sale record, catalogue entry, etc.)
+         */
+        evidenceUrl?: string;
+    }> | Array<Media2> | 'possessed_at_death' | 'receivable' | 'contingent' | 'immoveable' | 'moveable' | 'mixed' | 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed' | 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented' | 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none' | {
+        /**
+         * Person IDs of co-owners
+         */
+        coOwnerPersonIds?: Array<string>;
+        /**
+         * How ownership is structured between co-owners
+         */
+        ownershipType?: 'joint_tenants' | 'tenants_in_common' | 'community_property' | 'partnership' | 'other';
+        /**
+         * The testator's ownership percentage
+         */
+        ownershipPercentage?: number;
+        /**
+         * Date joint tenancy was severed to become tenants in common (if applicable)
+         */
+        severanceDate?: string;
+    } | CulturalDisposition2 | {
+        /**
+         * Category of communal authority
+         */
+        authorityType?: 'family_council' | 'clan_association' | 'religious_body' | 'tribal_council' | 'government';
+        /**
+         * Whether approval from this authority is legally required before disposal
+         */
+        approvalRequired?: boolean;
+        /**
+         * Name of the specific authority or person
+         */
+        authorityName?: string;
+        /**
+         * Jurisdiction where this communal authority has legal standing
+         */
+        jurisdiction?: Jurisdiction2;
+    } | {
+        /**
+         * The law governing succession for this asset
+         */
+        governingLaw?: {
+            /**
+             * Jurisdiction whose succession law applies
+             */
+            jurisdiction?: Jurisdiction2;
+            /**
+             * Which legal tradition applies
+             */
+            legalTradition?: 'common_law' | 'civil_law' | 'mixed' | 'customary_law' | 'islamic_law' | 'hindu_law' | 'jewish_law' | 'canon_law';
+            /**
+             * Name of the governing statute
+             */
+            statute?: string;
+            /**
+             * Specific section of the statute
+             */
+            section?: string;
+        };
+        /**
+         * How the governing law was determined
+         */
+        determinedBy?: 'domicile' | 'situs' | 'nationality' | 'personal_status' | 'choice_of_law' | 'treaty';
+        /**
+         * Whether this succession regime is legally binding
+         */
+        binding?: boolean;
+        /**
+         * INHERIT extension IDs that apply to this asset's succession
+         */
+        extensions?: Array<string>;
+        /**
+         * Additional context about the succession regime
+         */
+        notes?: string;
+    } | {
+        /**
+         * Person IDs of the primary beneficiaries
+         */
+        primaryBeneficiaryPersonIds?: Array<string>;
+        /**
+         * Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)
+         */
+        contingentBeneficiaryPersonIds?: Array<string>;
+        /**
+         * The type of beneficiary designation
+         */
+        designationType?: 'retirement_account' | 'life_insurance' | 'superannuation' | 'pod_account' | 'other';
+        /**
+         * Reference to the NonprobateTransfer entity that tracks this designation
+         */
+        linkedNonprobateTransferId?: string;
+    } | {
+        /**
+         * Whether the account holder has given consent for fiduciary access
+         */
+        consentGiven?: boolean;
+        /**
+         * The scope of access granted to fiduciaries
+         */
+        scope?: 'full_access' | 'limited_access' | 'no_access';
+        /**
+         * Reference to the Person.id designated to receive access to this digital asset
+         */
+        designatedRecipientPersonId?: string;
+        /**
+         * Human-readable display name for the referenced designated recipient person
+         */
+        designatedRecipientPersonIdDisplay?: string;
+        /**
+         * Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA
+         */
+        onlineToolDirective?: boolean;
+    } | string | string | {
+        /**
+         * Brand or manufacturer name
+         */
+        name: string;
+        /**
+         * Wikidata Q-number for this brand. Resolves to structured data via the Wikidata API — founding year, country, parent company, logo, official website, product categories
+         */
+        wikidataId?: string;
+        /**
+         * Official brand website
+         */
+        website?: string;
+    } | 'complete' | 'partial' | 'box_only' | 'papers_only' | 'none' | 'unknown' | {
+        /**
+         * Name of the person or organisation holding the asset
+         */
+        name?: string;
+        /**
+         * Email address for the custodian
+         */
+        contactEmail?: string;
+        /**
+         * Phone number for the custodian
+         */
+        contactPhone?: string;
+        /**
+         * The nature of the custodial relationship
+         */
+        relationship?: string;
+        /**
+         * Account or reference number with the custodian
+         */
+        reference?: string;
+    } | 'goldmine' | 'sheldon' | 'ags' | 'bsc' | 'gia' | 'watch_trade' | 'classic_vehicle' | 'book_trade' | string | 'immediate' | 'within_7_days' | 'within_30_days' | 'none' | {
+        /**
+         * Name of the insurance provider
+         */
+        provider?: string;
+        /**
+         * Policy reference number
+         */
+        policyReference?: string;
+        /**
+         * The insured value in minor currency units
+         */
+        insuredValue?: Money2;
+        /**
+         * Next renewal date. Important — cover may lapse if not renewed after death
+         */
+        renewalDate?: string;
+        /**
+         * Additional insurance notes
+         */
+        notes?: string;
+    } | {
+        /**
+         * The type of entity that was split
+         */
+        entityType: 'asset' | 'asset_collection';
+        /**
+         * The id of the original entity that was split
+         */
+        entityId: string;
+        /**
+         * When the split occurred
+         */
+        splitAt: string;
+        /**
+         * Why the split was requested
+         */
+        reason?: string;
+    } | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | Array<string> | {
+        /**
+         * Marketplaces and platforms to search
+         */
+        platforms?: Array<string>;
+        /**
+         * Natural-language query an agent should use
+         */
+        searchQuery?: string;
+        /**
+         * Key-value filters to narrow results. Agents map to platform-specific parameters
+         */
+        filters?: {
+            [key: string]: string;
+        };
+        /**
+         * Platforms explicitly excluded
+         */
+        excludePlatforms?: Array<string>;
+        /**
+         * When an agent last executed this search profile
+         */
+        lastSearchedAt?: string;
+        /**
+         * How often this item should be re-searched
+         */
+        searchFrequency?: 'once' | 'weekly' | 'monthly' | 'on_demand';
+    } | number | string | Visibility2 | Array<FieldProvenance2> | Array<{
+        /**
+         * Unique identifier for this comment
+         */
+        id: string;
+        /**
+         * Person.id of the comment author
+         */
+        authorPersonId?: string;
+        /**
+         * Human-readable display name for the referenced author person
+         */
+        authorPersonIdDisplay?: string;
+        /**
+         * Comment text
+         */
+        content: string;
+        /**
+         * When the comment was created
+         */
+        createdAt: string;
+        visibility?: Visibility2;
+    }> | {
+        /**
+         * Type of the target entity
+         */
+        entityType?: 'asset' | 'asset_collection';
+        /**
+         * ID of the target entity
+         */
+        entityId?: string;
+        /**
+         * When the merge occurred
+         */
+        mergedAt?: string;
+        /**
+         * Why the entities were merged
+         */
+        reason?: string;
+    } | Provenance2 | Jurisdiction2 | {
+        jurisdiction?: Jurisdiction2;
+        assetType?: 'immoveable' | 'moveable' | 'mixed' | 'exempt';
+        exemptions?: Array<string>;
+        reliefClaimed?: Array<string>;
+    } | {
+        accessType?: string;
+        platform?: string;
+        visibility?: Visibility2;
+        /**
+         * The estate role required to follow these instructions
+         */
+        requiredRole?: string;
+        steps?: Array<{
+            step: number;
+            method: string;
+            description?: string;
+            location?: string;
+            holderPersonId?: string;
+        }>;
+        memorialisation?: {
+            preference?: 'transfer_to_beneficiary' | 'memorialise' | 'delete' | 'archive' | 'no_preference';
+            instructions?: string;
+        };
+        lastVerified?: string;
+        verifiedBy?: string;
+    } | 'keeping' | 'considering' | 'thinning' | 'listed' | 'sold' | 'allocated' | 'donated' | Array<{
+        /**
+         * The sales channel where this item is listed
+         */
+        channel: 'ebay' | 'amazon' | 'shopify' | 'etsy' | 'own_website' | 'auction_house' | 'other';
+        /**
+         * Human-readable name of the channel, especially when channel is other
+         */
+        channelName?: string;
+        /**
+         * The platform-specific listing identifier
+         */
+        listingId?: string;
+        /**
+         * Direct URL to the listing on the external platform
+         */
+        listingUrl?: string;
+        /**
+         * Current status of this listing
+         */
+        status: 'draft' | 'active' | 'sold' | 'withdrawn' | 'expired';
+        /**
+         * The listed asking price
+         */
+        askingPrice?: Money2;
+        /**
+         * When this listing was created or last activated
+         */
+        listedAt?: string;
+        /**
+         * When the item was sold via this listing, if applicable
+         */
+        soldAt?: string | null;
+        /**
+         * The actual sale price, if sold
+         */
+        soldPrice?: Money2;
+    }> | Array<ServiceRecord> | {
+        /**
+         * Name of the insurance company
+         */
+        insurer?: string;
+        /**
+         * The insurance policy number
+         */
+        policyNumber?: string;
+        /**
+         * The type of insurance policy covering this item
+         */
+        policyType?: 'home_contents' | 'specialist_collectibles' | 'classic_vehicle' | 'individual_item' | 'fine_art' | 'jewellery' | 'other';
+        /**
+         * The agreed or insured value, in minor currency units. May differ from market value
+         */
+        agreedValue?: Money2;
+        /**
+         * When the insurance cover for this item was last confirmed or reviewed
+         */
+        coverConfirmedAt?: string;
+    } | 'parcel' | 'large_item' | 'specialist_transport' | 'collection_only' | Array<'outer_box' | 'inner_box' | 'warranty_card' | 'cosc_certificate' | 'instruction_manual' | 'hang_tags' | 'service_booklet' | 'purchase_receipt' | 'original_invoice' | 'v5c_logbook' | 'mot_certificate' | 'provenance_letter' | 'certificate_of_authenticity' | 'appraisal_certificate' | 'export_licence' | 'customs_declaration' | string> | {
+        /**
+         * The type of tax relief claimed
+         */
+        reliefType?: 'agricultural_property' | 'business_property' | 'woodland' | 'heritage' | 'charitable';
+        eligible?: boolean;
+        /**
+         * Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
+         */
+        percentage?: number;
+        /**
+         * Conditions for maintaining eligibility
+         */
+        conditions?: string;
+        jurisdiction?: Jurisdiction2;
+        statute?: string;
+    } | {
+        type?: 'sentimental' | 'cultural' | 'religious' | 'historical' | 'family_heirloom' | 'professional';
+        description?: string;
+        /**
+         * Whether and how the testator has restricted disposal of this asset
+         */
+        restrictionOnDisposal?: {
+            exists?: boolean;
+            nature?: string;
+        };
+    } | undefined;
+};
+
+/**
+ * Asset Collection
+ *
+ * A named group of related assets — e.g. a model railway collection, vinyl record library, or art portfolio. Lets families and dealers understand which items belong together and should be considered as a set
+ */
+export type AssetCollection2 = {
+    /**
+     * Unique identifier for this asset collection
+     */
+    id: string;
+    /**
+     * The root document this entity belongs to — either an estate document (schema.json) or a catalogue document (catalogue.json)
+     */
+    rootDocumentId: string;
+    /**
+     * Display name for this collection
+     */
+    name: string;
+    /**
+     * Context for family members and dealers about the collection's scope, provenance, or significance
+     */
+    description?: string;
+    /**
+     * The primary category of items in this collection
+     */
+    category?: 'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other';
+    /**
+     * Estimated total value of the collection as a whole
+     */
+    estimatedValue?: Money2;
+    /**
+     * How the estimated value was determined
+     */
+    valuationSource?: 'self_estimated' | 'dealer_valuation' | 'auction_estimate' | 'insurance_value';
+    /**
+     * Date the valuation was performed or last updated
+     */
+    valuationDate?: string;
+    /**
+     * Free-text guidance from the testator about what should happen to this collection — keep together, sell at auction, donate to a museum, etc
+     */
+    disposalWishes?: string;
+    /**
+     * The testator's preferred strategy for disposing of this collection. More structured than disposalWishes
+     */
+    disposalStrategy?: 'keep_together' | 'sell_as_collection' | 'sell_individually' | 'auction' | 'donate' | 'gift_to_person' | 'dealer_bids' | 'mixed' | 'undecided';
+    /**
+     * The minimum total value the testator or executor will accept for the collection. Prevents fire-sale disposal. In minor currency units
+     */
+    minimumAcceptableValue?: Money2;
+    /**
+     * Preferred channel for disposing of the collection
+     */
+    preferredDisposalMethod?: 'private_sale' | 'auction_house' | 'dealer_network' | 'online_marketplace' | 'specialist_fair' | 'museum_acquisition' | 'other';
+    /**
+     * Notes about specialist dealers who might be interested in this collection. Names, contact details, areas of expertise
+     */
+    specialistDealerNotes?: string;
+    /**
+     * Any additional notes about this collection
+     */
+    notes?: string;
+    /**
+     * Overview photographs and videos of the collection as a whole — the display, the storage, the scale of the collection
+     */
+    images?: Array<Media2>;
+    /**
+     * Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split
+     */
+    splitFrom?: {
+        /**
+         * The type of entity that was split
+         */
+        entityType: 'asset' | 'asset_collection';
+        /**
+         * The id of the original entity that was split
+         */
+        entityId: string;
+        /**
+         * When the split occurred
+         */
+        splitAt: string;
+        /**
+         * Why the split was requested
+         */
+        reason?: string;
+    };
+    /**
+     * History of how items in this collection were disposed of during estate administration
+     */
+    disposalHistory?: Array<{
+        /**
+         * Asset.id of the disposed item
+         */
+        assetId?: string;
+        /**
+         * How the item was disposed of
+         */
+        disposalMethod?: 'sold_as_collection' | 'sold_individually' | 'gifted_to_beneficiary' | 'donated' | 'kept' | 'other';
+        /**
+         * Sale proceeds
+         */
+        proceeds?: Money2;
+        /**
+         * Person.id of the recipient
+         */
+        recipientPersonId?: string;
+        /**
+         * Human-readable display name for the referenced recipient person
+         */
+        recipientPersonIdDisplay?: string;
+        /**
+         * Organisation.id of the recipient
+         */
+        recipientOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced recipient organisation
+         */
+        recipientOrganisationIdDisplay?: string;
+        /**
+         * Date of disposal
+         */
+        date?: string;
+        /**
+         * Notes about the disposal
+         */
+        notes?: string;
+    }>;
+    /**
+     * Records that this entity was merged into another entity — the target entity is the canonical version
+     */
+    mergedInto?: {
+        /**
+         * Type of the target entity
+         */
+        entityType?: 'asset' | 'asset_collection';
+        /**
+         * ID of the target entity
+         */
+        entityId?: string;
+        /**
+         * When the merge occurred
+         */
+        mergedAt?: string;
+        /**
+         * Why the entities were merged
+         */
+        reason?: string;
+    };
+    /**
+     * Comparison of different valuation sources for this collection — insurance, dealer, auction
+     */
+    valuationComparison?: {
+        /**
+         * Insurance valuation
+         */
+        insuranceValue?: Money2;
+        /**
+         * Date of insurance valuation
+         */
+        insuranceDate?: string;
+        /**
+         * Dealer's estimate
+         */
+        dealerEstimate?: Money2;
+        /**
+         * Date of dealer estimate
+         */
+        dealerDate?: string;
+        /**
+         * Auction house estimate
+         */
+        auctionEstimate?: Money2;
+        /**
+         * Date of auction estimate
+         */
+        auctionDate?: string;
+        /**
+         * Most likely realisable amount considering all sources
+         */
+        likelyRealisableAmount?: Money2;
+    };
+    /**
+     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
+     */
+    provenance?: Provenance2;
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | string | string | 'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other' | Money2 | 'self_estimated' | 'dealer_valuation' | 'auction_estimate' | 'insurance_value' | string | string | 'keep_together' | 'sell_as_collection' | 'sell_individually' | 'auction' | 'donate' | 'gift_to_person' | 'dealer_bids' | 'mixed' | 'undecided' | 'private_sale' | 'auction_house' | 'dealer_network' | 'online_marketplace' | 'specialist_fair' | 'museum_acquisition' | 'other' | Array<Media2> | {
+        /**
+         * The type of entity that was split
+         */
+        entityType: 'asset' | 'asset_collection';
+        /**
+         * The id of the original entity that was split
+         */
+        entityId: string;
+        /**
+         * When the split occurred
+         */
+        splitAt: string;
+        /**
+         * Why the split was requested
+         */
+        reason?: string;
+    } | Array<{
+        /**
+         * Asset.id of the disposed item
+         */
+        assetId?: string;
+        /**
+         * How the item was disposed of
+         */
+        disposalMethod?: 'sold_as_collection' | 'sold_individually' | 'gifted_to_beneficiary' | 'donated' | 'kept' | 'other';
+        /**
+         * Sale proceeds
+         */
+        proceeds?: Money2;
+        /**
+         * Person.id of the recipient
+         */
+        recipientPersonId?: string;
+        /**
+         * Human-readable display name for the referenced recipient person
+         */
+        recipientPersonIdDisplay?: string;
+        /**
+         * Organisation.id of the recipient
+         */
+        recipientOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced recipient organisation
+         */
+        recipientOrganisationIdDisplay?: string;
+        /**
+         * Date of disposal
+         */
+        date?: string;
+        /**
+         * Notes about the disposal
+         */
+        notes?: string;
+    }> | {
+        /**
+         * Type of the target entity
+         */
+        entityType?: 'asset' | 'asset_collection';
+        /**
+         * ID of the target entity
+         */
+        entityId?: string;
+        /**
+         * When the merge occurred
+         */
+        mergedAt?: string;
+        /**
+         * Why the entities were merged
+         */
+        reason?: string;
+    } | {
+        /**
+         * Insurance valuation
+         */
+        insuranceValue?: Money2;
+        /**
+         * Date of insurance valuation
+         */
+        insuranceDate?: string;
+        /**
+         * Dealer's estimate
+         */
+        dealerEstimate?: Money2;
+        /**
+         * Date of dealer estimate
+         */
+        dealerDate?: string;
+        /**
+         * Auction house estimate
+         */
+        auctionEstimate?: Money2;
+        /**
+         * Date of auction estimate
+         */
+        auctionDate?: string;
+        /**
+         * Most likely realisable amount considering all sources
+         */
+        likelyRealisableAmount?: Money2;
+    } | Provenance2 | undefined;
+};
+
+/**
+ * PostalAddress
+ *
+ * A physical address. Culturally neutral — supports any global addressing convention
+ */
+export type Address2 = {
+    /**
+     * The full address as a single formatted string, suitable for display. Preserves the original representation from the source document. Must not be the sole address representation — always populate structured fields where possible
+     */
+    formattedAddress?: string;
+    /**
+     * Street number and name. For Japanese addresses, use the block and building number (chōme-ban-gō)
+     */
+    streetAddress?: string;
+    /**
+     * Secondary address line — flat, suite, building, or floor. Use when the primary street address is insufficient
+     */
+    addressLine2?: string;
+    /**
+     * City, town, village, or ward. For Japanese addresses, this is the city or special ward (ku)
+     */
+    addressLocality?: string;
+    /**
+     * State, prefecture, province, or county. The administrative division below national level
+     */
+    addressRegion?: string;
+    /**
+     * Postal or ZIP code. Format varies by country — UK postcodes, US ZIP codes, Japanese 〒 codes, etc
+     */
+    postalCode?: string;
+    /**
+     * ISO 3166-1 alpha-2 country code. Always uppercase
+     */
+    addressCountry?: string;
+    /**
+     * Geographic latitude in decimal degrees. Useful for properties in jurisdictions without formal addressing systems
+     */
+    latitude?: number;
+    /**
+     * Geographic longitude in decimal degrees. Pair with latitude for precise property location
+     */
+    longitude?: number;
+    /**
+     * A nearby landmark used to locate the address. Essential in jurisdictions without formal street addressing — India, Nigeria, and rural areas worldwide
+     */
+    landmark?: string;
+    /**
+     * Free-form directions to reach the address when no formal address system exists. Common in rural communities across Africa, South Asia, and the Pacific Islands
+     */
+    directionNotes?: string;
+    /**
+     * The addressing convention that governs the display order of this address. Defaults to 'western' if omitted
+     */
+    addressOrder?: 'western' | 'japanese' | 'indian' | 'arabic' | 'custom';
+};
+
+/**
+ * A registration with a regulatory body, professional association, or government registry
+ */
+export type Registration = {
+    /**
+     * The regulatory body or registry. Use an id from well-known-organisations.json where available, or a descriptive string for unlisted bodies
+     */
+    body: string;
+    /**
+     * The registration number. Format varies by body — see well-known-organisations.json for expected patterns
+     */
+    number: string;
+    /**
+     * Current status of this registration
+     */
+    status?: 'active' | 'suspended' | 'revoked' | 'voluntary' | 'expired';
+    /**
+     * Jurisdiction this registration applies to. ISO 3166-1 alpha-2 or ISO 3166-2 code
+     */
+    jurisdiction?: string;
+    /**
+     * URL to verify this registration with the regulatory body
+     */
+    verificationUrl?: string;
+    /**
+     * When this registration was last verified
+     */
+    verifiedAt?: string;
+    /**
+     * Result of a live API check against this registry. Snapshot at retrievedAt. Registry-specific fields are validated conditionally based on the parent body field
+     */
+    liveCheck?: {
+        /**
+         * When this check was performed
+         */
+        retrievedAt: string;
+        /**
+         * Companies House company status
+         */
+        companyStatus?: 'active' | 'dissolved' | 'liquidation' | 'receivership' | 'administration' | 'voluntary-arrangement' | 'converted-closed' | string;
+        /**
+         * Standard Industrial Classification codes from Companies House
+         */
+        sicCodes?: Array<string>;
+        /**
+         * Date of incorporation
+         */
+        incorporatedAt?: string;
+        /**
+         * Whether accounts are overdue at Companies House
+         */
+        accountsOverdue?: boolean;
+        /**
+         * Whether there are active insolvency proceedings
+         */
+        insolvencyFlag?: boolean;
+        /**
+         * FCA authorisation status
+         */
+        authorisationStatus?: 'authorised' | 'revoked' | 'suspended' | 'cancelled' | 'no-longer-authorised' | string;
+        /**
+         * FCA firm reference number
+         */
+        firmReference?: string;
+        /**
+         * Regulated activities the firm is authorised for
+         */
+        permissions?: Array<string>;
+        /**
+         * When FCA authorisation took effect
+         */
+        effectiveFrom?: string;
+        /**
+         * Charity Commission or OSCR registration status
+         */
+        charityStatus?: 'registered' | 'removed' | 'suspended' | 'in-default' | string;
+        /**
+         * Latest reported annual income in minor units (pennies/cents)
+         */
+        income?: number;
+        /**
+         * Charitable objects or purposes
+         */
+        objects?: string;
+        /**
+         * Date the charity was registered
+         */
+        dateRegistered?: string;
+        /**
+         * Whether the charity's reporting is up to date
+         */
+        reportingStatus?: 'up-to-date' | 'overdue' | 'not-required' | string;
+    };
+};
+
+/**
+ * Organisation
+ *
+ * An organisation that interacts with the estate — legal firms, financial institutions, charities, dealers, funeral providers, employers, government bodies, and others. Maps to schema:Organization in JSON-LD
+ */
+export type Organisation2 = {
+    /**
+     * Unique identifier for this organisation within the INHERIT document
+     */
+    id: string;
+    /**
+     * The organisation's legal or trading name
+     */
+    name: string;
+    /**
+     * The nature of the organisation. Use x-inherit- prefix for jurisdiction-specific or niche types not covered by the core enum
+     */
+    organisationType: 'legal_firm' | 'financial_institution' | 'pension_provider' | 'insurance_provider' | 'dealer' | 'auction_house' | 'valuation_firm' | 'funeral_provider' | 'charity' | 'religious_institution' | 'employer' | 'trust_corporation' | 'accountancy_firm' | 'government_body' | 'retailer' | 'manufacturer' | 'property_management' | 'storage_facility' | 'digital_platform' | 'utility_provider' | 'other' | string;
+    /**
+     * The roles this organisation plays in this specific estate. An organisation may play multiple roles
+     */
+    estateRoles?: Array<'beneficiary' | 'will_writer' | 'executor' | 'trustee' | 'asset_holder' | 'liability_holder' | 'insurer' | 'valuer' | 'recommended_dealer' | 'funeral_provider' | 'professional_adviser' | 'regulatory_body' | 'employer' | 'retailer' | 'service_provider' | string>;
+    /**
+     * Primary jurisdiction where this organisation operates. ISO 3166-1 alpha-2 or ISO 3166-2 code
+     */
+    jurisdiction?: string;
+    /**
+     * The organisation's address
+     */
+    address?: Address2;
+    /**
+     * The organisation's website
+     */
+    url?: string;
+    /**
+     * Primary contact email
+     */
+    email?: string;
+    /**
+     * Primary contact phone number
+     */
+    phone?: string;
+    /**
+     * URL to the organisation's logo
+     */
+    logo?: string;
+    /**
+     * Wikidata Q-number for this organisation, enabling linked data resolution. Many major organisations have Wikidata entries with structured data (founding date, parent company, headquarters, etc.)
+     */
+    wikidataId?: string;
+    /**
+     * Brief description of the organisation and its relevance to this estate
+     */
+    description?: string;
+    /**
+     * Registrations with regulatory bodies, professional associations, and government registries. An organisation may hold multiple registrations across jurisdictions
+     */
+    registrations?: Array<Registration>;
+    /**
+     * Name of the primary contact person at this organisation for estate matters
+     */
+    contactPerson?: string;
+    /**
+     * Free-text notes about this organisation's relationship to the estate
+     */
+    notes?: string;
+    /**
+     * Aggregate ratings from review platforms. One entry per platform. Supports user decision-making, agent filtering/ranking, and point-in-time audit trails
+     */
+    ratings?: Array<{
+        /**
+         * The review platform
+         */
+        platform: 'trustpilot' | 'google' | 'feefo' | 'reviews_io' | 'funeral_guide' | 'checkatrade' | string;
+        /**
+         * The aggregate rating score
+         */
+        ratingValue: number;
+        /**
+         * Maximum possible score on this platform. Default 5 if absent
+         */
+        bestRating?: number;
+        /**
+         * Minimum possible score on this platform. Default 1 if absent
+         */
+        worstRating?: number;
+        /**
+         * Total number of reviews on this platform
+         */
+        reviewCount?: number;
+        /**
+         * URL to the organisation's profile on this platform
+         */
+        profileUrl?: string;
+        /**
+         * When this rating data was retrieved or verified
+         */
+        retrievedAt: string;
+    }>;
+    /**
+     * URIs identifying this entity elsewhere (schema.org sameAs). e.g. Wikidata, LinkedIn, DBpedia
+     */
+    sameAs?: Array<string>;
+    /**
+     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
+     */
+    provenance?: Provenance2;
+    /**
+     * The organisation's VAT registration status and scheme. Affects how VAT is calculated on transactions involving this organisation
+     */
+    vatConfiguration?: {
+        /**
+         * Whether the organisation is VAT registered
+         */
+        vatRegistered?: boolean;
+        /**
+         * Which VAT scheme the organisation uses. Only relevant if vatRegistered is true
+         */
+        vatScheme?: 'margin_scheme' | 'global_accounting' | 'standard_vat';
+        /**
+         * The organisation's VAT registration number
+         */
+        vatNumber?: string;
+        /**
+         * The country of VAT registration, as ISO 3166-1 alpha-2
+         */
+        vatCountry?: string;
+    };
+    /**
+     * International shipping capabilities and policies for this organisation
+     */
+    internationalShipping?: {
+        /**
+         * ISO 3166-1 alpha-2 country codes this organisation ships to
+         */
+        shipsToCountries?: Array<string>;
+        /**
+         * ISO 3166-1 alpha-2 country codes this organisation receives items from
+         */
+        receivesFromCountries?: Array<string>;
+        /**
+         * Whether this organisation handles customs declarations for international shipments
+         */
+        customsHandling?: boolean;
+        /**
+         * Who pays import duties on international transactions
+         */
+        importDutyPolicy?: 'dealer_absorbs' | 'buyer_pays' | 'included_in_shipping';
+        /**
+         * The primary currency this organisation trades in, as ISO 4217
+         */
+        currency?: string;
+    };
+    /**
+     * External identifiers — charity number, company registration, UEN, etc.
+     */
+    identifiers?: Array<Identifier2>;
+    /**
+     * Dealer-specific profile information. Only relevant for organisations that operate as dealers on marketplace or catalogue platforms
+     */
+    dealerProfile?: {
+        /**
+         * Asset categories this dealer specialises in
+         */
+        categories?: Array<string>;
+        /**
+         * The dealer's subscription tier on the platform
+         */
+        dealerTier?: 'free' | 'standard' | 'professional';
+        /**
+         * Physical services this dealer can provide
+         */
+        fulfilmentCapabilities?: Array<'inspection' | 'grading' | 'photography' | 'storage' | 'shipping' | 'restoration'>;
+        /**
+         * How far the dealer operates
+         */
+        geographicReach?: 'local' | 'national' | 'international';
+        /**
+         * Typical time to respond to a valuation request or offer
+         */
+        averageResponseTime?: string;
+    };
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | string | 'legal_firm' | 'financial_institution' | 'pension_provider' | 'insurance_provider' | 'dealer' | 'auction_house' | 'valuation_firm' | 'funeral_provider' | 'charity' | 'religious_institution' | 'employer' | 'trust_corporation' | 'accountancy_firm' | 'government_body' | 'retailer' | 'manufacturer' | 'property_management' | 'storage_facility' | 'digital_platform' | 'utility_provider' | 'other' | string | Array<'beneficiary' | 'will_writer' | 'executor' | 'trustee' | 'asset_holder' | 'liability_holder' | 'insurer' | 'valuer' | 'recommended_dealer' | 'funeral_provider' | 'professional_adviser' | 'regulatory_body' | 'employer' | 'retailer' | 'service_provider' | string> | string | Address2 | string | string | string | string | string | Array<Registration> | string | Array<{
+        /**
+         * The review platform
+         */
+        platform: 'trustpilot' | 'google' | 'feefo' | 'reviews_io' | 'funeral_guide' | 'checkatrade' | string;
+        /**
+         * The aggregate rating score
+         */
+        ratingValue: number;
+        /**
+         * Maximum possible score on this platform. Default 5 if absent
+         */
+        bestRating?: number;
+        /**
+         * Minimum possible score on this platform. Default 1 if absent
+         */
+        worstRating?: number;
+        /**
+         * Total number of reviews on this platform
+         */
+        reviewCount?: number;
+        /**
+         * URL to the organisation's profile on this platform
+         */
+        profileUrl?: string;
+        /**
+         * When this rating data was retrieved or verified
+         */
+        retrievedAt: string;
+    }> | Array<string> | Provenance2 | {
+        /**
+         * Whether the organisation is VAT registered
+         */
+        vatRegistered?: boolean;
+        /**
+         * Which VAT scheme the organisation uses. Only relevant if vatRegistered is true
+         */
+        vatScheme?: 'margin_scheme' | 'global_accounting' | 'standard_vat';
+        /**
+         * The organisation's VAT registration number
+         */
+        vatNumber?: string;
+        /**
+         * The country of VAT registration, as ISO 3166-1 alpha-2
+         */
+        vatCountry?: string;
+    } | {
+        /**
+         * ISO 3166-1 alpha-2 country codes this organisation ships to
+         */
+        shipsToCountries?: Array<string>;
+        /**
+         * ISO 3166-1 alpha-2 country codes this organisation receives items from
+         */
+        receivesFromCountries?: Array<string>;
+        /**
+         * Whether this organisation handles customs declarations for international shipments
+         */
+        customsHandling?: boolean;
+        /**
+         * Who pays import duties on international transactions
+         */
+        importDutyPolicy?: 'dealer_absorbs' | 'buyer_pays' | 'included_in_shipping';
+        /**
+         * The primary currency this organisation trades in, as ISO 4217
+         */
+        currency?: string;
+    } | Array<Identifier2> | {
+        /**
+         * Asset categories this dealer specialises in
+         */
+        categories?: Array<string>;
+        /**
+         * The dealer's subscription tier on the platform
+         */
+        dealerTier?: 'free' | 'standard' | 'professional';
+        /**
+         * Physical services this dealer can provide
+         */
+        fulfilmentCapabilities?: Array<'inspection' | 'grading' | 'photography' | 'storage' | 'shipping' | 'restoration'>;
+        /**
+         * How far the dealer operates
+         */
+        geographicReach?: 'local' | 'national' | 'international';
+        /**
+         * Typical time to respond to a valuation request or offer
+         */
+        averageResponseTime?: string;
+    } | undefined;
+};
+
+/**
+ * Property
+ *
+ * Real estate. Supports individual ownership, communal/family property (Nigeria), HUF coparcenary (India), government-vested land (Land Use Act), US community property, and informal/unregistered holdings
+ */
+export type Property2 = {
+    /**
+     * Unique identifier for this property within the INHERIT document
+     */
+    id: string;
+    /**
+     * Display name for this property — a familiar label or street address. Should be recognisable to all parties involved in the estate
+     */
+    name: string;
+    /**
+     * Territory-neutral property type. Use reference-data/local-term-mappings.json to display jurisdiction-appropriate labels in UIs
+     */
+    propertyType?: 'detached' | 'attached' | 'apartment' | 'land' | 'commercial' | 'mixed_use' | 'rural' | 'mobile' | 'watercraft' | 'other';
+    /**
+     * Physical address of the property
+     */
+    address?: Address2;
+    /**
+     * Owner's estimate of the property's current market value, in minor currency units
+     */
+    estimatedValue?: Money2;
+    /**
+     * Professional surveyor or valuer's assessment of the property value, in minor currency units
+     */
+    professionalValuation?: Money2;
+    /**
+     * Value of this property net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored
+     */
+    netEquity?: Money2;
+    /**
+     * True when the active charges secured against this property exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall
+     */
+    inNegativeEquity?: boolean;
+    /**
+     * Date the most recent valuation (estimated or professional) was performed
+     */
+    valuationDate?: string;
+    /**
+     * Level of confidence in the stated valuation
+     */
+    valuationConfidence?: 'estimated' | 'professional' | 'official' | 'unknown';
+    /**
+     * Whether this is the testator's primary residence. Relevant for residence nil rate band (UK), homestead exemption (US), and similar tax reliefs
+     */
+    isPrimaryResidence?: boolean;
+    /**
+     * How ownership of this property is legally structured
+     */
+    ownershipType?: 'sole' | 'joint_tenants' | 'tenants_in_common' | 'trust' | 'tenancy_by_entirety';
+    /**
+     * The testator's ownership share as a percentage. For joint tenants, typically 50% for two co-owners. For tenants in common, may be any split
+     */
+    ownershipPercentage?: number;
+    /**
+     * The cultural or legal model of ownership. Goes beyond the simple legal title to capture communal and customary ownership forms
+     */
+    ownershipModel?: 'individual' | 'joint' | 'communal_family' | 'huf_coparcenary' | 'tribal' | 'government_vested' | 'trust_held';
+    /**
+     * How the property was acquired. Determines which succession law applies in India and other jurisdictions
+     */
+    acquisitionType?: 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed';
+    /**
+     * Territory-neutral tenure type. Use reference-data/local-term-mappings.json to display jurisdiction-appropriate labels in UIs
+     */
+    tenureType?: 'ownership' | 'lease' | 'communal' | 'customary' | 'informal' | 'government_allocated';
+    /**
+     * Whether this property is formally registered with a land authority
+     */
+    registrationStatus?: 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented';
+    /**
+     * The type of evidence available to prove ownership. In many jurisdictions, informal evidence is the only kind available
+     */
+    ownershipEvidence?: 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none';
+    /**
+     * Cultural, religious, and regulatory constraints on disposal of this property
+     */
+    culturalDisposition?: CulturalDisposition2;
+    /**
+     * The communal or family authority whose approval is required to dispose of this property
+     */
+    communalAuthority?: {
+        /**
+         * Category of communal authority
+         */
+        authorityType?: 'family_council' | 'clan_association' | 'religious_body' | 'tribal_council' | 'government';
+        /**
+         * Whether approval from this authority is legally required before disposal
+         */
+        approvalRequired?: boolean;
+        /**
+         * Name of the specific authority or person
+         */
+        authorityName?: string;
+        /**
+         * Jurisdiction where this communal authority has legal standing
+         */
+        jurisdiction?: Jurisdiction2;
+    };
+    /**
+     * The succession regime governing this specific property. Overrides estate.defaultSuccessionRegime when present
+     */
+    successionRegime?: {
+        /**
+         * The law governing succession for this property
+         */
+        governingLaw?: {
+            /**
+             * Jurisdiction whose succession law applies
+             */
+            jurisdiction?: Jurisdiction2;
+            /**
+             * Which legal tradition applies
+             */
+            legalTradition?: 'common_law' | 'civil_law' | 'mixed' | 'customary_law' | 'islamic_law' | 'hindu_law' | 'jewish_law' | 'canon_law';
+            /**
+             * Name of the governing statute
+             */
+            statute?: string;
+            /**
+             * Specific section of the statute
+             */
+            section?: string;
+        };
+        /**
+         * How the governing law was determined
+         */
+        determinedBy?: 'domicile' | 'situs' | 'nationality' | 'personal_status' | 'choice_of_law' | 'treaty';
+        /**
+         * Whether this succession regime is legally binding
+         */
+        binding?: boolean;
+        /**
+         * INHERIT extension IDs that apply to this property's succession
+         */
+        extensions?: Array<string>;
+        /**
+         * Additional context about the succession regime
+         */
+        notes?: string;
+    };
+    /**
+     * Reference to the Person.id of the current custodian of communal or family property. The custodian manages but does not own the property
+     */
+    custodianPersonId?: string;
+    /**
+     * Human-readable display name for the referenced custodian person
+     */
+    custodianPersonIdDisplay?: string;
+    /**
+     * Whether government or regulatory consent is required to transfer this property. Common in Nigeria (governor's consent) and for agricultural land in parts of India
+     */
+    governmentConsentRequired?: boolean;
+    /**
+     * Whether this property is classified as immoveable, moveable, or mixed. Determines which conflict-of-laws rules apply
+     */
+    mobilityType?: 'immoveable' | 'moveable' | 'mixed';
+    /**
+     * Outstanding mortgage balance in minor currency units. If the property is mortgage-free, omit this field
+     */
+    mortgageOutstanding?: Money2;
+    /**
+     * Marital property character classification for US community property states. Determines whether the testator may dispose of the entire property or only their half
+     */
+    characterClassification?: 'community' | 'separate' | 'quasi_community' | 'mixed' | 'not_applicable';
+    /**
+     * US homestead exemption status. Protects the primary residence from creditors and may restrict the testator's ability to devise the property
+     */
+    homesteadStatus?: {
+        /**
+         * Whether this property qualifies as a homestead
+         */
+        isHomestead?: boolean;
+        /**
+         * Dollar value of the homestead exemption, if capped
+         */
+        exemptionAmount?: Money2;
+        /**
+         * Whether the homestead exemption has no dollar cap. True in Florida, Texas (rural), and several other states
+         */
+        exemptionUnlimited?: boolean;
+        /**
+         * Whether this homestead is subject to restrictions on devise — e.g. Florida prohibits devising homestead away from a surviving spouse or minor children
+         */
+        deviseRestriction?: boolean;
+        /**
+         * Additional notes on homestead status
+         */
+        notes?: string;
+    };
+    /**
+     * Whether this property passes outside the probate estate — typically via joint tenancy with right of survivorship, a transfer-on-death deed, or a trust
+     */
+    passesOutsideEstate?: boolean;
+    /**
+     * A life estate imposed by statute rather than by the will. The surviving spouse or other protected person has a right to occupy for life
+     */
+    statutoryLifeEstate?: {
+        /**
+         * Reference to the Person.id of the life estate beneficiary
+         */
+        beneficiaryPersonId?: string;
+        /**
+         * Human-readable display name for the referenced beneficiary person
+         */
+        beneficiaryPersonIdDisplay?: string;
+        /**
+         * The statutory basis for this life estate
+         */
+        basis?: string;
+        /**
+         * Any conditions on the life estate
+         */
+        conditions?: string;
+    };
+    /**
+     * Free-text notes about this property. Use for unusual tenure arrangements, ongoing disputes, or planning considerations
+     */
+    notes?: string;
+    /**
+     * Links to this property in external databases, portals, and registries — Land Registry, Rightmove, Zoopla, Zillow, council tax records, EPC certificates, etc
+     */
+    externalLinks?: Array<{
+        /**
+         * The external system or platform name
+         */
+        system: string;
+        /**
+         * The platform-specific identifier for this property
+         */
+        id: string;
+        /**
+         * Direct URL to the property's page on the external platform
+         */
+        url?: string;
+        /**
+         * Human-readable label for display
+         */
+        label?: string;
+        /**
+         * Timestamp when this link was last verified
+         */
+        retrievedAt?: string;
+    }>;
+    /**
+     * Photographs and videos of this property — exterior, interior, key rooms, any damage or features relevant to valuation
+     */
+    images?: Array<Media2>;
+    /**
+     * Controls who can see this property record
+     */
+    visibility?: Visibility2;
+    /**
+     * Per-field provenance records — how each field's value was obtained
+     */
+    fieldProvenance?: Array<FieldProvenance2>;
+    /**
+     * Discussion comments on this entity
+     */
+    comments?: Array<{
+        /**
+         * Unique identifier for this comment
+         */
+        id: string;
+        /**
+         * Person.id of the comment author
+         */
+        authorPersonId?: string;
+        /**
+         * Human-readable display name for the referenced author person
+         */
+        authorPersonIdDisplay?: string;
+        /**
+         * Comment text
+         */
+        content: string;
+        /**
+         * When the comment was created
+         */
+        createdAt: string;
+        visibility?: Visibility2;
+    }>;
+    /**
+     * Rental income details if the property is let — important for estate income tax and beneficiary entitlements
+     */
+    rentalIncome?: {
+        /**
+         * Monthly rental income
+         */
+        monthlyAmount?: Money2;
+        /**
+         * Name of the current tenant
+         */
+        tenantName?: string;
+        /**
+         * Date the current lease expires
+         */
+        leaseEndDate?: string;
+        /**
+         * Organisation.id of the managing agent
+         */
+        managingAgentOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced managing agent organisation
+         */
+        managingAgentOrganisationIdDisplay?: string;
+    };
+    /**
+     * Energy Performance Certificate data. UK properties require an EPC for sale or letting. Rating A (most efficient) to G (least efficient). Legally significant — EPC below E cannot be let without exemption
+     */
+    epc?: {
+        /**
+         * When this EPC data was retrieved from the register
+         */
+        retrievedAt: string;
+        /**
+         * Overall EPC rating band
+         */
+        rating?: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
+        /**
+         * Numeric energy efficiency score (1–100, higher is better)
+         */
+        energyEfficiencyScore?: number;
+        /**
+         * Numeric environmental impact score (1–100, higher is better)
+         */
+        environmentalImpactScore?: number;
+        /**
+         * When the EPC expires (valid for 10 years from issue)
+         */
+        expiryDate?: string;
+        /**
+         * EPC certificate reference number
+         */
+        certificateNumber?: string;
+        /**
+         * URL to the certificate on the EPC register
+         */
+        certificateUrl?: string;
+        /**
+         * Total floor area in square metres
+         */
+        floorArea?: number;
+        /**
+         * Primary heating system description
+         */
+        heatingType?: string;
+    };
+    /**
+     * HM Land Registry data — title information, last sale price, and registered charges. Confirms ownership and surfaces encumbrances relevant to estate administration
+     */
+    landRegistry?: {
+        /**
+         * When this data was retrieved from Land Registry
+         */
+        retrievedAt: string;
+        /**
+         * Land Registry title number
+         */
+        titleNumber?: string;
+        /**
+         * Class of title registered at Land Registry
+         */
+        titleClass?: 'absolute' | 'qualified' | 'possessory' | 'good_leasehold' | string;
+        /**
+         * Last recorded sale price in minor units (pennies)
+         */
+        lastSalePrice?: number;
+        /**
+         * Date of last recorded sale
+         */
+        lastSaleDate?: string;
+        /**
+         * Tenure as recorded by Land Registry
+         */
+        tenure?: 'freehold' | 'leasehold' | string;
+        /**
+         * Owner names as they appear on the register
+         */
+        registeredOwners?: Array<string>;
+        /**
+         * Number of registered charges (mortgages, restrictions, notices)
+         */
+        chargesCount?: number;
+    };
+    /**
+     * Flood risk data from the Environment Agency (England) or equivalent national agency. Affects insurability, value, and estate planning decisions
+     */
+    floodRisk?: {
+        /**
+         * When this flood risk data was retrieved
+         */
+        retrievedAt: string;
+        /**
+         * Risk of flooding from rivers and the sea
+         */
+        riverAndSeaRisk?: 'high' | 'medium' | 'low' | 'very_low' | string;
+        /**
+         * Risk of flooding from surface water
+         */
+        surfaceWaterRisk?: 'high' | 'medium' | 'low' | 'very_low' | string;
+        /**
+         * Environment Agency flood zone designation
+         */
+        floodZone?: '1' | '2' | '3a' | '3b' | string;
+        /**
+         * Name of the nearest river, stream, or watercourse
+         */
+        nearestWatercourse?: string;
+        /**
+         * Whether the area has been affected by flooding in the past
+         */
+        historicalFlooding?: boolean;
+    };
+    /**
+     * Leasehold-specific data — lease term, ground rent, service charge, freeholder. Relevant when tenureType is 'lease'. No conditional enforcement — allowed on any property for flexibility
+     */
+    leasehold?: {
+        /**
+         * When this leasehold data was retrieved or last verified
+         */
+        retrievedAt: string;
+        /**
+         * Date the lease commenced
+         */
+        leaseStartDate?: string;
+        /**
+         * Original lease term in years
+         */
+        leaseTerm?: number;
+        /**
+         * Approximate years remaining at retrievedAt. Below 80 years triggers mortgage difficulties; below 70 significantly impacts value
+         */
+        yearsRemaining?: number;
+        /**
+         * Annual ground rent in minor units (pennies). Zero for peppercorn rents
+         */
+        groundRent?: number;
+        /**
+         * Next ground rent review date
+         */
+        groundRentReviewDate?: string;
+        /**
+         * Annual service charge in minor units (pennies)
+         */
+        serviceCharge?: number;
+        /**
+         * Name of the freeholder or landlord
+         */
+        freeholderName?: string;
+        /**
+         * Name of the managing agent or management company
+         */
+        managementCompany?: string;
+    };
+    /**
+     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
+     */
+    provenance?: Provenance2;
+    /**
+     * The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile
+     */
+    applicableLaw?: Jurisdiction2;
+    /**
+     * Per-property tax treatment — how this property is classified for tax purposes
+     */
+    taxTreatment?: {
+        jurisdiction?: Jurisdiction2;
+        assetType?: 'immoveable' | 'moveable' | 'mixed' | 'exempt';
+        exemptions?: Array<string>;
+        reliefClaimed?: Array<string>;
+    };
+    /**
+     * Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)
+     */
+    taxReliefEligibility?: {
+        /**
+         * The type of tax relief claimed
+         */
+        reliefType?: 'agricultural_property' | 'business_property' | 'woodland' | 'heritage' | 'charitable';
+        eligible?: boolean;
+        /**
+         * Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
+         */
+        percentage?: number;
+        /**
+         * Conditions for maintaining eligibility
+         */
+        conditions?: string;
+        jurisdiction?: Jurisdiction2;
+        statute?: string;
+    };
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | string | 'detached' | 'attached' | 'apartment' | 'land' | 'commercial' | 'mixed_use' | 'rural' | 'mobile' | 'watercraft' | 'other' | Address2 | Money2 | boolean | string | 'estimated' | 'professional' | 'official' | 'unknown' | 'sole' | 'joint_tenants' | 'tenants_in_common' | 'trust' | 'tenancy_by_entirety' | number | 'individual' | 'joint' | 'communal_family' | 'huf_coparcenary' | 'tribal' | 'government_vested' | 'trust_held' | 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed' | 'ownership' | 'lease' | 'communal' | 'customary' | 'informal' | 'government_allocated' | 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented' | 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none' | CulturalDisposition2 | {
+        /**
+         * Category of communal authority
+         */
+        authorityType?: 'family_council' | 'clan_association' | 'religious_body' | 'tribal_council' | 'government';
+        /**
+         * Whether approval from this authority is legally required before disposal
+         */
+        approvalRequired?: boolean;
+        /**
+         * Name of the specific authority or person
+         */
+        authorityName?: string;
+        /**
+         * Jurisdiction where this communal authority has legal standing
+         */
+        jurisdiction?: Jurisdiction2;
+    } | {
+        /**
+         * The law governing succession for this property
+         */
+        governingLaw?: {
+            /**
+             * Jurisdiction whose succession law applies
+             */
+            jurisdiction?: Jurisdiction2;
+            /**
+             * Which legal tradition applies
+             */
+            legalTradition?: 'common_law' | 'civil_law' | 'mixed' | 'customary_law' | 'islamic_law' | 'hindu_law' | 'jewish_law' | 'canon_law';
+            /**
+             * Name of the governing statute
+             */
+            statute?: string;
+            /**
+             * Specific section of the statute
+             */
+            section?: string;
+        };
+        /**
+         * How the governing law was determined
+         */
+        determinedBy?: 'domicile' | 'situs' | 'nationality' | 'personal_status' | 'choice_of_law' | 'treaty';
+        /**
+         * Whether this succession regime is legally binding
+         */
+        binding?: boolean;
+        /**
+         * INHERIT extension IDs that apply to this property's succession
+         */
+        extensions?: Array<string>;
+        /**
+         * Additional context about the succession regime
+         */
+        notes?: string;
+    } | string | 'immoveable' | 'moveable' | 'mixed' | 'community' | 'separate' | 'quasi_community' | 'mixed' | 'not_applicable' | {
+        /**
+         * Whether this property qualifies as a homestead
+         */
+        isHomestead?: boolean;
+        /**
+         * Dollar value of the homestead exemption, if capped
+         */
+        exemptionAmount?: Money2;
+        /**
+         * Whether the homestead exemption has no dollar cap. True in Florida, Texas (rural), and several other states
+         */
+        exemptionUnlimited?: boolean;
+        /**
+         * Whether this homestead is subject to restrictions on devise — e.g. Florida prohibits devising homestead away from a surviving spouse or minor children
+         */
+        deviseRestriction?: boolean;
+        /**
+         * Additional notes on homestead status
+         */
+        notes?: string;
+    } | {
+        /**
+         * Reference to the Person.id of the life estate beneficiary
+         */
+        beneficiaryPersonId?: string;
+        /**
+         * Human-readable display name for the referenced beneficiary person
+         */
+        beneficiaryPersonIdDisplay?: string;
+        /**
+         * The statutory basis for this life estate
+         */
+        basis?: string;
+        /**
+         * Any conditions on the life estate
+         */
+        conditions?: string;
+    } | string | Array<{
+        /**
+         * The external system or platform name
+         */
+        system: string;
+        /**
+         * The platform-specific identifier for this property
+         */
+        id: string;
+        /**
+         * Direct URL to the property's page on the external platform
+         */
+        url?: string;
+        /**
+         * Human-readable label for display
+         */
+        label?: string;
+        /**
+         * Timestamp when this link was last verified
+         */
+        retrievedAt?: string;
+    }> | Array<Media2> | Visibility2 | Array<FieldProvenance2> | Array<{
+        /**
+         * Unique identifier for this comment
+         */
+        id: string;
+        /**
+         * Person.id of the comment author
+         */
+        authorPersonId?: string;
+        /**
+         * Human-readable display name for the referenced author person
+         */
+        authorPersonIdDisplay?: string;
+        /**
+         * Comment text
+         */
+        content: string;
+        /**
+         * When the comment was created
+         */
+        createdAt: string;
+        visibility?: Visibility2;
+    }> | {
+        /**
+         * Monthly rental income
+         */
+        monthlyAmount?: Money2;
+        /**
+         * Name of the current tenant
+         */
+        tenantName?: string;
+        /**
+         * Date the current lease expires
+         */
+        leaseEndDate?: string;
+        /**
+         * Organisation.id of the managing agent
+         */
+        managingAgentOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced managing agent organisation
+         */
+        managingAgentOrganisationIdDisplay?: string;
+    } | {
+        /**
+         * When this EPC data was retrieved from the register
+         */
+        retrievedAt: string;
+        /**
+         * Overall EPC rating band
+         */
+        rating?: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
+        /**
+         * Numeric energy efficiency score (1–100, higher is better)
+         */
+        energyEfficiencyScore?: number;
+        /**
+         * Numeric environmental impact score (1–100, higher is better)
+         */
+        environmentalImpactScore?: number;
+        /**
+         * When the EPC expires (valid for 10 years from issue)
+         */
+        expiryDate?: string;
+        /**
+         * EPC certificate reference number
+         */
+        certificateNumber?: string;
+        /**
+         * URL to the certificate on the EPC register
+         */
+        certificateUrl?: string;
+        /**
+         * Total floor area in square metres
+         */
+        floorArea?: number;
+        /**
+         * Primary heating system description
+         */
+        heatingType?: string;
+    } | {
+        /**
+         * When this data was retrieved from Land Registry
+         */
+        retrievedAt: string;
+        /**
+         * Land Registry title number
+         */
+        titleNumber?: string;
+        /**
+         * Class of title registered at Land Registry
+         */
+        titleClass?: 'absolute' | 'qualified' | 'possessory' | 'good_leasehold' | string;
+        /**
+         * Last recorded sale price in minor units (pennies)
+         */
+        lastSalePrice?: number;
+        /**
+         * Date of last recorded sale
+         */
+        lastSaleDate?: string;
+        /**
+         * Tenure as recorded by Land Registry
+         */
+        tenure?: 'freehold' | 'leasehold' | string;
+        /**
+         * Owner names as they appear on the register
+         */
+        registeredOwners?: Array<string>;
+        /**
+         * Number of registered charges (mortgages, restrictions, notices)
+         */
+        chargesCount?: number;
+    } | {
+        /**
+         * When this flood risk data was retrieved
+         */
+        retrievedAt: string;
+        /**
+         * Risk of flooding from rivers and the sea
+         */
+        riverAndSeaRisk?: 'high' | 'medium' | 'low' | 'very_low' | string;
+        /**
+         * Risk of flooding from surface water
+         */
+        surfaceWaterRisk?: 'high' | 'medium' | 'low' | 'very_low' | string;
+        /**
+         * Environment Agency flood zone designation
+         */
+        floodZone?: '1' | '2' | '3a' | '3b' | string;
+        /**
+         * Name of the nearest river, stream, or watercourse
+         */
+        nearestWatercourse?: string;
+        /**
+         * Whether the area has been affected by flooding in the past
+         */
+        historicalFlooding?: boolean;
+    } | {
+        /**
+         * When this leasehold data was retrieved or last verified
+         */
+        retrievedAt: string;
+        /**
+         * Date the lease commenced
+         */
+        leaseStartDate?: string;
+        /**
+         * Original lease term in years
+         */
+        leaseTerm?: number;
+        /**
+         * Approximate years remaining at retrievedAt. Below 80 years triggers mortgage difficulties; below 70 significantly impacts value
+         */
+        yearsRemaining?: number;
+        /**
+         * Annual ground rent in minor units (pennies). Zero for peppercorn rents
+         */
+        groundRent?: number;
+        /**
+         * Next ground rent review date
+         */
+        groundRentReviewDate?: string;
+        /**
+         * Annual service charge in minor units (pennies)
+         */
+        serviceCharge?: number;
+        /**
+         * Name of the freeholder or landlord
+         */
+        freeholderName?: string;
+        /**
+         * Name of the managing agent or management company
+         */
+        managementCompany?: string;
+    } | Provenance2 | Jurisdiction2 | {
+        jurisdiction?: Jurisdiction2;
+        assetType?: 'immoveable' | 'moveable' | 'mixed' | 'exempt';
+        exemptions?: Array<string>;
+        reliefClaimed?: Array<string>;
+    } | {
+        /**
+         * The type of tax relief claimed
+         */
+        reliefType?: 'agricultural_property' | 'business_property' | 'woodland' | 'heritage' | 'charitable';
+        eligible?: boolean;
+        /**
+         * Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
+         */
+        percentage?: number;
+        /**
+         * Conditions for maintaining eligibility
+         */
+        conditions?: string;
+        jurisdiction?: Jurisdiction2;
+        statute?: string;
+    } | undefined;
+};
+
+/**
+ * Space
+ *
+ * A distinguishable space within or associated with a property — rooms, outbuildings, storage areas, and outdoor zones where assets may be located. Maps to schema:Place in JSON-LD
+ */
+export type Space2 = unknown & {
+    /**
+     * Unique identifier for this space within the INHERIT document
+     */
+    id: string;
+    /**
+     * Reference to the Property.id that contains or is associated with this space
+     */
+    propertyId?: string;
+    /**
+     * Reference to another Space.id that physically contains this space — a loft inside a house, a shelving bay inside a storage room. Enables the recursive Property → Space → Space → item chain a room-by-room listing walk produces. Absent or null means this space sits directly in the Property
+     */
+    containedInSpaceId?: string | null;
+    /**
+     * The type of space. Use x-inherit- prefix for cultural or jurisdiction-specific space types not covered by the core enum
+     */
+    spaceType: 'living_room' | 'dining_room' | 'kitchen' | 'kitchen_diner' | 'breakfast_room' | 'family_room' | 'sitting_room' | 'drawing_room' | 'conservatory' | 'sunroom' | 'snug' | 'bedroom' | 'guest_bedroom' | 'nursery' | 'spare_room' | 'dressing_room' | 'bathroom' | 'en_suite' | 'shower_room' | 'wet_room' | 'cloakroom' | 'wc' | 'hallway' | 'entrance_hall' | 'landing' | 'corridor' | 'porch' | 'vestibule' | 'study' | 'home_office' | 'library' | 'workshop' | 'studio' | 'music_room' | 'craft_room' | 'art_studio' | 'games_room' | 'home_cinema' | 'gym' | 'utility_room' | 'laundry_room' | 'boot_room' | 'pantry' | 'larder' | 'airing_cupboard' | 'boiler_room' | 'loft' | 'attic' | 'basement' | 'cellar' | 'wine_cellar' | 'walk_in_wardrobe' | 'storage_room' | 'cupboard_under_stairs' | 'box_room' | 'garage' | 'double_garage' | 'carport' | 'shed' | 'greenhouse' | 'summerhouse' | 'garden_room' | 'outbuilding' | 'barn' | 'annex' | 'stable' | 'front_garden' | 'rear_garden' | 'side_garden' | 'patio' | 'terrace' | 'balcony' | 'roof_terrace' | 'driveway' | 'courtyard' | 'yard' | 'swimming_pool' | 'prayer_room' | 'puja_room' | 'butsudan_room' | 'tatami_room' | 'genkan' | 'majlis' | 'helpers_room' | 'gurdwara_room' | 'meditation_room' | 'gun_room' | 'safe_room' | 'safe' | 'self_storage' | 'safe_deposit_box' | 'workplace' | 'relatives_house' | 'holiday_home' | 'vehicle_car' | 'vehicle_boat' | 'vehicle_caravan' | 'allotment' | 'digital_storage' | 'portable' | 'other' | string;
+    /**
+     * Display name for this space. Allows personalisation beyond the spaceType label
+     */
+    name?: string;
+    /**
+     * Which floor this space is on, if applicable
+     */
+    floor?: 'basement' | 'ground' | 'first' | 'second' | 'third' | 'fourth' | 'fifth' | 'attic' | 'mezzanine' | 'other';
+    /**
+     * Additional notes about this space — access instructions, security details, storage conditions
+     */
+    notes?: string;
+    /**
+     * Photographs of this space — overview, contents, access points
+     */
+    images?: Array<Media2>;
+    /**
+     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
+     */
+    provenance?: Provenance2;
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | string | null | 'living_room' | 'dining_room' | 'kitchen' | 'kitchen_diner' | 'breakfast_room' | 'family_room' | 'sitting_room' | 'drawing_room' | 'conservatory' | 'sunroom' | 'snug' | 'bedroom' | 'guest_bedroom' | 'nursery' | 'spare_room' | 'dressing_room' | 'bathroom' | 'en_suite' | 'shower_room' | 'wet_room' | 'cloakroom' | 'wc' | 'hallway' | 'entrance_hall' | 'landing' | 'corridor' | 'porch' | 'vestibule' | 'study' | 'home_office' | 'library' | 'workshop' | 'studio' | 'music_room' | 'craft_room' | 'art_studio' | 'games_room' | 'home_cinema' | 'gym' | 'utility_room' | 'laundry_room' | 'boot_room' | 'pantry' | 'larder' | 'airing_cupboard' | 'boiler_room' | 'loft' | 'attic' | 'basement' | 'cellar' | 'wine_cellar' | 'walk_in_wardrobe' | 'storage_room' | 'cupboard_under_stairs' | 'box_room' | 'garage' | 'double_garage' | 'carport' | 'shed' | 'greenhouse' | 'summerhouse' | 'garden_room' | 'outbuilding' | 'barn' | 'annex' | 'stable' | 'front_garden' | 'rear_garden' | 'side_garden' | 'patio' | 'terrace' | 'balcony' | 'roof_terrace' | 'driveway' | 'courtyard' | 'yard' | 'swimming_pool' | 'prayer_room' | 'puja_room' | 'butsudan_room' | 'tatami_room' | 'genkan' | 'majlis' | 'helpers_room' | 'gurdwara_room' | 'meditation_room' | 'gun_room' | 'safe_room' | 'safe' | 'self_storage' | 'safe_deposit_box' | 'workplace' | 'relatives_house' | 'holiday_home' | 'vehicle_car' | 'vehicle_boat' | 'vehicle_caravan' | 'allotment' | 'digital_storage' | 'portable' | 'other' | string | string | 'basement' | 'ground' | 'first' | 'second' | 'third' | 'fourth' | 'fifth' | 'attic' | 'mezzanine' | 'other' | string | Array<Media2> | Provenance2 | undefined;
+};
+
+/**
+ * A comparable sale or listing used to support the valuation. Capturing comparables with screenshots and metadata creates an auditable evidence trail for executors, HMRC, and probate courts
+ */
+export type Comparable = {
+    /**
+     * Link to the comparable sale or listing
+     */
+    url?: string;
+    /**
+     * Screenshot of the listing at the time it was captured. Listings are often removed after sale — the screenshot preserves the evidence
+     */
+    screenshotUrl?: string;
+    /**
+     * Description of the comparable item
+     */
+    title?: string;
+    /**
+     * The sale price of the comparable item, in minor currency units
+     */
+    salePrice?: Money2;
+    /**
+     * Date the comparable item sold
+     */
+    saleDate?: string;
+    /**
+     * Where the comparable sold — marketplace, auction house, or dealer
+     */
+    platform?: string;
+    /**
+     * The platform-specific listing or item identifier. Enables API-driven price lookups — e.g. eBay item ID resolves via the Browse API, Chrono24 ref resolves to watch data, Discogs release ID resolves to vinyl data
+     */
+    platformListingId?: string;
+    /**
+     * Structured auction lot reference for provenance tracking — house, sale, and lot number. Enables lookups against auction house archives and provenance databases
+     */
+    auctionLotRef?: string;
+    /**
+     * Timestamp when the comparable was captured or recorded. Important because market values shift and stale comparables lose evidential weight
+     */
+    capturedAt?: string;
+    /**
+     * How closely the comparable matches the item being valued
+     */
+    matchConfidence?: 'exact' | 'close' | 'approximate' | 'weak';
+    /**
+     * What makes this item comparable — the specific attributes that justify the comparison
+     */
+    matchFactors?: Array<string>;
+    /**
+     * Free-text notes explaining the comparison — differences, adjustments, or caveats
+     */
+    matchNotes?: string;
+    /**
+     * Numeric match confidence (0-100). Companion to the matchConfidence categorical enum. Agents use this for filtering and ranking — 'show me everything above 70' is quantitative reasoning that categorical enums don't support
+     */
+    matchScore?: number;
+    /**
+     * Human feedback on this comparable. Creates the learning feedback loop — agents learn which comparables humans accept, improving future searches
+     */
+    humanVerdict?: 'accepted' | 'rejected' | 'adjusted' | 'not_reviewed';
+    /**
+     * Why this comparable was rejected. Feeds back into agent learning — future searches avoid this type of mismatch
+     */
+    rejectionReason?: string;
+};
+
+/**
+ * Valuation
+ *
+ * A valuation of an estate asset, property, or asset collection. Supports multiple valuations per entity over time — owner estimates, professional valuations, AI analyses, dealer offers, and probate-agreed figures
+ */
+export type Valuation2 = {
+    /**
+     * Unique identifier for this valuation within the INHERIT document
+     */
+    id: string;
+    /**
+     * The type of entity being valued
+     */
+    entityType: 'asset' | 'property' | 'asset_collection';
+    /**
+     * Reference to the entity being valued — an Asset.id, Property.id, or AssetCollection.id
+     */
+    entityId: string;
+    /**
+     * The valuation amount, in minor currency units
+     */
+    valuedAmount: Money2;
+    /**
+     * Date the valuation was performed or assessed
+     */
+    valuationDate: string;
+    /**
+     * Who performed the valuation — the name of the person, firm, or service
+     */
+    provider?: string;
+    /**
+     * The type of person or organisation that provided the valuation
+     */
+    providerType?: 'owner' | 'professional_valuer' | 'auction_house' | 'dealer' | 'insurance_assessor' | 'tax_authority' | 'ai_estimate' | 'other';
+    /**
+     * The professional body registration of the valuer. A valuation from a RICS-registered surveyor or ASA-accredited appraiser carries significantly more weight with tax authorities and probate courts
+     */
+    valuerRegistration?: {
+        /**
+         * The professional body or accreditation organisation
+         */
+        body?: string;
+        /**
+         * The valuer's membership or registration number with the professional body
+         */
+        membershipId?: string;
+        /**
+         * The valuer's professional designation or qualification level
+         */
+        designation?: string;
+        /**
+         * URL to verify the valuer's registration with the professional body
+         */
+        verificationUrl?: string;
+    };
+    /**
+     * The valuation methodology used
+     */
+    method?: 'comparable_sales' | 'replacement_cost' | 'income_approach' | 'market_listing' | 'insurance_schedule' | 'ai_analysis' | 'expert_opinion' | 'other';
+    /**
+     * The purpose for which this valuation was obtained
+     */
+    valuationPurpose?: 'current_estimate' | 'date_of_death' | 'insurance' | 'official' | 'tax_return' | 'dealer_offer' | 'ai_estimate' | 'pre_sale' | 'probate';
+    /**
+     * Confidence level in this valuation
+     */
+    confidence?: 'high' | 'medium' | 'low' | 'unknown';
+    /**
+     * Comparable items found on marketplaces — used to support the valuation. Agent-generated comparables should include matchScore for quantitative filtering and will accumulate humanVerdict feedback over time
+     */
+    comparables?: Array<Comparable>;
+    /**
+     * Free-text notes about this valuation — methodology details, caveats, market conditions, or disagreements with other valuations
+     */
+    notes?: string;
+    /**
+     * Per-field provenance records — how each field's value was obtained
+     */
+    fieldProvenance?: Array<FieldProvenance2>;
+    /**
+     * Auction house estimate and result data
+     */
+    auctionData?: {
+        /**
+         * Organisation.id of the auction house
+         */
+        auctionHouseOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced auction house organisation
+         */
+        auctionHouseOrganisationIdDisplay?: string;
+        /**
+         * Date of the auction sale
+         */
+        saleDate?: string;
+        /**
+         * Auction lot number
+         */
+        lotNumber?: string;
+        /**
+         * Low estimate
+         */
+        estimateLow?: Money2;
+        /**
+         * High estimate
+         */
+        estimateHigh?: Money2;
+        /**
+         * Hammer price (winning bid before premium)
+         */
+        hammerPrice?: Money2;
+        /**
+         * Buyer's premium as a percentage
+         */
+        buyersPremiumPercentage?: number;
+        /**
+         * Total amount realised including premium
+         */
+        totalRealised?: Money2;
+        /**
+         * Whether the lot was sold
+         */
+        sold?: boolean;
+    };
+    /**
+     * The date until which this valuation is considered valid. Common for insurance valuations which require annual renewal. After this date, the valuation may need to be refreshed
+     */
+    validUntil?: string | null;
+    /**
+     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
+     */
+    provenance?: Provenance2;
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | 'asset' | 'property' | 'asset_collection' | Money2 | string | string | 'owner' | 'professional_valuer' | 'auction_house' | 'dealer' | 'insurance_assessor' | 'tax_authority' | 'ai_estimate' | 'other' | {
+        /**
+         * The professional body or accreditation organisation
+         */
+        body?: string;
+        /**
+         * The valuer's membership or registration number with the professional body
+         */
+        membershipId?: string;
+        /**
+         * The valuer's professional designation or qualification level
+         */
+        designation?: string;
+        /**
+         * URL to verify the valuer's registration with the professional body
+         */
+        verificationUrl?: string;
+    } | 'comparable_sales' | 'replacement_cost' | 'income_approach' | 'market_listing' | 'insurance_schedule' | 'ai_analysis' | 'expert_opinion' | 'other' | 'current_estimate' | 'date_of_death' | 'insurance' | 'official' | 'tax_return' | 'dealer_offer' | 'ai_estimate' | 'pre_sale' | 'probate' | 'high' | 'medium' | 'low' | 'unknown' | Array<Comparable> | string | Array<FieldProvenance2> | {
+        /**
+         * Organisation.id of the auction house
+         */
+        auctionHouseOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced auction house organisation
+         */
+        auctionHouseOrganisationIdDisplay?: string;
+        /**
+         * Date of the auction sale
+         */
+        saleDate?: string;
+        /**
+         * Auction lot number
+         */
+        lotNumber?: string;
+        /**
+         * Low estimate
+         */
+        estimateLow?: Money2;
+        /**
+         * High estimate
+         */
+        estimateHigh?: Money2;
+        /**
+         * Hammer price (winning bid before premium)
+         */
+        hammerPrice?: Money2;
+        /**
+         * Buyer's premium as a percentage
+         */
+        buyersPremiumPercentage?: number;
+        /**
+         * Total amount realised including premium
+         */
+        totalRealised?: Money2;
+        /**
+         * Whether the lot was sold
+         */
+        sold?: boolean;
+    } | string | null | Provenance2 | undefined;
+};
+
+export type LegacyContact = {
+    /**
+     * Unique identifier for this legacy contact
+     */
+    id: string;
+    /**
+     * Reference to a Person.id, if the legacy contact is also in the people array
+     */
+    personId?: string;
+    /**
+     * Human-readable display name for the referenced person
+     */
+    personIdDisplay?: string;
+    /**
+     * Display name — required because catalogue-only documents may not have a people array
+     */
+    name: string;
+    /**
+     * Relationship to the catalogue/estate owner
+     */
+    relationship?: string;
+    /**
+     * Email address for notification
+     */
+    email?: string;
+    /**
+     * Phone number
+     */
+    phone?: string;
+    /**
+     * How to notify this person
+     */
+    notificationMethod?: 'email' | 'phone' | 'post' | 'in_person';
+    /**
+     * What level of access this person should receive
+     */
+    accessLevel: 'full' | 'read_only' | 'collection_only' | 'financial_only';
+    /**
+     * Whether the 'Please open when I have passed away' letter has been generated for this contact
+     */
+    letterGenerated?: boolean;
+    /**
+     * When the letter was last generated
+     */
+    letterGeneratedAt?: string;
+    /**
+     * How the letter was or should be delivered
+     */
+    letterDeliveryMethod?: 'printed' | 'digital' | 'both';
+    /**
+     * Additional notes about this legacy contact
+     */
+    notes?: string;
+};
+
+export type AssetInterest2 = unknown & {
+    /**
+     * Unique identifier for this interest record
+     */
+    id: string;
+    /**
+     * The root document this entity belongs to — either an estate document (schema.json) or a catalogue document (catalogue.json)
+     */
+    rootDocumentId: string;
+    /**
+     * Reference to a specific Asset.id, if the interest is in a single asset
+     */
+    assetId?: string | null;
+    /**
+     * Reference to an AssetCollection.id, if the interest is in an entire collection
+     */
+    collectionId?: string | null;
+    /**
+     * The person expressing interest (a Person.id). The person's relationship to the estate is qualified by expressedByRole
+     */
+    personId?: string;
+    /**
+     * Human-readable display name for the referenced person
+     */
+    personIdDisplay?: string;
+    /**
+     * How strongly the beneficiary has expressed interest
+     */
+    interestLevel: 'mentioned' | 'expressed_interest' | 'strongly_wants' | 'agreed';
+    /**
+     * How this interest was communicated or recorded
+     */
+    sourceType?: 'family_conversation' | 'written_request' | 'chat_message' | 'platform_private_message' | 'platform_group_message' | 'proxy_reported' | 'testator_observed' | 'manual';
+    /**
+     * Whether the testator has seen and acknowledged this interest
+     */
+    testatorAcknowledged?: boolean;
+    /**
+     * Additional context about this interest
+     */
+    notes?: string;
+    /**
+     * Reference to the Organisation.id expressing interest, if an organisation rather than a person. Mutually exclusive with personId
+     */
+    organisationId?: string;
+    /**
+     * Human-readable display name for the referenced organisation
+     */
+    organisationIdDisplay?: string;
+    /**
+     * The role of the person expressing this interest in relation to the estate or catalogue. Qualifies the authority and weight of the expression. Follows the Schema.org Role pattern
+     */
+    expressedByRole?: 'testator' | 'beneficiary' | 'executor' | 'proxy' | string;
+    /**
+     * The nature of the interest being expressed. Distinguishes between wanting to acquire, wanting to receive, wanting to allocate to someone, willingness to sell, and soft admiration
+     */
+    intentType?: 'acquire' | 'receive' | 'allocate' | 'sell' | 'admire' | string;
+    /**
+     * Interest in any asset matching this product identity, rather than a specific asset. Use instead of assetId when the interest is in a product class, not a specific instance. Maps to Schema.org Product (vs IndividualProduct for assetId). Matching is by identifier (strongest), brand + category (medium), or category alone (weakest)
+     */
+    productMatch?: {
+        /**
+         * The identifier system, from reference-data/identifier-systems.json
+         */
+        identifierSystem?: string;
+        /**
+         * The product identifier value within the system
+         */
+        identifierValue?: string;
+        /**
+         * Brand name for matching
+         */
+        brand?: string;
+        /**
+         * Wikidata entity ID for the brand — strongest cross-system brand match
+         */
+        brandWikidataId?: string;
+        /**
+         * INHERIT product category for broad matching
+         */
+        category?: string;
+        /**
+         * INHERIT subcategory for narrower matching
+         */
+        subcategory?: string;
+        /**
+         * Minimum acceptable condition. If absent, matches all conditions. Uses the same enum as asset.condition
+         */
+        minimumCondition?: 'excellent' | 'good' | 'fair' | 'poor';
+        /**
+         * Additional matching criteria in free text
+         */
+        notes?: string;
+    };
+    /**
+     * Number of items desired (for productMatch wishlist entries) or number of the specific asset being discussed. Default 1 if absent. Follows the same convention as asset.quantity
+     */
+    quantity?: number;
+    /**
+     * When this interest was expressed or recorded
+     */
+    expressedAt?: string;
+    /**
+     * For wishlist items that have been pre-ordered from a dealer or manufacturer but not yet received. Tracks order status, payment, and expected delivery
+     */
+    preOrderStatus?: {
+        /**
+         * Current status of the pre-order
+         */
+        orderStatus?: 'wanted' | 'pre_ordered_unpaid' | 'pre_ordered_paid' | 'dispatched' | 'received';
+        /**
+         * The dealer or manufacturer the item was ordered from
+         */
+        orderedFrom?: string;
+        /**
+         * The dealer's or manufacturer's order reference number
+         */
+        orderReference?: string;
+        /**
+         * When the order was placed
+         */
+        orderDate?: string;
+        /**
+         * When the item is expected to arrive. Manufacturers often announce target quarters rather than exact dates
+         */
+        expectedDeliveryDate?: string | null;
+        /**
+         * Whether the item has been paid for
+         */
+        paymentStatus?: 'unpaid' | 'deposit_paid' | 'fully_paid' | 'refunded';
+        /**
+         * The amount paid so far, in minor currency units
+         */
+        amountPaid?: Money2;
+        /**
+         * How the payment was made
+         */
+        paymentMethod?: string;
+    };
+    /**
+     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
+     */
+    provenance?: Provenance2;
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | string | null | string | null | string | 'mentioned' | 'expressed_interest' | 'strongly_wants' | 'agreed' | 'family_conversation' | 'written_request' | 'chat_message' | 'platform_private_message' | 'platform_group_message' | 'proxy_reported' | 'testator_observed' | 'manual' | boolean | string | 'testator' | 'beneficiary' | 'executor' | 'proxy' | string | 'acquire' | 'receive' | 'allocate' | 'sell' | 'admire' | string | {
+        /**
+         * The identifier system, from reference-data/identifier-systems.json
+         */
+        identifierSystem?: string;
+        /**
+         * The product identifier value within the system
+         */
+        identifierValue?: string;
+        /**
+         * Brand name for matching
+         */
+        brand?: string;
+        /**
+         * Wikidata entity ID for the brand — strongest cross-system brand match
+         */
+        brandWikidataId?: string;
+        /**
+         * INHERIT product category for broad matching
+         */
+        category?: string;
+        /**
+         * INHERIT subcategory for narrower matching
+         */
+        subcategory?: string;
+        /**
+         * Minimum acceptable condition. If absent, matches all conditions. Uses the same enum as asset.condition
+         */
+        minimumCondition?: 'excellent' | 'good' | 'fair' | 'poor';
+        /**
+         * Additional matching criteria in free text
+         */
+        notes?: string;
+    } | number | string | {
+        /**
+         * Current status of the pre-order
+         */
+        orderStatus?: 'wanted' | 'pre_ordered_unpaid' | 'pre_ordered_paid' | 'dispatched' | 'received';
+        /**
+         * The dealer or manufacturer the item was ordered from
+         */
+        orderedFrom?: string;
+        /**
+         * The dealer's or manufacturer's order reference number
+         */
+        orderReference?: string;
+        /**
+         * When the order was placed
+         */
+        orderDate?: string;
+        /**
+         * When the item is expected to arrive. Manufacturers often announce target quarters rather than exact dates
+         */
+        expectedDeliveryDate?: string | null;
+        /**
+         * Whether the item has been paid for
+         */
+        paymentStatus?: 'unpaid' | 'deposit_paid' | 'fully_paid' | 'refunded';
+        /**
+         * The amount paid so far, in minor currency units
+         */
+        amountPaid?: Money2;
+        /**
+         * How the payment was made
+         */
+        paymentMethod?: string;
+    } | Provenance2 | undefined;
+};
+
+/**
+ * Wish
+ *
+ * A non-binding (or culturally/religiously binding) wish — funeral, letter of wishes, care instructions, pet care, digital estate, distribution preferences
+ */
+export type Wish2 = {
+    /**
+     * Unique identifier for this wish within the INHERIT document
+     */
+    id: string;
+    /**
+     * The category of wish. Wishes may be non-binding in law but culturally or religiously obligatory
+     */
+    wishType: 'funeral' | 'letter' | 'care' | 'distribution' | 'digital' | 'pets' | 'general' | 'digital_likeness';
+    /**
+     * A short descriptive title for this wish
+     */
+    title: string;
+    /**
+     * The full text content of the wish. May be lengthy for letters of wishes
+     */
+    content?: string;
+    /**
+     * The legal or moral force of this wish. Most wishes are non-binding but may carry significant cultural or religious weight
+     */
+    bindingNature?: 'non_binding' | 'culturally_obligatory' | 'religiously_obligatory' | 'legally_binding';
+    /**
+     * Reference to the Person.id this wish is addressed to — typically an executor, guardian, or family member
+     */
+    addresseePersonId?: string;
+    /**
+     * Human-readable display name for the referenced addressee person
+     */
+    addresseePersonIdDisplay?: string;
+    /**
+     * Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item)
+     */
+    relatedAssetId?: string;
+    /**
+     * Additional notes about this wish
+     */
+    notes?: string;
+    visibility?: Visibility2;
+    /**
+     * Type of funeral arrangement preferred
+     */
+    funeralArrangementType?: 'burial' | 'cremation' | 'green_burial' | 'sea_burial' | 'sky_burial' | 'donation_to_science' | 'other' | string;
+    /**
+     * Type of ceremony preferred
+     */
+    funeralCeremonyType?: 'religious' | 'secular' | 'hybrid' | 'none';
+    /**
+     * Religion or faith tradition for the ceremony, if funeralCeremonyType is 'religious' or 'hybrid'
+     */
+    funeralCeremonyReligion?: string;
+    /**
+     * Reference to the Organisation.id of the preferred funeral provider
+     */
+    funeralProviderOrganisationId?: string;
+    /**
+     * Human-readable display name for the referenced funeral provider organisation
+     */
+    funeralProviderOrganisationIdDisplay?: string;
+    /**
+     * Whether a pre-paid funeral plan is in place
+     */
+    funeralPrePaid?: boolean;
+    /**
+     * Policy number for the pre-paid funeral plan
+     */
+    funeralPrePaidPolicyNumber?: string;
+    /**
+     * Maximum budget for the funeral, in minor currency units
+     */
+    funeralBudgetMaximum?: Money2;
+    /**
+     * How the funeral is to be funded
+     */
+    funeralBudgetSource?: 'estate' | 'pre_paid' | 'insurance' | 'family' | 'other';
+    /**
+     * Preferred location for the funeral service or burial
+     */
+    funeralLocationPreference?: string;
+    /**
+     * Music requested for the funeral service
+     */
+    funeralMusicWishes?: string;
+    /**
+     * Readings or poems requested for the funeral service
+     */
+    funeralReadingWishes?: string;
+    /**
+     * Organ donation preferences
+     */
+    organDonation?: {
+        /**
+         * Whether consent given
+         */
+        consentGiven?: boolean;
+        /**
+         * Specific organs consented
+         */
+        organs?: Array<string>;
+        /**
+         * Organisation coordinating donation
+         */
+        coordinatingOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced coordinating organisation
+         */
+        coordinatingOrganisationIdDisplay?: string;
+    };
+    /**
+     * Body donation to medical research
+     */
+    medicalResearchDonation?: {
+        /**
+         * Whether consent given
+         */
+        consentGiven?: boolean;
+        /**
+         * Research institution Organisation.id
+         */
+        institutionOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced institution organisation
+         */
+        institutionOrganisationIdDisplay?: string;
+        /**
+         * Any restrictions
+         */
+        restrictions?: string;
+    };
+    /**
+     * Preference regarding autopsy
+     */
+    autopsyPreference?: 'requested' | 'declined' | 'no_preference';
+    /**
+     * Additional notes about funeral budget
+     */
+    funeralBudgetNotes?: string;
+    /**
+     * Whether the person consents to posthumous AI/digital recreation
+     */
+    likenessConsent?: 'permitted' | 'prohibited' | 'restricted' | 'not_stated';
+    /**
+     * What aspects of likeness are covered
+     */
+    likenessScope?: Array<'voice' | 'visual_appearance' | 'writing_style' | 'personality_model' | 'full_avatar'>;
+    /**
+     * What purposes are allowed
+     */
+    likenessPermittedUses?: Array<'memorial' | 'family_private' | 'educational' | 'commercial' | 'legal_proceedings' | 'artistic'>;
+    /**
+     * What purposes are explicitly forbidden
+     */
+    likenessProhibitedUses?: Array<'memorial' | 'family_private' | 'educational' | 'commercial' | 'legal_proceedings' | 'artistic'>;
+    /**
+     * Who has authority over likeness decisions after death
+     */
+    likenessControllerPersonId?: string;
+    /**
+     * Human-readable display name for the referenced likeness controller person
+     */
+    likenessControllerPersonIdDisplay?: string;
+    /**
+     * ISO 8601 duration — how long consent/prohibition lasts, e.g. P25Y = 25 years
+     */
+    likenessTimeLimit?: string;
+    /**
+     * Conditions under which consent is revoked
+     */
+    likenessRevocationConditions?: string;
+    /**
+     * Policy on AI-generated synthetic media using the person's likeness
+     */
+    syntheticMediaPolicy?: 'allow_with_attribution' | 'allow_without_attribution' | 'prohibit_all' | 'family_decision' | 'not_stated';
+    /**
+     * Tracking enforcement of likeness wishes — takedown requests and platform compliance
+     */
+    likenessEnforcement?: Array<{
+        /**
+         * Platform where enforcement action is directed
+         */
+        platform: string;
+        /**
+         * What type of enforcement action was requested
+         */
+        requestType: 'takedown' | 'restrict' | 'transfer_control' | 'verify_consent' | 'cease_training' | 'other';
+        /**
+         * When the enforcement request was made
+         */
+        requestDate?: string;
+        /**
+         * Who made the request (executor, controller, legal representative)
+         */
+        requestedBy?: string;
+        /**
+         * FK to person who made the request
+         */
+        requestedByPersonId?: string;
+        /**
+         * Human-readable display name for the referenced requested by person
+         */
+        requestedByPersonIdDisplay?: string;
+        /**
+         * Current status of the enforcement request
+         */
+        status?: 'pending' | 'acknowledged' | 'complied' | 'refused' | 'escalated' | 'unknown';
+        /**
+         * When the platform responded
+         */
+        responseDate?: string;
+        /**
+         * Platform's reference number for the request
+         */
+        referenceNumber?: string;
+        /**
+         * Legal basis for the request, e.g. EU AI Act, NO FAKES Act, estate executor authority
+         */
+        legalBasis?: string;
+        notes?: string;
+    }>;
+    /**
+     * Inventory of existing AI/digital likeness models and instructions for each
+     */
+    existingDigitalModels?: Array<{
+        /**
+         * e.g. HereAfter, StoryFile (schema.org provider)
+         */
+        provider?: string;
+        /**
+         * Type of digital model
+         */
+        modelType?: 'chatbot' | 'voice_clone' | 'visual_avatar' | 'full_replica' | 'other';
+        /**
+         * Instruction for what to do with this model after death
+         */
+        action?: 'preserve' | 'delete' | 'transfer' | 'restrict';
+        /**
+         * Person.id who has authority over this specific model
+         */
+        controllerPersonId?: string;
+        /**
+         * Human-readable display name for the referenced controller person
+         */
+        controllerPersonIdDisplay?: string;
+    }>;
+    /**
+     * Trust IDs this wish or letter of wishes applies to
+     */
+    relatedTrustIds?: Array<string>;
+    /**
+     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
+     */
+    provenance?: Provenance2;
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | 'funeral' | 'letter' | 'care' | 'distribution' | 'digital' | 'pets' | 'general' | 'digital_likeness' | string | string | 'non_binding' | 'culturally_obligatory' | 'religiously_obligatory' | 'legally_binding' | string | string | Visibility2 | 'burial' | 'cremation' | 'green_burial' | 'sea_burial' | 'sky_burial' | 'donation_to_science' | 'other' | string | 'religious' | 'secular' | 'hybrid' | 'none' | boolean | string | Money2 | 'estate' | 'pre_paid' | 'insurance' | 'family' | 'other' | string | {
+        /**
+         * Whether consent given
+         */
+        consentGiven?: boolean;
+        /**
+         * Specific organs consented
+         */
+        organs?: Array<string>;
+        /**
+         * Organisation coordinating donation
+         */
+        coordinatingOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced coordinating organisation
+         */
+        coordinatingOrganisationIdDisplay?: string;
+    } | {
+        /**
+         * Whether consent given
+         */
+        consentGiven?: boolean;
+        /**
+         * Research institution Organisation.id
+         */
+        institutionOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced institution organisation
+         */
+        institutionOrganisationIdDisplay?: string;
+        /**
+         * Any restrictions
+         */
+        restrictions?: string;
+    } | 'requested' | 'declined' | 'no_preference' | 'permitted' | 'prohibited' | 'restricted' | 'not_stated' | Array<'voice' | 'visual_appearance' | 'writing_style' | 'personality_model' | 'full_avatar'> | Array<'memorial' | 'family_private' | 'educational' | 'commercial' | 'legal_proceedings' | 'artistic'> | Array<'memorial' | 'family_private' | 'educational' | 'commercial' | 'legal_proceedings' | 'artistic'> | string | 'allow_with_attribution' | 'allow_without_attribution' | 'prohibit_all' | 'family_decision' | 'not_stated' | Array<{
+        /**
+         * Platform where enforcement action is directed
+         */
+        platform: string;
+        /**
+         * What type of enforcement action was requested
+         */
+        requestType: 'takedown' | 'restrict' | 'transfer_control' | 'verify_consent' | 'cease_training' | 'other';
+        /**
+         * When the enforcement request was made
+         */
+        requestDate?: string;
+        /**
+         * Who made the request (executor, controller, legal representative)
+         */
+        requestedBy?: string;
+        /**
+         * FK to person who made the request
+         */
+        requestedByPersonId?: string;
+        /**
+         * Human-readable display name for the referenced requested by person
+         */
+        requestedByPersonIdDisplay?: string;
+        /**
+         * Current status of the enforcement request
+         */
+        status?: 'pending' | 'acknowledged' | 'complied' | 'refused' | 'escalated' | 'unknown';
+        /**
+         * When the platform responded
+         */
+        responseDate?: string;
+        /**
+         * Platform's reference number for the request
+         */
+        referenceNumber?: string;
+        /**
+         * Legal basis for the request, e.g. EU AI Act, NO FAKES Act, estate executor authority
+         */
+        legalBasis?: string;
+        notes?: string;
+    }> | Array<{
+        /**
+         * e.g. HereAfter, StoryFile (schema.org provider)
+         */
+        provider?: string;
+        /**
+         * Type of digital model
+         */
+        modelType?: 'chatbot' | 'voice_clone' | 'visual_avatar' | 'full_replica' | 'other';
+        /**
+         * Instruction for what to do with this model after death
+         */
+        action?: 'preserve' | 'delete' | 'transfer' | 'restrict';
+        /**
+         * Person.id who has authority over this specific model
+         */
+        controllerPersonId?: string;
+        /**
+         * Human-readable display name for the referenced controller person
+         */
+        controllerPersonIdDisplay?: string;
+    }> | Array<string> | Provenance2 | undefined;
+};
+
+export type ImportSource = {
+    /**
+     * Unique identifier for this import source, referenced by importSourceId on entities
+     */
+    id: string;
+    /**
+     * Name of the source system
+     */
+    systemName: string;
+    /**
+     * Date the data was imported from this source
+     */
+    importDate?: string;
+    /**
+     * How the data was imported from this source
+     */
+    importMethod?: 'api' | 'file_upload' | 'manual_copy' | 'ai_extraction' | 'ocr' | 'migration_script';
+    /**
+     * Additional context about the import
+     */
+    notes?: string;
+};
+
+/**
+ * Completeness
+ *
+ * A completeness score derived from a weighted checklist of estate data categories, scoped to a specific jurisdiction and estate status
+ */
+export type Completeness2 = {
+    /**
+     * Overall completeness percentage, calculated from the weighted checklist items
+     */
+    readonly score: number;
+    /**
+     * Maximum possible score for this jurisdiction and estate status combination. May be less than 100 if certain categories are not applicable
+     */
+    readonly maxScore: number;
+    /**
+     * ISO 3166-1 alpha-2 country code or ISO 3166-2 subdivision code identifying which jurisdiction this scoring applies to
+     */
+    jurisdiction?: string;
+    /**
+     * The estate status this completeness score was calculated against. Different statuses may require different data, affecting which checklist items are applicable
+     */
+    estateStatus?: string;
+    /**
+     * ISO 8601 date-time when this completeness score was computed
+     */
+    readonly calculatedAt?: string;
+    /**
+     * The individual items assessed to produce the overall score. Each item belongs to a category, has a relative weight, and a status indicating whether the data is present
+     */
+    checklist: Array<{
+        /**
+         * The data category this checklist item belongs to
+         */
+        category: 'personal_details' | 'assets_and_valuations' | 'liabilities' | 'beneficiaries' | 'executors' | 'guardians' | 'tax_information' | 'legal_documents' | 'lifetime_transfers' | 'pension_and_insurance';
+        /**
+         * A human-readable label describing what was checked
+         */
+        item: string;
+        /**
+         * Relative importance of this item. Higher weights contribute more to the overall score
+         */
+        weight: number;
+        /**
+         * Whether the data for this item is present and sufficient
+         */
+        status: 'complete' | 'incomplete' | 'not_applicable' | 'unknown';
+        /**
+         * Optional explanation of the status, such as what is missing or why the item is not applicable
+         */
+        details?: string;
+    }>;
+    [key: string]: {
+        [key: string]: unknown;
+    } | number | number | string | string | Array<{
+        /**
+         * The data category this checklist item belongs to
+         */
+        category: 'personal_details' | 'assets_and_valuations' | 'liabilities' | 'beneficiaries' | 'executors' | 'guardians' | 'tax_information' | 'legal_documents' | 'lifetime_transfers' | 'pension_and_insurance';
+        /**
+         * A human-readable label describing what was checked
+         */
+        item: string;
+        /**
+         * Relative importance of this item. Higher weights contribute more to the overall score
+         */
+        weight: number;
+        /**
+         * Whether the data for this item is present and sufficient
+         */
+        status: 'complete' | 'incomplete' | 'not_applicable' | 'unknown';
+        /**
+         * Optional explanation of the status, such as what is missing or why the item is not applicable
+         */
+        details?: string;
+    }> | undefined;
+};
+
+export type RecommendedAction = {
+    /**
+     * Unique identifier for this action
+     */
+    id: string;
+    /**
+     * Category of the recommended action
+     */
+    category: 'completeness' | 'tax_planning' | 'legal_requirement' | 'valuation' | 'transfer_history' | 'beneficiary_review' | 'document_update';
+    /**
+     * Priority level for this action
+     */
+    priority: 'critical' | 'high' | 'medium' | 'low';
+    /**
+     * Short action title
+     */
+    title: string;
+    /**
+     * Detailed explanation of what to do and why
+     */
+    description?: string;
+    /**
+     * Current status of this action
+     */
+    status: 'pending' | 'in_progress' | 'completed' | 'dismissed';
+    /**
+     * What data gap or condition generated this action
+     */
+    triggeredBy?: string;
+    /**
+     * Entity type this action relates to
+     */
+    relatedEntityType?: string;
+    /**
+     * ID of the specific entity this action relates to
+     */
+    relatedEntityId?: string;
+};
+
+export type Conformance = {
+    /**
+     * Conformance level achieved
+     */
+    level: 'level_1' | 'level_2' | 'level_3';
+    /**
+     * The conformance profile the document was validated at. Must match the document's conformanceProfile ('estate' when that is absent). Absent on certificates written before profiles existed, which are read as 'estate'
+     */
+    profile?: 'estate' | 'catalogue';
+    /**
+     * When the validation was performed
+     */
+    validatedAt: string;
+    /**
+     * Name of the tool that performed the validation
+     */
+    validatedBy: string;
+    /**
+     * INHERIT schema version this document was validated against
+     */
+    schemaVersion: string;
+    /**
+     * Completeness score at time of validation
+     */
+    completenessScore?: number;
+    /**
+     * Count of entities per type at time of validation
+     */
+    entityCounts?: {
+        [key: string]: number;
+    };
+    /**
+     * Count of entities by data provenance source
+     */
+    provenanceSummary?: {
+        [key: string]: number;
+    };
+    /**
+     * Validation warnings — non-blocking issues that may need attention
+     */
+    warnings?: Array<string>;
+    /**
+     * URL of the validation service that produced this conformance certificate
+     */
+    validationEndpoint?: string;
+};
+
+/**
+ * Machine-readable conformance certificate — records the validation level, schema version, completeness score, and provenance summary at time of validation
+ */
+export type Conformance2 = Conformance;
+
+/**
+ * InsurancePolicy
+ *
+ * A standalone insurance policy entity — life, home, health, motor, travel, pet, or professional indemnity. Life insurance is often the single largest estate asset. Policies written in trust pass outside the estate
+ */
+export type InsurancePolicy2 = {
+    /**
+     * Unique identifier for this insurance policy within the INHERIT document
+     */
+    id: string;
+    /**
+     * The type of insurance policy
+     */
+    policyType: 'life' | 'home' | 'health' | 'motor' | 'travel' | 'pet' | 'professional_indemnity' | 'other' | string;
+    /**
+     * Reference to the Organisation.id of the insurance provider
+     */
+    providerOrganisationId: string;
+    /**
+     * Human-readable display name for the referenced provider organisation
+     */
+    providerOrganisationIdDisplay?: string;
+    /**
+     * The insurance policy number or reference
+     */
+    policyNumber?: string;
+    /**
+     * Total cover amount (sum assured for life, rebuild cost for home, etc.) in minor currency units
+     */
+    coverAmount?: Money2;
+    /**
+     * Premium amount per payment period, in minor currency units
+     */
+    premiumAmount?: Money2;
+    /**
+     * How often premiums are paid
+     */
+    premiumFrequency?: 'monthly' | 'annual' | 'single_premium' | 'paid_up' | 'other';
+    /**
+     * Next renewal date. Important — cover may lapse if not renewed after death
+     */
+    renewalDate?: string;
+    /**
+     * Date the policy matures (for endowment policies and investment-linked policies)
+     */
+    maturityDate?: string;
+    /**
+     * Death benefit details — what is payable on the policyholder's death, to whom, and how
+     */
+    deathBenefit?: {
+        /**
+         * Death benefit amount in minor currency units
+         */
+        amount?: Money2;
+        /**
+         * Reference to the Person.id of the nominated death benefit recipient
+         */
+        nomineePersonId?: string;
+        /**
+         * Human-readable display name for the referenced nominee person
+         */
+        nomineePersonIdDisplay?: string;
+        /**
+         * Reference to the Organisation.id of the nominated death benefit recipient, if an organisation. Mutually exclusive with nomineePersonId
+         */
+        nomineeOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced nominee organisation
+         */
+        nomineeOrganisationIdDisplay?: string;
+        /**
+         * Whether the death benefit nomination is believed to be current and valid
+         */
+        nominationCurrent?: boolean;
+        /**
+         * How the death benefit is paid
+         */
+        benefitType?: 'lump_sum' | 'income' | 'pension' | 'discretionary';
+        /**
+         * Verification status of the death benefit beneficiary
+         */
+        beneficiaryVerificationStatus?: 'unverified' | 'identity_confirmed' | 'entitlement_confirmed';
+    };
+    /**
+     * Whether the policy is written in trust. If true, proceeds pass outside the estate and are not subject to inheritance tax
+     */
+    writtenInTrust?: boolean;
+    /**
+     * Details of the trust holding this policy, if writtenInTrust is true
+     */
+    trustDetails?: {
+        /**
+         * Reference to the Person.id of the policy trustee
+         */
+        trusteePersonId?: string;
+        /**
+         * Human-readable display name for the referenced trustee person
+         */
+        trusteePersonIdDisplay?: string;
+        /**
+         * Reference to the Organisation.id of a corporate trustee
+         */
+        trusteeOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced trustee organisation
+         */
+        trusteeOrganisationIdDisplay?: string;
+        /**
+         * Name of the trust
+         */
+        trustName?: string;
+    };
+    /**
+     * Current status of any claim against this policy
+     */
+    claimStatus?: 'active' | 'claim_submitted' | 'claim_approved' | 'claim_paid' | 'claim_disputed' | 'pending' | 'approved' | 'paid' | 'declined';
+    /**
+     * URI pointing to an external policy record (FHIR Coverage resource, or any external insurance management system)
+     */
+    externalPolicyRef?: string;
+    /**
+     * Lifecycle tracking for policy nominations — tracks the current nomination status and any superseding nominations
+     */
+    nominationLifecycle?: {
+        /**
+         * Current status of the nomination
+         */
+        nominationStatus?: 'active' | 'revoked' | 'superseded' | 'expired' | 'disputed';
+        /**
+         * When the nomination was last verified as current
+         */
+        verifiedAt?: string;
+        /**
+         * When the nomination was last updated by the policyholder
+         */
+        lastUpdated?: string;
+        /**
+         * Reference to a previous nomination that this one replaces
+         */
+        supersedesNominationId?: string;
+    };
+    /**
+     * Conditions, exclusions, or clauses that affect the policy — e.g. suicide clause, contestability period, pre-existing condition exclusions
+     */
+    policyConditions?: Array<{
+        /**
+         * Description of the condition or clause
+         */
+        condition?: string;
+        /**
+         * Date the condition expires, if applicable
+         */
+        expiryDate?: string;
+        /**
+         * How this condition affects a claim
+         */
+        impact?: string;
+    }>;
+    /**
+     * Free-text notes about this insurance policy
+     */
+    notes?: string;
+    /**
+     * Details specific to funeral plan insurance
+     */
+    funeralPlanDetails?: {
+        /**
+         * Reference to the Organisation.id of the covered funeral provider
+         */
+        coveredFuneralProviderOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced covered funeral provider organisation
+         */
+        coveredFuneralProviderOrganisationIdDisplay?: string;
+        /**
+         * Whether the plan is transferable on death
+         */
+        transferableOnDeath?: boolean;
+        /**
+         * Total advance payments made
+         */
+        advancePayments?: Money2;
+    };
+    /**
+     * Financial compensation scheme protection status. In the UK, the FSCS protects insurance policyholders if the insurer fails. Knowing whether a policy is protected matters for estate risk assessment
+     */
+    depositorProtection?: {
+        /**
+         * When this protection status was checked
+         */
+        retrievedAt: string;
+        /**
+         * The compensation or protection scheme
+         */
+        scheme?: 'fscs' | 'mib' | string;
+        /**
+         * Whether this policy is protected by the scheme
+         */
+        protected?: boolean;
+        /**
+         * Maximum protection amount in minor units (pennies). FSCS insurance limit is unlimited for compulsory insurance, £85,000 for non-compulsory
+         */
+        protectionLimit?: number;
+        /**
+         * URL to the scheme's claim process or guidance page
+         */
+        claimProcessUrl?: string;
+    };
+    /**
+     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
+     */
+    provenance?: Provenance2;
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | 'life' | 'home' | 'health' | 'motor' | 'travel' | 'pet' | 'professional_indemnity' | 'other' | string | string | string | Money2 | 'monthly' | 'annual' | 'single_premium' | 'paid_up' | 'other' | string | {
+        /**
+         * Death benefit amount in minor currency units
+         */
+        amount?: Money2;
+        /**
+         * Reference to the Person.id of the nominated death benefit recipient
+         */
+        nomineePersonId?: string;
+        /**
+         * Human-readable display name for the referenced nominee person
+         */
+        nomineePersonIdDisplay?: string;
+        /**
+         * Reference to the Organisation.id of the nominated death benefit recipient, if an organisation. Mutually exclusive with nomineePersonId
+         */
+        nomineeOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced nominee organisation
+         */
+        nomineeOrganisationIdDisplay?: string;
+        /**
+         * Whether the death benefit nomination is believed to be current and valid
+         */
+        nominationCurrent?: boolean;
+        /**
+         * How the death benefit is paid
+         */
+        benefitType?: 'lump_sum' | 'income' | 'pension' | 'discretionary';
+        /**
+         * Verification status of the death benefit beneficiary
+         */
+        beneficiaryVerificationStatus?: 'unverified' | 'identity_confirmed' | 'entitlement_confirmed';
+    } | boolean | {
+        /**
+         * Reference to the Person.id of the policy trustee
+         */
+        trusteePersonId?: string;
+        /**
+         * Human-readable display name for the referenced trustee person
+         */
+        trusteePersonIdDisplay?: string;
+        /**
+         * Reference to the Organisation.id of a corporate trustee
+         */
+        trusteeOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced trustee organisation
+         */
+        trusteeOrganisationIdDisplay?: string;
+        /**
+         * Name of the trust
+         */
+        trustName?: string;
+    } | 'active' | 'claim_submitted' | 'claim_approved' | 'claim_paid' | 'claim_disputed' | 'pending' | 'approved' | 'paid' | 'declined' | string | {
+        /**
+         * Current status of the nomination
+         */
+        nominationStatus?: 'active' | 'revoked' | 'superseded' | 'expired' | 'disputed';
+        /**
+         * When the nomination was last verified as current
+         */
+        verifiedAt?: string;
+        /**
+         * When the nomination was last updated by the policyholder
+         */
+        lastUpdated?: string;
+        /**
+         * Reference to a previous nomination that this one replaces
+         */
+        supersedesNominationId?: string;
+    } | Array<{
+        /**
+         * Description of the condition or clause
+         */
+        condition?: string;
+        /**
+         * Date the condition expires, if applicable
+         */
+        expiryDate?: string;
+        /**
+         * How this condition affects a claim
+         */
+        impact?: string;
+    }> | string | {
+        /**
+         * Reference to the Organisation.id of the covered funeral provider
+         */
+        coveredFuneralProviderOrganisationId?: string;
+        /**
+         * Human-readable display name for the referenced covered funeral provider organisation
+         */
+        coveredFuneralProviderOrganisationIdDisplay?: string;
+        /**
+         * Whether the plan is transferable on death
+         */
+        transferableOnDeath?: boolean;
+        /**
+         * Total advance payments made
+         */
+        advancePayments?: Money2;
+    } | {
+        /**
+         * When this protection status was checked
+         */
+        retrievedAt: string;
+        /**
+         * The compensation or protection scheme
+         */
+        scheme?: 'fscs' | 'mib' | string;
+        /**
+         * Whether this policy is protected by the scheme
+         */
+        protected?: boolean;
+        /**
+         * Maximum protection amount in minor units (pennies). FSCS insurance limit is unlimited for compulsory insurance, £85,000 for non-compulsory
+         */
+        protectionLimit?: number;
+        /**
+         * URL to the scheme's claim process or guidance page
+         */
+        claimProcessUrl?: string;
+    } | Provenance2 | undefined;
+};
+
+/**
+ * A third party expressing interest in purchasing or acquiring estate assets
+ */
+export type InterestedParty = {
+    /**
+     * Reference to a Person.id if the interested party is an individual in the people array
+     */
+    personId?: string;
+    /**
+     * Human-readable display name for the referenced person
+     */
+    personIdDisplay?: string;
+    /**
+     * Name of the interested party — individual or organisation
+     */
+    name: string;
+    /**
+     * The type of interested party
+     */
+    type: 'art_dealer' | 'antique_dealer' | 'property_investor' | 'auction_house' | 'gallery' | 'private_collector' | 'museum' | 'institution' | 'charity' | 'developer' | 'fund_manager' | 'family_office' | 'estate_agent' | 'legal_practice' | 'other';
+    /**
+     * Contact details for the interested party
+     */
+    contactDetails?: string;
+    /**
+     * Reference to an Organisation.id if the interested party is a known organisation. Mutually exclusive with personId
+     */
+    organisationId?: string;
+    /**
+     * Human-readable display name for the referenced organisation
+     */
+    organisationIdDisplay?: string;
+};
+
+/**
+ * A specific asset or property that the interested party wants to acquire
+ */
+export type AssetInterestItem = {
+    /**
+     * Reference to an Asset.id
+     */
+    assetId?: string;
+    /**
+     * Reference to a Property.id
+     */
+    propertyId?: string;
+    /**
+     * How strong the interested party's intent is
+     */
+    interestLevel?: 'exploratory' | 'moderate' | 'strong' | 'committed';
+};
+
+export type CollectionInterest = unknown & {
+    /**
+     * Name of the collection
+     */
+    name?: string;
+    /**
+     * Asset IDs that make up this collection
+     */
+    assetIds?: Array<string>;
+    /**
+     * Property IDs that make up this collection
+     */
+    propertyIds?: Array<string>;
+    /**
+     * Additional notes about the collection interest
+     */
+    notes?: string;
+};
+
+/**
+ * Details of a specific offer made by the interested party
+ */
+export type OfferDetails = {
+    /**
+     * The offer amount in minor currency units
+     */
+    amount?: Money2;
+    /**
+     * Conditions attached to the offer
+     */
+    conditions?: Array<string>;
+    /**
+     * Date the offer expires
+     */
+    validUntil?: string;
+    /**
+     * Date the offer was made
+     */
+    offerDate?: string;
+    /**
+     * Reference to the document containing the offer
+     */
+    documentRef?: string;
+    /**
+     * Terms and conditions of the offer
+     */
+    offerTerms?: string;
+    /**
+     * Whether a physical inspection is required before the offer can be finalised
+     */
+    inspectionRequired?: boolean;
+    /**
+     * Date the inspection is scheduled or took place
+     */
+    inspectionDate?: string;
+};
+
+/**
+ * Dealer Interest
+ *
+ * Level D data — records third-party interest in estate assets (art dealers, property investors, collectors). Privacy-controlled. Managed via proxy authorisation
+ */
+export type DealerInterest2 = {
+    /**
+     * Unique identifier for this dealer interest record within the INHERIT document
+     */
+    id: string;
+    /**
+     * The third party expressing interest in estate assets
+     */
+    interestedParty: InterestedParty;
+    /**
+     * Specific assets or properties the interested party wants to acquire
+     */
+    assets?: Array<AssetInterestItem>;
+    /**
+     * Interest in a collection of assets as a whole
+     */
+    collection?: CollectionInterest;
+    /**
+     * Current status of the offer or expression of interest
+     */
+    offerStatus: 'standing_interest' | 'verbal_offer' | 'written_offer' | 'formal_valuation' | 'conditional_offer' | 'accepted' | 'declined' | 'expired' | 'withdrawn';
+    /**
+     * Details of a specific offer, if one has been made
+     */
+    offerDetails?: OfferDetails;
+    /**
+     * The testator's disposition towards selling this asset
+     */
+    testatorDisposition?: 'willing_to_sell' | 'prefer_not_to_sell' | 'hold_for_executor' | 'deferred_to_family' | 'promised_to_institution' | 'undecided';
+    /**
+     * Reference to a Bequest.id if this asset is also subject to a bequest. A dealer interest and a bequest may conflict
+     */
+    linkedBequestId?: string;
+    /**
+     * Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches
+     */
+    privacyLevel: 'testator_only' | 'proxy_visible' | 'executor_visible' | 'all_parties';
+    /**
+     * Who initiated the communication about this potential transaction
+     */
+    communicationInitiatedBy?: 'buyer' | 'testator' | 'proxy' | 'executor';
+    /**
+     * Reference to the ProxyAuthorisation.id that governs this dealer interest — the proxy managing the negotiation
+     */
+    managedByProxyId?: string;
+    /**
+     * Free-text notes about this dealer interest
+     */
+    notes?: string;
+    /**
+     * The outcome of a verification inspection — records whether the item matched its listed condition and any price adjustments
+     */
+    verificationResult?: {
+        /**
+         * Whether the item has been through verification
+         */
+        verified?: boolean;
+        /**
+         * When the verification was completed
+         */
+        verifiedAt?: string;
+        /**
+         * Whether the item's condition matched the seller's listed grade
+         */
+        conditionConfirmed?: boolean;
+        /**
+         * The adjusted price if condition differed from listed. Null if no adjustment needed
+         */
+        adjustedAmount?: Money2;
+        /**
+         * Details of any condition discrepancy found during verification
+         */
+        discrepancyNotes?: string;
+        /**
+         * Reference to the Organisation.id of the verification dealer
+         */
+        verifiedByOrganisationId?: string;
+    };
+    /**
+     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
+     */
+    provenance?: Provenance2;
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | InterestedParty | Array<AssetInterestItem> | CollectionInterest | 'standing_interest' | 'verbal_offer' | 'written_offer' | 'formal_valuation' | 'conditional_offer' | 'accepted' | 'declined' | 'expired' | 'withdrawn' | OfferDetails | 'willing_to_sell' | 'prefer_not_to_sell' | 'hold_for_executor' | 'deferred_to_family' | 'promised_to_institution' | 'undecided' | 'testator_only' | 'proxy_visible' | 'executor_visible' | 'all_parties' | 'buyer' | 'testator' | 'proxy' | 'executor' | string | {
+        /**
+         * Whether the item has been through verification
+         */
+        verified?: boolean;
+        /**
+         * When the verification was completed
+         */
+        verifiedAt?: string;
+        /**
+         * Whether the item's condition matched the seller's listed grade
+         */
+        conditionConfirmed?: boolean;
+        /**
+         * The adjusted price if condition differed from listed. Null if no adjustment needed
+         */
+        adjustedAmount?: Money2;
+        /**
+         * Details of any condition discrepancy found during verification
+         */
+        discrepancyNotes?: string;
+        /**
+         * Reference to the Organisation.id of the verification dealer
+         */
+        verifiedByOrganisationId?: string;
+    } | Provenance2 | undefined;
+};
+
+/**
+ * Audit Event
+ *
+ * A single audit event recording who changed what, when, and why. Designed for enterprise audit trail requirements, probate court compliance, and GDPR-compatible personal data handling
+ */
+export type AuditEvent2 = {
+    /**
+     * What type of action was performed
+     */
+    action: 'created' | 'modified' | 'deleted' | 'accessed' | 'exported' | 'validated' | 'version_created' | 'granted' | 'revoked' | 'challenged';
+    /**
+     * When the action occurred
+     */
+    performedAt: string;
+    /**
+     * Reference to the Person.id who performed the action. Uses a UUID reference rather than a display name for GDPR data minimisation — resolve the name at display time, not storage time
+     */
+    agentPersonId?: string;
+    /**
+     * Human-readable description of who performed the action. Use only when a person ID is not available (e.g. system actions, external agents)
+     */
+    agentDescription?: string;
+    /**
+     * The type of INHERIT entity that was affected
+     */
+    entityType?: string;
+    /**
+     * The ID of the entity that was affected
+     */
+    entityId?: string;
+    /**
+     * What specifically was done. Should be specific enough for an auditor to understand without seeing the before/after data
+     */
+    detail?: string;
+    /**
+     * The value before the change, if applicable. For field-level audit trails
+     */
+    previousValue?: string;
+    /**
+     * The value after the change, if applicable
+     */
+    newValue?: string;
+    /**
+     * Whether this audit entry has been redacted for GDPR compliance. When true, the agentPersonId and detail fields may have been cleared but the structural record of the action is preserved
+     */
+    redacted?: boolean;
+    /**
+     * Link to supporting evidence (court order, signed document, etc.)
+     */
+    evidenceUrl?: string;
+};
+
+/**
+ * INHERIT v2 Catalogue Schema
+ *
+ * Entry point for catalogue-only documents — living collectors cataloguing items without the full estate envelope. Assets, collections, valuations, legacy contacts and allocation intent. This is the catalogue conformance profile of the INHERIT root: a document here that declares conformanceProfile 'catalogue' also conforms to schema.json as it stands, with nothing wrapped or moved. Do not wrap a catalogue inside an estate document — the estate profile carries assetInterests, legacyContacts and dealerInterests only inside applicationState, which is not part of the interchange standard. See proposal 0003
+ */
+export type Catalogue2 = {
+    /**
+     * Schema identifier — declares this as an INHERIT v3 catalogue document
+     */
+    $schema?: 'https://openinherit.org/v3/catalogue.json';
+    /**
+     * Declares this document as the catalogue conformance profile of the INHERIT root (schema.json). With it, the same document — unchanged, unwrapped — also conforms to schema.json. Optional here so catalogue documents written before profiles existed stay valid against this schema
+     */
+    conformanceProfile?: 'catalogue';
+    /**
+     * JSON-LD context URI
+     */
+    '@context'?: string;
+    schemaVersion?: string;
+    readonly exportedAt?: string;
+    readonly exportedBy?: {
+        name?: string;
+        email?: string;
+    };
+    readonly generator?: {
+        name: string;
+        version?: string;
+        url?: string;
+    };
+    /**
+     * Sequential version number for this document. Incremented each time the document is substantively modified. Version 1 is the first version
+     */
+    documentVersion?: number;
+    /**
+     * When this version of the document was created. Courts and regulators care about when changes were made, not just which version number
+     */
+    versionedAt?: string;
+    /**
+     * Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version
+     */
+    previousVersionId?: string | null;
+    /**
+     * Human-readable summary of what changed in this version. Like a commit message for the document
+     */
+    changeDescription?: string;
+    /**
+     * The catalogued items
+     */
+    assets: Array<Asset2>;
+    /**
+     * Named groupings of assets
+     */
+    assetCollections?: Array<AssetCollection2>;
+    /**
+     * Organisations associated with catalogued assets — dealers, retailers, valuers, auction houses
+     */
+    organisations?: Array<Organisation2>;
+    /**
+     * Properties whose spaces appear in this catalogue. A catalogue is not an estate document, so a property here need carry no more than an id and a name — enough for spaces[].propertyId to resolve inside the document and for a room to be attributed to an address
+     */
+    properties?: Array<Property2>;
+    /**
+     * Physical storage locations for items in this catalogue. Each asset can reference a space via spaceId. Critical for collectors with items across multiple properties or countries — affects probate jurisdiction and dealer collection logistics
+     */
+    spaces?: Array<Space2>;
+    /**
+     * Valuations of items and collections
+     */
+    valuations?: Array<Valuation2>;
+    /**
+     * People to notify and grant access when the owner dies. The 'Please open when I have passed away' letter recipients
+     */
+    legacyContacts?: Array<LegacyContact>;
+    /**
+     * Expressions of interest about assets, collections, or products. Includes the catalogue owner's own wishlist (things they want to acquire), interest from other people, and allocation intentions. Complements assets[] — assets are things you own; assetInterests are things you want, things others want, and decisions about who gets what
+     */
+    assetInterests?: Array<AssetInterest2>;
+    /**
+     * Personal messages, letters, care instructions, and non-binding wishes. Complements legacyContacts — legacyContacts tracks who receives the letter; wishes stores what it says. Types: letter (personal messages to specific people), care (maintenance and care instructions for items or collections), distribution (non-binding preferences about what should happen to items), general (anything else)
+     */
+    wishes?: Array<Wish2>;
+    /**
+     * Default data provenance for entities in this catalogue
+     */
+    dataProvenance?: 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated';
+    /**
+     * Systems data was imported from
+     */
+    importSources?: Array<ImportSource>;
+    completeness?: Completeness2;
+    recommendedActions?: Array<RecommendedAction>;
+    conformance?: Conformance2;
+    /**
+     * Insurance policies associated with catalogued assets
+     */
+    insurancePolicies?: Array<InsurancePolicy2>;
+    /**
+     * Provisional offers and expressions of interest from dealers. Allows the catalogue owner to receive and track dealer offers on items they are considering selling, or standing offers to be included in the LegacyLetter
+     */
+    dealerInterests?: Array<DealerInterest2>;
+    /**
+     * Settings for the shareable gift wishlist. When enabled, the owner can share a public link to their wishlist for family and friends to buy from
+     */
+    giftListSettings?: {
+        /**
+         * Whether the gift list is currently shareable
+         */
+        enabled?: boolean;
+        /**
+         * The owner's personal message shown at the top of the gift list
+         */
+        personalMessage?: string;
+        /**
+         * Who can see the gift list
+         */
+        visibility?: 'public' | 'link_only' | 'private';
+        /**
+         * Asset interest IDs that someone has marked as bought. These are hidden from the public gift list to prevent duplicate gifts
+         */
+        fulfilledItems?: Array<string>;
+    };
+    /**
+     * Metadata about the LegacyLetter — the printed or digital document addressed to the owner's legacy contacts, summarising the catalogue, allocations, dealer offers, and personal messages. Tracks generation status to flag when the letter is stale
+     */
+    legacyLetter?: {
+        /**
+         * When the letter was last generated
+         */
+        lastGenerated?: string;
+        /**
+         * Incremental version number of the letter
+         */
+        version?: number;
+        /**
+         * Whether the letter has been delivered to the legacy contacts
+         */
+        delivered?: boolean;
+        /**
+         * How the letter was delivered
+         */
+        deliveryMethod?: 'printed' | 'digital' | 'both';
+        /**
+         * Number of items in the catalogue when the letter was last generated. Used to detect staleness — if the current item count differs significantly, the letter should be regenerated
+         */
+        itemCountAtGeneration?: number;
+    };
+    /**
+     * Formal audit trail of actions taken on this document. Records who changed what, when, and why. Uses person ID references for GDPR data minimisation. Entries may be redacted under Article 17(3)(e) without breaking the log structure. Retention aligns with the estate document lifecycle
+     */
+    auditLog?: Array<AuditEvent2>;
+    [key: string]: {
+        [key: string]: unknown;
+    } | 'https://openinherit.org/v3/catalogue.json' | 'catalogue' | string | string | string | {
+        name?: string;
+        email?: string;
+    } | {
+        name: string;
+        version?: string;
+        url?: string;
+    } | number | string | null | string | Array<Asset2> | Array<AssetCollection2> | Array<Organisation2> | Array<Property2> | Array<Space2> | Array<Valuation2> | Array<LegacyContact> | Array<AssetInterest2> | Array<Wish2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | Array<ImportSource> | Completeness2 | Array<RecommendedAction> | Conformance2 | Array<InsurancePolicy2> | Array<DealerInterest2> | {
+        /**
+         * Whether the gift list is currently shareable
+         */
+        enabled?: boolean;
+        /**
+         * The owner's personal message shown at the top of the gift list
+         */
+        personalMessage?: string;
+        /**
+         * Who can see the gift list
+         */
+        visibility?: 'public' | 'link_only' | 'private';
+        /**
+         * Asset interest IDs that someone has marked as bought. These are hidden from the public gift list to prevent duplicate gifts
+         */
+        fulfilledItems?: Array<string>;
+    } | {
+        /**
+         * When the letter was last generated
+         */
+        lastGenerated?: string;
+        /**
+         * Incremental version number of the letter
+         */
+        version?: number;
+        /**
+         * Whether the letter has been delivered to the legacy contacts
+         */
+        delivered?: boolean;
+        /**
+         * How the letter was delivered
+         */
+        deliveryMethod?: 'printed' | 'digital' | 'both';
+        /**
+         * Number of items in the catalogue when the letter was last generated. Used to detect staleness — if the current item count differs significantly, the letter should be regenerated
+         */
+        itemCountAtGeneration?: number;
+    } | Array<AuditEvent2> | undefined;
 };
 
 /**
@@ -510,26 +6602,6 @@ export type TemporalRule2 = {
      * The jurisdiction this temporal rule applies to. Enables different thresholds for different jurisdictions (e.g. UK IHT vs Scottish IHT)
      */
     jurisdiction?: Jurisdiction2;
-};
-
-/**
- * Money
- *
- * Monetary value in integer minor currency units with ISO 4217 code. Never floating point
- */
-export type Money2 = {
-    /**
-     * Value in the smallest currency unit (pence, cents, sen). The consumer must apply the ISO 4217 exponent to convert to a display value
-     */
-    amount: number;
-    /**
-     * ISO 4217 three-letter currency code. Use the code for the currency of the amount, not the reporting currency
-     */
-    currency: string;
-    /**
-     * Number of decimal places for this currency. Display value = amount / 10^exponent. Most currencies use 2 (default). JPY/KRW use 0. KWD/BHD/OMR use 3
-     */
-    exponent?: number;
 };
 
 /**
@@ -598,6 +6670,29 @@ export type UkEnglandWales = {
         effectiveFrom?: string;
         statutoryInstrument?: string;
     };
+    /**
+     * Whether and how marriage revokes a prior will. For England & Wales, see s.18 Wills Act 1837 and the contemplation-of-marriage exception in s.18(3)–(4).
+     */
+    marriageRevocation?: {
+        /**
+         * Whether a marriage (after execution of the will) automatically revokes the will.
+         */
+        revokesPriorWill: boolean;
+        /**
+         * Citation of the primary statute governing revocation-by-marriage.
+         */
+        statute: string;
+        statuteUrl?: string;
+        /**
+         * Whether a will made in contemplation of a specific marriage survives that marriage.
+         */
+        contemplationException?: boolean;
+        /**
+         * Plain-English description of the contemplation-of-marriage rule.
+         */
+        contemplationRule?: string;
+        notes?: string;
+    };
     [key: string]: {
         [key: string]: unknown;
     } | TemporalRule2 | boolean | number | {
@@ -640,6 +6735,25 @@ export type UkEnglandWales = {
         amount?: Money2;
         effectiveFrom?: string;
         statutoryInstrument?: string;
+    } | {
+        /**
+         * Whether a marriage (after execution of the will) automatically revokes the will.
+         */
+        revokesPriorWill: boolean;
+        /**
+         * Citation of the primary statute governing revocation-by-marriage.
+         */
+        statute: string;
+        statuteUrl?: string;
+        /**
+         * Whether a will made in contemplation of a specific marriage survives that marriage.
+         */
+        contemplationException?: boolean;
+        /**
+         * Plain-English description of the contemplation-of-marriage rule.
+         */
+        contemplationRule?: string;
+        notes?: string;
     } | undefined;
 };
 
@@ -1191,6 +7305,39 @@ export type Ireland = {
         notes?: string;
     };
     /**
+     * Maps each property to its local Irish tenure. The core property tenureType holds the territory-neutral value (ownership, lease); this records the local term
+     */
+    localTenureTypes?: Array<{
+        propertyId: string;
+        localType: 'freehold' | 'leasehold' | 'fee_farm_grant';
+    }>;
+    /**
+     * Which Irish register each property's title is recorded on, and with what class of title. Land Registry (Tailte Éireann) registers title in folios; unregistered title is evidenced by deeds recorded in the Registry of Deeds (Tailte Éireann)
+     */
+    landRegistration?: Array<unknown & {
+        propertyId: string;
+        /**
+         * land_registry: title registered in a folio at the Land Registry (Tailte Éireann). registry_of_deeds: unregistered title, with deeds recorded in the Registry of Deeds (Tailte Éireann)
+         */
+        register: 'land_registry' | 'registry_of_deeds';
+        /**
+         * Land registry folio number, including the county prefix
+         */
+        folioNumber?: string;
+        /**
+         * Class of title registered on the folio
+         */
+        titleClass?: 'absolute' | 'qualified' | 'possessory' | 'good_leasehold';
+        /**
+         * Registry of Deeds reference — the serial number, or year, book and number for an older memorial
+         */
+        deedsReference?: string;
+        /**
+         * When this registration data was retrieved or last verified
+         */
+        retrievedAt?: string;
+    }>;
+    /**
      * Tracked changes to Irish succession legislation
      */
     legislativeChanges?: Array<TemporalRule2>;
@@ -1270,7 +7417,102 @@ export type Ireland = {
             description?: string;
         }>;
         notes?: string;
-    } | Array<TemporalRule2> | string | undefined;
+    } | Array<{
+        propertyId: string;
+        localType: 'freehold' | 'leasehold' | 'fee_farm_grant';
+    }> | Array<unknown & {
+        propertyId: string;
+        /**
+         * land_registry: title registered in a folio at the Land Registry (Tailte Éireann). registry_of_deeds: unregistered title, with deeds recorded in the Registry of Deeds (Tailte Éireann)
+         */
+        register: 'land_registry' | 'registry_of_deeds';
+        /**
+         * Land registry folio number, including the county prefix
+         */
+        folioNumber?: string;
+        /**
+         * Class of title registered on the folio
+         */
+        titleClass?: 'absolute' | 'qualified' | 'possessory' | 'good_leasehold';
+        /**
+         * Registry of Deeds reference — the serial number, or year, book and number for an older memorial
+         */
+        deedsReference?: string;
+        /**
+         * When this registration data was retrieved or last verified
+         */
+        retrievedAt?: string;
+    }> | Array<TemporalRule2> | string | undefined;
+};
+
+/**
+ * Northern Ireland Extension
+ *
+ * Northern Ireland real property — local tenure (including fee farm grants) and the two land registers, the Land Registry of folios and the Registry of Deeds, with classes of registered title. Northern Ireland succession, probate and tax are not yet modelled in this extension
+ */
+export type NorthernIreland = {
+    /**
+     * Maps each property to its local Northern Ireland tenure. The core property tenureType holds the territory-neutral value (ownership, lease); this records the local term
+     */
+    localTenureTypes?: Array<{
+        propertyId: string;
+        localType: 'freehold' | 'leasehold' | 'fee_farm_grant';
+    }>;
+    /**
+     * Which Northern Ireland register each property's title is recorded on, and with what class of title. Land Registry of Northern Ireland (Land & Property Services) registers title in folios; unregistered title is evidenced by deeds whose memorials are recorded in the Registry of Deeds (Land & Property Services)
+     */
+    landRegistration?: Array<unknown & {
+        propertyId: string;
+        /**
+         * land_registry: title registered in a folio at the Land Registry of Northern Ireland (Land & Property Services). registry_of_deeds: unregistered title, with deeds recorded in the Registry of Deeds (Land & Property Services)
+         */
+        register: 'land_registry' | 'registry_of_deeds';
+        /**
+         * Land registry folio number, including the county prefix
+         */
+        folioNumber?: string;
+        /**
+         * Class of title registered on the folio
+         */
+        titleClass?: 'absolute' | 'qualified' | 'possessory' | 'good_leasehold' | 'good_fee_farm_grant';
+        /**
+         * Registry of Deeds memorial reference (year, book and number, or serial number)
+         */
+        deedsReference?: string;
+        /**
+         * When this registration data was retrieved or last verified
+         */
+        retrievedAt?: string;
+    }>;
+    notes?: string;
+    [key: string]: {
+        [key: string]: unknown;
+    } | Array<{
+        propertyId: string;
+        localType: 'freehold' | 'leasehold' | 'fee_farm_grant';
+    }> | Array<unknown & {
+        propertyId: string;
+        /**
+         * land_registry: title registered in a folio at the Land Registry of Northern Ireland (Land & Property Services). registry_of_deeds: unregistered title, with deeds recorded in the Registry of Deeds (Land & Property Services)
+         */
+        register: 'land_registry' | 'registry_of_deeds';
+        /**
+         * Land registry folio number, including the county prefix
+         */
+        folioNumber?: string;
+        /**
+         * Class of title registered on the folio
+         */
+        titleClass?: 'absolute' | 'qualified' | 'possessory' | 'good_leasehold' | 'good_fee_farm_grant';
+        /**
+         * Registry of Deeds memorial reference (year, book and number, or serial number)
+         */
+        deedsReference?: string;
+        /**
+         * When this registration data was retrieved or last verified
+         */
+        retrievedAt?: string;
+    }> | string | undefined;
 };
 
 /**
@@ -2204,9 +8446,27 @@ export type SingaporeMalaysia = {
     malaysianShariah?: MalaysianShariah;
     epfNominations?: Array<EpfNomination>;
     notes?: string;
+    /**
+     * Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia.
+     */
+    marriageRevocation?: {
+        revokesPriorWill: boolean;
+        statute: string;
+        statuteUrl?: string;
+        contemplationException?: boolean;
+        contemplationRule?: string;
+        notes?: string;
+    };
     [key: string]: {
         [key: string]: unknown;
-    } | 'SG' | 'MY' | SingaporeIsaDistribution | SingaporeAmlaDistribution | Array<CpfNomination> | MalaysianDistributionAct | MalaysianShariah | Array<EpfNomination> | string | undefined;
+    } | 'SG' | 'MY' | SingaporeIsaDistribution | SingaporeAmlaDistribution | Array<CpfNomination> | MalaysianDistributionAct | MalaysianShariah | Array<EpfNomination> | string | {
+        revokesPriorWill: boolean;
+        statute: string;
+        statuteUrl?: string;
+        contemplationException?: boolean;
+        contemplationRule?: string;
+        notes?: string;
+    } | undefined;
 };
 
 export type BrazilianSuccession = {
@@ -4109,6 +10369,17 @@ export type Uae = {
         registrationReference?: string;
     };
     notes?: string;
+    /**
+     * Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs.
+     */
+    marriageRevocation?: {
+        revokesPriorWill: boolean;
+        statute: string;
+        statuteUrl?: string;
+        contemplationException?: boolean;
+        contemplationRule?: string;
+        notes?: string;
+    };
     [key: string]: {
         [key: string]: unknown;
     } | 'sharia' | 'difc' | 'decree_law_41_home_country' | {
@@ -4171,82 +10442,131 @@ export type Uae = {
          * Registration reference number
          */
         registrationReference?: string;
-    } | string | undefined;
+    } | string | {
+        revokesPriorWill: boolean;
+        statute: string;
+        statuteUrl?: string;
+        contemplationException?: boolean;
+        contemplationRule?: string;
+        notes?: string;
+    } | undefined;
 };
 
 /**
- * AiProvenance
- *
- * Records which AI model produced a piece of data and whether a human has verified it. Basic provenance is in INHERIT core; implementation-specific detail (exact model version, pipeline, reasoning, cost) should use x-inherit-* extension properties
+ * A hash algorithm id from reference-data/algorithm-lifecycle-registry.json (kind: digest)
  */
-export type AiProvenance2 = {
+export type DigestAlgorithmId = 'sha-1' | 'sha-256' | 'sha-384' | 'sha-512' | 'sha3-256' | 'sha3-384' | 'sha3-512';
+
+/**
+ * A signature algorithm id from reference-data/algorithm-lifecycle-registry.json (kind: signature)
+ */
+export type SignatureAlgorithmId = 'rsa-pkcs1v15-2048' | 'rsa-pkcs1v15-3072' | 'rsa-pkcs1v15-4096' | 'ecdsa-p256' | 'ecdsa-p384' | 'ed25519' | 'ml-dsa-44' | 'ml-dsa-65' | 'ml-dsa-87' | 'slh-dsa-sha2-128s' | 'slh-dsa-sha2-256s';
+
+/**
+ * A hash value with the algorithm that produced it, as lowercase hexadecimal of the length that algorithm produces. The algorithm is one of $defs/digestAlgorithmId
+ */
+export type Digest = {
     /**
-     * AI model family that generated this data
+     * Hash algorithm that produced the value
      */
-    model?: 'claude' | 'gpt' | 'gemini' | 'grok' | 'llama' | 'mistral' | 'other' | string;
+    algorithm: 'sha-1';
     /**
-     * Confidence score 0–100 indicating how certain the AI is about the generated data
+     * The hash value, 40 lowercase hexadecimal characters
      */
-    confidence?: number;
+    value: string;
+} | {
     /**
-     * When the AI produced this data
+     * Hash algorithm that produced the value
      */
-    generatedAt?: string;
+    algorithm: 'sha-256' | 'sha3-256';
     /**
-     * Whether a human has verified this AI-generated data
+     * The hash value, 64 lowercase hexadecimal characters
      */
-    humanReviewed?: boolean;
+    value: string;
+} | {
     /**
-     * Person ID or role of the reviewer who verified this data
+     * Hash algorithm that produced the value
      */
-    reviewedBy?: string;
+    algorithm: 'sha-384' | 'sha3-384';
     /**
-     * When the human review occurred
+     * The hash value, 96 lowercase hexadecimal characters
      */
-    reviewedAt?: string;
-    [key: string]: {
-        [key: string]: unknown;
-    } | 'claude' | 'gpt' | 'gemini' | 'grok' | 'llama' | 'mistral' | 'other' | string | number | string | boolean | string | undefined;
+    value: string;
+} | {
+    /**
+     * Hash algorithm that produced the value
+     */
+    algorithm: 'sha-512' | 'sha3-512';
+    /**
+     * The hash value, 128 lowercase hexadecimal characters
+     */
+    value: string;
 };
 
 /**
- * Provenance
- *
- * Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
+ * One RFC 4998 ArchiveTimeStamp: an RFC 3161 time-stamp token over a hash tree that covers the protected object or the previous archive timestamps
  */
-export type Provenance2 = {
+export type ArchiveTimestamp = {
     /**
-     * How this entity's data was originally created
+     * Position in the chain, starting at 0 for the initial archive timestamp and increasing by one
      */
-    source?: 'import' | 'manual' | 'ai_generated';
+    sequence: number;
     /**
-     * Overall confidence score for this entity's data (0.0 = no confidence, 1.0 = fully verified)
+     * initial: the first archive timestamp over the protected object. timestamp_renewal: covers the previous timestamp with the same hash algorithm, added to the current chain (RFC 4998 section 5.2). hash_tree_renewal: re-hashes the object and all previous chains, normally with a stronger hash algorithm, and starts a new chain
      */
-    confidence?: number;
+    renewalType: 'initial' | 'timestamp_renewal' | 'hash_tree_renewal';
     /**
-     * References importSources[].id on the root document — identifies which import source produced this entity's data. Plain string, not UUID
+     * The time-stamp token's generation time (RFC 3161 genTime)
      */
-    importSourceId?: string;
+    timestamp: string;
     /**
-     * AI provenance metadata — which AI model produced this data and whether a human has verified it
+     * Hash algorithm of this archive timestamp's hash tree. Within one chain every archive timestamp uses the same one
      */
-    aiProvenance?: AiProvenance2;
+    digestAlgorithm: DigestAlgorithmId;
     /**
-     * Human review verdict on AI-generated or imported data
+     * Signature algorithm of the time-stamping authority's signature on the token
      */
-    humanVerdict?: 'approved' | 'rejected' | 'modified' | 'pending_review';
+    signatureAlgorithm: SignatureAlgorithmId;
     /**
-     * Reason for rejecting or modifying data
+     * The hash this archive timestamp covers: the protected object hash for the initial one, the previous timestamp's hash for a timestamp renewal, or the combined object-and-chains hash for a hash-tree renewal. Its algorithm is this archive timestamp's digestAlgorithm
      */
-    rejectionReason?: string;
+    coveredDigest: Digest;
     /**
-     * When the human verdict was recorded
+     * Reference to the RFC 3161 time-stamp token, such as a URI or URN in the archive
      */
-    verdictAt?: string;
+    timestampTokenRef: string;
     /**
-     * ID of the agent task that created or modified this entity — links to the agent orchestration system
+     * Name of the time-stamping authority that issued the token
      */
-    agentTaskId?: string;
+    timestampAuthorityName?: string;
+};
+
+/**
+ * Archive Timestamp Chain
+ *
+ * The renewal history of an RFC 4998 Evidence Record Syntax (ERS) evidence record for a signed or attested document, so that it can still be verified after the hash or signature algorithms it was created with are no longer secure. Records the shape of the chain: the hash of the protected document, then every archive timestamp in time order — the initial one, each Timestamp Renewal (same hash algorithm, new timestamp) and each Hash-Tree Renewal (new hash algorithm, starts a new chain). Cryptographic verification of the evidence record itself is done outside the schema; this object carries what that verification and a renewal schedule need. Algorithm ids are the ids in reference-data/algorithm-lifecycle-registry.json
+ */
+export type ArchiveTimestampChain2 = {
+    /**
+     * The evidence record syntax the chain follows. Only RFC 4998 Evidence Record Syntax is defined
+     */
+    evidenceRecordFormat: 'rfc4998';
+    /**
+     * Hash of the protected data object (the signed will, codicil or other attested document) as covered by the initial archive timestamp. Its algorithm is the initial archive timestamp's digest algorithm
+     */
+    protectedObjectDigest: Digest;
+    /**
+     * Every archive timestamp, ascending by time (RFC 4998 section 5.1). The first is the initial archive timestamp (sequence 0, renewalType initial); each later one is a renewal. Only the newest one's algorithms need to remain secure for the record to verify. Order and the initial-first rule are checked by scripts/check-archive-timestamp-chain.mjs, since JSON Schema cannot compare one item with the next
+     */
+    archiveTimestamps: Array<ArchiveTimestamp>;
+    /**
+     * Where the DER-encoded RFC 4998 EvidenceRecord is held
+     */
+    evidenceRecordContentUrl?: string;
+    /**
+     * Free-text notes about the chain, such as the archive service that maintains it
+     */
+    notes?: string;
 };
 
 /**
@@ -4348,6 +10668,10 @@ export type Attestation2 = {
      * The hash or signature value
      */
     tamperEvidenceValue?: string;
+    /**
+     * RFC 4998 Evidence Record Syntax renewal chain for this attestation's signed document, so that it can still be verified after the algorithms it was signed and timestamped with are no longer secure. Complements tamperEvidenceMethod and tamperEvidenceValue, which record a single hash or signature
+     */
+    archiveTimestampChain?: ArchiveTimestampChain2;
     /**
      * Remote Online Notarisation session identifier
      */
@@ -4478,7 +10802,7 @@ export type Attestation2 = {
          * Occupation of the witness as recorded on the will
          */
         occupation?: string;
-    }> | 'in_person' | 'video' | 'remote' | 'none' | 'kinyan_sudar' | 'kinyan_agav' | 'seal_based' | 'inkan_registered' | 'written_signed' | 'oral_witnessed' | 'oral_community' | 'seal_based' | boolean | 'english_law' | 'halachic_broad' | 'shariah_standard' | 'civil_law_standard' | 'customary_oral' | 'community_testimony' | string | 'physical' | 'electronic' | 'hybrid' | string | string | string | string | number | 'government_id' | 'credential_analysis' | 'knowledge_based_authentication' | 'biometric' | 'personal_knowledge' | string | string | string | Array<string> | string | {
+    }> | 'in_person' | 'video' | 'remote' | 'none' | 'kinyan_sudar' | 'kinyan_agav' | 'seal_based' | 'inkan_registered' | 'written_signed' | 'oral_witnessed' | 'oral_community' | 'seal_based' | boolean | 'english_law' | 'halachic_broad' | 'shariah_standard' | 'civil_law_standard' | 'customary_oral' | 'community_testimony' | string | 'physical' | 'electronic' | 'hybrid' | string | string | string | ArchiveTimestampChain2 | string | number | 'government_id' | 'credential_analysis' | 'knowledge_based_authentication' | 'biometric' | 'personal_knowledge' | string | string | string | Array<string> | string | {
         /**
          * Person making the declaration
          */
@@ -4886,6 +11210,10 @@ export type Estate2 = {
      * Estimated total value of the estate before liabilities. In minor currency units
      */
     totalEstimatedValue?: Money2;
+    /**
+     * Total value of the estate after netting secured charges against the assets they charge and subtracting unsecured liabilities, in minor currency units. The after-liabilities counterpart to totalEstimatedValue. A convenience denormalisation: the authoritative figure is derived, not stored
+     */
+    netEstateEquity?: Money2;
     /**
      * Will execution formalities — witnesses, signing method, and compliance checks
      */
@@ -6406,158 +12734,6 @@ export type Estate2 = {
 };
 
 /**
- * PostalAddress
- *
- * A physical address. Culturally neutral — supports any global addressing convention
- */
-export type Address2 = {
-    /**
-     * The full address as a single formatted string, suitable for display. Preserves the original representation from the source document. Must not be the sole address representation — always populate structured fields where possible
-     */
-    formattedAddress?: string;
-    /**
-     * Street number and name. For Japanese addresses, use the block and building number (chōme-ban-gō)
-     */
-    streetAddress?: string;
-    /**
-     * Secondary address line — flat, suite, building, or floor. Use when the primary street address is insufficient
-     */
-    addressLine2?: string;
-    /**
-     * City, town, village, or ward. For Japanese addresses, this is the city or special ward (ku)
-     */
-    addressLocality?: string;
-    /**
-     * State, prefecture, province, or county. The administrative division below national level
-     */
-    addressRegion?: string;
-    /**
-     * Postal or ZIP code. Format varies by country — UK postcodes, US ZIP codes, Japanese 〒 codes, etc
-     */
-    postalCode?: string;
-    /**
-     * ISO 3166-1 alpha-2 country code. Always uppercase
-     */
-    addressCountry?: string;
-    /**
-     * Geographic latitude in decimal degrees. Useful for properties in jurisdictions without formal addressing systems
-     */
-    latitude?: number;
-    /**
-     * Geographic longitude in decimal degrees. Pair with latitude for precise property location
-     */
-    longitude?: number;
-    /**
-     * A nearby landmark used to locate the address. Essential in jurisdictions without formal street addressing — India, Nigeria, and rural areas worldwide
-     */
-    landmark?: string;
-    /**
-     * Free-form directions to reach the address when no formal address system exists. Common in rural communities across Africa, South Asia, and the Pacific Islands
-     */
-    directionNotes?: string;
-    /**
-     * The addressing convention that governs the display order of this address. Defaults to 'western' if omitted
-     */
-    addressOrder?: 'western' | 'japanese' | 'indian' | 'arabic' | 'custom';
-};
-
-/**
- * Identifier
- *
- * A typed external identifier. Use 'system' to namespace identifiers and prevent collisions across jurisdictions and organisations
- */
-export type Identifier2 = {
-    /**
-     * Namespace URI or name identifying the issuing authority or system. Use URN format where possible for unambiguous identification
-     */
-    system?: string;
-    /**
-     * Human-readable type label describing what kind of identifier this is
-     */
-    type?: string;
-};
-
-/**
- * FieldProvenance
- *
- * Records how a specific field's value was obtained — manual entry, AI extraction, import, OCR, or computation
- */
-export type FieldProvenance2 = {
-    /**
-     * The field name this provenance record applies to
-     */
-    field: string;
-    /**
-     * How the field value was obtained
-     */
-    method: 'manual_entry' | 'ai_extracted' | 'imported' | 'computed' | 'ocr_scanned' | string;
-    /**
-     * Confidence in the field value (0-100)
-     */
-    confidence?: number;
-    /**
-     * When this field was last verified
-     */
-    verifiedAt?: string;
-    /**
-     * Who verified this field
-     */
-    verifiedBy?: string;
-    /**
-     * Reference to the document.json entity this value was extracted from
-     */
-    sourceDocumentId?: string;
-    /**
-     * Page number in the source document where this value was found
-     */
-    sourcePageNumber?: number;
-    /**
-     * Location within the page where this value was found
-     */
-    sourceRegion?: string;
-    /**
-     * The raw text as extracted before any normalisation or structuring. Preserves exactly what the source document said
-     */
-    originalText?: string;
-    /**
-     * Writing system of the source document. Critical for handwritten wills in non-Latin scripts
-     */
-    originalScript?: 'latin' | 'kanji' | 'hiragana' | 'katakana' | 'arabic' | 'hebrew' | 'devanagari' | 'tamil' | 'chinese_simplified' | 'chinese_traditional' | 'hangul' | 'cyrillic' | 'thai' | 'mixed' | 'other' | string;
-    /**
-     * OCR engine or extraction tool used to obtain this value
-     */
-    ocrEngine?: string;
-    /**
-     * When this value was extracted from the source document
-     */
-    extractedAt: string;
-    /**
-     * The third-party source that provided this field value. Enables attribution credits and the data source kill switch
-     */
-    dataSource?: {
-        /**
-         * Short identifier for the data source
-         */
-        source?: string;
-        /**
-         * URL to the source's website or the specific page this data came from
-         */
-        sourceUrl?: string;
-        /**
-         * When this data was retrieved from the source
-         */
-        retrievedAt?: string;
-    };
-};
-
-/**
- * Visibility
- *
- * Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records
- */
-export type Visibility2 = 'testator_only' | 'proxy_visible' | 'companion_visible' | 'executor_visible' | 'beneficiary_visible' | 'all_parties';
-
-/**
  * Person
  *
  * A person involved in the estate. Schema.org name alignment. Any Unicode script. Supports CJK phonetic readings, chieftaincy titles, clan/lineage identifiers, dual legal personalities, and tax residency across multiple jurisdictions
@@ -7334,3474 +13510,6 @@ export type Relationship2 = {
 };
 
 /**
- * Cultural Disposition
- *
- * Cultural, religious, and regulatory constraints on how an asset or property may be disposed of. Covers sacred status, disposal restrictions, export controls, and whether the item can be bequeathed
- */
-export type CulturalDisposition2 = {
-    /**
-     * Whether this item has religious or spiritual significance that restricts disposal
-     */
-    sacredStatus?: 'secular' | 'consecrated' | 'ritually_significant' | 'inalienable_endowment';
-    /**
-     * The cultural weight of this item — determines who should be consulted about its disposition
-     */
-    culturalSignificance?: 'personal' | 'family_heirloom' | 'community' | 'national_heritage';
-    /**
-     * Whether this item can be willed to another person. False for waqf endowments, some ancestral property, and inalienable cultural artefacts
-     */
-    bequeathable?: boolean;
-    /**
-     * Specific restrictions on how this item may be disposed of, with the authority that imposes each restriction
-     */
-    disposalRestrictions?: Array<{
-        /**
-         * Name of the authority imposing this restriction
-         */
-        authority?: string;
-        /**
-         * Category of the authority
-         */
-        authorityType?: 'religious_body' | 'family_council' | 'clan_association' | 'tribal_council' | 'government' | 'heritage_authority';
-        /**
-         * What the restriction requires
-         */
-        requirement: string;
-        /**
-         * Jurisdiction where this restriction applies
-         */
-        jurisdiction?: Jurisdiction2;
-    }>;
-    /**
-     * Legal restrictions on exporting this item from its current jurisdiction
-     */
-    exportRestrictions?: Array<{
-        /**
-         * Jurisdiction imposing the export restriction
-         */
-        jurisdiction: Jurisdiction2;
-        /**
-         * Category of export restriction
-         */
-        restrictionType: 'cultural_property' | 'national_treasure' | 'antiquity' | 'protected_species' | 'controlled_goods';
-        /**
-         * The government body or agency that controls export
-         */
-        authority?: string;
-        /**
-         * Whether a licence or permit is required for export
-         */
-        licenceRequired?: boolean;
-        /**
-         * Additional details about the restriction
-         */
-        notes?: string;
-    }>;
-};
-
-/**
- * Media
- *
- * A media attachment — photograph, video, or document scan. Used for identification, valuation, condition documentation, and provenance records
- */
-export type Media2 = {
-    /**
-     * URI pointing to the media file. May be an HTTPS URL, S3 URI, or other storage reference
-     */
-    url: string;
-    /**
-     * Human-readable description of what this media shows
-     */
-    caption?: string;
-    /**
-     * MIME type of the media file. Maps to Schema.org encodingFormat
-     */
-    mediaType?: string;
-    /**
-     * Base64-encoded media content for self-contained documents. Use for small files (attestation scans, signatures, certificates) that must travel with the estate plan. For large files (photos, videos), use url instead
-     */
-    content?: string;
-    /**
-     * The purpose of this media — what question does it answer? Enables executors and dealers to find specific documentation without scrolling through galleries
-     */
-    viewType?: 'overview' | 'identification' | 'condition' | 'provenance' | 'maker_mark' | 'serial_number' | 'damage' | 'scale_reference' | 'label' | 'certificate' | 'receipt' | 'environment';
-    /**
-     * When this media was captured. Useful for establishing condition at a point in time
-     */
-    takenAt?: string;
-    /**
-     * URI for a smaller preview version of the media. Maps to Schema.org thumbnail
-     */
-    thumbnailUrl?: string;
-};
-
-/**
- * Property
- *
- * Real estate. Supports individual ownership, communal/family property (Nigeria), HUF coparcenary (India), government-vested land (Land Use Act), US community property, and informal/unregistered holdings
- */
-export type Property2 = {
-    /**
-     * Unique identifier for this property within the INHERIT document
-     */
-    id: string;
-    /**
-     * Display name for this property — a familiar label or street address. Should be recognisable to all parties involved in the estate
-     */
-    name: string;
-    /**
-     * Territory-neutral property type. Use reference-data/local-term-mappings.json to display jurisdiction-appropriate labels in UIs
-     */
-    propertyType?: 'detached' | 'attached' | 'apartment' | 'land' | 'commercial' | 'mixed_use' | 'rural' | 'mobile' | 'watercraft' | 'other';
-    /**
-     * Physical address of the property
-     */
-    address?: Address2;
-    /**
-     * Owner's estimate of the property's current market value, in minor currency units
-     */
-    estimatedValue?: Money2;
-    /**
-     * Professional surveyor or valuer's assessment of the property value, in minor currency units
-     */
-    professionalValuation?: Money2;
-    /**
-     * Date the most recent valuation (estimated or professional) was performed
-     */
-    valuationDate?: string;
-    /**
-     * Level of confidence in the stated valuation
-     */
-    valuationConfidence?: 'estimated' | 'professional' | 'official' | 'unknown';
-    /**
-     * Whether this is the testator's primary residence. Relevant for residence nil rate band (UK), homestead exemption (US), and similar tax reliefs
-     */
-    isPrimaryResidence?: boolean;
-    /**
-     * How ownership of this property is legally structured
-     */
-    ownershipType?: 'sole' | 'joint_tenants' | 'tenants_in_common' | 'trust' | 'tenancy_by_entirety';
-    /**
-     * The testator's ownership share as a percentage. For joint tenants, typically 50% for two co-owners. For tenants in common, may be any split
-     */
-    ownershipPercentage?: number;
-    /**
-     * The cultural or legal model of ownership. Goes beyond the simple legal title to capture communal and customary ownership forms
-     */
-    ownershipModel?: 'individual' | 'joint' | 'communal_family' | 'huf_coparcenary' | 'tribal' | 'government_vested' | 'trust_held';
-    /**
-     * How the property was acquired. Determines which succession law applies in India and other jurisdictions
-     */
-    acquisitionType?: 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed';
-    /**
-     * Territory-neutral tenure type. Use reference-data/local-term-mappings.json to display jurisdiction-appropriate labels in UIs
-     */
-    tenureType?: 'ownership' | 'lease' | 'communal' | 'customary' | 'informal' | 'government_allocated';
-    /**
-     * Whether this property is formally registered with a land authority
-     */
-    registrationStatus?: 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented';
-    /**
-     * The type of evidence available to prove ownership. In many jurisdictions, informal evidence is the only kind available
-     */
-    ownershipEvidence?: 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none';
-    /**
-     * Cultural, religious, and regulatory constraints on disposal of this property
-     */
-    culturalDisposition?: CulturalDisposition2;
-    /**
-     * The communal or family authority whose approval is required to dispose of this property
-     */
-    communalAuthority?: {
-        /**
-         * Category of communal authority
-         */
-        authorityType?: 'family_council' | 'clan_association' | 'religious_body' | 'tribal_council' | 'government';
-        /**
-         * Whether approval from this authority is legally required before disposal
-         */
-        approvalRequired?: boolean;
-        /**
-         * Name of the specific authority or person
-         */
-        authorityName?: string;
-        /**
-         * Jurisdiction where this communal authority has legal standing
-         */
-        jurisdiction?: Jurisdiction2;
-    };
-    /**
-     * The succession regime governing this specific property. Overrides estate.defaultSuccessionRegime when present
-     */
-    successionRegime?: {
-        /**
-         * The law governing succession for this property
-         */
-        governingLaw?: {
-            /**
-             * Jurisdiction whose succession law applies
-             */
-            jurisdiction?: Jurisdiction2;
-            /**
-             * Which legal tradition applies
-             */
-            legalTradition?: 'common_law' | 'civil_law' | 'mixed' | 'customary_law' | 'islamic_law' | 'hindu_law' | 'jewish_law' | 'canon_law';
-            /**
-             * Name of the governing statute
-             */
-            statute?: string;
-            /**
-             * Specific section of the statute
-             */
-            section?: string;
-        };
-        /**
-         * How the governing law was determined
-         */
-        determinedBy?: 'domicile' | 'situs' | 'nationality' | 'personal_status' | 'choice_of_law' | 'treaty';
-        /**
-         * Whether this succession regime is legally binding
-         */
-        binding?: boolean;
-        /**
-         * INHERIT extension IDs that apply to this property's succession
-         */
-        extensions?: Array<string>;
-        /**
-         * Additional context about the succession regime
-         */
-        notes?: string;
-    };
-    /**
-     * Reference to the Person.id of the current custodian of communal or family property. The custodian manages but does not own the property
-     */
-    custodianPersonId?: string;
-    /**
-     * Human-readable display name for the referenced custodian person
-     */
-    custodianPersonIdDisplay?: string;
-    /**
-     * Whether government or regulatory consent is required to transfer this property. Common in Nigeria (governor's consent) and for agricultural land in parts of India
-     */
-    governmentConsentRequired?: boolean;
-    /**
-     * Whether this property is classified as immoveable, moveable, or mixed. Determines which conflict-of-laws rules apply
-     */
-    mobilityType?: 'immoveable' | 'moveable' | 'mixed';
-    /**
-     * Outstanding mortgage balance in minor currency units. If the property is mortgage-free, omit this field
-     */
-    mortgageOutstanding?: Money2;
-    /**
-     * Marital property character classification for US community property states. Determines whether the testator may dispose of the entire property or only their half
-     */
-    characterClassification?: 'community' | 'separate' | 'quasi_community' | 'mixed' | 'not_applicable';
-    /**
-     * US homestead exemption status. Protects the primary residence from creditors and may restrict the testator's ability to devise the property
-     */
-    homesteadStatus?: {
-        /**
-         * Whether this property qualifies as a homestead
-         */
-        isHomestead?: boolean;
-        /**
-         * Dollar value of the homestead exemption, if capped
-         */
-        exemptionAmount?: Money2;
-        /**
-         * Whether the homestead exemption has no dollar cap. True in Florida, Texas (rural), and several other states
-         */
-        exemptionUnlimited?: boolean;
-        /**
-         * Whether this homestead is subject to restrictions on devise — e.g. Florida prohibits devising homestead away from a surviving spouse or minor children
-         */
-        deviseRestriction?: boolean;
-        /**
-         * Additional notes on homestead status
-         */
-        notes?: string;
-    };
-    /**
-     * Whether this property passes outside the probate estate — typically via joint tenancy with right of survivorship, a transfer-on-death deed, or a trust
-     */
-    passesOutsideEstate?: boolean;
-    /**
-     * A life estate imposed by statute rather than by the will. The surviving spouse or other protected person has a right to occupy for life
-     */
-    statutoryLifeEstate?: {
-        /**
-         * Reference to the Person.id of the life estate beneficiary
-         */
-        beneficiaryPersonId?: string;
-        /**
-         * Human-readable display name for the referenced beneficiary person
-         */
-        beneficiaryPersonIdDisplay?: string;
-        /**
-         * The statutory basis for this life estate
-         */
-        basis?: string;
-        /**
-         * Any conditions on the life estate
-         */
-        conditions?: string;
-    };
-    /**
-     * Free-text notes about this property. Use for unusual tenure arrangements, ongoing disputes, or planning considerations
-     */
-    notes?: string;
-    /**
-     * Links to this property in external databases, portals, and registries — Land Registry, Rightmove, Zoopla, Zillow, council tax records, EPC certificates, etc
-     */
-    externalLinks?: Array<{
-        /**
-         * The external system or platform name
-         */
-        system: string;
-        /**
-         * The platform-specific identifier for this property
-         */
-        id: string;
-        /**
-         * Direct URL to the property's page on the external platform
-         */
-        url?: string;
-        /**
-         * Human-readable label for display
-         */
-        label?: string;
-        /**
-         * Timestamp when this link was last verified
-         */
-        retrievedAt?: string;
-    }>;
-    /**
-     * Photographs and videos of this property — exterior, interior, key rooms, any damage or features relevant to valuation
-     */
-    images?: Array<Media2>;
-    /**
-     * Controls who can see this property record
-     */
-    visibility?: Visibility2;
-    /**
-     * Per-field provenance records — how each field's value was obtained
-     */
-    fieldProvenance?: Array<FieldProvenance2>;
-    /**
-     * Discussion comments on this entity
-     */
-    comments?: Array<{
-        /**
-         * Unique identifier for this comment
-         */
-        id: string;
-        /**
-         * Person.id of the comment author
-         */
-        authorPersonId?: string;
-        /**
-         * Human-readable display name for the referenced author person
-         */
-        authorPersonIdDisplay?: string;
-        /**
-         * Comment text
-         */
-        content: string;
-        /**
-         * When the comment was created
-         */
-        createdAt: string;
-        visibility?: Visibility2;
-    }>;
-    /**
-     * Rental income details if the property is let — important for estate income tax and beneficiary entitlements
-     */
-    rentalIncome?: {
-        /**
-         * Monthly rental income
-         */
-        monthlyAmount?: Money2;
-        /**
-         * Name of the current tenant
-         */
-        tenantName?: string;
-        /**
-         * Date the current lease expires
-         */
-        leaseEndDate?: string;
-        /**
-         * Organisation.id of the managing agent
-         */
-        managingAgentOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced managing agent organisation
-         */
-        managingAgentOrganisationIdDisplay?: string;
-    };
-    /**
-     * Energy Performance Certificate data. UK properties require an EPC for sale or letting. Rating A (most efficient) to G (least efficient). Legally significant — EPC below E cannot be let without exemption
-     */
-    epc?: {
-        /**
-         * When this EPC data was retrieved from the register
-         */
-        retrievedAt: string;
-        /**
-         * Overall EPC rating band
-         */
-        rating?: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
-        /**
-         * Numeric energy efficiency score (1–100, higher is better)
-         */
-        energyEfficiencyScore?: number;
-        /**
-         * Numeric environmental impact score (1–100, higher is better)
-         */
-        environmentalImpactScore?: number;
-        /**
-         * When the EPC expires (valid for 10 years from issue)
-         */
-        expiryDate?: string;
-        /**
-         * EPC certificate reference number
-         */
-        certificateNumber?: string;
-        /**
-         * URL to the certificate on the EPC register
-         */
-        certificateUrl?: string;
-        /**
-         * Total floor area in square metres
-         */
-        floorArea?: number;
-        /**
-         * Primary heating system description
-         */
-        heatingType?: string;
-    };
-    /**
-     * HM Land Registry data — title information, last sale price, and registered charges. Confirms ownership and surfaces encumbrances relevant to estate administration
-     */
-    landRegistry?: {
-        /**
-         * When this data was retrieved from Land Registry
-         */
-        retrievedAt: string;
-        /**
-         * Land Registry title number
-         */
-        titleNumber?: string;
-        /**
-         * Class of title registered at Land Registry
-         */
-        titleClass?: 'absolute' | 'qualified' | 'possessory' | 'good_leasehold' | string;
-        /**
-         * Last recorded sale price in minor units (pennies)
-         */
-        lastSalePrice?: number;
-        /**
-         * Date of last recorded sale
-         */
-        lastSaleDate?: string;
-        /**
-         * Tenure as recorded by Land Registry
-         */
-        tenure?: 'freehold' | 'leasehold' | string;
-        /**
-         * Owner names as they appear on the register
-         */
-        registeredOwners?: Array<string>;
-        /**
-         * Number of registered charges (mortgages, restrictions, notices)
-         */
-        chargesCount?: number;
-    };
-    /**
-     * Flood risk data from the Environment Agency (England) or equivalent national agency. Affects insurability, value, and estate planning decisions
-     */
-    floodRisk?: {
-        /**
-         * When this flood risk data was retrieved
-         */
-        retrievedAt: string;
-        /**
-         * Risk of flooding from rivers and the sea
-         */
-        riverAndSeaRisk?: 'high' | 'medium' | 'low' | 'very_low' | string;
-        /**
-         * Risk of flooding from surface water
-         */
-        surfaceWaterRisk?: 'high' | 'medium' | 'low' | 'very_low' | string;
-        /**
-         * Environment Agency flood zone designation
-         */
-        floodZone?: '1' | '2' | '3a' | '3b' | string;
-        /**
-         * Name of the nearest river, stream, or watercourse
-         */
-        nearestWatercourse?: string;
-        /**
-         * Whether the area has been affected by flooding in the past
-         */
-        historicalFlooding?: boolean;
-    };
-    /**
-     * Leasehold-specific data — lease term, ground rent, service charge, freeholder. Relevant when tenureType is 'lease'. No conditional enforcement — allowed on any property for flexibility
-     */
-    leasehold?: {
-        /**
-         * When this leasehold data was retrieved or last verified
-         */
-        retrievedAt: string;
-        /**
-         * Date the lease commenced
-         */
-        leaseStartDate?: string;
-        /**
-         * Original lease term in years
-         */
-        leaseTerm?: number;
-        /**
-         * Approximate years remaining at retrievedAt. Below 80 years triggers mortgage difficulties; below 70 significantly impacts value
-         */
-        yearsRemaining?: number;
-        /**
-         * Annual ground rent in minor units (pennies). Zero for peppercorn rents
-         */
-        groundRent?: number;
-        /**
-         * Next ground rent review date
-         */
-        groundRentReviewDate?: string;
-        /**
-         * Annual service charge in minor units (pennies)
-         */
-        serviceCharge?: number;
-        /**
-         * Name of the freeholder or landlord
-         */
-        freeholderName?: string;
-        /**
-         * Name of the managing agent or management company
-         */
-        managementCompany?: string;
-    };
-    /**
-     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
-     */
-    provenance?: Provenance2;
-    /**
-     * The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile
-     */
-    applicableLaw?: Jurisdiction2;
-    /**
-     * Per-property tax treatment — how this property is classified for tax purposes
-     */
-    taxTreatment?: {
-        jurisdiction?: Jurisdiction2;
-        assetType?: 'immoveable' | 'moveable' | 'mixed' | 'exempt';
-        exemptions?: Array<string>;
-        reliefClaimed?: Array<string>;
-    };
-    /**
-     * Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)
-     */
-    taxReliefEligibility?: {
-        /**
-         * The type of tax relief claimed
-         */
-        reliefType?: 'agricultural_property' | 'business_property' | 'woodland' | 'heritage' | 'charitable';
-        eligible?: boolean;
-        /**
-         * Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
-         */
-        percentage?: number;
-        /**
-         * Conditions for maintaining eligibility
-         */
-        conditions?: string;
-        jurisdiction?: Jurisdiction2;
-        statute?: string;
-    };
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | string | 'detached' | 'attached' | 'apartment' | 'land' | 'commercial' | 'mixed_use' | 'rural' | 'mobile' | 'watercraft' | 'other' | Address2 | Money2 | string | 'estimated' | 'professional' | 'official' | 'unknown' | boolean | 'sole' | 'joint_tenants' | 'tenants_in_common' | 'trust' | 'tenancy_by_entirety' | number | 'individual' | 'joint' | 'communal_family' | 'huf_coparcenary' | 'tribal' | 'government_vested' | 'trust_held' | 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed' | 'ownership' | 'lease' | 'communal' | 'customary' | 'informal' | 'government_allocated' | 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented' | 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none' | CulturalDisposition2 | {
-        /**
-         * Category of communal authority
-         */
-        authorityType?: 'family_council' | 'clan_association' | 'religious_body' | 'tribal_council' | 'government';
-        /**
-         * Whether approval from this authority is legally required before disposal
-         */
-        approvalRequired?: boolean;
-        /**
-         * Name of the specific authority or person
-         */
-        authorityName?: string;
-        /**
-         * Jurisdiction where this communal authority has legal standing
-         */
-        jurisdiction?: Jurisdiction2;
-    } | {
-        /**
-         * The law governing succession for this property
-         */
-        governingLaw?: {
-            /**
-             * Jurisdiction whose succession law applies
-             */
-            jurisdiction?: Jurisdiction2;
-            /**
-             * Which legal tradition applies
-             */
-            legalTradition?: 'common_law' | 'civil_law' | 'mixed' | 'customary_law' | 'islamic_law' | 'hindu_law' | 'jewish_law' | 'canon_law';
-            /**
-             * Name of the governing statute
-             */
-            statute?: string;
-            /**
-             * Specific section of the statute
-             */
-            section?: string;
-        };
-        /**
-         * How the governing law was determined
-         */
-        determinedBy?: 'domicile' | 'situs' | 'nationality' | 'personal_status' | 'choice_of_law' | 'treaty';
-        /**
-         * Whether this succession regime is legally binding
-         */
-        binding?: boolean;
-        /**
-         * INHERIT extension IDs that apply to this property's succession
-         */
-        extensions?: Array<string>;
-        /**
-         * Additional context about the succession regime
-         */
-        notes?: string;
-    } | string | 'immoveable' | 'moveable' | 'mixed' | 'community' | 'separate' | 'quasi_community' | 'mixed' | 'not_applicable' | {
-        /**
-         * Whether this property qualifies as a homestead
-         */
-        isHomestead?: boolean;
-        /**
-         * Dollar value of the homestead exemption, if capped
-         */
-        exemptionAmount?: Money2;
-        /**
-         * Whether the homestead exemption has no dollar cap. True in Florida, Texas (rural), and several other states
-         */
-        exemptionUnlimited?: boolean;
-        /**
-         * Whether this homestead is subject to restrictions on devise — e.g. Florida prohibits devising homestead away from a surviving spouse or minor children
-         */
-        deviseRestriction?: boolean;
-        /**
-         * Additional notes on homestead status
-         */
-        notes?: string;
-    } | {
-        /**
-         * Reference to the Person.id of the life estate beneficiary
-         */
-        beneficiaryPersonId?: string;
-        /**
-         * Human-readable display name for the referenced beneficiary person
-         */
-        beneficiaryPersonIdDisplay?: string;
-        /**
-         * The statutory basis for this life estate
-         */
-        basis?: string;
-        /**
-         * Any conditions on the life estate
-         */
-        conditions?: string;
-    } | string | Array<{
-        /**
-         * The external system or platform name
-         */
-        system: string;
-        /**
-         * The platform-specific identifier for this property
-         */
-        id: string;
-        /**
-         * Direct URL to the property's page on the external platform
-         */
-        url?: string;
-        /**
-         * Human-readable label for display
-         */
-        label?: string;
-        /**
-         * Timestamp when this link was last verified
-         */
-        retrievedAt?: string;
-    }> | Array<Media2> | Visibility2 | Array<FieldProvenance2> | Array<{
-        /**
-         * Unique identifier for this comment
-         */
-        id: string;
-        /**
-         * Person.id of the comment author
-         */
-        authorPersonId?: string;
-        /**
-         * Human-readable display name for the referenced author person
-         */
-        authorPersonIdDisplay?: string;
-        /**
-         * Comment text
-         */
-        content: string;
-        /**
-         * When the comment was created
-         */
-        createdAt: string;
-        visibility?: Visibility2;
-    }> | {
-        /**
-         * Monthly rental income
-         */
-        monthlyAmount?: Money2;
-        /**
-         * Name of the current tenant
-         */
-        tenantName?: string;
-        /**
-         * Date the current lease expires
-         */
-        leaseEndDate?: string;
-        /**
-         * Organisation.id of the managing agent
-         */
-        managingAgentOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced managing agent organisation
-         */
-        managingAgentOrganisationIdDisplay?: string;
-    } | {
-        /**
-         * When this EPC data was retrieved from the register
-         */
-        retrievedAt: string;
-        /**
-         * Overall EPC rating band
-         */
-        rating?: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
-        /**
-         * Numeric energy efficiency score (1–100, higher is better)
-         */
-        energyEfficiencyScore?: number;
-        /**
-         * Numeric environmental impact score (1–100, higher is better)
-         */
-        environmentalImpactScore?: number;
-        /**
-         * When the EPC expires (valid for 10 years from issue)
-         */
-        expiryDate?: string;
-        /**
-         * EPC certificate reference number
-         */
-        certificateNumber?: string;
-        /**
-         * URL to the certificate on the EPC register
-         */
-        certificateUrl?: string;
-        /**
-         * Total floor area in square metres
-         */
-        floorArea?: number;
-        /**
-         * Primary heating system description
-         */
-        heatingType?: string;
-    } | {
-        /**
-         * When this data was retrieved from Land Registry
-         */
-        retrievedAt: string;
-        /**
-         * Land Registry title number
-         */
-        titleNumber?: string;
-        /**
-         * Class of title registered at Land Registry
-         */
-        titleClass?: 'absolute' | 'qualified' | 'possessory' | 'good_leasehold' | string;
-        /**
-         * Last recorded sale price in minor units (pennies)
-         */
-        lastSalePrice?: number;
-        /**
-         * Date of last recorded sale
-         */
-        lastSaleDate?: string;
-        /**
-         * Tenure as recorded by Land Registry
-         */
-        tenure?: 'freehold' | 'leasehold' | string;
-        /**
-         * Owner names as they appear on the register
-         */
-        registeredOwners?: Array<string>;
-        /**
-         * Number of registered charges (mortgages, restrictions, notices)
-         */
-        chargesCount?: number;
-    } | {
-        /**
-         * When this flood risk data was retrieved
-         */
-        retrievedAt: string;
-        /**
-         * Risk of flooding from rivers and the sea
-         */
-        riverAndSeaRisk?: 'high' | 'medium' | 'low' | 'very_low' | string;
-        /**
-         * Risk of flooding from surface water
-         */
-        surfaceWaterRisk?: 'high' | 'medium' | 'low' | 'very_low' | string;
-        /**
-         * Environment Agency flood zone designation
-         */
-        floodZone?: '1' | '2' | '3a' | '3b' | string;
-        /**
-         * Name of the nearest river, stream, or watercourse
-         */
-        nearestWatercourse?: string;
-        /**
-         * Whether the area has been affected by flooding in the past
-         */
-        historicalFlooding?: boolean;
-    } | {
-        /**
-         * When this leasehold data was retrieved or last verified
-         */
-        retrievedAt: string;
-        /**
-         * Date the lease commenced
-         */
-        leaseStartDate?: string;
-        /**
-         * Original lease term in years
-         */
-        leaseTerm?: number;
-        /**
-         * Approximate years remaining at retrievedAt. Below 80 years triggers mortgage difficulties; below 70 significantly impacts value
-         */
-        yearsRemaining?: number;
-        /**
-         * Annual ground rent in minor units (pennies). Zero for peppercorn rents
-         */
-        groundRent?: number;
-        /**
-         * Next ground rent review date
-         */
-        groundRentReviewDate?: string;
-        /**
-         * Annual service charge in minor units (pennies)
-         */
-        serviceCharge?: number;
-        /**
-         * Name of the freeholder or landlord
-         */
-        freeholderName?: string;
-        /**
-         * Name of the managing agent or management company
-         */
-        managementCompany?: string;
-    } | Provenance2 | Jurisdiction2 | {
-        jurisdiction?: Jurisdiction2;
-        assetType?: 'immoveable' | 'moveable' | 'mixed' | 'exempt';
-        exemptions?: Array<string>;
-        reliefClaimed?: Array<string>;
-    } | {
-        /**
-         * The type of tax relief claimed
-         */
-        reliefType?: 'agricultural_property' | 'business_property' | 'woodland' | 'heritage' | 'charitable';
-        eligible?: boolean;
-        /**
-         * Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
-         */
-        percentage?: number;
-        /**
-         * Conditions for maintaining eligibility
-         */
-        conditions?: string;
-        jurisdiction?: Jurisdiction2;
-        statute?: string;
-    } | undefined;
-};
-
-/**
- * Financial Asset Properties
- *
- * Category-specific properties for financial assets: bank accounts, pensions, ISAs, shares, bonds, crypto wallets, insurance policies, debts receivable
- */
-export type Financial = {
-    /**
-     * Detailed shareholding information — company, share class, voting rights, restrictions. Relevant for BPR (UK), stepped-up basis (US), and controlling interest calculations
-     */
-    shareholding?: {
-        /**
-         * Name of the company in which shares are held
-         */
-        companyName?: string;
-        /**
-         * Company registration number
-         */
-        companyNumber?: string;
-        /**
-         * Class of shares held
-         */
-        shareClass?: string;
-        /**
-         * Number of shares held
-         */
-        numberOfShares?: number;
-        /**
-         * Total shares issued by the company (for calculating percentage ownership)
-         */
-        totalSharesIssued?: number;
-        /**
-         * Whether these shares carry voting rights
-         */
-        votingRights?: boolean;
-        /**
-         * Whether transfer of these shares is restricted (e.g. pre-emption rights, shareholder agreement)
-         */
-        restrictedTransfer?: boolean;
-        /**
-         * Stock exchange where shares are listed, if publicly traded. Null/absent for private companies
-         */
-        listedExchange?: string;
-        /**
-         * Stock ticker symbol
-         */
-        ticker?: string;
-        /**
-         * CUSIP identifier (US/Canada). 9-character alphanumeric
-         */
-        cusip?: string;
-        /**
-         * International Securities Identification Number
-         */
-        isin?: string;
-    };
-    /**
-     * Detailed business interest information — partnership shares, LLP membership, sole trader business. Relevant for BPR (UK), QFOBI (US), and succession planning
-     */
-    businessInterest?: {
-        /**
-         * Trading name of the business
-         */
-        businessName?: string;
-        /**
-         * Legal structure of the business
-         */
-        businessType?: 'sole_trader' | 'partnership' | 'llp' | 'limited_company' | 'plc' | 'franchise' | 'cooperative' | 'other';
-        /**
-         * The testator's ownership percentage
-         */
-        ownershipPercentage?: number;
-        /**
-         * Whether the testator holds a controlling interest. Affects BPR eligibility and valuation discounts
-         */
-        controllingInterest?: boolean;
-        /**
-         * Whether a written partnership/operating agreement exists
-         */
-        partnershipAgreement?: boolean;
-        /**
-         * What the partnership/operating agreement says about succession on death
-         */
-        successionProvision?: string;
-        /**
-         * Approximate annual turnover — helps with BPR qualification and valuation
-         */
-        annualTurnover?: Money2;
-        /**
-         * Number of employees
-         */
-        employees?: number;
-    };
-    /**
-     * Detailed pension information — scheme type, nominated beneficiaries, death benefits. Pensions often pass outside the estate via nomination
-     */
-    pension?: {
-        /**
-         * The type of pension scheme
-         */
-        schemeType?: 'defined_benefit' | 'defined_contribution' | 'sipp' | 'state_pension' | 'annuity' | 'drawdown' | 'other';
-        /**
-         * Pension provider name
-         */
-        provider?: string;
-        /**
-         * Policy or membership reference number
-         */
-        policyReference?: string;
-        /**
-         * Person IDs of nominated beneficiaries. Pension trustees usually have discretion but will consider nominations
-         */
-        nominatedBeneficiaries?: Array<string>;
-        /**
-         * Date the beneficiary nomination was last updated
-         */
-        nominationDate?: string;
-        /**
-         * Type of death benefit payable from this pension
-         */
-        deathBenefitType?: 'lump_sum' | 'dependants_pension' | 'drawdown_transfer' | 'annuity_guarantee' | 'none';
-        /**
-         * Whether the pension has been accessed/crystallised. Affects tax treatment on death (UK: pre-75 tax-free, post-75 taxed as income)
-         */
-        crystallised?: boolean;
-        /**
-         * Percentage of lifetime allowance used (UK). Abolished April 2024 but transitional protections remain
-         */
-        lifetimeAllowanceUsed?: number;
-        /**
-         * The broad pension category, covering international pension types
-         */
-        pensionType?: 'occupational' | 'personal' | 'stakeholder' | 'sipp' | 'ssas' | 'workplace' | 'state' | 'cpf' | 'epf' | 'other' | string;
-        /**
-         * Reference to the Organisation.id of the pension provider
-         */
-        pensionProviderOrganisationId?: string;
-        /**
-         * Membership or scheme reference number
-         */
-        pensionMemberNumber?: string;
-        /**
-         * Structured death benefit nomination — who receives pension benefits on death, and the terms
-         */
-        deathBenefitNomination?: {
-            /**
-             * Reference to the Person.id of the nominated beneficiary
-             */
-            nomineePersonId?: string;
-            /**
-             * Date the nomination was made or last updated
-             */
-            nominationDate?: string;
-            /**
-             * Date the nomination should next be reviewed
-             */
-            nominationReviewDate?: string;
-            /**
-             * Whether the nomination is believed to be current and valid
-             */
-            nominationCurrent?: boolean;
-            /**
-             * Date the nomination expires, if applicable
-             */
-            nominationExpiryDate?: string;
-            /**
-             * Type of death benefit the nominee would receive
-             */
-            benefitType?: 'lump_sum' | 'income' | 'pension' | 'discretionary';
-            /**
-             * Estimated death benefit amount, in minor currency units
-             */
-            estimatedAmount?: Money2;
-        };
-        /**
-         * Date drawdown commenced, if the pension is in drawdown
-         */
-        drawdownStartDate?: string;
-        /**
-         * Pension fund valuation at date of death
-         */
-        pensionValuationAtDeath?: {
-            /**
-             * Estimated value at death
-             */
-            estimatedValue?: Money2;
-            /**
-             * Method used
-             */
-            valuationMethod?: string;
-            /**
-             * Date of valuation
-             */
-            valuationDate?: string;
-        };
-        /**
-         * Details of annuity continuation on death — whether payments continue and to whom
-         */
-        annuityContinuation?: {
-            /**
-             * Whether an annuity is currently in force
-             */
-            annuityInForce?: boolean;
-            /**
-             * Annual annuity amount in minor currency units
-             */
-            annuityAmount?: Money2;
-            /**
-             * What happens to the annuity on the holder's death
-             */
-            continuationOnDeath?: 'terminates' | 'continues_to_spouse' | 'continues_to_beneficiary' | 'fixed_term';
-            /**
-             * Person.id of the beneficiary who receives continuation payments
-             */
-            continuationBeneficiaryPersonId?: string;
-        };
-    };
-    /**
-     * Life insurance policy details — type, sum assured, beneficiaries, trust status. Policies written in trust pass outside the estate
-     */
-    insurancePolicy?: {
-        /**
-         * Type of insurance policy
-         */
-        policyType?: 'term_life' | 'whole_life' | 'endowment' | 'critical_illness' | 'income_protection' | 'key_person' | 'other';
-        /**
-         * Insurance company name
-         */
-        provider?: string;
-        /**
-         * Policy reference number
-         */
-        policyReference?: string;
-        /**
-         * The amount payable on death, in minor currency units
-         */
-        sumAssured?: Money2;
-        /**
-         * Whether the policy is written in trust. If true, proceeds pass outside the estate and are not subject to inheritance tax
-         */
-        writtenInTrust?: boolean;
-        /**
-         * Names of the policy trustees, if written in trust
-         */
-        trusteeNames?: Array<string>;
-        /**
-         * Person IDs of named beneficiaries
-         */
-        beneficiaryPersonIds?: Array<string>;
-        /**
-         * How often premiums are paid
-         */
-        premiumFrequency?: 'monthly' | 'annual' | 'single_premium' | 'paid_up';
-        /**
-         * Policy expiry date (for term policies)
-         */
-        expiryDate?: string;
-    };
-    /**
-     * Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will
-     */
-    coOwnership?: {
-        /**
-         * Person IDs of co-owners
-         */
-        coOwnerPersonIds?: Array<string>;
-        /**
-         * How ownership is structured between co-owners
-         */
-        ownershipType?: 'joint_tenants' | 'tenants_in_common' | 'community_property' | 'partnership' | 'other';
-        /**
-         * The testator's ownership percentage
-         */
-        ownershipPercentage?: number;
-        /**
-         * Date joint tenancy was severed to become tenants in common (if applicable)
-         */
-        severanceDate?: string;
-    };
-    /**
-     * Intellectual property details — patents, copyrights, trademarks, trade secrets. IP succession varies by jurisdiction and type
-     */
-    intellectualProperty?: {
-        /**
-         * Type of intellectual property
-         */
-        ipType?: 'patent' | 'copyright' | 'trademark' | 'design_right' | 'trade_secret' | 'database_right' | 'other';
-        /**
-         * Registration or application number
-         */
-        registrationNumber?: string;
-        /**
-         * Intellectual property office where registered
-         */
-        registrationOffice?: string;
-        /**
-         * Date the IP right expires
-         */
-        expiryDate?: string;
-        /**
-         * Approximate annual revenue generated from this IP (licensing, royalties, etc.)
-         */
-        annualRevenue?: Money2;
-        /**
-         * Current licensees of this IP
-         */
-        licensees?: Array<string>;
-    };
-    /**
-     * Employee stock compensation details — options, RSUs, ESPPs. Vesting schedules and exercise windows are critical on death
-     */
-    stockCompensation?: {
-        /**
-         * Type of stock compensation
-         */
-        compensationType?: 'iso' | 'nso' | 'rsu' | 'espp' | 'phantom_stock' | 'sar' | 'other';
-        /**
-         * Date the award was granted
-         */
-        grantDate?: string;
-        /**
-         * Description of the vesting schedule
-         */
-        vestingSchedule?: string;
-        /**
-         * Number of shares/units currently vested
-         */
-        vestedQuantity?: number;
-        /**
-         * Number of shares/units not yet vested. May be forfeited on death depending on plan terms
-         */
-        unvestedQuantity?: number;
-        /**
-         * Strike/exercise price per share for options
-         */
-        exercisePrice?: Money2;
-        /**
-         * Date the options expire. Estate typically has limited window to exercise after death
-         */
-        expirationDate?: string;
-        /**
-         * Time allowed for estate to exercise options after death
-         */
-        postDeathExerciseWindow?: string;
-        /**
-         * Whether unvested awards accelerate (fully vest) on death
-         */
-        acceleratesOnDeath?: boolean;
-    };
-    /**
-     * Details of money owed to the testator by others. These are estate assets that the executor must collect
-     */
-    debtReceivable?: {
-        /**
-         * Name of the person or organisation that owes the debt
-         */
-        debtorName?: string;
-        /**
-         * Reference to Person.id if the debtor is in the people array
-         */
-        debtorPersonId?: string;
-        /**
-         * Original amount of the debt
-         */
-        originalAmount?: Money2;
-        /**
-         * Amount currently outstanding
-         */
-        outstandingAmount?: Money2;
-        /**
-         * Annual interest rate on the debt, as a percentage
-         */
-        interestRate?: number;
-        /**
-         * Whether the debt is secured against collateral
-         */
-        secured?: boolean;
-        /**
-         * Reference to any loan agreement or promissory note
-         */
-        documentRef?: string;
-        /**
-         * Likelihood of collecting this debt
-         */
-        collectibility?: 'likely' | 'uncertain' | 'doubtful' | 'uncollectible';
-    };
-};
-
-/**
- * Vehicle Asset Properties
- *
- * Category-specific properties for vehicles: cars, motorcycles, boats, caravans, classic vehicles
- */
-export type Vehicle = {
-    /**
-     * Structured vehicle data — identity, registration, and estate administration tracking. Present when category is 'vehicle'. Maps to schema:Vehicle in JSON-LD
-     */
-    vehicle?: {
-        /**
-         * Vehicle registration number (number plate). Primary UK identifier. Format varies by jurisdiction
-         */
-        registrationNumber?: string;
-        /**
-         * 17-character Vehicle Identification Number. International standard, globally unique per vehicle
-         */
-        vin?: string;
-        /**
-         * Vehicle manufacturer. Use the DVLA-registered name where available
-         */
-        make?: string;
-        /**
-         * Vehicle model name. DVLA VES API does not return this — must come from user input or VIN decode
-         */
-        model?: string;
-        /**
-         * Trim level, edition, or variant
-         */
-        variant?: string;
-        /**
-         * Four-digit year of manufacture
-         */
-        yearOfManufacture?: number;
-        /**
-         * Date of first registration in the UK (or equivalent jurisdiction)
-         */
-        dateOfFirstRegistration?: string;
-        /**
-         * DVLA-registered colour
-         */
-        colour?: string;
-        /**
-         * Fuel type as reported by DVLA
-         */
-        fuelType?: 'petrol' | 'diesel' | 'electric' | 'hybrid_petrol' | 'hybrid_diesel' | 'lpg' | 'other' | string;
-        /**
-         * Engine capacity in cubic centimetres (cc). Zero for electric vehicles
-         */
-        engineCapacity?: number;
-        /**
-         * CO2 emissions in grams per kilometre
-         */
-        co2Emissions?: number;
-        /**
-         * Type of vehicle
-         */
-        vehicleType?: 'car' | 'motorcycle' | 'van' | 'motorhome' | 'trike' | 'sidecar_outfit' | 'other' | string;
-        /**
-         * Whether the vehicle is considered a classic or historic vehicle. In the UK, vehicles manufactured before 1 January 1977 are exempt from vehicle excise duty. Classic vehicles may need specialist valuation (Hagerty, auction houses) rather than standard guides
-         */
-        isClassic?: boolean;
-        /**
-         * Whether the deceased was the registered keeper of this vehicle
-         */
-        keeperStatus?: 'registered_keeper' | 'not_registered_keeper' | 'unknown' | string;
-        /**
-         * Status of the V5C registration document (logbook)
-         */
-        v5cStatus?: 'held' | 'missing' | 'applied_for' | 'with_dvla' | string;
-        /**
-         * Type of finance arrangement on the vehicle. If HP or PCP, the vehicle is owned by the finance company, not the estate
-         */
-        financeType?: 'none' | 'hp' | 'pcp' | 'lease' | 'loan' | 'unknown' | string;
-        /**
-         * Whether a Statutory Off Road Notification (SORN) is currently in effect
-         */
-        sornDeclared?: boolean;
-        /**
-         * Tracks which estate administration steps have been completed for this vehicle
-         */
-        deathActions?: {
-            /**
-             * Whether DVLA has been notified of the keeper's death
-             */
-            dvlaNotified?: boolean;
-            /**
-             * When DVLA was notified
-             */
-            dvlaNotifiedAt?: string;
-            /**
-             * Whether the vehicle insurer has been notified
-             */
-            insurerNotified?: boolean;
-            /**
-             * When the insurer was notified
-             */
-            insurerNotifiedAt?: string;
-            /**
-             * Whether the finance company has been notified (if applicable)
-             */
-            financeCompanyNotified?: boolean;
-            /**
-             * Whether the finance has been settled or the vehicle returned
-             */
-            financeSettled?: boolean;
-            /**
-             * Whether a refund has been claimed for remaining full months of vehicle tax
-             */
-            taxRefundClaimed?: boolean;
-            /**
-             * What the executor intends to do with the vehicle
-             */
-            intendedDisposal?: 'transfer_to_beneficiary' | 'sell' | 'scrap' | 'sorn_and_store' | 'undecided' | string;
-        };
-    };
-    /**
-     * Live vehicle check data from DVLA VES, DVSA MOT History, and HPI/finance check APIs. Point-in-time snapshot at retrievedAt
-     */
-    vehicleCheck?: {
-        /**
-         * When this check data was fetched
-         */
-        retrievedAt: string;
-        /**
-         * Current MOT expiry date
-         */
-        motExpiry?: string;
-        /**
-         * Current MOT status
-         */
-        motStatus?: 'valid' | 'expired' | 'no_mot_required' | 'sorn' | string;
-        /**
-         * Mileage at last MOT test
-         */
-        lastMileage?: number;
-        /**
-         * Date of the last MOT mileage reading
-         */
-        lastMileageDate?: string;
-        /**
-         * Number of advisory items at last MOT
-         */
-        advisoryCount?: number;
-        /**
-         * Number of failure items at last MOT
-         */
-        failureCount?: number;
-        /**
-         * DVLA vehicle tax status
-         */
-        taxStatus?: 'taxed' | 'untaxed' | 'sorn' | 'not_taxed_for_on_road_use' | string;
-        /**
-         * When vehicle tax expires
-         */
-        taxDueDate?: string;
-        /**
-         * Whether the vehicle appears insured on the Motor Insurance Database
-         */
-        insuranceStatus?: 'insured' | 'not_insured' | 'unknown' | string;
-        /**
-         * Whether there is outstanding finance on the vehicle
-         */
-        financeOutstanding?: boolean;
-        /**
-         * Finance settlement figure in minor units (pennies). The amount needed to clear the finance and take ownership
-         */
-        financeSettlementAmount?: number;
-        /**
-         * Insurance write-off category, if applicable
-         */
-        writeOffCategory?: 'A' | 'B' | 'S' | 'N' | 'none' | string;
-        /**
-         * Whether the vehicle is reported stolen
-         */
-        stolenStatus?: 'clear' | 'reported_stolen' | 'unknown' | string;
-        /**
-         * Number of previous registered keepers
-         */
-        previousKeepers?: number;
-        /**
-         * Number of registration plate changes in the vehicle's history
-         */
-        plateChanges?: number;
-        /**
-         * Whether MOT mileage readings show a discrepancy (clocking indicator)
-         */
-        mileageAnomaly?: boolean;
-    };
-};
-
-/**
- * Digital Asset Properties
- *
- * Category-specific properties for digital assets: domains, social media, subscriptions, crypto wallets, cloud storage, NFTs, gaming accounts
- */
-export type Digital = {
-    /**
-     * Structured access information for digital assets — login credentials, 2FA, recovery methods, and platform death policies. Critical for executors managing the digital estate
-     */
-    digitalAccess?: {
-        /**
-         * Username or login identifier for this account
-         */
-        username?: string;
-        /**
-         * Where the password is stored — a password manager, physical location, or person who holds it
-         */
-        passwordStorageLocation?: string;
-        /**
-         * Name of the password manager holding credentials for this account
-         */
-        passwordManager?: string;
-        /**
-         * Whether two-factor authentication is enabled on this account
-         */
-        twoFactorEnabled?: boolean;
-        /**
-         * Methods available to recover access to this account if the primary credentials are unavailable
-         */
-        recoveryMethods?: Array<{
-            /**
-             * Type of recovery method
-             */
-            type?: 'backup_codes' | 'email' | 'phone' | 'security_key';
-            /**
-             * Where this recovery method or device is stored
-             */
-            location?: string;
-        }>;
-        /**
-         * The platform's policy for handling accounts after the holder's death
-         */
-        platformDeathPolicy?: 'memorialise' | 'delete' | 'transfer' | 'archive' | 'unknown' | string;
-        /**
-         * Whether a legacy contact has been configured on the platform (e.g. Google Inactive Account Manager, Facebook Legacy Contact)
-         */
-        legacyContactConfigured?: boolean;
-        /**
-         * Reference to the Person.id configured as the platform's legacy contact
-         */
-        legacyContactPersonId?: string;
-    };
-    /**
-     * Social media account details for digital assets
-     */
-    socialMedia?: {
-        /**
-         * The social media platform
-         */
-        platform?: 'facebook' | 'instagram' | 'tiktok' | 'twitter_x' | 'linkedin' | 'threads' | 'youtube' | 'pinterest' | 'other' | string;
-        /**
-         * Username or handle
-         */
-        username?: string;
-        /**
-         * Direct URL to the profile
-         */
-        url?: string;
-        /**
-         * Number of followers
-         */
-        followerCount?: number;
-        /**
-         * Whether the account generates revenue
-         */
-        monetised?: boolean;
-        /**
-         * Preferred action after death
-         */
-        postDeathAction?: 'memorialise' | 'delete' | 'transfer' | 'archive' | 'unknown' | string;
-        /**
-         * Person.id to transfer the account to
-         */
-        transferToPersonId?: string;
-    };
-    /**
-     * Cryptocurrency wallet and key access information
-     */
-    cryptoAccess?: {
-        /**
-         * The blockchain network
-         */
-        blockchain?: 'bitcoin' | 'ethereum' | 'solana' | 'cardano' | 'other' | string;
-        /**
-         * Type of wallet
-         */
-        walletType?: 'hardware' | 'software' | 'exchange' | 'custodian' | 'paper';
-        /**
-         * Public wallet address
-         */
-        walletAddress?: string;
-        /**
-         * Where the private key is stored — DO NOT store the key itself
-         */
-        privateKeyLocation?: string;
-        /**
-         * Where the seed phrase is stored — DO NOT store it
-         */
-        seedPhraseLocation?: string;
-        /**
-         * Organisation.id of the exchange
-         */
-        exchangeOrganisationId?: string;
-        /**
-         * Original cost basis for CGT
-         */
-        costBasis?: Money2;
-    };
-    /**
-     * Cloud storage account details for digital assets — provider, usage, important folders, family photo access
-     */
-    cloudStorage?: {
-        /**
-         * Cloud storage provider
-         */
-        provider?: 'google_drive' | 'onedrive' | 'icloud' | 'dropbox' | 'aws_s3' | 'other' | string;
-        /**
-         * Amount of storage used
-         */
-        storageUsed?: string;
-        /**
-         * Important folders that need attention during estate administration
-         */
-        importantFolders?: Array<{
-            /**
-             * Folder name
-             */
-            name?: string;
-            /**
-             * Description of folder contents
-             */
-            contents?: string;
-            /**
-             * What should happen to this folder
-             */
-            action?: 'archive' | 'delete' | 'transfer';
-        }>;
-        /**
-         * Whether the account contains family photos that should be preserved and shared
-         */
-        familyPhotoAccess?: boolean;
-    };
-    /**
-     * Domain name registration details — registrar, expiry, transfer locks. Critical for executors managing digital estates with web properties
-     */
-    domainNameAccess?: {
-        /**
-         * The registered domain name
-         */
-        domainName?: string;
-        /**
-         * Domain registrar name
-         */
-        registrar?: string;
-        /**
-         * Organisation.id of the registrant, if the domain is held by an organisation
-         */
-        registrantOrganisationId?: string;
-        /**
-         * Domain registration expiry date
-         */
-        expiryDate?: string;
-        /**
-         * Whether automatic renewal is enabled
-         */
-        autoRenew?: boolean;
-        /**
-         * Whether the domain has a transfer lock (registrar lock / clientTransferProhibited)
-         */
-        transferLocked?: boolean;
-        /**
-         * Where the transfer auth code is stored — reference only, never the code itself
-         */
-        authCodeLocation?: string;
-        /**
-         * Nameservers currently assigned to the domain
-         */
-        nameservers?: Array<string>;
-    };
-    /**
-     * Non-fungible token (NFT) details — blockchain, contract, token identifier, and marketplace information
-     */
-    nftAccess?: {
-        /**
-         * The blockchain network hosting the NFT
-         */
-        blockchain?: 'bitcoin' | 'ethereum' | 'solana' | 'cardano' | 'polygon' | 'other' | string;
-        /**
-         * Smart contract address for the NFT collection
-         */
-        contractAddress?: string;
-        /**
-         * Token identifier — string because can be very large integers
-         */
-        tokenId?: string;
-        /**
-         * The token standard used by the NFT contract
-         */
-        tokenStandard?: 'erc_721' | 'erc_1155' | 'other' | string;
-        /**
-         * Primary marketplace where this NFT is listed or was purchased
-         */
-        marketplace?: string;
-        /**
-         * Direct URL to the NFT listing on the marketplace
-         */
-        marketplaceUrl?: string;
-        /**
-         * Points to off-chain metadata JSON (tokenURI)
-         */
-        metadataUri?: string;
-    };
-    /**
-     * Monetised online content — YouTube channels, Substack newsletters, Patreon pages, and similar revenue-generating content platforms
-     */
-    monetisedContentAccess?: {
-        /**
-         * Content platform
-         */
-        platform?: 'youtube' | 'substack' | 'etsy' | 'patreon' | 'twitch' | 'spotify' | 'medium' | 'other' | string;
-        /**
-         * Direct URL to the channel or storefront
-         */
-        channelUrl?: string;
-        /**
-         * Display name of the channel or storefront
-         */
-        channelName?: string;
-        /**
-         * Number of subscribers or followers on the platform
-         */
-        subscriberCount?: number;
-        /**
-         * Approximate monthly revenue from the platform, in minor currency units
-         */
-        monthlyRevenue?: Money2;
-        /**
-         * Current monetisation status of the content
-         */
-        monetisationStatus?: 'active' | 'suspended' | 'demonetised' | 'pending' | 'none' | string;
-        /**
-         * Primary type of content produced
-         */
-        contentType?: 'video' | 'audio' | 'written' | 'mixed' | 'other' | string;
-        /**
-         * How the content generates revenue
-         */
-        revenueModel?: 'advertising' | 'subscription' | 'tips' | 'affiliate' | 'merchandise' | 'mixed' | string;
-    };
-    /**
-     * Loyalty programme points and rewards — airline miles, hotel points, retailer schemes. Some programmes permit post-death transfer; others forfeit on death
-     */
-    loyaltyAccess?: {
-        /**
-         * Name of the loyalty programme
-         */
-        programme?: string;
-        /**
-         * Organisation that operates the programme
-         */
-        programmeProvider?: string;
-        /**
-         * Current points balance
-         */
-        pointsBalance?: number;
-        /**
-         * Approximate cash equivalent of the points balance, in minor currency units
-         */
-        cashEquivalent?: Money2;
-        /**
-         * Date when the points expire if not used
-         */
-        expiryDate?: string;
-        /**
-         * Whether the programme permits transfer of points after death
-         */
-        transferable?: boolean;
-        /**
-         * URL to the programme's transfer or bereavement page
-         */
-        transferUrl?: string;
-    };
-    /**
-     * Gaming platform account details — Steam, Xbox, PlayStation, and similar platforms with virtual currencies and digital game libraries
-     */
-    gamingAccess?: {
-        /**
-         * Gaming platform
-         */
-        platform?: 'steam' | 'xbox' | 'playstation' | 'nintendo' | 'epic' | 'roblox' | 'other' | string;
-        /**
-         * Account name or gamertag on the platform
-         */
-        accountName?: string;
-        /**
-         * Balance of virtual currency on the platform
-         */
-        virtualCurrencyBalance?: number;
-        /**
-         * Name of the virtual currency
-         */
-        virtualCurrencyName?: string;
-        /**
-         * Whether the platform permits account or library transfer after death
-         */
-        transferable?: boolean;
-        /**
-         * Estimated real-world value of the account's digital assets, in minor currency units
-         */
-        estimatedRealValue?: Money2;
-    };
-    /**
-     * Instructions for what should happen to a digital asset or account after death — memorialise, delete, transfer, archive, or preserve
-     */
-    platformDelegation?: {
-        /**
-         * Desired post-death action for this digital asset
-         */
-        action: 'memorialise' | 'delete' | 'transfer' | 'archive' | 'deactivate' | 'preserve' | string;
-        /**
-         * How long to wait before executing the action, as an ISO 8601 duration
-         */
-        delayDuration?: string;
-        /**
-         * Person.id to transfer the asset to (when action is 'transfer')
-         */
-        transferToPersonId?: string;
-        /**
-         * Free-text instructions for the executor regarding this digital asset
-         */
-        specificInstructions?: string;
-        /**
-         * Whether the platform's native death/inactivity tool has been set up
-         */
-        platformToolConfigured?: boolean;
-        /**
-         * Which platform tool has been configured, if any
-         */
-        platformToolType?: 'inactive_account_manager' | 'legacy_contact' | 'digital_legacy' | 'memorialisation_request' | 'none' | 'other' | string;
-        /**
-         * Date when the platform tool was configured
-         */
-        configuredDate?: string;
-    };
-    /**
-     * How a fiduciary (executor, personal representative) can gain lawful access to this digital asset after death
-     */
-    fiduciaryAccess?: {
-        /**
-         * The method by which a fiduciary can access this digital asset
-         */
-        accessMethod: 'designated_recipient' | 'legacy_contact' | 'inactive_account_manager' | 'court_order' | 'rufadaa_request' | 'platform_form' | 'credential_sharing' | 'none' | string;
-        /**
-         * Whether the chosen access method has been set up with the platform
-         */
-        accessConfigured?: boolean;
-        /**
-         * Person.id of the designated recipient for this digital asset
-         */
-        designatedRecipientPersonId?: string;
-        /**
-         * RUFADAA catalogue vs content distinction
-         */
-        accessScope?: 'catalogue_only' | 'full_content' | 'restricted' | 'unknown' | string;
-        /**
-         * URL to the platform's terms of service or bereavement policy
-         */
-        termsOfServiceUrl?: string;
-        /**
-         * Summary of key constraints from the platform's terms of service that affect fiduciary access
-         */
-        termsOfServiceConstraints?: string;
-    };
-};
-
-/**
- * Business Asset Properties
- *
- * Category-specific properties for business assets: partnerships, company holdings, intellectual property, stock compensation
- */
-export type Business = {
-    /**
-     * Detailed business interest information — partnership shares, LLP membership, sole trader business. Relevant for BPR (UK), QFOBI (US), and succession planning
-     */
-    businessInterest?: {
-        /**
-         * Trading name of the business
-         */
-        businessName?: string;
-        /**
-         * Legal structure of the business
-         */
-        businessType?: 'sole_trader' | 'partnership' | 'llp' | 'limited_company' | 'plc' | 'franchise' | 'cooperative' | 'other';
-        /**
-         * The testator's ownership percentage
-         */
-        ownershipPercentage?: number;
-        /**
-         * Whether the testator holds a controlling interest. Affects BPR eligibility and valuation discounts
-         */
-        controllingInterest?: boolean;
-        /**
-         * Whether a written partnership/operating agreement exists
-         */
-        partnershipAgreement?: boolean;
-        /**
-         * What the partnership/operating agreement says about succession on death
-         */
-        successionProvision?: string;
-        /**
-         * Approximate annual turnover — helps with BPR qualification and valuation
-         */
-        annualTurnover?: Money2;
-        /**
-         * Number of employees
-         */
-        employees?: number;
-    };
-    /**
-     * Intellectual property details — patents, copyrights, trademarks, trade secrets. IP succession varies by jurisdiction and type
-     */
-    intellectualProperty?: {
-        /**
-         * Type of intellectual property
-         */
-        ipType?: 'patent' | 'copyright' | 'trademark' | 'design_right' | 'trade_secret' | 'database_right' | 'other';
-        /**
-         * Registration or application number
-         */
-        registrationNumber?: string;
-        /**
-         * Intellectual property office where registered
-         */
-        registrationOffice?: string;
-        /**
-         * Date the IP right expires
-         */
-        expiryDate?: string;
-        /**
-         * Approximate annual revenue generated from this IP (licensing, royalties, etc.)
-         */
-        annualRevenue?: Money2;
-        /**
-         * Current licensees of this IP
-         */
-        licensees?: Array<string>;
-    };
-    /**
-     * Employee stock compensation details — options, RSUs, ESPPs. Vesting schedules and exercise windows are critical on death
-     */
-    stockCompensation?: {
-        /**
-         * Type of stock compensation
-         */
-        compensationType?: 'iso' | 'nso' | 'rsu' | 'espp' | 'phantom_stock' | 'sar' | 'other';
-        /**
-         * Date the award was granted
-         */
-        grantDate?: string;
-        /**
-         * Description of the vesting schedule
-         */
-        vestingSchedule?: string;
-        /**
-         * Number of shares/units currently vested
-         */
-        vestedQuantity?: number;
-        /**
-         * Number of shares/units not yet vested. May be forfeited on death depending on plan terms
-         */
-        unvestedQuantity?: number;
-        /**
-         * Strike/exercise price per share for options
-         */
-        exercisePrice?: Money2;
-        /**
-         * Date the options expire. Estate typically has limited window to exercise after death
-         */
-        expirationDate?: string;
-        /**
-         * Time allowed for estate to exercise options after death
-         */
-        postDeathExerciseWindow?: string;
-        /**
-         * Whether unvested awards accelerate (fully vest) on death
-         */
-        acceleratesOnDeath?: boolean;
-    };
-    /**
-     * Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will
-     */
-    coOwnership?: {
-        /**
-         * Person IDs of co-owners
-         */
-        coOwnerPersonIds?: Array<string>;
-        /**
-         * How ownership is structured between co-owners
-         */
-        ownershipType?: 'joint_tenants' | 'tenants_in_common' | 'community_property' | 'partnership' | 'other';
-        /**
-         * The testator's ownership percentage
-         */
-        ownershipPercentage?: number;
-        /**
-         * Date joint tenancy was severed to become tenants in common (if applicable)
-         */
-        severanceDate?: string;
-    };
-};
-
-/**
- * General Asset Properties
- *
- * Category-specific properties for general tangible assets: art, antiques, jewellery, collectibles, books, wine, clothing, firearms, musical instruments, property contents
- */
-export type General = {
-    /**
-     * Result of a stolen art check against the Art Loss Register (ALR) or equivalent database. Required by auction houses before sale of art, antiques, and high-value collectibles
-     */
-    stolenArtCheck?: {
-        /**
-         * When the check was performed
-         */
-        retrievedAt: string;
-        /**
-         * Outcome of the stolen art check
-         */
-        result?: 'clear' | 'flagged' | 'inconclusive' | string;
-        /**
-         * ALR certificate or search reference number
-         */
-        certificateReference?: string;
-        /**
-         * URL to the ALR certificate or search result
-         */
-        certificateUrl?: string;
-        /**
-         * Who performed the check — person name, organisation, or system identifier
-         */
-        checkedBy?: string;
-    };
-    /**
-     * Structured gemological certificate data from GIA, AGS, or other grading laboratory. Confirms stone identity, quality grades, and weight — essential for insurance and sale valuation
-     */
-    gemologicalCertificate?: {
-        /**
-         * When this certificate data was retrieved or verified
-         */
-        retrievedAt: string;
-        /**
-         * The grading laboratory that issued the certificate
-         */
-        laboratory?: 'gia' | 'ags' | 'igi' | 'hrd' | 'egl' | string;
-        /**
-         * Certificate or report number
-         */
-        certificateNumber?: string;
-        /**
-         * URL to verify the certificate online with the issuing laboratory
-         */
-        verificationUrl?: string;
-        /**
-         * Type of gemstone
-         */
-        stoneType?: string;
-        /**
-         * Weight in carats
-         */
-        caratWeight?: number;
-        /**
-         * Colour grade as assigned by the laboratory
-         */
-        colourGrade?: string;
-        /**
-         * Clarity grade as assigned by the laboratory
-         */
-        clarityGrade?: string;
-        /**
-         * Cut grade as assigned by the laboratory (diamonds only — not all labs grade cut for coloured stones)
-         */
-        cutGrade?: string;
-    };
-};
-
-/**
- * A single service, maintenance, or restoration record for a mechanical or valuable item. Used for watches, vehicles, clocks, musical instruments, and any item with a service lifecycle
- */
-export type ServiceRecord = {
-    /**
-     * When the service was performed
-     */
-    serviceDate: string;
-    /**
-     * Who performed the service (manufacturer service centre, independent specialist, etc.)
-     */
-    provider?: string;
-    /**
-     * What was done
-     */
-    description?: string;
-    /**
-     * Cost of the service, in minor currency units
-     */
-    cost?: Money2;
-    /**
-     * Reference to a service certificate, receipt, or MOT certificate
-     */
-    documentReference?: string;
-};
-
-/**
- * Asset
- *
- * A non-property asset: financial accounts, personal property, vehicles, digital assets, business interests, Islamic finance instruments, etc
- */
-export type Asset2 = unknown & {
-    /**
-     * Unique identifier for this asset within the INHERIT document
-     */
-    id: string;
-    /**
-     * Display name for this asset. Should be specific enough to identify the item during probate
-     */
-    name: string;
-    /**
-     * Top-level category from the INHERIT Product Taxonomy. Use the `subcategory` field for finer classification. See `reference-data/category-guidance.json` for valid subcategories, recommended identifiers, and photography guidance per category
-     */
-    category: 'financial' | 'vehicle' | 'digital' | 'business' | 'property_contents' | 'jewellery_watches' | 'art' | 'antiques' | 'collectibles' | 'musical_instruments' | 'books_manuscripts' | 'wine_spirits' | 'clothing_textiles' | 'firearms_sporting' | 'islamic_financial' | 'other';
-    /**
-     * Finer classification within the top-level category. Values are defined in reference-data/category-guidance.json but the field is freeform to accommodate jurisdiction-specific asset types. Examples: financial → 'pension', collectibles → 'model_railways', vehicle → 'classic_vehicle'
-     */
-    subcategory?: string;
-    /**
-     * Owner's estimate of the asset's current value, in minor currency units
-     */
-    estimatedValue?: Money2;
-    /**
-     * Professional valuation of the asset, in minor currency units
-     */
-    professionalValuation?: Money2;
-    /**
-     * Date of the most recent valuation
-     */
-    valuationDate?: string;
-    /**
-     * Level of confidence in the stated valuation
-     */
-    valuationConfidence?: 'estimated' | 'professional' | 'official' | 'unknown';
-    /**
-     * Physical condition of the asset. Affects resale value — dealers use this to price items. Pair with conditionSystem and conditionGrade for domain-specific grading. Use 'not_applicable' for financial assets where condition is meaningless
-     */
-    condition?: 'excellent' | 'good' | 'fair' | 'poor' | 'unknown' | 'not_applicable';
-    /**
-     * Number of items if this represents multiple identical or similar items
-     */
-    quantity?: number;
-    /**
-     * Where this asset is physically stored or held — a bank, safe, property, or institution
-     */
-    location?: string;
-    /**
-     * Reference to a Property.id if this asset is located at a specific property in the estate
-     */
-    propertyId?: string;
-    /**
-     * Reference to the AssetCollection.id this asset belongs to. An asset may belong to at most one collection. If set, this asset's value contributes to the collection's total
-     */
-    assetCollectionId?: string;
-    /**
-     * Reference to a Space.id representing where this item is physically stored. Critical for collections spread across multiple properties or countries — affects probate jurisdiction and dealer collection logistics
-     */
-    spaceId?: string | null;
-    /**
-     * External identifiers — serial numbers, account numbers, policy references, registration numbers, etc
-     */
-    identifiers?: Array<Identifier2>;
-    /**
-     * Links to this asset in external databases, marketplaces, and registries. The universal connector — any external system can be referenced without a schema change. Use identifiers for formal identifier schemes (ISBN, VIN, NINO); use externalLinks for platform-specific references, product pages, and database entries
-     */
-    externalLinks?: Array<{
-        /**
-         * The external system or platform name. Use lowercase, no spaces
-         */
-        system: string;
-        /**
-         * The platform-specific identifier for this asset
-         */
-        id: string;
-        /**
-         * Direct URL to the asset's page on the external platform. Optional — some systems are API-only
-         */
-        url?: string;
-        /**
-         * Human-readable label for display. Optional — defaults to the system name
-         */
-        label?: string;
-        /**
-         * Timestamp when this link was last verified or data was last retrieved
-         */
-        retrievedAt?: string;
-    }>;
-    /**
-     * URI pointing to the manufacturer's or retailer's official product page for this exact item. Distinct from storageRef (document storage) and externalLinks (database references). Enables direct linking to manufacturer specifications, manuals, and warranty information
-     */
-    productPage?: string;
-    /**
-     * Prior ownership records — establishes the chain of provenance for the asset. Critical for art, antiques, and high-value collectibles
-     */
-    provenanceChain?: Array<{
-        /**
-         * Description of this provenance record
-         */
-        description: string;
-        /**
-         * Name of the previous owner (may be anonymised)
-         */
-        ownerName?: string;
-        /**
-         * Approximate start date of this ownership period
-         */
-        fromDate?: string;
-        /**
-         * Approximate end date of this ownership period
-         */
-        toDate?: string;
-        /**
-         * How the owner acquired the asset
-         */
-        acquisitionMethod?: 'purchase' | 'inheritance' | 'gift' | 'commission' | 'restitution' | 'auction' | 'unknown';
-        /**
-         * Where this provenance information came from
-         */
-        source?: string;
-        /**
-         * Link to supporting evidence (sale record, catalogue entry, etc.)
-         */
-        evidenceUrl?: string;
-    }>;
-    /**
-     * Photographs, videos, and document scans. Vision-capable AI agents use these to identify items, assess condition, and find visual matches on marketplaces. Use viewType from media.json to categorize each media item
-     */
-    images?: Array<Media2>;
-    /**
-     * Whether the asset was held at death, is receivable post-death, or is contingent on a future event
-     */
-    possessionStatus?: 'possessed_at_death' | 'receivable' | 'contingent';
-    /**
-     * Whether this asset is classified as immoveable or moveable property. Affects which conflict-of-laws rules apply in cross-border estates
-     */
-    mobilityType?: 'immoveable' | 'moveable' | 'mixed';
-    /**
-     * How this asset was acquired. Determines succession rules in Indian and other customary systems
-     */
-    acquisitionType?: 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed';
-    /**
-     * Whether ownership of this asset is formally registered or documented
-     */
-    registrationStatus?: 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented';
-    /**
-     * The type of evidence available to prove ownership of this asset
-     */
-    ownershipEvidence?: 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none';
-    /**
-     * Cultural, religious, and regulatory constraints on disposal of this asset
-     */
-    culturalDisposition?: CulturalDisposition2;
-    /**
-     * The communal or family authority whose approval is required to dispose of this asset
-     */
-    communalAuthority?: {
-        /**
-         * Category of communal authority
-         */
-        authorityType?: 'family_council' | 'clan_association' | 'religious_body' | 'tribal_council' | 'government';
-        /**
-         * Whether approval from this authority is legally required before disposal
-         */
-        approvalRequired?: boolean;
-        /**
-         * Name of the specific authority or person
-         */
-        authorityName?: string;
-        /**
-         * Jurisdiction where this communal authority has legal standing
-         */
-        jurisdiction?: Jurisdiction2;
-    };
-    /**
-     * The succession regime governing this specific asset. Overrides estate.defaultSuccessionRegime when present
-     */
-    successionRegime?: {
-        /**
-         * The law governing succession for this asset
-         */
-        governingLaw?: {
-            /**
-             * Jurisdiction whose succession law applies
-             */
-            jurisdiction?: Jurisdiction2;
-            /**
-             * Which legal tradition applies
-             */
-            legalTradition?: 'common_law' | 'civil_law' | 'mixed' | 'customary_law' | 'islamic_law' | 'hindu_law' | 'jewish_law' | 'canon_law';
-            /**
-             * Name of the governing statute
-             */
-            statute?: string;
-            /**
-             * Specific section of the statute
-             */
-            section?: string;
-        };
-        /**
-         * How the governing law was determined
-         */
-        determinedBy?: 'domicile' | 'situs' | 'nationality' | 'personal_status' | 'choice_of_law' | 'treaty';
-        /**
-         * Whether this succession regime is legally binding
-         */
-        binding?: boolean;
-        /**
-         * INHERIT extension IDs that apply to this asset's succession
-         */
-        extensions?: Array<string>;
-        /**
-         * Additional context about the succession regime
-         */
-        notes?: string;
-    };
-    /**
-     * Named beneficiary designation for this asset. Assets with beneficiary designations pass outside the probate estate — the will does not control their distribution
-     */
-    beneficiaryDesignation?: {
-        /**
-         * Person IDs of the primary beneficiaries
-         */
-        primaryBeneficiaryPersonIds?: Array<string>;
-        /**
-         * Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)
-         */
-        contingentBeneficiaryPersonIds?: Array<string>;
-        /**
-         * The type of beneficiary designation
-         */
-        designationType?: 'retirement_account' | 'life_insurance' | 'superannuation' | 'pod_account' | 'other';
-        /**
-         * Reference to the NonprobateTransfer entity that tracks this designation
-         */
-        linkedNonprobateTransferId?: string;
-    };
-    /**
-     * Digital access consent under RUFADAA or equivalent legislation. Governs whether executors and fiduciaries can access the deceased's digital accounts and assets
-     */
-    digitalAccessConsent?: {
-        /**
-         * Whether the account holder has given consent for fiduciary access
-         */
-        consentGiven?: boolean;
-        /**
-         * The scope of access granted to fiduciaries
-         */
-        scope?: 'full_access' | 'limited_access' | 'no_access';
-        /**
-         * Reference to the Person.id designated to receive access to this digital asset
-         */
-        designatedRecipientPersonId?: string;
-        /**
-         * Human-readable display name for the referenced designated recipient person
-         */
-        designatedRecipientPersonIdDisplay?: string;
-        /**
-         * Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA
-         */
-        onlineToolDirective?: boolean;
-    };
-    /**
-     * Whether this asset passes outside the probate estate. Beneficiary designations, POD accounts, and jointly held assets typically bypass the will
-     */
-    passesOutsideEstate?: boolean;
-    /**
-     * Free-text notes about this asset. Use for provenance, sentimental value, special handling instructions, or anything not captured by structured fields
-     */
-    notes?: string;
-    /**
-     * Structured description of the asset — what it is, its significance, and key details a dealer or executor would need. Distinct from 'notes' which is free-form
-     */
-    description?: string;
-    /**
-     * The manufacturer or brand name. Accepts a plain string (backwards compatible) or a structured object with Wikidata linkage for rich product data. AI agents should use this as a primary search dimension when finding comparables
-     */
-    brand?: string | {
-        /**
-         * Brand or manufacturer name
-         */
-        name: string;
-        /**
-         * Wikidata Q-number for this brand. Resolves to structured data via the Wikidata API — founding year, country, parent company, logo, official website, product categories
-         */
-        wikidataId?: string;
-        /**
-         * Official brand website
-         */
-        website?: string;
-    };
-    /**
-     * The specific model, product line, or range name. Combined with brand and identifiers, this is the primary key for marketplace search. AI agents construct search queries from brand + model + subcategory
-     */
-    model?: string;
-    /**
-     * Date the asset was acquired by the current owner. Used for capital gains tax calculations, insurance claims, and provenance. Maps to Schema.org purchaseDate
-     */
-    purchaseDate?: string;
-    /**
-     * Whether original packaging, documentation, and accessories are present. Affects value by 20–40% across watches, model railways, jewellery, and many other domains
-     */
-    originalPackaging?: 'complete' | 'partial' | 'box_only' | 'papers_only' | 'none' | 'unknown';
-    /**
-     * Third party currently holding this asset — a bank (safe deposit), storage facility (bonded wine), repairer (watch at jeweller), gallery (art on loan), or institution. The executor needs to know who to contact
-     */
-    custodian?: {
-        /**
-         * Name of the person or organisation holding the asset
-         */
-        name?: string;
-        /**
-         * Email address for the custodian
-         */
-        contactEmail?: string;
-        /**
-         * Phone number for the custodian
-         */
-        contactPhone?: string;
-        /**
-         * The nature of the custodial relationship
-         */
-        relationship?: string;
-        /**
-         * Account or reference number with the custodian
-         */
-        reference?: string;
-    };
-    /**
-     * The grading system used for the conditionGrade value. Allows domain-specific condition assessment alongside the generic condition field
-     */
-    conditionSystem?: 'goldmine' | 'sheldon' | 'ags' | 'bsc' | 'gia' | 'watch_trade' | 'classic_vehicle' | 'book_trade' | string;
-    /**
-     * The specific grade within the conditionSystem. Meaningful only when conditionSystem is set
-     */
-    conditionGrade?: string;
-    /**
-     * URI pointing to the official documentation of the grading standard used. Enables tools to display the correct grading scale and interpret the conditionGrade value
-     */
-    conditionStandard?: string;
-    /**
-     * How urgently this asset needs attention after the testator's death. Drives the executor's priority list
-     */
-    urgency?: 'immediate' | 'within_7_days' | 'within_30_days' | 'none';
-    /**
-     * Explanation of why this asset is urgent. Particularly important for 'immediate' items
-     */
-    urgencyReason?: string;
-    /**
-     * Reference to another Asset.id if this asset is physically contained within or logically part of another asset. Enables hierarchical asset nesting — e.g. a watch inside a safe, tools inside a toolbox
-     */
-    containedInAssetId?: string;
-    /**
-     * Insurance coverage for this asset. The executor needs to know what's insured, by whom, and whether cover continues after death
-     */
-    insurance?: {
-        /**
-         * Name of the insurance provider
-         */
-        provider?: string;
-        /**
-         * Policy reference number
-         */
-        policyReference?: string;
-        /**
-         * The insured value in minor currency units
-         */
-        insuredValue?: Money2;
-        /**
-         * Next renewal date. Important — cover may lapse if not renewed after death
-         */
-        renewalDate?: string;
-        /**
-         * Additional insurance notes
-         */
-        notes?: string;
-    };
-    /**
-     * Where the asset was purchased or acquired from. Collectors track provenance — valuable for dealers and for establishing authenticity
-     */
-    purchasedFrom?: string;
-    /**
-     * Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split
-     */
-    splitFrom?: {
-        /**
-         * The type of entity that was split
-         */
-        entityType: 'asset' | 'asset_collection';
-        /**
-         * The id of the original entity that was split
-         */
-        entityId: string;
-        /**
-         * When the split occurred
-         */
-        splitAt: string;
-        /**
-         * Why the split was requested
-         */
-        reason?: string;
-    };
-    /**
-     * How this specific entity's data was captured. Overrides the document-level default if set
-     */
-    dataProvenance?: 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated';
-    /**
-     * Keywords for marketplace search — AI-generated or human-curated. Memoization: once derived, cached here so subsequent agents reuse them instantly rather than re-deriving
-     */
-    searchTerms?: Array<string>;
-    /**
-     * Structured search instructions for comparable-finding agents. Acts as agent memory — the item teaches future agents how to find its peers
-     */
-    comparableSearchProfile?: {
-        /**
-         * Marketplaces and platforms to search
-         */
-        platforms?: Array<string>;
-        /**
-         * Natural-language query an agent should use
-         */
-        searchQuery?: string;
-        /**
-         * Key-value filters to narrow results. Agents map to platform-specific parameters
-         */
-        filters?: {
-            [key: string]: string;
-        };
-        /**
-         * Platforms explicitly excluded
-         */
-        excludePlatforms?: Array<string>;
-        /**
-         * When an agent last executed this search profile
-         */
-        lastSearchedAt?: string;
-        /**
-         * How often this item should be re-searched
-         */
-        searchFrequency?: 'once' | 'weekly' | 'monthly' | 'on_demand';
-    };
-    /**
-     * AI-suggested subcategory refinement, kept separate from the human-set subcategory. Accepted when the user confirms. Provenance: always AI-generated
-     */
-    suggestedSubcategory?: string;
-    /**
-     * Numeric reliability score (0-100) for the current valuation. Computed from: recency, method, corroborating comparables, variance between estimates. Companion to the categorical valuationConfidence enum — the enum captures source, this number captures trustworthiness now. Agents use this to prioritise which assets need re-valuation
-     */
-    valuationReliability?: number;
-    /**
-     * When this entity's data was last verified by a human or authoritative source. Agents use this to decide whether to trust existing values or re-derive them
-     */
-    lastVerifiedAt?: string;
-    /**
-     * Who or what verified this entity — a person's name, a tool, or 'owner'
-     */
-    verifiedBy?: string;
-    /**
-     * Controls who can see this asset. Some assets (firearms, digital accounts, sensitive collections) may need restricted visibility
-     */
-    visibility?: Visibility2;
-    /**
-     * Per-field provenance records — how each field's value was obtained
-     */
-    fieldProvenance?: Array<FieldProvenance2>;
-    /**
-     * Discussion comments on this entity
-     */
-    comments?: Array<{
-        /**
-         * Unique identifier for this comment
-         */
-        id: string;
-        /**
-         * Person.id of the comment author
-         */
-        authorPersonId?: string;
-        /**
-         * Human-readable display name for the referenced author person
-         */
-        authorPersonIdDisplay?: string;
-        /**
-         * Comment text
-         */
-        content: string;
-        /**
-         * When the comment was created
-         */
-        createdAt: string;
-        visibility?: Visibility2;
-    }>;
-    /**
-     * Records that this entity was merged into another entity — the target entity is the canonical version
-     */
-    mergedInto?: {
-        /**
-         * Type of the target entity
-         */
-        entityType?: 'asset' | 'asset_collection';
-        /**
-         * ID of the target entity
-         */
-        entityId?: string;
-        /**
-         * When the merge occurred
-         */
-        mergedAt?: string;
-        /**
-         * Why the entities were merged
-         */
-        reason?: string;
-    };
-    /**
-     * Human-readable display name for the referenced storage location
-     */
-    spaceIdDisplay?: string;
-    /**
-     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
-     */
-    provenance?: Provenance2;
-    /**
-     * The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile
-     */
-    applicableLaw?: Jurisdiction2;
-    /**
-     * Per-asset tax treatment — how this asset is classified for tax purposes in a specific jurisdiction
-     */
-    taxTreatment?: {
-        jurisdiction?: Jurisdiction2;
-        assetType?: 'immoveable' | 'moveable' | 'mixed' | 'exempt';
-        exemptions?: Array<string>;
-        reliefClaimed?: Array<string>;
-    };
-    /**
-     * Instructions for accessing this asset after death — steps, locations, holders. No secrets in the document, just instructions for finding them. Available for all asset categories (digital: crypto wallets, social media; physical: safes, storage units)
-     */
-    accessInstructions?: {
-        accessType?: string;
-        platform?: string;
-        visibility?: Visibility2;
-        /**
-         * The estate role required to follow these instructions
-         */
-        requiredRole?: string;
-        steps?: Array<{
-            step: number;
-            method: string;
-            description?: string;
-            location?: string;
-            holderPersonId?: string;
-        }>;
-        memorialisation?: {
-            preference?: 'transfer_to_beneficiary' | 'memorialise' | 'delete' | 'archive' | 'no_preference';
-            instructions?: string;
-        };
-        lastVerified?: string;
-        verifiedBy?: string;
-    };
-    /**
-     * The owner's current intention for this item. Absent means keeping (the default). Used by catalogue applications to track whether items are being actively managed, offered for sale, or allocated to specific people
-     */
-    ownerIntent?: 'keeping' | 'considering' | 'thinning' | 'listed' | 'sold' | 'allocated' | 'donated';
-    /**
-     * Active or historical listings of this item for sale on external channels. Tracks where the item is listed, its status, and sale outcome. Application-level data — not part of the estate interchange but carried alongside it for catalogue and dealer workflows
-     */
-    listings?: Array<{
-        /**
-         * The sales channel where this item is listed
-         */
-        channel: 'ebay' | 'amazon' | 'shopify' | 'etsy' | 'own_website' | 'auction_house' | 'other';
-        /**
-         * Human-readable name of the channel, especially when channel is other
-         */
-        channelName?: string;
-        /**
-         * The platform-specific listing identifier
-         */
-        listingId?: string;
-        /**
-         * Direct URL to the listing on the external platform
-         */
-        listingUrl?: string;
-        /**
-         * Current status of this listing
-         */
-        status: 'draft' | 'active' | 'sold' | 'withdrawn' | 'expired';
-        /**
-         * The listed asking price
-         */
-        askingPrice?: Money2;
-        /**
-         * When this listing was created or last activated
-         */
-        listedAt?: string;
-        /**
-         * When the item was sold via this listing, if applicable
-         */
-        soldAt?: string | null;
-        /**
-         * The actual sale price, if sold
-         */
-        soldPrice?: Money2;
-    }>;
-    /**
-     * Service, maintenance, and restoration records. Critical for watches (service intervals affect value), vehicles (MOT history, restoration), clocks, and musical instruments
-     */
-    serviceHistory?: Array<ServiceRecord>;
-    /**
-     * Insurance details for this item. Tracks which policy covers it, the agreed value, and when cover was last confirmed. Essential for executors who need to claim on the correct policy
-     */
-    insuranceCover?: {
-        /**
-         * Name of the insurance company
-         */
-        insurer?: string;
-        /**
-         * The insurance policy number
-         */
-        policyNumber?: string;
-        /**
-         * The type of insurance policy covering this item
-         */
-        policyType?: 'home_contents' | 'specialist_collectibles' | 'classic_vehicle' | 'individual_item' | 'fine_art' | 'jewellery' | 'other';
-        /**
-         * The agreed or insured value, in minor currency units. May differ from market value
-         */
-        agreedValue?: Money2;
-        /**
-         * When the insurance cover for this item was last confirmed or reviewed
-         */
-        coverConfirmedAt?: string;
-    };
-    /**
-     * How this item can be transported for selling or verification. Determines which logistics path the Deal Comparison uses
-     */
-    shippingClass?: 'parcel' | 'large_item' | 'specialist_transport' | 'collection_only';
-    /**
-     * Original documents, certificates, and packaging elements present with this item. Affects value significantly across many categories. Cross-category: watches, vehicles, books, art, and collectibles share some document types
-     */
-    includedDocuments?: Array<'outer_box' | 'inner_box' | 'warranty_card' | 'cosc_certificate' | 'instruction_manual' | 'hang_tags' | 'service_booklet' | 'purchase_receipt' | 'original_invoice' | 'v5c_logbook' | 'mot_certificate' | 'provenance_letter' | 'certificate_of_authenticity' | 'appraisal_certificate' | 'export_licence' | 'customs_declaration' | string>;
-    /**
-     * Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)
-     */
-    taxReliefEligibility?: {
-        /**
-         * The type of tax relief claimed
-         */
-        reliefType?: 'agricultural_property' | 'business_property' | 'woodland' | 'heritage' | 'charitable';
-        eligible?: boolean;
-        /**
-         * Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
-         */
-        percentage?: number;
-        /**
-         * Conditions for maintaining eligibility
-         */
-        conditions?: string;
-        jurisdiction?: Jurisdiction2;
-        statute?: string;
-    };
-    /**
-     * Cultural, religious, sentimental, or professional significance beyond monetary value
-     */
-    significance?: {
-        type?: 'sentimental' | 'cultural' | 'religious' | 'historical' | 'family_heirloom' | 'professional';
-        description?: string;
-        /**
-         * Whether and how the testator has restricted disposal of this asset
-         */
-        restrictionOnDisposal?: {
-            exists?: boolean;
-            nature?: string;
-        };
-    };
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | string | 'financial' | 'vehicle' | 'digital' | 'business' | 'property_contents' | 'jewellery_watches' | 'art' | 'antiques' | 'collectibles' | 'musical_instruments' | 'books_manuscripts' | 'wine_spirits' | 'clothing_textiles' | 'firearms_sporting' | 'islamic_financial' | 'other' | string | Money2 | string | 'estimated' | 'professional' | 'official' | 'unknown' | 'excellent' | 'good' | 'fair' | 'poor' | 'unknown' | 'not_applicable' | number | string | string | null | Array<Identifier2> | Array<{
-        /**
-         * The external system or platform name. Use lowercase, no spaces
-         */
-        system: string;
-        /**
-         * The platform-specific identifier for this asset
-         */
-        id: string;
-        /**
-         * Direct URL to the asset's page on the external platform. Optional — some systems are API-only
-         */
-        url?: string;
-        /**
-         * Human-readable label for display. Optional — defaults to the system name
-         */
-        label?: string;
-        /**
-         * Timestamp when this link was last verified or data was last retrieved
-         */
-        retrievedAt?: string;
-    }> | string | Array<{
-        /**
-         * Description of this provenance record
-         */
-        description: string;
-        /**
-         * Name of the previous owner (may be anonymised)
-         */
-        ownerName?: string;
-        /**
-         * Approximate start date of this ownership period
-         */
-        fromDate?: string;
-        /**
-         * Approximate end date of this ownership period
-         */
-        toDate?: string;
-        /**
-         * How the owner acquired the asset
-         */
-        acquisitionMethod?: 'purchase' | 'inheritance' | 'gift' | 'commission' | 'restitution' | 'auction' | 'unknown';
-        /**
-         * Where this provenance information came from
-         */
-        source?: string;
-        /**
-         * Link to supporting evidence (sale record, catalogue entry, etc.)
-         */
-        evidenceUrl?: string;
-    }> | Array<Media2> | 'possessed_at_death' | 'receivable' | 'contingent' | 'immoveable' | 'moveable' | 'mixed' | 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed' | 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented' | 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none' | CulturalDisposition2 | {
-        /**
-         * Category of communal authority
-         */
-        authorityType?: 'family_council' | 'clan_association' | 'religious_body' | 'tribal_council' | 'government';
-        /**
-         * Whether approval from this authority is legally required before disposal
-         */
-        approvalRequired?: boolean;
-        /**
-         * Name of the specific authority or person
-         */
-        authorityName?: string;
-        /**
-         * Jurisdiction where this communal authority has legal standing
-         */
-        jurisdiction?: Jurisdiction2;
-    } | {
-        /**
-         * The law governing succession for this asset
-         */
-        governingLaw?: {
-            /**
-             * Jurisdiction whose succession law applies
-             */
-            jurisdiction?: Jurisdiction2;
-            /**
-             * Which legal tradition applies
-             */
-            legalTradition?: 'common_law' | 'civil_law' | 'mixed' | 'customary_law' | 'islamic_law' | 'hindu_law' | 'jewish_law' | 'canon_law';
-            /**
-             * Name of the governing statute
-             */
-            statute?: string;
-            /**
-             * Specific section of the statute
-             */
-            section?: string;
-        };
-        /**
-         * How the governing law was determined
-         */
-        determinedBy?: 'domicile' | 'situs' | 'nationality' | 'personal_status' | 'choice_of_law' | 'treaty';
-        /**
-         * Whether this succession regime is legally binding
-         */
-        binding?: boolean;
-        /**
-         * INHERIT extension IDs that apply to this asset's succession
-         */
-        extensions?: Array<string>;
-        /**
-         * Additional context about the succession regime
-         */
-        notes?: string;
-    } | {
-        /**
-         * Person IDs of the primary beneficiaries
-         */
-        primaryBeneficiaryPersonIds?: Array<string>;
-        /**
-         * Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)
-         */
-        contingentBeneficiaryPersonIds?: Array<string>;
-        /**
-         * The type of beneficiary designation
-         */
-        designationType?: 'retirement_account' | 'life_insurance' | 'superannuation' | 'pod_account' | 'other';
-        /**
-         * Reference to the NonprobateTransfer entity that tracks this designation
-         */
-        linkedNonprobateTransferId?: string;
-    } | {
-        /**
-         * Whether the account holder has given consent for fiduciary access
-         */
-        consentGiven?: boolean;
-        /**
-         * The scope of access granted to fiduciaries
-         */
-        scope?: 'full_access' | 'limited_access' | 'no_access';
-        /**
-         * Reference to the Person.id designated to receive access to this digital asset
-         */
-        designatedRecipientPersonId?: string;
-        /**
-         * Human-readable display name for the referenced designated recipient person
-         */
-        designatedRecipientPersonIdDisplay?: string;
-        /**
-         * Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA
-         */
-        onlineToolDirective?: boolean;
-    } | boolean | string | string | {
-        /**
-         * Brand or manufacturer name
-         */
-        name: string;
-        /**
-         * Wikidata Q-number for this brand. Resolves to structured data via the Wikidata API — founding year, country, parent company, logo, official website, product categories
-         */
-        wikidataId?: string;
-        /**
-         * Official brand website
-         */
-        website?: string;
-    } | 'complete' | 'partial' | 'box_only' | 'papers_only' | 'none' | 'unknown' | {
-        /**
-         * Name of the person or organisation holding the asset
-         */
-        name?: string;
-        /**
-         * Email address for the custodian
-         */
-        contactEmail?: string;
-        /**
-         * Phone number for the custodian
-         */
-        contactPhone?: string;
-        /**
-         * The nature of the custodial relationship
-         */
-        relationship?: string;
-        /**
-         * Account or reference number with the custodian
-         */
-        reference?: string;
-    } | 'goldmine' | 'sheldon' | 'ags' | 'bsc' | 'gia' | 'watch_trade' | 'classic_vehicle' | 'book_trade' | string | 'immediate' | 'within_7_days' | 'within_30_days' | 'none' | {
-        /**
-         * Name of the insurance provider
-         */
-        provider?: string;
-        /**
-         * Policy reference number
-         */
-        policyReference?: string;
-        /**
-         * The insured value in minor currency units
-         */
-        insuredValue?: Money2;
-        /**
-         * Next renewal date. Important — cover may lapse if not renewed after death
-         */
-        renewalDate?: string;
-        /**
-         * Additional insurance notes
-         */
-        notes?: string;
-    } | {
-        /**
-         * The type of entity that was split
-         */
-        entityType: 'asset' | 'asset_collection';
-        /**
-         * The id of the original entity that was split
-         */
-        entityId: string;
-        /**
-         * When the split occurred
-         */
-        splitAt: string;
-        /**
-         * Why the split was requested
-         */
-        reason?: string;
-    } | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | Array<string> | {
-        /**
-         * Marketplaces and platforms to search
-         */
-        platforms?: Array<string>;
-        /**
-         * Natural-language query an agent should use
-         */
-        searchQuery?: string;
-        /**
-         * Key-value filters to narrow results. Agents map to platform-specific parameters
-         */
-        filters?: {
-            [key: string]: string;
-        };
-        /**
-         * Platforms explicitly excluded
-         */
-        excludePlatforms?: Array<string>;
-        /**
-         * When an agent last executed this search profile
-         */
-        lastSearchedAt?: string;
-        /**
-         * How often this item should be re-searched
-         */
-        searchFrequency?: 'once' | 'weekly' | 'monthly' | 'on_demand';
-    } | number | string | Visibility2 | Array<FieldProvenance2> | Array<{
-        /**
-         * Unique identifier for this comment
-         */
-        id: string;
-        /**
-         * Person.id of the comment author
-         */
-        authorPersonId?: string;
-        /**
-         * Human-readable display name for the referenced author person
-         */
-        authorPersonIdDisplay?: string;
-        /**
-         * Comment text
-         */
-        content: string;
-        /**
-         * When the comment was created
-         */
-        createdAt: string;
-        visibility?: Visibility2;
-    }> | {
-        /**
-         * Type of the target entity
-         */
-        entityType?: 'asset' | 'asset_collection';
-        /**
-         * ID of the target entity
-         */
-        entityId?: string;
-        /**
-         * When the merge occurred
-         */
-        mergedAt?: string;
-        /**
-         * Why the entities were merged
-         */
-        reason?: string;
-    } | Provenance2 | Jurisdiction2 | {
-        jurisdiction?: Jurisdiction2;
-        assetType?: 'immoveable' | 'moveable' | 'mixed' | 'exempt';
-        exemptions?: Array<string>;
-        reliefClaimed?: Array<string>;
-    } | {
-        accessType?: string;
-        platform?: string;
-        visibility?: Visibility2;
-        /**
-         * The estate role required to follow these instructions
-         */
-        requiredRole?: string;
-        steps?: Array<{
-            step: number;
-            method: string;
-            description?: string;
-            location?: string;
-            holderPersonId?: string;
-        }>;
-        memorialisation?: {
-            preference?: 'transfer_to_beneficiary' | 'memorialise' | 'delete' | 'archive' | 'no_preference';
-            instructions?: string;
-        };
-        lastVerified?: string;
-        verifiedBy?: string;
-    } | 'keeping' | 'considering' | 'thinning' | 'listed' | 'sold' | 'allocated' | 'donated' | Array<{
-        /**
-         * The sales channel where this item is listed
-         */
-        channel: 'ebay' | 'amazon' | 'shopify' | 'etsy' | 'own_website' | 'auction_house' | 'other';
-        /**
-         * Human-readable name of the channel, especially when channel is other
-         */
-        channelName?: string;
-        /**
-         * The platform-specific listing identifier
-         */
-        listingId?: string;
-        /**
-         * Direct URL to the listing on the external platform
-         */
-        listingUrl?: string;
-        /**
-         * Current status of this listing
-         */
-        status: 'draft' | 'active' | 'sold' | 'withdrawn' | 'expired';
-        /**
-         * The listed asking price
-         */
-        askingPrice?: Money2;
-        /**
-         * When this listing was created or last activated
-         */
-        listedAt?: string;
-        /**
-         * When the item was sold via this listing, if applicable
-         */
-        soldAt?: string | null;
-        /**
-         * The actual sale price, if sold
-         */
-        soldPrice?: Money2;
-    }> | Array<ServiceRecord> | {
-        /**
-         * Name of the insurance company
-         */
-        insurer?: string;
-        /**
-         * The insurance policy number
-         */
-        policyNumber?: string;
-        /**
-         * The type of insurance policy covering this item
-         */
-        policyType?: 'home_contents' | 'specialist_collectibles' | 'classic_vehicle' | 'individual_item' | 'fine_art' | 'jewellery' | 'other';
-        /**
-         * The agreed or insured value, in minor currency units. May differ from market value
-         */
-        agreedValue?: Money2;
-        /**
-         * When the insurance cover for this item was last confirmed or reviewed
-         */
-        coverConfirmedAt?: string;
-    } | 'parcel' | 'large_item' | 'specialist_transport' | 'collection_only' | Array<'outer_box' | 'inner_box' | 'warranty_card' | 'cosc_certificate' | 'instruction_manual' | 'hang_tags' | 'service_booklet' | 'purchase_receipt' | 'original_invoice' | 'v5c_logbook' | 'mot_certificate' | 'provenance_letter' | 'certificate_of_authenticity' | 'appraisal_certificate' | 'export_licence' | 'customs_declaration' | string> | {
-        /**
-         * The type of tax relief claimed
-         */
-        reliefType?: 'agricultural_property' | 'business_property' | 'woodland' | 'heritage' | 'charitable';
-        eligible?: boolean;
-        /**
-         * Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
-         */
-        percentage?: number;
-        /**
-         * Conditions for maintaining eligibility
-         */
-        conditions?: string;
-        jurisdiction?: Jurisdiction2;
-        statute?: string;
-    } | {
-        type?: 'sentimental' | 'cultural' | 'religious' | 'historical' | 'family_heirloom' | 'professional';
-        description?: string;
-        /**
-         * Whether and how the testator has restricted disposal of this asset
-         */
-        restrictionOnDisposal?: {
-            exists?: boolean;
-            nature?: string;
-        };
-    } | undefined;
-};
-
-/**
- * Asset Collection
- *
- * A named group of related assets — e.g. a model railway collection, vinyl record library, or art portfolio. Lets families and dealers understand which items belong together and should be considered as a set
- */
-export type AssetCollection2 = {
-    /**
-     * Unique identifier for this asset collection
-     */
-    id: string;
-    /**
-     * The root document this entity belongs to — either an estate document (schema.json) or a catalogue document (catalogue.json)
-     */
-    rootDocumentId: string;
-    /**
-     * Display name for this collection
-     */
-    name: string;
-    /**
-     * Context for family members and dealers about the collection's scope, provenance, or significance
-     */
-    description?: string;
-    /**
-     * The primary category of items in this collection
-     */
-    category?: 'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other';
-    /**
-     * Estimated total value of the collection as a whole
-     */
-    estimatedValue?: Money2;
-    /**
-     * How the estimated value was determined
-     */
-    valuationSource?: 'self_estimated' | 'dealer_valuation' | 'auction_estimate' | 'insurance_value';
-    /**
-     * Date the valuation was performed or last updated
-     */
-    valuationDate?: string;
-    /**
-     * Free-text guidance from the testator about what should happen to this collection — keep together, sell at auction, donate to a museum, etc
-     */
-    disposalWishes?: string;
-    /**
-     * The testator's preferred strategy for disposing of this collection. More structured than disposalWishes
-     */
-    disposalStrategy?: 'keep_together' | 'sell_as_collection' | 'sell_individually' | 'auction' | 'donate' | 'gift_to_person' | 'dealer_bids' | 'mixed' | 'undecided';
-    /**
-     * The minimum total value the testator or executor will accept for the collection. Prevents fire-sale disposal. In minor currency units
-     */
-    minimumAcceptableValue?: Money2;
-    /**
-     * Preferred channel for disposing of the collection
-     */
-    preferredDisposalMethod?: 'private_sale' | 'auction_house' | 'dealer_network' | 'online_marketplace' | 'specialist_fair' | 'museum_acquisition' | 'other';
-    /**
-     * Notes about specialist dealers who might be interested in this collection. Names, contact details, areas of expertise
-     */
-    specialistDealerNotes?: string;
-    /**
-     * Any additional notes about this collection
-     */
-    notes?: string;
-    /**
-     * Overview photographs and videos of the collection as a whole — the display, the storage, the scale of the collection
-     */
-    images?: Array<Media2>;
-    /**
-     * Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split
-     */
-    splitFrom?: {
-        /**
-         * The type of entity that was split
-         */
-        entityType: 'asset' | 'asset_collection';
-        /**
-         * The id of the original entity that was split
-         */
-        entityId: string;
-        /**
-         * When the split occurred
-         */
-        splitAt: string;
-        /**
-         * Why the split was requested
-         */
-        reason?: string;
-    };
-    /**
-     * History of how items in this collection were disposed of during estate administration
-     */
-    disposalHistory?: Array<{
-        /**
-         * Asset.id of the disposed item
-         */
-        assetId?: string;
-        /**
-         * How the item was disposed of
-         */
-        disposalMethod?: 'sold_as_collection' | 'sold_individually' | 'gifted_to_beneficiary' | 'donated' | 'kept' | 'other';
-        /**
-         * Sale proceeds
-         */
-        proceeds?: Money2;
-        /**
-         * Person.id of the recipient
-         */
-        recipientPersonId?: string;
-        /**
-         * Human-readable display name for the referenced recipient person
-         */
-        recipientPersonIdDisplay?: string;
-        /**
-         * Organisation.id of the recipient
-         */
-        recipientOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced recipient organisation
-         */
-        recipientOrganisationIdDisplay?: string;
-        /**
-         * Date of disposal
-         */
-        date?: string;
-        /**
-         * Notes about the disposal
-         */
-        notes?: string;
-    }>;
-    /**
-     * Records that this entity was merged into another entity — the target entity is the canonical version
-     */
-    mergedInto?: {
-        /**
-         * Type of the target entity
-         */
-        entityType?: 'asset' | 'asset_collection';
-        /**
-         * ID of the target entity
-         */
-        entityId?: string;
-        /**
-         * When the merge occurred
-         */
-        mergedAt?: string;
-        /**
-         * Why the entities were merged
-         */
-        reason?: string;
-    };
-    /**
-     * Comparison of different valuation sources for this collection — insurance, dealer, auction
-     */
-    valuationComparison?: {
-        /**
-         * Insurance valuation
-         */
-        insuranceValue?: Money2;
-        /**
-         * Date of insurance valuation
-         */
-        insuranceDate?: string;
-        /**
-         * Dealer's estimate
-         */
-        dealerEstimate?: Money2;
-        /**
-         * Date of dealer estimate
-         */
-        dealerDate?: string;
-        /**
-         * Auction house estimate
-         */
-        auctionEstimate?: Money2;
-        /**
-         * Date of auction estimate
-         */
-        auctionDate?: string;
-        /**
-         * Most likely realisable amount considering all sources
-         */
-        likelyRealisableAmount?: Money2;
-    };
-    /**
-     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
-     */
-    provenance?: Provenance2;
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | string | string | 'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other' | Money2 | 'self_estimated' | 'dealer_valuation' | 'auction_estimate' | 'insurance_value' | string | string | 'keep_together' | 'sell_as_collection' | 'sell_individually' | 'auction' | 'donate' | 'gift_to_person' | 'dealer_bids' | 'mixed' | 'undecided' | 'private_sale' | 'auction_house' | 'dealer_network' | 'online_marketplace' | 'specialist_fair' | 'museum_acquisition' | 'other' | Array<Media2> | {
-        /**
-         * The type of entity that was split
-         */
-        entityType: 'asset' | 'asset_collection';
-        /**
-         * The id of the original entity that was split
-         */
-        entityId: string;
-        /**
-         * When the split occurred
-         */
-        splitAt: string;
-        /**
-         * Why the split was requested
-         */
-        reason?: string;
-    } | Array<{
-        /**
-         * Asset.id of the disposed item
-         */
-        assetId?: string;
-        /**
-         * How the item was disposed of
-         */
-        disposalMethod?: 'sold_as_collection' | 'sold_individually' | 'gifted_to_beneficiary' | 'donated' | 'kept' | 'other';
-        /**
-         * Sale proceeds
-         */
-        proceeds?: Money2;
-        /**
-         * Person.id of the recipient
-         */
-        recipientPersonId?: string;
-        /**
-         * Human-readable display name for the referenced recipient person
-         */
-        recipientPersonIdDisplay?: string;
-        /**
-         * Organisation.id of the recipient
-         */
-        recipientOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced recipient organisation
-         */
-        recipientOrganisationIdDisplay?: string;
-        /**
-         * Date of disposal
-         */
-        date?: string;
-        /**
-         * Notes about the disposal
-         */
-        notes?: string;
-    }> | {
-        /**
-         * Type of the target entity
-         */
-        entityType?: 'asset' | 'asset_collection';
-        /**
-         * ID of the target entity
-         */
-        entityId?: string;
-        /**
-         * When the merge occurred
-         */
-        mergedAt?: string;
-        /**
-         * Why the entities were merged
-         */
-        reason?: string;
-    } | {
-        /**
-         * Insurance valuation
-         */
-        insuranceValue?: Money2;
-        /**
-         * Date of insurance valuation
-         */
-        insuranceDate?: string;
-        /**
-         * Dealer's estimate
-         */
-        dealerEstimate?: Money2;
-        /**
-         * Date of dealer estimate
-         */
-        dealerDate?: string;
-        /**
-         * Auction house estimate
-         */
-        auctionEstimate?: Money2;
-        /**
-         * Date of auction estimate
-         */
-        auctionDate?: string;
-        /**
-         * Most likely realisable amount considering all sources
-         */
-        likelyRealisableAmount?: Money2;
-    } | Provenance2 | undefined;
-};
-
-/**
  * Liability
  *
  * A debt or financial obligation. Includes mortgages, loans, credit cards, and cultural obligations (mahr, ketubah debt, lobola) that are priority debts in certain jurisdictions
@@ -10814,7 +13522,7 @@ export type Liability2 = {
     /**
      * The category of liability. Cultural and religious obligations are included because they are priority debts in their respective legal systems
      */
-    liabilityType: 'mortgage' | 'personal_loan' | 'credit_card' | 'overdraft' | 'student_loan' | 'car_finance' | 'hire_purchase' | 'mahr' | 'ketubah_debt' | 'lobola' | 'tax_liability' | 'funeral_costs' | 'care_fees' | 'mezonot' | 'other';
+    liabilityType: 'mortgage' | 'personal_loan' | 'credit_card' | 'overdraft' | 'student_loan' | 'car_finance' | 'hire_purchase' | 'secured_loan' | 'second_charge' | 'logbook_loan' | 'mahr' | 'ketubah_debt' | 'lobola' | 'tax_liability' | 'funeral_costs' | 'care_fees' | 'mezonot' | 'other';
     /**
      * Name of the creditor, institution, or person to whom the debt is owed
      */
@@ -10827,6 +13535,22 @@ export type Liability2 = {
      * Reference to a Property.id or Asset.id that this liability is secured against. Unsecured debts should omit this field
      */
     securedAgainst?: string;
+    /**
+     * Lifecycle state of the registered charge securing this liability. Only meaningful when securedAgainst is present. A discharged or satisfied charge no longer reduces the equity in the asset it was registered against
+     */
+    chargeStatus?: 'active' | 'discharged' | 'satisfied';
+    /**
+     * Redemption or early-settlement figure to clear this liability, in minor currency units. May differ from amount — a PCP or hire-purchase settlement typically includes unpaid interest and fees, and a mortgage redemption may include an early-repayment charge. Where present this is the figure that nets against the secured asset's value
+     */
+    settlementAmount?: Money2;
+    /**
+     * Date the charge was registered against the secured property or asset
+     */
+    chargeRegisteredDate?: string;
+    /**
+     * Registry entry or agreement number identifying the charge — HM Land Registry charge entry, finance agreement number, or the equivalent in the jurisdiction of the secured asset
+     */
+    chargeReference?: string;
     /**
      * Regular monthly payment amount in minor currency units, if applicable
      */
@@ -10883,7 +13607,7 @@ export type Liability2 = {
     provenance?: Provenance2;
     [key: string]: {
         [key: string]: unknown;
-    } | string | 'mortgage' | 'personal_loan' | 'credit_card' | 'overdraft' | 'student_loan' | 'car_finance' | 'hire_purchase' | 'mahr' | 'ketubah_debt' | 'lobola' | 'tax_liability' | 'funeral_costs' | 'care_fees' | 'mezonot' | 'other' | string | Money2 | number | string | string | string | Visibility2 | {
+    } | string | 'mortgage' | 'personal_loan' | 'credit_card' | 'overdraft' | 'student_loan' | 'car_finance' | 'hire_purchase' | 'secured_loan' | 'second_charge' | 'logbook_loan' | 'mahr' | 'ketubah_debt' | 'lobola' | 'tax_liability' | 'funeral_costs' | 'care_fees' | 'mezonot' | 'other' | string | Money2 | 'active' | 'discharged' | 'satisfied' | string | number | string | string | Visibility2 | {
         /**
          * When this information was confirmed with the Student Loans Company or equivalent
          */
@@ -12113,364 +14837,6 @@ export type Guardian2 = unknown & {
 };
 
 /**
- * Wish
- *
- * A non-binding (or culturally/religiously binding) wish — funeral, letter of wishes, care instructions, pet care, digital estate, distribution preferences
- */
-export type Wish2 = {
-    /**
-     * Unique identifier for this wish within the INHERIT document
-     */
-    id: string;
-    /**
-     * The category of wish. Wishes may be non-binding in law but culturally or religiously obligatory
-     */
-    wishType: 'funeral' | 'letter' | 'care' | 'distribution' | 'digital' | 'pets' | 'general' | 'digital_likeness';
-    /**
-     * A short descriptive title for this wish
-     */
-    title: string;
-    /**
-     * The full text content of the wish. May be lengthy for letters of wishes
-     */
-    content?: string;
-    /**
-     * The legal or moral force of this wish. Most wishes are non-binding but may carry significant cultural or religious weight
-     */
-    bindingNature?: 'non_binding' | 'culturally_obligatory' | 'religiously_obligatory' | 'legally_binding';
-    /**
-     * Reference to the Person.id this wish is addressed to — typically an executor, guardian, or family member
-     */
-    addresseePersonId?: string;
-    /**
-     * Human-readable display name for the referenced addressee person
-     */
-    addresseePersonIdDisplay?: string;
-    /**
-     * Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item)
-     */
-    relatedAssetId?: string;
-    /**
-     * Additional notes about this wish
-     */
-    notes?: string;
-    visibility?: Visibility2;
-    /**
-     * Type of funeral arrangement preferred
-     */
-    funeralArrangementType?: 'burial' | 'cremation' | 'green_burial' | 'sea_burial' | 'sky_burial' | 'donation_to_science' | 'other' | string;
-    /**
-     * Type of ceremony preferred
-     */
-    funeralCeremonyType?: 'religious' | 'secular' | 'hybrid' | 'none';
-    /**
-     * Religion or faith tradition for the ceremony, if funeralCeremonyType is 'religious' or 'hybrid'
-     */
-    funeralCeremonyReligion?: string;
-    /**
-     * Reference to the Organisation.id of the preferred funeral provider
-     */
-    funeralProviderOrganisationId?: string;
-    /**
-     * Human-readable display name for the referenced funeral provider organisation
-     */
-    funeralProviderOrganisationIdDisplay?: string;
-    /**
-     * Whether a pre-paid funeral plan is in place
-     */
-    funeralPrePaid?: boolean;
-    /**
-     * Policy number for the pre-paid funeral plan
-     */
-    funeralPrePaidPolicyNumber?: string;
-    /**
-     * Maximum budget for the funeral, in minor currency units
-     */
-    funeralBudgetMaximum?: Money2;
-    /**
-     * How the funeral is to be funded
-     */
-    funeralBudgetSource?: 'estate' | 'pre_paid' | 'insurance' | 'family' | 'other';
-    /**
-     * Preferred location for the funeral service or burial
-     */
-    funeralLocationPreference?: string;
-    /**
-     * Music requested for the funeral service
-     */
-    funeralMusicWishes?: string;
-    /**
-     * Readings or poems requested for the funeral service
-     */
-    funeralReadingWishes?: string;
-    /**
-     * Organ donation preferences
-     */
-    organDonation?: {
-        /**
-         * Whether consent given
-         */
-        consentGiven?: boolean;
-        /**
-         * Specific organs consented
-         */
-        organs?: Array<string>;
-        /**
-         * Organisation coordinating donation
-         */
-        coordinatingOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced coordinating organisation
-         */
-        coordinatingOrganisationIdDisplay?: string;
-    };
-    /**
-     * Body donation to medical research
-     */
-    medicalResearchDonation?: {
-        /**
-         * Whether consent given
-         */
-        consentGiven?: boolean;
-        /**
-         * Research institution Organisation.id
-         */
-        institutionOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced institution organisation
-         */
-        institutionOrganisationIdDisplay?: string;
-        /**
-         * Any restrictions
-         */
-        restrictions?: string;
-    };
-    /**
-     * Preference regarding autopsy
-     */
-    autopsyPreference?: 'requested' | 'declined' | 'no_preference';
-    /**
-     * Additional notes about funeral budget
-     */
-    funeralBudgetNotes?: string;
-    /**
-     * Whether the person consents to posthumous AI/digital recreation
-     */
-    likenessConsent?: 'permitted' | 'prohibited' | 'restricted' | 'not_stated';
-    /**
-     * What aspects of likeness are covered
-     */
-    likenessScope?: Array<'voice' | 'visual_appearance' | 'writing_style' | 'personality_model' | 'full_avatar'>;
-    /**
-     * What purposes are allowed
-     */
-    likenessPermittedUses?: Array<'memorial' | 'family_private' | 'educational' | 'commercial' | 'legal_proceedings' | 'artistic'>;
-    /**
-     * What purposes are explicitly forbidden
-     */
-    likenessProhibitedUses?: Array<'memorial' | 'family_private' | 'educational' | 'commercial' | 'legal_proceedings' | 'artistic'>;
-    /**
-     * Who has authority over likeness decisions after death
-     */
-    likenessControllerPersonId?: string;
-    /**
-     * Human-readable display name for the referenced likeness controller person
-     */
-    likenessControllerPersonIdDisplay?: string;
-    /**
-     * ISO 8601 duration — how long consent/prohibition lasts, e.g. P25Y = 25 years
-     */
-    likenessTimeLimit?: string;
-    /**
-     * Conditions under which consent is revoked
-     */
-    likenessRevocationConditions?: string;
-    /**
-     * Policy on AI-generated synthetic media using the person's likeness
-     */
-    syntheticMediaPolicy?: 'allow_with_attribution' | 'allow_without_attribution' | 'prohibit_all' | 'family_decision' | 'not_stated';
-    /**
-     * Tracking enforcement of likeness wishes — takedown requests and platform compliance
-     */
-    likenessEnforcement?: Array<{
-        /**
-         * Platform where enforcement action is directed
-         */
-        platform: string;
-        /**
-         * What type of enforcement action was requested
-         */
-        requestType: 'takedown' | 'restrict' | 'transfer_control' | 'verify_consent' | 'cease_training' | 'other';
-        /**
-         * When the enforcement request was made
-         */
-        requestDate?: string;
-        /**
-         * Who made the request (executor, controller, legal representative)
-         */
-        requestedBy?: string;
-        /**
-         * FK to person who made the request
-         */
-        requestedByPersonId?: string;
-        /**
-         * Human-readable display name for the referenced requested by person
-         */
-        requestedByPersonIdDisplay?: string;
-        /**
-         * Current status of the enforcement request
-         */
-        status?: 'pending' | 'acknowledged' | 'complied' | 'refused' | 'escalated' | 'unknown';
-        /**
-         * When the platform responded
-         */
-        responseDate?: string;
-        /**
-         * Platform's reference number for the request
-         */
-        referenceNumber?: string;
-        /**
-         * Legal basis for the request, e.g. EU AI Act, NO FAKES Act, estate executor authority
-         */
-        legalBasis?: string;
-        notes?: string;
-    }>;
-    /**
-     * Inventory of existing AI/digital likeness models and instructions for each
-     */
-    existingDigitalModels?: Array<{
-        /**
-         * e.g. HereAfter, StoryFile (schema.org provider)
-         */
-        provider?: string;
-        /**
-         * Type of digital model
-         */
-        modelType?: 'chatbot' | 'voice_clone' | 'visual_avatar' | 'full_replica' | 'other';
-        /**
-         * Instruction for what to do with this model after death
-         */
-        action?: 'preserve' | 'delete' | 'transfer' | 'restrict';
-        /**
-         * Person.id who has authority over this specific model
-         */
-        controllerPersonId?: string;
-        /**
-         * Human-readable display name for the referenced controller person
-         */
-        controllerPersonIdDisplay?: string;
-    }>;
-    /**
-     * Trust IDs this wish or letter of wishes applies to
-     */
-    relatedTrustIds?: Array<string>;
-    /**
-     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
-     */
-    provenance?: Provenance2;
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | 'funeral' | 'letter' | 'care' | 'distribution' | 'digital' | 'pets' | 'general' | 'digital_likeness' | string | string | 'non_binding' | 'culturally_obligatory' | 'religiously_obligatory' | 'legally_binding' | string | string | Visibility2 | 'burial' | 'cremation' | 'green_burial' | 'sea_burial' | 'sky_burial' | 'donation_to_science' | 'other' | string | 'religious' | 'secular' | 'hybrid' | 'none' | boolean | string | Money2 | 'estate' | 'pre_paid' | 'insurance' | 'family' | 'other' | string | {
-        /**
-         * Whether consent given
-         */
-        consentGiven?: boolean;
-        /**
-         * Specific organs consented
-         */
-        organs?: Array<string>;
-        /**
-         * Organisation coordinating donation
-         */
-        coordinatingOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced coordinating organisation
-         */
-        coordinatingOrganisationIdDisplay?: string;
-    } | {
-        /**
-         * Whether consent given
-         */
-        consentGiven?: boolean;
-        /**
-         * Research institution Organisation.id
-         */
-        institutionOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced institution organisation
-         */
-        institutionOrganisationIdDisplay?: string;
-        /**
-         * Any restrictions
-         */
-        restrictions?: string;
-    } | 'requested' | 'declined' | 'no_preference' | 'permitted' | 'prohibited' | 'restricted' | 'not_stated' | Array<'voice' | 'visual_appearance' | 'writing_style' | 'personality_model' | 'full_avatar'> | Array<'memorial' | 'family_private' | 'educational' | 'commercial' | 'legal_proceedings' | 'artistic'> | Array<'memorial' | 'family_private' | 'educational' | 'commercial' | 'legal_proceedings' | 'artistic'> | string | 'allow_with_attribution' | 'allow_without_attribution' | 'prohibit_all' | 'family_decision' | 'not_stated' | Array<{
-        /**
-         * Platform where enforcement action is directed
-         */
-        platform: string;
-        /**
-         * What type of enforcement action was requested
-         */
-        requestType: 'takedown' | 'restrict' | 'transfer_control' | 'verify_consent' | 'cease_training' | 'other';
-        /**
-         * When the enforcement request was made
-         */
-        requestDate?: string;
-        /**
-         * Who made the request (executor, controller, legal representative)
-         */
-        requestedBy?: string;
-        /**
-         * FK to person who made the request
-         */
-        requestedByPersonId?: string;
-        /**
-         * Human-readable display name for the referenced requested by person
-         */
-        requestedByPersonIdDisplay?: string;
-        /**
-         * Current status of the enforcement request
-         */
-        status?: 'pending' | 'acknowledged' | 'complied' | 'refused' | 'escalated' | 'unknown';
-        /**
-         * When the platform responded
-         */
-        responseDate?: string;
-        /**
-         * Platform's reference number for the request
-         */
-        referenceNumber?: string;
-        /**
-         * Legal basis for the request, e.g. EU AI Act, NO FAKES Act, estate executor authority
-         */
-        legalBasis?: string;
-        notes?: string;
-    }> | Array<{
-        /**
-         * e.g. HereAfter, StoryFile (schema.org provider)
-         */
-        provider?: string;
-        /**
-         * Type of digital model
-         */
-        modelType?: 'chatbot' | 'voice_clone' | 'visual_avatar' | 'full_replica' | 'other';
-        /**
-         * Instruction for what to do with this model after death
-         */
-        action?: 'preserve' | 'delete' | 'transfer' | 'restrict';
-        /**
-         * Person.id who has authority over this specific model
-         */
-        controllerPersonId?: string;
-        /**
-         * Human-readable display name for the referenced controller person
-         */
-        controllerPersonIdDisplay?: string;
-    }> | Array<string> | Provenance2 | undefined;
-};
-
-/**
  * A single clause within a will or testamentary document
  */
 export type WillClause = {
@@ -13280,267 +15646,6 @@ export type PowerOfAppointment2 = {
 };
 
 /**
- * A comparable sale or listing used to support the valuation. Capturing comparables with screenshots and metadata creates an auditable evidence trail for executors, HMRC, and probate courts
- */
-export type Comparable = {
-    /**
-     * Link to the comparable sale or listing
-     */
-    url?: string;
-    /**
-     * Screenshot of the listing at the time it was captured. Listings are often removed after sale — the screenshot preserves the evidence
-     */
-    screenshotUrl?: string;
-    /**
-     * Description of the comparable item
-     */
-    title?: string;
-    /**
-     * The sale price of the comparable item, in minor currency units
-     */
-    salePrice?: Money2;
-    /**
-     * Date the comparable item sold
-     */
-    saleDate?: string;
-    /**
-     * Where the comparable sold — marketplace, auction house, or dealer
-     */
-    platform?: string;
-    /**
-     * The platform-specific listing or item identifier. Enables API-driven price lookups — e.g. eBay item ID resolves via the Browse API, Chrono24 ref resolves to watch data, Discogs release ID resolves to vinyl data
-     */
-    platformListingId?: string;
-    /**
-     * Structured auction lot reference for provenance tracking — house, sale, and lot number. Enables lookups against auction house archives and provenance databases
-     */
-    auctionLotRef?: string;
-    /**
-     * Timestamp when the comparable was captured or recorded. Important because market values shift and stale comparables lose evidential weight
-     */
-    capturedAt?: string;
-    /**
-     * How closely the comparable matches the item being valued
-     */
-    matchConfidence?: 'exact' | 'close' | 'approximate' | 'weak';
-    /**
-     * What makes this item comparable — the specific attributes that justify the comparison
-     */
-    matchFactors?: Array<string>;
-    /**
-     * Free-text notes explaining the comparison — differences, adjustments, or caveats
-     */
-    matchNotes?: string;
-    /**
-     * Numeric match confidence (0-100). Companion to the matchConfidence categorical enum. Agents use this for filtering and ranking — 'show me everything above 70' is quantitative reasoning that categorical enums don't support
-     */
-    matchScore?: number;
-    /**
-     * Human feedback on this comparable. Creates the learning feedback loop — agents learn which comparables humans accept, improving future searches
-     */
-    humanVerdict?: 'accepted' | 'rejected' | 'adjusted' | 'not_reviewed';
-    /**
-     * Why this comparable was rejected. Feeds back into agent learning — future searches avoid this type of mismatch
-     */
-    rejectionReason?: string;
-};
-
-/**
- * Valuation
- *
- * A valuation of an estate asset, property, or asset collection. Supports multiple valuations per entity over time — owner estimates, professional valuations, AI analyses, dealer offers, and probate-agreed figures
- */
-export type Valuation2 = {
-    /**
-     * Unique identifier for this valuation within the INHERIT document
-     */
-    id: string;
-    /**
-     * The type of entity being valued
-     */
-    entityType: 'asset' | 'property' | 'asset_collection';
-    /**
-     * Reference to the entity being valued — an Asset.id, Property.id, or AssetCollection.id
-     */
-    entityId: string;
-    /**
-     * The valuation amount, in minor currency units
-     */
-    valuedAmount: Money2;
-    /**
-     * Date the valuation was performed or assessed
-     */
-    valuationDate: string;
-    /**
-     * Who performed the valuation — the name of the person, firm, or service
-     */
-    provider?: string;
-    /**
-     * The type of person or organisation that provided the valuation
-     */
-    providerType?: 'owner' | 'professional_valuer' | 'auction_house' | 'dealer' | 'insurance_assessor' | 'tax_authority' | 'ai_estimate' | 'other';
-    /**
-     * The professional body registration of the valuer. A valuation from a RICS-registered surveyor or ASA-accredited appraiser carries significantly more weight with tax authorities and probate courts
-     */
-    valuerRegistration?: {
-        /**
-         * The professional body or accreditation organisation
-         */
-        body?: string;
-        /**
-         * The valuer's membership or registration number with the professional body
-         */
-        membershipId?: string;
-        /**
-         * The valuer's professional designation or qualification level
-         */
-        designation?: string;
-        /**
-         * URL to verify the valuer's registration with the professional body
-         */
-        verificationUrl?: string;
-    };
-    /**
-     * The valuation methodology used
-     */
-    method?: 'comparable_sales' | 'replacement_cost' | 'income_approach' | 'market_listing' | 'insurance_schedule' | 'ai_analysis' | 'expert_opinion' | 'other';
-    /**
-     * The purpose for which this valuation was obtained
-     */
-    valuationPurpose?: 'current_estimate' | 'date_of_death' | 'insurance' | 'official' | 'tax_return' | 'dealer_offer' | 'ai_estimate' | 'pre_sale' | 'probate';
-    /**
-     * Confidence level in this valuation
-     */
-    confidence?: 'high' | 'medium' | 'low' | 'unknown';
-    /**
-     * Comparable items found on marketplaces — used to support the valuation. Agent-generated comparables should include matchScore for quantitative filtering and will accumulate humanVerdict feedback over time
-     */
-    comparables?: Array<Comparable>;
-    /**
-     * Free-text notes about this valuation — methodology details, caveats, market conditions, or disagreements with other valuations
-     */
-    notes?: string;
-    /**
-     * Per-field provenance records — how each field's value was obtained
-     */
-    fieldProvenance?: Array<FieldProvenance2>;
-    /**
-     * Auction house estimate and result data
-     */
-    auctionData?: {
-        /**
-         * Organisation.id of the auction house
-         */
-        auctionHouseOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced auction house organisation
-         */
-        auctionHouseOrganisationIdDisplay?: string;
-        /**
-         * Date of the auction sale
-         */
-        saleDate?: string;
-        /**
-         * Auction lot number
-         */
-        lotNumber?: string;
-        /**
-         * Low estimate
-         */
-        estimateLow?: Money2;
-        /**
-         * High estimate
-         */
-        estimateHigh?: Money2;
-        /**
-         * Hammer price (winning bid before premium)
-         */
-        hammerPrice?: Money2;
-        /**
-         * Buyer's premium as a percentage
-         */
-        buyersPremiumPercentage?: number;
-        /**
-         * Total amount realised including premium
-         */
-        totalRealised?: Money2;
-        /**
-         * Whether the lot was sold
-         */
-        sold?: boolean;
-    };
-    /**
-     * The date until which this valuation is considered valid. Common for insurance valuations which require annual renewal. After this date, the valuation may need to be refreshed
-     */
-    validUntil?: string | null;
-    /**
-     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
-     */
-    provenance?: Provenance2;
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | 'asset' | 'property' | 'asset_collection' | Money2 | string | string | 'owner' | 'professional_valuer' | 'auction_house' | 'dealer' | 'insurance_assessor' | 'tax_authority' | 'ai_estimate' | 'other' | {
-        /**
-         * The professional body or accreditation organisation
-         */
-        body?: string;
-        /**
-         * The valuer's membership or registration number with the professional body
-         */
-        membershipId?: string;
-        /**
-         * The valuer's professional designation or qualification level
-         */
-        designation?: string;
-        /**
-         * URL to verify the valuer's registration with the professional body
-         */
-        verificationUrl?: string;
-    } | 'comparable_sales' | 'replacement_cost' | 'income_approach' | 'market_listing' | 'insurance_schedule' | 'ai_analysis' | 'expert_opinion' | 'other' | 'current_estimate' | 'date_of_death' | 'insurance' | 'official' | 'tax_return' | 'dealer_offer' | 'ai_estimate' | 'pre_sale' | 'probate' | 'high' | 'medium' | 'low' | 'unknown' | Array<Comparable> | string | Array<FieldProvenance2> | {
-        /**
-         * Organisation.id of the auction house
-         */
-        auctionHouseOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced auction house organisation
-         */
-        auctionHouseOrganisationIdDisplay?: string;
-        /**
-         * Date of the auction sale
-         */
-        saleDate?: string;
-        /**
-         * Auction lot number
-         */
-        lotNumber?: string;
-        /**
-         * Low estimate
-         */
-        estimateLow?: Money2;
-        /**
-         * High estimate
-         */
-        estimateHigh?: Money2;
-        /**
-         * Hammer price (winning bid before premium)
-         */
-        hammerPrice?: Money2;
-        /**
-         * Buyer's premium as a percentage
-         */
-        buyersPremiumPercentage?: number;
-        /**
-         * Total amount realised including premium
-         */
-        totalRealised?: Money2;
-        /**
-         * Whether the lot was sold
-         */
-        sold?: boolean;
-    } | string | null | Provenance2 | undefined;
-};
-
-/**
  * Lifetime Transfer
  *
  * A gift or transfer made during the testator's lifetime, relevant for tax calculations such as the UK 7-year rule, US unified gift/estate tax, and similar lookback provisions in other jurisdictions
@@ -13677,824 +15782,6 @@ export type LifetimeTransfer2 = {
             reliefPercentage?: number;
         };
     } | undefined;
-};
-
-/**
- * A registration with a regulatory body, professional association, or government registry
- */
-export type Registration = {
-    /**
-     * The regulatory body or registry. Use an id from well-known-organisations.json where available, or a descriptive string for unlisted bodies
-     */
-    body: string;
-    /**
-     * The registration number. Format varies by body — see well-known-organisations.json for expected patterns
-     */
-    number: string;
-    /**
-     * Current status of this registration
-     */
-    status?: 'active' | 'suspended' | 'revoked' | 'voluntary' | 'expired';
-    /**
-     * Jurisdiction this registration applies to. ISO 3166-1 alpha-2 or ISO 3166-2 code
-     */
-    jurisdiction?: string;
-    /**
-     * URL to verify this registration with the regulatory body
-     */
-    verificationUrl?: string;
-    /**
-     * When this registration was last verified
-     */
-    verifiedAt?: string;
-    /**
-     * Result of a live API check against this registry. Snapshot at retrievedAt. Registry-specific fields are validated conditionally based on the parent body field
-     */
-    liveCheck?: {
-        /**
-         * When this check was performed
-         */
-        retrievedAt: string;
-        /**
-         * Companies House company status
-         */
-        companyStatus?: 'active' | 'dissolved' | 'liquidation' | 'receivership' | 'administration' | 'voluntary-arrangement' | 'converted-closed' | string;
-        /**
-         * Standard Industrial Classification codes from Companies House
-         */
-        sicCodes?: Array<string>;
-        /**
-         * Date of incorporation
-         */
-        incorporatedAt?: string;
-        /**
-         * Whether accounts are overdue at Companies House
-         */
-        accountsOverdue?: boolean;
-        /**
-         * Whether there are active insolvency proceedings
-         */
-        insolvencyFlag?: boolean;
-        /**
-         * FCA authorisation status
-         */
-        authorisationStatus?: 'authorised' | 'revoked' | 'suspended' | 'cancelled' | 'no-longer-authorised' | string;
-        /**
-         * FCA firm reference number
-         */
-        firmReference?: string;
-        /**
-         * Regulated activities the firm is authorised for
-         */
-        permissions?: Array<string>;
-        /**
-         * When FCA authorisation took effect
-         */
-        effectiveFrom?: string;
-        /**
-         * Charity Commission or OSCR registration status
-         */
-        charityStatus?: 'registered' | 'removed' | 'suspended' | 'in-default' | string;
-        /**
-         * Latest reported annual income in minor units (pennies/cents)
-         */
-        income?: number;
-        /**
-         * Charitable objects or purposes
-         */
-        objects?: string;
-        /**
-         * Date the charity was registered
-         */
-        dateRegistered?: string;
-        /**
-         * Whether the charity's reporting is up to date
-         */
-        reportingStatus?: 'up-to-date' | 'overdue' | 'not-required' | string;
-    };
-};
-
-/**
- * Organisation
- *
- * An organisation that interacts with the estate — legal firms, financial institutions, charities, dealers, funeral providers, employers, government bodies, and others. Maps to schema:Organization in JSON-LD
- */
-export type Organisation2 = {
-    /**
-     * Unique identifier for this organisation within the INHERIT document
-     */
-    id: string;
-    /**
-     * The organisation's legal or trading name
-     */
-    name: string;
-    /**
-     * The nature of the organisation. Use x-inherit- prefix for jurisdiction-specific or niche types not covered by the core enum
-     */
-    organisationType: 'legal_firm' | 'financial_institution' | 'pension_provider' | 'insurance_provider' | 'dealer' | 'auction_house' | 'valuation_firm' | 'funeral_provider' | 'charity' | 'religious_institution' | 'employer' | 'trust_corporation' | 'accountancy_firm' | 'government_body' | 'retailer' | 'manufacturer' | 'property_management' | 'storage_facility' | 'digital_platform' | 'utility_provider' | 'other' | string;
-    /**
-     * The roles this organisation plays in this specific estate. An organisation may play multiple roles
-     */
-    estateRoles?: Array<'beneficiary' | 'will_writer' | 'executor' | 'trustee' | 'asset_holder' | 'liability_holder' | 'insurer' | 'valuer' | 'recommended_dealer' | 'funeral_provider' | 'professional_adviser' | 'regulatory_body' | 'employer' | 'retailer' | 'service_provider' | string>;
-    /**
-     * Primary jurisdiction where this organisation operates. ISO 3166-1 alpha-2 or ISO 3166-2 code
-     */
-    jurisdiction?: string;
-    /**
-     * The organisation's address
-     */
-    address?: Address2;
-    /**
-     * The organisation's website
-     */
-    url?: string;
-    /**
-     * Primary contact email
-     */
-    email?: string;
-    /**
-     * Primary contact phone number
-     */
-    phone?: string;
-    /**
-     * URL to the organisation's logo
-     */
-    logo?: string;
-    /**
-     * Wikidata Q-number for this organisation, enabling linked data resolution. Many major organisations have Wikidata entries with structured data (founding date, parent company, headquarters, etc.)
-     */
-    wikidataId?: string;
-    /**
-     * Brief description of the organisation and its relevance to this estate
-     */
-    description?: string;
-    /**
-     * Registrations with regulatory bodies, professional associations, and government registries. An organisation may hold multiple registrations across jurisdictions
-     */
-    registrations?: Array<Registration>;
-    /**
-     * Name of the primary contact person at this organisation for estate matters
-     */
-    contactPerson?: string;
-    /**
-     * Free-text notes about this organisation's relationship to the estate
-     */
-    notes?: string;
-    /**
-     * Aggregate ratings from review platforms. One entry per platform. Supports user decision-making, agent filtering/ranking, and point-in-time audit trails
-     */
-    ratings?: Array<{
-        /**
-         * The review platform
-         */
-        platform: 'trustpilot' | 'google' | 'feefo' | 'reviews_io' | 'funeral_guide' | 'checkatrade' | string;
-        /**
-         * The aggregate rating score
-         */
-        ratingValue: number;
-        /**
-         * Maximum possible score on this platform. Default 5 if absent
-         */
-        bestRating?: number;
-        /**
-         * Minimum possible score on this platform. Default 1 if absent
-         */
-        worstRating?: number;
-        /**
-         * Total number of reviews on this platform
-         */
-        reviewCount?: number;
-        /**
-         * URL to the organisation's profile on this platform
-         */
-        profileUrl?: string;
-        /**
-         * When this rating data was retrieved or verified
-         */
-        retrievedAt: string;
-    }>;
-    /**
-     * URIs identifying this entity elsewhere (schema.org sameAs). e.g. Wikidata, LinkedIn, DBpedia
-     */
-    sameAs?: Array<string>;
-    /**
-     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
-     */
-    provenance?: Provenance2;
-    /**
-     * The organisation's VAT registration status and scheme. Affects how VAT is calculated on transactions involving this organisation
-     */
-    vatConfiguration?: {
-        /**
-         * Whether the organisation is VAT registered
-         */
-        vatRegistered?: boolean;
-        /**
-         * Which VAT scheme the organisation uses. Only relevant if vatRegistered is true
-         */
-        vatScheme?: 'margin_scheme' | 'global_accounting' | 'standard_vat';
-        /**
-         * The organisation's VAT registration number
-         */
-        vatNumber?: string;
-        /**
-         * The country of VAT registration, as ISO 3166-1 alpha-2
-         */
-        vatCountry?: string;
-    };
-    /**
-     * International shipping capabilities and policies for this organisation
-     */
-    internationalShipping?: {
-        /**
-         * ISO 3166-1 alpha-2 country codes this organisation ships to
-         */
-        shipsToCountries?: Array<string>;
-        /**
-         * ISO 3166-1 alpha-2 country codes this organisation receives items from
-         */
-        receivesFromCountries?: Array<string>;
-        /**
-         * Whether this organisation handles customs declarations for international shipments
-         */
-        customsHandling?: boolean;
-        /**
-         * Who pays import duties on international transactions
-         */
-        importDutyPolicy?: 'dealer_absorbs' | 'buyer_pays' | 'included_in_shipping';
-        /**
-         * The primary currency this organisation trades in, as ISO 4217
-         */
-        currency?: string;
-    };
-    /**
-     * External identifiers — charity number, company registration, UEN, etc.
-     */
-    identifiers?: Array<Identifier2>;
-    /**
-     * Dealer-specific profile information. Only relevant for organisations that operate as dealers on marketplace or catalogue platforms
-     */
-    dealerProfile?: {
-        /**
-         * Asset categories this dealer specialises in
-         */
-        categories?: Array<string>;
-        /**
-         * The dealer's subscription tier on the platform
-         */
-        dealerTier?: 'free' | 'standard' | 'professional';
-        /**
-         * Physical services this dealer can provide
-         */
-        fulfilmentCapabilities?: Array<'inspection' | 'grading' | 'photography' | 'storage' | 'shipping' | 'restoration'>;
-        /**
-         * How far the dealer operates
-         */
-        geographicReach?: 'local' | 'national' | 'international';
-        /**
-         * Typical time to respond to a valuation request or offer
-         */
-        averageResponseTime?: string;
-    };
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | string | 'legal_firm' | 'financial_institution' | 'pension_provider' | 'insurance_provider' | 'dealer' | 'auction_house' | 'valuation_firm' | 'funeral_provider' | 'charity' | 'religious_institution' | 'employer' | 'trust_corporation' | 'accountancy_firm' | 'government_body' | 'retailer' | 'manufacturer' | 'property_management' | 'storage_facility' | 'digital_platform' | 'utility_provider' | 'other' | string | Array<'beneficiary' | 'will_writer' | 'executor' | 'trustee' | 'asset_holder' | 'liability_holder' | 'insurer' | 'valuer' | 'recommended_dealer' | 'funeral_provider' | 'professional_adviser' | 'regulatory_body' | 'employer' | 'retailer' | 'service_provider' | string> | string | Address2 | string | string | string | string | string | Array<Registration> | string | Array<{
-        /**
-         * The review platform
-         */
-        platform: 'trustpilot' | 'google' | 'feefo' | 'reviews_io' | 'funeral_guide' | 'checkatrade' | string;
-        /**
-         * The aggregate rating score
-         */
-        ratingValue: number;
-        /**
-         * Maximum possible score on this platform. Default 5 if absent
-         */
-        bestRating?: number;
-        /**
-         * Minimum possible score on this platform. Default 1 if absent
-         */
-        worstRating?: number;
-        /**
-         * Total number of reviews on this platform
-         */
-        reviewCount?: number;
-        /**
-         * URL to the organisation's profile on this platform
-         */
-        profileUrl?: string;
-        /**
-         * When this rating data was retrieved or verified
-         */
-        retrievedAt: string;
-    }> | Array<string> | Provenance2 | {
-        /**
-         * Whether the organisation is VAT registered
-         */
-        vatRegistered?: boolean;
-        /**
-         * Which VAT scheme the organisation uses. Only relevant if vatRegistered is true
-         */
-        vatScheme?: 'margin_scheme' | 'global_accounting' | 'standard_vat';
-        /**
-         * The organisation's VAT registration number
-         */
-        vatNumber?: string;
-        /**
-         * The country of VAT registration, as ISO 3166-1 alpha-2
-         */
-        vatCountry?: string;
-    } | {
-        /**
-         * ISO 3166-1 alpha-2 country codes this organisation ships to
-         */
-        shipsToCountries?: Array<string>;
-        /**
-         * ISO 3166-1 alpha-2 country codes this organisation receives items from
-         */
-        receivesFromCountries?: Array<string>;
-        /**
-         * Whether this organisation handles customs declarations for international shipments
-         */
-        customsHandling?: boolean;
-        /**
-         * Who pays import duties on international transactions
-         */
-        importDutyPolicy?: 'dealer_absorbs' | 'buyer_pays' | 'included_in_shipping';
-        /**
-         * The primary currency this organisation trades in, as ISO 4217
-         */
-        currency?: string;
-    } | Array<Identifier2> | {
-        /**
-         * Asset categories this dealer specialises in
-         */
-        categories?: Array<string>;
-        /**
-         * The dealer's subscription tier on the platform
-         */
-        dealerTier?: 'free' | 'standard' | 'professional';
-        /**
-         * Physical services this dealer can provide
-         */
-        fulfilmentCapabilities?: Array<'inspection' | 'grading' | 'photography' | 'storage' | 'shipping' | 'restoration'>;
-        /**
-         * How far the dealer operates
-         */
-        geographicReach?: 'local' | 'national' | 'international';
-        /**
-         * Typical time to respond to a valuation request or offer
-         */
-        averageResponseTime?: string;
-    } | undefined;
-};
-
-/**
- * Space
- *
- * A distinguishable space within or associated with a property — rooms, outbuildings, storage areas, and outdoor zones where assets may be located. Maps to schema:Place in JSON-LD
- */
-export type Space2 = {
-    /**
-     * Unique identifier for this space within the INHERIT document
-     */
-    id: string;
-    /**
-     * Reference to the Property.id that contains or is associated with this space
-     */
-    propertyId: string;
-    /**
-     * The type of space. Use x-inherit- prefix for cultural or jurisdiction-specific space types not covered by the core enum
-     */
-    spaceType: 'living_room' | 'dining_room' | 'kitchen' | 'kitchen_diner' | 'breakfast_room' | 'family_room' | 'sitting_room' | 'drawing_room' | 'conservatory' | 'sunroom' | 'snug' | 'bedroom' | 'guest_bedroom' | 'nursery' | 'spare_room' | 'dressing_room' | 'bathroom' | 'en_suite' | 'shower_room' | 'wet_room' | 'cloakroom' | 'wc' | 'hallway' | 'entrance_hall' | 'landing' | 'corridor' | 'porch' | 'vestibule' | 'study' | 'home_office' | 'library' | 'workshop' | 'studio' | 'music_room' | 'craft_room' | 'art_studio' | 'games_room' | 'home_cinema' | 'gym' | 'utility_room' | 'laundry_room' | 'boot_room' | 'pantry' | 'larder' | 'airing_cupboard' | 'boiler_room' | 'loft' | 'attic' | 'basement' | 'cellar' | 'wine_cellar' | 'walk_in_wardrobe' | 'storage_room' | 'cupboard_under_stairs' | 'box_room' | 'garage' | 'double_garage' | 'carport' | 'shed' | 'greenhouse' | 'summerhouse' | 'garden_room' | 'outbuilding' | 'barn' | 'annex' | 'stable' | 'front_garden' | 'rear_garden' | 'side_garden' | 'patio' | 'terrace' | 'balcony' | 'roof_terrace' | 'driveway' | 'courtyard' | 'yard' | 'swimming_pool' | 'prayer_room' | 'puja_room' | 'butsudan_room' | 'tatami_room' | 'genkan' | 'majlis' | 'helpers_room' | 'gurdwara_room' | 'meditation_room' | 'gun_room' | 'safe_room' | 'safe' | 'self_storage' | 'safe_deposit_box' | 'workplace' | 'relatives_house' | 'holiday_home' | 'vehicle_car' | 'vehicle_boat' | 'vehicle_caravan' | 'allotment' | 'digital_storage' | 'portable' | 'other' | string;
-    /**
-     * Display name for this space. Allows personalisation beyond the spaceType label
-     */
-    name?: string;
-    /**
-     * Which floor this space is on, if applicable
-     */
-    floor?: 'basement' | 'ground' | 'first' | 'second' | 'third' | 'fourth' | 'fifth' | 'attic' | 'mezzanine' | 'other';
-    /**
-     * Additional notes about this space — access instructions, security details, storage conditions
-     */
-    notes?: string;
-    /**
-     * Photographs of this space — overview, contents, access points
-     */
-    images?: Array<Media2>;
-    /**
-     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
-     */
-    provenance?: Provenance2;
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | 'living_room' | 'dining_room' | 'kitchen' | 'kitchen_diner' | 'breakfast_room' | 'family_room' | 'sitting_room' | 'drawing_room' | 'conservatory' | 'sunroom' | 'snug' | 'bedroom' | 'guest_bedroom' | 'nursery' | 'spare_room' | 'dressing_room' | 'bathroom' | 'en_suite' | 'shower_room' | 'wet_room' | 'cloakroom' | 'wc' | 'hallway' | 'entrance_hall' | 'landing' | 'corridor' | 'porch' | 'vestibule' | 'study' | 'home_office' | 'library' | 'workshop' | 'studio' | 'music_room' | 'craft_room' | 'art_studio' | 'games_room' | 'home_cinema' | 'gym' | 'utility_room' | 'laundry_room' | 'boot_room' | 'pantry' | 'larder' | 'airing_cupboard' | 'boiler_room' | 'loft' | 'attic' | 'basement' | 'cellar' | 'wine_cellar' | 'walk_in_wardrobe' | 'storage_room' | 'cupboard_under_stairs' | 'box_room' | 'garage' | 'double_garage' | 'carport' | 'shed' | 'greenhouse' | 'summerhouse' | 'garden_room' | 'outbuilding' | 'barn' | 'annex' | 'stable' | 'front_garden' | 'rear_garden' | 'side_garden' | 'patio' | 'terrace' | 'balcony' | 'roof_terrace' | 'driveway' | 'courtyard' | 'yard' | 'swimming_pool' | 'prayer_room' | 'puja_room' | 'butsudan_room' | 'tatami_room' | 'genkan' | 'majlis' | 'helpers_room' | 'gurdwara_room' | 'meditation_room' | 'gun_room' | 'safe_room' | 'safe' | 'self_storage' | 'safe_deposit_box' | 'workplace' | 'relatives_house' | 'holiday_home' | 'vehicle_car' | 'vehicle_boat' | 'vehicle_caravan' | 'allotment' | 'digital_storage' | 'portable' | 'other' | string | string | 'basement' | 'ground' | 'first' | 'second' | 'third' | 'fourth' | 'fifth' | 'attic' | 'mezzanine' | 'other' | string | Array<Media2> | Provenance2 | undefined;
-};
-
-export type ImportSource = {
-    /**
-     * Unique identifier for this import source, referenced by importSourceId on entities
-     */
-    id: string;
-    /**
-     * Name of the source system
-     */
-    systemName: string;
-    /**
-     * Date the data was imported from this source
-     */
-    importDate?: string;
-    /**
-     * How the data was imported from this source
-     */
-    importMethod?: 'api' | 'file_upload' | 'manual_copy' | 'ai_extraction' | 'ocr' | 'migration_script';
-    /**
-     * Additional context about the import
-     */
-    notes?: string;
-};
-
-export type Conformance = {
-    /**
-     * Conformance level achieved
-     */
-    level: 'level_1' | 'level_2' | 'level_3';
-    /**
-     * When the validation was performed
-     */
-    validatedAt: string;
-    /**
-     * Name of the tool that performed the validation
-     */
-    validatedBy: string;
-    /**
-     * INHERIT schema version this document was validated against
-     */
-    schemaVersion: string;
-    /**
-     * Completeness score at time of validation
-     */
-    completenessScore?: number;
-    /**
-     * Count of entities per type at time of validation
-     */
-    entityCounts?: {
-        [key: string]: number;
-    };
-    /**
-     * Count of entities by data provenance source
-     */
-    provenanceSummary?: {
-        [key: string]: number;
-    };
-    /**
-     * Validation warnings — non-blocking issues that may need attention
-     */
-    warnings?: Array<string>;
-    /**
-     * URL of the validation service that produced this conformance certificate
-     */
-    validationEndpoint?: string;
-};
-
-/**
- * InsurancePolicy
- *
- * A standalone insurance policy entity — life, home, health, motor, travel, pet, or professional indemnity. Life insurance is often the single largest estate asset. Policies written in trust pass outside the estate
- */
-export type InsurancePolicy2 = {
-    /**
-     * Unique identifier for this insurance policy within the INHERIT document
-     */
-    id: string;
-    /**
-     * The type of insurance policy
-     */
-    policyType: 'life' | 'home' | 'health' | 'motor' | 'travel' | 'pet' | 'professional_indemnity' | 'other' | string;
-    /**
-     * Reference to the Organisation.id of the insurance provider
-     */
-    providerOrganisationId: string;
-    /**
-     * Human-readable display name for the referenced provider organisation
-     */
-    providerOrganisationIdDisplay?: string;
-    /**
-     * The insurance policy number or reference
-     */
-    policyNumber?: string;
-    /**
-     * Total cover amount (sum assured for life, rebuild cost for home, etc.) in minor currency units
-     */
-    coverAmount?: Money2;
-    /**
-     * Premium amount per payment period, in minor currency units
-     */
-    premiumAmount?: Money2;
-    /**
-     * How often premiums are paid
-     */
-    premiumFrequency?: 'monthly' | 'annual' | 'single_premium' | 'paid_up' | 'other';
-    /**
-     * Next renewal date. Important — cover may lapse if not renewed after death
-     */
-    renewalDate?: string;
-    /**
-     * Date the policy matures (for endowment policies and investment-linked policies)
-     */
-    maturityDate?: string;
-    /**
-     * Death benefit details — what is payable on the policyholder's death, to whom, and how
-     */
-    deathBenefit?: {
-        /**
-         * Death benefit amount in minor currency units
-         */
-        amount?: Money2;
-        /**
-         * Reference to the Person.id of the nominated death benefit recipient
-         */
-        nomineePersonId?: string;
-        /**
-         * Human-readable display name for the referenced nominee person
-         */
-        nomineePersonIdDisplay?: string;
-        /**
-         * Reference to the Organisation.id of the nominated death benefit recipient, if an organisation. Mutually exclusive with nomineePersonId
-         */
-        nomineeOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced nominee organisation
-         */
-        nomineeOrganisationIdDisplay?: string;
-        /**
-         * Whether the death benefit nomination is believed to be current and valid
-         */
-        nominationCurrent?: boolean;
-        /**
-         * How the death benefit is paid
-         */
-        benefitType?: 'lump_sum' | 'income' | 'pension' | 'discretionary';
-        /**
-         * Verification status of the death benefit beneficiary
-         */
-        beneficiaryVerificationStatus?: 'unverified' | 'identity_confirmed' | 'entitlement_confirmed';
-    };
-    /**
-     * Whether the policy is written in trust. If true, proceeds pass outside the estate and are not subject to inheritance tax
-     */
-    writtenInTrust?: boolean;
-    /**
-     * Details of the trust holding this policy, if writtenInTrust is true
-     */
-    trustDetails?: {
-        /**
-         * Reference to the Person.id of the policy trustee
-         */
-        trusteePersonId?: string;
-        /**
-         * Human-readable display name for the referenced trustee person
-         */
-        trusteePersonIdDisplay?: string;
-        /**
-         * Reference to the Organisation.id of a corporate trustee
-         */
-        trusteeOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced trustee organisation
-         */
-        trusteeOrganisationIdDisplay?: string;
-        /**
-         * Name of the trust
-         */
-        trustName?: string;
-    };
-    /**
-     * Current status of any claim against this policy
-     */
-    claimStatus?: 'active' | 'claim_submitted' | 'claim_approved' | 'claim_paid' | 'claim_disputed' | 'pending' | 'approved' | 'paid' | 'declined';
-    /**
-     * URI pointing to an external policy record (FHIR Coverage resource, or any external insurance management system)
-     */
-    externalPolicyRef?: string;
-    /**
-     * Lifecycle tracking for policy nominations — tracks the current nomination status and any superseding nominations
-     */
-    nominationLifecycle?: {
-        /**
-         * Current status of the nomination
-         */
-        nominationStatus?: 'active' | 'revoked' | 'superseded' | 'expired' | 'disputed';
-        /**
-         * When the nomination was last verified as current
-         */
-        verifiedAt?: string;
-        /**
-         * When the nomination was last updated by the policyholder
-         */
-        lastUpdated?: string;
-        /**
-         * Reference to a previous nomination that this one replaces
-         */
-        supersedesNominationId?: string;
-    };
-    /**
-     * Conditions, exclusions, or clauses that affect the policy — e.g. suicide clause, contestability period, pre-existing condition exclusions
-     */
-    policyConditions?: Array<{
-        /**
-         * Description of the condition or clause
-         */
-        condition?: string;
-        /**
-         * Date the condition expires, if applicable
-         */
-        expiryDate?: string;
-        /**
-         * How this condition affects a claim
-         */
-        impact?: string;
-    }>;
-    /**
-     * Free-text notes about this insurance policy
-     */
-    notes?: string;
-    /**
-     * Details specific to funeral plan insurance
-     */
-    funeralPlanDetails?: {
-        /**
-         * Reference to the Organisation.id of the covered funeral provider
-         */
-        coveredFuneralProviderOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced covered funeral provider organisation
-         */
-        coveredFuneralProviderOrganisationIdDisplay?: string;
-        /**
-         * Whether the plan is transferable on death
-         */
-        transferableOnDeath?: boolean;
-        /**
-         * Total advance payments made
-         */
-        advancePayments?: Money2;
-    };
-    /**
-     * Financial compensation scheme protection status. In the UK, the FSCS protects insurance policyholders if the insurer fails. Knowing whether a policy is protected matters for estate risk assessment
-     */
-    depositorProtection?: {
-        /**
-         * When this protection status was checked
-         */
-        retrievedAt: string;
-        /**
-         * The compensation or protection scheme
-         */
-        scheme?: 'fscs' | 'mib' | string;
-        /**
-         * Whether this policy is protected by the scheme
-         */
-        protected?: boolean;
-        /**
-         * Maximum protection amount in minor units (pennies). FSCS insurance limit is unlimited for compulsory insurance, £85,000 for non-compulsory
-         */
-        protectionLimit?: number;
-        /**
-         * URL to the scheme's claim process or guidance page
-         */
-        claimProcessUrl?: string;
-    };
-    /**
-     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
-     */
-    provenance?: Provenance2;
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | 'life' | 'home' | 'health' | 'motor' | 'travel' | 'pet' | 'professional_indemnity' | 'other' | string | string | string | Money2 | 'monthly' | 'annual' | 'single_premium' | 'paid_up' | 'other' | string | {
-        /**
-         * Death benefit amount in minor currency units
-         */
-        amount?: Money2;
-        /**
-         * Reference to the Person.id of the nominated death benefit recipient
-         */
-        nomineePersonId?: string;
-        /**
-         * Human-readable display name for the referenced nominee person
-         */
-        nomineePersonIdDisplay?: string;
-        /**
-         * Reference to the Organisation.id of the nominated death benefit recipient, if an organisation. Mutually exclusive with nomineePersonId
-         */
-        nomineeOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced nominee organisation
-         */
-        nomineeOrganisationIdDisplay?: string;
-        /**
-         * Whether the death benefit nomination is believed to be current and valid
-         */
-        nominationCurrent?: boolean;
-        /**
-         * How the death benefit is paid
-         */
-        benefitType?: 'lump_sum' | 'income' | 'pension' | 'discretionary';
-        /**
-         * Verification status of the death benefit beneficiary
-         */
-        beneficiaryVerificationStatus?: 'unverified' | 'identity_confirmed' | 'entitlement_confirmed';
-    } | boolean | {
-        /**
-         * Reference to the Person.id of the policy trustee
-         */
-        trusteePersonId?: string;
-        /**
-         * Human-readable display name for the referenced trustee person
-         */
-        trusteePersonIdDisplay?: string;
-        /**
-         * Reference to the Organisation.id of a corporate trustee
-         */
-        trusteeOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced trustee organisation
-         */
-        trusteeOrganisationIdDisplay?: string;
-        /**
-         * Name of the trust
-         */
-        trustName?: string;
-    } | 'active' | 'claim_submitted' | 'claim_approved' | 'claim_paid' | 'claim_disputed' | 'pending' | 'approved' | 'paid' | 'declined' | string | {
-        /**
-         * Current status of the nomination
-         */
-        nominationStatus?: 'active' | 'revoked' | 'superseded' | 'expired' | 'disputed';
-        /**
-         * When the nomination was last verified as current
-         */
-        verifiedAt?: string;
-        /**
-         * When the nomination was last updated by the policyholder
-         */
-        lastUpdated?: string;
-        /**
-         * Reference to a previous nomination that this one replaces
-         */
-        supersedesNominationId?: string;
-    } | Array<{
-        /**
-         * Description of the condition or clause
-         */
-        condition?: string;
-        /**
-         * Date the condition expires, if applicable
-         */
-        expiryDate?: string;
-        /**
-         * How this condition affects a claim
-         */
-        impact?: string;
-    }> | string | {
-        /**
-         * Reference to the Organisation.id of the covered funeral provider
-         */
-        coveredFuneralProviderOrganisationId?: string;
-        /**
-         * Human-readable display name for the referenced covered funeral provider organisation
-         */
-        coveredFuneralProviderOrganisationIdDisplay?: string;
-        /**
-         * Whether the plan is transferable on death
-         */
-        transferableOnDeath?: boolean;
-        /**
-         * Total advance payments made
-         */
-        advancePayments?: Money2;
-    } | {
-        /**
-         * When this protection status was checked
-         */
-        retrievedAt: string;
-        /**
-         * The compensation or protection scheme
-         */
-        scheme?: 'fscs' | 'mib' | string;
-        /**
-         * Whether this policy is protected by the scheme
-         */
-        protected?: boolean;
-        /**
-         * Maximum protection amount in minor units (pennies). FSCS insurance limit is unlimited for compulsory insurance, £85,000 for non-compulsory
-         */
-        protectionLimit?: number;
-        /**
-         * URL to the scheme's claim process or guidance page
-         */
-        claimProcessUrl?: string;
-    } | Provenance2 | undefined;
 };
 
 /**
@@ -14663,58 +15950,6 @@ export type Pet2 = {
 };
 
 /**
- * Audit Event
- *
- * A single audit event recording who changed what, when, and why. Designed for enterprise audit trail requirements, probate court compliance, and GDPR-compatible personal data handling
- */
-export type AuditEvent2 = {
-    /**
-     * What type of action was performed
-     */
-    action: 'created' | 'modified' | 'deleted' | 'accessed' | 'exported' | 'validated' | 'version_created' | 'granted' | 'revoked' | 'challenged';
-    /**
-     * When the action occurred
-     */
-    performedAt: string;
-    /**
-     * Reference to the Person.id who performed the action. Uses a UUID reference rather than a display name for GDPR data minimisation — resolve the name at display time, not storage time
-     */
-    agentPersonId?: string;
-    /**
-     * Human-readable description of who performed the action. Use only when a person ID is not available (e.g. system actions, external agents)
-     */
-    agentDescription?: string;
-    /**
-     * The type of INHERIT entity that was affected
-     */
-    entityType?: string;
-    /**
-     * The ID of the entity that was affected
-     */
-    entityId?: string;
-    /**
-     * What specifically was done. Should be specific enough for an auditor to understand without seeing the before/after data
-     */
-    detail?: string;
-    /**
-     * The value before the change, if applicable. For field-level audit trails
-     */
-    previousValue?: string;
-    /**
-     * The value after the change, if applicable
-     */
-    newValue?: string;
-    /**
-     * Whether this audit entry has been redacted for GDPR compliance. When true, the agentPersonId and detail fields may have been cleared but the structural record of the action is preserved
-     */
-    redacted?: boolean;
-    /**
-     * Link to supporting evidence (court order, signed document, etc.)
-     */
-    evidenceUrl?: string;
-};
-
-/**
  * Notification
  *
  * A notification sent to a person or organisation during estate administration — beneficiary notifications, executor appointments, probate grants, document requests
@@ -14767,122 +16002,6 @@ export type Notification2 = {
     [key: string]: {
         [key: string]: unknown;
     } | string | 'beneficiary_notified' | 'executor_appointed' | 'probate_granted' | 'asset_identified' | 'asset_sold' | 'document_request' | 'other' | string | 'person' | 'organisation' | string | 'email' | 'post' | 'phone' | 'sms' | 'in_app' | 'other' | string | 'pending' | 'sent' | 'delivered' | 'failed' | 'bounced' | string | string | Provenance2 | undefined;
-};
-
-export type RecommendedAction = {
-    /**
-     * Unique identifier for this action
-     */
-    id: string;
-    /**
-     * Category of the recommended action
-     */
-    category: 'completeness' | 'tax_planning' | 'legal_requirement' | 'valuation' | 'transfer_history' | 'beneficiary_review' | 'document_update';
-    /**
-     * Priority level for this action
-     */
-    priority: 'critical' | 'high' | 'medium' | 'low';
-    /**
-     * Short action title
-     */
-    title: string;
-    /**
-     * Detailed explanation of what to do and why
-     */
-    description?: string;
-    /**
-     * Current status of this action
-     */
-    status: 'pending' | 'in_progress' | 'completed' | 'dismissed';
-    /**
-     * What data gap or condition generated this action
-     */
-    triggeredBy?: string;
-    /**
-     * Entity type this action relates to
-     */
-    relatedEntityType?: string;
-    /**
-     * ID of the specific entity this action relates to
-     */
-    relatedEntityId?: string;
-};
-
-/**
- * Completeness
- *
- * A completeness score derived from a weighted checklist of estate data categories, scoped to a specific jurisdiction and estate status
- */
-export type Completeness2 = {
-    /**
-     * Overall completeness percentage, calculated from the weighted checklist items
-     */
-    readonly score: number;
-    /**
-     * Maximum possible score for this jurisdiction and estate status combination. May be less than 100 if certain categories are not applicable
-     */
-    readonly maxScore: number;
-    /**
-     * ISO 3166-1 alpha-2 country code or ISO 3166-2 subdivision code identifying which jurisdiction this scoring applies to
-     */
-    jurisdiction?: string;
-    /**
-     * The estate status this completeness score was calculated against. Different statuses may require different data, affecting which checklist items are applicable
-     */
-    estateStatus?: string;
-    /**
-     * ISO 8601 date-time when this completeness score was computed
-     */
-    readonly calculatedAt?: string;
-    /**
-     * The individual items assessed to produce the overall score. Each item belongs to a category, has a relative weight, and a status indicating whether the data is present
-     */
-    checklist: Array<{
-        /**
-         * The data category this checklist item belongs to
-         */
-        category: 'personal_details' | 'assets_and_valuations' | 'liabilities' | 'beneficiaries' | 'executors' | 'guardians' | 'tax_information' | 'legal_documents' | 'lifetime_transfers' | 'pension_and_insurance';
-        /**
-         * A human-readable label describing what was checked
-         */
-        item: string;
-        /**
-         * Relative importance of this item. Higher weights contribute more to the overall score
-         */
-        weight: number;
-        /**
-         * Whether the data for this item is present and sufficient
-         */
-        status: 'complete' | 'incomplete' | 'not_applicable' | 'unknown';
-        /**
-         * Optional explanation of the status, such as what is missing or why the item is not applicable
-         */
-        details?: string;
-    }>;
-    [key: string]: {
-        [key: string]: unknown;
-    } | number | number | string | string | Array<{
-        /**
-         * The data category this checklist item belongs to
-         */
-        category: 'personal_details' | 'assets_and_valuations' | 'liabilities' | 'beneficiaries' | 'executors' | 'guardians' | 'tax_information' | 'legal_documents' | 'lifetime_transfers' | 'pension_and_insurance';
-        /**
-         * A human-readable label describing what was checked
-         */
-        item: string;
-        /**
-         * Relative importance of this item. Higher weights contribute more to the overall score
-         */
-        weight: number;
-        /**
-         * Whether the data for this item is present and sufficient
-         */
-        status: 'complete' | 'incomplete' | 'not_applicable' | 'unknown';
-        /**
-         * Optional explanation of the status, such as what is missing or why the item is not applicable
-         */
-        details?: string;
-    }> | undefined;
 };
 
 /**
@@ -15000,61 +16119,6 @@ export type TaxPosition2 = {
          */
         notes?: string;
     }> | number | Array<string> | string | boolean | string | undefined;
-};
-
-export type LegacyContact = {
-    /**
-     * Unique identifier for this legacy contact
-     */
-    id: string;
-    /**
-     * Reference to a Person.id, if the legacy contact is also in the people array
-     */
-    personId?: string;
-    /**
-     * Human-readable display name for the referenced person
-     */
-    personIdDisplay?: string;
-    /**
-     * Display name — required because catalogue-only documents may not have a people array
-     */
-    name: string;
-    /**
-     * Relationship to the catalogue/estate owner
-     */
-    relationship?: string;
-    /**
-     * Email address for notification
-     */
-    email?: string;
-    /**
-     * Phone number
-     */
-    phone?: string;
-    /**
-     * How to notify this person
-     */
-    notificationMethod?: 'email' | 'phone' | 'post' | 'in_person';
-    /**
-     * What level of access this person should receive
-     */
-    accessLevel: 'full' | 'read_only' | 'collection_only' | 'financial_only';
-    /**
-     * Whether the 'Please open when I have passed away' letter has been generated for this contact
-     */
-    letterGenerated?: boolean;
-    /**
-     * When the letter was last generated
-     */
-    letterGeneratedAt?: string;
-    /**
-     * How the letter was or should be delivered
-     */
-    letterDeliveryMethod?: 'printed' | 'digital' | 'both';
-    /**
-     * Additional notes about this legacy contact
-     */
-    notes?: string;
 };
 
 export type DataSharing = {
@@ -15230,446 +16294,6 @@ export type Acknowledgement2 = {
     } | string | 'bequest' | 'executor_appointment' | 'guardian_appointment' | 'other' | string | string | 'in_app' | 'email' | 'verbal' | 'written' | 'other' | string | Provenance2 | undefined;
 };
 
-export type AssetInterest2 = unknown & {
-    /**
-     * Unique identifier for this interest record
-     */
-    id: string;
-    /**
-     * The root document this entity belongs to — either an estate document (schema.json) or a catalogue document (catalogue.json)
-     */
-    rootDocumentId: string;
-    /**
-     * Reference to a specific Asset.id, if the interest is in a single asset
-     */
-    assetId?: string | null;
-    /**
-     * Reference to an AssetCollection.id, if the interest is in an entire collection
-     */
-    collectionId?: string | null;
-    /**
-     * The person expressing interest (a Person.id). The person's relationship to the estate is qualified by expressedByRole
-     */
-    personId?: string;
-    /**
-     * Human-readable display name for the referenced person
-     */
-    personIdDisplay?: string;
-    /**
-     * How strongly the beneficiary has expressed interest
-     */
-    interestLevel: 'mentioned' | 'expressed_interest' | 'strongly_wants' | 'agreed';
-    /**
-     * How this interest was communicated or recorded
-     */
-    sourceType?: 'family_conversation' | 'written_request' | 'chat_message' | 'platform_private_message' | 'platform_group_message' | 'proxy_reported' | 'testator_observed' | 'manual';
-    /**
-     * Whether the testator has seen and acknowledged this interest
-     */
-    testatorAcknowledged?: boolean;
-    /**
-     * Additional context about this interest
-     */
-    notes?: string;
-    /**
-     * Reference to the Organisation.id expressing interest, if an organisation rather than a person. Mutually exclusive with personId
-     */
-    organisationId?: string;
-    /**
-     * Human-readable display name for the referenced organisation
-     */
-    organisationIdDisplay?: string;
-    /**
-     * The role of the person expressing this interest in relation to the estate or catalogue. Qualifies the authority and weight of the expression. Follows the Schema.org Role pattern
-     */
-    expressedByRole?: 'testator' | 'beneficiary' | 'executor' | 'proxy' | string;
-    /**
-     * The nature of the interest being expressed. Distinguishes between wanting to acquire, wanting to receive, wanting to allocate to someone, willingness to sell, and soft admiration
-     */
-    intentType?: 'acquire' | 'receive' | 'allocate' | 'sell' | 'admire' | string;
-    /**
-     * Interest in any asset matching this product identity, rather than a specific asset. Use instead of assetId when the interest is in a product class, not a specific instance. Maps to Schema.org Product (vs IndividualProduct for assetId). Matching is by identifier (strongest), brand + category (medium), or category alone (weakest)
-     */
-    productMatch?: {
-        /**
-         * The identifier system, from reference-data/identifier-systems.json
-         */
-        identifierSystem?: string;
-        /**
-         * The product identifier value within the system
-         */
-        identifierValue?: string;
-        /**
-         * Brand name for matching
-         */
-        brand?: string;
-        /**
-         * Wikidata entity ID for the brand — strongest cross-system brand match
-         */
-        brandWikidataId?: string;
-        /**
-         * INHERIT product category for broad matching
-         */
-        category?: string;
-        /**
-         * INHERIT subcategory for narrower matching
-         */
-        subcategory?: string;
-        /**
-         * Minimum acceptable condition. If absent, matches all conditions. Uses the same enum as asset.condition
-         */
-        minimumCondition?: 'excellent' | 'good' | 'fair' | 'poor';
-        /**
-         * Additional matching criteria in free text
-         */
-        notes?: string;
-    };
-    /**
-     * Number of items desired (for productMatch wishlist entries) or number of the specific asset being discussed. Default 1 if absent. Follows the same convention as asset.quantity
-     */
-    quantity?: number;
-    /**
-     * When this interest was expressed or recorded
-     */
-    expressedAt?: string;
-    /**
-     * For wishlist items that have been pre-ordered from a dealer or manufacturer but not yet received. Tracks order status, payment, and expected delivery
-     */
-    preOrderStatus?: {
-        /**
-         * Current status of the pre-order
-         */
-        orderStatus?: 'wanted' | 'pre_ordered_unpaid' | 'pre_ordered_paid' | 'dispatched' | 'received';
-        /**
-         * The dealer or manufacturer the item was ordered from
-         */
-        orderedFrom?: string;
-        /**
-         * The dealer's or manufacturer's order reference number
-         */
-        orderReference?: string;
-        /**
-         * When the order was placed
-         */
-        orderDate?: string;
-        /**
-         * When the item is expected to arrive. Manufacturers often announce target quarters rather than exact dates
-         */
-        expectedDeliveryDate?: string | null;
-        /**
-         * Whether the item has been paid for
-         */
-        paymentStatus?: 'unpaid' | 'deposit_paid' | 'fully_paid' | 'refunded';
-        /**
-         * The amount paid so far, in minor currency units
-         */
-        amountPaid?: Money2;
-        /**
-         * How the payment was made
-         */
-        paymentMethod?: string;
-    };
-    /**
-     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
-     */
-    provenance?: Provenance2;
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | string | null | string | null | string | 'mentioned' | 'expressed_interest' | 'strongly_wants' | 'agreed' | 'family_conversation' | 'written_request' | 'chat_message' | 'platform_private_message' | 'platform_group_message' | 'proxy_reported' | 'testator_observed' | 'manual' | boolean | string | 'testator' | 'beneficiary' | 'executor' | 'proxy' | string | 'acquire' | 'receive' | 'allocate' | 'sell' | 'admire' | string | {
-        /**
-         * The identifier system, from reference-data/identifier-systems.json
-         */
-        identifierSystem?: string;
-        /**
-         * The product identifier value within the system
-         */
-        identifierValue?: string;
-        /**
-         * Brand name for matching
-         */
-        brand?: string;
-        /**
-         * Wikidata entity ID for the brand — strongest cross-system brand match
-         */
-        brandWikidataId?: string;
-        /**
-         * INHERIT product category for broad matching
-         */
-        category?: string;
-        /**
-         * INHERIT subcategory for narrower matching
-         */
-        subcategory?: string;
-        /**
-         * Minimum acceptable condition. If absent, matches all conditions. Uses the same enum as asset.condition
-         */
-        minimumCondition?: 'excellent' | 'good' | 'fair' | 'poor';
-        /**
-         * Additional matching criteria in free text
-         */
-        notes?: string;
-    } | number | string | {
-        /**
-         * Current status of the pre-order
-         */
-        orderStatus?: 'wanted' | 'pre_ordered_unpaid' | 'pre_ordered_paid' | 'dispatched' | 'received';
-        /**
-         * The dealer or manufacturer the item was ordered from
-         */
-        orderedFrom?: string;
-        /**
-         * The dealer's or manufacturer's order reference number
-         */
-        orderReference?: string;
-        /**
-         * When the order was placed
-         */
-        orderDate?: string;
-        /**
-         * When the item is expected to arrive. Manufacturers often announce target quarters rather than exact dates
-         */
-        expectedDeliveryDate?: string | null;
-        /**
-         * Whether the item has been paid for
-         */
-        paymentStatus?: 'unpaid' | 'deposit_paid' | 'fully_paid' | 'refunded';
-        /**
-         * The amount paid so far, in minor currency units
-         */
-        amountPaid?: Money2;
-        /**
-         * How the payment was made
-         */
-        paymentMethod?: string;
-    } | Provenance2 | undefined;
-};
-
-/**
- * A third party expressing interest in purchasing or acquiring estate assets
- */
-export type InterestedParty = {
-    /**
-     * Reference to a Person.id if the interested party is an individual in the people array
-     */
-    personId?: string;
-    /**
-     * Human-readable display name for the referenced person
-     */
-    personIdDisplay?: string;
-    /**
-     * Name of the interested party — individual or organisation
-     */
-    name: string;
-    /**
-     * The type of interested party
-     */
-    type: 'art_dealer' | 'antique_dealer' | 'property_investor' | 'auction_house' | 'gallery' | 'private_collector' | 'museum' | 'institution' | 'charity' | 'developer' | 'fund_manager' | 'family_office' | 'estate_agent' | 'legal_practice' | 'other';
-    /**
-     * Contact details for the interested party
-     */
-    contactDetails?: string;
-    /**
-     * Reference to an Organisation.id if the interested party is a known organisation. Mutually exclusive with personId
-     */
-    organisationId?: string;
-    /**
-     * Human-readable display name for the referenced organisation
-     */
-    organisationIdDisplay?: string;
-};
-
-/**
- * A specific asset or property that the interested party wants to acquire
- */
-export type AssetInterestItem = {
-    /**
-     * Reference to an Asset.id
-     */
-    assetId?: string;
-    /**
-     * Reference to a Property.id
-     */
-    propertyId?: string;
-    /**
-     * How strong the interested party's intent is
-     */
-    interestLevel?: 'exploratory' | 'moderate' | 'strong' | 'committed';
-};
-
-export type CollectionInterest = unknown & {
-    /**
-     * Name of the collection
-     */
-    name?: string;
-    /**
-     * Asset IDs that make up this collection
-     */
-    assetIds?: Array<string>;
-    /**
-     * Property IDs that make up this collection
-     */
-    propertyIds?: Array<string>;
-    /**
-     * Additional notes about the collection interest
-     */
-    notes?: string;
-};
-
-/**
- * Details of a specific offer made by the interested party
- */
-export type OfferDetails = {
-    /**
-     * The offer amount in minor currency units
-     */
-    amount?: Money2;
-    /**
-     * Conditions attached to the offer
-     */
-    conditions?: Array<string>;
-    /**
-     * Date the offer expires
-     */
-    validUntil?: string;
-    /**
-     * Date the offer was made
-     */
-    offerDate?: string;
-    /**
-     * Reference to the document containing the offer
-     */
-    documentRef?: string;
-    /**
-     * Terms and conditions of the offer
-     */
-    offerTerms?: string;
-    /**
-     * Whether a physical inspection is required before the offer can be finalised
-     */
-    inspectionRequired?: boolean;
-    /**
-     * Date the inspection is scheduled or took place
-     */
-    inspectionDate?: string;
-};
-
-/**
- * Dealer Interest
- *
- * Level D data — records third-party interest in estate assets (art dealers, property investors, collectors). Privacy-controlled. Managed via proxy authorisation
- */
-export type DealerInterest2 = {
-    /**
-     * Unique identifier for this dealer interest record within the INHERIT document
-     */
-    id: string;
-    /**
-     * The third party expressing interest in estate assets
-     */
-    interestedParty: InterestedParty;
-    /**
-     * Specific assets or properties the interested party wants to acquire
-     */
-    assets?: Array<AssetInterestItem>;
-    /**
-     * Interest in a collection of assets as a whole
-     */
-    collection?: CollectionInterest;
-    /**
-     * Current status of the offer or expression of interest
-     */
-    offerStatus: 'standing_interest' | 'verbal_offer' | 'written_offer' | 'formal_valuation' | 'conditional_offer' | 'accepted' | 'declined' | 'expired' | 'withdrawn';
-    /**
-     * Details of a specific offer, if one has been made
-     */
-    offerDetails?: OfferDetails;
-    /**
-     * The testator's disposition towards selling this asset
-     */
-    testatorDisposition?: 'willing_to_sell' | 'prefer_not_to_sell' | 'hold_for_executor' | 'deferred_to_family' | 'promised_to_institution' | 'undecided';
-    /**
-     * Reference to a Bequest.id if this asset is also subject to a bequest. A dealer interest and a bequest may conflict
-     */
-    linkedBequestId?: string;
-    /**
-     * Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches
-     */
-    privacyLevel: 'testator_only' | 'proxy_visible' | 'executor_visible' | 'all_parties';
-    /**
-     * Who initiated the communication about this potential transaction
-     */
-    communicationInitiatedBy?: 'buyer' | 'testator' | 'proxy' | 'executor';
-    /**
-     * Reference to the ProxyAuthorisation.id that governs this dealer interest — the proxy managing the negotiation
-     */
-    managedByProxyId?: string;
-    /**
-     * Free-text notes about this dealer interest
-     */
-    notes?: string;
-    /**
-     * The outcome of a verification inspection — records whether the item matched its listed condition and any price adjustments
-     */
-    verificationResult?: {
-        /**
-         * Whether the item has been through verification
-         */
-        verified?: boolean;
-        /**
-         * When the verification was completed
-         */
-        verifiedAt?: string;
-        /**
-         * Whether the item's condition matched the seller's listed grade
-         */
-        conditionConfirmed?: boolean;
-        /**
-         * The adjusted price if condition differed from listed. Null if no adjustment needed
-         */
-        adjustedAmount?: Money2;
-        /**
-         * Details of any condition discrepancy found during verification
-         */
-        discrepancyNotes?: string;
-        /**
-         * Reference to the Organisation.id of the verification dealer
-         */
-        verifiedByOrganisationId?: string;
-    };
-    /**
-     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
-     */
-    provenance?: Provenance2;
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | InterestedParty | Array<AssetInterestItem> | CollectionInterest | 'standing_interest' | 'verbal_offer' | 'written_offer' | 'formal_valuation' | 'conditional_offer' | 'accepted' | 'declined' | 'expired' | 'withdrawn' | OfferDetails | 'willing_to_sell' | 'prefer_not_to_sell' | 'hold_for_executor' | 'deferred_to_family' | 'promised_to_institution' | 'undecided' | 'testator_only' | 'proxy_visible' | 'executor_visible' | 'all_parties' | 'buyer' | 'testator' | 'proxy' | 'executor' | string | {
-        /**
-         * Whether the item has been through verification
-         */
-        verified?: boolean;
-        /**
-         * When the verification was completed
-         */
-        verifiedAt?: string;
-        /**
-         * Whether the item's condition matched the seller's listed grade
-         */
-        conditionConfirmed?: boolean;
-        /**
-         * The adjusted price if condition differed from listed. Null if no adjustment needed
-         */
-        adjustedAmount?: Money2;
-        /**
-         * Details of any condition discrepancy found during verification
-         */
-        discrepancyNotes?: string;
-        /**
-         * Reference to the Organisation.id of the verification dealer
-         */
-        verifiedByOrganisationId?: string;
-    } | Provenance2 | undefined;
-};
-
 /**
  * Subscription
  *
@@ -15801,6 +16425,14 @@ export type IntegrityConstraint = {
      */
     required?: boolean;
     /**
+     * The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops
+     */
+    kind?: 'existence' | 'acyclic';
+    /**
+     * For kind 'acyclic': the maximum number of hops a containment chain may have before it is rejected as unreasonably deep. A chain longer than this fails with INHERIT_DEPTH_EXCEEDED even if it is acyclic
+     */
+    maxDepth?: number;
+    /**
      * Machine-readable error code from the INHERIT error vocabulary
      */
     code: string;
@@ -15817,9 +16449,9 @@ export type IntegrityConstraint = {
  */
 export type Schema = unknown & {
     /**
-     * Schema identifier — declares this as an INHERIT v3 document. Standard JSON Schema keyword
+     * Schema identifier — declares this as an INHERIT v3 document. Standard JSON Schema keyword. An estate-profile document carries the root URL; a catalogue-profile document may carry either the root URL or the catalogue URL, so a catalogue document written against catalogue.json conforms to the root unchanged
      */
-    $schema?: 'https://openinherit.org/v3/schema.json';
+    $schema?: 'https://openinherit.org/v3/schema.json' | 'https://openinherit.org/v3/catalogue.json';
     /**
      * JSON-LD context URI. When present, makes this document self-describing linked data
      */
@@ -15829,9 +16461,13 @@ export type Schema = unknown & {
      */
     '@type'?: string;
     /**
+     * The conformance profile this document claims. 'estate' (the default when absent) is the full estate document: estate, people and schemaVersion are required. 'catalogue' is a catalogue-only document — a living owner cataloguing items with no estate envelope: the document must satisfy catalogue.json in full, so assets is required, estate-only members are not allowed, and the catalogue's own members (assetInterests, legacyContacts, dealerInterests, giftListSettings, legacyLetter, completeness, recommendedActions) are carried at the root rather than in applicationState. A profile is a declared subset of this one root, not a second root
+     */
+    conformanceProfile?: 'estate' | 'catalogue';
+    /**
      * Semver version of the INHERIT schema this document was created against. Enables consumers to detect compatibility and handle graceful degradation
      */
-    schemaVersion: string;
+    schemaVersion?: string;
     /**
      * Timestamp when this document was exported from the producing system
      */
@@ -15889,11 +16525,11 @@ export type Schema = unknown & {
     /**
      * The single estate record for this document
      */
-    estate: Estate2;
+    estate?: Estate2;
     /**
      * All people involved in the estate — testator, beneficiaries, executors, witnesses, guardians, etc
      */
-    people: Array<Person2>;
+    people?: Array<Person2>;
     /**
      * Familial bonds between people in the estate. Essential for intestacy calculations
      */
@@ -16170,7 +16806,7 @@ export type Schema = unknown & {
     referentialIntegrity?: Array<IntegrityConstraint>;
     [key: string]: {
         [key: string]: unknown;
-    } | 'https://openinherit.org/v3/schema.json' | string | string | string | string | {
+    } | 'https://openinherit.org/v3/schema.json' | 'https://openinherit.org/v3/catalogue.json' | string | string | 'estate' | 'catalogue' | string | string | {
         /**
          * Name of the person who exported the document
          */
@@ -16350,198 +16986,6 @@ export type Schema = unknown & {
 };
 
 /**
- * INHERIT v2 Catalogue Schema
- *
- * Lightweight root schema for catalogue-only documents — living collectors cataloguing items without the full estate envelope. Assets, collections, valuations, and legacy contacts. Upgrade path: wrap in a full estate document (schema.json) when needed
- */
-export type Catalogue2 = {
-    /**
-     * Schema identifier — declares this as an INHERIT v3 catalogue document
-     */
-    $schema?: 'https://openinherit.org/v3/catalogue.json';
-    /**
-     * JSON-LD context URI
-     */
-    '@context'?: string;
-    schemaVersion?: string;
-    readonly exportedAt?: string;
-    readonly exportedBy?: {
-        name?: string;
-        email?: string;
-    };
-    readonly generator?: {
-        name: string;
-        version?: string;
-        url?: string;
-    };
-    /**
-     * Sequential version number for this document. Incremented each time the document is substantively modified. Version 1 is the first version
-     */
-    documentVersion?: number;
-    /**
-     * When this version of the document was created. Courts and regulators care about when changes were made, not just which version number
-     */
-    versionedAt?: string;
-    /**
-     * Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version
-     */
-    previousVersionId?: string | null;
-    /**
-     * Human-readable summary of what changed in this version. Like a commit message for the document
-     */
-    changeDescription?: string;
-    /**
-     * The catalogued items
-     */
-    assets: Array<Asset2>;
-    /**
-     * Named groupings of assets
-     */
-    assetCollections?: Array<AssetCollection2>;
-    /**
-     * Organisations associated with catalogued assets — dealers, retailers, valuers, auction houses
-     */
-    organisations?: Array<Organisation2>;
-    /**
-     * Physical storage locations for items in this catalogue. Each asset can reference a space via spaceId. Critical for collectors with items across multiple properties or countries — affects probate jurisdiction and dealer collection logistics
-     */
-    spaces?: Array<Space2>;
-    /**
-     * Valuations of items and collections
-     */
-    valuations?: Array<Valuation2>;
-    /**
-     * People to notify and grant access when the owner dies. The 'Please open when I have passed away' letter recipients
-     */
-    legacyContacts?: Array<LegacyContact>;
-    /**
-     * Expressions of interest about assets, collections, or products. Includes the catalogue owner's own wishlist (things they want to acquire), interest from other people, and allocation intentions. Complements assets[] — assets are things you own; assetInterests are things you want, things others want, and decisions about who gets what
-     */
-    assetInterests?: Array<AssetInterest2>;
-    /**
-     * Personal messages, letters, care instructions, and non-binding wishes. Complements legacyContacts — legacyContacts tracks who receives the letter; wishes stores what it says. Types: letter (personal messages to specific people), care (maintenance and care instructions for items or collections), distribution (non-binding preferences about what should happen to items), general (anything else)
-     */
-    wishes?: Array<Wish2>;
-    /**
-     * Default data provenance for entities in this catalogue
-     */
-    dataProvenance?: 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated';
-    /**
-     * Systems data was imported from
-     */
-    importSources?: Array<ImportSource>;
-    completeness?: Completeness2;
-    recommendedActions?: Array<RecommendedAction>;
-    conformance?: Conformance;
-    /**
-     * Insurance policies associated with catalogued assets
-     */
-    insurancePolicies?: Array<InsurancePolicy2>;
-    /**
-     * Provisional offers and expressions of interest from dealers. Allows the catalogue owner to receive and track dealer offers on items they are considering selling, or standing offers to be included in the LegacyLetter
-     */
-    dealerInterests?: Array<DealerInterest2>;
-    /**
-     * Settings for the shareable gift wishlist. When enabled, the owner can share a public link to their wishlist for family and friends to buy from
-     */
-    giftListSettings?: {
-        /**
-         * Whether the gift list is currently shareable
-         */
-        enabled?: boolean;
-        /**
-         * The owner's personal message shown at the top of the gift list
-         */
-        personalMessage?: string;
-        /**
-         * Who can see the gift list
-         */
-        visibility?: 'public' | 'link_only' | 'private';
-        /**
-         * Asset interest IDs that someone has marked as bought. These are hidden from the public gift list to prevent duplicate gifts
-         */
-        fulfilledItems?: Array<string>;
-    };
-    /**
-     * Metadata about the LegacyLetter — the printed or digital document addressed to the owner's legacy contacts, summarising the catalogue, allocations, dealer offers, and personal messages. Tracks generation status to flag when the letter is stale
-     */
-    legacyLetter?: {
-        /**
-         * When the letter was last generated
-         */
-        lastGenerated?: string;
-        /**
-         * Incremental version number of the letter
-         */
-        version?: number;
-        /**
-         * Whether the letter has been delivered to the legacy contacts
-         */
-        delivered?: boolean;
-        /**
-         * How the letter was delivered
-         */
-        deliveryMethod?: 'printed' | 'digital' | 'both';
-        /**
-         * Number of items in the catalogue when the letter was last generated. Used to detect staleness — if the current item count differs significantly, the letter should be regenerated
-         */
-        itemCountAtGeneration?: number;
-    };
-    /**
-     * Formal audit trail of actions taken on this document. Records who changed what, when, and why. Uses person ID references for GDPR data minimisation. Entries may be redacted under Article 17(3)(e) without breaking the log structure. Retention aligns with the estate document lifecycle
-     */
-    auditLog?: Array<AuditEvent2>;
-    [key: string]: {
-        [key: string]: unknown;
-    } | 'https://openinherit.org/v3/catalogue.json' | string | string | string | {
-        name?: string;
-        email?: string;
-    } | {
-        name: string;
-        version?: string;
-        url?: string;
-    } | number | string | null | string | Array<Asset2> | Array<AssetCollection2> | Array<Organisation2> | Array<Space2> | Array<Valuation2> | Array<LegacyContact> | Array<AssetInterest2> | Array<Wish2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | Array<ImportSource> | Completeness2 | Array<RecommendedAction> | Conformance | Array<InsurancePolicy2> | Array<DealerInterest2> | {
-        /**
-         * Whether the gift list is currently shareable
-         */
-        enabled?: boolean;
-        /**
-         * The owner's personal message shown at the top of the gift list
-         */
-        personalMessage?: string;
-        /**
-         * Who can see the gift list
-         */
-        visibility?: 'public' | 'link_only' | 'private';
-        /**
-         * Asset interest IDs that someone has marked as bought. These are hidden from the public gift list to prevent duplicate gifts
-         */
-        fulfilledItems?: Array<string>;
-    } | {
-        /**
-         * When the letter was last generated
-         */
-        lastGenerated?: string;
-        /**
-         * Incremental version number of the letter
-         */
-        version?: number;
-        /**
-         * Whether the letter has been delivered to the legacy contacts
-         */
-        delivered?: boolean;
-        /**
-         * How the letter was delivered
-         */
-        deliveryMethod?: 'printed' | 'digital' | 'both';
-        /**
-         * Number of items in the catalogue when the letter was last generated. Used to detect staleness — if the current item count differs significantly, the letter should be regenerated
-         */
-        itemCountAtGeneration?: number;
-    } | Array<AuditEvent2> | undefined;
-};
-
-/**
  * Conformance result for a single entity schema
  */
 export type EntityConformance = {
@@ -16619,6 +17063,10 @@ export type ConformanceDeclaration2 = {
      * INHERIT schema version this declaration applies to
      */
     inheritVersion: string;
+    /**
+     * Which INHERIT document root the declared conformance applies to. 'estate' is the full estate document (schema.json); 'catalogue' is the catalogue-only document (catalogue.json) used by living collectors without the estate envelope. Absent means 'estate', which is what every declaration made before this field existed claimed
+     */
+    root?: 'estate' | 'catalogue';
     /**
      * Overall conformance level achieved. The minimum across all declared entities
      */
@@ -16722,6 +17170,1668 @@ export type TaxPositionWritable = TaxPositionWritable2;
 export type VisibilityWritable = Visibility2;
 
 /**
+ * Identifier
+ *
+ * A typed external identifier. Use 'system' to namespace identifiers and prevent collisions across jurisdictions and organisations
+ */
+export type IdentifierWritable2 = {
+    /**
+     * Namespace URI or name identifying the issuing authority or system. Use URN format where possible for unambiguous identification
+     */
+    system?: string;
+    /**
+     * The identifier value itself. Format depends on the system — may include hyphens, spaces, or check digits as appropriate
+     */
+    value: string;
+    /**
+     * Human-readable type label describing what kind of identifier this is
+     */
+    type?: string;
+};
+
+/**
+ * Asset
+ *
+ * A non-property asset: financial accounts, personal property, vehicles, digital assets, business interests, Islamic finance instruments, etc
+ */
+export type AssetWritable2 = unknown & {
+    /**
+     * Unique identifier for this asset within the INHERIT document
+     */
+    id: string;
+    /**
+     * Display name for this asset. Should be specific enough to identify the item during probate
+     */
+    name: string;
+    /**
+     * Top-level category from the INHERIT Product Taxonomy. Use the `subcategory` field for finer classification. See `reference-data/category-guidance.json` for valid subcategories, recommended identifiers, and photography guidance per category
+     */
+    category: 'financial' | 'vehicle' | 'digital' | 'business' | 'property_contents' | 'jewellery_watches' | 'art' | 'antiques' | 'collectibles' | 'musical_instruments' | 'books_manuscripts' | 'wine_spirits' | 'clothing_textiles' | 'firearms_sporting' | 'islamic_financial' | 'other';
+    /**
+     * Finer classification within the top-level category. Values are defined in reference-data/category-guidance.json but the field is freeform to accommodate jurisdiction-specific asset types. Examples: financial → 'pension', collectibles → 'model_railways', vehicle → 'classic_vehicle'
+     */
+    subcategory?: string;
+    /**
+     * Owner's estimate of the asset's current value, in minor currency units
+     */
+    estimatedValue?: Money2;
+    /**
+     * Professional valuation of the asset, in minor currency units
+     */
+    professionalValuation?: Money2;
+    /**
+     * Value of this asset net of the active charges secured against it, in minor currency units. A convenience denormalisation: the authoritative figure is derived, not stored
+     */
+    netEquity?: Money2;
+    /**
+     * True when the active charges secured against this asset exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall
+     */
+    inNegativeEquity?: boolean;
+    /**
+     * Date of the most recent valuation
+     */
+    valuationDate?: string;
+    /**
+     * Level of confidence in the stated valuation
+     */
+    valuationConfidence?: 'estimated' | 'professional' | 'official' | 'unknown';
+    /**
+     * Physical condition of the asset. Affects resale value — dealers use this to price items. Pair with conditionSystem and conditionGrade for domain-specific grading. Use 'not_applicable' for financial assets where condition is meaningless
+     */
+    condition?: 'excellent' | 'good' | 'fair' | 'poor' | 'unknown' | 'not_applicable';
+    /**
+     * Number of items if this represents multiple identical or similar items
+     */
+    quantity?: number;
+    /**
+     * Where this asset is physically stored or held — a bank, safe, property, or institution
+     */
+    location?: string;
+    /**
+     * Reference to a Property.id if this asset is located at a specific property in the estate
+     */
+    propertyId?: string;
+    /**
+     * Reference to the AssetCollection.id this asset belongs to. An asset may belong to at most one collection. If set, this asset's value contributes to the collection's total
+     */
+    assetCollectionId?: string;
+    /**
+     * Reference to a Space.id representing where this item is physically stored. Critical for collections spread across multiple properties or countries — affects probate jurisdiction and dealer collection logistics
+     */
+    spaceId?: string | null;
+    /**
+     * External identifiers — serial numbers, account numbers, policy references, registration numbers, etc
+     */
+    identifiers?: Array<IdentifierWritable2>;
+    /**
+     * Links to this asset in external databases, marketplaces, and registries. The universal connector — any external system can be referenced without a schema change. Use identifiers for formal identifier schemes (ISBN, VIN, NINO); use externalLinks for platform-specific references, product pages, and database entries
+     */
+    externalLinks?: Array<{
+        /**
+         * The external system or platform name. Use lowercase, no spaces
+         */
+        system: string;
+        /**
+         * The platform-specific identifier for this asset
+         */
+        id: string;
+        /**
+         * Direct URL to the asset's page on the external platform. Optional — some systems are API-only
+         */
+        url?: string;
+        /**
+         * Human-readable label for display. Optional — defaults to the system name
+         */
+        label?: string;
+        /**
+         * Timestamp when this link was last verified or data was last retrieved
+         */
+        retrievedAt?: string;
+    }>;
+    /**
+     * URI pointing to the manufacturer's or retailer's official product page for this exact item. Distinct from storageRef (document storage) and externalLinks (database references). Enables direct linking to manufacturer specifications, manuals, and warranty information
+     */
+    productPage?: string;
+    /**
+     * Prior ownership records — establishes the chain of provenance for the asset. Critical for art, antiques, and high-value collectibles
+     */
+    provenanceChain?: Array<{
+        /**
+         * Description of this provenance record
+         */
+        description: string;
+        /**
+         * Name of the previous owner (may be anonymised)
+         */
+        ownerName?: string;
+        /**
+         * Approximate start date of this ownership period
+         */
+        fromDate?: string;
+        /**
+         * Approximate end date of this ownership period
+         */
+        toDate?: string;
+        /**
+         * How the owner acquired the asset
+         */
+        acquisitionMethod?: 'purchase' | 'inheritance' | 'gift' | 'commission' | 'restitution' | 'auction' | 'unknown';
+        /**
+         * Where this provenance information came from
+         */
+        source?: string;
+        /**
+         * Link to supporting evidence (sale record, catalogue entry, etc.)
+         */
+        evidenceUrl?: string;
+    }>;
+    /**
+     * Photographs, videos, and document scans. Vision-capable AI agents use these to identify items, assess condition, and find visual matches on marketplaces. Use viewType from media.json to categorize each media item
+     */
+    images?: Array<Media2>;
+    /**
+     * Whether the asset was held at death, is receivable post-death, or is contingent on a future event
+     */
+    possessionStatus?: 'possessed_at_death' | 'receivable' | 'contingent';
+    /**
+     * Whether this asset is classified as immoveable or moveable property. Affects which conflict-of-laws rules apply in cross-border estates
+     */
+    mobilityType?: 'immoveable' | 'moveable' | 'mixed';
+    /**
+     * How this asset was acquired. Determines succession rules in Indian and other customary systems
+     */
+    acquisitionType?: 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed';
+    /**
+     * Whether ownership of this asset is formally registered or documented
+     */
+    registrationStatus?: 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented';
+    /**
+     * The type of evidence available to prove ownership of this asset
+     */
+    ownershipEvidence?: 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none';
+    /**
+     * Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will
+     */
+    coOwnership?: {
+        /**
+         * Person IDs of co-owners
+         */
+        coOwnerPersonIds?: Array<string>;
+        /**
+         * How ownership is structured between co-owners
+         */
+        ownershipType?: 'joint_tenants' | 'tenants_in_common' | 'community_property' | 'partnership' | 'other';
+        /**
+         * The testator's ownership percentage
+         */
+        ownershipPercentage?: number;
+        /**
+         * Date joint tenancy was severed to become tenants in common (if applicable)
+         */
+        severanceDate?: string;
+    };
+    /**
+     * Cultural, religious, and regulatory constraints on disposal of this asset
+     */
+    culturalDisposition?: CulturalDisposition2;
+    /**
+     * The communal or family authority whose approval is required to dispose of this asset
+     */
+    communalAuthority?: {
+        /**
+         * Category of communal authority
+         */
+        authorityType?: 'family_council' | 'clan_association' | 'religious_body' | 'tribal_council' | 'government';
+        /**
+         * Whether approval from this authority is legally required before disposal
+         */
+        approvalRequired?: boolean;
+        /**
+         * Name of the specific authority or person
+         */
+        authorityName?: string;
+        /**
+         * Jurisdiction where this communal authority has legal standing
+         */
+        jurisdiction?: Jurisdiction2;
+    };
+    /**
+     * The succession regime governing this specific asset. Overrides estate.defaultSuccessionRegime when present
+     */
+    successionRegime?: {
+        /**
+         * The law governing succession for this asset
+         */
+        governingLaw?: {
+            /**
+             * Jurisdiction whose succession law applies
+             */
+            jurisdiction?: Jurisdiction2;
+            /**
+             * Which legal tradition applies
+             */
+            legalTradition?: 'common_law' | 'civil_law' | 'mixed' | 'customary_law' | 'islamic_law' | 'hindu_law' | 'jewish_law' | 'canon_law';
+            /**
+             * Name of the governing statute
+             */
+            statute?: string;
+            /**
+             * Specific section of the statute
+             */
+            section?: string;
+        };
+        /**
+         * How the governing law was determined
+         */
+        determinedBy?: 'domicile' | 'situs' | 'nationality' | 'personal_status' | 'choice_of_law' | 'treaty';
+        /**
+         * Whether this succession regime is legally binding
+         */
+        binding?: boolean;
+        /**
+         * INHERIT extension IDs that apply to this asset's succession
+         */
+        extensions?: Array<string>;
+        /**
+         * Additional context about the succession regime
+         */
+        notes?: string;
+    };
+    /**
+     * Named beneficiary designation for this asset. Assets with beneficiary designations pass outside the probate estate — the will does not control their distribution
+     */
+    beneficiaryDesignation?: {
+        /**
+         * Person IDs of the primary beneficiaries
+         */
+        primaryBeneficiaryPersonIds?: Array<string>;
+        /**
+         * Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)
+         */
+        contingentBeneficiaryPersonIds?: Array<string>;
+        /**
+         * The type of beneficiary designation
+         */
+        designationType?: 'retirement_account' | 'life_insurance' | 'superannuation' | 'pod_account' | 'other';
+        /**
+         * Reference to the NonprobateTransfer entity that tracks this designation
+         */
+        linkedNonprobateTransferId?: string;
+    };
+    /**
+     * Digital access consent under RUFADAA or equivalent legislation. Governs whether executors and fiduciaries can access the deceased's digital accounts and assets
+     */
+    digitalAccessConsent?: {
+        /**
+         * Whether the account holder has given consent for fiduciary access
+         */
+        consentGiven?: boolean;
+        /**
+         * The scope of access granted to fiduciaries
+         */
+        scope?: 'full_access' | 'limited_access' | 'no_access';
+        /**
+         * Reference to the Person.id designated to receive access to this digital asset
+         */
+        designatedRecipientPersonId?: string;
+        /**
+         * Human-readable display name for the referenced designated recipient person
+         */
+        designatedRecipientPersonIdDisplay?: string;
+        /**
+         * Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA
+         */
+        onlineToolDirective?: boolean;
+    };
+    /**
+     * Whether this asset passes outside the probate estate. Beneficiary designations, POD accounts, and jointly held assets typically bypass the will
+     */
+    passesOutsideEstate?: boolean;
+    /**
+     * Free-text notes about this asset. Use for provenance, sentimental value, special handling instructions, or anything not captured by structured fields
+     */
+    notes?: string;
+    /**
+     * Structured description of the asset — what it is, its significance, and key details a dealer or executor would need. Distinct from 'notes' which is free-form
+     */
+    description?: string;
+    /**
+     * The manufacturer or brand name. Accepts a plain string (backwards compatible) or a structured object with Wikidata linkage for rich product data. AI agents should use this as a primary search dimension when finding comparables
+     */
+    brand?: string | {
+        /**
+         * Brand or manufacturer name
+         */
+        name: string;
+        /**
+         * Wikidata Q-number for this brand. Resolves to structured data via the Wikidata API — founding year, country, parent company, logo, official website, product categories
+         */
+        wikidataId?: string;
+        /**
+         * Official brand website
+         */
+        website?: string;
+    };
+    /**
+     * The specific model, product line, or range name. Combined with brand and identifiers, this is the primary key for marketplace search. AI agents construct search queries from brand + model + subcategory
+     */
+    model?: string;
+    /**
+     * Date the asset was acquired by the current owner. Used for capital gains tax calculations, insurance claims, and provenance. Maps to Schema.org purchaseDate
+     */
+    purchaseDate?: string;
+    /**
+     * Whether original packaging, documentation, and accessories are present. Affects value by 20–40% across watches, model railways, jewellery, and many other domains
+     */
+    originalPackaging?: 'complete' | 'partial' | 'box_only' | 'papers_only' | 'none' | 'unknown';
+    /**
+     * Third party currently holding this asset — a bank (safe deposit), storage facility (bonded wine), repairer (watch at jeweller), gallery (art on loan), or institution. The executor needs to know who to contact
+     */
+    custodian?: {
+        /**
+         * Name of the person or organisation holding the asset
+         */
+        name?: string;
+        /**
+         * Email address for the custodian
+         */
+        contactEmail?: string;
+        /**
+         * Phone number for the custodian
+         */
+        contactPhone?: string;
+        /**
+         * The nature of the custodial relationship
+         */
+        relationship?: string;
+        /**
+         * Account or reference number with the custodian
+         */
+        reference?: string;
+    };
+    /**
+     * The grading system used for the conditionGrade value. Allows domain-specific condition assessment alongside the generic condition field
+     */
+    conditionSystem?: 'goldmine' | 'sheldon' | 'ags' | 'bsc' | 'gia' | 'watch_trade' | 'classic_vehicle' | 'book_trade' | string;
+    /**
+     * The specific grade within the conditionSystem. Meaningful only when conditionSystem is set
+     */
+    conditionGrade?: string;
+    /**
+     * URI pointing to the official documentation of the grading standard used. Enables tools to display the correct grading scale and interpret the conditionGrade value
+     */
+    conditionStandard?: string;
+    /**
+     * How urgently this asset needs attention after the testator's death. Drives the executor's priority list
+     */
+    urgency?: 'immediate' | 'within_7_days' | 'within_30_days' | 'none';
+    /**
+     * Explanation of why this asset is urgent. Particularly important for 'immediate' items
+     */
+    urgencyReason?: string;
+    /**
+     * Reference to another Asset.id if this asset is physically contained within or logically part of another asset. Enables hierarchical asset nesting — e.g. a watch inside a safe, tools inside a toolbox
+     */
+    containedInAssetId?: string;
+    /**
+     * Insurance coverage for this asset. The executor needs to know what's insured, by whom, and whether cover continues after death
+     */
+    insurance?: {
+        /**
+         * Name of the insurance provider
+         */
+        provider?: string;
+        /**
+         * Policy reference number
+         */
+        policyReference?: string;
+        /**
+         * The insured value in minor currency units
+         */
+        insuredValue?: Money2;
+        /**
+         * Next renewal date. Important — cover may lapse if not renewed after death
+         */
+        renewalDate?: string;
+        /**
+         * Additional insurance notes
+         */
+        notes?: string;
+    };
+    /**
+     * Where the asset was purchased or acquired from. Collectors track provenance — valuable for dealers and for establishing authenticity
+     */
+    purchasedFrom?: string;
+    /**
+     * Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split
+     */
+    splitFrom?: {
+        /**
+         * The type of entity that was split
+         */
+        entityType: 'asset' | 'asset_collection';
+        /**
+         * The id of the original entity that was split
+         */
+        entityId: string;
+        /**
+         * When the split occurred
+         */
+        splitAt: string;
+        /**
+         * Why the split was requested
+         */
+        reason?: string;
+    };
+    /**
+     * How this specific entity's data was captured. Overrides the document-level default if set
+     */
+    dataProvenance?: 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated';
+    /**
+     * Keywords for marketplace search — AI-generated or human-curated. Memoization: once derived, cached here so subsequent agents reuse them instantly rather than re-deriving
+     */
+    searchTerms?: Array<string>;
+    /**
+     * Structured search instructions for comparable-finding agents. Acts as agent memory — the item teaches future agents how to find its peers
+     */
+    comparableSearchProfile?: {
+        /**
+         * Marketplaces and platforms to search
+         */
+        platforms?: Array<string>;
+        /**
+         * Natural-language query an agent should use
+         */
+        searchQuery?: string;
+        /**
+         * Key-value filters to narrow results. Agents map to platform-specific parameters
+         */
+        filters?: {
+            [key: string]: string;
+        };
+        /**
+         * Platforms explicitly excluded
+         */
+        excludePlatforms?: Array<string>;
+        /**
+         * When an agent last executed this search profile
+         */
+        lastSearchedAt?: string;
+        /**
+         * How often this item should be re-searched
+         */
+        searchFrequency?: 'once' | 'weekly' | 'monthly' | 'on_demand';
+    };
+    /**
+     * AI-suggested subcategory refinement, kept separate from the human-set subcategory. Accepted when the user confirms. Provenance: always AI-generated
+     */
+    suggestedSubcategory?: string;
+    /**
+     * Numeric reliability score (0-100) for the current valuation. Computed from: recency, method, corroborating comparables, variance between estimates. Companion to the categorical valuationConfidence enum — the enum captures source, this number captures trustworthiness now. Agents use this to prioritise which assets need re-valuation
+     */
+    valuationReliability?: number;
+    /**
+     * When this entity's data was last verified by a human or authoritative source. Agents use this to decide whether to trust existing values or re-derive them
+     */
+    lastVerifiedAt?: string;
+    /**
+     * Who or what verified this entity — a person's name, a tool, or 'owner'
+     */
+    verifiedBy?: string;
+    /**
+     * Controls who can see this asset. Some assets (firearms, digital accounts, sensitive collections) may need restricted visibility
+     */
+    visibility?: Visibility2;
+    /**
+     * Per-field provenance records — how each field's value was obtained
+     */
+    fieldProvenance?: Array<FieldProvenance2>;
+    /**
+     * Discussion comments on this entity
+     */
+    comments?: Array<{
+        /**
+         * Unique identifier for this comment
+         */
+        id: string;
+        /**
+         * Person.id of the comment author
+         */
+        authorPersonId?: string;
+        /**
+         * Human-readable display name for the referenced author person
+         */
+        authorPersonIdDisplay?: string;
+        /**
+         * Comment text
+         */
+        content: string;
+        /**
+         * When the comment was created
+         */
+        createdAt: string;
+        visibility?: Visibility2;
+    }>;
+    /**
+     * Records that this entity was merged into another entity — the target entity is the canonical version
+     */
+    mergedInto?: {
+        /**
+         * Type of the target entity
+         */
+        entityType?: 'asset' | 'asset_collection';
+        /**
+         * ID of the target entity
+         */
+        entityId?: string;
+        /**
+         * When the merge occurred
+         */
+        mergedAt?: string;
+        /**
+         * Why the entities were merged
+         */
+        reason?: string;
+    };
+    /**
+     * Human-readable display name for the referenced storage location
+     */
+    spaceIdDisplay?: string;
+    /**
+     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
+     */
+    provenance?: Provenance2;
+    /**
+     * The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile
+     */
+    applicableLaw?: Jurisdiction2;
+    /**
+     * Per-asset tax treatment — how this asset is classified for tax purposes in a specific jurisdiction
+     */
+    taxTreatment?: {
+        jurisdiction?: Jurisdiction2;
+        assetType?: 'immoveable' | 'moveable' | 'mixed' | 'exempt';
+        exemptions?: Array<string>;
+        reliefClaimed?: Array<string>;
+    };
+    /**
+     * Instructions for accessing this asset after death — steps, locations, holders. No secrets in the document, just instructions for finding them. Available for all asset categories (digital: crypto wallets, social media; physical: safes, storage units)
+     */
+    accessInstructions?: {
+        accessType?: string;
+        platform?: string;
+        visibility?: Visibility2;
+        /**
+         * The estate role required to follow these instructions
+         */
+        requiredRole?: string;
+        steps?: Array<{
+            step: number;
+            method: string;
+            description?: string;
+            location?: string;
+            holderPersonId?: string;
+        }>;
+        memorialisation?: {
+            preference?: 'transfer_to_beneficiary' | 'memorialise' | 'delete' | 'archive' | 'no_preference';
+            instructions?: string;
+        };
+        lastVerified?: string;
+        verifiedBy?: string;
+    };
+    /**
+     * The owner's current intention for this item. Absent means keeping (the default). Used by catalogue applications to track whether items are being actively managed, offered for sale, or allocated to specific people
+     */
+    ownerIntent?: 'keeping' | 'considering' | 'thinning' | 'listed' | 'sold' | 'allocated' | 'donated';
+    /**
+     * Active or historical listings of this item for sale on external channels. Tracks where the item is listed, its status, and sale outcome. Application-level data — not part of the estate interchange but carried alongside it for catalogue and dealer workflows
+     */
+    listings?: Array<{
+        /**
+         * The sales channel where this item is listed
+         */
+        channel: 'ebay' | 'amazon' | 'shopify' | 'etsy' | 'own_website' | 'auction_house' | 'other';
+        /**
+         * Human-readable name of the channel, especially when channel is other
+         */
+        channelName?: string;
+        /**
+         * The platform-specific listing identifier
+         */
+        listingId?: string;
+        /**
+         * Direct URL to the listing on the external platform
+         */
+        listingUrl?: string;
+        /**
+         * Current status of this listing
+         */
+        status: 'draft' | 'active' | 'sold' | 'withdrawn' | 'expired';
+        /**
+         * The listed asking price
+         */
+        askingPrice?: Money2;
+        /**
+         * When this listing was created or last activated
+         */
+        listedAt?: string;
+        /**
+         * When the item was sold via this listing, if applicable
+         */
+        soldAt?: string | null;
+        /**
+         * The actual sale price, if sold
+         */
+        soldPrice?: Money2;
+    }>;
+    /**
+     * Service, maintenance, and restoration records. Critical for watches (service intervals affect value), vehicles (MOT history, restoration), clocks, and musical instruments
+     */
+    serviceHistory?: Array<ServiceRecord>;
+    /**
+     * Insurance details for this item. Tracks which policy covers it, the agreed value, and when cover was last confirmed. Essential for executors who need to claim on the correct policy
+     */
+    insuranceCover?: {
+        /**
+         * Name of the insurance company
+         */
+        insurer?: string;
+        /**
+         * The insurance policy number
+         */
+        policyNumber?: string;
+        /**
+         * The type of insurance policy covering this item
+         */
+        policyType?: 'home_contents' | 'specialist_collectibles' | 'classic_vehicle' | 'individual_item' | 'fine_art' | 'jewellery' | 'other';
+        /**
+         * The agreed or insured value, in minor currency units. May differ from market value
+         */
+        agreedValue?: Money2;
+        /**
+         * When the insurance cover for this item was last confirmed or reviewed
+         */
+        coverConfirmedAt?: string;
+    };
+    /**
+     * How this item can be transported for selling or verification. Determines which logistics path the Deal Comparison uses
+     */
+    shippingClass?: 'parcel' | 'large_item' | 'specialist_transport' | 'collection_only';
+    /**
+     * Original documents, certificates, and packaging elements present with this item. Affects value significantly across many categories. Cross-category: watches, vehicles, books, art, and collectibles share some document types
+     */
+    includedDocuments?: Array<'outer_box' | 'inner_box' | 'warranty_card' | 'cosc_certificate' | 'instruction_manual' | 'hang_tags' | 'service_booklet' | 'purchase_receipt' | 'original_invoice' | 'v5c_logbook' | 'mot_certificate' | 'provenance_letter' | 'certificate_of_authenticity' | 'appraisal_certificate' | 'export_licence' | 'customs_declaration' | string>;
+    /**
+     * Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)
+     */
+    taxReliefEligibility?: {
+        /**
+         * The type of tax relief claimed
+         */
+        reliefType?: 'agricultural_property' | 'business_property' | 'woodland' | 'heritage' | 'charitable';
+        eligible?: boolean;
+        /**
+         * Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
+         */
+        percentage?: number;
+        /**
+         * Conditions for maintaining eligibility
+         */
+        conditions?: string;
+        jurisdiction?: Jurisdiction2;
+        statute?: string;
+    };
+    /**
+     * Cultural, religious, sentimental, or professional significance beyond monetary value
+     */
+    significance?: {
+        type?: 'sentimental' | 'cultural' | 'religious' | 'historical' | 'family_heirloom' | 'professional';
+        description?: string;
+        /**
+         * Whether and how the testator has restricted disposal of this asset
+         */
+        restrictionOnDisposal?: {
+            exists?: boolean;
+            nature?: string;
+        };
+    };
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | string | 'financial' | 'vehicle' | 'digital' | 'business' | 'property_contents' | 'jewellery_watches' | 'art' | 'antiques' | 'collectibles' | 'musical_instruments' | 'books_manuscripts' | 'wine_spirits' | 'clothing_textiles' | 'firearms_sporting' | 'islamic_financial' | 'other' | string | Money2 | boolean | string | 'estimated' | 'professional' | 'official' | 'unknown' | 'excellent' | 'good' | 'fair' | 'poor' | 'unknown' | 'not_applicable' | number | string | string | null | Array<IdentifierWritable2> | Array<{
+        /**
+         * The external system or platform name. Use lowercase, no spaces
+         */
+        system: string;
+        /**
+         * The platform-specific identifier for this asset
+         */
+        id: string;
+        /**
+         * Direct URL to the asset's page on the external platform. Optional — some systems are API-only
+         */
+        url?: string;
+        /**
+         * Human-readable label for display. Optional — defaults to the system name
+         */
+        label?: string;
+        /**
+         * Timestamp when this link was last verified or data was last retrieved
+         */
+        retrievedAt?: string;
+    }> | string | Array<{
+        /**
+         * Description of this provenance record
+         */
+        description: string;
+        /**
+         * Name of the previous owner (may be anonymised)
+         */
+        ownerName?: string;
+        /**
+         * Approximate start date of this ownership period
+         */
+        fromDate?: string;
+        /**
+         * Approximate end date of this ownership period
+         */
+        toDate?: string;
+        /**
+         * How the owner acquired the asset
+         */
+        acquisitionMethod?: 'purchase' | 'inheritance' | 'gift' | 'commission' | 'restitution' | 'auction' | 'unknown';
+        /**
+         * Where this provenance information came from
+         */
+        source?: string;
+        /**
+         * Link to supporting evidence (sale record, catalogue entry, etc.)
+         */
+        evidenceUrl?: string;
+    }> | Array<Media2> | 'possessed_at_death' | 'receivable' | 'contingent' | 'immoveable' | 'moveable' | 'mixed' | 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed' | 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented' | 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none' | {
+        /**
+         * Person IDs of co-owners
+         */
+        coOwnerPersonIds?: Array<string>;
+        /**
+         * How ownership is structured between co-owners
+         */
+        ownershipType?: 'joint_tenants' | 'tenants_in_common' | 'community_property' | 'partnership' | 'other';
+        /**
+         * The testator's ownership percentage
+         */
+        ownershipPercentage?: number;
+        /**
+         * Date joint tenancy was severed to become tenants in common (if applicable)
+         */
+        severanceDate?: string;
+    } | CulturalDisposition2 | {
+        /**
+         * Category of communal authority
+         */
+        authorityType?: 'family_council' | 'clan_association' | 'religious_body' | 'tribal_council' | 'government';
+        /**
+         * Whether approval from this authority is legally required before disposal
+         */
+        approvalRequired?: boolean;
+        /**
+         * Name of the specific authority or person
+         */
+        authorityName?: string;
+        /**
+         * Jurisdiction where this communal authority has legal standing
+         */
+        jurisdiction?: Jurisdiction2;
+    } | {
+        /**
+         * The law governing succession for this asset
+         */
+        governingLaw?: {
+            /**
+             * Jurisdiction whose succession law applies
+             */
+            jurisdiction?: Jurisdiction2;
+            /**
+             * Which legal tradition applies
+             */
+            legalTradition?: 'common_law' | 'civil_law' | 'mixed' | 'customary_law' | 'islamic_law' | 'hindu_law' | 'jewish_law' | 'canon_law';
+            /**
+             * Name of the governing statute
+             */
+            statute?: string;
+            /**
+             * Specific section of the statute
+             */
+            section?: string;
+        };
+        /**
+         * How the governing law was determined
+         */
+        determinedBy?: 'domicile' | 'situs' | 'nationality' | 'personal_status' | 'choice_of_law' | 'treaty';
+        /**
+         * Whether this succession regime is legally binding
+         */
+        binding?: boolean;
+        /**
+         * INHERIT extension IDs that apply to this asset's succession
+         */
+        extensions?: Array<string>;
+        /**
+         * Additional context about the succession regime
+         */
+        notes?: string;
+    } | {
+        /**
+         * Person IDs of the primary beneficiaries
+         */
+        primaryBeneficiaryPersonIds?: Array<string>;
+        /**
+         * Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)
+         */
+        contingentBeneficiaryPersonIds?: Array<string>;
+        /**
+         * The type of beneficiary designation
+         */
+        designationType?: 'retirement_account' | 'life_insurance' | 'superannuation' | 'pod_account' | 'other';
+        /**
+         * Reference to the NonprobateTransfer entity that tracks this designation
+         */
+        linkedNonprobateTransferId?: string;
+    } | {
+        /**
+         * Whether the account holder has given consent for fiduciary access
+         */
+        consentGiven?: boolean;
+        /**
+         * The scope of access granted to fiduciaries
+         */
+        scope?: 'full_access' | 'limited_access' | 'no_access';
+        /**
+         * Reference to the Person.id designated to receive access to this digital asset
+         */
+        designatedRecipientPersonId?: string;
+        /**
+         * Human-readable display name for the referenced designated recipient person
+         */
+        designatedRecipientPersonIdDisplay?: string;
+        /**
+         * Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA
+         */
+        onlineToolDirective?: boolean;
+    } | string | string | {
+        /**
+         * Brand or manufacturer name
+         */
+        name: string;
+        /**
+         * Wikidata Q-number for this brand. Resolves to structured data via the Wikidata API — founding year, country, parent company, logo, official website, product categories
+         */
+        wikidataId?: string;
+        /**
+         * Official brand website
+         */
+        website?: string;
+    } | 'complete' | 'partial' | 'box_only' | 'papers_only' | 'none' | 'unknown' | {
+        /**
+         * Name of the person or organisation holding the asset
+         */
+        name?: string;
+        /**
+         * Email address for the custodian
+         */
+        contactEmail?: string;
+        /**
+         * Phone number for the custodian
+         */
+        contactPhone?: string;
+        /**
+         * The nature of the custodial relationship
+         */
+        relationship?: string;
+        /**
+         * Account or reference number with the custodian
+         */
+        reference?: string;
+    } | 'goldmine' | 'sheldon' | 'ags' | 'bsc' | 'gia' | 'watch_trade' | 'classic_vehicle' | 'book_trade' | string | 'immediate' | 'within_7_days' | 'within_30_days' | 'none' | {
+        /**
+         * Name of the insurance provider
+         */
+        provider?: string;
+        /**
+         * Policy reference number
+         */
+        policyReference?: string;
+        /**
+         * The insured value in minor currency units
+         */
+        insuredValue?: Money2;
+        /**
+         * Next renewal date. Important — cover may lapse if not renewed after death
+         */
+        renewalDate?: string;
+        /**
+         * Additional insurance notes
+         */
+        notes?: string;
+    } | {
+        /**
+         * The type of entity that was split
+         */
+        entityType: 'asset' | 'asset_collection';
+        /**
+         * The id of the original entity that was split
+         */
+        entityId: string;
+        /**
+         * When the split occurred
+         */
+        splitAt: string;
+        /**
+         * Why the split was requested
+         */
+        reason?: string;
+    } | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | Array<string> | {
+        /**
+         * Marketplaces and platforms to search
+         */
+        platforms?: Array<string>;
+        /**
+         * Natural-language query an agent should use
+         */
+        searchQuery?: string;
+        /**
+         * Key-value filters to narrow results. Agents map to platform-specific parameters
+         */
+        filters?: {
+            [key: string]: string;
+        };
+        /**
+         * Platforms explicitly excluded
+         */
+        excludePlatforms?: Array<string>;
+        /**
+         * When an agent last executed this search profile
+         */
+        lastSearchedAt?: string;
+        /**
+         * How often this item should be re-searched
+         */
+        searchFrequency?: 'once' | 'weekly' | 'monthly' | 'on_demand';
+    } | number | string | Visibility2 | Array<FieldProvenance2> | Array<{
+        /**
+         * Unique identifier for this comment
+         */
+        id: string;
+        /**
+         * Person.id of the comment author
+         */
+        authorPersonId?: string;
+        /**
+         * Human-readable display name for the referenced author person
+         */
+        authorPersonIdDisplay?: string;
+        /**
+         * Comment text
+         */
+        content: string;
+        /**
+         * When the comment was created
+         */
+        createdAt: string;
+        visibility?: Visibility2;
+    }> | {
+        /**
+         * Type of the target entity
+         */
+        entityType?: 'asset' | 'asset_collection';
+        /**
+         * ID of the target entity
+         */
+        entityId?: string;
+        /**
+         * When the merge occurred
+         */
+        mergedAt?: string;
+        /**
+         * Why the entities were merged
+         */
+        reason?: string;
+    } | Provenance2 | Jurisdiction2 | {
+        jurisdiction?: Jurisdiction2;
+        assetType?: 'immoveable' | 'moveable' | 'mixed' | 'exempt';
+        exemptions?: Array<string>;
+        reliefClaimed?: Array<string>;
+    } | {
+        accessType?: string;
+        platform?: string;
+        visibility?: Visibility2;
+        /**
+         * The estate role required to follow these instructions
+         */
+        requiredRole?: string;
+        steps?: Array<{
+            step: number;
+            method: string;
+            description?: string;
+            location?: string;
+            holderPersonId?: string;
+        }>;
+        memorialisation?: {
+            preference?: 'transfer_to_beneficiary' | 'memorialise' | 'delete' | 'archive' | 'no_preference';
+            instructions?: string;
+        };
+        lastVerified?: string;
+        verifiedBy?: string;
+    } | 'keeping' | 'considering' | 'thinning' | 'listed' | 'sold' | 'allocated' | 'donated' | Array<{
+        /**
+         * The sales channel where this item is listed
+         */
+        channel: 'ebay' | 'amazon' | 'shopify' | 'etsy' | 'own_website' | 'auction_house' | 'other';
+        /**
+         * Human-readable name of the channel, especially when channel is other
+         */
+        channelName?: string;
+        /**
+         * The platform-specific listing identifier
+         */
+        listingId?: string;
+        /**
+         * Direct URL to the listing on the external platform
+         */
+        listingUrl?: string;
+        /**
+         * Current status of this listing
+         */
+        status: 'draft' | 'active' | 'sold' | 'withdrawn' | 'expired';
+        /**
+         * The listed asking price
+         */
+        askingPrice?: Money2;
+        /**
+         * When this listing was created or last activated
+         */
+        listedAt?: string;
+        /**
+         * When the item was sold via this listing, if applicable
+         */
+        soldAt?: string | null;
+        /**
+         * The actual sale price, if sold
+         */
+        soldPrice?: Money2;
+    }> | Array<ServiceRecord> | {
+        /**
+         * Name of the insurance company
+         */
+        insurer?: string;
+        /**
+         * The insurance policy number
+         */
+        policyNumber?: string;
+        /**
+         * The type of insurance policy covering this item
+         */
+        policyType?: 'home_contents' | 'specialist_collectibles' | 'classic_vehicle' | 'individual_item' | 'fine_art' | 'jewellery' | 'other';
+        /**
+         * The agreed or insured value, in minor currency units. May differ from market value
+         */
+        agreedValue?: Money2;
+        /**
+         * When the insurance cover for this item was last confirmed or reviewed
+         */
+        coverConfirmedAt?: string;
+    } | 'parcel' | 'large_item' | 'specialist_transport' | 'collection_only' | Array<'outer_box' | 'inner_box' | 'warranty_card' | 'cosc_certificate' | 'instruction_manual' | 'hang_tags' | 'service_booklet' | 'purchase_receipt' | 'original_invoice' | 'v5c_logbook' | 'mot_certificate' | 'provenance_letter' | 'certificate_of_authenticity' | 'appraisal_certificate' | 'export_licence' | 'customs_declaration' | string> | {
+        /**
+         * The type of tax relief claimed
+         */
+        reliefType?: 'agricultural_property' | 'business_property' | 'woodland' | 'heritage' | 'charitable';
+        eligible?: boolean;
+        /**
+         * Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
+         */
+        percentage?: number;
+        /**
+         * Conditions for maintaining eligibility
+         */
+        conditions?: string;
+        jurisdiction?: Jurisdiction2;
+        statute?: string;
+    } | {
+        type?: 'sentimental' | 'cultural' | 'religious' | 'historical' | 'family_heirloom' | 'professional';
+        description?: string;
+        /**
+         * Whether and how the testator has restricted disposal of this asset
+         */
+        restrictionOnDisposal?: {
+            exists?: boolean;
+            nature?: string;
+        };
+    } | undefined;
+};
+
+/**
+ * Organisation
+ *
+ * An organisation that interacts with the estate — legal firms, financial institutions, charities, dealers, funeral providers, employers, government bodies, and others. Maps to schema:Organization in JSON-LD
+ */
+export type OrganisationWritable2 = {
+    /**
+     * Unique identifier for this organisation within the INHERIT document
+     */
+    id: string;
+    /**
+     * The organisation's legal or trading name
+     */
+    name: string;
+    /**
+     * The nature of the organisation. Use x-inherit- prefix for jurisdiction-specific or niche types not covered by the core enum
+     */
+    organisationType: 'legal_firm' | 'financial_institution' | 'pension_provider' | 'insurance_provider' | 'dealer' | 'auction_house' | 'valuation_firm' | 'funeral_provider' | 'charity' | 'religious_institution' | 'employer' | 'trust_corporation' | 'accountancy_firm' | 'government_body' | 'retailer' | 'manufacturer' | 'property_management' | 'storage_facility' | 'digital_platform' | 'utility_provider' | 'other' | string;
+    /**
+     * The roles this organisation plays in this specific estate. An organisation may play multiple roles
+     */
+    estateRoles?: Array<'beneficiary' | 'will_writer' | 'executor' | 'trustee' | 'asset_holder' | 'liability_holder' | 'insurer' | 'valuer' | 'recommended_dealer' | 'funeral_provider' | 'professional_adviser' | 'regulatory_body' | 'employer' | 'retailer' | 'service_provider' | string>;
+    /**
+     * Primary jurisdiction where this organisation operates. ISO 3166-1 alpha-2 or ISO 3166-2 code
+     */
+    jurisdiction?: string;
+    /**
+     * The organisation's address
+     */
+    address?: Address2;
+    /**
+     * The organisation's website
+     */
+    url?: string;
+    /**
+     * Primary contact email
+     */
+    email?: string;
+    /**
+     * Primary contact phone number
+     */
+    phone?: string;
+    /**
+     * URL to the organisation's logo
+     */
+    logo?: string;
+    /**
+     * Wikidata Q-number for this organisation, enabling linked data resolution. Many major organisations have Wikidata entries with structured data (founding date, parent company, headquarters, etc.)
+     */
+    wikidataId?: string;
+    /**
+     * Brief description of the organisation and its relevance to this estate
+     */
+    description?: string;
+    /**
+     * Registrations with regulatory bodies, professional associations, and government registries. An organisation may hold multiple registrations across jurisdictions
+     */
+    registrations?: Array<Registration>;
+    /**
+     * Name of the primary contact person at this organisation for estate matters
+     */
+    contactPerson?: string;
+    /**
+     * Free-text notes about this organisation's relationship to the estate
+     */
+    notes?: string;
+    /**
+     * Aggregate ratings from review platforms. One entry per platform. Supports user decision-making, agent filtering/ranking, and point-in-time audit trails
+     */
+    ratings?: Array<{
+        /**
+         * The review platform
+         */
+        platform: 'trustpilot' | 'google' | 'feefo' | 'reviews_io' | 'funeral_guide' | 'checkatrade' | string;
+        /**
+         * The aggregate rating score
+         */
+        ratingValue: number;
+        /**
+         * Maximum possible score on this platform. Default 5 if absent
+         */
+        bestRating?: number;
+        /**
+         * Minimum possible score on this platform. Default 1 if absent
+         */
+        worstRating?: number;
+        /**
+         * Total number of reviews on this platform
+         */
+        reviewCount?: number;
+        /**
+         * URL to the organisation's profile on this platform
+         */
+        profileUrl?: string;
+        /**
+         * When this rating data was retrieved or verified
+         */
+        retrievedAt: string;
+    }>;
+    /**
+     * URIs identifying this entity elsewhere (schema.org sameAs). e.g. Wikidata, LinkedIn, DBpedia
+     */
+    sameAs?: Array<string>;
+    /**
+     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
+     */
+    provenance?: Provenance2;
+    /**
+     * The organisation's VAT registration status and scheme. Affects how VAT is calculated on transactions involving this organisation
+     */
+    vatConfiguration?: {
+        /**
+         * Whether the organisation is VAT registered
+         */
+        vatRegistered?: boolean;
+        /**
+         * Which VAT scheme the organisation uses. Only relevant if vatRegistered is true
+         */
+        vatScheme?: 'margin_scheme' | 'global_accounting' | 'standard_vat';
+        /**
+         * The organisation's VAT registration number
+         */
+        vatNumber?: string;
+        /**
+         * The country of VAT registration, as ISO 3166-1 alpha-2
+         */
+        vatCountry?: string;
+    };
+    /**
+     * International shipping capabilities and policies for this organisation
+     */
+    internationalShipping?: {
+        /**
+         * ISO 3166-1 alpha-2 country codes this organisation ships to
+         */
+        shipsToCountries?: Array<string>;
+        /**
+         * ISO 3166-1 alpha-2 country codes this organisation receives items from
+         */
+        receivesFromCountries?: Array<string>;
+        /**
+         * Whether this organisation handles customs declarations for international shipments
+         */
+        customsHandling?: boolean;
+        /**
+         * Who pays import duties on international transactions
+         */
+        importDutyPolicy?: 'dealer_absorbs' | 'buyer_pays' | 'included_in_shipping';
+        /**
+         * The primary currency this organisation trades in, as ISO 4217
+         */
+        currency?: string;
+    };
+    /**
+     * External identifiers — charity number, company registration, UEN, etc.
+     */
+    identifiers?: Array<IdentifierWritable2>;
+    /**
+     * Dealer-specific profile information. Only relevant for organisations that operate as dealers on marketplace or catalogue platforms
+     */
+    dealerProfile?: {
+        /**
+         * Asset categories this dealer specialises in
+         */
+        categories?: Array<string>;
+        /**
+         * The dealer's subscription tier on the platform
+         */
+        dealerTier?: 'free' | 'standard' | 'professional';
+        /**
+         * Physical services this dealer can provide
+         */
+        fulfilmentCapabilities?: Array<'inspection' | 'grading' | 'photography' | 'storage' | 'shipping' | 'restoration'>;
+        /**
+         * How far the dealer operates
+         */
+        geographicReach?: 'local' | 'national' | 'international';
+        /**
+         * Typical time to respond to a valuation request or offer
+         */
+        averageResponseTime?: string;
+    };
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | string | 'legal_firm' | 'financial_institution' | 'pension_provider' | 'insurance_provider' | 'dealer' | 'auction_house' | 'valuation_firm' | 'funeral_provider' | 'charity' | 'religious_institution' | 'employer' | 'trust_corporation' | 'accountancy_firm' | 'government_body' | 'retailer' | 'manufacturer' | 'property_management' | 'storage_facility' | 'digital_platform' | 'utility_provider' | 'other' | string | Array<'beneficiary' | 'will_writer' | 'executor' | 'trustee' | 'asset_holder' | 'liability_holder' | 'insurer' | 'valuer' | 'recommended_dealer' | 'funeral_provider' | 'professional_adviser' | 'regulatory_body' | 'employer' | 'retailer' | 'service_provider' | string> | string | Address2 | string | string | string | string | string | Array<Registration> | string | Array<{
+        /**
+         * The review platform
+         */
+        platform: 'trustpilot' | 'google' | 'feefo' | 'reviews_io' | 'funeral_guide' | 'checkatrade' | string;
+        /**
+         * The aggregate rating score
+         */
+        ratingValue: number;
+        /**
+         * Maximum possible score on this platform. Default 5 if absent
+         */
+        bestRating?: number;
+        /**
+         * Minimum possible score on this platform. Default 1 if absent
+         */
+        worstRating?: number;
+        /**
+         * Total number of reviews on this platform
+         */
+        reviewCount?: number;
+        /**
+         * URL to the organisation's profile on this platform
+         */
+        profileUrl?: string;
+        /**
+         * When this rating data was retrieved or verified
+         */
+        retrievedAt: string;
+    }> | Array<string> | Provenance2 | {
+        /**
+         * Whether the organisation is VAT registered
+         */
+        vatRegistered?: boolean;
+        /**
+         * Which VAT scheme the organisation uses. Only relevant if vatRegistered is true
+         */
+        vatScheme?: 'margin_scheme' | 'global_accounting' | 'standard_vat';
+        /**
+         * The organisation's VAT registration number
+         */
+        vatNumber?: string;
+        /**
+         * The country of VAT registration, as ISO 3166-1 alpha-2
+         */
+        vatCountry?: string;
+    } | {
+        /**
+         * ISO 3166-1 alpha-2 country codes this organisation ships to
+         */
+        shipsToCountries?: Array<string>;
+        /**
+         * ISO 3166-1 alpha-2 country codes this organisation receives items from
+         */
+        receivesFromCountries?: Array<string>;
+        /**
+         * Whether this organisation handles customs declarations for international shipments
+         */
+        customsHandling?: boolean;
+        /**
+         * Who pays import duties on international transactions
+         */
+        importDutyPolicy?: 'dealer_absorbs' | 'buyer_pays' | 'included_in_shipping';
+        /**
+         * The primary currency this organisation trades in, as ISO 4217
+         */
+        currency?: string;
+    } | Array<IdentifierWritable2> | {
+        /**
+         * Asset categories this dealer specialises in
+         */
+        categories?: Array<string>;
+        /**
+         * The dealer's subscription tier on the platform
+         */
+        dealerTier?: 'free' | 'standard' | 'professional';
+        /**
+         * Physical services this dealer can provide
+         */
+        fulfilmentCapabilities?: Array<'inspection' | 'grading' | 'photography' | 'storage' | 'shipping' | 'restoration'>;
+        /**
+         * How far the dealer operates
+         */
+        geographicReach?: 'local' | 'national' | 'international';
+        /**
+         * Typical time to respond to a valuation request or offer
+         */
+        averageResponseTime?: string;
+    } | undefined;
+};
+
+/**
+ * Completeness
+ *
+ * A completeness score derived from a weighted checklist of estate data categories, scoped to a specific jurisdiction and estate status
+ */
+export type CompletenessWritable2 = {
+    /**
+     * ISO 3166-1 alpha-2 country code or ISO 3166-2 subdivision code identifying which jurisdiction this scoring applies to
+     */
+    jurisdiction?: string;
+    /**
+     * The estate status this completeness score was calculated against. Different statuses may require different data, affecting which checklist items are applicable
+     */
+    estateStatus?: string;
+    /**
+     * The individual items assessed to produce the overall score. Each item belongs to a category, has a relative weight, and a status indicating whether the data is present
+     */
+    checklist: Array<{
+        /**
+         * The data category this checklist item belongs to
+         */
+        category: 'personal_details' | 'assets_and_valuations' | 'liabilities' | 'beneficiaries' | 'executors' | 'guardians' | 'tax_information' | 'legal_documents' | 'lifetime_transfers' | 'pension_and_insurance';
+        /**
+         * A human-readable label describing what was checked
+         */
+        item: string;
+        /**
+         * Relative importance of this item. Higher weights contribute more to the overall score
+         */
+        weight: number;
+        /**
+         * Whether the data for this item is present and sufficient
+         */
+        status: 'complete' | 'incomplete' | 'not_applicable' | 'unknown';
+        /**
+         * Optional explanation of the status, such as what is missing or why the item is not applicable
+         */
+        details?: string;
+    }>;
+    [key: string]: {
+        [key: string]: unknown;
+    } | string | Array<{
+        /**
+         * The data category this checklist item belongs to
+         */
+        category: 'personal_details' | 'assets_and_valuations' | 'liabilities' | 'beneficiaries' | 'executors' | 'guardians' | 'tax_information' | 'legal_documents' | 'lifetime_transfers' | 'pension_and_insurance';
+        /**
+         * A human-readable label describing what was checked
+         */
+        item: string;
+        /**
+         * Relative importance of this item. Higher weights contribute more to the overall score
+         */
+        weight: number;
+        /**
+         * Whether the data for this item is present and sufficient
+         */
+        status: 'complete' | 'incomplete' | 'not_applicable' | 'unknown';
+        /**
+         * Optional explanation of the status, such as what is missing or why the item is not applicable
+         */
+        details?: string;
+    }> | undefined;
+};
+
+/**
+ * INHERIT v2 Catalogue Schema
+ *
+ * Entry point for catalogue-only documents — living collectors cataloguing items without the full estate envelope. Assets, collections, valuations, legacy contacts and allocation intent. This is the catalogue conformance profile of the INHERIT root: a document here that declares conformanceProfile 'catalogue' also conforms to schema.json as it stands, with nothing wrapped or moved. Do not wrap a catalogue inside an estate document — the estate profile carries assetInterests, legacyContacts and dealerInterests only inside applicationState, which is not part of the interchange standard. See proposal 0003
+ */
+export type CatalogueWritable2 = {
+    /**
+     * Schema identifier — declares this as an INHERIT v3 catalogue document
+     */
+    $schema?: 'https://openinherit.org/v3/catalogue.json';
+    /**
+     * Declares this document as the catalogue conformance profile of the INHERIT root (schema.json). With it, the same document — unchanged, unwrapped — also conforms to schema.json. Optional here so catalogue documents written before profiles existed stay valid against this schema
+     */
+    conformanceProfile?: 'catalogue';
+    /**
+     * JSON-LD context URI
+     */
+    '@context'?: string;
+    schemaVersion?: string;
+    /**
+     * Sequential version number for this document. Incremented each time the document is substantively modified. Version 1 is the first version
+     */
+    documentVersion?: number;
+    /**
+     * When this version of the document was created. Courts and regulators care about when changes were made, not just which version number
+     */
+    versionedAt?: string;
+    /**
+     * Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version
+     */
+    previousVersionId?: string | null;
+    /**
+     * Human-readable summary of what changed in this version. Like a commit message for the document
+     */
+    changeDescription?: string;
+    /**
+     * The catalogued items
+     */
+    assets: Array<AssetWritable2>;
+    /**
+     * Named groupings of assets
+     */
+    assetCollections?: Array<AssetCollection2>;
+    /**
+     * Organisations associated with catalogued assets — dealers, retailers, valuers, auction houses
+     */
+    organisations?: Array<OrganisationWritable2>;
+    /**
+     * Properties whose spaces appear in this catalogue. A catalogue is not an estate document, so a property here need carry no more than an id and a name — enough for spaces[].propertyId to resolve inside the document and for a room to be attributed to an address
+     */
+    properties?: Array<Property2>;
+    /**
+     * Physical storage locations for items in this catalogue. Each asset can reference a space via spaceId. Critical for collectors with items across multiple properties or countries — affects probate jurisdiction and dealer collection logistics
+     */
+    spaces?: Array<Space2>;
+    /**
+     * Valuations of items and collections
+     */
+    valuations?: Array<Valuation2>;
+    /**
+     * People to notify and grant access when the owner dies. The 'Please open when I have passed away' letter recipients
+     */
+    legacyContacts?: Array<LegacyContact>;
+    /**
+     * Expressions of interest about assets, collections, or products. Includes the catalogue owner's own wishlist (things they want to acquire), interest from other people, and allocation intentions. Complements assets[] — assets are things you own; assetInterests are things you want, things others want, and decisions about who gets what
+     */
+    assetInterests?: Array<AssetInterest2>;
+    /**
+     * Personal messages, letters, care instructions, and non-binding wishes. Complements legacyContacts — legacyContacts tracks who receives the letter; wishes stores what it says. Types: letter (personal messages to specific people), care (maintenance and care instructions for items or collections), distribution (non-binding preferences about what should happen to items), general (anything else)
+     */
+    wishes?: Array<Wish2>;
+    /**
+     * Default data provenance for entities in this catalogue
+     */
+    dataProvenance?: 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated';
+    /**
+     * Systems data was imported from
+     */
+    importSources?: Array<ImportSource>;
+    completeness?: CompletenessWritable2;
+    recommendedActions?: Array<RecommendedAction>;
+    conformance?: Conformance2;
+    /**
+     * Insurance policies associated with catalogued assets
+     */
+    insurancePolicies?: Array<InsurancePolicy2>;
+    /**
+     * Provisional offers and expressions of interest from dealers. Allows the catalogue owner to receive and track dealer offers on items they are considering selling, or standing offers to be included in the LegacyLetter
+     */
+    dealerInterests?: Array<DealerInterest2>;
+    /**
+     * Settings for the shareable gift wishlist. When enabled, the owner can share a public link to their wishlist for family and friends to buy from
+     */
+    giftListSettings?: {
+        /**
+         * Whether the gift list is currently shareable
+         */
+        enabled?: boolean;
+        /**
+         * The owner's personal message shown at the top of the gift list
+         */
+        personalMessage?: string;
+        /**
+         * Who can see the gift list
+         */
+        visibility?: 'public' | 'link_only' | 'private';
+        /**
+         * Asset interest IDs that someone has marked as bought. These are hidden from the public gift list to prevent duplicate gifts
+         */
+        fulfilledItems?: Array<string>;
+    };
+    /**
+     * Metadata about the LegacyLetter — the printed or digital document addressed to the owner's legacy contacts, summarising the catalogue, allocations, dealer offers, and personal messages. Tracks generation status to flag when the letter is stale
+     */
+    legacyLetter?: {
+        /**
+         * When the letter was last generated
+         */
+        lastGenerated?: string;
+        /**
+         * Incremental version number of the letter
+         */
+        version?: number;
+        /**
+         * Whether the letter has been delivered to the legacy contacts
+         */
+        delivered?: boolean;
+        /**
+         * How the letter was delivered
+         */
+        deliveryMethod?: 'printed' | 'digital' | 'both';
+        /**
+         * Number of items in the catalogue when the letter was last generated. Used to detect staleness — if the current item count differs significantly, the letter should be regenerated
+         */
+        itemCountAtGeneration?: number;
+    };
+    /**
+     * Formal audit trail of actions taken on this document. Records who changed what, when, and why. Uses person ID references for GDPR data minimisation. Entries may be redacted under Article 17(3)(e) without breaking the log structure. Retention aligns with the estate document lifecycle
+     */
+    auditLog?: Array<AuditEvent2>;
+    [key: string]: {
+        [key: string]: unknown;
+    } | 'https://openinherit.org/v3/catalogue.json' | 'catalogue' | string | string | number | string | string | null | string | Array<AssetWritable2> | Array<AssetCollection2> | Array<OrganisationWritable2> | Array<Property2> | Array<Space2> | Array<Valuation2> | Array<LegacyContact> | Array<AssetInterest2> | Array<Wish2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | Array<ImportSource> | CompletenessWritable2 | Array<RecommendedAction> | Conformance2 | Array<InsurancePolicy2> | Array<DealerInterest2> | {
+        /**
+         * Whether the gift list is currently shareable
+         */
+        enabled?: boolean;
+        /**
+         * The owner's personal message shown at the top of the gift list
+         */
+        personalMessage?: string;
+        /**
+         * Who can see the gift list
+         */
+        visibility?: 'public' | 'link_only' | 'private';
+        /**
+         * Asset interest IDs that someone has marked as bought. These are hidden from the public gift list to prevent duplicate gifts
+         */
+        fulfilledItems?: Array<string>;
+    } | {
+        /**
+         * When the letter was last generated
+         */
+        lastGenerated?: string;
+        /**
+         * Incremental version number of the letter
+         */
+        version?: number;
+        /**
+         * Whether the letter has been delivered to the legacy contacts
+         */
+        delivered?: boolean;
+        /**
+         * How the letter was delivered
+         */
+        deliveryMethod?: 'printed' | 'digital' | 'both';
+        /**
+         * Number of items in the catalogue when the letter was last generated. Used to detect staleness — if the current item count differs significantly, the letter should be regenerated
+         */
+        itemCountAtGeneration?: number;
+    } | Array<AuditEvent2> | undefined;
+};
+
+/**
  * Estate
  *
  * The root estate record — will, intestacy, or trust-based succession plan. Contains testator details, jurisdiction, will formalities, forced heirship, probate grants, death record, multi-jurisdiction administration, and tax treaty positions
@@ -16783,6 +18893,10 @@ export type EstateWritable2 = {
      * Estimated total value of the estate before liabilities. In minor currency units
      */
     totalEstimatedValue?: Money2;
+    /**
+     * Total value of the estate after netting secured charges against the assets they charge and subtracting unsecured liabilities, in minor currency units. The after-liabilities counterpart to totalEstimatedValue. A convenience denormalisation: the authoritative figure is derived, not stored
+     */
+    netEstateEquity?: Money2;
     /**
      * Will execution formalities — witnesses, signing method, and compliance checks
      */
@@ -18295,26 +20409,6 @@ export type EstateWritable2 = {
 };
 
 /**
- * Identifier
- *
- * A typed external identifier. Use 'system' to namespace identifiers and prevent collisions across jurisdictions and organisations
- */
-export type IdentifierWritable2 = {
-    /**
-     * Namespace URI or name identifying the issuing authority or system. Use URN format where possible for unambiguous identification
-     */
-    system?: string;
-    /**
-     * The identifier value itself. Format depends on the system — may include hyphens, spaces, or check digits as appropriate
-     */
-    value: string;
-    /**
-     * Human-readable type label describing what kind of identifier this is
-     */
-    type?: string;
-};
-
-/**
  * Person
  *
  * A person involved in the estate. Schema.org name alignment. Any Unicode script. Supports CJK phonetic readings, chieftaincy titles, clan/lineage identifiers, dual legal personalities, and tax residency across multiple jurisdictions
@@ -18782,1419 +20876,6 @@ export type PersonWritable2 = {
 };
 
 /**
- * Asset
- *
- * A non-property asset: financial accounts, personal property, vehicles, digital assets, business interests, Islamic finance instruments, etc
- */
-export type AssetWritable2 = unknown & {
-    /**
-     * Unique identifier for this asset within the INHERIT document
-     */
-    id: string;
-    /**
-     * Display name for this asset. Should be specific enough to identify the item during probate
-     */
-    name: string;
-    /**
-     * Top-level category from the INHERIT Product Taxonomy. Use the `subcategory` field for finer classification. See `reference-data/category-guidance.json` for valid subcategories, recommended identifiers, and photography guidance per category
-     */
-    category: 'financial' | 'vehicle' | 'digital' | 'business' | 'property_contents' | 'jewellery_watches' | 'art' | 'antiques' | 'collectibles' | 'musical_instruments' | 'books_manuscripts' | 'wine_spirits' | 'clothing_textiles' | 'firearms_sporting' | 'islamic_financial' | 'other';
-    /**
-     * Finer classification within the top-level category. Values are defined in reference-data/category-guidance.json but the field is freeform to accommodate jurisdiction-specific asset types. Examples: financial → 'pension', collectibles → 'model_railways', vehicle → 'classic_vehicle'
-     */
-    subcategory?: string;
-    /**
-     * Owner's estimate of the asset's current value, in minor currency units
-     */
-    estimatedValue?: Money2;
-    /**
-     * Professional valuation of the asset, in minor currency units
-     */
-    professionalValuation?: Money2;
-    /**
-     * Date of the most recent valuation
-     */
-    valuationDate?: string;
-    /**
-     * Level of confidence in the stated valuation
-     */
-    valuationConfidence?: 'estimated' | 'professional' | 'official' | 'unknown';
-    /**
-     * Physical condition of the asset. Affects resale value — dealers use this to price items. Pair with conditionSystem and conditionGrade for domain-specific grading. Use 'not_applicable' for financial assets where condition is meaningless
-     */
-    condition?: 'excellent' | 'good' | 'fair' | 'poor' | 'unknown' | 'not_applicable';
-    /**
-     * Number of items if this represents multiple identical or similar items
-     */
-    quantity?: number;
-    /**
-     * Where this asset is physically stored or held — a bank, safe, property, or institution
-     */
-    location?: string;
-    /**
-     * Reference to a Property.id if this asset is located at a specific property in the estate
-     */
-    propertyId?: string;
-    /**
-     * Reference to the AssetCollection.id this asset belongs to. An asset may belong to at most one collection. If set, this asset's value contributes to the collection's total
-     */
-    assetCollectionId?: string;
-    /**
-     * Reference to a Space.id representing where this item is physically stored. Critical for collections spread across multiple properties or countries — affects probate jurisdiction and dealer collection logistics
-     */
-    spaceId?: string | null;
-    /**
-     * External identifiers — serial numbers, account numbers, policy references, registration numbers, etc
-     */
-    identifiers?: Array<IdentifierWritable2>;
-    /**
-     * Links to this asset in external databases, marketplaces, and registries. The universal connector — any external system can be referenced without a schema change. Use identifiers for formal identifier schemes (ISBN, VIN, NINO); use externalLinks for platform-specific references, product pages, and database entries
-     */
-    externalLinks?: Array<{
-        /**
-         * The external system or platform name. Use lowercase, no spaces
-         */
-        system: string;
-        /**
-         * The platform-specific identifier for this asset
-         */
-        id: string;
-        /**
-         * Direct URL to the asset's page on the external platform. Optional — some systems are API-only
-         */
-        url?: string;
-        /**
-         * Human-readable label for display. Optional — defaults to the system name
-         */
-        label?: string;
-        /**
-         * Timestamp when this link was last verified or data was last retrieved
-         */
-        retrievedAt?: string;
-    }>;
-    /**
-     * URI pointing to the manufacturer's or retailer's official product page for this exact item. Distinct from storageRef (document storage) and externalLinks (database references). Enables direct linking to manufacturer specifications, manuals, and warranty information
-     */
-    productPage?: string;
-    /**
-     * Prior ownership records — establishes the chain of provenance for the asset. Critical for art, antiques, and high-value collectibles
-     */
-    provenanceChain?: Array<{
-        /**
-         * Description of this provenance record
-         */
-        description: string;
-        /**
-         * Name of the previous owner (may be anonymised)
-         */
-        ownerName?: string;
-        /**
-         * Approximate start date of this ownership period
-         */
-        fromDate?: string;
-        /**
-         * Approximate end date of this ownership period
-         */
-        toDate?: string;
-        /**
-         * How the owner acquired the asset
-         */
-        acquisitionMethod?: 'purchase' | 'inheritance' | 'gift' | 'commission' | 'restitution' | 'auction' | 'unknown';
-        /**
-         * Where this provenance information came from
-         */
-        source?: string;
-        /**
-         * Link to supporting evidence (sale record, catalogue entry, etc.)
-         */
-        evidenceUrl?: string;
-    }>;
-    /**
-     * Photographs, videos, and document scans. Vision-capable AI agents use these to identify items, assess condition, and find visual matches on marketplaces. Use viewType from media.json to categorize each media item
-     */
-    images?: Array<Media2>;
-    /**
-     * Whether the asset was held at death, is receivable post-death, or is contingent on a future event
-     */
-    possessionStatus?: 'possessed_at_death' | 'receivable' | 'contingent';
-    /**
-     * Whether this asset is classified as immoveable or moveable property. Affects which conflict-of-laws rules apply in cross-border estates
-     */
-    mobilityType?: 'immoveable' | 'moveable' | 'mixed';
-    /**
-     * How this asset was acquired. Determines succession rules in Indian and other customary systems
-     */
-    acquisitionType?: 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed';
-    /**
-     * Whether ownership of this asset is formally registered or documented
-     */
-    registrationStatus?: 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented';
-    /**
-     * The type of evidence available to prove ownership of this asset
-     */
-    ownershipEvidence?: 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none';
-    /**
-     * Cultural, religious, and regulatory constraints on disposal of this asset
-     */
-    culturalDisposition?: CulturalDisposition2;
-    /**
-     * The communal or family authority whose approval is required to dispose of this asset
-     */
-    communalAuthority?: {
-        /**
-         * Category of communal authority
-         */
-        authorityType?: 'family_council' | 'clan_association' | 'religious_body' | 'tribal_council' | 'government';
-        /**
-         * Whether approval from this authority is legally required before disposal
-         */
-        approvalRequired?: boolean;
-        /**
-         * Name of the specific authority or person
-         */
-        authorityName?: string;
-        /**
-         * Jurisdiction where this communal authority has legal standing
-         */
-        jurisdiction?: Jurisdiction2;
-    };
-    /**
-     * The succession regime governing this specific asset. Overrides estate.defaultSuccessionRegime when present
-     */
-    successionRegime?: {
-        /**
-         * The law governing succession for this asset
-         */
-        governingLaw?: {
-            /**
-             * Jurisdiction whose succession law applies
-             */
-            jurisdiction?: Jurisdiction2;
-            /**
-             * Which legal tradition applies
-             */
-            legalTradition?: 'common_law' | 'civil_law' | 'mixed' | 'customary_law' | 'islamic_law' | 'hindu_law' | 'jewish_law' | 'canon_law';
-            /**
-             * Name of the governing statute
-             */
-            statute?: string;
-            /**
-             * Specific section of the statute
-             */
-            section?: string;
-        };
-        /**
-         * How the governing law was determined
-         */
-        determinedBy?: 'domicile' | 'situs' | 'nationality' | 'personal_status' | 'choice_of_law' | 'treaty';
-        /**
-         * Whether this succession regime is legally binding
-         */
-        binding?: boolean;
-        /**
-         * INHERIT extension IDs that apply to this asset's succession
-         */
-        extensions?: Array<string>;
-        /**
-         * Additional context about the succession regime
-         */
-        notes?: string;
-    };
-    /**
-     * Named beneficiary designation for this asset. Assets with beneficiary designations pass outside the probate estate — the will does not control their distribution
-     */
-    beneficiaryDesignation?: {
-        /**
-         * Person IDs of the primary beneficiaries
-         */
-        primaryBeneficiaryPersonIds?: Array<string>;
-        /**
-         * Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)
-         */
-        contingentBeneficiaryPersonIds?: Array<string>;
-        /**
-         * The type of beneficiary designation
-         */
-        designationType?: 'retirement_account' | 'life_insurance' | 'superannuation' | 'pod_account' | 'other';
-        /**
-         * Reference to the NonprobateTransfer entity that tracks this designation
-         */
-        linkedNonprobateTransferId?: string;
-    };
-    /**
-     * Digital access consent under RUFADAA or equivalent legislation. Governs whether executors and fiduciaries can access the deceased's digital accounts and assets
-     */
-    digitalAccessConsent?: {
-        /**
-         * Whether the account holder has given consent for fiduciary access
-         */
-        consentGiven?: boolean;
-        /**
-         * The scope of access granted to fiduciaries
-         */
-        scope?: 'full_access' | 'limited_access' | 'no_access';
-        /**
-         * Reference to the Person.id designated to receive access to this digital asset
-         */
-        designatedRecipientPersonId?: string;
-        /**
-         * Human-readable display name for the referenced designated recipient person
-         */
-        designatedRecipientPersonIdDisplay?: string;
-        /**
-         * Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA
-         */
-        onlineToolDirective?: boolean;
-    };
-    /**
-     * Whether this asset passes outside the probate estate. Beneficiary designations, POD accounts, and jointly held assets typically bypass the will
-     */
-    passesOutsideEstate?: boolean;
-    /**
-     * Free-text notes about this asset. Use for provenance, sentimental value, special handling instructions, or anything not captured by structured fields
-     */
-    notes?: string;
-    /**
-     * Structured description of the asset — what it is, its significance, and key details a dealer or executor would need. Distinct from 'notes' which is free-form
-     */
-    description?: string;
-    /**
-     * The manufacturer or brand name. Accepts a plain string (backwards compatible) or a structured object with Wikidata linkage for rich product data. AI agents should use this as a primary search dimension when finding comparables
-     */
-    brand?: string | {
-        /**
-         * Brand or manufacturer name
-         */
-        name: string;
-        /**
-         * Wikidata Q-number for this brand. Resolves to structured data via the Wikidata API — founding year, country, parent company, logo, official website, product categories
-         */
-        wikidataId?: string;
-        /**
-         * Official brand website
-         */
-        website?: string;
-    };
-    /**
-     * The specific model, product line, or range name. Combined with brand and identifiers, this is the primary key for marketplace search. AI agents construct search queries from brand + model + subcategory
-     */
-    model?: string;
-    /**
-     * Date the asset was acquired by the current owner. Used for capital gains tax calculations, insurance claims, and provenance. Maps to Schema.org purchaseDate
-     */
-    purchaseDate?: string;
-    /**
-     * Whether original packaging, documentation, and accessories are present. Affects value by 20–40% across watches, model railways, jewellery, and many other domains
-     */
-    originalPackaging?: 'complete' | 'partial' | 'box_only' | 'papers_only' | 'none' | 'unknown';
-    /**
-     * Third party currently holding this asset — a bank (safe deposit), storage facility (bonded wine), repairer (watch at jeweller), gallery (art on loan), or institution. The executor needs to know who to contact
-     */
-    custodian?: {
-        /**
-         * Name of the person or organisation holding the asset
-         */
-        name?: string;
-        /**
-         * Email address for the custodian
-         */
-        contactEmail?: string;
-        /**
-         * Phone number for the custodian
-         */
-        contactPhone?: string;
-        /**
-         * The nature of the custodial relationship
-         */
-        relationship?: string;
-        /**
-         * Account or reference number with the custodian
-         */
-        reference?: string;
-    };
-    /**
-     * The grading system used for the conditionGrade value. Allows domain-specific condition assessment alongside the generic condition field
-     */
-    conditionSystem?: 'goldmine' | 'sheldon' | 'ags' | 'bsc' | 'gia' | 'watch_trade' | 'classic_vehicle' | 'book_trade' | string;
-    /**
-     * The specific grade within the conditionSystem. Meaningful only when conditionSystem is set
-     */
-    conditionGrade?: string;
-    /**
-     * URI pointing to the official documentation of the grading standard used. Enables tools to display the correct grading scale and interpret the conditionGrade value
-     */
-    conditionStandard?: string;
-    /**
-     * How urgently this asset needs attention after the testator's death. Drives the executor's priority list
-     */
-    urgency?: 'immediate' | 'within_7_days' | 'within_30_days' | 'none';
-    /**
-     * Explanation of why this asset is urgent. Particularly important for 'immediate' items
-     */
-    urgencyReason?: string;
-    /**
-     * Reference to another Asset.id if this asset is physically contained within or logically part of another asset. Enables hierarchical asset nesting — e.g. a watch inside a safe, tools inside a toolbox
-     */
-    containedInAssetId?: string;
-    /**
-     * Insurance coverage for this asset. The executor needs to know what's insured, by whom, and whether cover continues after death
-     */
-    insurance?: {
-        /**
-         * Name of the insurance provider
-         */
-        provider?: string;
-        /**
-         * Policy reference number
-         */
-        policyReference?: string;
-        /**
-         * The insured value in minor currency units
-         */
-        insuredValue?: Money2;
-        /**
-         * Next renewal date. Important — cover may lapse if not renewed after death
-         */
-        renewalDate?: string;
-        /**
-         * Additional insurance notes
-         */
-        notes?: string;
-    };
-    /**
-     * Where the asset was purchased or acquired from. Collectors track provenance — valuable for dealers and for establishing authenticity
-     */
-    purchasedFrom?: string;
-    /**
-     * Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split
-     */
-    splitFrom?: {
-        /**
-         * The type of entity that was split
-         */
-        entityType: 'asset' | 'asset_collection';
-        /**
-         * The id of the original entity that was split
-         */
-        entityId: string;
-        /**
-         * When the split occurred
-         */
-        splitAt: string;
-        /**
-         * Why the split was requested
-         */
-        reason?: string;
-    };
-    /**
-     * How this specific entity's data was captured. Overrides the document-level default if set
-     */
-    dataProvenance?: 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated';
-    /**
-     * Keywords for marketplace search — AI-generated or human-curated. Memoization: once derived, cached here so subsequent agents reuse them instantly rather than re-deriving
-     */
-    searchTerms?: Array<string>;
-    /**
-     * Structured search instructions for comparable-finding agents. Acts as agent memory — the item teaches future agents how to find its peers
-     */
-    comparableSearchProfile?: {
-        /**
-         * Marketplaces and platforms to search
-         */
-        platforms?: Array<string>;
-        /**
-         * Natural-language query an agent should use
-         */
-        searchQuery?: string;
-        /**
-         * Key-value filters to narrow results. Agents map to platform-specific parameters
-         */
-        filters?: {
-            [key: string]: string;
-        };
-        /**
-         * Platforms explicitly excluded
-         */
-        excludePlatforms?: Array<string>;
-        /**
-         * When an agent last executed this search profile
-         */
-        lastSearchedAt?: string;
-        /**
-         * How often this item should be re-searched
-         */
-        searchFrequency?: 'once' | 'weekly' | 'monthly' | 'on_demand';
-    };
-    /**
-     * AI-suggested subcategory refinement, kept separate from the human-set subcategory. Accepted when the user confirms. Provenance: always AI-generated
-     */
-    suggestedSubcategory?: string;
-    /**
-     * Numeric reliability score (0-100) for the current valuation. Computed from: recency, method, corroborating comparables, variance between estimates. Companion to the categorical valuationConfidence enum — the enum captures source, this number captures trustworthiness now. Agents use this to prioritise which assets need re-valuation
-     */
-    valuationReliability?: number;
-    /**
-     * When this entity's data was last verified by a human or authoritative source. Agents use this to decide whether to trust existing values or re-derive them
-     */
-    lastVerifiedAt?: string;
-    /**
-     * Who or what verified this entity — a person's name, a tool, or 'owner'
-     */
-    verifiedBy?: string;
-    /**
-     * Controls who can see this asset. Some assets (firearms, digital accounts, sensitive collections) may need restricted visibility
-     */
-    visibility?: Visibility2;
-    /**
-     * Per-field provenance records — how each field's value was obtained
-     */
-    fieldProvenance?: Array<FieldProvenance2>;
-    /**
-     * Discussion comments on this entity
-     */
-    comments?: Array<{
-        /**
-         * Unique identifier for this comment
-         */
-        id: string;
-        /**
-         * Person.id of the comment author
-         */
-        authorPersonId?: string;
-        /**
-         * Human-readable display name for the referenced author person
-         */
-        authorPersonIdDisplay?: string;
-        /**
-         * Comment text
-         */
-        content: string;
-        /**
-         * When the comment was created
-         */
-        createdAt: string;
-        visibility?: Visibility2;
-    }>;
-    /**
-     * Records that this entity was merged into another entity — the target entity is the canonical version
-     */
-    mergedInto?: {
-        /**
-         * Type of the target entity
-         */
-        entityType?: 'asset' | 'asset_collection';
-        /**
-         * ID of the target entity
-         */
-        entityId?: string;
-        /**
-         * When the merge occurred
-         */
-        mergedAt?: string;
-        /**
-         * Why the entities were merged
-         */
-        reason?: string;
-    };
-    /**
-     * Human-readable display name for the referenced storage location
-     */
-    spaceIdDisplay?: string;
-    /**
-     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
-     */
-    provenance?: Provenance2;
-    /**
-     * The jurisdiction whose succession law governs this item. Missing means defaults to estate domicile
-     */
-    applicableLaw?: Jurisdiction2;
-    /**
-     * Per-asset tax treatment — how this asset is classified for tax purposes in a specific jurisdiction
-     */
-    taxTreatment?: {
-        jurisdiction?: Jurisdiction2;
-        assetType?: 'immoveable' | 'moveable' | 'mixed' | 'exempt';
-        exemptions?: Array<string>;
-        reliefClaimed?: Array<string>;
-    };
-    /**
-     * Instructions for accessing this asset after death — steps, locations, holders. No secrets in the document, just instructions for finding them. Available for all asset categories (digital: crypto wallets, social media; physical: safes, storage units)
-     */
-    accessInstructions?: {
-        accessType?: string;
-        platform?: string;
-        visibility?: Visibility2;
-        /**
-         * The estate role required to follow these instructions
-         */
-        requiredRole?: string;
-        steps?: Array<{
-            step: number;
-            method: string;
-            description?: string;
-            location?: string;
-            holderPersonId?: string;
-        }>;
-        memorialisation?: {
-            preference?: 'transfer_to_beneficiary' | 'memorialise' | 'delete' | 'archive' | 'no_preference';
-            instructions?: string;
-        };
-        lastVerified?: string;
-        verifiedBy?: string;
-    };
-    /**
-     * The owner's current intention for this item. Absent means keeping (the default). Used by catalogue applications to track whether items are being actively managed, offered for sale, or allocated to specific people
-     */
-    ownerIntent?: 'keeping' | 'considering' | 'thinning' | 'listed' | 'sold' | 'allocated' | 'donated';
-    /**
-     * Active or historical listings of this item for sale on external channels. Tracks where the item is listed, its status, and sale outcome. Application-level data — not part of the estate interchange but carried alongside it for catalogue and dealer workflows
-     */
-    listings?: Array<{
-        /**
-         * The sales channel where this item is listed
-         */
-        channel: 'ebay' | 'amazon' | 'shopify' | 'etsy' | 'own_website' | 'auction_house' | 'other';
-        /**
-         * Human-readable name of the channel, especially when channel is other
-         */
-        channelName?: string;
-        /**
-         * The platform-specific listing identifier
-         */
-        listingId?: string;
-        /**
-         * Direct URL to the listing on the external platform
-         */
-        listingUrl?: string;
-        /**
-         * Current status of this listing
-         */
-        status: 'draft' | 'active' | 'sold' | 'withdrawn' | 'expired';
-        /**
-         * The listed asking price
-         */
-        askingPrice?: Money2;
-        /**
-         * When this listing was created or last activated
-         */
-        listedAt?: string;
-        /**
-         * When the item was sold via this listing, if applicable
-         */
-        soldAt?: string | null;
-        /**
-         * The actual sale price, if sold
-         */
-        soldPrice?: Money2;
-    }>;
-    /**
-     * Service, maintenance, and restoration records. Critical for watches (service intervals affect value), vehicles (MOT history, restoration), clocks, and musical instruments
-     */
-    serviceHistory?: Array<ServiceRecord>;
-    /**
-     * Insurance details for this item. Tracks which policy covers it, the agreed value, and when cover was last confirmed. Essential for executors who need to claim on the correct policy
-     */
-    insuranceCover?: {
-        /**
-         * Name of the insurance company
-         */
-        insurer?: string;
-        /**
-         * The insurance policy number
-         */
-        policyNumber?: string;
-        /**
-         * The type of insurance policy covering this item
-         */
-        policyType?: 'home_contents' | 'specialist_collectibles' | 'classic_vehicle' | 'individual_item' | 'fine_art' | 'jewellery' | 'other';
-        /**
-         * The agreed or insured value, in minor currency units. May differ from market value
-         */
-        agreedValue?: Money2;
-        /**
-         * When the insurance cover for this item was last confirmed or reviewed
-         */
-        coverConfirmedAt?: string;
-    };
-    /**
-     * How this item can be transported for selling or verification. Determines which logistics path the Deal Comparison uses
-     */
-    shippingClass?: 'parcel' | 'large_item' | 'specialist_transport' | 'collection_only';
-    /**
-     * Original documents, certificates, and packaging elements present with this item. Affects value significantly across many categories. Cross-category: watches, vehicles, books, art, and collectibles share some document types
-     */
-    includedDocuments?: Array<'outer_box' | 'inner_box' | 'warranty_card' | 'cosc_certificate' | 'instruction_manual' | 'hang_tags' | 'service_booklet' | 'purchase_receipt' | 'original_invoice' | 'v5c_logbook' | 'mot_certificate' | 'provenance_letter' | 'certificate_of_authenticity' | 'appraisal_certificate' | 'export_licence' | 'customs_declaration' | string>;
-    /**
-     * Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)
-     */
-    taxReliefEligibility?: {
-        /**
-         * The type of tax relief claimed
-         */
-        reliefType?: 'agricultural_property' | 'business_property' | 'woodland' | 'heritage' | 'charitable';
-        eligible?: boolean;
-        /**
-         * Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
-         */
-        percentage?: number;
-        /**
-         * Conditions for maintaining eligibility
-         */
-        conditions?: string;
-        jurisdiction?: Jurisdiction2;
-        statute?: string;
-    };
-    /**
-     * Cultural, religious, sentimental, or professional significance beyond monetary value
-     */
-    significance?: {
-        type?: 'sentimental' | 'cultural' | 'religious' | 'historical' | 'family_heirloom' | 'professional';
-        description?: string;
-        /**
-         * Whether and how the testator has restricted disposal of this asset
-         */
-        restrictionOnDisposal?: {
-            exists?: boolean;
-            nature?: string;
-        };
-    };
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | string | 'financial' | 'vehicle' | 'digital' | 'business' | 'property_contents' | 'jewellery_watches' | 'art' | 'antiques' | 'collectibles' | 'musical_instruments' | 'books_manuscripts' | 'wine_spirits' | 'clothing_textiles' | 'firearms_sporting' | 'islamic_financial' | 'other' | string | Money2 | string | 'estimated' | 'professional' | 'official' | 'unknown' | 'excellent' | 'good' | 'fair' | 'poor' | 'unknown' | 'not_applicable' | number | string | string | null | Array<IdentifierWritable2> | Array<{
-        /**
-         * The external system or platform name. Use lowercase, no spaces
-         */
-        system: string;
-        /**
-         * The platform-specific identifier for this asset
-         */
-        id: string;
-        /**
-         * Direct URL to the asset's page on the external platform. Optional — some systems are API-only
-         */
-        url?: string;
-        /**
-         * Human-readable label for display. Optional — defaults to the system name
-         */
-        label?: string;
-        /**
-         * Timestamp when this link was last verified or data was last retrieved
-         */
-        retrievedAt?: string;
-    }> | string | Array<{
-        /**
-         * Description of this provenance record
-         */
-        description: string;
-        /**
-         * Name of the previous owner (may be anonymised)
-         */
-        ownerName?: string;
-        /**
-         * Approximate start date of this ownership period
-         */
-        fromDate?: string;
-        /**
-         * Approximate end date of this ownership period
-         */
-        toDate?: string;
-        /**
-         * How the owner acquired the asset
-         */
-        acquisitionMethod?: 'purchase' | 'inheritance' | 'gift' | 'commission' | 'restitution' | 'auction' | 'unknown';
-        /**
-         * Where this provenance information came from
-         */
-        source?: string;
-        /**
-         * Link to supporting evidence (sale record, catalogue entry, etc.)
-         */
-        evidenceUrl?: string;
-    }> | Array<Media2> | 'possessed_at_death' | 'receivable' | 'contingent' | 'immoveable' | 'moveable' | 'mixed' | 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed' | 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented' | 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none' | CulturalDisposition2 | {
-        /**
-         * Category of communal authority
-         */
-        authorityType?: 'family_council' | 'clan_association' | 'religious_body' | 'tribal_council' | 'government';
-        /**
-         * Whether approval from this authority is legally required before disposal
-         */
-        approvalRequired?: boolean;
-        /**
-         * Name of the specific authority or person
-         */
-        authorityName?: string;
-        /**
-         * Jurisdiction where this communal authority has legal standing
-         */
-        jurisdiction?: Jurisdiction2;
-    } | {
-        /**
-         * The law governing succession for this asset
-         */
-        governingLaw?: {
-            /**
-             * Jurisdiction whose succession law applies
-             */
-            jurisdiction?: Jurisdiction2;
-            /**
-             * Which legal tradition applies
-             */
-            legalTradition?: 'common_law' | 'civil_law' | 'mixed' | 'customary_law' | 'islamic_law' | 'hindu_law' | 'jewish_law' | 'canon_law';
-            /**
-             * Name of the governing statute
-             */
-            statute?: string;
-            /**
-             * Specific section of the statute
-             */
-            section?: string;
-        };
-        /**
-         * How the governing law was determined
-         */
-        determinedBy?: 'domicile' | 'situs' | 'nationality' | 'personal_status' | 'choice_of_law' | 'treaty';
-        /**
-         * Whether this succession regime is legally binding
-         */
-        binding?: boolean;
-        /**
-         * INHERIT extension IDs that apply to this asset's succession
-         */
-        extensions?: Array<string>;
-        /**
-         * Additional context about the succession regime
-         */
-        notes?: string;
-    } | {
-        /**
-         * Person IDs of the primary beneficiaries
-         */
-        primaryBeneficiaryPersonIds?: Array<string>;
-        /**
-         * Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)
-         */
-        contingentBeneficiaryPersonIds?: Array<string>;
-        /**
-         * The type of beneficiary designation
-         */
-        designationType?: 'retirement_account' | 'life_insurance' | 'superannuation' | 'pod_account' | 'other';
-        /**
-         * Reference to the NonprobateTransfer entity that tracks this designation
-         */
-        linkedNonprobateTransferId?: string;
-    } | {
-        /**
-         * Whether the account holder has given consent for fiduciary access
-         */
-        consentGiven?: boolean;
-        /**
-         * The scope of access granted to fiduciaries
-         */
-        scope?: 'full_access' | 'limited_access' | 'no_access';
-        /**
-         * Reference to the Person.id designated to receive access to this digital asset
-         */
-        designatedRecipientPersonId?: string;
-        /**
-         * Human-readable display name for the referenced designated recipient person
-         */
-        designatedRecipientPersonIdDisplay?: string;
-        /**
-         * Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA
-         */
-        onlineToolDirective?: boolean;
-    } | boolean | string | string | {
-        /**
-         * Brand or manufacturer name
-         */
-        name: string;
-        /**
-         * Wikidata Q-number for this brand. Resolves to structured data via the Wikidata API — founding year, country, parent company, logo, official website, product categories
-         */
-        wikidataId?: string;
-        /**
-         * Official brand website
-         */
-        website?: string;
-    } | 'complete' | 'partial' | 'box_only' | 'papers_only' | 'none' | 'unknown' | {
-        /**
-         * Name of the person or organisation holding the asset
-         */
-        name?: string;
-        /**
-         * Email address for the custodian
-         */
-        contactEmail?: string;
-        /**
-         * Phone number for the custodian
-         */
-        contactPhone?: string;
-        /**
-         * The nature of the custodial relationship
-         */
-        relationship?: string;
-        /**
-         * Account or reference number with the custodian
-         */
-        reference?: string;
-    } | 'goldmine' | 'sheldon' | 'ags' | 'bsc' | 'gia' | 'watch_trade' | 'classic_vehicle' | 'book_trade' | string | 'immediate' | 'within_7_days' | 'within_30_days' | 'none' | {
-        /**
-         * Name of the insurance provider
-         */
-        provider?: string;
-        /**
-         * Policy reference number
-         */
-        policyReference?: string;
-        /**
-         * The insured value in minor currency units
-         */
-        insuredValue?: Money2;
-        /**
-         * Next renewal date. Important — cover may lapse if not renewed after death
-         */
-        renewalDate?: string;
-        /**
-         * Additional insurance notes
-         */
-        notes?: string;
-    } | {
-        /**
-         * The type of entity that was split
-         */
-        entityType: 'asset' | 'asset_collection';
-        /**
-         * The id of the original entity that was split
-         */
-        entityId: string;
-        /**
-         * When the split occurred
-         */
-        splitAt: string;
-        /**
-         * Why the split was requested
-         */
-        reason?: string;
-    } | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | Array<string> | {
-        /**
-         * Marketplaces and platforms to search
-         */
-        platforms?: Array<string>;
-        /**
-         * Natural-language query an agent should use
-         */
-        searchQuery?: string;
-        /**
-         * Key-value filters to narrow results. Agents map to platform-specific parameters
-         */
-        filters?: {
-            [key: string]: string;
-        };
-        /**
-         * Platforms explicitly excluded
-         */
-        excludePlatforms?: Array<string>;
-        /**
-         * When an agent last executed this search profile
-         */
-        lastSearchedAt?: string;
-        /**
-         * How often this item should be re-searched
-         */
-        searchFrequency?: 'once' | 'weekly' | 'monthly' | 'on_demand';
-    } | number | string | Visibility2 | Array<FieldProvenance2> | Array<{
-        /**
-         * Unique identifier for this comment
-         */
-        id: string;
-        /**
-         * Person.id of the comment author
-         */
-        authorPersonId?: string;
-        /**
-         * Human-readable display name for the referenced author person
-         */
-        authorPersonIdDisplay?: string;
-        /**
-         * Comment text
-         */
-        content: string;
-        /**
-         * When the comment was created
-         */
-        createdAt: string;
-        visibility?: Visibility2;
-    }> | {
-        /**
-         * Type of the target entity
-         */
-        entityType?: 'asset' | 'asset_collection';
-        /**
-         * ID of the target entity
-         */
-        entityId?: string;
-        /**
-         * When the merge occurred
-         */
-        mergedAt?: string;
-        /**
-         * Why the entities were merged
-         */
-        reason?: string;
-    } | Provenance2 | Jurisdiction2 | {
-        jurisdiction?: Jurisdiction2;
-        assetType?: 'immoveable' | 'moveable' | 'mixed' | 'exempt';
-        exemptions?: Array<string>;
-        reliefClaimed?: Array<string>;
-    } | {
-        accessType?: string;
-        platform?: string;
-        visibility?: Visibility2;
-        /**
-         * The estate role required to follow these instructions
-         */
-        requiredRole?: string;
-        steps?: Array<{
-            step: number;
-            method: string;
-            description?: string;
-            location?: string;
-            holderPersonId?: string;
-        }>;
-        memorialisation?: {
-            preference?: 'transfer_to_beneficiary' | 'memorialise' | 'delete' | 'archive' | 'no_preference';
-            instructions?: string;
-        };
-        lastVerified?: string;
-        verifiedBy?: string;
-    } | 'keeping' | 'considering' | 'thinning' | 'listed' | 'sold' | 'allocated' | 'donated' | Array<{
-        /**
-         * The sales channel where this item is listed
-         */
-        channel: 'ebay' | 'amazon' | 'shopify' | 'etsy' | 'own_website' | 'auction_house' | 'other';
-        /**
-         * Human-readable name of the channel, especially when channel is other
-         */
-        channelName?: string;
-        /**
-         * The platform-specific listing identifier
-         */
-        listingId?: string;
-        /**
-         * Direct URL to the listing on the external platform
-         */
-        listingUrl?: string;
-        /**
-         * Current status of this listing
-         */
-        status: 'draft' | 'active' | 'sold' | 'withdrawn' | 'expired';
-        /**
-         * The listed asking price
-         */
-        askingPrice?: Money2;
-        /**
-         * When this listing was created or last activated
-         */
-        listedAt?: string;
-        /**
-         * When the item was sold via this listing, if applicable
-         */
-        soldAt?: string | null;
-        /**
-         * The actual sale price, if sold
-         */
-        soldPrice?: Money2;
-    }> | Array<ServiceRecord> | {
-        /**
-         * Name of the insurance company
-         */
-        insurer?: string;
-        /**
-         * The insurance policy number
-         */
-        policyNumber?: string;
-        /**
-         * The type of insurance policy covering this item
-         */
-        policyType?: 'home_contents' | 'specialist_collectibles' | 'classic_vehicle' | 'individual_item' | 'fine_art' | 'jewellery' | 'other';
-        /**
-         * The agreed or insured value, in minor currency units. May differ from market value
-         */
-        agreedValue?: Money2;
-        /**
-         * When the insurance cover for this item was last confirmed or reviewed
-         */
-        coverConfirmedAt?: string;
-    } | 'parcel' | 'large_item' | 'specialist_transport' | 'collection_only' | Array<'outer_box' | 'inner_box' | 'warranty_card' | 'cosc_certificate' | 'instruction_manual' | 'hang_tags' | 'service_booklet' | 'purchase_receipt' | 'original_invoice' | 'v5c_logbook' | 'mot_certificate' | 'provenance_letter' | 'certificate_of_authenticity' | 'appraisal_certificate' | 'export_licence' | 'customs_declaration' | string> | {
-        /**
-         * The type of tax relief claimed
-         */
-        reliefType?: 'agricultural_property' | 'business_property' | 'woodland' | 'heritage' | 'charitable';
-        eligible?: boolean;
-        /**
-         * Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
-         */
-        percentage?: number;
-        /**
-         * Conditions for maintaining eligibility
-         */
-        conditions?: string;
-        jurisdiction?: Jurisdiction2;
-        statute?: string;
-    } | {
-        type?: 'sentimental' | 'cultural' | 'religious' | 'historical' | 'family_heirloom' | 'professional';
-        description?: string;
-        /**
-         * Whether and how the testator has restricted disposal of this asset
-         */
-        restrictionOnDisposal?: {
-            exists?: boolean;
-            nature?: string;
-        };
-    } | undefined;
-};
-
-/**
- * Organisation
- *
- * An organisation that interacts with the estate — legal firms, financial institutions, charities, dealers, funeral providers, employers, government bodies, and others. Maps to schema:Organization in JSON-LD
- */
-export type OrganisationWritable2 = {
-    /**
-     * Unique identifier for this organisation within the INHERIT document
-     */
-    id: string;
-    /**
-     * The organisation's legal or trading name
-     */
-    name: string;
-    /**
-     * The nature of the organisation. Use x-inherit- prefix for jurisdiction-specific or niche types not covered by the core enum
-     */
-    organisationType: 'legal_firm' | 'financial_institution' | 'pension_provider' | 'insurance_provider' | 'dealer' | 'auction_house' | 'valuation_firm' | 'funeral_provider' | 'charity' | 'religious_institution' | 'employer' | 'trust_corporation' | 'accountancy_firm' | 'government_body' | 'retailer' | 'manufacturer' | 'property_management' | 'storage_facility' | 'digital_platform' | 'utility_provider' | 'other' | string;
-    /**
-     * The roles this organisation plays in this specific estate. An organisation may play multiple roles
-     */
-    estateRoles?: Array<'beneficiary' | 'will_writer' | 'executor' | 'trustee' | 'asset_holder' | 'liability_holder' | 'insurer' | 'valuer' | 'recommended_dealer' | 'funeral_provider' | 'professional_adviser' | 'regulatory_body' | 'employer' | 'retailer' | 'service_provider' | string>;
-    /**
-     * Primary jurisdiction where this organisation operates. ISO 3166-1 alpha-2 or ISO 3166-2 code
-     */
-    jurisdiction?: string;
-    /**
-     * The organisation's address
-     */
-    address?: Address2;
-    /**
-     * The organisation's website
-     */
-    url?: string;
-    /**
-     * Primary contact email
-     */
-    email?: string;
-    /**
-     * Primary contact phone number
-     */
-    phone?: string;
-    /**
-     * URL to the organisation's logo
-     */
-    logo?: string;
-    /**
-     * Wikidata Q-number for this organisation, enabling linked data resolution. Many major organisations have Wikidata entries with structured data (founding date, parent company, headquarters, etc.)
-     */
-    wikidataId?: string;
-    /**
-     * Brief description of the organisation and its relevance to this estate
-     */
-    description?: string;
-    /**
-     * Registrations with regulatory bodies, professional associations, and government registries. An organisation may hold multiple registrations across jurisdictions
-     */
-    registrations?: Array<Registration>;
-    /**
-     * Name of the primary contact person at this organisation for estate matters
-     */
-    contactPerson?: string;
-    /**
-     * Free-text notes about this organisation's relationship to the estate
-     */
-    notes?: string;
-    /**
-     * Aggregate ratings from review platforms. One entry per platform. Supports user decision-making, agent filtering/ranking, and point-in-time audit trails
-     */
-    ratings?: Array<{
-        /**
-         * The review platform
-         */
-        platform: 'trustpilot' | 'google' | 'feefo' | 'reviews_io' | 'funeral_guide' | 'checkatrade' | string;
-        /**
-         * The aggregate rating score
-         */
-        ratingValue: number;
-        /**
-         * Maximum possible score on this platform. Default 5 if absent
-         */
-        bestRating?: number;
-        /**
-         * Minimum possible score on this platform. Default 1 if absent
-         */
-        worstRating?: number;
-        /**
-         * Total number of reviews on this platform
-         */
-        reviewCount?: number;
-        /**
-         * URL to the organisation's profile on this platform
-         */
-        profileUrl?: string;
-        /**
-         * When this rating data was retrieved or verified
-         */
-        retrievedAt: string;
-    }>;
-    /**
-     * URIs identifying this entity elsewhere (schema.org sameAs). e.g. Wikidata, LinkedIn, DBpedia
-     */
-    sameAs?: Array<string>;
-    /**
-     * Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it
-     */
-    provenance?: Provenance2;
-    /**
-     * The organisation's VAT registration status and scheme. Affects how VAT is calculated on transactions involving this organisation
-     */
-    vatConfiguration?: {
-        /**
-         * Whether the organisation is VAT registered
-         */
-        vatRegistered?: boolean;
-        /**
-         * Which VAT scheme the organisation uses. Only relevant if vatRegistered is true
-         */
-        vatScheme?: 'margin_scheme' | 'global_accounting' | 'standard_vat';
-        /**
-         * The organisation's VAT registration number
-         */
-        vatNumber?: string;
-        /**
-         * The country of VAT registration, as ISO 3166-1 alpha-2
-         */
-        vatCountry?: string;
-    };
-    /**
-     * International shipping capabilities and policies for this organisation
-     */
-    internationalShipping?: {
-        /**
-         * ISO 3166-1 alpha-2 country codes this organisation ships to
-         */
-        shipsToCountries?: Array<string>;
-        /**
-         * ISO 3166-1 alpha-2 country codes this organisation receives items from
-         */
-        receivesFromCountries?: Array<string>;
-        /**
-         * Whether this organisation handles customs declarations for international shipments
-         */
-        customsHandling?: boolean;
-        /**
-         * Who pays import duties on international transactions
-         */
-        importDutyPolicy?: 'dealer_absorbs' | 'buyer_pays' | 'included_in_shipping';
-        /**
-         * The primary currency this organisation trades in, as ISO 4217
-         */
-        currency?: string;
-    };
-    /**
-     * External identifiers — charity number, company registration, UEN, etc.
-     */
-    identifiers?: Array<IdentifierWritable2>;
-    /**
-     * Dealer-specific profile information. Only relevant for organisations that operate as dealers on marketplace or catalogue platforms
-     */
-    dealerProfile?: {
-        /**
-         * Asset categories this dealer specialises in
-         */
-        categories?: Array<string>;
-        /**
-         * The dealer's subscription tier on the platform
-         */
-        dealerTier?: 'free' | 'standard' | 'professional';
-        /**
-         * Physical services this dealer can provide
-         */
-        fulfilmentCapabilities?: Array<'inspection' | 'grading' | 'photography' | 'storage' | 'shipping' | 'restoration'>;
-        /**
-         * How far the dealer operates
-         */
-        geographicReach?: 'local' | 'national' | 'international';
-        /**
-         * Typical time to respond to a valuation request or offer
-         */
-        averageResponseTime?: string;
-    };
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | string | 'legal_firm' | 'financial_institution' | 'pension_provider' | 'insurance_provider' | 'dealer' | 'auction_house' | 'valuation_firm' | 'funeral_provider' | 'charity' | 'religious_institution' | 'employer' | 'trust_corporation' | 'accountancy_firm' | 'government_body' | 'retailer' | 'manufacturer' | 'property_management' | 'storage_facility' | 'digital_platform' | 'utility_provider' | 'other' | string | Array<'beneficiary' | 'will_writer' | 'executor' | 'trustee' | 'asset_holder' | 'liability_holder' | 'insurer' | 'valuer' | 'recommended_dealer' | 'funeral_provider' | 'professional_adviser' | 'regulatory_body' | 'employer' | 'retailer' | 'service_provider' | string> | string | Address2 | string | string | string | string | string | Array<Registration> | string | Array<{
-        /**
-         * The review platform
-         */
-        platform: 'trustpilot' | 'google' | 'feefo' | 'reviews_io' | 'funeral_guide' | 'checkatrade' | string;
-        /**
-         * The aggregate rating score
-         */
-        ratingValue: number;
-        /**
-         * Maximum possible score on this platform. Default 5 if absent
-         */
-        bestRating?: number;
-        /**
-         * Minimum possible score on this platform. Default 1 if absent
-         */
-        worstRating?: number;
-        /**
-         * Total number of reviews on this platform
-         */
-        reviewCount?: number;
-        /**
-         * URL to the organisation's profile on this platform
-         */
-        profileUrl?: string;
-        /**
-         * When this rating data was retrieved or verified
-         */
-        retrievedAt: string;
-    }> | Array<string> | Provenance2 | {
-        /**
-         * Whether the organisation is VAT registered
-         */
-        vatRegistered?: boolean;
-        /**
-         * Which VAT scheme the organisation uses. Only relevant if vatRegistered is true
-         */
-        vatScheme?: 'margin_scheme' | 'global_accounting' | 'standard_vat';
-        /**
-         * The organisation's VAT registration number
-         */
-        vatNumber?: string;
-        /**
-         * The country of VAT registration, as ISO 3166-1 alpha-2
-         */
-        vatCountry?: string;
-    } | {
-        /**
-         * ISO 3166-1 alpha-2 country codes this organisation ships to
-         */
-        shipsToCountries?: Array<string>;
-        /**
-         * ISO 3166-1 alpha-2 country codes this organisation receives items from
-         */
-        receivesFromCountries?: Array<string>;
-        /**
-         * Whether this organisation handles customs declarations for international shipments
-         */
-        customsHandling?: boolean;
-        /**
-         * Who pays import duties on international transactions
-         */
-        importDutyPolicy?: 'dealer_absorbs' | 'buyer_pays' | 'included_in_shipping';
-        /**
-         * The primary currency this organisation trades in, as ISO 4217
-         */
-        currency?: string;
-    } | Array<IdentifierWritable2> | {
-        /**
-         * Asset categories this dealer specialises in
-         */
-        categories?: Array<string>;
-        /**
-         * The dealer's subscription tier on the platform
-         */
-        dealerTier?: 'free' | 'standard' | 'professional';
-        /**
-         * Physical services this dealer can provide
-         */
-        fulfilmentCapabilities?: Array<'inspection' | 'grading' | 'photography' | 'storage' | 'shipping' | 'restoration'>;
-        /**
-         * How far the dealer operates
-         */
-        geographicReach?: 'local' | 'national' | 'international';
-        /**
-         * Typical time to respond to a valuation request or offer
-         */
-        averageResponseTime?: string;
-    } | undefined;
-};
-
-/**
- * Completeness
- *
- * A completeness score derived from a weighted checklist of estate data categories, scoped to a specific jurisdiction and estate status
- */
-export type CompletenessWritable2 = {
-    /**
-     * ISO 3166-1 alpha-2 country code or ISO 3166-2 subdivision code identifying which jurisdiction this scoring applies to
-     */
-    jurisdiction?: string;
-    /**
-     * The estate status this completeness score was calculated against. Different statuses may require different data, affecting which checklist items are applicable
-     */
-    estateStatus?: string;
-    /**
-     * The individual items assessed to produce the overall score. Each item belongs to a category, has a relative weight, and a status indicating whether the data is present
-     */
-    checklist: Array<{
-        /**
-         * The data category this checklist item belongs to
-         */
-        category: 'personal_details' | 'assets_and_valuations' | 'liabilities' | 'beneficiaries' | 'executors' | 'guardians' | 'tax_information' | 'legal_documents' | 'lifetime_transfers' | 'pension_and_insurance';
-        /**
-         * A human-readable label describing what was checked
-         */
-        item: string;
-        /**
-         * Relative importance of this item. Higher weights contribute more to the overall score
-         */
-        weight: number;
-        /**
-         * Whether the data for this item is present and sufficient
-         */
-        status: 'complete' | 'incomplete' | 'not_applicable' | 'unknown';
-        /**
-         * Optional explanation of the status, such as what is missing or why the item is not applicable
-         */
-        details?: string;
-    }>;
-    [key: string]: {
-        [key: string]: unknown;
-    } | string | Array<{
-        /**
-         * The data category this checklist item belongs to
-         */
-        category: 'personal_details' | 'assets_and_valuations' | 'liabilities' | 'beneficiaries' | 'executors' | 'guardians' | 'tax_information' | 'legal_documents' | 'lifetime_transfers' | 'pension_and_insurance';
-        /**
-         * A human-readable label describing what was checked
-         */
-        item: string;
-        /**
-         * Relative importance of this item. Higher weights contribute more to the overall score
-         */
-        weight: number;
-        /**
-         * Whether the data for this item is present and sufficient
-         */
-        status: 'complete' | 'incomplete' | 'not_applicable' | 'unknown';
-        /**
-         * Optional explanation of the status, such as what is missing or why the item is not applicable
-         */
-        details?: string;
-    }> | undefined;
-};
-
-/**
  * TaxPosition
  *
  * An estimated tax position for an estate in a specific jurisdiction, including gross and net values, available exemptions, and estimated liability
@@ -20413,9 +21094,9 @@ export type EventWritable2 = {
  */
 export type SchemaWritable = unknown & {
     /**
-     * Schema identifier — declares this as an INHERIT v3 document. Standard JSON Schema keyword
+     * Schema identifier — declares this as an INHERIT v3 document. Standard JSON Schema keyword. An estate-profile document carries the root URL; a catalogue-profile document may carry either the root URL or the catalogue URL, so a catalogue document written against catalogue.json conforms to the root unchanged
      */
-    $schema?: 'https://openinherit.org/v3/schema.json';
+    $schema?: 'https://openinherit.org/v3/schema.json' | 'https://openinherit.org/v3/catalogue.json';
     /**
      * JSON-LD context URI. When present, makes this document self-describing linked data
      */
@@ -20425,9 +21106,13 @@ export type SchemaWritable = unknown & {
      */
     '@type'?: string;
     /**
+     * The conformance profile this document claims. 'estate' (the default when absent) is the full estate document: estate, people and schemaVersion are required. 'catalogue' is a catalogue-only document — a living owner cataloguing items with no estate envelope: the document must satisfy catalogue.json in full, so assets is required, estate-only members are not allowed, and the catalogue's own members (assetInterests, legacyContacts, dealerInterests, giftListSettings, legacyLetter, completeness, recommendedActions) are carried at the root rather than in applicationState. A profile is a declared subset of this one root, not a second root
+     */
+    conformanceProfile?: 'estate' | 'catalogue';
+    /**
      * Semver version of the INHERIT schema this document was created against. Enables consumers to detect compatibility and handle graceful degradation
      */
-    schemaVersion: string;
+    schemaVersion?: string;
     /**
      * Sequential version number for this document. Incremented each time the document is substantively modified. Version 1 is the first version
      */
@@ -20447,11 +21132,11 @@ export type SchemaWritable = unknown & {
     /**
      * The single estate record for this document
      */
-    estate: EstateWritable2;
+    estate?: EstateWritable2;
     /**
      * All people involved in the estate — testator, beneficiaries, executors, witnesses, guardians, etc
      */
-    people: Array<PersonWritable2>;
+    people?: Array<PersonWritable2>;
     /**
      * Familial bonds between people in the estate. Essential for intestacy calculations
      */
@@ -20728,7 +21413,7 @@ export type SchemaWritable = unknown & {
     referentialIntegrity?: Array<IntegrityConstraint>;
     [key: string]: {
         [key: string]: unknown;
-    } | 'https://openinherit.org/v3/schema.json' | string | string | string | number | string | string | null | string | EstateWritable2 | Array<PersonWritable2> | Array<Kinship2> | Array<Relationship2> | Array<Property2> | Array<AssetWritable2> | Array<AssetCollection2> | Array<Liability2> | Array<Bequest2> | Array<Trust2> | Array<Executor2> | Array<Guardian2> | Array<Wish2> | Array<Document2> | Array<NonprobateTransfer2> | Array<ProxyAuthorisation2> | Array<PowerOfAppointment2> | Array<Valuation2> | Array<LifetimeTransfer2> | Array<OrganisationWritable2> | Array<Space2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | boolean | 'document' | 'collection' | 'transaction' | Array<ImportSource> | Conformance | Array<{
+    } | 'https://openinherit.org/v3/schema.json' | 'https://openinherit.org/v3/catalogue.json' | string | string | 'estate' | 'catalogue' | string | number | string | string | null | string | EstateWritable2 | Array<PersonWritable2> | Array<Kinship2> | Array<Relationship2> | Array<Property2> | Array<AssetWritable2> | Array<AssetCollection2> | Array<Liability2> | Array<Bequest2> | Array<Trust2> | Array<Executor2> | Array<Guardian2> | Array<Wish2> | Array<Document2> | Array<NonprobateTransfer2> | Array<ProxyAuthorisation2> | Array<PowerOfAppointment2> | Array<Valuation2> | Array<LifetimeTransfer2> | Array<OrganisationWritable2> | Array<Space2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | boolean | 'document' | 'collection' | 'transaction' | Array<ImportSource> | Conformance | Array<{
         /**
          * Unique extension identifier, e.g. 'uk-england-wales', 'islamic-succession'
          */
@@ -20881,183 +21566,8 @@ export type SchemaWritable = unknown & {
     } | Array<IntegrityConstraint> | undefined;
 };
 
-/**
- * INHERIT v2 Catalogue Schema
- *
- * Lightweight root schema for catalogue-only documents — living collectors cataloguing items without the full estate envelope. Assets, collections, valuations, and legacy contacts. Upgrade path: wrap in a full estate document (schema.json) when needed
- */
-export type CatalogueWritable2 = {
-    /**
-     * Schema identifier — declares this as an INHERIT v3 catalogue document
-     */
-    $schema?: 'https://openinherit.org/v3/catalogue.json';
-    /**
-     * JSON-LD context URI
-     */
-    '@context'?: string;
-    schemaVersion?: string;
-    /**
-     * Sequential version number for this document. Incremented each time the document is substantively modified. Version 1 is the first version
-     */
-    documentVersion?: number;
-    /**
-     * When this version of the document was created. Courts and regulators care about when changes were made, not just which version number
-     */
-    versionedAt?: string;
-    /**
-     * Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version
-     */
-    previousVersionId?: string | null;
-    /**
-     * Human-readable summary of what changed in this version. Like a commit message for the document
-     */
-    changeDescription?: string;
-    /**
-     * The catalogued items
-     */
-    assets: Array<AssetWritable2>;
-    /**
-     * Named groupings of assets
-     */
-    assetCollections?: Array<AssetCollection2>;
-    /**
-     * Organisations associated with catalogued assets — dealers, retailers, valuers, auction houses
-     */
-    organisations?: Array<OrganisationWritable2>;
-    /**
-     * Physical storage locations for items in this catalogue. Each asset can reference a space via spaceId. Critical for collectors with items across multiple properties or countries — affects probate jurisdiction and dealer collection logistics
-     */
-    spaces?: Array<Space2>;
-    /**
-     * Valuations of items and collections
-     */
-    valuations?: Array<Valuation2>;
-    /**
-     * People to notify and grant access when the owner dies. The 'Please open when I have passed away' letter recipients
-     */
-    legacyContacts?: Array<LegacyContact>;
-    /**
-     * Expressions of interest about assets, collections, or products. Includes the catalogue owner's own wishlist (things they want to acquire), interest from other people, and allocation intentions. Complements assets[] — assets are things you own; assetInterests are things you want, things others want, and decisions about who gets what
-     */
-    assetInterests?: Array<AssetInterest2>;
-    /**
-     * Personal messages, letters, care instructions, and non-binding wishes. Complements legacyContacts — legacyContacts tracks who receives the letter; wishes stores what it says. Types: letter (personal messages to specific people), care (maintenance and care instructions for items or collections), distribution (non-binding preferences about what should happen to items), general (anything else)
-     */
-    wishes?: Array<Wish2>;
-    /**
-     * Default data provenance for entities in this catalogue
-     */
-    dataProvenance?: 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated';
-    /**
-     * Systems data was imported from
-     */
-    importSources?: Array<ImportSource>;
-    completeness?: CompletenessWritable2;
-    recommendedActions?: Array<RecommendedAction>;
-    conformance?: Conformance;
-    /**
-     * Insurance policies associated with catalogued assets
-     */
-    insurancePolicies?: Array<InsurancePolicy2>;
-    /**
-     * Provisional offers and expressions of interest from dealers. Allows the catalogue owner to receive and track dealer offers on items they are considering selling, or standing offers to be included in the LegacyLetter
-     */
-    dealerInterests?: Array<DealerInterest2>;
-    /**
-     * Settings for the shareable gift wishlist. When enabled, the owner can share a public link to their wishlist for family and friends to buy from
-     */
-    giftListSettings?: {
-        /**
-         * Whether the gift list is currently shareable
-         */
-        enabled?: boolean;
-        /**
-         * The owner's personal message shown at the top of the gift list
-         */
-        personalMessage?: string;
-        /**
-         * Who can see the gift list
-         */
-        visibility?: 'public' | 'link_only' | 'private';
-        /**
-         * Asset interest IDs that someone has marked as bought. These are hidden from the public gift list to prevent duplicate gifts
-         */
-        fulfilledItems?: Array<string>;
-    };
-    /**
-     * Metadata about the LegacyLetter — the printed or digital document addressed to the owner's legacy contacts, summarising the catalogue, allocations, dealer offers, and personal messages. Tracks generation status to flag when the letter is stale
-     */
-    legacyLetter?: {
-        /**
-         * When the letter was last generated
-         */
-        lastGenerated?: string;
-        /**
-         * Incremental version number of the letter
-         */
-        version?: number;
-        /**
-         * Whether the letter has been delivered to the legacy contacts
-         */
-        delivered?: boolean;
-        /**
-         * How the letter was delivered
-         */
-        deliveryMethod?: 'printed' | 'digital' | 'both';
-        /**
-         * Number of items in the catalogue when the letter was last generated. Used to detect staleness — if the current item count differs significantly, the letter should be regenerated
-         */
-        itemCountAtGeneration?: number;
-    };
-    /**
-     * Formal audit trail of actions taken on this document. Records who changed what, when, and why. Uses person ID references for GDPR data minimisation. Entries may be redacted under Article 17(3)(e) without breaking the log structure. Retention aligns with the estate document lifecycle
-     */
-    auditLog?: Array<AuditEvent2>;
-    [key: string]: {
-        [key: string]: unknown;
-    } | 'https://openinherit.org/v3/catalogue.json' | string | string | number | string | string | null | string | Array<AssetWritable2> | Array<AssetCollection2> | Array<OrganisationWritable2> | Array<Space2> | Array<Valuation2> | Array<LegacyContact> | Array<AssetInterest2> | Array<Wish2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | Array<ImportSource> | CompletenessWritable2 | Array<RecommendedAction> | Conformance | Array<InsurancePolicy2> | Array<DealerInterest2> | {
-        /**
-         * Whether the gift list is currently shareable
-         */
-        enabled?: boolean;
-        /**
-         * The owner's personal message shown at the top of the gift list
-         */
-        personalMessage?: string;
-        /**
-         * Who can see the gift list
-         */
-        visibility?: 'public' | 'link_only' | 'private';
-        /**
-         * Asset interest IDs that someone has marked as bought. These are hidden from the public gift list to prevent duplicate gifts
-         */
-        fulfilledItems?: Array<string>;
-    } | {
-        /**
-         * When the letter was last generated
-         */
-        lastGenerated?: string;
-        /**
-         * Incremental version number of the letter
-         */
-        version?: number;
-        /**
-         * Whether the letter has been delivered to the legacy contacts
-         */
-        delivered?: boolean;
-        /**
-         * How the letter was delivered
-         */
-        deliveryMethod?: 'printed' | 'digital' | 'both';
-        /**
-         * Number of items in the catalogue when the letter was last generated. Used to detect staleness — if the current item count differs significantly, the letter should be regenerated
-         */
-        itemCountAtGeneration?: number;
-    } | Array<AuditEvent2> | undefined;
-};
-
 export type ValidateDocumentData = {
-    body: SchemaWritable;
+    body: InheritDocumentWritable;
     path?: never;
     query?: never;
     url: '/validate';
@@ -21090,7 +21600,7 @@ export type ValidateDocumentResponses = {
 export type ValidateDocumentResponse = ValidateDocumentResponses[keyof ValidateDocumentResponses];
 
 export type ValidateCatalogueDocumentData = {
-    body: CatalogueWritable2;
+    body: CatalogueWritable;
     path?: never;
     query?: never;
     url: '/validate/catalogue';

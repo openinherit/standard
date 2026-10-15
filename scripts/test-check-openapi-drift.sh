@@ -3,8 +3,8 @@
 #
 #   scripts/check-openapi-components.py — the component list in openapi/openapi.yaml
 #                                         matches the JSON Schemas in v3/
-#   scripts/check-openapi-fresh.sh      — regenerating openapi/openapi-bundled.yaml and
-#                                         generated/typescript reproduces what is committed
+#   scripts/check-openapi-fresh.sh      — regenerating the two OpenAPI bundles, generated/typescript
+#                                         and the @openinherit/sdk clients reproduces what is committed
 #
 # Every case runs against a tree built in a temp dir, so the harness cannot go green
 # because the repo happens to be correct today, nor red because someone edited a real
@@ -136,7 +136,8 @@ BASE="$TMP/f-base"
 mkdir -p "$BASE/openapi" "$BASE/scripts" "$BASE/generated"
 cp -a "$ROOT/package.json" "$ROOT/redocly.yaml" "$BASE/"
 cp -a "$ROOT/v3" "$BASE/v3"
-cp -a "$ROOT/openapi/openapi.yaml" "$BASE/openapi/"
+cp -a "$ROOT/openapi/openapi.yaml" "$ROOT/openapi/reference-api.yaml" "$BASE/openapi/"
+mkdir -p "$BASE/packages/sdk/src"
 cp -a "$FRESH" "$BASE/scripts/"
 ln -s "$ROOT/node_modules" "$BASE/node_modules"
 printf 'node_modules\n' > "$BASE/.gitignore"
@@ -168,6 +169,26 @@ printf '\nexport type HandEdited = true;\n' >> "$T/generated/typescript/types.ge
 git -C "$T" commit -qam "hand edit"
 check "fresh: a hand edit to the committed client" 1 "generated/typescript/types.gen.ts" fresh "$T"
 
+T="$(case_tree sdk-estate-hand-edit)"
+printf '\nexport type HandEdited = true;\n' >> "$T/packages/sdk/src/estate/types.gen.ts"
+git -C "$T" commit -qam "hand edit"
+check "fresh: a hand edit to the published estate client" 1 "packages/sdk/src/estate/types.gen.ts" fresh "$T"
+
+T="$(case_tree sdk-reference-hand-edit)"
+printf '\nexport type HandEdited = true;\n' >> "$T/packages/sdk/src/reference/types.gen.ts"
+git -C "$T" commit -qam "hand edit"
+check "fresh: a hand edit to the published reference client" 1 "packages/sdk/src/reference/types.gen.ts" fresh "$T"
+
+T="$(case_tree reference-bundle-hand-edit)"
+sed -i '0,/description:/s//description: HAND EDIT/' "$T/openapi/reference-api-bundled.yaml"
+git -C "$T" commit -qam "hand edit"
+check "fresh: a hand edit to the committed reference bundle" 1 "openapi/reference-api-bundled.yaml" fresh "$T"
+
+T="$(case_tree reference-unregenerated)"
+sed -i '0,/description: Machine-readable error code$/s//description: Machine-readable error code, changed upstream/' "$T/openapi/reference-api.yaml"
+git -C "$T" commit -qam "upstream change, no regenerate"
+check "fresh: a reference-api change committed without regenerating" 1 "packages/sdk/src/reference" fresh "$T"
+
 T="$(case_tree unregenerated)"
 python3 - "$T/v3/person.json" <<'PY'
 import json, sys
@@ -177,6 +198,7 @@ json.dump(d, open(p, "w"), indent=2)
 PY
 git -C "$T" commit -qam "upstream change, no regenerate"
 check "fresh: a v3/ change committed without regenerating" 1 "STALE" fresh "$T"
+check "fresh: … and the published estate client is named stale" 1 "packages/sdk/src/estate/types.gen.ts" fresh "$T"
 
 T="$(case_tree untracked)"
 rm "$T/generated/typescript/index.ts"; git -C "$T" commit -qam "drop a generated file"

@@ -20,6 +20,8 @@
     "lint:reference-api": "npx @redocly/cli lint openapi/reference-api.yaml",
     "bundle:reference-api": "npx @redocly/cli bundle openapi/reference-api.yaml -o openapi/reference-api-bundled.yaml",
     "generate:reference-api": "npx @hey-api/openapi-ts -i ./openapi/reference-api-bundled.yaml -o generated/typescript-api -c @hey-api/client-fetch",
+    "generate:sdk": "npx @hey-api/openapi-ts -i ./openapi/openapi-bundled.yaml -o packages/sdk/src/estate -c @hey-api/client-fetch",
+    "generate:sdk:reference": "npx @hey-api/openapi-ts -i ./openapi/reference-api-bundled.yaml -o packages/sdk/src/reference -c @hey-api/client-fetch",
     "build": "pnpm --filter @openinherit/sdk run build",
     "build:sdk": "pnpm --filter @openinherit/sdk run build",
     "clean": "pnpm --filter @openinherit/sdk run clean",

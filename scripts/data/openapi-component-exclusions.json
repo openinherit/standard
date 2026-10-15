@@ -1,0 +1,17 @@
+{
+  "$comment": "v3/ JSON Schemas that deliberately have NO component in openapi/openapi.yaml. Read by scripts/check-openapi-components.py. Positive authorisation only: a v3/ schema that is neither a component nor listed here turns CI red. Every entry needs a reason; an entry for a file that has gone, or that has since become a component, also turns CI red.",
+  "excluded": [
+    {
+      "path": "v3/dialect.json",
+      "reason": "The INHERIT JSON Schema dialect (a meta-schema declaring $vocabulary). Schemas are written in it; no document is an instance of it, so it is not a data type for a client to model."
+    },
+    {
+      "path": "v3/vocab/estate/meta.json",
+      "reason": "The meta-schema for INHERIT's estate vocabulary keywords, referenced from v3/dialect.json. Like the dialect, it describes schemas, not estate data."
+    },
+    {
+      "path": "v3/common/error-codes.json",
+      "reason": "The machine-readable registry of INHERIT error codes. Its instance is the code list itself (carried in its default), read as JSON by validators and tooling; scripts/validate-schema-hygiene.mjs already treats it as metadata, not a data schema; it is not a field type any estate document carries, so a generated client type for it would model nothing a caller sends or receives."
+    }
+  ]
+}

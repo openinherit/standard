@@ -8,7 +8,7 @@ info:
     Jewish, Hindu, Japanese, and African customary legal traditions.
 
     This document serves two purposes:
-    1. Schema bundle — all 32 core entity schemas, 14 common types,
+    1. Schema bundle — all 32 core entity schemas, 15 common types,
        5 asset categories, and 21 jurisdiction extensions as OpenAPI
        components for TypeScript type generation, Zod schema generation,
        and SDK creation
@@ -250,7 +250,7 @@ components:
       x-inherit-maturity: draft
       $ref: '../v3/power-of-appointment.json'
 
-    # Common types (14)
+    # Common types (15)
     Money:
       description: Monetary amounts (integer minor units + currency)
       x-inherit-maturity: candidate
@@ -307,6 +307,10 @@ components:
       description: An auditable event recorded against an entity
       x-inherit-maturity: draft
       $ref: '../v3/common/audit-event.json'
+    ArchiveTimestampChain:
+      description: RFC 4998 evidence-record renewal history for a signed or attested document
+      x-inherit-maturity: draft
+      $ref: '../v3/common/archive-timestamp-chain.json'
 
     # Asset category schemas (5)
     AssetCategoryFinancial:

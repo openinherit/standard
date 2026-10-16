@@ -2,7 +2,7 @@
 github_issue: https://github.com/openinherit/standard/pull/73
 ---
 
-# Proposal 0005: A wish can be about a whole collection, not only a single item
+# Proposal 0006: A wish can be about a whole collection, not only a single item
 
 **Status:** under-review — the pull request that carries this document also carries the schema
 change it describes. Merging that pull request is acceptance; closing it is rejection.

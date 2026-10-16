@@ -54,7 +54,8 @@
     "test:release-contents": "node scripts/test-check-release-contents.mjs",
     "lint:schemas": "node scripts/check-schema-lint.mjs",
     "test:lint-schemas": "node scripts/test-check-schema-lint.mjs",
-    "test:workflow-path-filters": "node scripts/test-check-workflow-path-filters.mjs"
+    "test:workflow-path-filters": "node scripts/test-check-workflow-path-filters.mjs",
+    "test:proposal-numbers": "node scripts/check-proposal-numbers.mjs && node scripts/test-check-proposal-numbers.mjs"
   },
   "devDependencies": {
     "@hey-api/client-fetch": "latest",

@@ -33,6 +33,11 @@ jobs:
       - name: Death-tax-levied flag is declared and consistent
         run: pnpm run test:death-tax-levied
 
+      # Proposals are cited by number, so each has its own and its heading
+      # agrees. Two proposals merged on one day both took 0005.
+      - name: Proposal numbers are unique
+        run: pnpm run test:proposal-numbers
+
       # The UK and Irish extensions say what real property is held under: local
       # tenure, and for Northern Ireland and Ireland which register (land registry
       # folio or Registry of Deeds) and what class of title. Every value must have

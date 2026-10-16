@@ -8,7 +8,7 @@ The **INHERIT** open estate data standard — JSON Schemas for structured estate
 - **14 common types** — address, money, jurisdiction, identifier, provenance, temporal rules
 - **5 asset category schemas** — financial, vehicle, digital, business, general
 - **21 jurisdiction extensions** — UK, US, Australia/NZ, Singapore/Malaysia, Islamic, Hindu, Jewish, Japan, PRC China, EU Succession, and more
-- **Reference data** — enum descriptions, role definitions, form mappings
+- **Reference data** — regulatory bodies, practitioner activities, the body-to-activity map, and data-protection rules (`reference-data/*.json`; the standard repository holds the full set)
 
 ## Install
 

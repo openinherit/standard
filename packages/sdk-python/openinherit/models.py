@@ -17044,6 +17044,12 @@ class DelegationType(Enum):
     supervised = 'supervised'
 
 
+class DecisionModel(Enum):
+    supported = 'supported'
+    co_decision = 'co_decision'
+    substituted = 'substituted'
+
+
 class DelegationConstraints(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -17208,6 +17214,11 @@ class ProxyAuthorisation(BaseModel):
     delegationType: DelegationType | None = Field(
         None,
         description='The type of delegation — on-behalf-of preserves principal/agent distinction, impersonation collapses it',
+    )
+    decisionModel: DecisionModel | None = Field(
+        None,
+        description='Who makes the decision this authorisation is exercised for: the owner with help (supported), the owner and the proxy jointly (co_decision), or the proxy in place of an owner who cannot decide (substituted). Absent means not recorded',
+        examples=['supported', 'substituted'],
     )
     delegationConstraints: DelegationConstraints | None = Field(
         None, description='Constraints limiting how this delegation may be exercised'
@@ -19701,7 +19712,10 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                           'valuationConfidence',
                                                           'valuationDate',
                                                           'visibility']},
- 'https://openinherit.org/v3/proxy-authorisation.json': {'conditionals': [{'if': {'required': ['delegateType'],
+ 'https://openinherit.org/v3/proxy-authorisation.json': {'conditionals': [{'if': {'required': ['activationTrigger'],
+                                                                                  'properties': {'activationTrigger': {'const': 'on_incapacity'}}},
+                                                                           'then': {'properties': {'decisionModel': {'const': 'substituted'}}}},
+                                                                          {'if': {'required': ['delegateType'],
                                                                                   'properties': {'delegateType': {'const': 'person'}}},
                                                                            'then': {'required': ['proxyPersonId']}},
                                                                           {'if': {'required': ['delegateType'],
@@ -19725,6 +19739,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                                               'consentRecord',
                                                                               'credentialRef',
                                                                               'dealerNegotiationPermitted',
+                                                                              'decisionModel',
                                                                               'delegateType',
                                                                               'delegationConstraints',
                                                                               'delegationType',
@@ -19758,6 +19773,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                                      'consentRecord',
                                                                      'credentialRef',
                                                                      'dealerNegotiationPermitted',
+                                                                     'decisionModel',
                                                                      'delegateType',
                                                                      'delegationConstraints',
                                                                      'delegationType',

@@ -797,6 +797,25 @@ const RULES: Record<string, Rule> = {
       {
         "if": {
           "required": [
+            "activationTrigger"
+          ],
+          "properties": {
+            "activationTrigger": {
+              "const": "on_incapacity"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "decisionModel": {
+              "const": "substituted"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
             "delegateType"
           ],
           "properties": {
@@ -863,6 +882,7 @@ const RULES: Record<string, Rule> = {
         "consentRecord",
         "credentialRef",
         "dealerNegotiationPermitted",
+        "decisionModel",
         "delegateType",
         "delegationConstraints",
         "delegationType",
@@ -901,6 +921,7 @@ const RULES: Record<string, Rule> = {
       "consentRecord",
       "credentialRef",
       "dealerNegotiationPermitted",
+      "decisionModel",
       "delegateType",
       "delegationConstraints",
       "delegationType",

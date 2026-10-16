@@ -30,6 +30,7 @@ Schema `$id`: `https://openinherit.org/v3/proxy-authorisation.json`
 | `revocationDate` | `string` (date) | | Date the proxy authorisation was revoked by the testator, if applicable |
 | `revocation` | `object` | | Structured revocation record — models revocation as a mechanism, not just a date |
 | `delegationType` | one of `on_behalf_of`, `impersonation`, `co_equal`, `supervised` | | The type of delegation — on-behalf-of preserves principal/agent distinction, impersonation collapses it |
+| `decisionModel` | one of `supported`, `co_decision`, `substituted` | | Who makes the decision this authorisation is exercised for: the owner with help (supported), the owner and the proxy jointly (co_decision), or the proxy in place of an owner who cannot decide (substituted). Absent means not recorded |
 | `delegationConstraints` | `object` | | Constraints limiting how this delegation may be exercised |
 | `activationTrigger` | one of `immediate`, `on_death`, `on_incapacity`, `on_court_order`, `on_date`, `on_inactivity`, `manual` | | The condition that activates this delegation |
 | `activationDate` | `string` (date) | | For on_date trigger |

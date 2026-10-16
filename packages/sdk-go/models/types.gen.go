@@ -143,6 +143,9 @@ type BeneficiaryOrganisation struct {
 
 // Codicil An amendment to an existing will. Codicils must be executed with the same formalities as the will itself
 type Codicil struct {
+	// AmendsClauseIds Clause identifiers in the original will that this codicil amends. Enables computing the effective will after amendments
+	AmendsClauseIds *[]openapi_types.UUID `json:"amendsClauseIds,omitempty"`
+
 	// Attestation A first-class attestation entity recording will execution formalities. Each attestation has its own identity — supports tracking multiple attestation events independently (original will, codicils, re-execution after marriage). Reused by estate, codicils, trusts, extensions. Supports written (E&W Wills Act s.9), oral (Islamic/customary), seal-based (Japanese inkan), kinyan-based (Jewish)
 	Attestation *Attestation `json:"attestation,omitempty"`
 
@@ -155,8 +158,17 @@ type Codicil struct {
 	// DocumentId Reference to the Document entity storing the codicil text
 	DocumentId *openapi_types.UUID `json:"documentId,omitempty"`
 
+	// EffectiveDate Date when this codicil takes effect, if different from the execution date — supports conditional or deferred codicils
+	EffectiveDate *openapi_types.Date `json:"effectiveDate,omitempty"`
+
 	// Id Unique identifier for this codicil
 	Id openapi_types.UUID `json:"id"`
+
+	// PriorDocumentId Identifier of the will or codicil that this codicil amends — links to the Document entity of the prior instrument
+	PriorDocumentId *openapi_types.UUID `json:"priorDocumentId,omitempty"`
+
+	// RevokesClauseIds Clause identifiers in the original will that this codicil revokes entirely
+	RevokesClauseIds *[]openapi_types.UUID `json:"revokesClauseIds,omitempty"`
 }
 
 // CollectionInterest Interest in a collection of assets or properties as a whole, rather than individual items
@@ -239,6 +251,9 @@ type Conformance struct {
 
 	// Level Conformance level achieved
 	Level interface{} `json:"level"`
+
+	// Profile The conformance profile the document was validated at. Must match the document's conformanceProfile ('estate' when that is absent). Absent on certificates written before profiles existed, which are read as 'estate'
+	Profile interface{} `json:"profile,omitempty"`
 
 	// ProvenanceSummary Count of entities by data provenance source
 	ProvenanceSummary *map[string]int `json:"provenanceSummary,omitempty"`
@@ -357,8 +372,77 @@ type ExternalReference_ReferenceType struct {
 	union json.RawMessage
 }
 
-// FinancialInstrument defines model for FinancialInstrument.
-type FinancialInstrument = interface{}
+// FinancialInstrument A financial instrument associated with the relationship — mahr, ketubah, lobola, prenuptial agreement, or marriage settlement
+type FinancialInstrument struct {
+	// Description Free-text description of the instrument
+	Description *string `json:"description,omitempty"`
+
+	// DocumentRef Reference to a Document.id storing the instrument
+	DocumentRef *string `json:"documentRef,omitempty"`
+
+	// InheritanceImpact How this instrument affects inheritance distribution
+	InheritanceImpact *string `json:"inheritanceImpact,omitempty"`
+
+	// InstrumentDate Date the instrument was signed or executed
+	InstrumentDate *openapi_types.Date `json:"instrumentDate,omitempty"`
+
+	// KetubahDetails Structured ketubah details. Required when the financial instrument type is KETUBAH
+	KetubahDetails *struct {
+		// BrideStatus The bride's status at the time of marriage, which determines the ikkar amount
+		BrideStatus interface{} `json:"brideStatus,omitempty"`
+
+		// Nedunya Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		Nedunya *Money `json:"nedunya,omitempty"`
+
+		// OfficiatingRabbi Name of the rabbi who officiated the ceremony
+		OfficiatingRabbi *string `json:"officiatingRabbi,omitempty"`
+
+		// PrincipalAmount Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		PrincipalAmount *Money `json:"principalAmount,omitempty"`
+
+		// TosefetAmount Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		TosefetAmount *Money `json:"tosefetAmount,omitempty"`
+
+		// WitnessPersonIds Person IDs of the ketubah witnesses. Under halacha, witnesses must be male, adult, and observant
+		WitnessPersonIds *[]openapi_types.UUID `json:"witnessPersonIds,omitempty"`
+	} `json:"ketubahDetails,omitempty"`
+
+	// LobolaDetails Structured lobola details for African customary marriages
+	LobolaDetails *struct {
+		// IncludesLivestock Whether the lobola includes livestock (cattle are traditional in many Southern African customs)
+		IncludesLivestock *bool `json:"includesLivestock,omitempty"`
+
+		// LivestockCount Number of livestock included in the lobola
+		LivestockCount *int `json:"livestockCount,omitempty"`
+
+		// NegotiatedWith The family or person with whom the lobola was negotiated
+		NegotiatedWith *string `json:"negotiatedWith,omitempty"`
+	} `json:"lobolaDetails,omitempty"`
+
+	// MaharDetails Structured mahr details. Required when the financial instrument type is MAHR
+	MaharDetails *struct {
+		// LinkedLiabilityId Reference to the Liability.id representing the deferred mahr as an estate debt
+		LinkedLiabilityId *openapi_types.UUID `json:"linkedLiabilityId,omitempty"`
+
+		// MaharType Whether the mahr is prompt, deferred, or a combination
+		MaharType interface{} `json:"maharType,omitempty"`
+
+		// RecipientPersonId Reference to the Person.id of the mahr recipient (the wife)
+		RecipientPersonId *openapi_types.UUID `json:"recipientPersonId,omitempty"`
+
+		// RecipientPersonIdDisplay Human-readable display name for the referenced recipient person
+		RecipientPersonIdDisplay *string `json:"recipientPersonIdDisplay,omitempty"`
+	} `json:"maharDetails,omitempty"`
+
+	// Status Payment status of this financial instrument
+	Status interface{} `json:"status,omitempty"`
+
+	// Type The type of financial instrument
+	Type interface{} `json:"type"`
+
+	// Value Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+	Value *Money `json:"value,omitempty"`
+}
 
 // ForcedHeirship Forced heirship regime details. Many civil law jurisdictions reserve a portion of the estate for certain heirs regardless of the will
 type ForcedHeirship struct {
@@ -414,6 +498,9 @@ type ImportSource struct {
 	SystemName string `json:"systemName"`
 }
 
+// InheritDocument Root entry point for an INHERIT v3 estate data interchange document. Contains a single estate and arrays of all entity types
+type InheritDocument = Schema
+
 // InheritanceResponse The beneficiary's response to the inheritance — acceptance, renunciation, or qualified acceptance. In civil law jurisdictions, acceptance may be required within a time limit
 type InheritanceResponse struct {
 	// CourtFiled Whether the response was filed with a court (required in some jurisdictions)
@@ -445,6 +532,12 @@ type IntegrityConstraint struct {
 
 	// Field A path expression for referential integrity constraints. Supports camelCase field paths and x-inherit-* extension block paths
 	Field IntegrityPath `json:"field"`
+
+	// Kind The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops
+	Kind interface{} `json:"kind,omitempty"`
+
+	// MaxDepth For kind 'acyclic': the maximum number of hops a containment chain may have before it is rejected as unreasonably deep. A chain longer than this fails with INHERIT_DEPTH_EXCEEDED even if it is acyclic
+	MaxDepth *int `json:"maxDepth,omitempty"`
 
 	// References A path expression for referential integrity constraints. Supports camelCase field paths and x-inherit-* extension block paths
 	References IntegrityPath `json:"references"`
@@ -628,6 +721,17 @@ type PostDeathAction struct {
 
 	// Type The type of post-death action
 	Type interface{} `json:"type"`
+
+	// VariationDetails Details of a deed of variation — who redirected what to whom
+	VariationDetails *struct {
+		AllBeneficiariesConsented *bool               `json:"allBeneficiariesConsented,omitempty"`
+		FromBeneficiaryId         *openapi_types.UUID `json:"fromBeneficiaryId,omitempty"`
+		Reason                    interface{}         `json:"reason,omitempty"`
+
+		// RedirectedAmount Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		RedirectedAmount *Money              `json:"redirectedAmount,omitempty"`
+		ToBeneficiaryId  *openapi_types.UUID `json:"toBeneficiaryId,omitempty"`
+	} `json:"variationDetails,omitempty"`
 }
 
 // ProbateGrant A grant of probate or letters of administration issued by a court. Without a grant, executors have no legal authority to administer the estate
@@ -988,6 +1092,9 @@ type TrustBeneficiary struct {
 	// ClassDefinition Natural-language description of the beneficiary class
 	ClassDefinition *string `json:"classDefinition,omitempty"`
 
+	// GenerationLevel Generational distance from the testator. 1 = child, 2 = grandchild, 3+ = great-grandchild
+	GenerationLevel *int `json:"generationLevel,omitempty"`
+
 	// InterestType The nature of this beneficiary's interest in the trust
 	InterestType interface{} `json:"interestType"`
 
@@ -1209,8 +1316,612 @@ type AiProvenance_Model struct {
 	union json.RawMessage
 }
 
-// Asset defines model for asset.
-type Asset = interface{}
+// ArchiveTimestampChain The renewal history of an RFC 4998 Evidence Record Syntax (ERS) evidence record for a signed or attested document, so that it can still be verified after the hash or signature algorithms it was created with are no longer secure. Records the shape of the chain: the hash of the protected document, then every archive timestamp in time order — the initial one, each Timestamp Renewal (same hash algorithm, new timestamp) and each Hash-Tree Renewal (new hash algorithm, starts a new chain). Cryptographic verification of the evidence record itself is done outside the schema; this object carries what that verification and a renewal schedule need. Algorithm ids are the ids in reference-data/algorithm-lifecycle-registry.json
+type ArchiveTimestampChain struct {
+	// ArchiveTimestamps Every archive timestamp, ascending by time (RFC 4998 section 5.1). The first is the initial archive timestamp (sequence 0, renewalType initial); each later one is a renewal. Only the newest one's algorithms need to remain secure for the record to verify. Order and the initial-first rule are checked by scripts/check-archive-timestamp-chain.mjs, since JSON Schema cannot compare one item with the next
+	ArchiveTimestamps []ArchiveTimestamp `json:"archiveTimestamps"`
+
+	// EvidenceRecordContentUrl Where the DER-encoded RFC 4998 EvidenceRecord is held
+	EvidenceRecordContentUrl *string `json:"evidenceRecordContentUrl,omitempty"`
+
+	// EvidenceRecordFormat The evidence record syntax the chain follows. Only RFC 4998 Evidence Record Syntax is defined
+	EvidenceRecordFormat interface{} `json:"evidenceRecordFormat"`
+
+	// Notes Free-text notes about the chain, such as the archive service that maintains it
+	Notes *string `json:"notes,omitempty"`
+
+	// ProtectedObjectDigest A hash value with the algorithm that produced it, as lowercase hexadecimal of the length that algorithm produces. The algorithm is one of $defs/digestAlgorithmId
+	ProtectedObjectDigest Digest `json:"protectedObjectDigest"`
+}
+
+// ArchiveTimestamp One RFC 4998 ArchiveTimeStamp: an RFC 3161 time-stamp token over a hash tree that covers the protected object or the previous archive timestamps
+type ArchiveTimestamp struct {
+	// CoveredDigest A hash value with the algorithm that produced it, as lowercase hexadecimal of the length that algorithm produces. The algorithm is one of $defs/digestAlgorithmId
+	CoveredDigest Digest `json:"coveredDigest"`
+
+	// DigestAlgorithm A hash algorithm id from reference-data/algorithm-lifecycle-registry.json (kind: digest)
+	DigestAlgorithm DigestAlgorithmId `json:"digestAlgorithm"`
+
+	// RenewalType initial: the first archive timestamp over the protected object. timestamp_renewal: covers the previous timestamp with the same hash algorithm, added to the current chain (RFC 4998 section 5.2). hash_tree_renewal: re-hashes the object and all previous chains, normally with a stronger hash algorithm, and starts a new chain
+	RenewalType interface{} `json:"renewalType"`
+
+	// Sequence Position in the chain, starting at 0 for the initial archive timestamp and increasing by one
+	Sequence int `json:"sequence"`
+
+	// SignatureAlgorithm A signature algorithm id from reference-data/algorithm-lifecycle-registry.json (kind: signature)
+	SignatureAlgorithm SignatureAlgorithmId `json:"signatureAlgorithm"`
+
+	// Timestamp The time-stamp token's generation time (RFC 3161 genTime)
+	Timestamp time.Time `json:"timestamp"`
+
+	// TimestampAuthorityName Name of the time-stamping authority that issued the token
+	TimestampAuthorityName *string `json:"timestampAuthorityName,omitempty"`
+
+	// TimestampTokenRef Reference to the RFC 3161 time-stamp token, such as a URI or URN in the archive
+	TimestampTokenRef string `json:"timestampTokenRef"`
+}
+
+// Asset A non-property asset: financial accounts, personal property, vehicles, digital assets, business interests, Islamic finance instruments, etc
+type Asset struct {
+	// AccessInstructions Instructions for accessing this asset after death — steps, locations, holders. No secrets in the document, just instructions for finding them. Available for all asset categories (digital: crypto wallets, social media; physical: safes, storage units)
+	AccessInstructions *struct {
+		AccessType      *string             `json:"accessType,omitempty"`
+		LastVerified    *openapi_types.Date `json:"lastVerified,omitempty"`
+		Memorialisation *struct {
+			Instructions *string     `json:"instructions,omitempty"`
+			Preference   interface{} `json:"preference,omitempty"`
+		} `json:"memorialisation,omitempty"`
+		Platform *string `json:"platform,omitempty"`
+
+		// RequiredRole The estate role required to follow these instructions
+		RequiredRole *string `json:"requiredRole,omitempty"`
+		Steps        *[]struct {
+			Description    *string             `json:"description,omitempty"`
+			HolderPersonId *openapi_types.UUID `json:"holderPersonId,omitempty"`
+			Location       *string             `json:"location,omitempty"`
+			Method         string              `json:"method"`
+			Step           int                 `json:"step"`
+		} `json:"steps,omitempty"`
+		VerifiedBy *string `json:"verifiedBy,omitempty"`
+
+		// Visibility Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records
+		Visibility *Visibility `json:"visibility,omitempty"`
+	} `json:"accessInstructions,omitempty"`
+
+	// AcquisitionType How this asset was acquired. Determines succession rules in Indian and other customary systems
+	AcquisitionType interface{} `json:"acquisitionType,omitempty"`
+
+	// ApplicableLaw A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
+	ApplicableLaw *Jurisdiction `json:"applicableLaw,omitempty"`
+
+	// AssetCollectionId Reference to the AssetCollection.id this asset belongs to. An asset may belong to at most one collection. If set, this asset's value contributes to the collection's total
+	AssetCollectionId *openapi_types.UUID `json:"assetCollectionId,omitempty"`
+
+	// BeneficiaryDesignation Named beneficiary designation for this asset. Assets with beneficiary designations pass outside the probate estate — the will does not control their distribution
+	BeneficiaryDesignation *struct {
+		// ContingentBeneficiaryPersonIds Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)
+		ContingentBeneficiaryPersonIds *[]openapi_types.UUID `json:"contingentBeneficiaryPersonIds,omitempty"`
+
+		// DesignationType The type of beneficiary designation
+		DesignationType interface{} `json:"designationType,omitempty"`
+
+		// LinkedNonprobateTransferId Reference to the NonprobateTransfer entity that tracks this designation
+		LinkedNonprobateTransferId *openapi_types.UUID `json:"linkedNonprobateTransferId,omitempty"`
+
+		// PrimaryBeneficiaryPersonIds Person IDs of the primary beneficiaries
+		PrimaryBeneficiaryPersonIds *[]openapi_types.UUID `json:"primaryBeneficiaryPersonIds,omitempty"`
+	} `json:"beneficiaryDesignation,omitempty"`
+
+	// Brand The manufacturer or brand name. Accepts a plain string (backwards compatible) or a structured object with Wikidata linkage for rich product data. AI agents should use this as a primary search dimension when finding comparables
+	Brand *Asset_Brand `json:"brand,omitempty"`
+
+	// Category Top-level category from the INHERIT Product Taxonomy. Use the `subcategory` field for finer classification. See `reference-data/category-guidance.json` for valid subcategories, recommended identifiers, and photography guidance per category
+	Category interface{} `json:"category"`
+
+	// CoOwnership Co-ownership details for assets held jointly or in common with others. Determines whether the asset passes by survivorship or under the will
+	CoOwnership *struct {
+		// CoOwnerPersonIds Person IDs of co-owners
+		CoOwnerPersonIds *[]openapi_types.UUID `json:"coOwnerPersonIds,omitempty"`
+
+		// OwnershipPercentage The testator's ownership percentage
+		OwnershipPercentage *float32 `json:"ownershipPercentage,omitempty"`
+
+		// OwnershipType How ownership is structured between co-owners
+		OwnershipType interface{} `json:"ownershipType,omitempty"`
+
+		// SeveranceDate Date joint tenancy was severed to become tenants in common (if applicable)
+		SeveranceDate *openapi_types.Date `json:"severanceDate,omitempty"`
+	} `json:"coOwnership,omitempty"`
+
+	// Comments Discussion comments on this entity
+	Comments *[]struct {
+		// AuthorPersonId Person.id of the comment author
+		AuthorPersonId *openapi_types.UUID `json:"authorPersonId,omitempty"`
+
+		// AuthorPersonIdDisplay Human-readable display name for the referenced author person
+		AuthorPersonIdDisplay *string `json:"authorPersonIdDisplay,omitempty"`
+
+		// Content Comment text
+		Content string `json:"content"`
+
+		// CreatedAt When the comment was created
+		CreatedAt time.Time `json:"createdAt"`
+
+		// Id Unique identifier for this comment
+		Id openapi_types.UUID `json:"id"`
+
+		// Visibility Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records
+		Visibility *Visibility `json:"visibility,omitempty"`
+	} `json:"comments,omitempty"`
+
+	// CommunalAuthority The communal or family authority whose approval is required to dispose of this asset
+	CommunalAuthority *struct {
+		// ApprovalRequired Whether approval from this authority is legally required before disposal
+		ApprovalRequired *bool `json:"approvalRequired,omitempty"`
+
+		// AuthorityName Name of the specific authority or person
+		AuthorityName *string `json:"authorityName,omitempty"`
+
+		// AuthorityType Category of communal authority
+		AuthorityType interface{} `json:"authorityType,omitempty"`
+
+		// Jurisdiction A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
+		Jurisdiction *Jurisdiction `json:"jurisdiction,omitempty"`
+	} `json:"communalAuthority,omitempty"`
+
+	// ComparableSearchProfile Structured search instructions for comparable-finding agents. Acts as agent memory — the item teaches future agents how to find its peers
+	ComparableSearchProfile *struct {
+		// ExcludePlatforms Platforms explicitly excluded
+		ExcludePlatforms *[]string `json:"excludePlatforms,omitempty"`
+
+		// Filters Key-value filters to narrow results. Agents map to platform-specific parameters
+		Filters *map[string]string `json:"filters,omitempty"`
+
+		// LastSearchedAt When an agent last executed this search profile
+		LastSearchedAt *time.Time `json:"lastSearchedAt,omitempty"`
+
+		// Platforms Marketplaces and platforms to search
+		Platforms *[]string `json:"platforms,omitempty"`
+
+		// SearchFrequency How often this item should be re-searched
+		SearchFrequency interface{} `json:"searchFrequency,omitempty"`
+
+		// SearchQuery Natural-language query an agent should use
+		SearchQuery *string `json:"searchQuery,omitempty"`
+	} `json:"comparableSearchProfile,omitempty"`
+
+	// Condition Physical condition of the asset. Affects resale value — dealers use this to price items. Pair with conditionSystem and conditionGrade for domain-specific grading. Use 'not_applicable' for financial assets where condition is meaningless
+	Condition interface{} `json:"condition,omitempty"`
+
+	// ConditionGrade The specific grade within the conditionSystem. Meaningful only when conditionSystem is set
+	ConditionGrade *string `json:"conditionGrade,omitempty"`
+
+	// ConditionStandard URI pointing to the official documentation of the grading standard used. Enables tools to display the correct grading scale and interpret the conditionGrade value
+	ConditionStandard *string `json:"conditionStandard,omitempty"`
+
+	// ConditionSystem The grading system used for the conditionGrade value. Allows domain-specific condition assessment alongside the generic condition field
+	ConditionSystem *Asset_ConditionSystem `json:"conditionSystem,omitempty"`
+
+	// ContainedInAssetId Reference to another Asset.id if this asset is physically contained within or logically part of another asset. Enables hierarchical asset nesting — e.g. a watch inside a safe, tools inside a toolbox
+	ContainedInAssetId *openapi_types.UUID `json:"containedInAssetId,omitempty"`
+
+	// CulturalDisposition Cultural, religious, and regulatory constraints on how an asset or property may be disposed of. Covers sacred status, disposal restrictions, export controls, and whether the item can be bequeathed
+	CulturalDisposition *CulturalDisposition `json:"culturalDisposition,omitempty"`
+
+	// Custodian Third party currently holding this asset — a bank (safe deposit), storage facility (bonded wine), repairer (watch at jeweller), gallery (art on loan), or institution. The executor needs to know who to contact
+	Custodian *struct {
+		// ContactEmail Email address for the custodian
+		ContactEmail *openapi_types.Email `json:"contactEmail,omitempty"`
+
+		// ContactPhone Phone number for the custodian
+		ContactPhone *string `json:"contactPhone,omitempty"`
+
+		// Name Name of the person or organisation holding the asset
+		Name *string `json:"name,omitempty"`
+
+		// Reference Account or reference number with the custodian
+		Reference *string `json:"reference,omitempty"`
+
+		// Relationship The nature of the custodial relationship
+		Relationship *string `json:"relationship,omitempty"`
+	} `json:"custodian,omitempty"`
+
+	// DataProvenance How this specific entity's data was captured. Overrides the document-level default if set
+	DataProvenance interface{} `json:"dataProvenance,omitempty"`
+
+	// Description Structured description of the asset — what it is, its significance, and key details a dealer or executor would need. Distinct from 'notes' which is free-form
+	Description *string `json:"description,omitempty"`
+
+	// DigitalAccessConsent Digital access consent under RUFADAA or equivalent legislation. Governs whether executors and fiduciaries can access the deceased's digital accounts and assets
+	DigitalAccessConsent *struct {
+		// ConsentGiven Whether the account holder has given consent for fiduciary access
+		ConsentGiven *bool `json:"consentGiven,omitempty"`
+
+		// DesignatedRecipientPersonId Reference to the Person.id designated to receive access to this digital asset
+		DesignatedRecipientPersonId *openapi_types.UUID `json:"designatedRecipientPersonId,omitempty"`
+
+		// DesignatedRecipientPersonIdDisplay Human-readable display name for the referenced designated recipient person
+		DesignatedRecipientPersonIdDisplay *string `json:"designatedRecipientPersonIdDisplay,omitempty"`
+
+		// OnlineToolDirective Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA
+		OnlineToolDirective *bool `json:"onlineToolDirective,omitempty"`
+
+		// Scope The scope of access granted to fiduciaries
+		Scope interface{} `json:"scope,omitempty"`
+	} `json:"digitalAccessConsent,omitempty"`
+
+	// EstimatedValue Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+	EstimatedValue *Money `json:"estimatedValue,omitempty"`
+
+	// ExternalLinks Links to this asset in external databases, marketplaces, and registries. The universal connector — any external system can be referenced without a schema change. Use identifiers for formal identifier schemes (ISBN, VIN, NINO); use externalLinks for platform-specific references, product pages, and database entries
+	ExternalLinks *[]struct {
+		// Id The platform-specific identifier for this asset
+		Id string `json:"id"`
+
+		// Label Human-readable label for display. Optional — defaults to the system name
+		Label *string `json:"label,omitempty"`
+
+		// RetrievedAt Timestamp when this link was last verified or data was last retrieved
+		RetrievedAt *time.Time `json:"retrievedAt,omitempty"`
+
+		// System The external system or platform name. Use lowercase, no spaces
+		System string `json:"system"`
+
+		// Url Direct URL to the asset's page on the external platform. Optional — some systems are API-only
+		Url *string `json:"url,omitempty"`
+	} `json:"externalLinks,omitempty"`
+
+	// FieldProvenance Per-field provenance records — how each field's value was obtained
+	FieldProvenance *[]FieldProvenance `json:"fieldProvenance,omitempty"`
+
+	// Id Unique identifier for this asset within the INHERIT document
+	Id openapi_types.UUID `json:"id"`
+
+	// Identifiers External identifiers — serial numbers, account numbers, policy references, registration numbers, etc
+	Identifiers *[]Identifier `json:"identifiers,omitempty"`
+
+	// Images Photographs, videos, and document scans. Vision-capable AI agents use these to identify items, assess condition, and find visual matches on marketplaces. Use viewType from media.json to categorize each media item
+	Images *[]Media `json:"images,omitempty"`
+
+	// InNegativeEquity True when the active charges secured against this asset exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall
+	InNegativeEquity *bool `json:"inNegativeEquity,omitempty"`
+
+	// IncludedDocuments Original documents, certificates, and packaging elements present with this item. Affects value significantly across many categories. Cross-category: watches, vehicles, books, art, and collectibles share some document types
+	IncludedDocuments *[]Asset_IncludedDocuments_Item `json:"includedDocuments,omitempty"`
+
+	// Insurance Insurance coverage for this asset. The executor needs to know what's insured, by whom, and whether cover continues after death
+	Insurance *struct {
+		// InsuredValue Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		InsuredValue *Money `json:"insuredValue,omitempty"`
+
+		// Notes Additional insurance notes
+		Notes *string `json:"notes,omitempty"`
+
+		// PolicyReference Policy reference number
+		PolicyReference *string `json:"policyReference,omitempty"`
+
+		// Provider Name of the insurance provider
+		Provider *string `json:"provider,omitempty"`
+
+		// RenewalDate Next renewal date. Important — cover may lapse if not renewed after death
+		RenewalDate *openapi_types.Date `json:"renewalDate,omitempty"`
+	} `json:"insurance,omitempty"`
+
+	// InsuranceCover Insurance details for this item. Tracks which policy covers it, the agreed value, and when cover was last confirmed. Essential for executors who need to claim on the correct policy
+	InsuranceCover *struct {
+		// AgreedValue Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		AgreedValue *Money `json:"agreedValue,omitempty"`
+
+		// CoverConfirmedAt When the insurance cover for this item was last confirmed or reviewed
+		CoverConfirmedAt *openapi_types.Date `json:"coverConfirmedAt,omitempty"`
+
+		// Insurer Name of the insurance company
+		Insurer *string `json:"insurer,omitempty"`
+
+		// PolicyNumber The insurance policy number
+		PolicyNumber *string `json:"policyNumber,omitempty"`
+
+		// PolicyType The type of insurance policy covering this item
+		PolicyType interface{} `json:"policyType,omitempty"`
+	} `json:"insuranceCover,omitempty"`
+
+	// LastVerifiedAt When this entity's data was last verified by a human or authoritative source. Agents use this to decide whether to trust existing values or re-derive them
+	LastVerifiedAt *time.Time `json:"lastVerifiedAt,omitempty"`
+
+	// Listings Active or historical listings of this item for sale on external channels. Tracks where the item is listed, its status, and sale outcome. Application-level data — not part of the estate interchange but carried alongside it for catalogue and dealer workflows
+	Listings *[]struct {
+		// AskingPrice Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		AskingPrice *Money `json:"askingPrice,omitempty"`
+
+		// Channel The sales channel where this item is listed
+		Channel interface{} `json:"channel"`
+
+		// ChannelName Human-readable name of the channel, especially when channel is other
+		ChannelName *string `json:"channelName,omitempty"`
+
+		// ListedAt When this listing was created or last activated
+		ListedAt *time.Time `json:"listedAt,omitempty"`
+
+		// ListingId The platform-specific listing identifier
+		ListingId *string `json:"listingId,omitempty"`
+
+		// ListingUrl Direct URL to the listing on the external platform
+		ListingUrl *string `json:"listingUrl,omitempty"`
+
+		// SoldAt When the item was sold via this listing, if applicable
+		SoldAt *time.Time `json:"soldAt,omitempty"`
+
+		// SoldPrice Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		SoldPrice *Money `json:"soldPrice,omitempty"`
+
+		// Status Current status of this listing
+		Status interface{} `json:"status"`
+	} `json:"listings,omitempty"`
+
+	// Location Where this asset is physically stored or held — a bank, safe, property, or institution
+	Location *string `json:"location,omitempty"`
+
+	// MergedInto Records that this entity was merged into another entity — the target entity is the canonical version
+	MergedInto *struct {
+		// EntityId ID of the target entity
+		EntityId *openapi_types.UUID `json:"entityId,omitempty"`
+
+		// EntityType Type of the target entity
+		EntityType interface{} `json:"entityType,omitempty"`
+
+		// MergedAt When the merge occurred
+		MergedAt *time.Time `json:"mergedAt,omitempty"`
+
+		// Reason Why the entities were merged
+		Reason *string `json:"reason,omitempty"`
+	} `json:"mergedInto,omitempty"`
+
+	// MobilityType Whether this asset is classified as immoveable or moveable property. Affects which conflict-of-laws rules apply in cross-border estates
+	MobilityType interface{} `json:"mobilityType,omitempty"`
+
+	// Model The specific model, product line, or range name. Combined with brand and identifiers, this is the primary key for marketplace search. AI agents construct search queries from brand + model + subcategory
+	Model *string `json:"model,omitempty"`
+
+	// Name Display name for this asset. Should be specific enough to identify the item during probate
+	Name string `json:"name"`
+
+	// NetEquity Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+	NetEquity *Money `json:"netEquity,omitempty"`
+
+	// Notes Free-text notes about this asset. Use for provenance, sentimental value, special handling instructions, or anything not captured by structured fields
+	Notes *string `json:"notes,omitempty"`
+
+	// OriginalPackaging Whether original packaging, documentation, and accessories are present. Affects value by 20–40% across watches, model railways, jewellery, and many other domains
+	OriginalPackaging interface{} `json:"originalPackaging,omitempty"`
+
+	// OwnerIntent The owner's current intention for this item. Absent means keeping (the default). Used by catalogue applications to track whether items are being actively managed, offered for sale, or allocated to specific people
+	OwnerIntent interface{} `json:"ownerIntent,omitempty"`
+
+	// OwnershipEvidence The type of evidence available to prove ownership of this asset
+	OwnershipEvidence interface{} `json:"ownershipEvidence,omitempty"`
+
+	// PassesOutsideEstate Whether this asset passes outside the probate estate. Beneficiary designations, POD accounts, and jointly held assets typically bypass the will
+	PassesOutsideEstate *bool `json:"passesOutsideEstate,omitempty"`
+
+	// PossessionStatus Whether the asset was held at death, is receivable post-death, or is contingent on a future event
+	PossessionStatus interface{} `json:"possessionStatus,omitempty"`
+
+	// ProductPage URI pointing to the manufacturer's or retailer's official product page for this exact item. Distinct from storageRef (document storage) and externalLinks (database references). Enables direct linking to manufacturer specifications, manuals, and warranty information
+	ProductPage *string `json:"productPage,omitempty"`
+
+	// ProfessionalValuation Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+	ProfessionalValuation *Money `json:"professionalValuation,omitempty"`
+
+	// PropertyId Reference to a Property.id if this asset is located at a specific property in the estate
+	PropertyId *openapi_types.UUID `json:"propertyId,omitempty"`
+
+	// Provenance Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
+	Provenance *Provenance `json:"provenance,omitempty"`
+
+	// ProvenanceChain Prior ownership records — establishes the chain of provenance for the asset. Critical for art, antiques, and high-value collectibles
+	ProvenanceChain *[]struct {
+		// AcquisitionMethod How the owner acquired the asset
+		AcquisitionMethod interface{} `json:"acquisitionMethod,omitempty"`
+
+		// Description Description of this provenance record
+		Description string `json:"description"`
+
+		// EvidenceUrl Link to supporting evidence (sale record, catalogue entry, etc.)
+		EvidenceUrl *string `json:"evidenceUrl,omitempty"`
+
+		// FromDate Approximate start date of this ownership period
+		FromDate *openapi_types.Date `json:"fromDate,omitempty"`
+
+		// OwnerName Name of the previous owner (may be anonymised)
+		OwnerName *string `json:"ownerName,omitempty"`
+
+		// Source Where this provenance information came from
+		Source *string `json:"source,omitempty"`
+
+		// ToDate Approximate end date of this ownership period
+		ToDate *openapi_types.Date `json:"toDate,omitempty"`
+	} `json:"provenanceChain,omitempty"`
+
+	// PurchaseDate Date the asset was acquired by the current owner. Used for capital gains tax calculations, insurance claims, and provenance. Maps to Schema.org purchaseDate
+	PurchaseDate *openapi_types.Date `json:"purchaseDate,omitempty"`
+
+	// PurchasedFrom Where the asset was purchased or acquired from. Collectors track provenance — valuable for dealers and for establishing authenticity
+	PurchasedFrom *string `json:"purchasedFrom,omitempty"`
+
+	// Quantity Number of items if this represents multiple identical or similar items
+	Quantity *int `json:"quantity,omitempty"`
+
+	// RegistrationStatus Whether ownership of this asset is formally registered or documented
+	RegistrationStatus interface{} `json:"registrationStatus,omitempty"`
+
+	// SearchTerms Keywords for marketplace search — AI-generated or human-curated. Memoization: once derived, cached here so subsequent agents reuse them instantly rather than re-deriving
+	SearchTerms *[]string `json:"searchTerms,omitempty"`
+
+	// ServiceHistory Service, maintenance, and restoration records. Critical for watches (service intervals affect value), vehicles (MOT history, restoration), clocks, and musical instruments
+	ServiceHistory *[]ServiceRecord `json:"serviceHistory,omitempty"`
+
+	// ShippingClass How this item can be transported for selling or verification. Determines which logistics path the Deal Comparison uses
+	ShippingClass interface{} `json:"shippingClass,omitempty"`
+
+	// Significance Cultural, religious, sentimental, or professional significance beyond monetary value
+	Significance *struct {
+		Description *string `json:"description,omitempty"`
+
+		// RestrictionOnDisposal Whether and how the testator has restricted disposal of this asset
+		RestrictionOnDisposal *struct {
+			Exists *bool   `json:"exists,omitempty"`
+			Nature *string `json:"nature,omitempty"`
+		} `json:"restrictionOnDisposal,omitempty"`
+		Type interface{} `json:"type,omitempty"`
+	} `json:"significance,omitempty"`
+
+	// SpaceId Reference to a Space.id representing where this item is physically stored. Critical for collections spread across multiple properties or countries — affects probate jurisdiction and dealer collection logistics
+	SpaceId *openapi_types.UUID `json:"spaceId,omitempty"`
+
+	// SpaceIdDisplay Human-readable display name for the referenced storage location
+	SpaceIdDisplay *string `json:"spaceIdDisplay,omitempty"`
+
+	// SplitFrom Provenance record when this entity was created by splitting a larger entity. The original entity is typically archived after the split
+	SplitFrom *struct {
+		// EntityId The id of the original entity that was split
+		EntityId openapi_types.UUID `json:"entityId"`
+
+		// EntityType The type of entity that was split
+		EntityType interface{} `json:"entityType"`
+
+		// Reason Why the split was requested
+		Reason *string `json:"reason,omitempty"`
+
+		// SplitAt When the split occurred
+		SplitAt time.Time `json:"splitAt"`
+	} `json:"splitFrom,omitempty"`
+
+	// Subcategory Finer classification within the top-level category. Values are defined in reference-data/category-guidance.json but the field is freeform to accommodate jurisdiction-specific asset types. Examples: financial → 'pension', collectibles → 'model_railways', vehicle → 'classic_vehicle'
+	Subcategory *string `json:"subcategory,omitempty"`
+
+	// SuccessionRegime The succession regime governing this specific asset. Overrides estate.defaultSuccessionRegime when present
+	SuccessionRegime *struct {
+		// Binding Whether this succession regime is legally binding
+		Binding *bool `json:"binding,omitempty"`
+
+		// DeterminedBy How the governing law was determined
+		DeterminedBy interface{} `json:"determinedBy,omitempty"`
+
+		// Extensions INHERIT extension IDs that apply to this asset's succession
+		Extensions *[]string `json:"extensions,omitempty"`
+
+		// GoverningLaw The law governing succession for this asset
+		GoverningLaw *struct {
+			// Jurisdiction A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
+			Jurisdiction *Jurisdiction `json:"jurisdiction,omitempty"`
+
+			// LegalTradition Which legal tradition applies
+			LegalTradition interface{} `json:"legalTradition,omitempty"`
+
+			// Section Specific section of the statute
+			Section *string `json:"section,omitempty"`
+
+			// Statute Name of the governing statute
+			Statute *string `json:"statute,omitempty"`
+		} `json:"governingLaw,omitempty"`
+
+		// Notes Additional context about the succession regime
+		Notes *string `json:"notes,omitempty"`
+	} `json:"successionRegime,omitempty"`
+
+	// SuggestedSubcategory AI-suggested subcategory refinement, kept separate from the human-set subcategory. Accepted when the user confirms. Provenance: always AI-generated
+	SuggestedSubcategory *string `json:"suggestedSubcategory,omitempty"`
+
+	// TaxReliefEligibility Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)
+	TaxReliefEligibility *struct {
+		// Conditions Conditions for maintaining eligibility
+		Conditions *string `json:"conditions,omitempty"`
+		Eligible   *bool   `json:"eligible,omitempty"`
+
+		// Jurisdiction A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
+		Jurisdiction *Jurisdiction `json:"jurisdiction,omitempty"`
+
+		// Percentage Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
+		Percentage *int `json:"percentage,omitempty"`
+
+		// ReliefType The type of tax relief claimed
+		ReliefType interface{} `json:"reliefType,omitempty"`
+		Statute    *string     `json:"statute,omitempty"`
+	} `json:"taxReliefEligibility,omitempty"`
+
+	// TaxTreatment Per-asset tax treatment — how this asset is classified for tax purposes in a specific jurisdiction
+	TaxTreatment *struct {
+		AssetType  interface{} `json:"assetType,omitempty"`
+		Exemptions *[]string   `json:"exemptions,omitempty"`
+
+		// Jurisdiction A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
+		Jurisdiction  *Jurisdiction `json:"jurisdiction,omitempty"`
+		ReliefClaimed *[]string     `json:"reliefClaimed,omitempty"`
+	} `json:"taxTreatment,omitempty"`
+
+	// Urgency How urgently this asset needs attention after the testator's death. Drives the executor's priority list
+	Urgency interface{} `json:"urgency,omitempty"`
+
+	// UrgencyReason Explanation of why this asset is urgent. Particularly important for 'immediate' items
+	UrgencyReason *string `json:"urgencyReason,omitempty"`
+
+	// ValuationConfidence Level of confidence in the stated valuation
+	ValuationConfidence interface{} `json:"valuationConfidence,omitempty"`
+
+	// ValuationDate Date of the most recent valuation
+	ValuationDate *openapi_types.Date `json:"valuationDate,omitempty"`
+
+	// ValuationReliability Numeric reliability score (0-100) for the current valuation. Computed from: recency, method, corroborating comparables, variance between estimates. Companion to the categorical valuationConfidence enum — the enum captures source, this number captures trustworthiness now. Agents use this to prioritise which assets need re-valuation
+	ValuationReliability *int `json:"valuationReliability,omitempty"`
+
+	// VerifiedBy Who or what verified this entity — a person's name, a tool, or 'owner'
+	VerifiedBy *string `json:"verifiedBy,omitempty"`
+
+	// Visibility Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records
+	Visibility *Visibility `json:"visibility,omitempty"`
+}
+
+// AssetBrand0 defines model for .
+type AssetBrand0 = string
+
+// AssetBrand1 defines model for .
+type AssetBrand1 struct {
+	// Name Brand or manufacturer name
+	Name string `json:"name"`
+
+	// Website Official brand website
+	Website *string `json:"website,omitempty"`
+
+	// WikidataId Wikidata Q-number for this brand. Resolves to structured data via the Wikidata API — founding year, country, parent company, logo, official website, product categories
+	WikidataId *string `json:"wikidataId,omitempty"`
+}
+
+// Asset_Brand The manufacturer or brand name. Accepts a plain string (backwards compatible) or a structured object with Wikidata linkage for rich product data. AI agents should use this as a primary search dimension when finding comparables
+type Asset_Brand struct {
+	union json.RawMessage
+}
+
+// AssetConditionSystem0 defines model for .
+type AssetConditionSystem0 = interface{}
+
+// AssetConditionSystem1 defines model for .
+type AssetConditionSystem1 = string
+
+// Asset_ConditionSystem The grading system used for the conditionGrade value. Allows domain-specific condition assessment alongside the generic condition field
+type Asset_ConditionSystem struct {
+	union json.RawMessage
+}
+
+// AssetIncludedDocuments0 defines model for .
+type AssetIncludedDocuments0 = interface{}
+
+// AssetIncludedDocuments1 defines model for .
+type AssetIncludedDocuments1 = string
+
+// Asset_IncludedDocuments_Item defines model for asset.includedDocuments.Item.
+type Asset_IncludedDocuments_Item struct {
+	union json.RawMessage
+}
 
 // AssetCollection A named group of related assets — e.g. a model railway collection, vinyl record library, or art portfolio. Lets families and dealers understand which items belong together and should be considered as a set
 type AssetCollection struct {
@@ -1486,8 +2197,14 @@ type AssetInterest1 = interface{}
 
 // Attestation A first-class attestation entity recording will execution formalities. Each attestation has its own identity — supports tracking multiple attestation events independently (original will, codicils, re-execution after marriage). Reused by estate, codicils, trusts, extensions. Supports written (E&W Wills Act s.9), oral (Islamic/customary), seal-based (Japanese inkan), kinyan-based (Jewish)
 type Attestation struct {
-	// AttestationDate Date the will or document was executed (signed and witnessed)
-	AttestationDate *openapi_types.Date `json:"attestationDate,omitempty"`
+	// AllPagesSigned Whether all pages have been signed by the testator and all witnesses
+	AllPagesSigned *bool `json:"allPagesSigned,omitempty"`
+
+	// ArchiveTimestampChain The renewal history of an RFC 4998 Evidence Record Syntax (ERS) evidence record for a signed or attested document, so that it can still be verified after the hash or signature algorithms it was created with are no longer secure. Records the shape of the chain: the hash of the protected document, then every archive timestamp in time order — the initial one, each Timestamp Renewal (same hash algorithm, new timestamp) and each Hash-Tree Renewal (new hash algorithm, starts a new chain). Cryptographic verification of the evidence record itself is done outside the schema; this object carries what that verification and a renewal schedule need. Algorithm ids are the ids in reference-data/algorithm-lifecycle-registry.json
+	ArchiveTimestampChain *ArchiveTimestampChain `json:"archiveTimestampChain,omitempty"`
+
+	// AttestationDate Date and time the document was executed. Use T00:00:00Z for date-only precision. Time precision recommended for video-witnessed, RON, or electronically signed documents
+	AttestationDate *time.Time `json:"attestationDate,omitempty"`
 
 	// AttestationType The form of attestation used
 	AttestationType interface{} `json:"attestationType,omitempty"`
@@ -1515,6 +2232,15 @@ type Attestation struct {
 
 	// Notes Additional notes on attestation — unusual circumstances, concerns about formalities, or cultural context
 	Notes *string `json:"notes,omitempty"`
+
+	// PageCount Total number of pages in the executed document
+	PageCount *int `json:"pageCount,omitempty"`
+
+	// PagesSignedByTestator Number of pages signed by the testator
+	PagesSignedByTestator *int `json:"pagesSignedByTestator,omitempty"`
+
+	// PagesSignedByWitnesses Number of pages signed by the witnesses
+	PagesSignedByWitnesses *int `json:"pagesSignedByWitnesses,omitempty"`
 
 	// Provenance Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
 	Provenance *Provenance `json:"provenance,omitempty"`
@@ -1609,6 +2335,21 @@ type Attestation struct {
 	// WitnessPersonIds Person IDs of the witnesses. Most jurisdictions require at least two witnesses. Some (e.g. holographic wills) require none
 	WitnessPersonIds *[]openapi_types.UUID `json:"witnessPersonIds,omitempty"`
 
+	// Witnesses Detailed witness information as recorded on the will. Witnesses are often not estate participants — their names and addresses appear on the document but they may not be in the people array. Coexists with witnessPersonIds for backward compatibility
+	Witnesses *[]struct {
+		// Address Address of the witness at the time of execution, as recorded on the will
+		Address *string `json:"address,omitempty"`
+
+		// Name Full name of the witness as recorded on the will
+		Name string `json:"name"`
+
+		// Occupation Occupation of the witness as recorded on the will
+		Occupation *string `json:"occupation,omitempty"`
+
+		// PersonId Reference to a person in the people array, if this witness is also an estate participant
+		PersonId *openapi_types.UUID `json:"personId,omitempty"`
+	} `json:"witnesses,omitempty"`
+
 	// WitnessesSignedInPresenceOfTestator Whether each witness signed in the presence of the testator. Required under the Wills Act 1837 s.9(d)
 	WitnessesSignedInPresenceOfTestator *bool `json:"witnessesSignedInPresenceOfTestator,omitempty"`
 }
@@ -1649,10 +2390,251 @@ type AuditEvent struct {
 	Redacted *bool `json:"redacted,omitempty"`
 }
 
-// Bequest defines model for bequest.
-type Bequest = interface{}
+// Bequest A disposition of property or money in a will. Supports 8 core types (specific, pecuniary, demonstrative, general, residuary, life_interest, class, debt_forgiveness) and extension types via x-inherit- prefix (e.g. x-inherit-wasiyya, x-inherit-halachic-matanah)
+type Bequest struct {
+	// Amount Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+	Amount *Money `json:"amount,omitempty"`
 
-// Catalogue Lightweight root schema for catalogue-only documents — living collectors cataloguing items without the full estate envelope. Assets, collections, valuations, and legacy contacts. Upgrade path: wrap in a full estate document (schema.json) when needed
+	// ApplicableLaw A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
+	ApplicableLaw *Jurisdiction `json:"applicableLaw,omitempty"`
+
+	// AssetCollectionId Reference to the AssetCollection.id being bequeathed. A bequest may reference either assetIds (individual items) or assetCollectionId (entire collection), not both
+	AssetCollectionId *openapi_types.UUID `json:"assetCollectionId,omitempty"`
+
+	// AssetIds References to Asset.id(s) being bequeathed as individual items. A bequest may reference either assetIds (individual items) or assetCollectionId (entire collection), not both
+	AssetIds *[]openapi_types.UUID `json:"assetIds,omitempty"`
+
+	// BeneficiaryId Reference to the Person.id of the individual beneficiary
+	BeneficiaryId *openapi_types.UUID `json:"beneficiaryId,omitempty"`
+
+	// BeneficiaryIdDisplay Human-readable display name for the referenced beneficiary
+	BeneficiaryIdDisplay *string `json:"beneficiaryIdDisplay,omitempty"`
+
+	// BeneficiaryOrganisation An organisation that receives a bequest — charity, company, trust, or unincorporated association
+	BeneficiaryOrganisation *BeneficiaryOrganisation `json:"beneficiaryOrganisation,omitempty"`
+
+	// BequestType The category of bequest. Core types cover common law estates. Extension types use x-inherit- prefix (e.g. x-inherit-wasiyya, x-inherit-halachic-matanah)
+	BequestType Bequest_BequestType `json:"bequestType"`
+
+	// CharityGiftAidEligible Whether the bequest has been verified as eligible for Gift Aid. In the UK, estates leaving 10%+ to charity qualify for the reduced 36% IHT rate
+	CharityGiftAidEligible *bool `json:"charityGiftAidEligible,omitempty"`
+
+	// CharityNonMergingClause Whether the gift fails if the charity merges with another organisation before distribution
+	CharityNonMergingClause *bool `json:"charityNonMergingClause,omitempty"`
+
+	// CharityPurposeRestriction Restriction on how the charity may use the bequeathed funds — e.g. 'Must be used for cancer research only'
+	CharityPurposeRestriction *string `json:"charityPurposeRestriction,omitempty"`
+
+	// CharityRegistrationVerifiedAt When the charity's registration was last verified as active
+	CharityRegistrationVerifiedAt *time.Time `json:"charityRegistrationVerifiedAt,omitempty"`
+
+	// CharityReportingRequired Whether the charity is required to report back on how the funds were used
+	CharityReportingRequired *bool `json:"charityReportingRequired,omitempty"`
+
+	// ClassDefinition Natural-language definition of the beneficiary class. Required for class bequests. Must be precise enough for executors to identify all members
+	ClassDefinition *string `json:"classDefinition,omitempty"`
+
+	// ClassSubstitution Substitution rules for class gifts — what happens when a member of the class predeceases the testator
+	ClassSubstitution *struct {
+		PredeceaseHandling interface{} `json:"predeceaseHandling,omitempty"`
+		Rule               interface{} `json:"rule,omitempty"`
+
+		// SubstituteClass Who takes the share of a deceased class member
+		SubstituteClass *string `json:"substituteClass,omitempty"`
+	} `json:"classSubstitution,omitempty"`
+
+	// ClauseReference The clause number in the will that contains this bequest
+	ClauseReference *string `json:"clauseReference,omitempty"`
+
+	// Comments Discussion comments on this entity
+	Comments *[]struct {
+		// AuthorPersonId Person.id of the comment author
+		AuthorPersonId *openapi_types.UUID `json:"authorPersonId,omitempty"`
+
+		// AuthorPersonIdDisplay Human-readable display name for the referenced author person
+		AuthorPersonIdDisplay *string `json:"authorPersonIdDisplay,omitempty"`
+
+		// Content Comment text
+		Content string `json:"content"`
+
+		// CreatedAt When the comment was created
+		CreatedAt time.Time `json:"createdAt"`
+
+		// Id Unique identifier for this comment
+		Id openapi_types.UUID `json:"id"`
+
+		// Visibility Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records
+		Visibility *Visibility `json:"visibility,omitempty"`
+	} `json:"comments,omitempty"`
+
+	// Conditions Conditions precedent that must be satisfied before the beneficiary receives this bequest. Each condition has a typed category for machine-readable common patterns, plus a human-readable description
+	Conditions *[]struct {
+		// AttainmentAge Age the beneficiary must reach. Only applicable when conditionType is age_attainment
+		AttainmentAge *int `json:"attainmentAge,omitempty"`
+
+		// ConditionType The category of condition
+		ConditionType interface{} `json:"conditionType"`
+
+		// Description Human-readable description of the condition, as expressed in the will
+		Description string `json:"description"`
+
+		// FailureConsequence What happens if this condition is not satisfied
+		FailureConsequence interface{} `json:"failureConsequence,omitempty"`
+
+		// FailureDescription Human-readable description of the failure consequence
+		FailureDescription *string `json:"failureDescription,omitempty"`
+
+		// PersonId The person this condition applies to, if different from the bequest beneficiary
+		PersonId *openapi_types.UUID `json:"personId,omitempty"`
+
+		// SurvivalDays Number of days the beneficiary must survive the testator. Only applicable when conditionType is survival_period
+		SurvivalDays *int `json:"survivalDays,omitempty"`
+	} `json:"conditions,omitempty"`
+
+	// ConstrainedBy Which legal principle constrains this bequest, if any
+	ConstrainedBy interface{} `json:"constrainedBy,omitempty"`
+
+	// CustomaryOverride Whether customary or religious law overrides the testator's freedom to dispose of this gift as they wish
+	CustomaryOverride *bool `json:"customaryOverride,omitempty"`
+
+	// Description Free-text description of the bequest — what is being given
+	Description *string `json:"description,omitempty"`
+
+	// DistributionMethod How the bequest is distributed among multiple beneficiaries
+	DistributionMethod *Bequest_DistributionMethod `json:"distributionMethod,omitempty"`
+
+	// ExecutorDirections Administrative directions to the executor regarding this bequest
+	ExecutorDirections *[]struct {
+		Binding         *bool   `json:"binding,omitempty"`
+		ClauseReference *string `json:"clauseReference,omitempty"`
+
+		// Directive The instruction as expressed in the will
+		Directive string `json:"directive"`
+	} `json:"executorDirections,omitempty"`
+
+	// GiftAidRegistrationNumber Gift Aid registration number for the charity
+	GiftAidRegistrationNumber *string `json:"giftAidRegistrationNumber,omitempty"`
+
+	// GiftAidVerificationUrl URL to verify the Gift Aid registration
+	GiftAidVerificationUrl *string `json:"giftAidVerificationUrl,omitempty"`
+
+	// GiftAidVerifiedAt When Gift Aid registration was last verified
+	GiftAidVerifiedAt *time.Time `json:"giftAidVerifiedAt,omitempty"`
+
+	// Hotchpot Whether lifetime gifts (advances) to the beneficiary are brought into account when calculating their share. Common in intestacy and some wills
+	Hotchpot *bool `json:"hotchpot,omitempty"`
+
+	// HotchpotTransferIds References to lifetime transfer IDs that should be brought into account (hotchpot) when calculating this beneficiary's entitlement. Links bequests to prior gifts — if the testator gave the beneficiary £50,000 during their lifetime, this bequest may be reduced accordingly
+	HotchpotTransferIds *[]openapi_types.UUID `json:"hotchpotTransferIds,omitempty"`
+
+	// Id Unique identifier for this bequest within the INHERIT document
+	Id openapi_types.UUID `json:"id"`
+
+	// InheritanceResponse The beneficiary's response to the inheritance — acceptance, renunciation, or qualified acceptance. In civil law jurisdictions, acceptance may be required within a time limit
+	InheritanceResponse *InheritanceResponse `json:"inheritanceResponse,omitempty"`
+
+	// InsurancePolicyIds References to InsurancePolicy.id(s) associated with this bequest. Links life insurance or other policies whose proceeds form part of this gift
+	InsurancePolicyIds *[]openapi_types.UUID `json:"insurancePolicyIds,omitempty"`
+
+	// LegacyPledge A legacy pledge commitment tracked before the will is finalised
+	LegacyPledge *struct {
+		// FundingAssetId Asset backing the pledge, if funded
+		FundingAssetId   *openapi_types.UUID `json:"fundingAssetId,omitempty"`
+		FundingMechanism interface{}         `json:"fundingMechanism,omitempty"`
+
+		// PledgeAmount Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		PledgeAmount *Money `json:"pledgeAmount,omitempty"`
+
+		// PledgeDocumentId Reference to a Document.id recording the pledge
+		PledgeDocumentId *openapi_types.UUID `json:"pledgeDocumentId,omitempty"`
+
+		// PledgeStatus Current status of the pledge
+		PledgeStatus interface{} `json:"pledgeStatus,omitempty"`
+
+		// PledgedDate Date the pledge was made
+		PledgedDate *openapi_types.Date `json:"pledgedDate,omitempty"`
+		Revocable   *bool               `json:"revocable,omitempty"`
+	} `json:"legacyPledge,omitempty"`
+
+	// LiabilityIds References to Liability.id(s) associated with this bequest. For debt_forgiveness bequests, these are the debts being cancelled. For other types, indicates liabilities attached to the bequeathed asset
+	LiabilityIds *[]openapi_types.UUID `json:"liabilityIds,omitempty"`
+
+	// LifeInterest Details of a life interest — one person enjoys the asset during their lifetime, then it passes to the remainderman
+	LifeInterest *LifeInterest `json:"lifeInterest,omitempty"`
+
+	// MentionedAssetIds Assets mentioned in this clause for clarity but not limiting scope. For residuary bequests, named for legal certainty while absorbing all unallocated assets
+	MentionedAssetIds *[]openapi_types.UUID `json:"mentionedAssetIds,omitempty"`
+
+	// MentionedPropertyIds Properties mentioned in this clause for clarity but not limiting scope
+	MentionedPropertyIds *[]openapi_types.UUID `json:"mentionedPropertyIds,omitempty"`
+
+	// Notes Free-text notes about this bequest. Use for context, testator intent, or special instructions to executors
+	Notes *string `json:"notes,omitempty"`
+
+	// PostDeathActions Post-death actions that modified this bequest — disclaimers, deeds of variation, appropriations
+	PostDeathActions *[]PostDeathAction `json:"postDeathActions,omitempty"`
+
+	// PowerOfAppointmentId Reference to a PowerOfAppointment.id — indicates this bequest's distribution is subject to a power of appointment
+	PowerOfAppointmentId *openapi_types.UUID `json:"powerOfAppointmentId,omitempty"`
+
+	// PrecatoryWishes Non-binding wishes expressed by the testator about how the beneficiary should use or treat the bequeathed item
+	PrecatoryWishes *[]struct {
+		// Binding Always false for precatory wishes
+		Binding         *bool   `json:"binding,omitempty"`
+		ClauseReference *string `json:"clauseReference,omitempty"`
+
+		// Wish The wish as expressed in the will
+		Wish string `json:"wish"`
+	} `json:"precatoryWishes,omitempty"`
+
+	// PredeceaseRule What happens if the beneficiary dies before the testator
+	PredeceaseRule interface{} `json:"predeceaseRule,omitempty"`
+
+	// Priority Explicit priority order within the will. Lower numbers take precedence
+	Priority *int `json:"priority,omitempty"`
+
+	// PropertyIds References to Property.id(s) being devised. Links this bequest to specific real property — enables programmatic estate distribution calculation
+	PropertyIds *[]openapi_types.UUID `json:"propertyIds,omitempty"`
+
+	// Provenance Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
+	Provenance *Provenance `json:"provenance,omitempty"`
+
+	// SharePercentage Percentage share of the residuary estate or a specified fund
+	SharePercentage *float32 `json:"sharePercentage,omitempty"`
+
+	// SourceAssetId Reference to the Asset.id from which a demonstrative bequest should be paid
+	SourceAssetId *openapi_types.UUID `json:"sourceAssetId,omitempty"`
+
+	// Substitutions Substitute beneficiaries in case the primary beneficiary cannot receive the gift
+	Substitutions *[]Substitution `json:"substitutions,omitempty"`
+
+	// Visibility Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records
+	Visibility *Visibility `json:"visibility,omitempty"`
+}
+
+// BequestBequestType0 defines model for .
+type BequestBequestType0 = interface{}
+
+// BequestBequestType1 defines model for .
+type BequestBequestType1 = string
+
+// Bequest_BequestType The category of bequest. Core types cover common law estates. Extension types use x-inherit- prefix (e.g. x-inherit-wasiyya, x-inherit-halachic-matanah)
+type Bequest_BequestType struct {
+	union json.RawMessage
+}
+
+// BequestDistributionMethod0 defines model for .
+type BequestDistributionMethod0 = interface{}
+
+// BequestDistributionMethod1 defines model for .
+type BequestDistributionMethod1 = string
+
+// Bequest_DistributionMethod How the bequest is distributed among multiple beneficiaries
+type Bequest_DistributionMethod struct {
+	union json.RawMessage
+}
+
+// Catalogue Entry point for catalogue-only documents — living collectors cataloguing items without the full estate envelope. Assets, collections, valuations, legacy contacts and allocation intent. This is the catalogue conformance profile of the INHERIT root: a document here that declares conformanceProfile 'catalogue' also conforms to schema.json as it stands, with nothing wrapped or moved. Do not wrap a catalogue inside an estate document — the estate profile carries assetInterests, legacyContacts and dealerInterests only inside applicationState, which is not part of the interchange standard. See proposal 0003
 type Catalogue struct {
 	// Context JSON-LD context URI
 	Context *string `json:"@context,omitempty"`
@@ -1675,6 +2657,9 @@ type Catalogue struct {
 	// Completeness A completeness score derived from a weighted checklist of estate data categories, scoped to a specific jurisdiction and estate status
 	Completeness *Completeness `json:"completeness,omitempty"`
 	Conformance  *Conformance  `json:"conformance,omitempty"`
+
+	// ConformanceProfile Declares this document as the catalogue conformance profile of the INHERIT root (schema.json). With it, the same document — unchanged, unwrapped — also conforms to schema.json. Optional here so catalogue documents written before profiles existed stay valid against this schema
+	ConformanceProfile interface{} `json:"conformanceProfile,omitempty"`
 
 	// DataProvenance Default data provenance for entities in this catalogue
 	DataProvenance interface{} `json:"dataProvenance,omitempty"`
@@ -1741,7 +2726,10 @@ type Catalogue struct {
 	Organisations *[]Organisation `json:"organisations,omitempty"`
 
 	// PreviousVersionId Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version
-	PreviousVersionId  *openapi_types.UUID  `json:"previousVersionId,omitempty"`
+	PreviousVersionId *openapi_types.UUID `json:"previousVersionId,omitempty"`
+
+	// Properties Properties whose spaces appear in this catalogue. A catalogue is not an estate document, so a property here need carry no more than an id and a name — enough for spaces[].propertyId to resolve inside the document and for a room to be attributed to an address
+	Properties         *[]Property          `json:"properties,omitempty"`
 	RecommendedActions *[]RecommendedAction `json:"recommendedActions,omitempty"`
 	SchemaVersion      *string              `json:"schemaVersion,omitempty"`
 
@@ -1901,6 +2889,50 @@ type DealerInterest struct {
 		VerifiedByOrganisationId *openapi_types.UUID `json:"verifiedByOrganisationId,omitempty"`
 	} `json:"verificationResult,omitempty"`
 }
+
+// Digest A hash value with the algorithm that produced it, as lowercase hexadecimal of the length that algorithm produces. The algorithm is one of $defs/digestAlgorithmId
+type Digest struct {
+	union json.RawMessage
+}
+
+// Digest0 A 160-bit hash: sha-1
+type Digest0 struct {
+	// Algorithm Hash algorithm that produced the value
+	Algorithm interface{} `json:"algorithm"`
+
+	// Value The hash value, 40 lowercase hexadecimal characters
+	Value string `json:"value"`
+}
+
+// Digest1 A 256-bit hash: sha-256, sha3-256
+type Digest1 struct {
+	// Algorithm Hash algorithm that produced the value
+	Algorithm interface{} `json:"algorithm"`
+
+	// Value The hash value, 64 lowercase hexadecimal characters
+	Value string `json:"value"`
+}
+
+// Digest2 A 384-bit hash: sha-384, sha3-384
+type Digest2 struct {
+	// Algorithm Hash algorithm that produced the value
+	Algorithm interface{} `json:"algorithm"`
+
+	// Value The hash value, 96 lowercase hexadecimal characters
+	Value string `json:"value"`
+}
+
+// Digest3 A 512-bit hash: sha-512, sha3-512
+type Digest3 struct {
+	// Algorithm Hash algorithm that produced the value
+	Algorithm interface{} `json:"algorithm"`
+
+	// Value The hash value, 128 lowercase hexadecimal characters
+	Value string `json:"value"`
+}
+
+// DigestAlgorithmId A hash algorithm id from reference-data/algorithm-lifecycle-registry.json (kind: digest)
+type DigestAlgorithmId = interface{}
 
 // Document A document associated with an estate — wills, codicils, trust deeds, and other legal documents. Extension types use the x-inherit- prefix for jurisdiction-specific or religious document types
 type Document struct {
@@ -2099,6 +3131,13 @@ type Estate struct {
 	// AdministrationDeadlineSource Source or basis for the administration deadline
 	AdministrationDeadlineSource *string `json:"administrationDeadlineSource,omitempty"`
 
+	// AdministrationPhases Universal priority phases for estate administration. Lower priority numbers satisfied first
+	AdministrationPhases *[]struct {
+		Category    interface{} `json:"category"`
+		Description *string     `json:"description,omitempty"`
+		Priority    int         `json:"priority"`
+	} `json:"administrationPhases,omitempty"`
+
 	// AncillaryProbate Ancillary probate proceedings in jurisdictions other than the primary domiciliary jurisdiction. Required when the estate includes assets in foreign jurisdictions
 	AncillaryProbate *[]struct {
 		// FiduciaryPersonId Reference to the Person.id of the local fiduciary or administrator
@@ -2126,6 +3165,16 @@ type Estate struct {
 	// Attestation A first-class attestation entity recording will execution formalities. Each attestation has its own identity — supports tracking multiple attestation events independently (original will, codicils, re-execution after marriage). Reused by estate, codicils, trusts, extensions. Supports written (E&W Wills Act s.9), oral (Islamic/customary), seal-based (Japanese inkan), kinyan-based (Jewish)
 	Attestation *Attestation `json:"attestation,omitempty"`
 
+	// CareProvisions Ongoing care provisions for dependent adults, linking person, trust, and guardian
+	CareProvisions *[]struct {
+		// AnnualEstimatedCost Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		AnnualEstimatedCost *Money              `json:"annualEstimatedCost,omitempty"`
+		CareNeeds           *string             `json:"careNeeds,omitempty"`
+		DependantPersonId   openapi_types.UUID  `json:"dependantPersonId"`
+		GuardianId          *openapi_types.UUID `json:"guardianId,omitempty"`
+		TrustId             *openapi_types.UUID `json:"trustId,omitempty"`
+	} `json:"careProvisions,omitempty"`
+
 	// ChoiceOfLaw Choice of law declaration under the Brussels IV Regulation (EU Succession Regulation 650/2012) or equivalent. Allows the testator to choose which jurisdiction's succession law applies
 	ChoiceOfLaw *struct {
 		// Basis Legal basis for the choice of law
@@ -2143,6 +3192,9 @@ type Estate struct {
 
 	// CommorientesRule Commorientes rule — the legal presumption for order of death when two or more people die in the same event. Critical for determining which estate inherits from which
 	CommorientesRule *struct {
+		// AffectedPersonIds Person IDs of those who died in the same event
+		AffectedPersonIds *[]openapi_types.UUID `json:"affectedPersonIds,omitempty"`
+
 		// Applicable Whether the commorientes rule is relevant to this estate
 		Applicable *bool `json:"applicable,omitempty"`
 
@@ -2152,8 +3204,14 @@ type Estate struct {
 		// Notes Additional context — e.g. specific facts of the case
 		Notes *string `json:"notes,omitempty"`
 
+		// ProvedSurvivalOrder Person IDs in proved order of death, if established by evidence. First ID died first
+		ProvedSurvivalOrder *[]openapi_types.UUID `json:"provedSurvivalOrder,omitempty"`
+
 		// Rule The applicable commorientes rule
 		Rule *string `json:"rule,omitempty"`
+
+		// Statute The governing statute for commorientes in this jurisdiction
+		Statute *string `json:"statute,omitempty"`
 	} `json:"commorientesRule,omitempty"`
 
 	// CompanionEstateId Links to a companion estate record — either a parallel estate under a different legal system, or a household companion's estate
@@ -2161,6 +3219,21 @@ type Estate struct {
 
 	// CompanionLinkStatus Current state of the companion estate link. Absent if the estate has never been linked to a companion
 	CompanionLinkStatus interface{} `json:"companionLinkStatus,omitempty"`
+
+	// Connections Non-familial connections between people in the estate. Directed: fromPersonId has the connection to toPersonId
+	Connections *[]struct {
+		ConnectionType interface{}        `json:"connectionType"`
+		Description    *string            `json:"description,omitempty"`
+		FromPersonId   openapi_types.UUID `json:"fromPersonId"`
+		ToPersonId     openapi_types.UUID `json:"toPersonId"`
+	} `json:"connections,omitempty"`
+
+	// ConstructionClauses Interpretive and construction rules expressed in the will
+	ConstructionClauses *[]struct {
+		ClauseReference *string     `json:"clauseReference,omitempty"`
+		ClauseType      interface{} `json:"clauseType"`
+		Content         string      `json:"content"`
+	} `json:"constructionClauses,omitempty"`
 
 	// Contestability Structured assessment of grounds on which this will could be contested — the challenge surface
 	Contestability *struct {
@@ -2276,6 +3349,24 @@ type Estate struct {
 		Notes *string `json:"notes,omitempty"`
 	} `json:"defaultSuccessionRegime,omitempty"`
 
+	// DisinheritedPersons Persons whom the testator has explicitly excluded from inheriting. Distinguishes deliberate exclusion from oversight — critical for family provision and forced heirship claims
+	DisinheritedPersons *[]struct {
+		// ClauseReference Reference to the clause or section of the will containing the exclusion — e.g. 'clause 5', 'schedule 2 para 3'
+		ClauseReference *string `json:"clauseReference,omitempty"`
+
+		// PersonId Reference to the Person.id of the excluded individual
+		PersonId openapi_types.UUID `json:"personId"`
+
+		// PersonIdDisplay Human-readable label for the excluded person, for display purposes only
+		PersonIdDisplay *string `json:"personIdDisplay,omitempty"`
+
+		// Reason Practitioner-recorded reason for the exclusion, separate from the testator's own statement
+		Reason *string `json:"reason,omitempty"`
+
+		// Statement The testator's own words regarding the exclusion, as recorded in the will or codicil
+		Statement *string `json:"statement,omitempty"`
+	} `json:"disinheritedPersons,omitempty"`
+
 	// Domicile A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
 	Domicile Jurisdiction `json:"domicile"`
 
@@ -2319,11 +3410,56 @@ type Estate struct {
 	// ExecutionDate Date the will was formally executed (signed with proper attestation). Enables look-back period calculations when combined with lifetime transfers
 	ExecutionDate *openapi_types.Date `json:"executionDate,omitempty"`
 
+	// ExecutorPowers Statutory and express powers granted to executors/trustees for estate administration
+	ExecutorPowers *[]struct {
+		ClauseReference *string `json:"clauseReference,omitempty"`
+
+		// Description The specific power as expressed in the will
+		Description *string     `json:"description,omitempty"`
+		PowerType   interface{} `json:"powerType"`
+
+		// Statute The statute conferring or modifying this power
+		Statute *string `json:"statute,omitempty"`
+	} `json:"executorPowers,omitempty"`
+
 	// ExternalReferences References to this estate in external systems — practice management software, court filing systems, government portals. Enables round-trip synchronisation between INHERIT and PMS
 	ExternalReferences *[]ExternalReference `json:"externalReferences,omitempty"`
 
+	// FamilyProvisionClaims Potential or actual family provision claims against the estate. Tracks claims under statutes like the Inheritance (Provision for Family and Dependants) Act 1975
+	FamilyProvisionClaims *[]struct {
+		// Amount Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		Amount           *Money             `json:"amount,omitempty"`
+		ClaimType        interface{}        `json:"claimType"`
+		ClaimantPersonId openapi_types.UUID `json:"claimantPersonId"`
+
+		// Jurisdiction A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
+		Jurisdiction *Jurisdiction `json:"jurisdiction,omitempty"`
+		Notes        *string       `json:"notes,omitempty"`
+		Status       interface{}   `json:"status,omitempty"`
+		Statute      *string       `json:"statute,omitempty"`
+	} `json:"familyProvisionClaims,omitempty"`
+
 	// ForcedHeirship Forced heirship regime details. Many civil law jurisdictions reserve a portion of the estate for certain heirs regardless of the will
 	ForcedHeirship *ForcedHeirship `json:"forcedHeirship,omitempty"`
+
+	// GoverningJurisdictions Jurisdictions governing succession for this estate, with scope. Use when multiple legal systems apply to different assets (e.g. lex situs for immovable property abroad). Per-asset law is recorded on each asset/property via applicableLaw; this array provides the estate-level coordination map
+	GoverningJurisdictions *[]struct {
+		// AssetIds Asset IDs governed by this jurisdiction (when scope is specific_assets)
+		AssetIds *[]openapi_types.UUID `json:"assetIds,omitempty"`
+
+		// Jurisdiction A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
+		Jurisdiction Jurisdiction `json:"jurisdiction"`
+		Notes        *string      `json:"notes,omitempty"`
+
+		// PropertyIds Property IDs governed by this jurisdiction (when scope is specific_assets)
+		PropertyIds *[]openapi_types.UUID `json:"propertyIds,omitempty"`
+
+		// Scope Whether this jurisdiction applies to the whole estate or specific assets
+		Scope interface{} `json:"scope"`
+
+		// Statute Governing statute
+		Statute *string `json:"statute,omitempty"`
+	} `json:"governingJurisdictions,omitempty"`
 
 	// Id Unique identifier for this estate record
 	Id openapi_types.UUID `json:"id"`
@@ -2381,6 +3517,27 @@ type Estate struct {
 	// MirrorWillId Reference to the companion estate's id when this will was created as a mirror of the companion's will. Mirror wills have substantially the same provisions — typically leaving everything to each other and then to shared beneficiaries. This field records the intent, not a guarantee that the wills remain identical (either partner may subsequently diverge)
 	MirrorWillId *openapi_types.UUID `json:"mirrorWillId,omitempty"`
 
+	// MutualWillAgreement A binding mutual will agreement — two testators promise not to revoke their wills without notice. Creates a constructive trust on the survivor's estate. Distinct from mirror wills (which are independent)
+	MutualWillAgreement *struct {
+		// AgreementDocumentId Reference to Document.id recording the mutual promise
+		AgreementDocumentId *openapi_types.UUID `json:"agreementDocumentId,omitempty"`
+		Binding             *bool               `json:"binding,omitempty"`
+
+		// CounterpartyEstateId Reference to the counterparty's estate document, if available
+		CounterpartyEstateId *openapi_types.UUID `json:"counterpartyEstateId,omitempty"`
+
+		// CounterpartyPersonId The other testator bound by the agreement
+		CounterpartyPersonId *openapi_types.UUID `json:"counterpartyPersonId,omitempty"`
+		Exists               *bool               `json:"exists,omitempty"`
+		Revocable            *bool               `json:"revocable,omitempty"`
+
+		// Terms Summary of the agreement terms
+		Terms *string `json:"terms,omitempty"`
+	} `json:"mutualWillAgreement,omitempty"`
+
+	// NetEstateEquity Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+	NetEstateEquity *Money `json:"netEstateEquity,omitempty"`
+
 	// NoContestClause In terrorem (no-contest) clause — a provision that a beneficiary forfeits their gift if they challenge the will. Enforceability varies by jurisdiction
 	NoContestClause *struct {
 		// Enforceability Enforceability status in the governing jurisdiction
@@ -2398,6 +3555,20 @@ type Estate struct {
 
 	// ParallelDistributions Parallel distribution schemes under different legal systems — customary, religious, or statutory
 	ParallelDistributions *[]ParallelDistribution `json:"parallelDistributions,omitempty"`
+
+	// ParallelSuccessionConflicts Conflicts between parallel legal systems where the will cannot override customary or statutory rights
+	ParallelSuccessionConflicts *[]struct {
+		AffectedPersonId *openapi_types.UUID `json:"affectedPersonId,omitempty"`
+
+		// LegalSystem The legal system asserting the right
+		LegalSystem string `json:"legalSystem"`
+
+		// NatureOfRight Description of the customary right that conflicts with the will
+		NatureOfRight     string      `json:"natureOfRight"`
+		OverridableByWill *bool       `json:"overridableByWill,omitempty"`
+		Resolution        interface{} `json:"resolution,omitempty"`
+		StatutoryBasis    *string     `json:"statutoryBasis,omitempty"`
+	} `json:"parallelSuccessionConflicts,omitempty"`
 
 	// PretermittedHeirClaims Claims by pretermitted heirs — children born or adopted after the will was executed who are not mentioned in it
 	PretermittedHeirClaims *[]struct {
@@ -2482,6 +3653,21 @@ type Estate struct {
 
 	// Status The lifecycle status of this estate record. Progresses from planning through to closure
 	Status interface{} `json:"status"`
+
+	// StatutoryExclusions Statutes explicitly excluded from applying to this estate. Common: Apportionment Act 1870, Trustee Act 2000 s.31/s.32
+	StatutoryExclusions *[]struct {
+		ClauseReference *string `json:"clauseReference,omitempty"`
+
+		// Effect What the exclusion means in practice
+		Effect *string `json:"effect,omitempty"`
+
+		// Jurisdiction A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
+		Jurisdiction *Jurisdiction `json:"jurisdiction,omitempty"`
+
+		// Sections Specific sections excluded
+		Sections *string `json:"sections,omitempty"`
+		Statute  string  `json:"statute"`
+	} `json:"statutoryExclusions,omitempty"`
 
 	// SuccessionConflicts Known conflicts between legal systems regarding succession for this estate
 	SuccessionConflicts *[]SuccessionConflict `json:"successionConflicts,omitempty"`
@@ -2570,6 +3756,15 @@ type Estate struct {
 
 	// TotalEstimatedValue Monetary value in integer minor currency units with ISO 4217 code. Never floating point
 	TotalEstimatedValue *Money `json:"totalEstimatedValue,omitempty"`
+
+	// ValidityStatus Ongoing validity state of the will. Records life events that may invalidate the document
+	ValidityStatus *[]struct {
+		BreachedDate  *openapi_types.Date `json:"breachedDate,omitempty"`
+		ConditionType interface{}         `json:"conditionType"`
+		Description   *string             `json:"description,omitempty"`
+		Status        interface{}         `json:"status,omitempty"`
+		Statute       *string             `json:"statute,omitempty"`
+	} `json:"validityStatus,omitempty"`
 
 	// WillType The type of will. Extension types use x-inherit- prefix
 	WillType *Estate_WillType `json:"willType,omitempty"`
@@ -2675,6 +3870,15 @@ type Event_Metadata struct {
 
 // Executor A person appointed to administer an estate. Includes professional executors, administrators (intestacy), and administrators with will annexed
 type Executor struct {
+	// ConflictsOfInterest Declared conflicts of interest — executor/trustee who is also a beneficiary, drafter, or family member
+	ConflictsOfInterest *[]struct {
+		ConflictType                 interface{}         `json:"conflictType"`
+		Disclosed                    *bool               `json:"disclosed,omitempty"`
+		IndependentOversightRequired *bool               `json:"independentOversightRequired,omitempty"`
+		Notes                        *string             `json:"notes,omitempty"`
+		RelatedPersonId              *openapi_types.UUID `json:"relatedPersonId,omitempty"`
+	} `json:"conflictsOfInterest,omitempty"`
+
 	// ConsultWith Person IDs of individuals the executor should consult before making significant decisions. Models co-equal authority and consultation requirements
 	ConsultWith *[]openapi_types.UUID `json:"consultWith,omitempty"`
 
@@ -2721,7 +3925,19 @@ type Executor struct {
 	Provenance *Provenance `json:"provenance,omitempty"`
 
 	// Role The executor's role in the estate administration
-	Role  interface{} `json:"role"`
+	Role interface{} `json:"role"`
+
+	// Scope The scope of this executor's authority, for specialist executors. If absent, the executor has authority over the entire estate
+	Scope *struct {
+		// AssetCategories Asset categories this executor manages
+		AssetCategories *[]string `json:"assetCategories,omitempty"`
+
+		// AssetIds Specific asset IDs this executor manages
+		AssetIds *[]openapi_types.UUID `json:"assetIds,omitempty"`
+
+		// Description Human-readable description of the scope
+		Description *string `json:"description,omitempty"`
+	} `json:"scope,omitempty"`
 	union json.RawMessage
 }
 
@@ -2818,8 +4034,14 @@ type Guardian struct {
 	// Conditions Conditions on the guardianship — when it takes effect, any restrictions, or circumstances under which it lapses
 	Conditions *string `json:"conditions,omitempty"`
 
+	// DependantType The type of dependant this guardian is appointed for. Extends guardian beyond minors to cover adult dependants
+	DependantType interface{} `json:"dependantType,omitempty"`
+
 	// FamilyCouncilDecisionRef Reference to the family council decision that appointed this guardian, if the appointment was council-determined
 	FamilyCouncilDecisionRef *string `json:"familyCouncilDecisionRef,omitempty"`
+
+	// GuardianshipModel The cultural or legal model of guardianship. Differs across legal traditions — individual appointment (common law), family council (West African), collective care (South Asian extended family), court-appointed (civil law)
+	GuardianshipModel interface{} `json:"guardianshipModel,omitempty"`
 
 	// GuardianshipStructure The structure of the guardianship arrangement
 	GuardianshipStructure interface{} `json:"guardianshipStructure,omitempty"`
@@ -3081,7 +4303,7 @@ type Kinship struct {
 	// Id Unique identifier for this kinship bond within the INHERIT document
 	Id openapi_types.UUID `json:"id"`
 
-	// KinshipType The type of familial bond. The distinction between paternal and maternal half-siblings is critical for Islamic and some customary inheritance systems
+	// KinshipType The type of familial bond. Use the lineage property to distinguish paternal from maternal lines (critical for Islamic faraid, Hindu succession, matrilineal African systems). Use bloodDegree for whole/half-blood distinction (English, Hong Kong, New Zealand intestacy)
 	KinshipType interface{} `json:"kinshipType"`
 
 	// LegalBasis The legal basis for this family relationship — determines inheritance rights in jurisdiction-specific calculators
@@ -3095,6 +4317,14 @@ type Kinship struct {
 
 	// Notes Free-text notes about this kinship. Use for context on contested kinships, acknowledgement records, or customary recognition
 	Notes *string `json:"notes,omitempty"`
+
+	// ParentalOrderDetails Details of a parental order (surrogacy), when legalBasis is parental_order
+	ParentalOrderDetails *struct {
+		BiologicalParentIds *[]openapi_types.UUID `json:"biologicalParentIds,omitempty"`
+		OrderDate           *openapi_types.Date   `json:"orderDate,omitempty"`
+		OrderingCourt       *string               `json:"orderingCourt,omitempty"`
+		SurrogatePersonId   *openapi_types.UUID   `json:"surrogatePersonId,omitempty"`
+	} `json:"parentalOrderDetails,omitempty"`
 
 	// Provenance Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
 	Provenance *Provenance `json:"provenance,omitempty"`
@@ -3120,6 +4350,15 @@ type Liability struct {
 
 	// Amount Monetary value in integer minor currency units with ISO 4217 code. Never floating point
 	Amount Money `json:"amount"`
+
+	// ChargeReference Registry entry or agreement number identifying the charge — HM Land Registry charge entry, finance agreement number, or the equivalent in the jurisdiction of the secured asset
+	ChargeReference *string `json:"chargeReference,omitempty"`
+
+	// ChargeRegisteredDate Date the charge was registered against the secured property or asset
+	ChargeRegisteredDate *openapi_types.Date `json:"chargeRegisteredDate,omitempty"`
+
+	// ChargeStatus Lifecycle state of the registered charge securing this liability. Only meaningful when securedAgainst is present. A discharged or satisfied charge no longer reduces the equity in the asset it was registered against
+	ChargeStatus interface{} `json:"chargeStatus,omitempty"`
 
 	// Creditor Name of the creditor, institution, or person to whom the debt is owed
 	Creditor *string `json:"creditor,omitempty"`
@@ -3147,6 +4386,9 @@ type Liability struct {
 
 	// SecuredAgainst Reference to a Property.id or Asset.id that this liability is secured against. Unsecured debts should omit this field
 	SecuredAgainst *openapi_types.UUID `json:"securedAgainst,omitempty"`
+
+	// SettlementAmount Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+	SettlementAmount *Money `json:"settlementAmount,omitempty"`
 
 	// StartDate Date the liability was incurred or the agreement began
 	StartDate *openapi_types.Date `json:"startDate,omitempty"`
@@ -3319,6 +4561,15 @@ type NonprobateTransfer struct {
 	// Description Free-text description of the nonprobate transfer
 	Description *string `json:"description,omitempty"`
 
+	// DesignationConflict Documents a conflict between this beneficiary designation and another instrument (will, later nomination, court order)
+	DesignationConflict *struct {
+		ConflictingEntityId *openapi_types.UUID `json:"conflictingEntityId,omitempty"`
+		ConflictsWith       interface{}         `json:"conflictsWith,omitempty"`
+		Exists              *bool               `json:"exists,omitempty"`
+		Notes               *string             `json:"notes,omitempty"`
+		Resolution          interface{}         `json:"resolution,omitempty"`
+	} `json:"designationConflict,omitempty"`
+
 	// DesignationType More specific description of the transfer mechanism
 	DesignationType *string `json:"designationType,omitempty"`
 
@@ -3345,6 +4596,13 @@ type NonprobateTransfer struct {
 
 	// RecordingReference Recording or filing reference for the transfer instrument (e.g. county recorder reference for a TOD deed)
 	RecordingReference *string `json:"recordingReference,omitempty"`
+
+	// RevocationDetails How and when a beneficiary designation was revoked
+	RevocationDetails *struct {
+		RevokedBy           interface{}         `json:"revokedBy,omitempty"`
+		RevokedByDocumentId *openapi_types.UUID `json:"revokedByDocumentId,omitempty"`
+		RevokedDate         *openapi_types.Date `json:"revokedDate,omitempty"`
+	} `json:"revocationDetails,omitempty"`
 
 	// SurvivingOwnerPersonIds Person IDs of surviving joint owners for JTWROS and tenancy by entirety transfers
 	SurvivingOwnerPersonIds *[]openapi_types.UUID `json:"survivingOwnerPersonIds,omitempty"`
@@ -3440,6 +4698,9 @@ type Organisation struct {
 
 	// Id Unique identifier for this organisation within the INHERIT document
 	Id openapi_types.UUID `json:"id"`
+
+	// Identifiers External identifiers — charity number, company registration, UEN, etc.
+	Identifiers *[]Identifier `json:"identifiers,omitempty"`
 
 	// InternationalShipping International shipping capabilities and policies for this organisation
 	InternationalShipping *struct {
@@ -3732,6 +4993,16 @@ type Person struct {
 	// Provenance Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
 	Provenance *Provenance `json:"provenance,omitempty"`
 
+	// Religion The person's religious affiliation as a legal status. In jurisdictions where religion determines succession law (Singapore AMLA, Malaysian faraid, Israeli rabbinical courts), this is a jurisdictional switch, not a personal belief declaration
+	Religion *struct {
+		// AsAtDate Date this religious status was last confirmed
+		AsAtDate *openapi_types.Date `json:"asAtDate,omitempty"`
+
+		// Denomination Specific denomination if relevant
+		Denomination *string     `json:"denomination,omitempty"`
+		Faith        interface{} `json:"faith,omitempty"`
+	} `json:"religion,omitempty"`
+
 	// RitualName The person's name within a religious naming tradition. Required for religious court filings, halachic documents, and Shariah proceedings
 	RitualName *struct {
 		// Name The full ritual or religious name as used in religious proceedings
@@ -3887,6 +5158,52 @@ type PetSpecies1 = string
 // Pet_Species The species of the pet
 type Pet_Species struct {
 	union json.RawMessage
+}
+
+// PowerOfAppointment A testamentary power granting someone the authority to decide how assets or trust interests are distributed. Common in complex wills — the testator grants discretion to an appointee (typically an executor or trustee) to allocate among a defined class of beneficiaries
+type PowerOfAppointment struct {
+	// AppointeePersonId The person who holds the power and may exercise it (e.g. executor, trustee, spouse)
+	AppointeePersonId openapi_types.UUID `json:"appointeePersonId"`
+
+	// AppointeePersonIdDisplay Human-readable display name for the appointee
+	AppointeePersonIdDisplay *string `json:"appointeePersonIdDisplay,omitempty"`
+
+	// AppointorPersonId The person granting the power (usually the testator)
+	AppointorPersonId openapi_types.UUID `json:"appointorPersonId"`
+
+	// AppointorPersonIdDisplay Human-readable display name for the appointor
+	AppointorPersonIdDisplay *string `json:"appointorPersonIdDisplay,omitempty"`
+
+	// ClassOfBeneficiaries Natural-language definition of who the appointee may appoint to. Required for special and hybrid powers
+	ClassOfBeneficiaries *string `json:"classOfBeneficiaries,omitempty"`
+
+	// ExerciseConditions Conditions or limitations on how the power may be exercised
+	ExerciseConditions *string `json:"exerciseConditions,omitempty"`
+
+	// ExercisedDate Date the power was exercised, if it has been
+	ExercisedDate *openapi_types.Date `json:"exercisedDate,omitempty"`
+
+	// ExercisedDocumentId Reference to the Document.id recording the exercise of this power
+	ExercisedDocumentId *openapi_types.UUID `json:"exercisedDocumentId,omitempty"`
+
+	// Id Unique identifier for this power of appointment
+	Id openapi_types.UUID `json:"id"`
+
+	// Notes Free-text notes about this power of appointment
+	Notes *string `json:"notes,omitempty"`
+
+	// PowerType Whether this is a general, special, or hybrid power of appointment
+	PowerType interface{} `json:"powerType"`
+
+	// Provenance Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
+	Provenance *Provenance `json:"provenance,omitempty"`
+
+	// Scope Which assets, trusts, or bequests this power covers. If absent, the power applies to the entire residuary estate
+	Scope *struct {
+		AssetIds   *[]openapi_types.UUID `json:"assetIds,omitempty"`
+		BequestIds *[]openapi_types.UUID `json:"bequestIds,omitempty"`
+		TrustIds   *[]openapi_types.UUID `json:"trustIds,omitempty"`
+	} `json:"scope,omitempty"`
 }
 
 // Property Real estate. Supports individual ownership, communal/family property (Nigeria), HUF coparcenary (India), government-vested land (Land Use Act), US community property, and informal/unregistered holdings
@@ -4050,6 +5367,9 @@ type Property struct {
 	// Images Photographs and videos of this property — exterior, interior, key rooms, any damage or features relevant to valuation
 	Images *[]Media `json:"images,omitempty"`
 
+	// InNegativeEquity True when the active charges secured against this property exceed its value. Set alongside a netEquity of zero, because the zero floor would otherwise hide the shortfall
+	InNegativeEquity *bool `json:"inNegativeEquity,omitempty"`
+
 	// IsPrimaryResidence Whether this is the testator's primary residence. Relevant for residence nil rate band (UK), homestead exemption (US), and similar tax reliefs
 	IsPrimaryResidence *bool `json:"isPrimaryResidence,omitempty"`
 
@@ -4118,6 +5438,9 @@ type Property struct {
 
 	// Name Display name for this property — a familiar label or street address. Should be recognisable to all parties involved in the estate
 	Name string `json:"name"`
+
+	// NetEquity Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+	NetEquity *Money `json:"netEquity,omitempty"`
 
 	// Notes Free-text notes about this property. Use for unusual tenure arrangements, ongoing disputes, or planning considerations
 	Notes *string `json:"notes,omitempty"`
@@ -4211,6 +5534,23 @@ type Property struct {
 		// Notes Additional context about the succession regime
 		Notes *string `json:"notes,omitempty"`
 	} `json:"successionRegime,omitempty"`
+
+	// TaxReliefEligibility Tax relief eligibility for this asset or property (e.g. Agricultural Property Relief, Business Property Relief)
+	TaxReliefEligibility *struct {
+		// Conditions Conditions for maintaining eligibility
+		Conditions *string `json:"conditions,omitempty"`
+		Eligible   *bool   `json:"eligible,omitempty"`
+
+		// Jurisdiction A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
+		Jurisdiction *Jurisdiction `json:"jurisdiction,omitempty"`
+
+		// Percentage Relief percentage (e.g. 100 for full APR, 50 for partial BPR)
+		Percentage *int `json:"percentage,omitempty"`
+
+		// ReliefType The type of tax relief claimed
+		ReliefType interface{} `json:"reliefType,omitempty"`
+		Statute    *string     `json:"statute,omitempty"`
+	} `json:"taxReliefEligibility,omitempty"`
 
 	// TaxTreatment Per-property tax treatment — how this property is classified for tax purposes
 	TaxTreatment *struct {
@@ -4317,8 +5657,181 @@ type Provenance struct {
 	VerdictAt *time.Time `json:"verdictAt,omitempty"`
 }
 
-// ProxyAuthorisation defines model for proxy-authorisation.
-type ProxyAuthorisation = interface{}
+// ProxyAuthorisation Authorises a proxy to act on behalf of a testator — information gathering, communication, negotiation, or full decision-making. Includes consent record with cultural consent methods
+type ProxyAuthorisation struct {
+	// ActivationDate For on_date trigger
+	ActivationDate *openapi_types.Date `json:"activationDate,omitempty"`
+
+	// ActivationTrigger The condition that activates this delegation
+	ActivationTrigger interface{} `json:"activationTrigger,omitempty"`
+
+	// ActivationVerificationMethod Method used to verify that the activation condition has been met
+	ActivationVerificationMethod interface{} `json:"activationVerificationMethod,omitempty"`
+
+	// ActivationVerifiedAt When the activation condition was verified
+	ActivationVerifiedAt *time.Time `json:"activationVerifiedAt,omitempty"`
+
+	// ActivationVerifiedBy Who verified the activation condition was met
+	ActivationVerifiedBy *string `json:"activationVerifiedBy,omitempty"`
+
+	// AgentCapabilities What the agent is permitted to do under this authorisation. The schema records the authorised capabilities; the application enforces whether they are exercised
+	AgentCapabilities *[]ProxyAuthorisation_AgentCapabilities_Item `json:"agentCapabilities,omitempty"`
+
+	// AgentId Identifier for the AI agent delegate. Required when delegateType is agent. Format is intentionally flexible to accommodate different agent identity schemes as they emerge
+	AgentId *string `json:"agentId,omitempty"`
+
+	// AgentIdDisplay Human-readable display name for the agent
+	AgentIdDisplay *string `json:"agentIdDisplay,omitempty"`
+
+	// AuditLog Structured log of delegation actions — complements the auditTrailEnabled boolean
+	AuditLog *[]struct {
+		// Action What delegation action was taken
+		Action interface{} `json:"action"`
+
+		// Agent Who performed this action (schema.org agent)
+		Agent string `json:"agent"`
+
+		// Detail What specifically was done
+		Detail *string `json:"detail,omitempty"`
+
+		// EvidenceUrl Link to supporting evidence
+		EvidenceUrl *string `json:"evidenceUrl,omitempty"`
+
+		// PerformedAt When the action occurred
+		PerformedAt time.Time `json:"performedAt"`
+	} `json:"auditLog,omitempty"`
+
+	// AuditTrailEnabled Whether all actions taken by the proxy should be logged for audit purposes
+	AuditTrailEnabled *bool `json:"auditTrailEnabled,omitempty"`
+
+	// AuthenticationMethod How the delegate proves its identity when exercising this authorisation
+	AuthenticationMethod interface{} `json:"authenticationMethod,omitempty"`
+
+	// ConsentRecord Record of the testator's consent to proxy authorisation. Supports formal, informal, and culturally appropriate consent methods
+	ConsentRecord ConsentRecord `json:"consentRecord"`
+
+	// CredentialRef URI pointing to an external delegation credential (W3C Verifiable Credential 2.0, OpenID Foundation, or other delegation protocol). Protocol-agnostic
+	CredentialRef *string `json:"credentialRef,omitempty"`
+
+	// DealerNegotiationPermitted Whether the proxy is specifically authorised to negotiate with dealers and third parties interested in estate assets
+	DealerNegotiationPermitted *bool `json:"dealerNegotiationPermitted,omitempty"`
+
+	// DecisionModel Who makes the decision this authorisation is exercised for: the owner with help (supported), the owner and the proxy jointly (co_decision), or the proxy in place of an owner who cannot decide (substituted). Absent means not recorded
+	DecisionModel interface{} `json:"decisionModel,omitempty"`
+
+	// DelegateType The type of entity being delegated authority. Determines which identity fields are required
+	DelegateType interface{} `json:"delegateType"`
+
+	// DelegationConstraints Constraints limiting how this delegation may be exercised
+	DelegationConstraints *struct {
+		// CoApproverPersonId Who must co-approve
+		CoApproverPersonId *openapi_types.UUID `json:"coApproverPersonId,omitempty"`
+
+		// CoApproverPersonIdDisplay Human-readable display name for the referenced co approver person
+		CoApproverPersonIdDisplay *string `json:"coApproverPersonIdDisplay,omitempty"`
+
+		// ExcludedAssetIds Assets this delegate cannot access
+		ExcludedAssetIds *[]openapi_types.UUID `json:"excludedAssetIds,omitempty"`
+
+		// MaxTransactionValue Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		MaxTransactionValue *Money `json:"maxTransactionValue,omitempty"`
+
+		// RequiresCoApproval Whether another person must approve actions
+		RequiresCoApproval *bool `json:"requiresCoApproval,omitempty"`
+	} `json:"delegationConstraints,omitempty"`
+
+	// DelegationType The type of delegation — on-behalf-of preserves principal/agent distinction, impersonation collapses it
+	DelegationType interface{} `json:"delegationType,omitempty"`
+
+	// ExpiryDate Date on which the proxy authorisation expires, if time-limited
+	ExpiryDate *openapi_types.Date `json:"expiryDate,omitempty"`
+
+	// ExternalConsentRef URI pointing to an external consent record (FHIR Consent resource, or any external consent management system)
+	ExternalConsentRef *string `json:"externalConsentRef,omitempty"`
+
+	// HealthcareRecordAccess Whether this delegation includes authority to access the deceased's medical records. Relevant for FHIR integration and healthcare interoperability
+	HealthcareRecordAccess *bool `json:"healthcareRecordAccess,omitempty"`
+
+	// Id Unique identifier for this proxy authorisation within the INHERIT document
+	Id openapi_types.UUID `json:"id"`
+
+	// Notes Free-text notes about this proxy authorisation
+	Notes *string `json:"notes,omitempty"`
+
+	// Provenance Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
+	Provenance *Provenance `json:"provenance,omitempty"`
+
+	// ProxyPersonId Reference to the Person.id of the authorised proxy. Required when delegateType is person or organisation
+	ProxyPersonId *openapi_types.UUID `json:"proxyPersonId,omitempty"`
+
+	// ProxyPersonIdDisplay Human-readable display name for the referenced proxy person
+	ProxyPersonIdDisplay *string `json:"proxyPersonIdDisplay,omitempty"`
+
+	// Revocation Structured revocation record — models revocation as a mechanism, not just a date
+	Revocation *struct {
+		// ChallengeDeadline Final date by which a challenge must be filed
+		ChallengeDeadline *openapi_types.Date `json:"challengeDeadline,omitempty"`
+
+		// ChallengePeriodDays Number of days during which the revocation can be challenged
+		ChallengePeriodDays *int `json:"challengePeriodDays,omitempty"`
+
+		// EnforcementStatus Current status of the revocation
+		EnforcementStatus interface{} `json:"enforcementStatus,omitempty"`
+
+		// EvidenceUrl Link to the revocation document or court order
+		EvidenceUrl *string `json:"evidenceUrl,omitempty"`
+
+		// RevocationJurisdiction A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
+		RevocationJurisdiction *Jurisdiction `json:"revocationJurisdiction,omitempty"`
+
+		// RevocationMethod How the revocation was effected
+		RevocationMethod interface{} `json:"revocationMethod,omitempty"`
+
+		// RevokedAt When the delegation was revoked
+		RevokedAt *time.Time `json:"revokedAt,omitempty"`
+
+		// RevokedBy Who revoked the delegation (schema.org agent)
+		RevokedBy *string `json:"revokedBy,omitempty"`
+	} `json:"revocation,omitempty"`
+
+	// RevocationDate Date the proxy authorisation was revoked by the testator, if applicable
+	RevocationDate *openapi_types.Date `json:"revocationDate,omitempty"`
+
+	// Scope The scope of authority granted to the proxy
+	Scope interface{} `json:"scope"`
+
+	// StartDate Date from which the proxy authorisation is effective
+	StartDate *openapi_types.Date `json:"startDate,omitempty"`
+
+	// SubDelegation Whether the delegate can re-delegate authority. Supports delegation chains (executor → solicitor → paralegal)
+	SubDelegation *struct {
+		// Constraints Free-text constraints on sub-delegation
+		Constraints *string `json:"constraints,omitempty"`
+
+		// MaxDepth Maximum depth of the delegation chain (1 = delegate can appoint one sub-delegate)
+		MaxDepth *int `json:"maxDepth,omitempty"`
+
+		// Permitted Whether sub-delegation is permitted
+		Permitted *bool `json:"permitted,omitempty"`
+	} `json:"subDelegation,omitempty"`
+
+	// TestatorPersonId Reference to the Person.id of the testator granting the authorisation
+	TestatorPersonId openapi_types.UUID `json:"testatorPersonId"`
+
+	// TestatorPersonIdDisplay Human-readable display name for the referenced testator person
+	TestatorPersonIdDisplay *string `json:"testatorPersonIdDisplay,omitempty"`
+}
+
+// ProxyAuthorisationAgentCapabilities0 defines model for .
+type ProxyAuthorisationAgentCapabilities0 = interface{}
+
+// ProxyAuthorisationAgentCapabilities1 defines model for .
+type ProxyAuthorisationAgentCapabilities1 = string
+
+// ProxyAuthorisation_AgentCapabilities_Item defines model for proxy-authorisation.agentCapabilities.Item.
+type ProxyAuthorisation_AgentCapabilities_Item struct {
+	union json.RawMessage
+}
 
 // Relationship Spousal/partnership relationship. N-partner support (no structural two-partner limit). Event-based timeline (status derived from events). No gendered role names. Financial instruments with MAHR/KETUBAH subtype validation. Cross-jurisdiction recognition for dual civil/religious status
 type Relationship struct {
@@ -4392,6 +5905,9 @@ type Schema struct {
 	ChangeDescription *string      `json:"changeDescription,omitempty"`
 	Conformance       *Conformance `json:"conformance,omitempty"`
 
+	// ConformanceProfile The conformance profile this document claims. 'estate' (the default when absent) is the full estate document: estate, people and schemaVersion are required. 'catalogue' is a catalogue-only document — a living owner cataloguing items with no estate envelope: the document must satisfy catalogue.json in full, so assets is required, estate-only members are not allowed, and the catalogue's own members (assetInterests, legacyContacts, dealerInterests, giftListSettings, legacyLetter, completeness, recommendedActions) are carried at the root rather than in applicationState. A profile is a declared subset of this one root, not a second root
+	ConformanceProfile interface{} `json:"conformanceProfile,omitempty"`
+
 	// DataProvenance How this document was originally created. Indicates the primary method of data entry for the document as a whole — individual entities may have their own per-field provenance via confidenceScores
 	DataProvenance interface{} `json:"dataProvenance,omitempty"`
 
@@ -4402,7 +5918,7 @@ type Schema struct {
 	Documents *[]Document `json:"documents,omitempty"`
 
 	// Estate The root estate record — will, intestacy, or trust-based succession plan. Contains testator details, jurisdiction, will formalities, forced heirship, probate grants, death record, multi-jurisdiction administration, and tax treaty positions
-	Estate Estate `json:"estate"`
+	Estate *Estate `json:"estate,omitempty"`
 
 	// Executors Persons appointed to administer the estate
 	Executors *[]Executor `json:"executors,omitempty"`
@@ -4507,10 +6023,13 @@ type Schema struct {
 	PartialDocument *bool `json:"partialDocument,omitempty"`
 
 	// People All people involved in the estate — testator, beneficiaries, executors, witnesses, guardians, etc
-	People []Person `json:"people"`
+	People *[]Person `json:"people,omitempty"`
 
 	// Pets Pets requiring care arrangements
 	Pets *[]Pet `json:"pets,omitempty"`
+
+	// PowersOfAppointment Powers of appointment — testamentary authority granted to someone to decide distribution
+	PowersOfAppointment *[]PowerOfAppointment `json:"powersOfAppointment,omitempty"`
 
 	// PreviousVersionId Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version
 	PreviousVersionId *openapi_types.UUID `json:"previousVersionId,omitempty"`
@@ -4528,7 +6047,7 @@ type Schema struct {
 	Relationships *[]Relationship `json:"relationships,omitempty"`
 
 	// SchemaVersion Semver version of the INHERIT schema this document was created against. Enables consumers to detect compatibility and handle graceful degradation
-	SchemaVersion string `json:"schemaVersion"`
+	SchemaVersion *string `json:"schemaVersion,omitempty"`
 
 	// Spaces Spaces within properties — rooms, outbuildings, storage areas, and outdoor zones where assets are located
 	Spaces *[]Space `json:"spaces,omitempty"`
@@ -4631,8 +6150,14 @@ type Schema_ApplicationState struct {
 	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
+// SignatureAlgorithmId A signature algorithm id from reference-data/algorithm-lifecycle-registry.json (kind: signature)
+type SignatureAlgorithmId = interface{}
+
 // Space A distinguishable space within or associated with a property — rooms, outbuildings, storage areas, and outdoor zones where assets may be located. Maps to schema:Place in JSON-LD
 type Space struct {
+	// ContainedInSpaceId Reference to another Space.id that physically contains this space — a loft inside a house, a shelving bay inside a storage room. Enables the recursive Property → Space → Space → item chain a room-by-room listing walk produces. Absent or null means this space sits directly in the Property
+	ContainedInSpaceId *openapi_types.UUID `json:"containedInSpaceId,omitempty"`
+
 	// Floor Which floor this space is on, if applicable
 	Floor interface{} `json:"floor,omitempty"`
 
@@ -4649,7 +6174,7 @@ type Space struct {
 	Notes *string `json:"notes,omitempty"`
 
 	// PropertyId Reference to the Property.id that contains or is associated with this space
-	PropertyId openapi_types.UUID `json:"propertyId"`
+	PropertyId *openapi_types.UUID `json:"propertyId,omitempty"`
 
 	// Provenance Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
 	Provenance *Provenance `json:"provenance,omitempty"`
@@ -4829,11 +6354,35 @@ type Trust struct {
 	// Beneficiaries Beneficiaries of the trust — named individuals, classes, or organisations
 	Beneficiaries []TrustBeneficiary `json:"beneficiaries"`
 
+	// CharitableRemainderDetails Charitable remainder trust details — income interest to non-charitable beneficiary, remainder to charity
+	CharitableRemainderDetails *struct {
+		CrtType                     interface{}         `json:"crtType,omitempty"`
+		IncomeInterestBeneficiaryId *openapi_types.UUID `json:"incomeInterestBeneficiaryId,omitempty"`
+
+		// PayoutRate Annual payout percentage
+		PayoutRate             *float32            `json:"payoutRate,omitempty"`
+		RemainderBeneficiaryId *openapi_types.UUID `json:"remainderBeneficiaryId,omitempty"`
+
+		// TaxDeductionClaimed Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		TaxDeductionClaimed *Money      `json:"taxDeductionClaimed,omitempty"`
+		TermType            interface{} `json:"termType,omitempty"`
+		TermYears           *int        `json:"termYears,omitempty"`
+	} `json:"charitableRemainderDetails,omitempty"`
+
 	// ConditionType Category of the trust's primary activation condition
 	ConditionType interface{} `json:"conditionType,omitempty"`
 
 	// Conditions Conditions under which the trust activates, distributes, or terminates. Free text for complex conditions that cannot be fully structured
 	Conditions *string `json:"conditions,omitempty"`
+
+	// ConflictsOfInterest Declared conflicts of interest — executor/trustee who is also a beneficiary, drafter, or family member
+	ConflictsOfInterest *[]struct {
+		ConflictType                 interface{}         `json:"conflictType"`
+		Disclosed                    *bool               `json:"disclosed,omitempty"`
+		IndependentOversightRequired *bool               `json:"independentOversightRequired,omitempty"`
+		Notes                        *string             `json:"notes,omitempty"`
+		RelatedPersonId              *openapi_types.UUID `json:"relatedPersonId,omitempty"`
+	} `json:"conflictsOfInterest,omitempty"`
 
 	// ContingentInterests Interests in the trust that are contingent on future events
 	ContingentInterests *[]string `json:"contingentInterests,omitempty"`
@@ -4858,6 +6407,18 @@ type Trust struct {
 		// TriggerEvents Events that trigger the flee clause
 		TriggerEvents *[]string `json:"triggerEvents,omitempty"`
 	} `json:"fleeClause,omitempty"`
+
+	// GenerationSkipping Generation-skipping transfer classification for US tax purposes (IRC Chapter 13)
+	GenerationSkipping *struct {
+		Applies *bool `json:"applies,omitempty"`
+
+		// Classification GST classification
+		Classification interface{} `json:"classification,omitempty"`
+
+		// GstExemptionAllocated Monetary value in integer minor currency units with ISO 4217 code. Never floating point
+		GstExemptionAllocated *Money  `json:"gstExemptionAllocated,omitempty"`
+		Notes                 *string `json:"notes,omitempty"`
+	} `json:"generationSkipping,omitempty"`
 
 	// GoverningLaw A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
 	GoverningLaw *Jurisdiction `json:"governingLaw,omitempty"`
@@ -4885,6 +6446,12 @@ type Trust struct {
 		// RecognisedAs How the jurisdiction characterises the trust for legal and tax purposes
 		RecognisedAs *string `json:"recognisedAs,omitempty"`
 	} `json:"jurisdictionalRecognition,omitempty"`
+
+	// LetterOfWishesDocumentId Reference to Document.id containing the letter of wishes for this trust
+	LetterOfWishesDocumentId *openapi_types.UUID `json:"letterOfWishesDocumentId,omitempty"`
+
+	// LetterOfWishesStatus Binding status of the letter of wishes
+	LetterOfWishesStatus interface{} `json:"letterOfWishesStatus,omitempty"`
 
 	// Name Name of the trust, as it appears in the trust instrument
 	Name string `json:"name"`
@@ -4948,6 +6515,19 @@ type Trust struct {
 
 	// SettlorDisplay Human-readable display name for the referenced settlor
 	SettlorDisplay *string `json:"settlorDisplay,omitempty"`
+
+	// TaxPlanningDetails Tax planning configuration for nil-rate band, RNRB, A/B marital, or bypass trusts
+	TaxPlanningDetails *struct {
+		// CompanionTrustId UUID of the companion trust in an A/B pair
+		CompanionTrustId *openapi_types.UUID `json:"companionTrustId,omitempty"`
+		FundingMechanism interface{}         `json:"fundingMechanism,omitempty"`
+
+		// Structure The tax planning structure type
+		Structure *string `json:"structure,omitempty"`
+
+		// ThresholdReference Reference to the tax threshold being used
+		ThresholdReference *string `json:"thresholdReference,omitempty"`
+	} `json:"taxPlanningDetails,omitempty"`
 
 	// TrustPeriod The trust period or perpetuity period, if applicable. In England and Wales, the statutory perpetuity period is 125 years (Perpetuities and Accumulations Act 2009)
 	TrustPeriod *string `json:"trustPeriod,omitempty"`
@@ -5255,8 +6835,14 @@ type Wish struct {
 	// Provenance Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
 	Provenance *Provenance `json:"provenance,omitempty"`
 
-	// RelatedAssetId Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item)
+	// RelatedAssetId Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item). A wish may reference either relatedAssetId (a single item) or relatedCollectionId (an entire collection), not both
 	RelatedAssetId *openapi_types.UUID `json:"relatedAssetId,omitempty"`
+
+	// RelatedCollectionId Reference to an AssetCollection.id, if the wish relates to an entire collection rather than a single item. A wish may reference either relatedAssetId (a single item) or relatedCollectionId (an entire collection), not both
+	RelatedCollectionId *openapi_types.UUID `json:"relatedCollectionId,omitempty"`
+
+	// RelatedTrustIds Trust IDs this wish or letter of wishes applies to
+	RelatedTrustIds *[]openapi_types.UUID `json:"relatedTrustIds,omitempty"`
 
 	// SyntheticMediaPolicy Policy on AI-generated synthetic media using the person's likeness
 	SyntheticMediaPolicy interface{} `json:"syntheticMediaPolicy,omitempty"`
@@ -5283,7 +6869,7 @@ type Wish_FuneralArrangementType struct {
 }
 
 // ValidateDocumentJSONRequestBody defines body for ValidateDocument for application/json ContentType.
-type ValidateDocumentJSONRequestBody = Schema
+type ValidateDocumentJSONRequestBody = InheritDocument
 
 // ValidateCatalogueDocumentJSONRequestBody defines body for ValidateCatalogueDocument for application/json ContentType.
 type ValidateCatalogueDocumentJSONRequestBody = Catalogue
@@ -6462,6 +8048,192 @@ func (t *AiProvenance_Model) UnmarshalJSON(b []byte) error {
 	return err
 }
 
+// AsAssetBrand0 returns the union data inside the Asset_Brand as a AssetBrand0
+func (t Asset_Brand) AsAssetBrand0() (AssetBrand0, error) {
+	var body AssetBrand0
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromAssetBrand0 overwrites any union data inside the Asset_Brand as the provided AssetBrand0
+func (t *Asset_Brand) FromAssetBrand0(v AssetBrand0) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeAssetBrand0 performs a merge with any union data inside the Asset_Brand, using the provided AssetBrand0
+func (t *Asset_Brand) MergeAssetBrand0(v AssetBrand0) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsAssetBrand1 returns the union data inside the Asset_Brand as a AssetBrand1
+func (t Asset_Brand) AsAssetBrand1() (AssetBrand1, error) {
+	var body AssetBrand1
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromAssetBrand1 overwrites any union data inside the Asset_Brand as the provided AssetBrand1
+func (t *Asset_Brand) FromAssetBrand1(v AssetBrand1) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeAssetBrand1 performs a merge with any union data inside the Asset_Brand, using the provided AssetBrand1
+func (t *Asset_Brand) MergeAssetBrand1(v AssetBrand1) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t Asset_Brand) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *Asset_Brand) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsAssetConditionSystem0 returns the union data inside the Asset_ConditionSystem as a AssetConditionSystem0
+func (t Asset_ConditionSystem) AsAssetConditionSystem0() (AssetConditionSystem0, error) {
+	var body AssetConditionSystem0
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromAssetConditionSystem0 overwrites any union data inside the Asset_ConditionSystem as the provided AssetConditionSystem0
+func (t *Asset_ConditionSystem) FromAssetConditionSystem0(v AssetConditionSystem0) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeAssetConditionSystem0 performs a merge with any union data inside the Asset_ConditionSystem, using the provided AssetConditionSystem0
+func (t *Asset_ConditionSystem) MergeAssetConditionSystem0(v AssetConditionSystem0) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsAssetConditionSystem1 returns the union data inside the Asset_ConditionSystem as a AssetConditionSystem1
+func (t Asset_ConditionSystem) AsAssetConditionSystem1() (AssetConditionSystem1, error) {
+	var body AssetConditionSystem1
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromAssetConditionSystem1 overwrites any union data inside the Asset_ConditionSystem as the provided AssetConditionSystem1
+func (t *Asset_ConditionSystem) FromAssetConditionSystem1(v AssetConditionSystem1) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeAssetConditionSystem1 performs a merge with any union data inside the Asset_ConditionSystem, using the provided AssetConditionSystem1
+func (t *Asset_ConditionSystem) MergeAssetConditionSystem1(v AssetConditionSystem1) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t Asset_ConditionSystem) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *Asset_ConditionSystem) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsAssetIncludedDocuments0 returns the union data inside the Asset_IncludedDocuments_Item as a AssetIncludedDocuments0
+func (t Asset_IncludedDocuments_Item) AsAssetIncludedDocuments0() (AssetIncludedDocuments0, error) {
+	var body AssetIncludedDocuments0
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromAssetIncludedDocuments0 overwrites any union data inside the Asset_IncludedDocuments_Item as the provided AssetIncludedDocuments0
+func (t *Asset_IncludedDocuments_Item) FromAssetIncludedDocuments0(v AssetIncludedDocuments0) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeAssetIncludedDocuments0 performs a merge with any union data inside the Asset_IncludedDocuments_Item, using the provided AssetIncludedDocuments0
+func (t *Asset_IncludedDocuments_Item) MergeAssetIncludedDocuments0(v AssetIncludedDocuments0) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsAssetIncludedDocuments1 returns the union data inside the Asset_IncludedDocuments_Item as a AssetIncludedDocuments1
+func (t Asset_IncludedDocuments_Item) AsAssetIncludedDocuments1() (AssetIncludedDocuments1, error) {
+	var body AssetIncludedDocuments1
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromAssetIncludedDocuments1 overwrites any union data inside the Asset_IncludedDocuments_Item as the provided AssetIncludedDocuments1
+func (t *Asset_IncludedDocuments_Item) FromAssetIncludedDocuments1(v AssetIncludedDocuments1) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeAssetIncludedDocuments1 performs a merge with any union data inside the Asset_IncludedDocuments_Item, using the provided AssetIncludedDocuments1
+func (t *Asset_IncludedDocuments_Item) MergeAssetIncludedDocuments1(v AssetIncludedDocuments1) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t Asset_IncludedDocuments_Item) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *Asset_IncludedDocuments_Item) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
 // AsAssetInterest0 returns the union data inside the AssetInterest as a AssetInterest0
 func (t AssetInterest) AsAssetInterest0() (AssetInterest0, error) {
 	var body AssetInterest0
@@ -6926,6 +8698,244 @@ func (t *AssetInterest_IntentType) UnmarshalJSON(b []byte) error {
 	return err
 }
 
+// AsBequestBequestType0 returns the union data inside the Bequest_BequestType as a BequestBequestType0
+func (t Bequest_BequestType) AsBequestBequestType0() (BequestBequestType0, error) {
+	var body BequestBequestType0
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromBequestBequestType0 overwrites any union data inside the Bequest_BequestType as the provided BequestBequestType0
+func (t *Bequest_BequestType) FromBequestBequestType0(v BequestBequestType0) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeBequestBequestType0 performs a merge with any union data inside the Bequest_BequestType, using the provided BequestBequestType0
+func (t *Bequest_BequestType) MergeBequestBequestType0(v BequestBequestType0) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsBequestBequestType1 returns the union data inside the Bequest_BequestType as a BequestBequestType1
+func (t Bequest_BequestType) AsBequestBequestType1() (BequestBequestType1, error) {
+	var body BequestBequestType1
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromBequestBequestType1 overwrites any union data inside the Bequest_BequestType as the provided BequestBequestType1
+func (t *Bequest_BequestType) FromBequestBequestType1(v BequestBequestType1) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeBequestBequestType1 performs a merge with any union data inside the Bequest_BequestType, using the provided BequestBequestType1
+func (t *Bequest_BequestType) MergeBequestBequestType1(v BequestBequestType1) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t Bequest_BequestType) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *Bequest_BequestType) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsBequestDistributionMethod0 returns the union data inside the Bequest_DistributionMethod as a BequestDistributionMethod0
+func (t Bequest_DistributionMethod) AsBequestDistributionMethod0() (BequestDistributionMethod0, error) {
+	var body BequestDistributionMethod0
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromBequestDistributionMethod0 overwrites any union data inside the Bequest_DistributionMethod as the provided BequestDistributionMethod0
+func (t *Bequest_DistributionMethod) FromBequestDistributionMethod0(v BequestDistributionMethod0) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeBequestDistributionMethod0 performs a merge with any union data inside the Bequest_DistributionMethod, using the provided BequestDistributionMethod0
+func (t *Bequest_DistributionMethod) MergeBequestDistributionMethod0(v BequestDistributionMethod0) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsBequestDistributionMethod1 returns the union data inside the Bequest_DistributionMethod as a BequestDistributionMethod1
+func (t Bequest_DistributionMethod) AsBequestDistributionMethod1() (BequestDistributionMethod1, error) {
+	var body BequestDistributionMethod1
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromBequestDistributionMethod1 overwrites any union data inside the Bequest_DistributionMethod as the provided BequestDistributionMethod1
+func (t *Bequest_DistributionMethod) FromBequestDistributionMethod1(v BequestDistributionMethod1) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeBequestDistributionMethod1 performs a merge with any union data inside the Bequest_DistributionMethod, using the provided BequestDistributionMethod1
+func (t *Bequest_DistributionMethod) MergeBequestDistributionMethod1(v BequestDistributionMethod1) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t Bequest_DistributionMethod) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *Bequest_DistributionMethod) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsDigest0 returns the union data inside the Digest as a Digest0
+func (t Digest) AsDigest0() (Digest0, error) {
+	var body Digest0
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromDigest0 overwrites any union data inside the Digest as the provided Digest0
+func (t *Digest) FromDigest0(v Digest0) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeDigest0 performs a merge with any union data inside the Digest, using the provided Digest0
+func (t *Digest) MergeDigest0(v Digest0) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsDigest1 returns the union data inside the Digest as a Digest1
+func (t Digest) AsDigest1() (Digest1, error) {
+	var body Digest1
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromDigest1 overwrites any union data inside the Digest as the provided Digest1
+func (t *Digest) FromDigest1(v Digest1) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeDigest1 performs a merge with any union data inside the Digest, using the provided Digest1
+func (t *Digest) MergeDigest1(v Digest1) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsDigest2 returns the union data inside the Digest as a Digest2
+func (t Digest) AsDigest2() (Digest2, error) {
+	var body Digest2
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromDigest2 overwrites any union data inside the Digest as the provided Digest2
+func (t *Digest) FromDigest2(v Digest2) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeDigest2 performs a merge with any union data inside the Digest, using the provided Digest2
+func (t *Digest) MergeDigest2(v Digest2) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsDigest3 returns the union data inside the Digest as a Digest3
+func (t Digest) AsDigest3() (Digest3, error) {
+	var body Digest3
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromDigest3 overwrites any union data inside the Digest as the provided Digest3
+func (t *Digest) FromDigest3(v Digest3) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeDigest3 performs a merge with any union data inside the Digest, using the provided Digest3
+func (t *Digest) MergeDigest3(v Digest3) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t Digest) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *Digest) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
 // AsDocumentType0 returns the union data inside the Document_Type as a DocumentType0
 func (t Document_Type) AsDocumentType0() (DocumentType0, error) {
 	var body DocumentType0
@@ -7177,6 +9187,13 @@ func (t Executor) MarshalJSON() ([]byte, error) {
 		}
 	}
 
+	if t.ConflictsOfInterest != nil {
+		object["conflictsOfInterest"], err = json.Marshal(t.ConflictsOfInterest)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'conflictsOfInterest': %w", err)
+		}
+	}
+
 	if t.ConsultWith != nil {
 		object["consultWith"], err = json.Marshal(t.ConsultWith)
 		if err != nil {
@@ -7283,6 +9300,12 @@ func (t Executor) MarshalJSON() ([]byte, error) {
 		return nil, fmt.Errorf("error marshaling 'role': %w", err)
 	}
 
+	if t.Scope != nil {
+		object["scope"], err = json.Marshal(t.Scope)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'scope': %w", err)
+		}
+	}
 	b, err = json.Marshal(object)
 	return b, err
 }
@@ -7296,6 +9319,13 @@ func (t *Executor) UnmarshalJSON(b []byte) error {
 	err = json.Unmarshal(b, &object)
 	if err != nil {
 		return err
+	}
+
+	if raw, found := object["conflictsOfInterest"]; found {
+		err = json.Unmarshal(raw, &t.ConflictsOfInterest)
+		if err != nil {
+			return fmt.Errorf("error reading 'conflictsOfInterest': %w", err)
+		}
 	}
 
 	if raw, found := object["consultWith"]; found {
@@ -7407,6 +9437,13 @@ func (t *Executor) UnmarshalJSON(b []byte) error {
 		err = json.Unmarshal(raw, &t.Role)
 		if err != nil {
 			return fmt.Errorf("error reading 'role': %w", err)
+		}
+	}
+
+	if raw, found := object["scope"]; found {
+		err = json.Unmarshal(raw, &t.Scope)
+		if err != nil {
+			return fmt.Errorf("error reading 'scope': %w", err)
 		}
 	}
 
@@ -7626,11 +9663,21 @@ func (t Guardian) MarshalJSON() ([]byte, error) {
 		}
 	}
 
+	object["dependantType"], err = json.Marshal(t.DependantType)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'dependantType': %w", err)
+	}
+
 	if t.FamilyCouncilDecisionRef != nil {
 		object["familyCouncilDecisionRef"], err = json.Marshal(t.FamilyCouncilDecisionRef)
 		if err != nil {
 			return nil, fmt.Errorf("error marshaling 'familyCouncilDecisionRef': %w", err)
 		}
+	}
+
+	object["guardianshipModel"], err = json.Marshal(t.GuardianshipModel)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'guardianshipModel': %w", err)
 	}
 
 	object["guardianshipStructure"], err = json.Marshal(t.GuardianshipStructure)
@@ -7733,10 +9780,24 @@ func (t *Guardian) UnmarshalJSON(b []byte) error {
 		}
 	}
 
+	if raw, found := object["dependantType"]; found {
+		err = json.Unmarshal(raw, &t.DependantType)
+		if err != nil {
+			return fmt.Errorf("error reading 'dependantType': %w", err)
+		}
+	}
+
 	if raw, found := object["familyCouncilDecisionRef"]; found {
 		err = json.Unmarshal(raw, &t.FamilyCouncilDecisionRef)
 		if err != nil {
 			return fmt.Errorf("error reading 'familyCouncilDecisionRef': %w", err)
+		}
+	}
+
+	if raw, found := object["guardianshipModel"]; found {
+		err = json.Unmarshal(raw, &t.GuardianshipModel)
+		if err != nil {
+			return fmt.Errorf("error reading 'guardianshipModel': %w", err)
 		}
 	}
 
@@ -8608,6 +10669,68 @@ func (t Property_LandRegistry_TitleClass) MarshalJSON() ([]byte, error) {
 }
 
 func (t *Property_LandRegistry_TitleClass) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsProxyAuthorisationAgentCapabilities0 returns the union data inside the ProxyAuthorisation_AgentCapabilities_Item as a ProxyAuthorisationAgentCapabilities0
+func (t ProxyAuthorisation_AgentCapabilities_Item) AsProxyAuthorisationAgentCapabilities0() (ProxyAuthorisationAgentCapabilities0, error) {
+	var body ProxyAuthorisationAgentCapabilities0
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromProxyAuthorisationAgentCapabilities0 overwrites any union data inside the ProxyAuthorisation_AgentCapabilities_Item as the provided ProxyAuthorisationAgentCapabilities0
+func (t *ProxyAuthorisation_AgentCapabilities_Item) FromProxyAuthorisationAgentCapabilities0(v ProxyAuthorisationAgentCapabilities0) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeProxyAuthorisationAgentCapabilities0 performs a merge with any union data inside the ProxyAuthorisation_AgentCapabilities_Item, using the provided ProxyAuthorisationAgentCapabilities0
+func (t *ProxyAuthorisation_AgentCapabilities_Item) MergeProxyAuthorisationAgentCapabilities0(v ProxyAuthorisationAgentCapabilities0) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsProxyAuthorisationAgentCapabilities1 returns the union data inside the ProxyAuthorisation_AgentCapabilities_Item as a ProxyAuthorisationAgentCapabilities1
+func (t ProxyAuthorisation_AgentCapabilities_Item) AsProxyAuthorisationAgentCapabilities1() (ProxyAuthorisationAgentCapabilities1, error) {
+	var body ProxyAuthorisationAgentCapabilities1
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromProxyAuthorisationAgentCapabilities1 overwrites any union data inside the ProxyAuthorisation_AgentCapabilities_Item as the provided ProxyAuthorisationAgentCapabilities1
+func (t *ProxyAuthorisation_AgentCapabilities_Item) FromProxyAuthorisationAgentCapabilities1(v ProxyAuthorisationAgentCapabilities1) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeProxyAuthorisationAgentCapabilities1 performs a merge with any union data inside the ProxyAuthorisation_AgentCapabilities_Item, using the provided ProxyAuthorisationAgentCapabilities1
+func (t *ProxyAuthorisation_AgentCapabilities_Item) MergeProxyAuthorisationAgentCapabilities1(v ProxyAuthorisationAgentCapabilities1) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t ProxyAuthorisation_AgentCapabilities_Item) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *ProxyAuthorisation_AgentCapabilities_Item) UnmarshalJSON(b []byte) error {
 	err := t.union.UnmarshalJSON(b)
 	return err
 }

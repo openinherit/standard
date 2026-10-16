@@ -7,9 +7,11 @@ set -euo pipefail
 # only supports OpenAPI 3.0.x. This script:
 #   1. Downconverts the bundled spec from 3.1 to 3.0 using @apiture/openapi-down-convert
 #   2. Finishes the conversion (scripts/lib/openapi30-for-oapi-codegen.mjs): drops the
-#      JSON Schema if/then/else 3.0 cannot carry — left in, oapi-codegen turns Space and
-#      Schema into interface{} and Catalogue into a self-alias that does not compile —
-#      and rewrites numeric exclusiveMinimum/exclusiveMaximum into the 3.0 boolean form
+#      JSON Schema if/then/else 3.0 cannot carry (left in, Space and Schema come out as
+#      interface{}), rewrites numeric exclusiveMinimum/exclusiveMaximum into the 3.0
+#      boolean form, and folds each PascalCase alias component into the v3/ schema of
+#      the same Go name (left in, Catalogue comes out as `type Catalogue = Catalogue`,
+#      which does not compile)
 #   3. Generates Go types using oapi-codegen
 #
 # Both generators are pinned, so regenerating is deterministic and
@@ -42,7 +44,7 @@ TMP_SPEC="$TMP_DIR/openapi-3.0.json"
 echo "Step 1: Downconverting OpenAPI 3.1 → 3.0..."
 "$DOWN_CONVERT" -i "$INPUT" -o "$TMP_DIR/down-converted.json"
 
-echo "Step 2: Dropping if/then/else and rewriting exclusive bounds for 3.0..."
+echo "Step 2: Finishing the 3.0 conversion for oapi-codegen..."
 node "$ROOT_DIR/scripts/lib/openapi30-for-oapi-codegen.mjs" "$TMP_DIR/down-converted.json" "$TMP_SPEC"
 
 echo "Step 3: Generating Go types (oapi-codegen $OAPI_CODEGEN_VERSION)..."

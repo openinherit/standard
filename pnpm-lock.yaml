@@ -17,7 +17,7 @@ importers:
         version: 17.2.0
     devDependencies:
       '@apiture/openapi-down-convert':
-        specifier: ^0.14.2
+        specifier: 0.14.2
         version: 0.14.2
       '@hey-api/client-fetch':
         specifier: latest

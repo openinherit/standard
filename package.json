@@ -59,7 +59,7 @@
     "test:proposal-numbers": "node scripts/check-proposal-numbers.mjs && node scripts/test-check-proposal-numbers.mjs"
   },
   "devDependencies": {
-    "@apiture/openapi-down-convert": "^0.14.2",
+    "@apiture/openapi-down-convert": "0.14.2",
     "@hey-api/client-fetch": "latest",
     "@hey-api/openapi-ts": "latest",
     "@hyperjump/json-schema": "^1.18.0",

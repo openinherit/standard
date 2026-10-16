@@ -7,10 +7,8 @@
  *
  * Two things survive the down-convert that 3.0's Schema Object cannot carry:
  *
- * - if/then/else. Left in, oapi-codegen mistranslates them: an object whose
- *   allOf carries a conditional becomes interface{} (Space, Schema), and a $ref
- *   under `then` becomes a self-alias that does not compile
- *   (type Catalogue = Catalogue). A Go struct cannot say "required only when
+ * - if/then/else. Left in, oapi-codegen turns an object whose allOf carries a
+ *   conditional into interface{} (Space, Schema). A Go struct cannot say "required only when
  *   spaceType is on-site" anyway, so the conditional is dropped and the field
  *   stays optional, which is what the top-level `required` already says. An
  *   allOf member left carrying nothing but annotations goes with it.
@@ -34,6 +32,9 @@ import { fileURLToPath } from 'url';
 const CONDITIONAL = new Set(['if', 'then', 'else']);
 // Keys whose value maps NAMES to schemas: a property called "if" is not a keyword.
 const NAME_MAPS = new Set(['properties', 'patternProperties', '$defs', 'definitions', 'schemas']);
+// Keys whose value is instance data, never a schema: an example carrying an "if"
+// key is left exactly as written.
+const DATA = new Set(['example', 'examples', 'default', 'enum', 'const']);
 // Keys that annotate a schema without constraining it.
 const ANNOTATION = new Set(['description', 'title', '$comment']);
 
@@ -47,7 +48,8 @@ function walk(node, fix) {
   if (!isSchema(node)) return node;
   const out = {};
   for (const [k, v] of Object.entries(node)) {
-    out[k] = NAME_MAPS.has(k) && isSchema(v)
+    if (DATA.has(k) || k.startsWith('x-')) out[k] = v;
+    else out[k] = NAME_MAPS.has(k) && isSchema(v)
       ? Object.fromEntries(Object.entries(v).map(([name, s]) => [name, walk(s, fix)]))
       : walk(v, fix);
   }
@@ -104,11 +106,16 @@ export function foldCollidingAliases(doc) {
     }
   }
   if (!fold.size) return doc;
+  // Follow alias → alias → schema to the end, so no $ref lands on a folded name.
+  const end = (ref) => {
+    for (const seen = new Set(); fold.has(ref) && !seen.has(ref); ref = fold.get(ref)) seen.add(ref);
+    return ref;
+  };
   const repoint = (node) => {
     if (Array.isArray(node)) return node.map(repoint);
     if (!isSchema(node)) return node;
     return Object.fromEntries(Object.entries(node).map(([k, v]) =>
-      [k, k === '$ref' && fold.has(v) ? fold.get(v) : repoint(v)]));
+      [k, k === '$ref' && fold.has(v) ? end(v) : repoint(v)]));
   };
   const out = repoint(doc);
   out.components.schemas = Object.fromEntries(

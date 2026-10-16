@@ -5,9 +5,7 @@
  * packages/sdk-go/models/generate.sh that finishes the 3.1 → 3.0 conversion
  * @apiture/openapi-down-convert leaves undone, before oapi-codegen reads it.
  *
- * OpenAPI 3.0 has no if/then/else. Left in, oapi-codegen turns an object whose
- * allOf carries a conditional into interface{} (Space, Schema) and a $ref under
- * `then` into a self-alias that does not compile (type Catalogue = Catalogue).
+ * Why each step exists is in the module's header.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -130,4 +128,22 @@ test('goTypeName matches oapi-codegen ToCamelCase', () => {
   assert.equal(goTypeName('field_provenance.v2'), 'FieldProvenanceV2');
   assert.equal(goTypeName('a3b'), 'A3b');
   assert.equal(goTypeName('schema'), 'Schema');
+});
+
+test('example, default, enum, const and x- values are data, not schemas', () => {
+  const data = { if: 1, then: 2, exclusiveMinimum: 3, allOf: [{}] };
+  const s = { type: 'object', example: data, examples: [data], default: data, enum: [data], const: data, 'x-sample': data };
+  const out = forOapiCodegen(doc({ a: structuredClone(s) }));
+  assert.deepEqual(out.components.schemas.a, s);
+});
+
+test('an alias of an alias is repointed to the end of the chain', () => {
+  const out = foldCollidingAliases({ openapi: '3.0.3', components: { schemas: {
+    'Pet': { $ref: '#/components/schemas/pet_' },
+    'pet_': { $ref: '#/components/schemas/pet' },
+    'pet': { type: 'object' },
+    holder: { properties: { p: { $ref: '#/components/schemas/Pet' } } },
+  } } });
+  assert.deepEqual(Object.keys(out.components.schemas), ['pet', 'holder']);
+  assert.equal(out.components.schemas.holder.properties.p.$ref, '#/components/schemas/pet');
 });

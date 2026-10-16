@@ -23,12 +23,16 @@ const work = mkdtempSync(join(tmpdir(), 'release-contents-'));
 const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
 const writeJson = (p, obj) => writeFileSync(p, JSON.stringify(obj, null, 2) + '\n');
 
+// The fixture's own version, pinned so the suite does not depend on the repo's release
+// number. The packaged manifests are copied from the repo, so their version is overwritten.
+const FIXTURE_VERSION = '6.6.0';
+
 let n = 0;
 /** A fresh tree whose packages mirror the root exactly -- the gate's green case. */
 function makeTree() {
   const t = join(work, `tree-${++n}`);
   mkdirSync(t);
-  writeJson(join(t, 'package.json'), { name: 'openinherit', version: '6.6.0', private: true });
+  writeJson(join(t, 'package.json'), { name: 'openinherit', version: FIXTURE_VERSION, private: true });
   cpSync(join(ROOT, 'v3'), join(t, 'v3'), { recursive: true });
   cpSync(join(ROOT, 'extensions-registry.json'), join(t, 'extensions-registry.json'));
   // Root and package reference-data start identical; the package ships only these two.
@@ -39,7 +43,7 @@ function makeTree() {
 
   const schema = join(t, 'packages/schema');
   mkdirSync(schema, { recursive: true });
-  writeJson(join(schema, 'package.json'), readJson(join(ROOT, 'packages/schema/package.json')));
+  writeJson(join(schema, 'package.json'), { ...readJson(join(ROOT, 'packages/schema/package.json')), version: FIXTURE_VERSION });
   cpSync(join(t, 'v3'), join(schema, 'v3'), { recursive: true });
   cpSync(join(t, 'extensions-registry.json'), join(schema, 'extensions-registry.json'));
   mkdirSync(join(schema, 'reference-data'));
@@ -48,6 +52,7 @@ function makeTree() {
 
   const conf = join(t, 'packages/conformance');
   cpSync(join(ROOT, 'packages/conformance'), conf, { recursive: true });
+  set(t, 'packages/conformance/package.json', (p) => { p.version = FIXTURE_VERSION; });
   return t;
 }
 const set = (t, rel, fn) => {

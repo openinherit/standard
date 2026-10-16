@@ -55,13 +55,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Check bundled schema is current
-        run: |
-          if [ ! -f dist/inherit-v3-bundled.json ]; then
-            echo "::warning::dist/inherit-v3-bundled.json is missing. Run 'pnpm bundle' locally."
-          else
-            echo "Bundled schema: present ($(wc -c < dist/inherit-v3-bundled.json) bytes)"
-          fi
+      # A step named "Check bundled schema is current" stood here until October
+      # 2026. It looked for dist/inherit-v3-bundled.json, which is untracked, so
+      # on a fresh checkout it was always absent and printed a warning: it could
+      # not fail. The step below rebuilds the bundle and fails on drift.
 
       - name: Check vendored bundled schemas are current
         run: |

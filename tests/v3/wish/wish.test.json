@@ -951,6 +951,39 @@
         ]
       },
       "valid": true
+    },
+    {
+      "description": "valid — distribution wish about an entire collection (relatedCollectionId)",
+      "data": {
+        "id": "0f1e2d3c-4b5a-4968-8776-655443322110",
+        "wishType": "distribution",
+        "title": "The model railway",
+        "content": "I would like the whole railway, layout and rolling stock together, to go to Michael. Please keep it together.",
+        "bindingNature": "non_binding",
+        "relatedCollectionId": "b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — a wish names both a single item and a collection",
+      "data": {
+        "id": "1f1e2d3c-4b5a-4968-8776-655443322111",
+        "wishType": "distribution",
+        "title": "The model railway",
+        "relatedAssetId": "d4e5f6a7-b8c9-4123-8ef4-56789abcdef0",
+        "relatedCollectionId": "b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — relatedCollectionId is not a valid UUID",
+      "data": {
+        "id": "2f1e2d3c-4b5a-4968-8776-655443322112",
+        "wishType": "distribution",
+        "title": "The model railway",
+        "relatedCollectionId": "model-railway"
+      },
+      "valid": false
     }
   ]
 }

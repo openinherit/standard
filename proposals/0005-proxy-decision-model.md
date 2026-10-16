@@ -1,5 +1,5 @@
 ---
-github_issue: https://github.com/openinherit/standard/pulls
+github_issue: https://github.com/openinherit/standard/pull/74
 ---
 
 # Proposal 0005: Who decides — supported, co-decision or substituted — on a proxy authorisation

@@ -7922,6 +7922,11 @@ const zProxyAuthorisation$generated = z.intersection(z.unknown(), z.object({
         'co_equal',
         'supervised'
     ]).optional(),
+    decisionModel: z.enum([
+        'supported',
+        'co_decision',
+        'substituted'
+    ]).optional(),
     delegationConstraints: z.strictObject({
         maxTransactionValue: zMoney.optional(),
         requiresCoApproval: z.boolean().optional(),

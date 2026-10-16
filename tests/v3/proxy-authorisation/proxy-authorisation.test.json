@@ -937,6 +937,161 @@
         ]
       },
       "valid": true
+    },
+    {
+      "description": "valid — decisionModel supported: the owner decides, the proxy helps (owner retains capacity)",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000561",
+        "delegateType": "person",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000561",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000561",
+        "scope": "communication",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "decisionModel": "supported"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — decisionModel co_decision: the owner and the proxy decide jointly (e.g. an Irish co-decision-making agreement)",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000561",
+        "delegateType": "person",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000561",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000561",
+        "scope": "decision_making",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "decisionModel": "co_decision"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — decisionModel substituted: the proxy decides because the owner cannot",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000561",
+        "delegateType": "person",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000561",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000561",
+        "scope": "decision_making",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "decisionModel": "substituted",
+        "activationTrigger": "on_incapacity"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — decisionModel is independent of delegationType: a capable owner with a supervised agent",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000561",
+        "delegateType": "person",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000561",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000561",
+        "scope": "information_gathering",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "decisionModel": "supported",
+        "delegationType": "supervised"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — decisionModel is independent of delegationType: a substituted attorney acting co_equal",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000561",
+        "delegateType": "person",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000561",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000561",
+        "scope": "full",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "decisionModel": "substituted",
+        "delegationType": "co_equal"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — decisionModel absent: not recorded, as in every 6.x document written before it existed",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000561",
+        "delegateType": "person",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000561",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000561",
+        "scope": "information_gathering",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "activationTrigger": "on_incapacity"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — decisionModel outside the closed set",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000561",
+        "delegateType": "person",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000561",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000561",
+        "scope": "information_gathering",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "decisionModel": "best_interests"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — decisionModel has no explicit 'unspecified' value; absence means not recorded",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000561",
+        "delegateType": "person",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000561",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000561",
+        "scope": "information_gathering",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "decisionModel": "unspecified"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — activationTrigger on_incapacity with decisionModel supported: an authority that starts when the owner cannot decide is not supported decision-making",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000561",
+        "delegateType": "person",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000561",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000561",
+        "scope": "information_gathering",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "decisionModel": "supported",
+        "activationTrigger": "on_incapacity"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — activationTrigger on_incapacity with decisionModel co_decision",
+      "data": {
+        "id": "a1b2c3d4-0000-4000-8000-000000000561",
+        "delegateType": "person",
+        "proxyPersonId": "11111111-0000-0000-0000-000000000561",
+        "testatorPersonId": "22222222-0000-0000-0000-000000000561",
+        "scope": "information_gathering",
+        "consentRecord": {
+          "consentGiven": true
+        },
+        "decisionModel": "co_decision",
+        "activationTrigger": "on_incapacity"
+      },
+      "valid": false
     }
   ]
 }

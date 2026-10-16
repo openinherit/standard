@@ -15371,6 +15371,10 @@ export type ProxyAuthorisation2 = unknown & {
      */
     delegationType?: 'on_behalf_of' | 'impersonation' | 'co_equal' | 'supervised';
     /**
+     * Who makes the decision this authorisation is exercised for: the owner with help (supported), the owner and the proxy jointly (co_decision), or the proxy in place of an owner who cannot decide (substituted). Absent means not recorded
+     */
+    decisionModel?: 'supported' | 'co_decision' | 'substituted';
+    /**
      * Constraints limiting how this delegation may be exercised
      */
     delegationConstraints?: {
@@ -15516,7 +15520,7 @@ export type ProxyAuthorisation2 = unknown & {
          * Link to the revocation document or court order
          */
         evidenceUrl?: string;
-    } | 'on_behalf_of' | 'impersonation' | 'co_equal' | 'supervised' | {
+    } | 'on_behalf_of' | 'impersonation' | 'co_equal' | 'supervised' | 'supported' | 'co_decision' | 'substituted' | {
         /**
          * Financial limit per delegated action
          */

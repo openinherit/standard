@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- `ProxyAuthorisation.decisionModel` (proposal 0005): whether the owner still makes the decision
+  the proxy acts on (`supported`), makes it jointly with the proxy (`co_decision`), or lacks
+  capacity for it so the proxy decides in their place (`substituted`). Optional; absence means not
+  recorded. It is orthogonal to `delegationType` and `scope`. One conditional refuses a
+  contradiction: an authorisation with `activationTrigger: on_incapacity` that records a
+  `decisionModel` must record `substituted`. Sources per value are in the property's `$comment`
+  (Mental Capacity Act 2005 ss.1(3), 4; Adults with Incapacity (Scotland) Act 2000 s.1; Mental
+  Capacity Act (Northern Ireland) 2016 s.7; Assisted Decision-Making (Capacity) Act 2015 Parts 3–5;
+  UNCRPD Art 12). Vendored bundles, generated clients, runtime validators and the reference page are
+  regenerated.
+
 ## [6.7.0] — 2026-10-16
 
 ### Added

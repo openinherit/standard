@@ -6,6 +6,24 @@
   "type": "object",
   "allOf": [
     {
+      "$comment": "An authority that only activates when the owner can no longer decide is exercised in the owner's place, so it cannot be supported or co_decision.",
+      "if": {
+        "required": [ "activationTrigger" ],
+        "properties": {
+          "activationTrigger": {
+            "const": "on_incapacity"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "decisionModel": {
+            "const": "substituted"
+          }
+        }
+      }
+    },
+    {
       "if": {
         "required": [ "delegateType" ],
         "properties": {
@@ -250,6 +268,12 @@
       "description": "The type of delegation — on-behalf-of preserves principal/agent distinction, impersonation collapses it",
       "$comment": "OpenID Unfinished Digital Estate report; OAuth RFC 8693 act claim",
       "enum": [ "on_behalf_of", "impersonation", "co_equal", "supervised" ]
+    },
+    "decisionModel": {
+      "description": "Who makes the decision this authorisation is exercised for: the owner with help (supported), the owner and the proxy jointly (co_decision), or the proxy in place of an owner who cannot decide (substituted). Absent means not recorded",
+      "$comment": "supported: the owner retains decision-making capacity and decides; the proxy helps to gather information, communicate or carry out the owner's decision (Mental Capacity Act 2005 s.1(3); UNCRPD Art 12(3); Assisted Decision-Making (Capacity) Act 2015 Part 3). co_decision: the owner and the proxy make the decision jointly (Assisted Decision-Making (Capacity) Act 2015 Part 4). substituted: the proxy decides because the owner lacks capacity for the decision, and must act in the owner's best interests or under the equivalent principle (Mental Capacity Act 2005 s.4; Adults with Incapacity (Scotland) Act 2000 s.1; Mental Capacity Act (Northern Ireland) 2016 s.7; Assisted Decision-Making (Capacity) Act 2015 Part 5). Orthogonal to delegationType, which records the proxy's relation to the owner's authority, and to scope, which records what the proxy may do: a capable owner may have a supervised agent, and an incapacitated owner a co_equal attorney. Capacity is decision-specific and can change; record the model under which this authorisation is currently exercised.",
+      "examples": [ "supported", "substituted" ],
+      "enum": [ "supported", "co_decision", "substituted" ]
     },
     "delegationConstraints": {
       "description": "Constraints limiting how this delegation may be exercised",

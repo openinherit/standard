@@ -29,7 +29,7 @@ has one generated page per schema.
 
 ## Install
 
-The standard ships as npm packages (version 6.6.0):
+The standard ships as npm packages (version 6.7.0):
 
 ```bash
 npm install @openinherit/schema

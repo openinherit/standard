@@ -1,6 +1,6 @@
 {
   "name": "@openinherit/schema",
-  "version": "6.6.0",
+  "version": "6.7.0",
   "description": "INHERIT open estate data standard — 31 JSON Schemas, 14 common types, 5 asset categories, 21 jurisdiction extensions, and reference data for structured estate planning interchange across 7 legal traditions",
   "type": "module",
   "license": "Apache-2.0",

@@ -1,0 +1,44 @@
+name: Go SDK
+
+# packages/sdk-go is generated from openapi/openapi-bundled.yaml, which the
+# OpenAPI Drift workflow holds to v3/. Before this, no workflow regenerated the
+# Go types or even compiled the module, so types.gen.go sat at the 28 August
+# publication commit while v3/ moved on.
+#   fresh — regenerating types.gen.go reproduces the commit
+#   build — the module builds, vets and passes its tests
+#
+# No path filter, on purpose: a v3/ change is what makes the Go types stale,
+# and a filter on packages/sdk-go/** would never see it.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  go-sdk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: packages/sdk-go/go.mod
+          cache-dependency-path: packages/sdk-go/go.sum
+      - run: pnpm install --frozen-lockfile
+      - name: The 3.0 finishing step does what it says
+        run: node --test scripts/test-openapi30-for-oapi-codegen.mjs
+      - name: The freshness gate goes red when it should (hermetic)
+        run: bash scripts/test-check-go-models-fresh.sh
+      - name: Go types match what regenerating produces
+        run: bash scripts/check-go-models-fresh.sh
+      - name: Build, vet and test the module
+        working-directory: packages/sdk-go
+        run: |
+          go build ./...
+          go vet ./...
+          go test ./...

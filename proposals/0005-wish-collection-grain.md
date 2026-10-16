@@ -78,6 +78,18 @@ One new optional property, placed next to the one it pairs with, and one top-lev
 The wording and the `not` constraint follow `bequest.json`'s `assetIds` / `assetCollectionId`
 exactly, so a document cannot use one convention for the will and another for the wish.
 
+### The generated validators enforce it too
+
+The Zod (`@openinherit/sdk/zod`) and pydantic validators are generated from these schemas, and
+the generators dropped a schema's own top-level `not`. So both would have accepted a wish naming an
+item and a collection. They **already** accepted a bequest doing so: that case sat in
+`scripts/runtime-validator-divergences.json` as a known `false_accept`. Adding a second entry was
+not an option, because the register may only shrink. `scripts/lib/write-conditional-layer.py` now
+compiles a top-level `not` as an unconditional assertion that both evaluators check. Only
+`bequest.json` and `wish.json` have one. Four register entries no longer reproduce and are removed:
+the bequest not-both case, and a wish with an unknown root property (the now-layered `Wish`
+refuses it), each on both validators.
+
 The type is `string`, not `["string", "null"]` as on `asset-interest.json`'s `collectionId`, because
 it pairs with `relatedAssetId`, which is a plain `string`. Using the same type on both halves of the
 pair keeps the `not` constraint unambiguous.
@@ -90,6 +102,7 @@ pair keeps the `not` constraint unambiguous.
 | A wish cannot name an item and a collection together | same suite: a wish with both (invalid) | removing the `not` constraint |
 | The reference is a UUID | same suite: a non-UUID `relatedCollectionId` (invalid) | dropping the `pattern` |
 | Single-item wishes are unchanged | the existing `relatedAssetId` cases in the same file | any change to `relatedAssetId` |
+| The generated Zod and pydantic validators refuse an item and a collection together | `node scripts/test-runtime-validators.mjs` and `pytest packages/sdk-python` (corpus against the register, exact both ways) | removing the assertion loop from either evaluator: the wish case and the bequest case both come back as `REGRESSION` |
 | `packages/schema/v3` mirrors `v3` | `diff -r v3/ packages/schema/v3/` (Staleness Check) | editing one tree only |
 | The generated artefacts carry it | `docs:reference:check`, the OpenAPI drift gate, the runtime-validator regeneration | editing the schema without regenerating |
 | Nothing v1 could say is lost | the v1 completeness floor gate | narrowing or deleting `relatedAssetId` |

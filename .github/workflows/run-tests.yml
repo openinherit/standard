@@ -94,3 +94,21 @@ jobs:
       # if one of its examples would not validate.
       - name: Conformance-declaration policy matches its schema
         run: pnpm run test:conformance-declaration-policy
+
+      # The 22 extension schemas and 5 asset categories were never linted:
+      # package.json's lint names them only as --resolve arguments. This lints
+      # every schema under v3/ and refuses any finding above the pinned
+      # baseline, which may only fall. Exit 2 (cannot answer) fails the step.
+      - name: Every schema in v3/ is linted, and no new finding lands
+        run: pnpm run lint:schemas
+
+      - name: The schema lint check can go red
+        run: pnpm run test:lint-schemas
+
+      # A paths: filter that matches no tracked file stops its workflow running
+      # at all. validate-schemas.yml filtered on v2/**, which never existed.
+      - name: Every workflow path filter matches a tracked file
+        run: node scripts/check-workflow-path-filters.mjs
+
+      - name: The path filter check can go red
+        run: pnpm run test:workflow-path-filters

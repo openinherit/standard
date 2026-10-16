@@ -1,14 +1,25 @@
 name: Validate Schemas
 
+# These filters read 'v2/**' until October 2026. No v2/ directory has ever
+# existed here, so this workflow ran only when extensions-registry.json changed
+# and never on a schema edit. scripts/check-workflow-path-filters.mjs, run in
+# run-tests.yml on every push, now refuses a filter that matches no tracked file.
+
 on:
   push:
     paths:
-      - 'v2/**'
+      - 'v3/**'
       - 'extensions-registry.json'
+      - 'scripts/validate-schemas.mjs'
+      - 'scripts/check-duplicate-keys.mjs'
+      - '.github/workflows/validate-schemas.yml'
   pull_request:
     paths:
-      - 'v2/**'
+      - 'v3/**'
       - 'extensions-registry.json'
+      - 'scripts/validate-schemas.mjs'
+      - 'scripts/check-duplicate-keys.mjs'
+      - '.github/workflows/validate-schemas.yml'
 
 jobs:
   validate:

@@ -18,6 +18,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   Capacity Act (Northern Ireland) 2016 s.7; Assisted Decision-Making (Capacity) Act 2015 Parts 3–5;
   UNCRPD Art 12). Vendored bundles, generated clients, runtime validators and the reference page are
   regenerated.
+- A wish can be about a whole collection. `v3/wish.json` gains `relatedCollectionId`, a reference to
+  an `AssetCollection.id`, next to `relatedAssetId`. A wish may name a single item or a whole
+  collection, not both, which is the same pairing and constraint `bequest.json` uses for `assetIds`
+  and `assetCollectionId`. Until now someone could ask for a collection (`asset-interest.json`'s
+  `collectionId`) and a will could give one, but a non-binding wish, such as
+  `wishType: distribution`, could only be recorded against each item in turn. See
+  `proposals/0005-wish-collection-grain.md`.
+
+### Fixed
+
+- The generated Zod (`@openinherit/sdk/zod`) and pydantic validators now enforce a schema's own
+  top-level `not`. Before this they accepted a bequest naming both `assetIds` and
+  `assetCollectionId`, which the JSON Schema rejects. Two entries leave the runtime-validator
+  divergence register on each validator: that bequest case, and a wish with an unknown root
+  property, which the now-layered `Wish` refuses.
 
 ## [6.7.0] — 2026-10-16
 

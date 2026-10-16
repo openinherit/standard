@@ -19,7 +19,8 @@ Schema `$id`: `https://openinherit.org/v3/wish.json`
 | `bindingNature` | one of `non_binding`, `culturally_obligatory`, `religiously_obligatory`, `legally_binding` | | The legal or moral force of this wish. Most wishes are non-binding but may carry significant cultural or religious weight |
 | `addresseePersonId` | `string` (uuid) | | Reference to the Person.id this wish is addressed to — typically an executor, guardian, or family member |
 | `addresseePersonIdDisplay` | `string` | | Human-readable display name for the referenced addressee person |
-| `relatedAssetId` | `string` (uuid) | | Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item) |
+| `relatedAssetId` | `string` (uuid) | | Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item). A wish may reference either relatedAssetId (a single item) or relatedCollectionId (an entire collection), not both |
+| `relatedCollectionId` | `string` (uuid) | | Reference to an AssetCollection.id, if the wish relates to an entire collection rather than a single item. A wish may reference either relatedAssetId (a single item) or relatedCollectionId (an entire collection), not both |
 | `notes` | `string` | | Additional notes about this wish |
 | `visibility` | [Visibility](common/visibility.md) | | |
 | `funeralArrangementType` | one of `burial`, `cremation`, `green_burial`, `sea_burial`, `sky_burial`, `donation_to_science`, `other` or `string` | | Type of funeral arrangement preferred |

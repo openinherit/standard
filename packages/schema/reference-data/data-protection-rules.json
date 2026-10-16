@@ -1,4 +1,5 @@
 {
+  "$comment": "DISCLAIMER: This reference data is for informational purposes only. It does NOT constitute legal, tax, or regulatory advice. Always verify with current legislation and qualified professionals.",
   "$schema": "https://openinherit.org/reference-data/data-protection-rules-schema.json",
   "version": "1.0.0",
   "lastUpdated": "2026-03-26",
@@ -7,7 +8,11 @@
     {
       "jurisdiction": "GB-ENG",
       "framework": "UK GDPR + Data Protection Act 2018",
-      "specialCategories": ["religion", "health", "ethnicity"],
+      "specialCategories": [
+        "religion",
+        "health",
+        "ethnicity"
+      ],
       "consentMechanism": "explicit_consent",
       "retentionPeriod": "Duration of estate planning relationship + 6 years (Limitation Act 1980)",
       "crossBorderTransfer": "UK adequacy decisions apply; Standard Contractual Clauses for non-adequate countries",
@@ -18,7 +23,11 @@
     {
       "jurisdiction": "GB-SCT",
       "framework": "UK GDPR + Data Protection Act 2018",
-      "specialCategories": ["religion", "health", "ethnicity"],
+      "specialCategories": [
+        "religion",
+        "health",
+        "ethnicity"
+      ],
       "consentMechanism": "explicit_consent",
       "retentionPeriod": "Duration of estate planning relationship + 5 years (Prescription and Limitation (Scotland) Act 1973)",
       "crossBorderTransfer": "UK adequacy decisions apply",
@@ -29,7 +38,11 @@
     {
       "jurisdiction": "IE",
       "framework": "EU GDPR",
-      "specialCategories": ["religion", "health", "ethnicity"],
+      "specialCategories": [
+        "religion",
+        "health",
+        "ethnicity"
+      ],
       "consentMechanism": "explicit_consent",
       "retentionPeriod": "Duration of relationship + 6 years (Statute of Limitations 1957)",
       "crossBorderTransfer": "EU adequacy decisions; SCCs for third countries",
@@ -40,7 +53,10 @@
     {
       "jurisdiction": "US-NY",
       "framework": "No comprehensive federal privacy law; NY SHIELD Act; sector-specific (GLBA for financial data)",
-      "specialCategories": ["financial", "health"],
+      "specialCategories": [
+        "financial",
+        "health"
+      ],
       "consentMechanism": "opt_out",
       "retentionPeriod": "Varies by data type; typically 6-7 years for financial records",
       "crossBorderTransfer": "No general restriction; sector-specific rules apply",
@@ -51,7 +67,10 @@
     {
       "jurisdiction": "CA-ON",
       "framework": "PIPEDA (federal) + Ontario specific requirements",
-      "specialCategories": ["health", "financial"],
+      "specialCategories": [
+        "health",
+        "financial"
+      ],
       "consentMechanism": "meaningful_consent",
       "retentionPeriod": "Only as long as necessary for the purpose; typically 6-7 years for legal records",
       "crossBorderTransfer": "Permitted with comparable protection; accountability principle",
@@ -62,10 +81,14 @@
     {
       "jurisdiction": "AU-NSW",
       "framework": "Privacy Act 1988 (Cth) + Australian Privacy Principles",
-      "specialCategories": ["health", "religion", "ethnicity"],
+      "specialCategories": [
+        "health",
+        "religion",
+        "ethnicity"
+      ],
       "consentMechanism": "consent",
       "retentionPeriod": "Only as long as needed; destroy or de-identify when no longer required",
-      "crossBorderTransfer": "APP 8 — reasonable steps to ensure overseas recipient complies with APPs",
+      "crossBorderTransfer": "APP 8 \u2014 reasonable steps to ensure overseas recipient complies with APPs",
       "rightToErasure": true,
       "dataPortability": false,
       "notes": "Privacy Act Review 2023 proposed enhanced rights; status pending"
@@ -73,7 +96,10 @@
     {
       "jurisdiction": "SG",
       "framework": "Personal Data Protection Act 2012 (PDPA)",
-      "specialCategories": ["health", "financial"],
+      "specialCategories": [
+        "health",
+        "financial"
+      ],
       "consentMechanism": "consent",
       "retentionPeriod": "Only as long as necessary; cease retention when purpose no longer served",
       "crossBorderTransfer": "Permitted with comparable protection or consent",
@@ -84,7 +110,11 @@
     {
       "jurisdiction": "AE",
       "framework": "Federal Decree-Law No. 45/2021 (PDPL)",
-      "specialCategories": ["health", "religion", "ethnicity"],
+      "specialCategories": [
+        "health",
+        "religion",
+        "ethnicity"
+      ],
       "consentMechanism": "explicit_consent",
       "retentionPeriod": "Only as long as necessary for the purpose",
       "crossBorderTransfer": "Adequate protection required; free zones may have separate rules",
@@ -95,7 +125,12 @@
     {
       "jurisdiction": "JP",
       "framework": "Act on the Protection of Personal Information (APPI)",
-      "specialCategories": ["health", "religion", "ethnicity", "criminal_record"],
+      "specialCategories": [
+        "health",
+        "religion",
+        "ethnicity",
+        "criminal_record"
+      ],
       "consentMechanism": "consent",
       "retentionPeriod": "Purpose-limited; delete when purpose fulfilled",
       "crossBorderTransfer": "Consent + adequate protection (PPC whitelist) or binding corporate rules",
@@ -106,7 +141,10 @@
     {
       "jurisdiction": "IN-MH",
       "framework": "Digital Personal Data Protection Act 2023 (DPDPA)",
-      "specialCategories": ["health", "financial"],
+      "specialCategories": [
+        "health",
+        "financial"
+      ],
       "consentMechanism": "consent",
       "retentionPeriod": "Only as long as necessary; delete when consent withdrawn or purpose fulfilled",
       "crossBorderTransfer": "Permitted except to countries specifically blacklisted by Central Government",

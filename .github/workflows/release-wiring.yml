@@ -22,7 +22,12 @@ jobs:
       - name: The wiring check can go red
         run: node scripts/test-check-release-wiring.mjs
 
-      # The contents check itself runs in publish.yml, against the tag. Here we
-      # prove each of its assertions can refuse, on synthetic trees.
+      # publish.yml runs the contents check against the tag. Running it here too
+      # means a root schema or reference-data edit that is not copied into
+      # packages/schema reds the PR that makes it, not the tag pushed weeks later.
+      - name: What would be published mirrors the standard
+        run: node scripts/check-release-contents.mjs
+
+      # Here we prove each of its assertions can refuse, on synthetic trees.
       - name: The release contents check can go red
         run: node scripts/test-check-release-contents.mjs

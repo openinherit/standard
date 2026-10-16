@@ -8,7 +8,9 @@ The Zod and pydantic generators drop three things that v3/ relies on:
   2. validation keywords next to a `$ref`, such as catalogue.json's
      `conformance: {$ref, properties: {profile: {const: "catalogue"}}}`;
   3. `unevaluatedProperties: false`, wherever (1) decides which members are
-     evaluated.
+     evaluated;
+  4. a schema's own top-level `not`, such as bequest.json's and wish.json's
+     "an item or a whole collection, not both".
 
 Without this layer, a regenerated root validator accepts a document with no
 `estate`, `people` or `schemaVersion`. This script reads the v3/ sources and
@@ -165,9 +167,13 @@ class Compiler:
                 rest = {k: v for k, v in sub.items() if k != "$ref" and k not in ANNOTATIONS}
                 if rest:
                     overlays[p] = self.compile(rest, sid, f"{sid} properties/{p} (next to $ref)")
-        if not conds and not overlays:
+        # A top-level `not` applies to every instance, so it is compiled as an
+        # unconditional assertion. It evaluates no members, so it plays no part
+        # in the unevaluatedProperties count below.
+        asserts = [self.compile({"not": doc["not"]}, sid, f"{sid} not")] if "not" in doc else []
+        if not conds and not overlays and not asserts:
             return None
-        rule = {"conditionals": conds, "overlays": overlays, "closed": None,
+        rule = {"conditionals": conds, "asserts": asserts, "overlays": overlays, "closed": None,
                 "nonnull": sorted(p for p, sub in doc.get("properties", {}).items() if self.nonnull(sub, sid, set()))}
         if doc.get("unevaluatedProperties") is False or doc.get("additionalProperties") is False:
             names, patterns = set(doc.get("properties", {})), set(doc.get("patternProperties", {}))
@@ -243,7 +249,7 @@ def build(bundle: Path):
 # ---------------------------------------------------------------- zod
 
 ZOD_EVAL = r"""
-type Rule = { conditionals: any[]; overlays: Record<string, any>; closed: { props: string[]; patterns: string[] } | null; nonnull: string[] };
+type Rule = { conditionals: any[]; asserts: any[]; overlays: Record<string, any>; closed: { props: string[]; patterns: string[] } | null; nonnull: string[] };
 type Issue = { path: (string | number)[]; message: string };
 
 const isObj = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -313,6 +319,7 @@ function check(id: string, v: unknown): Issue[] {
       evaluated(branch, names, patterns);
     }
   }
+  for (const a of rule.asserts) evaluate(a, v, [], out);
   for (const k of rule.nonnull) if (k in v && v[k] === null) out.push({ path: [k], message: `${k} must not be null` });
   for (const [k, sub] of Object.entries(rule.overlays)) if (k in v) evaluate(sub, v[k], [k], out);
   if (rule.closed) {
@@ -499,6 +506,8 @@ def _layer_check(sid, data):
         if branch is not None:
             _evaluate(branch, data, [], out)
             _evaluated(branch, names, patterns)
+    for a in rule["asserts"]:
+        _evaluate(a, data, [], out)
     for k in rule["nonnull"]:
         if k in data and data[k] is None:
             out.append((k, f"{k} must not be null"))

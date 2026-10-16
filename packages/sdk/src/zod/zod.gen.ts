@@ -2586,7 +2586,7 @@ export const zAssetInterest2 = zAssetInterest;
  *
  * A non-binding (or culturally/religiously binding) wish — funeral, letter of wishes, care instructions, pet care, digital estate, distribution preferences
  */
-export const zWish = z.object({
+const zWish$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     wishType: z.enum([
         'funeral',
@@ -2609,6 +2609,7 @@ export const zWish = z.object({
     addresseePersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
     addresseePersonIdDisplay: z.string().max(255).optional(),
     relatedAssetId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
+    relatedCollectionId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
     notes: z.string().max(2000).optional(),
     visibility: zVisibility.optional(),
     funeralArrangementType: z.union([
@@ -2751,6 +2752,7 @@ export const zWish = z.object({
     relatedTrustIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(50).optional(),
     provenance: zProvenance.optional()
 });
+export const zWish = layer('https://openinherit.org/v3/wish.json', zWish$generated);
 
 /**
  * Non-binding wishes (funeral, organ donation, etc.)

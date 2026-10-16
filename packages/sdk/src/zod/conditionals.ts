@@ -70,6 +70,7 @@ const RULES: Record<string, Rule> = {
         }
       }
     ],
+    "asserts": [],
     "overlays": {
       "netEquity": {
         "properties": {
@@ -271,6 +272,16 @@ const RULES: Record<string, Rule> = {
         }
       }
     ],
+    "asserts": [
+      {
+        "not": {
+          "required": [
+            "assetIds",
+            "assetCollectionId"
+          ]
+        }
+      }
+    ],
     "overlays": {},
     "closed": {
       "props": [
@@ -378,6 +389,7 @@ const RULES: Record<string, Rule> = {
   },
   "https://openinherit.org/v3/catalogue.json": {
     "conditionals": [],
+    "asserts": [],
     "overlays": {
       "conformance": {
         "properties": {
@@ -482,6 +494,7 @@ const RULES: Record<string, Rule> = {
         }
       }
     ],
+    "asserts": [],
     "overlays": {},
     "closed": {
       "props": [
@@ -517,6 +530,7 @@ const RULES: Record<string, Rule> = {
   },
   "https://openinherit.org/v3/estate.json": {
     "conditionals": [],
+    "asserts": [],
     "overlays": {
       "netEstateEquity": {
         "properties": {
@@ -683,6 +697,7 @@ const RULES: Record<string, Rule> = {
   },
   "https://openinherit.org/v3/property.json": {
     "conditionals": [],
+    "asserts": [],
     "overlays": {
       "netEquity": {
         "properties": {
@@ -865,6 +880,7 @@ const RULES: Record<string, Rule> = {
         }
       }
     ],
+    "asserts": [],
     "overlays": {},
     "closed": {
       "props": [
@@ -997,6 +1013,7 @@ const RULES: Record<string, Rule> = {
         }
       }
     ],
+    "asserts": [],
     "overlays": {},
     "closed": {
       "props": [
@@ -1117,6 +1134,108 @@ const RULES: Record<string, Rule> = {
       "versionedAt",
       "wishes"
     ]
+  },
+  "https://openinherit.org/v3/wish.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "not": {
+          "required": [
+            "relatedAssetId",
+            "relatedCollectionId"
+          ]
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "addresseePersonId",
+        "addresseePersonIdDisplay",
+        "autopsyPreference",
+        "bindingNature",
+        "content",
+        "existingDigitalModels",
+        "funeralArrangementType",
+        "funeralBudgetMaximum",
+        "funeralBudgetNotes",
+        "funeralBudgetSource",
+        "funeralCeremonyReligion",
+        "funeralCeremonyType",
+        "funeralLocationPreference",
+        "funeralMusicWishes",
+        "funeralPrePaid",
+        "funeralPrePaidPolicyNumber",
+        "funeralProviderOrganisationId",
+        "funeralProviderOrganisationIdDisplay",
+        "funeralReadingWishes",
+        "id",
+        "likenessConsent",
+        "likenessControllerPersonId",
+        "likenessControllerPersonIdDisplay",
+        "likenessEnforcement",
+        "likenessPermittedUses",
+        "likenessProhibitedUses",
+        "likenessRevocationConditions",
+        "likenessScope",
+        "likenessTimeLimit",
+        "medicalResearchDonation",
+        "notes",
+        "organDonation",
+        "provenance",
+        "relatedAssetId",
+        "relatedCollectionId",
+        "relatedTrustIds",
+        "syntheticMediaPolicy",
+        "title",
+        "visibility",
+        "wishType"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "addresseePersonId",
+      "addresseePersonIdDisplay",
+      "autopsyPreference",
+      "bindingNature",
+      "content",
+      "existingDigitalModels",
+      "funeralBudgetMaximum",
+      "funeralBudgetNotes",
+      "funeralBudgetSource",
+      "funeralCeremonyReligion",
+      "funeralCeremonyType",
+      "funeralLocationPreference",
+      "funeralMusicWishes",
+      "funeralPrePaid",
+      "funeralPrePaidPolicyNumber",
+      "funeralProviderOrganisationId",
+      "funeralProviderOrganisationIdDisplay",
+      "funeralReadingWishes",
+      "id",
+      "likenessConsent",
+      "likenessControllerPersonId",
+      "likenessControllerPersonIdDisplay",
+      "likenessEnforcement",
+      "likenessPermittedUses",
+      "likenessProhibitedUses",
+      "likenessRevocationConditions",
+      "likenessScope",
+      "likenessTimeLimit",
+      "medicalResearchDonation",
+      "notes",
+      "organDonation",
+      "provenance",
+      "relatedAssetId",
+      "relatedCollectionId",
+      "relatedTrustIds",
+      "syntheticMediaPolicy",
+      "title",
+      "visibility",
+      "wishType"
+    ]
   }
 };
 
@@ -1205,7 +1324,7 @@ const REFKEYS: Record<string, { props: string[]; patterns: string[] }> = {
   }
 };
 
-type Rule = { conditionals: any[]; overlays: Record<string, any>; closed: { props: string[]; patterns: string[] } | null; nonnull: string[] };
+type Rule = { conditionals: any[]; asserts: any[]; overlays: Record<string, any>; closed: { props: string[]; patterns: string[] } | null; nonnull: string[] };
 type Issue = { path: (string | number)[]; message: string };
 
 const isObj = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -1275,6 +1394,7 @@ function check(id: string, v: unknown): Issue[] {
       evaluated(branch, names, patterns);
     }
   }
+  for (const a of rule.asserts) evaluate(a, v, [], out);
   for (const k of rule.nonnull) if (k in v && v[k] === null) out.push({ path: [k], message: `${k} must not be null` });
   for (const [k, sub] of Object.entries(rule.overlays)) if (k in v) evaluate(sub, v[k], [k], out);
   if (rule.closed) {

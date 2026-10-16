@@ -15770,6 +15770,10 @@ components:
         - id
         - wishType
         - title
+      not:
+        required:
+          - relatedAssetId
+          - relatedCollectionId
       propertyNames:
         pattern: ^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$
       properties:
@@ -15836,7 +15840,14 @@ components:
           type: string
           maxLength: 255
         relatedAssetId:
-          description: Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item)
+          description: Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item). A wish may reference either relatedAssetId (a single item) or relatedCollectionId (an entire collection), not both
+          type: string
+          pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+          format: uuid
+        relatedCollectionId:
+          description: Reference to an AssetCollection.id, if the wish relates to an entire collection rather than a single item. A wish may reference either relatedAssetId (a single item) or relatedCollectionId (an entire collection), not both
+          examples:
+            - b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8
           type: string
           pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
           format: uuid

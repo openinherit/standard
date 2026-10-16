@@ -5837,6 +5837,11 @@ class RelatedTrustId(RootModel[UUID]):
 
 
 class Wish(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/wish.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='allow',
     )
@@ -5875,7 +5880,12 @@ class Wish(BaseModel):
     )
     relatedAssetId: UUID | None = Field(
         None,
-        description='Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item)',
+        description='Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item). A wish may reference either relatedAssetId (a single item) or relatedCollectionId (an entire collection), not both',
+    )
+    relatedCollectionId: UUID | None = Field(
+        None,
+        description='Reference to an AssetCollection.id, if the wish relates to an entire collection rather than a single item. A wish may reference either relatedAssetId (a single item) or relatedCollectionId (an entire collection), not both',
+        examples=['b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8'],
     )
     notes: constr(max_length=2000) | None = Field(
         None,
@@ -19060,6 +19070,8 @@ def _layer_check(sid, data):
         if branch is not None:
             _evaluate(branch, data, [], out)
             _evaluated(branch, names, patterns)
+    for a in rule["asserts"]:
+        _evaluate(a, data, [], out)
     for k in rule["nonnull"]:
         if k in data and data[k] is None:
             out.append((k, f"{k} must not be null"))
@@ -19131,6 +19143,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                             {'if': {'required': ['category'],
                                                                     'properties': {'category': {'const': 'business'}}},
                                                              'then': {'$ref': 'https://openinherit.org/v3/asset-categories/business.json'}}],
+                                           'asserts': [],
                                            'overlays': {'netEquity': {'properties': {'amount': {'minimum': 0}}}},
                                            'closed': {'props': ['accessInstructions',
                                                                 'acquisitionType',
@@ -19284,6 +19297,8 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                               {'if': {'required': ['bequestType'],
                                                                       'properties': {'bequestType': {'const': 'life_interest'}}},
                                                                'then': {'required': ['lifeInterest']}}],
+                                             'asserts': [{'not': {'required': ['assetIds',
+                                                                               'assetCollectionId']}}],
                                              'overlays': {},
                                              'closed': {'props': ['amount',
                                                                   'applicableLaw',
@@ -19381,6 +19396,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                          'substitutions',
                                                          'visibility']},
  'https://openinherit.org/v3/catalogue.json': {'conditionals': [],
+                                               'asserts': [],
                                                'overlays': {'conformance': {'properties': {'profile': {'const': 'catalogue'}}}},
                                                'closed': {'props': ['$schema',
                                                                     '@context',
@@ -19445,6 +19461,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
  'https://openinherit.org/v3/conformance-declaration.json': {'conditionals': [{'if': {'properties': {'root': {'const': 'catalogue'}},
                                                                                       'required': ['root']},
                                                                                'then': {'properties': {'entities': {'not': {'required': ['estate']}}}}}],
+                                                             'asserts': [],
                                                              'overlays': {},
                                                              'closed': {'props': ['conformanceLevel',
                                                                                   'declaredAt',
@@ -19472,6 +19489,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                                          'root',
                                                                          'validatorDetails']},
  'https://openinherit.org/v3/estate.json': {'conditionals': [],
+                                            'asserts': [],
                                             'overlays': {'netEstateEquity': {'properties': {'amount': {'minimum': 0}}}},
                                             'closed': {'props': ['adjudicatingBodies',
                                                                  'administration',
@@ -19620,6 +19638,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                         'totalEstimatedValue',
                                                         'validityStatus']},
  'https://openinherit.org/v3/property.json': {'conditionals': [],
+                                              'asserts': [],
                                               'overlays': {'netEquity': {'properties': {'amount': {'minimum': 0}}}},
                                               'closed': {'props': ['acquisitionType',
                                                                    'address',
@@ -19724,6 +19743,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                                           {'if': {'required': ['delegateType'],
                                                                                   'properties': {'delegateType': {'const': 'organisation'}}},
                                                                            'then': {'required': ['proxyPersonId']}}],
+                                                         'asserts': [],
                                                          'overlays': {},
                                                          'closed': {'props': ['activationDate',
                                                                               'activationTrigger',
@@ -19806,6 +19826,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                                                       'insurancePolicies': {'maxItems': 50},
                                                                                       '$schema': {'const': 'https://openinherit.org/v3/schema.json'},
                                                                                       'conformance': {'properties': {'profile': {'const': 'estate'}}}}}}],
+                                            'asserts': [],
                                             'overlays': {},
                                             'closed': {'props': ['$schema',
                                                                  '@context',
@@ -19917,7 +19938,91 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                         'trusts',
                                                         'valuations',
                                                         'versionedAt',
-                                                        'wishes']}}
+                                                        'wishes']},
+ 'https://openinherit.org/v3/wish.json': {'conditionals': [],
+                                          'asserts': [{'not': {'required': ['relatedAssetId',
+                                                                            'relatedCollectionId']}}],
+                                          'overlays': {},
+                                          'closed': {'props': ['addresseePersonId',
+                                                               'addresseePersonIdDisplay',
+                                                               'autopsyPreference',
+                                                               'bindingNature',
+                                                               'content',
+                                                               'existingDigitalModels',
+                                                               'funeralArrangementType',
+                                                               'funeralBudgetMaximum',
+                                                               'funeralBudgetNotes',
+                                                               'funeralBudgetSource',
+                                                               'funeralCeremonyReligion',
+                                                               'funeralCeremonyType',
+                                                               'funeralLocationPreference',
+                                                               'funeralMusicWishes',
+                                                               'funeralPrePaid',
+                                                               'funeralPrePaidPolicyNumber',
+                                                               'funeralProviderOrganisationId',
+                                                               'funeralProviderOrganisationIdDisplay',
+                                                               'funeralReadingWishes',
+                                                               'id',
+                                                               'likenessConsent',
+                                                               'likenessControllerPersonId',
+                                                               'likenessControllerPersonIdDisplay',
+                                                               'likenessEnforcement',
+                                                               'likenessPermittedUses',
+                                                               'likenessProhibitedUses',
+                                                               'likenessRevocationConditions',
+                                                               'likenessScope',
+                                                               'likenessTimeLimit',
+                                                               'medicalResearchDonation',
+                                                               'notes',
+                                                               'organDonation',
+                                                               'provenance',
+                                                               'relatedAssetId',
+                                                               'relatedCollectionId',
+                                                               'relatedTrustIds',
+                                                               'syntheticMediaPolicy',
+                                                               'title',
+                                                               'visibility',
+                                                               'wishType'],
+                                                     'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                          'nonnull': ['addresseePersonId',
+                                                      'addresseePersonIdDisplay',
+                                                      'autopsyPreference',
+                                                      'bindingNature',
+                                                      'content',
+                                                      'existingDigitalModels',
+                                                      'funeralBudgetMaximum',
+                                                      'funeralBudgetNotes',
+                                                      'funeralBudgetSource',
+                                                      'funeralCeremonyReligion',
+                                                      'funeralCeremonyType',
+                                                      'funeralLocationPreference',
+                                                      'funeralMusicWishes',
+                                                      'funeralPrePaid',
+                                                      'funeralPrePaidPolicyNumber',
+                                                      'funeralProviderOrganisationId',
+                                                      'funeralProviderOrganisationIdDisplay',
+                                                      'funeralReadingWishes',
+                                                      'id',
+                                                      'likenessConsent',
+                                                      'likenessControllerPersonId',
+                                                      'likenessControllerPersonIdDisplay',
+                                                      'likenessEnforcement',
+                                                      'likenessPermittedUses',
+                                                      'likenessProhibitedUses',
+                                                      'likenessRevocationConditions',
+                                                      'likenessScope',
+                                                      'likenessTimeLimit',
+                                                      'medicalResearchDonation',
+                                                      'notes',
+                                                      'organDonation',
+                                                      'provenance',
+                                                      'relatedAssetId',
+                                                      'relatedCollectionId',
+                                                      'relatedTrustIds',
+                                                      'syntheticMediaPolicy',
+                                                      'title',
+                                                      'visibility',
+                                                      'wishType']}}
 
 _REFKEYS = {'https://openinherit.org/v3/asset-categories/business.json': {'props': ['businessInterest',
                                                                          'coOwnership',
@@ -19992,6 +20097,7 @@ _LAYER_MODELS = {
     'https://openinherit.org/v3/property.json': Property,
     'https://openinherit.org/v3/proxy-authorisation.json': ProxyAuthorisation,
     'https://openinherit.org/v3/schema.json': Schema,
+    'https://openinherit.org/v3/wish.json': Wish,
 }
 
 _guard(Catalogue, ['field_context', 'field_schema'])

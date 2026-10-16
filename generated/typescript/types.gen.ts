@@ -5229,9 +5229,13 @@ export type Wish2 = {
      */
     addresseePersonIdDisplay?: string;
     /**
-     * Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item)
+     * Reference to an Asset.id this wish relates to (e.g. a pet, a digital account, a specific item). A wish may reference either relatedAssetId (a single item) or relatedCollectionId (an entire collection), not both
      */
     relatedAssetId?: string;
+    /**
+     * Reference to an AssetCollection.id, if the wish relates to an entire collection rather than a single item. A wish may reference either relatedAssetId (a single item) or relatedCollectionId (an entire collection), not both
+     */
+    relatedCollectionId?: string;
     /**
      * Additional notes about this wish
      */

@@ -75,12 +75,6 @@
         ]
       },
       {
-        "case": "tests/v3/bequest/bequest.test.json::invalid — bequest with both assetIds AND assetCollectionId (exclusivity violation)",
-        "json_schema_keywords": [
-          "not"
-        ]
-      },
-      {
         "case": "tests/v3/bequest/bequest.test.json::invalid — debt_forgiveness without beneficiaryId or beneficiaryOrganisation",
         "json_schema_keywords": [
           "anyOf",
@@ -558,12 +552,6 @@
         "json_schema_keywords": [
           "unevaluatedProperties"
         ]
-      },
-      {
-        "case": "tests/v3/wish/wish.test.json::invalid — unknown root property rejected",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
       }
     ]
   },
@@ -622,12 +610,6 @@
         "case": "tests/v3/australia-nz/australia-nz.test.json::invalid — unknown root property",
         "json_schema_keywords": [
           "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/bequest/bequest.test.json::invalid — bequest with both assetIds AND assetCollectionId (exclusivity violation)",
-        "json_schema_keywords": [
-          "not"
         ]
       },
       {
@@ -1092,12 +1074,6 @@
       },
       {
         "case": "tests/v3/us-estate/us-estate.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/wish/wish.test.json::invalid — unknown root property rejected",
         "json_schema_keywords": [
           "unevaluatedProperties"
         ]

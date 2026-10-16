@@ -24,7 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   and `assetCollectionId`. Until now someone could ask for a collection (`asset-interest.json`'s
   `collectionId`) and a will could give one, but a non-binding wish, such as
   `wishType: distribution`, could only be recorded against each item in turn. See
-  `proposals/0005-wish-collection-grain.md`.
+  `proposals/0006-wish-collection-grain.md`.
 
 ### Fixed
 

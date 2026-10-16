@@ -1,6 +1,6 @@
 {
   "name": "@openinherit/sdk",
-  "version": "6.6.0",
+  "version": "6.7.0",
   "description": "INHERIT estate planning SDK — TypeScript types, API client stubs, and validation for the open estate data interchange standard. Generated from OpenAPI 3.1 via hey-api. Supports estate, bequest, kinship, trust, executor, and 21 jurisdiction extension types.",
   "type": "module",
   "license": "Apache-2.0",

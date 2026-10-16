@@ -1,5 +1,5 @@
 ---
-github_issue: https://github.com/openinherit/standard/pulls
+github_issue: https://github.com/openinherit/standard/pull/73
 ---
 
 # Proposal 0005: A wish can be about a whole collection, not only a single item

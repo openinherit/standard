@@ -12,11 +12,11 @@ Schema `$id`: `https://openinherit.org/v3/extensions/ireland/ireland.json`
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `spouseLegalRightShare` | `object` | | Spouse legal right share under Succession Act 1965 s.111 — 1/3 with children, 1/2 without. Cannot be defeated by will. |
+| `spouseLegalRightShare` | `object` | | Spouse legal right share under Succession Act 1965 s.111 — 1/3 with children, 1/2 without. Cannot be defeated by will |
 | `section117Claim` | `object` | | Section 117 moral duty provision — court can order provision for children if testator failed in moral duty |
 | `capitalAcquisitionsTax` | `object` | | Capital Acquisitions Tax (CAT) thresholds — Irish equivalent of inheritance tax |
 | `probateProcess` | `object` | | Irish probate process — Probate Office or District Probate Registry |
-| `enduringPowerOfAttorney` | `object` | | Irish EPA — different from English LPA. Must be registered with the court before it can be used. |
+| `enduringPowerOfAttorney` | `object` | | Irish EPA — different from English LPA. Must be registered with the court before it can be used |
 | `intestacyRules` | `object` | | Distribution order under Part VI of the Succession Act 1965 |
 | `dwellingHouseExemption` | `object` | | CAT Section 86 dwelling house exemption — inherited home exempt if beneficiary lived there 3+ years prior and continues 6 years after |
 | `civilPartnershipProvisions` | `object` | | Civil Partnership and Certain Rights and Obligations of Cohabitants Act 2010 |

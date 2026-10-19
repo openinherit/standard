@@ -4699,7 +4699,7 @@ type Organisation struct {
 	// Id Unique identifier for this organisation within the INHERIT document
 	Id openapi_types.UUID `json:"id"`
 
-	// Identifiers External identifiers — charity number, company registration, UEN, etc.
+	// Identifiers External identifiers, such as a charity number, company registration or UEN
 	Identifiers *[]Identifier `json:"identifiers,omitempty"`
 
 	// InternationalShipping International shipping capabilities and policies for this organisation

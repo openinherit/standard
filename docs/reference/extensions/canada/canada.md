@@ -2,7 +2,7 @@
 
 # Canada Extension
 
-Provincial succession rules for Canada: Quebec patrimony, Ontario equalization, BC WESA variation, Alberta dower rights, and Indigenous land succession details.
+Provincial succession rules for Canada: Quebec patrimony, Ontario equalization, BC WESA variation, Alberta dower rights, and Indigenous land succession details
 
 Source: [`v3/extensions/canada/canada.json`](../../../../v3/extensions/canada/canada.json)
 
@@ -12,7 +12,7 @@ Schema `$id`: `https://openinherit.org/v3/extensions/canada/canada.json`
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `province` | `string` — one of `CA-AB`, `CA-BC`, `CA-MB`, `CA-NB`, `CA-NL`, `CA-NS`, `CA-NT`, `CA-NU`, `CA-ON`, `CA-PE`, `CA-QC`, `CA-SK`, `CA-YT` | yes | Canadian province or territory whose succession law applies. Critical — every province has different intestacy rules, preferential shares, and property regimes |
+| `province` | one of `CA-AB`, `CA-BC`, `CA-MB`, `CA-NB`, `CA-NL`, `CA-NS`, `CA-NT`, `CA-NU`, `CA-ON`, `CA-PE`, `CA-QC`, `CA-SK`, `CA-YT` | yes | Canadian province or territory whose succession law applies. Critical — every province has different intestacy rules, preferential shares, and property regimes |
 | `quebecPatrimony` | [QuebecPatrimony](#def-QuebecPatrimony) | | |
 | `ontarioEqualization` | [OntarioEqualization](#def-OntarioEqualization) | | |
 | `bcWesaVariation` | [BCWESAVariation](#def-BCWESAVariation) | | |
@@ -57,7 +57,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | `propertyId` | `string` (uuid) | yes | |
 | `reserveName` | `string` | | |
 | `treatyNumber` | `string` | | |
-| `landType` | `string` — one of `reserve`, `treaty`, `fee_simple_on_reserve`, `certificate_of_possession` | yes | |
+| `landType` | one of `reserve`, `treaty`, `fee_simple_on_reserve`, `certificate_of_possession` | yes | |
 | `successionRestrictions` | `string` | | |
 | `notes` | `string` | | |
 

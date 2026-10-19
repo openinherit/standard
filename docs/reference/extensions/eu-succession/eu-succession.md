@@ -2,7 +2,7 @@
 
 # EU Succession Extension
 
-European succession rules: Brussels IV choice of law and European Certificate of Succession, Spanish regional regimes, forced heirship variants across civil law traditions, and post-Brexit UK asset handling.
+European succession rules: Brussels IV choice of law and European Certificate of Succession, Spanish regional regimes, forced heirship variants across civil law traditions, and post-Brexit UK asset handling
 
 Source: [`v3/extensions/eu-succession/eu-succession.json`](../../../../v3/extensions/eu-succession/eu-succession.json)
 
@@ -53,7 +53,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `model` | `string` — one of `french_reserve`, `german_pflichtteil`, `scandinavian_laglott`, `dutch_deferred`, `polish_zachowek`, `swiss_pflichtteil`, `italian_legittima` | yes | |
+| `model` | one of `french_reserve`, `german_pflichtteil`, `scandinavian_laglott`, `dutch_deferred`, `polish_zachowek`, `swiss_pflichtteil`, `italian_legittima` | yes | |
 | `claimNature` | `string` | | |
 | `reservedFraction` | `string` | | |
 | `calculationNotes` | `string` | | |
@@ -77,6 +77,6 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `region` | `string` — one of `common_civil`, `catalan`, `basque`, `navarre`, `aragon`, `balearic`, `galician` | yes | |
+| `region` | one of `common_civil`, `catalan`, `basque`, `navarre`, `aragon`, `balearic`, `galician` | yes | |
 | `forcedHeirshipRules` | `string` | | |
 | `notes` | `string` | | |

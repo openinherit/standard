@@ -14,7 +14,7 @@ Schema `$id`: `https://openinherit.org/v3/extensions/india/india.json`
 | --- | --- | --- | --- |
 | `personalLaw` | one of `hindu_succession_act_1956`, `indian_succession_act_1925`, `muslim_personal_law`, `parsi_succession`, `special_marriage_act`, `goa_civil_code` | yes | Which personal law governs this estate — India applies different succession laws based on religion |
 | `state` | `string` | | Indian state — different states have variations (e.g. agricultural land ceiling, stamp duty) |
-| `probateRequired` | `boolean` | | Whether probate is required — varies by religion and state. Mandatory for wills under Indian Succession Act in certain cities. |
+| `probateRequired` | `boolean` | | Whether probate is required — varies by religion and state. Mandatory for wills under Indian Succession Act in certain cities |
 | `probateJurisdiction` | `object` | | Which court has jurisdiction — District Court or High Court depending on estate value |
 | `agriculturalLand` | `object` | | Agricultural land has special succession rules — cannot be willed in some states, subject to ceiling limits |
 | `nriComplications` | `object` | | Non-Resident Indian complications — FEMA restrictions, repatriation limits, tax treaty implications |

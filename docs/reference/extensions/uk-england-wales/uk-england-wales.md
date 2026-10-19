@@ -2,7 +2,7 @@
 
 # UK England & Wales Extension
 
-IHT thresholds, intestacy rules, IFPA 1975 eligibility, and legislative changes for England & Wales estates. Temporal-rule wrapping on key values.
+IHT thresholds, intestacy rules, IFPA 1975 eligibility, and legislative changes for England & Wales estates. Temporal-rule wrapping on key values
 
 Source: [`v3/extensions/uk-england-wales/uk-england-wales.json`](../../../../v3/extensions/uk-england-wales/uk-england-wales.json)
 
@@ -26,6 +26,6 @@ Schema `$id`: `https://openinherit.org/v3/extensions/uk-england-wales/uk-england
 | `legislativeChanges` | array of `object` | | |
 | `intestacyHierarchy` | array of `object` | | Intestacy distribution hierarchy under the Administration of Estates Act 1925 s.46. Each tier takes priority over all lower tiers. Whole blood takes absolute priority over half blood at sibling and uncle/aunt levels |
 | `statutoryLegacy` | `object` | | The statutory legacy amount the surviving spouse receives before the kinship-based residuary distribution. Currently £322,000 (from 26 July 2023, SI 2023/877) |
-| `marriageRevocation` | `object` | | Whether and how marriage revokes a prior will. For England & Wales, see s.18 Wills Act 1837 and the contemplation-of-marriage exception in s.18(3)–(4). |
+| `marriageRevocation` | `object` | | Whether and how marriage revokes a prior will. For England & Wales, see s.18 Wills Act 1837 and the contemplation-of-marriage exception in s.18(3)–(4) |
 
 Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.

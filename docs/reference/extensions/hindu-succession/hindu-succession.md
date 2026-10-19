@@ -2,7 +2,7 @@
 
 # Hindu Succession Extension
 
-Hindu succession law specifics: Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications under the Hindu Succession Act 1956, stridhan assets, agricultural land ceiling rules, and NRI complications.
+Hindu succession law specifics: Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications under the Hindu Succession Act 1956, stridhan assets, agricultural land ceiling rules, and NRI complications
 
 Source: [`v3/extensions/hindu-succession/hindu-succession.json`](../../../../v3/extensions/hindu-succession/hindu-succession.json)
 
@@ -12,14 +12,14 @@ Schema `$id`: `https://openinherit.org/v3/extensions/hindu-succession/hindu-succ
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `applicableLaw` | `string` — one of `hindu_succession_act_1956`, `indian_succession_act_1925`, `muslim_personal_law`, `special_marriage_act`, `parsi_succession`, `goa_civil_code` | yes | |
-| `school` | `string` — one of `mitakshara`, `dayabhaga` | | |
+| `applicableLaw` | one of `hindu_succession_act_1956`, `indian_succession_act_1925`, `muslim_personal_law`, `special_marriage_act`, `parsi_succession`, `goa_civil_code` | yes | |
+| `school` | one of `mitakshara`, `dayabhaga` | | |
 | `hufDetails` | [HUFDetails](#def-HUFDetails) | | |
 | `heirClassifications` | array of [IndianHeirClassification](#def-IndianHeirClassification) | | |
 | `stridhanAssets` | array of [StridhanAsset](#def-StridhanAsset) | | |
 | `agriculturalLand` | array of `object` | | |
 | `nriComplications` | `object` | | |
-| `instrumentType` | `string` — one of `probate`, `letters_of_administration`, `succession_certificate` | | Type of probate instrument being sought or granted. India has three distinct instruments depending on whether the deceased left a will and the nature of the assets |
+| `instrumentType` | one of `probate`, `letters_of_administration`, `succession_certificate` | | Type of probate instrument being sought or granted. India has three distinct instruments depending on whether the deceased left a will and the nature of the assets |
 | `probateAdvisable` | `boolean` | | Whether probate is advisable for this estate. Section 213 (mandatory probate in Mumbai/Kolkata/Chennai) was deleted by the Repealing and Amending Act 2025 (Presidential assent 20 Dec 2025). Probate is now optional everywhere in India but remains strongly advisable — banks and housing societies may still request it in practice |
 | `crossStateAssets` | `boolean` | | Whether the estate includes assets in Indian states other than the primary jurisdiction. Affects which state's agricultural land ceiling laws apply and may require multiple court filings |
 | `hufProperty` | `boolean` | | Whether the estate includes Hindu Undivided Family coparcenary property. HUF property has special succession rules under the Hindu Succession Act — the 2005 Amendment gave daughters equal coparcenary rights. Must be distinguished from self-acquired property |
@@ -56,7 +56,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `personId` | `string` (uuid) | yes | |
-| `heirClass` | `string` — one of `class_I`, `class_II`, `agnate`, `cognate` | yes | |
+| `heirClass` | one of `class_I`, `class_II`, `agnate`, `cognate` | yes | |
 | `scheduleParagraph` | `string` | | |
 | `disputed` | `boolean` | | |
 | `disputeDetails` | `string` | | |

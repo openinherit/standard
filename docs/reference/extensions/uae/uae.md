@@ -24,6 +24,6 @@ Schema `$id`: `https://openinherit.org/v3/extensions/uae/uae.json`
 | `disputeResolution` | `object` | | Inheritance dispute resolution forum — dual-track system (Sharia vs common law) |
 | `homeCountryLawElection` | `object` | | Election to apply home-country succession law under Federal Decree Law No. 41 of 2022. Available to non-Muslims — allows election of home-country law instead of Sharia |
 | `notes` | `string` | | |
-| `marriageRevocation` | `object` | | Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs. |
+| `marriageRevocation` | `object` | | Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs |
 
 Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.

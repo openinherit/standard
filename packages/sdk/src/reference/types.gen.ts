@@ -10025,7 +10025,7 @@ export type Organisation = {
         currency?: string;
     };
     /**
-     * External identifiers — charity number, company registration, UEN, etc.
+     * External identifiers, such as a charity number, company registration or UEN
      */
     identifiers?: Array<Identifier>;
     /**
@@ -11552,7 +11552,7 @@ export type TemporalRule = {
 /**
  * UK England & Wales Extension
  *
- * IHT thresholds, intestacy rules, IFPA 1975 eligibility, and legislative changes for England & Wales estates. Temporal-rule wrapping on key values.
+ * IHT thresholds, intestacy rules, IFPA 1975 eligibility, and legislative changes for England & Wales estates. Temporal-rule wrapping on key values
  */
 export type UkEnglandWales = {
     intestacyStatutoryLegacy?: TemporalRule;
@@ -11616,24 +11616,24 @@ export type UkEnglandWales = {
         statutoryInstrument?: string;
     };
     /**
-     * Whether and how marriage revokes a prior will. For England & Wales, see s.18 Wills Act 1837 and the contemplation-of-marriage exception in s.18(3)–(4).
+     * Whether and how marriage revokes a prior will. For England & Wales, see s.18 Wills Act 1837 and the contemplation-of-marriage exception in s.18(3)–(4)
      */
     marriageRevocation?: {
         /**
-         * Whether a marriage (after execution of the will) automatically revokes the will.
+         * Whether a marriage (after execution of the will) automatically revokes the will
          */
         revokesPriorWill: boolean;
         /**
-         * Citation of the primary statute governing revocation-by-marriage.
+         * Citation of the primary statute governing revocation-by-marriage
          */
         statute: string;
         statuteUrl?: string;
         /**
-         * Whether a will made in contemplation of a specific marriage survives that marriage.
+         * Whether a will made in contemplation of a specific marriage survives that marriage
          */
         contemplationException?: boolean;
         /**
-         * Plain-English description of the contemplation-of-marriage rule.
+         * Plain-English description of the contemplation-of-marriage rule
          */
         contemplationRule?: string;
         notes?: string;
@@ -11682,20 +11682,20 @@ export type UkEnglandWales = {
         statutoryInstrument?: string;
     } | {
         /**
-         * Whether a marriage (after execution of the will) automatically revokes the will.
+         * Whether a marriage (after execution of the will) automatically revokes the will
          */
         revokesPriorWill: boolean;
         /**
-         * Citation of the primary statute governing revocation-by-marriage.
+         * Citation of the primary statute governing revocation-by-marriage
          */
         statute: string;
         statuteUrl?: string;
         /**
-         * Whether a will made in contemplation of a specific marriage survives that marriage.
+         * Whether a will made in contemplation of a specific marriage survives that marriage
          */
         contemplationException?: boolean;
         /**
-         * Plain-English description of the contemplation-of-marriage rule.
+         * Plain-English description of the contemplation-of-marriage rule
          */
         contemplationRule?: string;
         notes?: string;
@@ -11795,7 +11795,7 @@ export type Scotland = {
         courtReference?: string;
     };
     /**
-     * Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights.
+     * Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights
      */
     forcedHeirship?: {
         /**
@@ -12141,7 +12141,7 @@ export type Scotland = {
  */
 export type Ireland = {
     /**
-     * Spouse legal right share under Succession Act 1965 s.111 — 1/3 with children, 1/2 without. Cannot be defeated by will.
+     * Spouse legal right share under Succession Act 1965 s.111 — 1/3 with children, 1/2 without. Cannot be defeated by will
      */
     spouseLegalRightShare?: {
         /**
@@ -12198,7 +12198,7 @@ export type Ireland = {
         grantType?: 'probate' | 'administration_with_will' | 'administration_intestacy' | 'administration_de_bonis_non';
     };
     /**
-     * Irish EPA — different from English LPA. Must be registered with the court before it can be used.
+     * Irish EPA — different from English LPA. Must be registered with the court before it can be used
      */
     enduringPowerOfAttorney?: {
         registered?: boolean;
@@ -12463,7 +12463,7 @@ export type NorthernIreland = {
 /**
  * US Estate Extension
  *
- * US-specific estate planning: federal and state estate tax, community/separate property regimes, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes, RUFADAA, Louisiana forced heirship, probate variation, trust features, SECURE Act retirement rules, ancillary probate, advance directives.
+ * US-specific estate planning: federal and state estate tax, community/separate property regimes, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes, RUFADAA, Louisiana forced heirship, probate variation, trust features, SECURE Act retirement rules, ancillary probate, advance directives
  */
 export type UsEstate = {
     /**
@@ -12858,7 +12858,7 @@ export type IndigenousLandDetails = {
 /**
  * Canada Extension
  *
- * Provincial succession rules for Canada: Quebec patrimony, Ontario equalization, BC WESA variation, Alberta dower rights, and Indigenous land succession details.
+ * Provincial succession rules for Canada: Quebec patrimony, Ontario equalization, BC WESA variation, Alberta dower rights, and Indigenous land succession details
  */
 export type Canada = {
     /**
@@ -13002,7 +13002,7 @@ export type MaoriLandDetails = {
 /**
  * Australia & New Zealand Extension
  *
- * Succession rules for AU and NZ: superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ Property (Relationships) Act, testamentary promises, and Maori land under Te Ture Whenua.
+ * Succession rules for AU and NZ: superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ Property (Relationships) Act, testamentary promises, and Maori land under Te Ture Whenua
  */
 export type AustraliaNz = {
     jurisdiction: 'AU-NSW' | 'AU-VIC' | 'AU-QLD' | 'AU-WA' | 'AU-SA' | 'AU-TAS' | 'AU-ACT' | 'AU-NT' | 'NZ';
@@ -13057,7 +13057,7 @@ export type PostBrexitAssetHandling = {
 /**
  * EU Succession Extension
  *
- * European succession rules: Brussels IV choice of law and European Certificate of Succession, Spanish regional regimes, forced heirship variants across civil law traditions, and post-Brexit UK asset handling.
+ * European succession rules: Brussels IV choice of law and European Certificate of Succession, Spanish regional regimes, forced heirship variants across civil law traditions, and post-Brexit UK asset handling
  */
 export type EuSuccession = {
     /**
@@ -13127,7 +13127,7 @@ export type SpousesResidenceRight = {
 /**
  * Japan Extension
  *
- * Japanese succession law — koseki records, iryubun (reserved share) claims, yōshi (adoption), spousal residence right (2019 reform), isan bunkatsu (estate division), saishi succession, local will formalities.
+ * Japanese succession law — koseki records, iryubun (reserved share) claims, yōshi (adoption), spousal residence right (2019 reform), isan bunkatsu (estate division), saishi succession, local will formalities
  */
 export type Japan = {
     kosekiRecords?: Array<KosekiRecord>;
@@ -13278,7 +13278,7 @@ export type InheritanceTaxStatus = {
 /**
  * PRC China Extension
  *
- * People's Republic of China succession law — forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling, intestacy order (Arts. 1127-1132), will forms (6 types, Art. 1142), community property division (Art. 1153), rural land rights, and inheritance tax status.
+ * People's Republic of China succession law — forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling, intestacy order (Arts. 1127-1132), will forms (6 types, Art. 1142), community property division (Art. 1153), rural land rights, and inheritance tax status
  */
 export type PrcChina = {
     /**
@@ -13377,7 +13377,7 @@ export type EpfNomination = {
 /**
  * Singapore / Malaysia Extension
  *
- * Singapore and Malaysia succession law — ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction.
+ * Singapore and Malaysia succession law — ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction
  */
 export type SingaporeMalaysia = {
     /**
@@ -13392,7 +13392,7 @@ export type SingaporeMalaysia = {
     epfNominations?: Array<EpfNomination>;
     notes?: string;
     /**
-     * Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia.
+     * Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia
      */
     marriageRevocation?: {
         revokesPriorWill: boolean;
@@ -13525,7 +13525,7 @@ export type ForcedHeirshipPattern = {
 /**
  * Latin America Extension
  *
- * Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions.
+ * Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions
  */
 export type LatinAmerica = {
     /**
@@ -13609,7 +13609,7 @@ export type PriorityDebt = {
 /**
  * Islamic Succession Extension
  *
- * Faraid (Islamic inheritance) rules: heir classification, fixed shares, residuary (asaba), awl/radd adjustments, wasiyya limits, iddah periods, waqf details, and priority debts including mahr.
+ * Faraid (Islamic inheritance) rules: heir classification, fixed shares, residuary (asaba), awl/radd adjustments, wasiyya limits, iddah periods, waqf details, and priority debts including mahr
  */
 export type IslamicSuccession = {
     school: 'hanafi' | 'shafii' | 'maliki' | 'hanbali' | 'jafari' | 'ibadi' | 'zahiri';
@@ -13754,7 +13754,7 @@ export type BequestClassification = {
 /**
  * Jewish Succession Extension
  *
- * Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law.
+ * Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law
  */
 export type JewishSuccession = {
     /**
@@ -13808,7 +13808,7 @@ export type StridhanAsset = {
 /**
  * Hindu Succession Extension
  *
- * Hindu succession law specifics: Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications under the Hindu Succession Act 1956, stridhan assets, agricultural land ceiling rules, and NRI complications.
+ * Hindu succession law specifics: Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications under the Hindu Succession Act 1956, stridhan assets, agricultural land ceiling rules, and NRI complications
  */
 export type HinduSuccession = {
     applicableLaw: 'hindu_succession_act_1956' | 'indian_succession_act_1925' | 'muslim_personal_law' | 'special_marriage_act' | 'parsi_succession' | 'goa_civil_code';
@@ -13901,7 +13901,7 @@ export type WidowRights = {
 /**
  * Africa Customary Succession Extension
  *
- * Customary succession rules across African ethnic groups: patrilineal/matrilineal systems, family council decisions, communal property, widow rights, lobola, land tenure, and constitutional challenges.
+ * Customary succession rules across African ethnic groups: patrilineal/matrilineal systems, family council decisions, communal property, widow rights, lobola, land tenure, and constitutional challenges
  */
 export type AfricaCustomary = {
     /**
@@ -13956,7 +13956,7 @@ export type AfricaCustomary = {
 /**
  * Brazil Extension
  *
- * Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário process types, cartório attestation, disponível (testamentary freedom portion), and união estável (stable union recognition).
+ * Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário process types, cartório attestation, disponível (testamentary freedom portion), and união estável (stable union recognition)
  */
 export type Brazil = {
     /**
@@ -14210,7 +14210,7 @@ export type Brazil = {
 /**
  * Hong Kong Extension
  *
- * Hong Kong succession rules: local grant types under Cap. 10, MPF death benefit nominations under Cap. 485, cross-border PRC asset considerations, intestacy distribution under the Intestates' Estates Ordinance (Cap. 73), and small estate grants.
+ * Hong Kong succession rules: local grant types under Cap. 10, MPF death benefit nominations under Cap. 485, cross-border PRC asset considerations, intestacy distribution under the Intestates' Estates Ordinance (Cap. 73), and small estate grants
  */
 export type HongKong = {
     /**
@@ -14534,11 +14534,11 @@ export type HongKong = {
 /**
  * Switzerland Extension
  *
- * Swiss succession rules: Pflichtteil (forced heirship, 2023 Erbrechtsrevision), cantonal inheritance tax variation, matrimonial property regimes, Erbschein (certificate of inheritance), and notarial will forms.
+ * Swiss succession rules: Pflichtteil (forced heirship, 2023 Erbrechtsrevision), cantonal inheritance tax variation, matrimonial property regimes, Erbschein (certificate of inheritance), and notarial will forms
  */
 export type Switzerland = {
     /**
-     * Pflichtteil — the statutory reserved portion under Swiss law. Since the 2023 Erbrechtsrevision (ZGB Art. 470–480), parents are no longer protected heirs; descendants retain 1/2 of their intestate share and the surviving spouse 1/2 of their intestate share.
+     * Pflichtteil — the statutory reserved portion under Swiss law. Since the 2023 Erbrechtsrevision (ZGB Art. 470–480), parents are no longer protected heirs; descendants retain 1/2 of their intestate share and the surviving spouse 1/2 of their intestate share
      */
     pflichtteil?: {
         /**
@@ -14554,7 +14554,7 @@ export type Switzerland = {
              */
             personId: string;
             /**
-             * Class of protected heir. Since 2023, only descendants and surviving_spouse are protected heirs; parent is included for pre-2023 deaths.
+             * Class of protected heir. Since 2023, only descendants and surviving_spouse are protected heirs; parent is included for pre-2023 deaths
              */
             heirClass: 'descendant' | 'surviving_spouse' | 'parent';
             /**
@@ -14581,7 +14581,7 @@ export type Switzerland = {
         };
     };
     /**
-     * Cantonal inheritance tax and succession law variation. Switzerland has 26 cantons; direct-line heirs are exempt in most cantons, but rates and exemptions differ significantly.
+     * Cantonal inheritance tax and succession law variation. Switzerland has 26 cantons; direct-line heirs are exempt in most cantons, but rates and exemptions differ significantly
      */
     cantonalVariation?: {
         /**
@@ -14602,11 +14602,11 @@ export type Switzerland = {
         linealHeirsExempt?: boolean;
     };
     /**
-     * The matrimonial property regime governing the split of matrimonial property before succession begins. participation_in_acquisitions is the default regime under ZGB Art. 181.
+     * The matrimonial property regime governing the split of matrimonial property before succession begins. participation_in_acquisitions is the default regime under ZGB Art. 181
      */
     matrimonialPropertyRegime?: 'participation_in_acquisitions' | 'community_of_property' | 'separation_of_property';
     /**
-     * Erbschein — the Swiss certificate of inheritance (Erbenbescheinigung) issued by the competent cantonal authority confirming the identity of heirs and their shares.
+     * Erbschein — the Swiss certificate of inheritance (Erbenbescheinigung) issued by the competent cantonal authority confirming the identity of heirs and their shares
      */
     erbschein?: {
         /**
@@ -14627,7 +14627,7 @@ export type Switzerland = {
         referenceNumber?: string;
     };
     /**
-     * Form of will used under Swiss law. public_will: notarially authenticated before two witnesses (ZGB Art. 499–508). holographic_will: entirely handwritten, dated, and signed by the testator (ZGB Art. 505). oral_will: emergency oral will before two witnesses when notarial form is impossible (ZGB Art. 506–508).
+     * Form of will used under Swiss law. public_will: notarially authenticated before two witnesses (ZGB Art. 499–508). holographic_will: entirely handwritten, dated, and signed by the testator (ZGB Art. 505). oral_will: emergency oral will before two witnesses when notarial form is impossible (ZGB Art. 506–508)
      */
     notarialWillForm?: 'public_will' | 'holographic_will' | 'oral_will';
     notes?: string;
@@ -14647,7 +14647,7 @@ export type Switzerland = {
              */
             personId: string;
             /**
-             * Class of protected heir. Since 2023, only descendants and surviving_spouse are protected heirs; parent is included for pre-2023 deaths.
+             * Class of protected heir. Since 2023, only descendants and surviving_spouse are protected heirs; parent is included for pre-2023 deaths
              */
             heirClass: 'descendant' | 'surviving_spouse' | 'parent';
             /**
@@ -14712,15 +14712,15 @@ export type Switzerland = {
 /**
  * Israel Extension
  *
- * Israeli succession rules: parallel court systems (civil family court, rabbinical, sharia, druze), Inheritance Law 1965 process types, religious authority orders, kibbutz/moshav communal property, and Holocaust restitution assets.
+ * Israeli succession rules: parallel court systems (civil family court, rabbinical, sharia, druze), Inheritance Law 1965 process types, religious authority orders, kibbutz/moshav communal property, and Holocaust restitution assets
  */
 export type Israel = {
     /**
-     * The adjudicating court system handling this succession matter. Israel operates parallel civil and religious court systems, each with jurisdiction over different communities and matter types.
+     * The adjudicating court system handling this succession matter. Israel operates parallel civil and religious court systems, each with jurisdiction over different communities and matter types
      */
     parallelCourtSystems?: {
         /**
-         * The court system with jurisdiction over this succession matter. civil_family_court: Family Court under Family Court Law 1995 (default for most succession matters). rabbinical_court: Rabbinical Court with jurisdiction over Jewish personal status and succession where all parties consent. sharia_court: Sharia Court with jurisdiction over Muslim personal status matters. druze_court: Druze Religious Court with jurisdiction over Druze personal status. registrar_of_inheritance: Registrar of Inheritance (Rasham HaYerushot) for uncontested applications.
+         * The court system with jurisdiction over this succession matter. civil_family_court: Family Court under Family Court Law 1995 (default for most succession matters). rabbinical_court: Rabbinical Court with jurisdiction over Jewish personal status and succession where all parties consent. sharia_court: Sharia Court with jurisdiction over Muslim personal status matters. druze_court: Druze Religious Court with jurisdiction over Druze personal status. registrar_of_inheritance: Registrar of Inheritance (Rasham HaYerushot) for uncontested applications
          */
         adjudicatingCourt?: 'civil_family_court' | 'rabbinical_court' | 'sharia_court' | 'druze_court' | 'registrar_of_inheritance';
         /**
@@ -14737,11 +14737,11 @@ export type Israel = {
         allPartiesConsented?: boolean;
     };
     /**
-     * Details of the succession process under the Inheritance Law 1965 (Chok HaYerusha). The law provides two tracks: tzevu kiyum (probate order for wills) and tzevu yerusha (succession order for intestate estates).
+     * Details of the succession process under the Inheritance Law 1965 (Chok HaYerusha). The law provides two tracks: tzevu kiyum (probate order for wills) and tzevu yerusha (succession order for intestate estates)
      */
     inheritanceLaw1965?: {
         /**
-         * Type of succession order sought or obtained. tzevu_kiyum: probate order (tzav kiyum tzava'a) confirming the validity of a will. tzevu_yerusha: succession order (tzav yerusha) determining heirs on intestacy. combined: both orders sought together, e.g. where a partial will exists.
+         * Type of succession order sought or obtained. tzevu_kiyum: probate order (tzav kiyum tzava'a) confirming the validity of a will. tzevu_yerusha: succession order (tzav yerusha) determining heirs on intestacy. combined: both orders sought together, e.g. where a partial will exists
          */
         successionOrderType?: 'tzevu_kiyum' | 'tzevu_yerusha' | 'combined';
         /**
@@ -14753,7 +14753,7 @@ export type Israel = {
          */
         objectionsReceived?: boolean;
         /**
-         * Surviving spouse entitlement under Inheritance Law 1965. On intestacy, the spouse's share depends on the class of heirs surviving alongside them.
+         * Surviving spouse entitlement under Inheritance Law 1965. On intestacy, the spouse's share depends on the class of heirs surviving alongside them
          */
         spouseEntitlement?: {
             /**
@@ -14771,15 +14771,15 @@ export type Israel = {
         };
     };
     /**
-     * An order or ruling issued by a religious court with jurisdiction over this succession matter. Applicable where a religious court has issued a binding ruling recognised under Israeli law.
+     * An order or ruling issued by a religious court with jurisdiction over this succession matter. Applicable where a religious court has issued a binding ruling recognised under Israeli law
      */
     religiousAuthorityOrder?: {
         /**
-         * The religious authority issuing the order. bet_din: Rabbinical court (Jewish law). sharia_court: Sharia court (Islamic law). druze_court: Druze religious court.
+         * The religious authority issuing the order. bet_din: Rabbinical court (Jewish law). sharia_court: Sharia court (Islamic law). druze_court: Druze religious court
          */
         authority?: 'bet_din' | 'sharia_court' | 'druze_court';
         /**
-         * Type of religious authority order. succession_ruling: ruling on intestate distribution. halachic_will_validation: validation of a will under halachic principles. waqf_ruling: ruling concerning waqf (Islamic religious endowment) assets. consent_order: order by consent of all parties.
+         * Type of religious authority order. succession_ruling: ruling on intestate distribution. halachic_will_validation: validation of a will under halachic principles. waqf_ruling: ruling concerning waqf (Islamic religious endowment) assets. consent_order: order by consent of all parties
          */
         orderType?: 'succession_ruling' | 'halachic_will_validation' | 'waqf_ruling' | 'consent_order';
         /**
@@ -14796,11 +14796,11 @@ export type Israel = {
         binding?: boolean;
     };
     /**
-     * Communal or cooperative property held through a kibbutz or moshav. These structures create special succession rules as membership rights, housing allocations, and production quotas may not be freely transferable.
+     * Communal or cooperative property held through a kibbutz or moshav. These structures create special succession rules as membership rights, housing allocations, and production quotas may not be freely transferable
      */
     kibbutzProperty?: {
         /**
-         * Type of communal or cooperative structure. kibbutz_communal: traditional collective kibbutz where all property is collectively owned. kibbutz_renewed: renewed (mתחדש) kibbutz operating on differential pay and partial private ownership. moshav: cooperative smallholder settlement where land is state-leased and individually farmed. moshav_shitufi: collective moshav combining kibbutz production with moshav family life.
+         * Type of communal or cooperative structure. kibbutz_communal: traditional collective kibbutz where all property is collectively owned. kibbutz_renewed: renewed (mתחדש) kibbutz operating on differential pay and partial private ownership. moshav: cooperative smallholder settlement where land is state-leased and individually farmed. moshav_shitufi: collective moshav combining kibbutz production with moshav family life
          */
         communalOwnershipType?: 'kibbutz_communal' | 'kibbutz_renewed' | 'moshav' | 'moshav_shitufi';
         /**
@@ -14817,7 +14817,7 @@ export type Israel = {
         personalPropertyValue?: Money;
     };
     /**
-     * Holocaust restitution assets — property or claims arising from Nazi persecution and subsequent restitution programmes. Israel has a significant number of estates involving Holocaust-era assets due to its founding population.
+     * Holocaust restitution assets — property or claims arising from Nazi persecution and subsequent restitution programmes. Israel has a significant number of estates involving Holocaust-era assets due to its founding population
      */
     holocaustRestitution?: {
         /**
@@ -14825,7 +14825,7 @@ export type Israel = {
          */
         restitutionAssetsExist?: boolean;
         /**
-         * Source programme or authority from which restitution is or was sought. claims_conference: Conference on Jewish Material Claims Against Germany. german_government: German federal or state government restitution. austrian_government: Austrian government restitution. swiss_banks_settlement: Swiss Banks Settlement (Volcker process). art_restitution: looted art restitution. property_restitution: real property restitution. other: other restitution programme.
+         * Source programme or authority from which restitution is or was sought. claims_conference: Conference on Jewish Material Claims Against Germany. german_government: German federal or state government restitution. austrian_government: Austrian government restitution. swiss_banks_settlement: Swiss Banks Settlement (Volcker process). art_restitution: looted art restitution. property_restitution: real property restitution. other: other restitution programme
          */
         restitutionSource?: 'claims_conference' | 'german_government' | 'austrian_government' | 'swiss_banks_settlement' | 'art_restitution' | 'property_restitution' | 'other';
         /**
@@ -14846,7 +14846,7 @@ export type Israel = {
         [key: string]: unknown;
     } | {
         /**
-         * The court system with jurisdiction over this succession matter. civil_family_court: Family Court under Family Court Law 1995 (default for most succession matters). rabbinical_court: Rabbinical Court with jurisdiction over Jewish personal status and succession where all parties consent. sharia_court: Sharia Court with jurisdiction over Muslim personal status matters. druze_court: Druze Religious Court with jurisdiction over Druze personal status. registrar_of_inheritance: Registrar of Inheritance (Rasham HaYerushot) for uncontested applications.
+         * The court system with jurisdiction over this succession matter. civil_family_court: Family Court under Family Court Law 1995 (default for most succession matters). rabbinical_court: Rabbinical Court with jurisdiction over Jewish personal status and succession where all parties consent. sharia_court: Sharia Court with jurisdiction over Muslim personal status matters. druze_court: Druze Religious Court with jurisdiction over Druze personal status. registrar_of_inheritance: Registrar of Inheritance (Rasham HaYerushot) for uncontested applications
          */
         adjudicatingCourt?: 'civil_family_court' | 'rabbinical_court' | 'sharia_court' | 'druze_court' | 'registrar_of_inheritance';
         /**
@@ -14863,7 +14863,7 @@ export type Israel = {
         allPartiesConsented?: boolean;
     } | {
         /**
-         * Type of succession order sought or obtained. tzevu_kiyum: probate order (tzav kiyum tzava'a) confirming the validity of a will. tzevu_yerusha: succession order (tzav yerusha) determining heirs on intestacy. combined: both orders sought together, e.g. where a partial will exists.
+         * Type of succession order sought or obtained. tzevu_kiyum: probate order (tzav kiyum tzava'a) confirming the validity of a will. tzevu_yerusha: succession order (tzav yerusha) determining heirs on intestacy. combined: both orders sought together, e.g. where a partial will exists
          */
         successionOrderType?: 'tzevu_kiyum' | 'tzevu_yerusha' | 'combined';
         /**
@@ -14875,7 +14875,7 @@ export type Israel = {
          */
         objectionsReceived?: boolean;
         /**
-         * Surviving spouse entitlement under Inheritance Law 1965. On intestacy, the spouse's share depends on the class of heirs surviving alongside them.
+         * Surviving spouse entitlement under Inheritance Law 1965. On intestacy, the spouse's share depends on the class of heirs surviving alongside them
          */
         spouseEntitlement?: {
             /**
@@ -14893,11 +14893,11 @@ export type Israel = {
         };
     } | {
         /**
-         * The religious authority issuing the order. bet_din: Rabbinical court (Jewish law). sharia_court: Sharia court (Islamic law). druze_court: Druze religious court.
+         * The religious authority issuing the order. bet_din: Rabbinical court (Jewish law). sharia_court: Sharia court (Islamic law). druze_court: Druze religious court
          */
         authority?: 'bet_din' | 'sharia_court' | 'druze_court';
         /**
-         * Type of religious authority order. succession_ruling: ruling on intestate distribution. halachic_will_validation: validation of a will under halachic principles. waqf_ruling: ruling concerning waqf (Islamic religious endowment) assets. consent_order: order by consent of all parties.
+         * Type of religious authority order. succession_ruling: ruling on intestate distribution. halachic_will_validation: validation of a will under halachic principles. waqf_ruling: ruling concerning waqf (Islamic religious endowment) assets. consent_order: order by consent of all parties
          */
         orderType?: 'succession_ruling' | 'halachic_will_validation' | 'waqf_ruling' | 'consent_order';
         /**
@@ -14914,7 +14914,7 @@ export type Israel = {
         binding?: boolean;
     } | {
         /**
-         * Type of communal or cooperative structure. kibbutz_communal: traditional collective kibbutz where all property is collectively owned. kibbutz_renewed: renewed (mתחדש) kibbutz operating on differential pay and partial private ownership. moshav: cooperative smallholder settlement where land is state-leased and individually farmed. moshav_shitufi: collective moshav combining kibbutz production with moshav family life.
+         * Type of communal or cooperative structure. kibbutz_communal: traditional collective kibbutz where all property is collectively owned. kibbutz_renewed: renewed (mתחדש) kibbutz operating on differential pay and partial private ownership. moshav: cooperative smallholder settlement where land is state-leased and individually farmed. moshav_shitufi: collective moshav combining kibbutz production with moshav family life
          */
         communalOwnershipType?: 'kibbutz_communal' | 'kibbutz_renewed' | 'moshav' | 'moshav_shitufi';
         /**
@@ -14935,7 +14935,7 @@ export type Israel = {
          */
         restitutionAssetsExist?: boolean;
         /**
-         * Source programme or authority from which restitution is or was sought. claims_conference: Conference on Jewish Material Claims Against Germany. german_government: German federal or state government restitution. austrian_government: Austrian government restitution. swiss_banks_settlement: Swiss Banks Settlement (Volcker process). art_restitution: looted art restitution. property_restitution: real property restitution. other: other restitution programme.
+         * Source programme or authority from which restitution is or was sought. claims_conference: Conference on Jewish Material Claims Against Germany. german_government: German federal or state government restitution. austrian_government: Austrian government restitution. swiss_banks_settlement: Swiss Banks Settlement (Volcker process). art_restitution: looted art restitution. property_restitution: real property restitution. other: other restitution programme
          */
         restitutionSource?: 'claims_conference' | 'german_government' | 'austrian_government' | 'swiss_banks_settlement' | 'art_restitution' | 'property_restitution' | 'other';
         /**
@@ -14968,7 +14968,7 @@ export type India = {
      */
     state?: string;
     /**
-     * Whether probate is required — varies by religion and state. Mandatory for wills under Indian Succession Act in certain cities.
+     * Whether probate is required — varies by religion and state. Mandatory for wills under Indian Succession Act in certain cities
      */
     probateRequired?: boolean;
     /**
@@ -15315,7 +15315,7 @@ export type Uae = {
     };
     notes?: string;
     /**
-     * Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs.
+     * Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs
      */
     marriageRevocation?: {
         revokesPriorWill: boolean;
@@ -20242,7 +20242,7 @@ export type OrganisationWritable = {
         currency?: string;
     };
     /**
-     * External identifiers — charity number, company registration, UEN, etc.
+     * External identifiers, such as a charity number, company registration or UEN
      */
     identifiers?: Array<IdentifierWritable>;
     /**

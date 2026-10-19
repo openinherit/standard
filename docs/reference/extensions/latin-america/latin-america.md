@@ -2,7 +2,7 @@
 
 # Latin America Extension
 
-Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions.
+Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions
 
 Source: [`v3/extensions/latin-america/latin-america.json`](../../../../v3/extensions/latin-america/latin-america.json)
 
@@ -12,7 +12,7 @@ Schema `$id`: `https://openinherit.org/v3/extensions/latin-america/latin-america
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `country` | `string` — one of `BR`, `AR`, `CO`, `VE`, `MX`, `CL`, `PE` | yes | ISO 3166-1 alpha-2 country code identifying which Latin American jurisdiction's succession rules apply |
+| `country` | one of `BR`, `AR`, `CO`, `VE`, `MX`, `CL`, `PE` | yes | ISO 3166-1 alpha-2 country code identifying which Latin American jurisdiction's succession rules apply |
 | `brazilianSuccession` | [BrazilianSuccession](#def-BrazilianSuccession) | | |
 | `argentineSuccession` | [ArgentineSuccession](#def-ArgentineSuccession) | | |
 | `colombianSuccession` | [ColombianSuccession](#def-ColombianSuccession) | | |
@@ -72,7 +72,7 @@ Chilean succession under Código Civil — mitad legitimaria, cuarta de mejoras,
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `system` | `string` — one of `fourths` | | |
+| `system` | const `fourths` | | |
 | `legitimaRigurosa` | `string` | | |
 | `cuartaDeMejoras` | `string` | | |
 | `cuartaDeLibreDisposicion` | `string` | | |
@@ -88,7 +88,7 @@ General forced heirship pattern for civil law jurisdictions — covers Peru, Ecu
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `legitimaFraction` | `string` | | |
-| `forcedHeirCategories` | array of `string` — one of `descendants`, `ascendants`, `spouse` | | |
+| `forcedHeirCategories` | array of one of `descendants`, `ascendants`, `spouse` | | |
 | `freeDisposalFraction` | `string` | | |
 | `mejoraAvailable` | `boolean` | | Whether an improvement share exists |
 | `notes` | `string` | | |
@@ -103,7 +103,7 @@ Mexican succession under Federal Civil Code — no forced heirship but alimentos
 | --- | --- | --- | --- |
 | `alimentosObligations` | `boolean` | | Dependant maintenance that cannot be defeated by will |
 | `testamentaryWill` | `boolean` | | |
-| `intestacyOrder` | `string` — one of `descendants`, `spouse`, `ascendants`, `collaterals`, `concubine`, `state` | | |
+| `intestacyOrder` | one of `descendants`, `spouse`, `ascendants`, `collaterals`, `concubine`, `state` | | |
 | `stateCode` | `string` | | Mexican state code — civil law varies by state |
 | `publicTestament` | `boolean` | | Most common will form, executed before a notary |
 | `notes` | `string` | | |

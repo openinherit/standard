@@ -2,7 +2,7 @@
 
 # Africa Customary Succession Extension
 
-Customary succession rules across African ethnic groups: patrilineal/matrilineal systems, family council decisions, communal property, widow rights, lobola, land tenure, and constitutional challenges.
+Customary succession rules across African ethnic groups: patrilineal/matrilineal systems, family council decisions, communal property, widow rights, lobola, land tenure, and constitutional challenges
 
 Source: [`v3/extensions/africa-customary/africa-customary.json`](../../../../v3/extensions/africa-customary/africa-customary.json)
 
@@ -44,8 +44,8 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `ethnicGroup` | `string` | yes | |
-| `successionSystem` | `string` — one of `patrilineal_primogeniture`, `patrilineal_equal`, `matrilineal`, `bilateral`, `ultimogeniture` | yes | |
-| `widowInheritanceRight` | `string` — one of `full_inheritance`, `usufruct_only`, `levirate_marriage`, `none`, `statutory_override` | | |
+| `successionSystem` | one of `patrilineal_primogeniture`, `patrilineal_equal`, `matrilineal`, `bilateral`, `ultimogeniture` | yes | |
+| `widowInheritanceRight` | one of `full_inheritance`, `usufruct_only`, `levirate_marriage`, `none`, `statutory_override` | | |
 | `daughterInheritanceRight` | `string` | | |
 | `constitutionalOverride` | `boolean` | | |
 | `caseReference` | `string` | | |
@@ -62,7 +62,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | `participants` | array of `string` (uuid) | | |
 | `chairPersonId` | `string` (uuid) | | |
 | `outcome` | `string` | | |
-| `constitutionalChallengeOutcome` | `string` — one of `not_challenged`, `upheld`, `struck_down`, `pending` | | |
+| `constitutionalChallengeOutcome` | one of `not_challenged`, `upheld`, `struck_down`, `pending` | | |
 | `challengeable` | `boolean` | | |
 
 <a id="def-WidowRights"></a>

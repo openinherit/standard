@@ -1870,6 +1870,11 @@ class LegalSystem(Enum):
 
 
 class Jurisdiction(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/common/jurisdiction.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3388,6 +3393,25 @@ class Category1(Enum):
     other = 'other'
 
 
+class AdditionalCategory(Enum):
+    model_railways = 'model_railways'
+    vinyl_records = 'vinyl_records'
+    art = 'art'
+    jewellery = 'jewellery'
+    wine = 'wine'
+    stamps = 'stamps'
+    coins = 'coins'
+    books = 'books'
+    musical_instruments = 'musical_instruments'
+    fishing_gear = 'fishing_gear'
+    handbags = 'handbags'
+    power_tools = 'power_tools'
+    watches = 'watches'
+    ceramics = 'ceramics'
+    memorabilia = 'memorabilia'
+    other = 'other'
+
+
 class ValuationSource(Enum):
     self_estimated = 'self_estimated'
     dealer_valuation = 'dealer_valuation'
@@ -3503,6 +3527,11 @@ class ValuationComparison(BaseModel):
 
 
 class AssetCollection(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/asset-collection.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='allow',
     )
@@ -3530,6 +3559,28 @@ class AssetCollection(BaseModel):
         None,
         description='The primary category of items in this collection',
         examples=['model_railways', 'vinyl_records', 'art'],
+    )
+    additionalCategories: list[AdditionalCategory] | None = Field(
+        None,
+        description='Further categories the collection spans beyond its primary category, e.g. a watch collection that also holds jewellery',
+        examples=[['jewellery']],
+        max_length=16,
+        min_length=1,
+    )
+    expectedItemCount: conint(ge=0) | None = Field(
+        None,
+        description='How many items the owner says the collection holds, whether or not any has been listed. Declared by the owner, never computed from the listed items: the gap between this and what has been listed is what shows a collection is incomplete',
+        examples=[12, 20, 0],
+    )
+    expectedItemCountIsEstimate: (
+        bool | None
+    ) = (
+        Field(None, description="True when expectedItemCount is the owner's approximation ('roughly 20') rather than an exact count. Requires expectedItemCount", examples=[True])
+    )
+    location: constr(max_length=255) | None = Field(
+        None,
+        description='Where the collection is physically kept — a property, room, safe or storage facility. Same meaning as location on an individual asset, and recordable before any item is listed',
+        examples=['Wilmslow', 'Loft at Oakfield Road', 'Bonhams storage, London'],
     )
     estimatedValue: Money | None = Field(
         None,
@@ -11647,6 +11698,11 @@ class VideoDeclaration(BaseModel):
 
 
 class Attestation(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/attestation.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='allow',
     )
@@ -14077,6 +14133,11 @@ class Religion(BaseModel):
 
 
 class Person(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/person.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='allow',
     )
@@ -14763,6 +14824,11 @@ class StudentLoanInfo(BaseModel):
 
 
 class Liability(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/liability.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='allow',
     )
@@ -16224,6 +16290,11 @@ class Executor3(BaseModel):
 
 
 class Executor(RootModel[Executor2 | Executor3]):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/executor.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     root: Executor2 | Executor3 = Field(
         ...,
         description='A person appointed to administer an estate. Includes professional executors, administrators (intestacy), and administrators with will annexed',
@@ -16629,6 +16700,11 @@ class Registration2(BaseModel):
 
 
 class Document(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/document.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='allow',
     )
@@ -16791,6 +16867,11 @@ class RevocationDetails(BaseModel):
 
 
 class NonprobateTransfer(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/nonprobate-transfer.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='allow',
     )
@@ -17403,6 +17484,11 @@ class LookbackPeriod(BaseModel):
 
 
 class LifetimeTransfer(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/lifetime-transfer.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='allow',
     )
@@ -17967,6 +18053,11 @@ class Metadata(BaseModel):
 
 
 class Event(BaseModel):
+    @model_validator(mode='after')
+    def _inherit_conditional_layer(self) -> Any:
+        _layer_check('https://openinherit.org/v3/event.json', self.model_dump(mode='json', by_alias=True, exclude_unset=True))
+        return self
+
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -19000,10 +19091,17 @@ def _evaluate(s, v, path, out):
             out.append(("/".join(map(str, path)), f"must have at least {s['minItems']} items"))
         if "contains" in s and not any(_passes(s["contains"], x) for x in v):
             out.append(("/".join(map(str, path)), "must contain a matching item"))
+        if s.get("uniqueItems") is True and any(_same(x, y) for i, x in enumerate(v) for y in v[:i]):
+            out.append(("/".join(map(str, path)), "must not repeat an item"))
     if isinstance(v, dict):
         for k in s.get("required", []):
             if k not in v:
                 out.append(("/".join(map(str, [*path, k])), f"required: {k}"))
+        for k, needs in s.get("dependentRequired", {}).items():
+            if k in v:
+                for r in needs:
+                    if r not in v:
+                        out.append(("/".join(map(str, [*path, r])), f"required when {k} is present: {r}"))
         for k, sub in s.get("properties", {}).items():
             if k in v:
                 _evaluate(sub, v[k], [*path, k], out)
@@ -19107,7 +19205,61 @@ def _guard(cls, names):
     cls.__pydantic_validator__ = _InheritRawKeyGuard(cls.__pydantic_validator__, cls.__name__, names)
 
 
-_LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if': {'required': ['category'],
+_LAYER_RULES = {'https://openinherit.org/v3/asset-collection.json': {'conditionals': [],
+                                                      'asserts': [{'dependentRequired': {'additionalCategories': ['category'],
+                                                                                         'expectedItemCountIsEstimate': ['expectedItemCount']}},
+                                                                  {'properties': {'additionalCategories': {'uniqueItems': True}}}],
+                                                      'overlays': {},
+                                                      'closed': {'props': ['additionalCategories',
+                                                                           'category',
+                                                                           'description',
+                                                                           'disposalHistory',
+                                                                           'disposalStrategy',
+                                                                           'disposalWishes',
+                                                                           'estimatedValue',
+                                                                           'expectedItemCount',
+                                                                           'expectedItemCountIsEstimate',
+                                                                           'id',
+                                                                           'images',
+                                                                           'location',
+                                                                           'mergedInto',
+                                                                           'minimumAcceptableValue',
+                                                                           'name',
+                                                                           'notes',
+                                                                           'preferredDisposalMethod',
+                                                                           'provenance',
+                                                                           'rootDocumentId',
+                                                                           'specialistDealerNotes',
+                                                                           'splitFrom',
+                                                                           'valuationComparison',
+                                                                           'valuationDate',
+                                                                           'valuationSource'],
+                                                                 'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                                      'nonnull': ['additionalCategories',
+                                                                  'category',
+                                                                  'description',
+                                                                  'disposalHistory',
+                                                                  'disposalStrategy',
+                                                                  'disposalWishes',
+                                                                  'estimatedValue',
+                                                                  'expectedItemCount',
+                                                                  'expectedItemCountIsEstimate',
+                                                                  'id',
+                                                                  'images',
+                                                                  'location',
+                                                                  'mergedInto',
+                                                                  'minimumAcceptableValue',
+                                                                  'name',
+                                                                  'notes',
+                                                                  'preferredDisposalMethod',
+                                                                  'provenance',
+                                                                  'rootDocumentId',
+                                                                  'specialistDealerNotes',
+                                                                  'splitFrom',
+                                                                  'valuationComparison',
+                                                                  'valuationDate',
+                                                                  'valuationSource']},
+ 'https://openinherit.org/v3/asset.json': {'conditionals': [{'if': {'required': ['category'],
                                                                     'properties': {'category': {'const': 'financial'}}},
                                                              'then': {'$ref': 'https://openinherit.org/v3/asset-categories/financial.json'}},
                                                             {'if': {'required': ['category'],
@@ -19119,7 +19271,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                             {'if': {'required': ['category'],
                                                                     'properties': {'category': {'const': 'business'}}},
                                                              'then': {'$ref': 'https://openinherit.org/v3/asset-categories/business.json'}}],
-                                           'asserts': [],
+                                           'asserts': [{'properties': {'identifiers': {'uniqueItems': True}}}],
                                            'overlays': {'netEquity': {'properties': {'amount': {'minimum': 0}}}},
                                            'closed': {'props': ['accessInstructions',
                                                                 'acquisitionType',
@@ -19267,6 +19419,95 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                        'valuationReliability',
                                                        'verifiedBy',
                                                        'visibility']},
+ 'https://openinherit.org/v3/attestation.json': {'conditionals': [],
+                                                 'asserts': [{'properties': {'videoParticipantPersonIds': {'uniqueItems': True},
+                                                                             'witnessPersonIds': {'uniqueItems': True}}}],
+                                                 'overlays': {},
+                                                 'closed': {'props': ['allPagesSigned',
+                                                                      'archiveTimestampChain',
+                                                                      'attestationDate',
+                                                                      'attestationType',
+                                                                      'authenticationCharacteristic',
+                                                                      'authoritativeCopyHolder',
+                                                                      'custodianSystemName',
+                                                                      'executionType',
+                                                                      'id',
+                                                                      'identityVerificationMethod',
+                                                                      'method',
+                                                                      'notes',
+                                                                      'pageCount',
+                                                                      'pagesSignedByTestator',
+                                                                      'pagesSignedByWitnesses',
+                                                                      'provenance',
+                                                                      'qualifiedCustodianOrganisationId',
+                                                                      'qualifiedCustodianOrganisationIdDisplay',
+                                                                      'ronPlatform',
+                                                                      'ronRecordingContentUrl',
+                                                                      'ronRecordingRetentionYears',
+                                                                      'ronSessionId',
+                                                                      'selfProvingAffidavit',
+                                                                      'solicitorSupervised',
+                                                                      'tamperEvidenceMethod',
+                                                                      'tamperEvidenceValue',
+                                                                      'testatorSignedInPresenceOfWitnesses',
+                                                                      'videoDeclaration',
+                                                                      'videoJurisdictionValidFrom',
+                                                                      'videoJurisdictionValidUntil',
+                                                                      'videoLive',
+                                                                      'videoParticipantPersonIds',
+                                                                      'videoPlatform',
+                                                                      'videoRecordingContentUrl',
+                                                                      'videoRecordingDuration',
+                                                                      'videoRecordingMediaType',
+                                                                      'videoUninterrupted',
+                                                                      'witnessConflictCheck',
+                                                                      'witnessConflictCheckScope',
+                                                                      'witnessPersonIds',
+                                                                      'witnesses',
+                                                                      'witnessesSignedInPresenceOfTestator'],
+                                                            'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                                 'nonnull': ['allPagesSigned',
+                                                             'archiveTimestampChain',
+                                                             'attestationDate',
+                                                             'attestationType',
+                                                             'authenticationCharacteristic',
+                                                             'authoritativeCopyHolder',
+                                                             'custodianSystemName',
+                                                             'executionType',
+                                                             'id',
+                                                             'identityVerificationMethod',
+                                                             'method',
+                                                             'notes',
+                                                             'pageCount',
+                                                             'pagesSignedByTestator',
+                                                             'pagesSignedByWitnesses',
+                                                             'provenance',
+                                                             'qualifiedCustodianOrganisationId',
+                                                             'qualifiedCustodianOrganisationIdDisplay',
+                                                             'ronPlatform',
+                                                             'ronRecordingContentUrl',
+                                                             'ronRecordingRetentionYears',
+                                                             'ronSessionId',
+                                                             'selfProvingAffidavit',
+                                                             'solicitorSupervised',
+                                                             'tamperEvidenceMethod',
+                                                             'tamperEvidenceValue',
+                                                             'testatorSignedInPresenceOfWitnesses',
+                                                             'videoDeclaration',
+                                                             'videoJurisdictionValidFrom',
+                                                             'videoJurisdictionValidUntil',
+                                                             'videoLive',
+                                                             'videoParticipantPersonIds',
+                                                             'videoPlatform',
+                                                             'videoRecordingContentUrl',
+                                                             'videoRecordingDuration',
+                                                             'videoRecordingMediaType',
+                                                             'videoUninterrupted',
+                                                             'witnessConflictCheck',
+                                                             'witnessConflictCheckScope',
+                                                             'witnessPersonIds',
+                                                             'witnesses',
+                                                             'witnessesSignedInPresenceOfTestator']},
  'https://openinherit.org/v3/bequest.json': {'conditionals': [{'if': {'required': ['bequestType'],
                                                                       'properties': {'bequestType': {'const': 'class'}}},
                                                                'then': {'required': ['classDefinition']}},
@@ -19274,7 +19515,14 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                                       'properties': {'bequestType': {'const': 'life_interest'}}},
                                                                'then': {'required': ['lifeInterest']}}],
                                              'asserts': [{'not': {'required': ['assetIds',
-                                                                               'assetCollectionId']}}],
+                                                                               'assetCollectionId']}},
+                                                         {'properties': {'assetIds': {'uniqueItems': True},
+                                                                         'hotchpotTransferIds': {'uniqueItems': True},
+                                                                         'insurancePolicyIds': {'uniqueItems': True},
+                                                                         'liabilityIds': {'uniqueItems': True},
+                                                                         'mentionedAssetIds': {'uniqueItems': True},
+                                                                         'mentionedPropertyIds': {'uniqueItems': True},
+                                                                         'propertyIds': {'uniqueItems': True}}}],
                                              'overlays': {},
                                              'closed': {'props': ['amount',
                                                                   'applicableLaw',
@@ -19434,6 +19682,18 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                            'valuations',
                                                            'versionedAt',
                                                            'wishes']},
+ 'https://openinherit.org/v3/common/jurisdiction.json': {'conditionals': [],
+                                                         'asserts': [{'properties': {'legalSystems': {'uniqueItems': True}}}],
+                                                         'overlays': {},
+                                                         'closed': {'props': ['country',
+                                                                              'legalSystems',
+                                                                              'name',
+                                                                              'subdivision'],
+                                                                    'patterns': []},
+                                                         'nonnull': ['country',
+                                                                     'legalSystems',
+                                                                     'name',
+                                                                     'subdivision']},
  'https://openinherit.org/v3/conformance-declaration.json': {'conditionals': [{'if': {'properties': {'root': {'const': 'catalogue'}},
                                                                                       'required': ['root']},
                                                                                'then': {'properties': {'entities': {'not': {'required': ['estate']}}}}}],
@@ -19464,8 +19724,57 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                                          'provenance',
                                                                          'root',
                                                                          'validatorDetails']},
+ 'https://openinherit.org/v3/document.json': {'conditionals': [],
+                                              'asserts': [{'dependentRequired': {'entityId': ['entityType'],
+                                                                                 'entityType': ['entityId']}}],
+                                              'overlays': {},
+                                              'closed': {'props': ['clauses',
+                                                                   'content',
+                                                                   'createdAt',
+                                                                   'entityId',
+                                                                   'entityType',
+                                                                   'fileFormat',
+                                                                   'fileSizeBytes',
+                                                                   'formalityAdmittedAt',
+                                                                   'formalityAdmittedBy',
+                                                                   'formalityJurisdiction',
+                                                                   'formalityNotes',
+                                                                   'formalityStatus',
+                                                                   'id',
+                                                                   'images',
+                                                                   'mimeType',
+                                                                   'notes',
+                                                                   'provenance',
+                                                                   'registrations',
+                                                                   'registryReference',
+                                                                   'storageRef',
+                                                                   'title',
+                                                                   'type'],
+                                                         'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                              'nonnull': ['clauses',
+                                                          'content',
+                                                          'createdAt',
+                                                          'entityId',
+                                                          'entityType',
+                                                          'fileFormat',
+                                                          'fileSizeBytes',
+                                                          'formalityAdmittedAt',
+                                                          'formalityAdmittedBy',
+                                                          'formalityJurisdiction',
+                                                          'formalityNotes',
+                                                          'formalityStatus',
+                                                          'id',
+                                                          'images',
+                                                          'mimeType',
+                                                          'notes',
+                                                          'provenance',
+                                                          'registrations',
+                                                          'registryReference',
+                                                          'storageRef',
+                                                          'title']},
  'https://openinherit.org/v3/estate.json': {'conditionals': [],
-                                            'asserts': [],
+                                            'asserts': [{'dependentRequired': {'companionEstateId': ['companionLinkStatus']}},
+                                                        {'properties': {'revokesDocumentIds': {'uniqueItems': True}}}],
                                             'overlays': {'netEstateEquity': {'properties': {'amount': {'minimum': 0}}}},
                                             'closed': {'props': ['adjudicatingBodies',
                                                                  'administration',
@@ -19613,6 +19922,272 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                         'testatorPersonIdDisplay',
                                                         'totalEstimatedValue',
                                                         'validityStatus']},
+ 'https://openinherit.org/v3/event.json': {'conditionals': [],
+                                           'asserts': [{'properties': {'affectedEntityIds': {'uniqueItems': True}}}],
+                                           'overlays': {},
+                                           'closed': {'props': ['actor',
+                                                                'affectedEntityIds',
+                                                                'affectedEntityTypes',
+                                                                'description',
+                                                                'eventType',
+                                                                'id',
+                                                                'metadata',
+                                                                'occurredAt',
+                                                                'provenance',
+                                                                'trigger'],
+                                                      'patterns': []},
+                                           'nonnull': ['actor',
+                                                       'affectedEntityIds',
+                                                       'affectedEntityTypes',
+                                                       'description',
+                                                       'id',
+                                                       'metadata',
+                                                       'occurredAt',
+                                                       'provenance',
+                                                       'trigger']},
+ 'https://openinherit.org/v3/executor.json': {'conditionals': [],
+                                              'asserts': [{'dependentRequired': {'grantReference': ['grantDate',
+                                                                                                    'issuingCourt']}}],
+                                              'overlays': {},
+                                              'closed': {'props': ['conflictsOfInterest',
+                                                                   'consultWith',
+                                                                   'firmName',
+                                                                   'grantDate',
+                                                                   'grantReference',
+                                                                   'grantType',
+                                                                   'id',
+                                                                   'isProfessional',
+                                                                   'issuingCourt',
+                                                                   'notes',
+                                                                   'organisationId',
+                                                                   'organisationIdDisplay',
+                                                                   'personId',
+                                                                   'personIdDisplay',
+                                                                   'primary',
+                                                                   'provenance',
+                                                                   'role',
+                                                                   'scope'],
+                                                         'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                              'nonnull': ['conflictsOfInterest',
+                                                          'consultWith',
+                                                          'firmName',
+                                                          'grantDate',
+                                                          'grantReference',
+                                                          'grantType',
+                                                          'id',
+                                                          'isProfessional',
+                                                          'issuingCourt',
+                                                          'notes',
+                                                          'organisationId',
+                                                          'organisationIdDisplay',
+                                                          'personId',
+                                                          'personIdDisplay',
+                                                          'primary',
+                                                          'provenance',
+                                                          'role',
+                                                          'scope']},
+ 'https://openinherit.org/v3/liability.json': {'conditionals': [],
+                                               'asserts': [{'dependentRequired': {'chargeStatus': ['securedAgainst'],
+                                                                                  'settlementAmount': ['securedAgainst'],
+                                                                                  'chargeRegisteredDate': ['securedAgainst'],
+                                                                                  'chargeReference': ['securedAgainst']}}],
+                                               'overlays': {},
+                                               'closed': {'props': ['accountReference',
+                                                                    'amount',
+                                                                    'chargeReference',
+                                                                    'chargeRegisteredDate',
+                                                                    'chargeStatus',
+                                                                    'creditor',
+                                                                    'endDate',
+                                                                    'id',
+                                                                    'interestRate',
+                                                                    'liabilityType',
+                                                                    'monthlyPayment',
+                                                                    'notes',
+                                                                    'provenance',
+                                                                    'securedAgainst',
+                                                                    'settlementAmount',
+                                                                    'startDate',
+                                                                    'studentLoanInfo',
+                                                                    'visibility'],
+                                                          'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                               'nonnull': ['accountReference',
+                                                           'amount',
+                                                           'chargeReference',
+                                                           'chargeRegisteredDate',
+                                                           'chargeStatus',
+                                                           'creditor',
+                                                           'endDate',
+                                                           'id',
+                                                           'interestRate',
+                                                           'liabilityType',
+                                                           'monthlyPayment',
+                                                           'notes',
+                                                           'provenance',
+                                                           'securedAgainst',
+                                                           'settlementAmount',
+                                                           'startDate',
+                                                           'studentLoanInfo',
+                                                           'visibility']},
+ 'https://openinherit.org/v3/lifetime-transfer.json': {'conditionals': [],
+                                                       'asserts': [{'properties': {'doneeOrganisationIds': {'uniqueItems': True},
+                                                                                   'doneePersonIds': {'uniqueItems': True}}}],
+                                                       'overlays': {},
+                                                       'closed': {'props': ['assetId',
+                                                                            'doneeOrganisationIds',
+                                                                            'doneePersonIds',
+                                                                            'donorPersonId',
+                                                                            'donorPersonIdDisplay',
+                                                                            'exemptionsClaimed',
+                                                                            'id',
+                                                                            'jurisdiction',
+                                                                            'lookbackPeriod',
+                                                                            'lookbackRelevant',
+                                                                            'lookbackYearsRemaining',
+                                                                            'notes',
+                                                                            'propertyId',
+                                                                            'provenance',
+                                                                            'taperReliefPercentage',
+                                                                            'taxPaid',
+                                                                            'taxReturnFiled',
+                                                                            'transferDate',
+                                                                            'transferType',
+                                                                            'valuationId',
+                                                                            'value'],
+                                                                  'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                                       'nonnull': ['assetId',
+                                                                   'doneeOrganisationIds',
+                                                                   'doneePersonIds',
+                                                                   'donorPersonId',
+                                                                   'donorPersonIdDisplay',
+                                                                   'exemptionsClaimed',
+                                                                   'id',
+                                                                   'jurisdiction',
+                                                                   'lookbackPeriod',
+                                                                   'lookbackRelevant',
+                                                                   'lookbackYearsRemaining',
+                                                                   'notes',
+                                                                   'propertyId',
+                                                                   'provenance',
+                                                                   'taperReliefPercentage',
+                                                                   'taxPaid',
+                                                                   'taxReturnFiled',
+                                                                   'transferDate',
+                                                                   'transferType',
+                                                                   'valuationId',
+                                                                   'value']},
+ 'https://openinherit.org/v3/nonprobate-transfer.json': {'conditionals': [],
+                                                         'asserts': [{'properties': {'assetIds': {'uniqueItems': True},
+                                                                                     'beneficiaryPersonIds': {'uniqueItems': True},
+                                                                                     'contingentBeneficiaryPersonIds': {'uniqueItems': True},
+                                                                                     'survivingOwnerPersonIds': {'uniqueItems': True}}}],
+                                                         'overlays': {},
+                                                         'closed': {'props': ['assetIds',
+                                                                              'beneficiaryPersonIds',
+                                                                              'bindingNomination',
+                                                                              'contingentBeneficiaryPersonIds',
+                                                                              'description',
+                                                                              'designationConflict',
+                                                                              'designationType',
+                                                                              'id',
+                                                                              'jurisdiction',
+                                                                              'nominationExpiryDate',
+                                                                              'notes',
+                                                                              'passesOutsideEstate',
+                                                                              'propertyId',
+                                                                              'provenance',
+                                                                              'recordingReference',
+                                                                              'revocationDetails',
+                                                                              'survivingOwnerPersonIds',
+                                                                              'transferType',
+                                                                              'trustId'],
+                                                                    'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                                         'nonnull': ['assetIds',
+                                                                     'beneficiaryPersonIds',
+                                                                     'bindingNomination',
+                                                                     'contingentBeneficiaryPersonIds',
+                                                                     'description',
+                                                                     'designationConflict',
+                                                                     'designationType',
+                                                                     'id',
+                                                                     'jurisdiction',
+                                                                     'nominationExpiryDate',
+                                                                     'notes',
+                                                                     'passesOutsideEstate',
+                                                                     'propertyId',
+                                                                     'provenance',
+                                                                     'recordingReference',
+                                                                     'revocationDetails',
+                                                                     'survivingOwnerPersonIds',
+                                                                     'transferType',
+                                                                     'trustId']},
+ 'https://openinherit.org/v3/person.json': {'conditionals': [],
+                                            'asserts': [{'properties': {'identifiers': {'uniqueItems': True},
+                                                                        'roles': {'uniqueItems': True}}}],
+                                            'overlays': {},
+                                            'closed': {'props': ['accessibilityNeeds',
+                                                                 'additionalName',
+                                                                 'clanOrLineage',
+                                                                 'comments',
+                                                                 'contact',
+                                                                 'dateOfBirth',
+                                                                 'dateOfDeath',
+                                                                 'domicile',
+                                                                 'familyName',
+                                                                 'fieldProvenance',
+                                                                 'gender',
+                                                                 'givenName',
+                                                                 'id',
+                                                                 'identifiers',
+                                                                 'identity',
+                                                                 'jurisdictionRoles',
+                                                                 'language',
+                                                                 'legalPersonalities',
+                                                                 'notes',
+                                                                 'phoneticReading',
+                                                                 'posthumousAiConsent',
+                                                                 'preferredChannel',
+                                                                 'preferredName',
+                                                                 'provenance',
+                                                                 'religion',
+                                                                 'ritualName',
+                                                                 'roles',
+                                                                 'sameAs',
+                                                                 'sharedWithCompanion',
+                                                                 'taxResidency',
+                                                                 'titles'],
+                                                       'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
+                                            'nonnull': ['accessibilityNeeds',
+                                                        'additionalName',
+                                                        'clanOrLineage',
+                                                        'comments',
+                                                        'contact',
+                                                        'dateOfBirth',
+                                                        'dateOfDeath',
+                                                        'domicile',
+                                                        'familyName',
+                                                        'fieldProvenance',
+                                                        'gender',
+                                                        'givenName',
+                                                        'id',
+                                                        'identifiers',
+                                                        'identity',
+                                                        'jurisdictionRoles',
+                                                        'language',
+                                                        'legalPersonalities',
+                                                        'notes',
+                                                        'phoneticReading',
+                                                        'posthumousAiConsent',
+                                                        'preferredChannel',
+                                                        'preferredName',
+                                                        'provenance',
+                                                        'religion',
+                                                        'ritualName',
+                                                        'roles',
+                                                        'sameAs',
+                                                        'sharedWithCompanion',
+                                                        'taxResidency',
+                                                        'titles']},
  'https://openinherit.org/v3/property.json': {'conditionals': [],
                                               'asserts': [],
                                               'overlays': {'netEquity': {'properties': {'amount': {'minimum': 0}}}},
@@ -19802,7 +20377,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                                                       'insurancePolicies': {'maxItems': 50},
                                                                                       '$schema': {'const': 'https://openinherit.org/v3/schema.json'},
                                                                                       'conformance': {'properties': {'profile': {'const': 'estate'}}}}}}],
-                                            'asserts': [],
+                                            'asserts': [{'properties': {'powersOfAppointment': {'uniqueItems': True}}}],
                                             'overlays': {},
                                             'closed': {'props': ['$schema',
                                                                  '@context',
@@ -19917,7 +20492,8 @@ _LAYER_RULES = {'https://openinherit.org/v3/asset.json': {'conditionals': [{'if'
                                                         'wishes']},
  'https://openinherit.org/v3/wish.json': {'conditionals': [],
                                           'asserts': [{'not': {'required': ['relatedAssetId',
-                                                                            'relatedCollectionId']}}],
+                                                                            'relatedCollectionId']}},
+                                                      {'properties': {'relatedTrustIds': {'uniqueItems': True}}}],
                                           'overlays': {},
                                           'closed': {'props': ['addresseePersonId',
                                                                'addresseePersonIdDisplay',
@@ -20065,11 +20641,21 @@ _LAYER_MODELS = {
     'https://openinherit.org/v3/asset-categories/digital.json': Digital,
     'https://openinherit.org/v3/asset-categories/financial.json': Financial,
     'https://openinherit.org/v3/asset-categories/vehicle.json': Vehicle,
+    'https://openinherit.org/v3/asset-collection.json': AssetCollection,
     'https://openinherit.org/v3/asset.json': Asset,
+    'https://openinherit.org/v3/attestation.json': Attestation,
     'https://openinherit.org/v3/bequest.json': Bequest,
     'https://openinherit.org/v3/catalogue.json': Catalogue,
+    'https://openinherit.org/v3/common/jurisdiction.json': Jurisdiction,
     'https://openinherit.org/v3/conformance-declaration.json': ConformanceDeclaration,
+    'https://openinherit.org/v3/document.json': Document,
     'https://openinherit.org/v3/estate.json': Estate,
+    'https://openinherit.org/v3/event.json': Event,
+    'https://openinherit.org/v3/executor.json': Executor,
+    'https://openinherit.org/v3/liability.json': Liability,
+    'https://openinherit.org/v3/lifetime-transfer.json': LifetimeTransfer,
+    'https://openinherit.org/v3/nonprobate-transfer.json': NonprobateTransfer,
+    'https://openinherit.org/v3/person.json': Person,
     'https://openinherit.org/v3/property.json': Property,
     'https://openinherit.org/v3/proxy-authorisation.json': ProxyAuthorisation,
     'https://openinherit.org/v3/schema.json': Schema,

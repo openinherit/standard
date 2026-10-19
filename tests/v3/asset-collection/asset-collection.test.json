@@ -404,6 +404,179 @@
         }
       },
       "valid": true
+    },
+    {
+      "description": "valid — an owner-declared count with nothing listed, marked as an estimate",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "expectedItemCount": 20,
+        "expectedItemCountIsEstimate": true
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — an exact expected item count",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "expectedItemCount": 12
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — an expected item count of zero",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "expectedItemCount": 0
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — where the collection is kept, with no item listed",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "location": "Wilmslow"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — a collection spanning a primary and an additional category",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "category": "watches",
+        "additionalCategories": [
+          "jewellery"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — category, additional categories, location and an estimated count together",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "category": "watches",
+        "additionalCategories": [
+          "jewellery"
+        ],
+        "location": "Wilmslow",
+        "expectedItemCount": 20,
+        "expectedItemCountIsEstimate": true
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — expectedItemCount is negative",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "expectedItemCount": -1
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — expectedItemCount is not a whole number",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "expectedItemCount": 2.5
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — expectedItemCount is a range rather than a single count",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "expectedItemCount": {
+          "min": 18,
+          "max": 22
+        }
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — expectedItemCountIsEstimate without expectedItemCount",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "expectedItemCountIsEstimate": true
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalCategories without a primary category",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "additionalCategories": [
+          "jewellery"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalCategories is empty",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "category": "watches",
+        "additionalCategories": []
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalCategories repeats a value",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "category": "watches",
+        "additionalCategories": [
+          "jewellery",
+          "jewellery"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — additionalCategories holds a value outside the category list",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "category": "watches",
+        "additionalCategories": [
+          "clocks"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — location is longer than 255 characters",
+      "data": {
+        "id": "7a3e9c21-5b4d-4f8e-9a6c-2d1e0f3b4a59",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "name": "Watches and jewellery",
+        "location": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      "valid": false
     }
   ]
 }

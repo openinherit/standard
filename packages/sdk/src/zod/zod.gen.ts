@@ -899,7 +899,7 @@ export const zMedia2 = zMedia;
  *
  * A legal jurisdiction identified by ISO 3166 codes. Succession law varies not just by country but by subdivision — Scotland differs from England and Wales, and US states have radically different rules
  */
-export const zJurisdiction = z.strictObject({
+const zJurisdiction$generated = z.strictObject({
     country: z.string().regex(/^[A-Z]{2}$/),
     subdivision: z.string().max(255).regex(/^[A-Z]{2}-[A-Z0-9]{1,6}$/).optional(),
     legalSystems: z.array(z.enum([
@@ -914,6 +914,7 @@ export const zJurisdiction = z.strictObject({
     ])).max(20).optional(),
     name: z.string().max(255).optional()
 });
+export const zJurisdiction = layer('https://openinherit.org/v3/common/jurisdiction.json', zJurisdiction$generated);
 
 /**
  * ISO 3166-2 jurisdiction codes
@@ -1571,7 +1572,7 @@ export const zAsset2 = zAsset;
  *
  * A named group of related assets — e.g. a model railway collection, vinyl record library, or art portfolio. Lets families and dealers understand which items belong together and should be considered as a set
  */
-export const zAssetCollection = z.object({
+const zAssetCollection$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     rootDocumentId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     name: z.string().min(1).max(255),
@@ -1594,6 +1595,27 @@ export const zAssetCollection = z.object({
         'memorabilia',
         'other'
     ]).optional(),
+    additionalCategories: z.array(z.enum([
+        'model_railways',
+        'vinyl_records',
+        'art',
+        'jewellery',
+        'wine',
+        'stamps',
+        'coins',
+        'books',
+        'musical_instruments',
+        'fishing_gear',
+        'handbags',
+        'power_tools',
+        'watches',
+        'ceramics',
+        'memorabilia',
+        'other'
+    ])).min(1).max(16).optional(),
+    expectedItemCount: z.int().gte(0).optional(),
+    expectedItemCountIsEstimate: z.boolean().optional(),
+    location: z.string().max(255).optional(),
     estimatedValue: zMoney.optional(),
     valuationSource: z.enum([
         'self_estimated',
@@ -1668,6 +1690,7 @@ export const zAssetCollection = z.object({
     }).optional(),
     provenance: zProvenance.optional()
 });
+export const zAssetCollection = layer('https://openinherit.org/v3/asset-collection.json', zAssetCollection$generated);
 
 /**
  * A named grouping of assets within an estate or catalogue
@@ -5693,7 +5716,7 @@ export const zArchiveTimestampChain2 = zArchiveTimestampChain;
  *
  * A first-class attestation entity recording will execution formalities. Each attestation has its own identity — supports tracking multiple attestation events independently (original will, codicils, re-execution after marriage). Reused by estate, codicils, trusts, extensions. Supports written (E&W Wills Act s.9), oral (Islamic/customary), seal-based (Japanese inkan), kinyan-based (Jewish)
  */
-export const zAttestation = z.object({
+const zAttestation$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     attestationDate: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|[+-]\d{2}:\d{2})$/).optional(),
     witnessPersonIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).max(100).optional(),
@@ -5794,6 +5817,7 @@ export const zAttestation = z.object({
     pagesSignedByWitnesses: z.int().gte(0).lte(999).optional(),
     allPagesSigned: z.boolean().optional()
 });
+export const zAttestation = layer('https://openinherit.org/v3/attestation.json', zAttestation$generated);
 
 /**
  * Witness attestation of a document
@@ -6559,7 +6583,7 @@ export const zEstate2 = zEstate;
  *
  * A person involved in the estate. Schema.org name alignment. Any Unicode script. Supports CJK phonetic readings, chieftaincy titles, clan/lineage identifiers, dual legal personalities, and tax residency across multiple jurisdictions
  */
-export const zPerson = z.object({
+const zPerson$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     givenName: z.string().min(1).max(255),
     familyName: z.string().min(1).max(255).optional(),
@@ -6744,6 +6768,7 @@ export const zPerson = z.object({
         asAtDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
     }).optional()
 });
+export const zPerson = layer('https://openinherit.org/v3/person.json', zPerson$generated);
 
 /**
  * Any person referenced in the estate
@@ -6984,7 +7009,7 @@ export const zRelationship2 = zRelationship;
  *
  * A debt or financial obligation. Includes mortgages, loans, credit cards, and cultural obligations (mahr, ketubah debt, lobola) that are priority debts in certain jurisdictions
  */
-export const zLiability = z.object({
+const zLiability$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     liabilityType: z.enum([
         'mortgage',
@@ -7042,6 +7067,7 @@ export const zLiability = z.object({
     }).optional(),
     provenance: zProvenance.optional()
 });
+export const zLiability = layer('https://openinherit.org/v3/liability.json', zLiability$generated);
 
 /**
  * Debts, mortgages, loans
@@ -7493,7 +7519,7 @@ export const zTrust = z.object({
  */
 export const zTrust2 = zTrust;
 
-export const zExecutor = z.intersection(z.unknown(), z.object({
+const zExecutor$generated = z.intersection(z.unknown(), z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     personId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
     personIdDisplay: z.string().max(255).optional(),
@@ -7546,6 +7572,7 @@ export const zExecutor = z.intersection(z.unknown(), z.object({
         notes: z.string().max(2000).optional()
     })).max(50).optional()
 }));
+export const zExecutor = layer('https://openinherit.org/v3/executor.json', zExecutor$generated);
 
 /**
  * Named executor or administrator
@@ -7670,7 +7697,7 @@ export const zWillClause = z.strictObject({
  *
  * A document associated with an estate — wills, codicils, trust deeds, and other legal documents. Extension types use the x-inherit- prefix for jurisdiction-specific or religious document types
  */
-export const zDocument = z.object({
+const zDocument$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     type: z.union([
         z.enum([
@@ -7748,6 +7775,7 @@ export const zDocument = z.object({
     })).max(10).optional(),
     provenance: zProvenance.optional()
 });
+export const zDocument = layer('https://openinherit.org/v3/document.json', zDocument$generated);
 
 /**
  * Legal documents (wills, codicils, powers of attorney)
@@ -7759,7 +7787,7 @@ export const zDocument2 = zDocument;
  *
  * Assets that pass outside the probate estate — revocable trusts, TOD deeds, POD accounts, JTWROS, beneficiary designations, superannuation/CPF/EPF nominations
  */
-export const zNonprobateTransfer = z.object({
+const zNonprobateTransfer$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     transferType: z.enum([
         'revocable_trust',
@@ -7817,6 +7845,7 @@ export const zNonprobateTransfer = z.object({
     }).optional(),
     provenance: zProvenance.optional()
 });
+export const zNonprobateTransfer = layer('https://openinherit.org/v3/nonprobate-transfer.json', zNonprobateTransfer$generated);
 
 /**
  * Assets that pass outside the will
@@ -8028,7 +8057,7 @@ export const zPowerOfAppointment2 = zPowerOfAppointment;
  *
  * A gift or transfer made during the testator's lifetime, relevant for tax calculations such as the UK 7-year rule, US unified gift/estate tax, and similar lookback provisions in other jurisdictions
  */
-export const zLifetimeTransfer = z.object({
+const zLifetimeTransfer$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     transferDate: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/),
     donorPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
@@ -8087,6 +8116,7 @@ export const zLifetimeTransfer = z.object({
         }).optional()
     }).optional()
 });
+export const zLifetimeTransfer = layer('https://openinherit.org/v3/lifetime-transfer.json', zLifetimeTransfer$generated);
 
 /**
  * A transfer of assets made during the deceased's lifetime
@@ -8253,7 +8283,7 @@ export const zDataSharing = z.strictObject({
  *
  * An event that occurred during estate administration. The INHERIT document carries its own audit trail via the events array
  */
-export const zEvent = z.strictObject({
+const zEvent$generated = z.strictObject({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     eventType: z.union([
         z.enum([
@@ -8328,6 +8358,7 @@ export const zEvent = z.strictObject({
     }).optional(),
     provenance: zProvenance.optional()
 });
+export const zEvent = layer('https://openinherit.org/v3/event.json', zEvent$generated);
 
 /**
  * A significant lifecycle event recorded against the estate

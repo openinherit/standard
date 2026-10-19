@@ -63,12 +63,6 @@
         ]
       },
       {
-        "case": "tests/v3/attestation/attestation.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/australia-nz/australia-nz.test.json::invalid — unknown root property",
         "json_schema_keywords": [
           "unevaluatedProperties"
@@ -109,30 +103,6 @@
         ]
       },
       {
-        "case": "tests/v3/document/document.test.json::invalid — entityId present without entityType (dependentRequired)",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
-        "case": "tests/v3/document/document.test.json::invalid — entityType present without entityId (dependentRequired)",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
-        "case": "tests/v3/document/document.test.json::invalid — unknown property at root level (unevaluatedProperties false)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/estate/estate.test.json::invalid — companionEstateId present without companionLinkStatus (dependentRequired)",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
         "case": "tests/v3/estate/estate.test.json::invalid — missing status",
         "json_schema_keywords": [
           "required"
@@ -145,28 +115,10 @@
         ]
       },
       {
-        "case": "tests/v3/executor/executor.test.json::invalid — grantReference present with grantDate but missing issuingCourt (dependentRequired)",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
-        "case": "tests/v3/executor/executor.test.json::invalid — grantReference present without grantDate and issuingCourt (dependentRequired)",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
         "case": "tests/v3/executor/executor.test.json::invalid — missing required personId",
         "json_schema_keywords": [
           "anyOf",
           "required"
-        ]
-      },
-      {
-        "case": "tests/v3/executor/executor.test.json::invalid — unknown additional property at root level (unevaluatedProperties false)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -346,36 +298,6 @@
         ]
       },
       {
-        "case": "tests/v3/liability/liability.test.json::invalid — chargeStatus without securedAgainst",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
-        "case": "tests/v3/liability/liability.test.json::invalid — settlementAmount without securedAgainst",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
-        "case": "tests/v3/liability/liability.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/lifetime-transfer/lifetime-transfer.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/nonprobate-transfer/nonprobate-transfer.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — Northern Ireland class of title on a Registry of Deeds row",
         "json_schema_keywords": [
           "if",
@@ -433,12 +355,6 @@
         "case": "tests/v3/person/person.test.json::invalid — phoneticReading with no properties (minProperties: 1)",
         "json_schema_keywords": [
           "minProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/person/person.test.json::invalid — roles with duplicate values (uniqueItems)",
-        "json_schema_keywords": [
-          "uniqueItems"
         ]
       },
       {
@@ -601,12 +517,6 @@
         ]
       },
       {
-        "case": "tests/v3/attestation/attestation.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/australia-nz/australia-nz.test.json::invalid — unknown root property",
         "json_schema_keywords": [
           "unevaluatedProperties"
@@ -641,49 +551,7 @@
         ]
       },
       {
-        "case": "tests/v3/document/document.test.json::invalid — entityId present without entityType (dependentRequired)",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
-        "case": "tests/v3/document/document.test.json::invalid — entityType present without entityId (dependentRequired)",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
-        "case": "tests/v3/document/document.test.json::invalid — unknown property at root level (unevaluatedProperties false)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/estate/estate.test.json::invalid — companionEstateId present without companionLinkStatus (dependentRequired)",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
         "case": "tests/v3/eu-succession/eu-succession.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/executor/executor.test.json::invalid — grantReference present with grantDate but missing issuingCourt (dependentRequired)",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
-        "case": "tests/v3/executor/executor.test.json::invalid — grantReference present without grantDate and issuingCourt (dependentRequired)",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
-        "case": "tests/v3/executor/executor.test.json::invalid — unknown additional property at root level (unevaluatedProperties false)",
         "json_schema_keywords": [
           "unevaluatedProperties"
         ]
@@ -865,30 +733,6 @@
         ]
       },
       {
-        "case": "tests/v3/liability/liability.test.json::invalid — chargeStatus without securedAgainst",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
-        "case": "tests/v3/liability/liability.test.json::invalid — settlementAmount without securedAgainst",
-        "json_schema_keywords": [
-          "dependentRequired"
-        ]
-      },
-      {
-        "case": "tests/v3/liability/liability.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/lifetime-transfer/lifetime-transfer.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/media/media.test.json::invalid — url exceeds maxLength (2049 chars)",
         "json_schema_keywords": [
           "maxLength"
@@ -898,12 +742,6 @@
         "case": "tests/v3/media/media.test.json::invalid — url with uppercase scheme (fails pattern)",
         "json_schema_keywords": [
           "pattern"
-        ]
-      },
-      {
-        "case": "tests/v3/nonprobate-transfer/nonprobate-transfer.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -964,12 +802,6 @@
         "case": "tests/v3/person/person.test.json::invalid — phoneticReading with no properties (minProperties: 1)",
         "json_schema_keywords": [
           "minProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/person/person.test.json::invalid — roles with duplicate values (uniqueItems)",
-        "json_schema_keywords": [
-          "uniqueItems"
         ]
       },
       {

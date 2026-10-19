@@ -3116,6 +3116,22 @@ export type AssetCollection2 = {
      */
     category?: 'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other';
     /**
+     * Further categories the collection spans beyond its primary category, e.g. a watch collection that also holds jewellery
+     */
+    additionalCategories?: Array<'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other'>;
+    /**
+     * How many items the owner says the collection holds, whether or not any has been listed. Declared by the owner, never computed from the listed items: the gap between this and what has been listed is what shows a collection is incomplete
+     */
+    expectedItemCount?: number;
+    /**
+     * True when expectedItemCount is the owner's approximation ('roughly 20') rather than an exact count. Requires expectedItemCount
+     */
+    expectedItemCountIsEstimate?: boolean;
+    /**
+     * Where the collection is physically kept — a property, room, safe or storage facility. Same meaning as location on an individual asset, and recordable before any item is listed
+     */
+    location?: string;
+    /**
      * Estimated total value of the collection as a whole
      */
     estimatedValue?: Money2;
@@ -3277,7 +3293,7 @@ export type AssetCollection2 = {
     provenance?: Provenance2;
     [key: string]: {
         [key: string]: unknown;
-    } | string | string | string | 'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other' | Money2 | 'self_estimated' | 'dealer_valuation' | 'auction_estimate' | 'insurance_value' | string | string | 'keep_together' | 'sell_as_collection' | 'sell_individually' | 'auction' | 'donate' | 'gift_to_person' | 'dealer_bids' | 'mixed' | 'undecided' | 'private_sale' | 'auction_house' | 'dealer_network' | 'online_marketplace' | 'specialist_fair' | 'museum_acquisition' | 'other' | Array<Media2> | {
+    } | string | string | string | 'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other' | Array<'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other'> | number | boolean | string | Money2 | 'self_estimated' | 'dealer_valuation' | 'auction_estimate' | 'insurance_value' | string | 'keep_together' | 'sell_as_collection' | 'sell_individually' | 'auction' | 'donate' | 'gift_to_person' | 'dealer_bids' | 'mixed' | 'undecided' | 'private_sale' | 'auction_house' | 'dealer_network' | 'online_marketplace' | 'specialist_fair' | 'museum_acquisition' | 'other' | Array<Media2> | {
         /**
          * The type of entity that was split
          */

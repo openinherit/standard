@@ -348,7 +348,6 @@
   "required": [
     "applicableLaw"
   ],
-  "minProperties": 1,
   "patternProperties": {
     "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
       "type": "object",

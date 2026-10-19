@@ -124,8 +124,8 @@ for (const f of new Set([...Object.keys(current), ...Object.keys(base.findings ?
 }
 
 const reasons = base.reasons ?? {};
-const unreasoned = [...heldRules(base.findings ?? {})].filter((r) => typeof reasons[r] !== 'string' || !reasons[r].trim());
 const held = heldRules(base.findings ?? {});
+const unreasoned = [...held].filter((r) => typeof reasons[r] !== 'string' || !reasons[r].trim());
 for (const r of Object.keys(reasons)) if (!held.has(r)) ratchets.push(`reasons: '${r}' has a reason but the baseline holds none of it`);
 
 if (regressions.length) {

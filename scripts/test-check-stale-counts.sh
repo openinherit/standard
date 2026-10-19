@@ -148,7 +148,7 @@ run "$T" check-stale-counts.py
 expect_rc "5a counts under a 'Delivered in' heading are exempt" 0
 echo '- 13 jurisdiction extensions' >> "$T/ROADMAP.md"
 run "$T" check-stale-counts.py
-expect_says "5b the exemption ends at the next heading" 'ROADMAP.md:14 says "13 extension directories"'
+expect_says "5b the exemption ends at the next heading" 'ROADMAP.md:13 says "13 extension directories"'
 rm "$T/ROADMAP.md"
 
 # ── 6. "JSON Schema 2020-12 entity schemas" is a date, not a count ───────────

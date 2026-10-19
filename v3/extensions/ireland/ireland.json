@@ -7,7 +7,7 @@
   "type": "object",
   "properties": {
     "spouseLegalRightShare": {
-      "description": "Spouse legal right share under Succession Act 1965 s.111 — 1/3 with children, 1/2 without. Cannot be defeated by will.",
+      "description": "Spouse legal right share under Succession Act 1965 s.111 — 1/3 with children, 1/2 without. Cannot be defeated by will",
       "type": "object",
       "properties": {
         "fraction": {
@@ -94,7 +94,7 @@
       "additionalProperties": false
     },
     "enduringPowerOfAttorney": {
-      "description": "Irish EPA — different from English LPA. Must be registered with the court before it can be used.",
+      "description": "Irish EPA — different from English LPA. Must be registered with the court before it can be used",
       "type": "object",
       "properties": {
         "registered": {

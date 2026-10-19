@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinherit.org/v3/extensions/canada/canada.json",
   "title": "Canada Extension",
-  "description": "Provincial succession rules for Canada: Quebec patrimony, Ontario equalization, BC WESA variation, Alberta dower rights, and Indigenous land succession details.",
+  "description": "Provincial succession rules for Canada: Quebec patrimony, Ontario equalization, BC WESA variation, Alberta dower rights, and Indigenous land succession details",
   "$comment": "Canadian provinces generally do NOT distinguish whole blood from half blood. Half-siblings inherit equally with full siblings in all provinces.",
   "maturity": "draft",
   "extensionType": "geographic",

@@ -3,7 +3,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$dynamicAnchor": "meta",
   "title": "INHERIT Estate Vocabulary Meta-Schema",
-  "description": "Validates the syntax of INHERIT estate vocabulary keywords. These keywords describe schema-level metadata for estate data schemas.",
+  "description": "Validates the syntax of INHERIT estate vocabulary keywords. These keywords describe schema-level metadata for estate data schemas",
   "properties": {
     "jurisdiction": {
       "title": "The jurisdiction this schema targets or operates within",

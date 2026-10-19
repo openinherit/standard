@@ -3,7 +3,7 @@
   "$id": "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json",
   "$comment": "This extension implements succession rules derived from Jewish law as codified in specific jurisdictions. The extension name references the legal tradition, not the personal religious beliefs of any individual. A person of any faith (or none) may be subject to these rules depending on their jurisdiction of domicile. Extension type values: x-inherit-ketubah (document), x-inherit-shtar-chov (document), x-inherit-halachic-yerusha (distribution method), x-inherit-halachic-matanah (bequest)",
   "title": "Jewish Succession Extension",
-  "description": "Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law.",
+  "description": "Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law",
   "maturity": "draft",
   "extensionType": "tradition",
   "applicableJurisdictions": [

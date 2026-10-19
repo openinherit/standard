@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinherit.org/v3/extensions/japan/japan.json",
   "title": "Japan Extension",
-  "description": "Japanese succession law — koseki records, iryubun (reserved share) claims, yōshi (adoption), spousal residence right (2019 reform), isan bunkatsu (estate division), saishi succession, local will formalities.",
+  "description": "Japanese succession law — koseki records, iryubun (reserved share) claims, yōshi (adoption), spousal residence right (2019 reform), isan bunkatsu (estate division), saishi succession, local will formalities",
   "maturity": "draft",
   "extensionType": "geographic",
   "applicableJurisdictions": [

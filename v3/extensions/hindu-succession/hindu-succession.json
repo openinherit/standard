@@ -3,7 +3,7 @@
   "$id": "https://openinherit.org/v3/extensions/hindu-succession/hindu-succession.json",
   "$comment": "This extension implements succession rules derived from Hindu law as codified in specific jurisdictions. The extension name references the legal tradition, not the personal religious beliefs of any individual. A person of any faith (or none) may be subject to these rules depending on their jurisdiction of domicile.",
   "title": "Hindu Succession Extension",
-  "description": "Hindu succession law specifics: Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications under the Hindu Succession Act 1956, stridhan assets, agricultural land ceiling rules, and NRI complications.",
+  "description": "Hindu succession law specifics: Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications under the Hindu Succession Act 1956, stridhan assets, agricultural land ceiling rules, and NRI complications",
   "maturity": "draft",
   "extensionType": "tradition",
   "applicableJurisdictions": [

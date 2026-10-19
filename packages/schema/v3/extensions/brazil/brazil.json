@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinherit.org/v3/extensions/brazil/brazil.json",
   "title": "Brazil Extension",
-  "description": "Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário process types, cartório attestation, disponível (testamentary freedom portion), and união estável (stable union recognition).",
+  "description": "Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário process types, cartório attestation, disponível (testamentary freedom portion), and união estável (stable union recognition)",
   "maturity": "draft",
   "extensionType": "geographic",
   "applicableJurisdictions": ["BR"],

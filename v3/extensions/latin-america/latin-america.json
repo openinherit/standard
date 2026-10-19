@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinherit.org/v3/extensions/latin-america/latin-america.json",
   "title": "Latin America Extension",
-  "description": "Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions.",
+  "description": "Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions",
   "maturity": "draft",
   "extensionType": "geographic",
   "applicableJurisdictions": [
@@ -110,9 +110,7 @@
       "type": "object",
       "properties": {
         "system": {
-          "enum": [
-            "fourths"
-          ]
+          "const": "fourths"
         },
         "legitimaRigurosa": {
           "type": "string",

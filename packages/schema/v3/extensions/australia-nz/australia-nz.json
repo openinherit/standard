@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinherit.org/v3/extensions/australia-nz/australia-nz.json",
   "title": "Australia & New Zealand Extension",
-  "description": "Succession rules for AU and NZ: superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ Property (Relationships) Act, testamentary promises, and Maori land under Te Ture Whenua.",
+  "description": "Succession rules for AU and NZ: superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ Property (Relationships) Act, testamentary promises, and Maori land under Te Ture Whenua",
   "maturity": "draft",
   "extensionType": "geographic",
   "applicableJurisdictions": [

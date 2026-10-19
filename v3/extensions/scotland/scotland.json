@@ -146,7 +146,7 @@
       "additionalProperties": false
     },
     "forcedHeirship": {
-      "description": "Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights.",
+      "description": "Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights",
       "type": "object",
       "properties": {
         "legalRightsDefeated": {

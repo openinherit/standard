@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinherit.org/v3/extensions/prc-china/prc-china.json",
   "title": "PRC China Extension",
-  "description": "People's Republic of China succession law — forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling, intestacy order (Arts. 1127-1132), will forms (6 types, Art. 1142), community property division (Art. 1153), rural land rights, and inheritance tax status.",
+  "description": "People's Republic of China succession law — forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling, intestacy order (Arts. 1127-1132), will forms (6 types, Art. 1142), community property division (Art. 1153), rural land rights, and inheritance tax status",
   "maturity": "draft",
   "extensionType": "geographic",
   "applicableJurisdictions": [

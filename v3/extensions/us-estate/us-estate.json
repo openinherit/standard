@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinherit.org/v3/extensions/us-estate/us-estate.json",
   "title": "US Estate Extension",
-  "description": "US-specific estate planning: federal and state estate tax, community/separate property regimes, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes, RUFADAA, Louisiana forced heirship, probate variation, trust features, SECURE Act retirement rules, ancillary probate, advance directives.",
+  "description": "US-specific estate planning: federal and state estate tax, community/separate property regimes, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes, RUFADAA, Louisiana forced heirship, probate variation, trust features, SECURE Act retirement rules, ancillary probate, advance directives",
   "maturity": "candidate",
   "extensionType": "geographic",
   "applicableJurisdictions": [

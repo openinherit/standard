@@ -325,7 +325,7 @@
       "additionalProperties": false
     },
     "identifiers": {
-      "description": "External identifiers — charity number, company registration, UEN, etc.",
+      "description": "External identifiers, such as a charity number, company registration or UEN",
       "type": "array",
       "maxItems": 50,
       "items": {

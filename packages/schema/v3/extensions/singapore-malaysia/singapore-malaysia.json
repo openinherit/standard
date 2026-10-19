@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json",
   "title": "Singapore / Malaysia Extension",
-  "description": "Singapore and Malaysia succession law — ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction.",
+  "description": "Singapore and Malaysia succession law — ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction",
   "maturity": "draft",
   "extensionType": "hybrid",
   "applicableJurisdictions": [
@@ -307,7 +307,7 @@
     },
     "marriageRevocation": {
       "type": "object",
-      "description": "Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia.",
+      "description": "Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia",
       "properties": {
         "revokesPriorWill": { "type": "boolean" },
         "statute": { "type": "string", "maxLength": 255 },

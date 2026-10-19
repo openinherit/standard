@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinherit.org/v3/extensions/eu-succession/eu-succession.json",
   "title": "EU Succession Extension",
-  "description": "European succession rules: Brussels IV choice of law and European Certificate of Succession, Spanish regional regimes, forced heirship variants across civil law traditions, and post-Brexit UK asset handling.",
+  "description": "European succession rules: Brussels IV choice of law and European Certificate of Succession, Spanish regional regimes, forced heirship variants across civil law traditions, and post-Brexit UK asset handling",
   "maturity": "draft",
   "extensionType": "geographic",
   "applicableJurisdictions": [

@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@sourcemeta/blaze':
-        specifier: 17.2.0
-        version: 17.2.0
+        specifier: 17.2.1
+        version: 17.2.1
     devDependencies:
       '@apiture/openapi-down-convert':
         specifier: 0.14.2
@@ -32,8 +32,8 @@ importers:
         specifier: latest
         version: 2.64.1
       '@sourcemeta/jsonschema':
-        specifier: 17.2.0
-        version: 17.2.0
+        specifier: 17.2.1
+        version: 17.2.1
       ajv:
         specifier: ^8.17.1
         version: 8.18.0
@@ -441,12 +441,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@sourcemeta/blaze@17.2.0':
-    resolution: {integrity: sha512-MfYKSDZNUSRF+rKTZ1i/kovaM5zy5Y2G3TAmxuclq8q6xnYlpvqtaa4H7Lb/tkZfwfqPQXQxKM1f9B9ejtd4pQ==}
+  '@sourcemeta/blaze@17.2.1':
+    resolution: {integrity: sha512-FBo2pXqF3u1cOtfs590rOMfHWRWlzSC3H3zj5xJXsIOV6BYfx3iEAwJwWHNrD6qnsjvkh2mG6ujzvxTzZxzPuQ==}
     engines: {node: '>=21.7'}
 
-  '@sourcemeta/jsonschema@17.2.0':
-    resolution: {integrity: sha512-WV9JTU7zfge4HJXR4BGyDXG5jSa3rfsRtzZnUiHVKFX/DveiiKXEmvZahWi+RInRG9D0FKIeb6eAPiUSLr5ThQ==}
+  '@sourcemeta/jsonschema@17.2.1':
+    resolution: {integrity: sha512-Myc2txL8F61gYSKhrL+a6Lxg5zpRcDmytklc6STcwVrw0uRUlwK4/QRMffNDD9hzCOtAL50ILMWqnxbHm0hRew==}
     engines: {node: '>=16'}
     cpu: [x64, arm64]
     os: [darwin, linux, win32]
@@ -1154,9 +1154,9 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.60.1':
     optional: true
 
-  '@sourcemeta/blaze@17.2.0': {}
+  '@sourcemeta/blaze@17.2.1': {}
 
-  '@sourcemeta/jsonschema@17.2.0': {}
+  '@sourcemeta/jsonschema@17.2.1': {}
 
   '@types/estree@1.0.8': {}
 

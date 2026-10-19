@@ -10,7 +10,7 @@ All agent-wrapper files in this repo point here.
 
 ### What is INHERIT?
 
-INHERIT is an open estate data interchange standard for structured estate planning information. It defines 32 core entity schemas, 14 common types, 5 asset category schemas, and 21 jurisdiction/cultural extensions — enabling estate planning data to move between software systems, legal professionals, and AI tools across 7 legal traditions (common law, civil law, mixed, religious, customary, socialist, and hybrid).
+INHERIT is an open estate data interchange standard for structured estate planning information. It defines 34 core entity schemas, 16 common types, 5 asset category schemas, and 22 jurisdiction/cultural extensions — enabling estate planning data to move between software systems, legal professionals, and AI tools across 7 legal traditions (common law, civil law, mixed, religious, customary, socialist, and hybrid).
 
 ### The Minimum Viable Estate
 

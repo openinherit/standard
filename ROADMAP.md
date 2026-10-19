@@ -16,7 +16,7 @@ title: Roadmap
 
 Two audience-specific sites launched on Wednesday 9 April 2026:
 
-- **[www.openinherit.org](https://www.openinherit.org)** — for legal professionals, estate planners, institutional decision-makers, and journalists. Homepage, 39 example scenarios, 21 jurisdiction extensions, compatible platforms showcase, partners, media pack.
+- **[www.openinherit.org](https://www.openinherit.org)** — for legal professionals, estate planners, institutional decision-makers, and journalists. Homepage, 39 example scenarios, 22 jurisdiction extensions, compatible platforms showcase, partners, media pack.
 - **[dev.openinherit.org](https://dev.openinherit.org)** — developer portal with schema reference (40+ entity pages generated from schemas), API reference, validator, 7 developer case studies, integration guides, getting-started guide, AI integration guide.
 
 Built with Hugo, deployed on GitHub Pages. Extension data flows from the standard repo to the www site.
@@ -136,7 +136,7 @@ We welcome standards bodies working on the delegation and access layer for digit
 
 ### Additional Jurisdiction Extensions
 
-Planned extensions for South Korea, Indonesia, Philippines, and other jurisdictions based on community demand. The [extension guide](docs/implement/extension-guide.md) documents how to contribute new jurisdiction extensions. Browse the current [21 jurisdictions](https://www.openinherit.org/extensions/).
+Planned extensions for South Korea, Indonesia, Philippines, and other jurisdictions based on community demand. The [extension guide](docs/implement/extension-guide.md) documents how to contribute new jurisdiction extensions. Browse the current [22 jurisdictions](https://www.openinherit.org/extensions/).
 
 ## How to Influence the Roadmap
 

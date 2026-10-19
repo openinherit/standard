@@ -29,10 +29,10 @@ Each INHERIT schema has a maturity level that determines what changes are permit
 
 ### Current Status (v3)
 
-- **31 core entity schemas:** candidate maturity (includes root schema, catalogue, and conformance-declaration)
-- **15 common type schemas:** candidate maturity (money, address, jurisdiction, temporal-rule, identifier, visibility, media, completeness, tax-position, cultural-disposition, ai-provenance, audit-event, field-provenance, provenance)
+- **34 core entity schemas:** candidate maturity (includes the root schema, the dialect meta-schema, catalogue, and conformance-declaration)
+- **16 common type schemas:** candidate maturity (money, address, jurisdiction, temporal-rule, identifier, visibility, media, completeness, tax-position, cultural-disposition, ai-provenance, audit-event, field-provenance, provenance, archive-timestamp-chain, error-codes)
 - **5 asset category schemas:** candidate maturity (financial, vehicle, digital, business, general)
-- **21 extension schemas:** draft maturity
+- **22 extension schemas:** draft maturity
 
 Promotion to stable requires two independent implementations using the schema in production.
 

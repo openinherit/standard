@@ -58,7 +58,7 @@ Will-writing platforms, probate case management systems, and trust administratio
 
 ### International Jurisdiction Coverage
 
-INHERIT currently supports 21 jurisdiction extensions. Every jurisdiction has unique succession rules, tax regimes, and legal frameworks. Organisations with deep knowledge of specific jurisdictions can contribute extensions, reference data, and validation rules.
+INHERIT currently supports 22 jurisdiction extensions. Every jurisdiction has unique succession rules, tax regimes, and legal frameworks. Organisations with deep knowledge of specific jurisdictions can contribute extensions, reference data, and validation rules.
 
 ### Artificial Intelligence and Automation
 

@@ -10,7 +10,7 @@ INHERIT is a **data product for estate planning** in the sense described by Viot
 
 Before implementing INHERIT validation, read the [JSON Profile](../policies/json-profile.md) — it defines the parsing and boundary rules that all conformant implementations must follow.
 
-The standard comprises 31 core entity schemas, 14 common types, 5 asset category schemas, and 17 jurisdictional extensions covering common law, civil law, Islamic, Jewish, Hindu, Japanese, African customary, and mixed legal traditions. v3 adds Scotland, Ireland, UAE (dual-track Sharia/DIFC), and India (multi-personal-law).
+The standard comprises 34 core entity schemas, 16 common types, 5 asset category schemas, and 22 jurisdictional extensions covering common law, civil law, Islamic, Jewish, Hindu, Japanese, African customary, and mixed legal traditions. v3 adds Scotland, Ireland, UAE (dual-track Sharia/DIFC), and India (multi-personal-law).
 
 ### What's New in v3
 

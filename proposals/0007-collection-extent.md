@@ -87,6 +87,18 @@ Four optional properties, placed after `category`. The existing `category` prope
   conditional per enum value.
 - **No defaults.** A missing count does not mean zero, and a default would invent a denominator.
 
+### The generated validators enforce it too
+
+The Zod (`@openinherit/sdk/zod`) and pydantic validators are generated from these schemas. Both
+generators dropped a schema's own top-level `dependentRequired`, and the Zod generator also drops
+`uniqueItems`. So both would have accepted an estimate flag with no count, and Zod would have
+accepted a repeated additional category. The divergence register may only shrink, so adding entries
+was not an option. `scripts/lib/write-conditional-layer.py` now compiles a top-level
+`dependentRequired`, and `uniqueItems` on a top-level array member, as unconditional assertions in
+both evaluators. The same gap affected `document.json`, `estate.json`, `executor.json`,
+`liability.json` and `person.json`'s `roles`. Fourteen register entries no longer reproduce on each
+validator and are removed.
+
 ## How each part is proved
 
 | Claim | Command | What makes it go red |
@@ -96,6 +108,7 @@ Four optional properties, placed after `category`. The existing `category` prope
 | An estimate flag needs a count | same suite: flag without a count (invalid) | dropping that `dependentRequired` entry |
 | Additional categories need a primary, are non-empty, have no duplicates and come from the category list | same suite: four invalid cases | dropping `dependentRequired`, `minItems`, `uniqueItems` or the `enum` |
 | `location` matches `asset.location` | same suite: a 256-character location (invalid) | dropping `maxLength` |
+| The generated Zod and pydantic validators refuse the same documents | `node scripts/test-runtime-validators.mjs` and `pytest packages/sdk-python` (corpus against the register, exact both ways) | removing the `dependentRequired` or `uniqueItems` check from either evaluator: the asset-collection cases come back as `REGRESSION` |
 | `packages/schema/v3` mirrors `v3` | `diff -r v3/ packages/schema/v3/` (Staleness Check) | editing one tree only |
 | The generated artefacts carry it | `docs:reference:check`, the OpenAPI drift gate, the runtime-validator regeneration | editing the schema without regenerating |
 

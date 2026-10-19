@@ -17,6 +17,10 @@ Schema `$id`: `https://openinherit.org/v3/asset-collection.json`
 | `name` | `string` | yes | Display name for this collection |
 | `description` | `string` | | Context for family members and dealers about the collection's scope, provenance, or significance |
 | `category` | one of `model_railways`, `vinyl_records`, `art`, `jewellery`, `wine`, `stamps`, `coins`, `books`, `musical_instruments`, `fishing_gear`, `handbags`, `power_tools`, `watches`, `ceramics`, `memorabilia`, `other` | | The primary category of items in this collection |
+| `additionalCategories` | array of one of `model_railways`, `vinyl_records`, `art`, `jewellery`, `wine`, `stamps`, `coins`, `books`, `musical_instruments`, `fishing_gear`, `handbags`, `power_tools`, `watches`, `ceramics`, `memorabilia`, `other` | | Further categories the collection spans beyond its primary category, e.g. a watch collection that also holds jewellery |
+| `expectedItemCount` | `integer` | | How many items the owner says the collection holds, whether or not any has been listed. Declared by the owner, never computed from the listed items: the gap between this and what has been listed is what shows a collection is incomplete |
+| `expectedItemCountIsEstimate` | `boolean` | | True when expectedItemCount is the owner's approximation ('roughly 20') rather than an exact count. Requires expectedItemCount |
+| `location` | `string` | | Where the collection is physically kept — a property, room, safe or storage facility. Same meaning as location on an individual asset, and recordable before any item is listed |
 | `estimatedValue` | [Money](common/money.md) | | Estimated total value of the collection as a whole |
 | `valuationSource` | one of `self_estimated`, `dealer_valuation`, `auction_estimate`, `insurance_value` | | How the estimated value was determined |
 | `valuationDate` | `string` (date) | | Date the valuation was performed or last updated |

@@ -25,9 +25,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `collectionId`) and a will could give one, but a non-binding wish, such as
   `wishType: distribution`, could only be recorded against each item in turn. See
   `proposals/0006-wish-collection-grain.md`.
+- A collection can state its own extent before any item is listed (proposal 0007).
+  `v3/asset-collection.json` gains four optional properties: `expectedItemCount`, a whole number
+  ≥ 0 declared by the owner and never computed from the listed items, so a collection can show
+  *"9 of 12 listed"*; `expectedItemCountIsEstimate`, for *"roughly 20"*, valid only beside a count;
+  `location`, with the same meaning and limit as `asset.json`'s `location`; and
+  `additionalCategories`, further values from `category`'s own list, valid only when `category` is
+  present. `category` keeps its type. No defaults. Vendored bundles, generated clients, runtime
+  validators and the reference page are regenerated. See `proposals/0007-collection-extent.md`.
 
 ### Fixed
 
+- The generated Zod and pydantic validators now enforce a schema's own top-level
+  `dependentRequired`, and Zod now enforces `uniqueItems` on a top-level array member. Before this
+  they accepted, for example, a document naming `entityId` without `entityType`, an executor's
+  `grantReference` without `grantDate` and `issuingCourt`, and a person with repeated `roles`.
+  Fourteen entries leave the runtime-validator divergence register on each validator.
 - The generated Zod (`@openinherit/sdk/zod`) and pydantic validators now enforce a schema's own
   top-level `not`. Before this they accepted a bequest naming both `assetIds` and
   `assetCollectionId`, which the JSON Schema rejects. Two entries leave the runtime-validator

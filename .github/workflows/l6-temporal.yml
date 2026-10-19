@@ -65,7 +65,7 @@ jobs:
           ocaml-compiler: "4.14"
       # setup-ocaml caches the compiler switch only, not the catala build below.
       - name: Cache the Catala opam switch
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: _opam
           key: catala-switch-1.2.0-ocaml-4.14-${{ runner.os }}

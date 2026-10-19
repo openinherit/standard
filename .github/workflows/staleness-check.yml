@@ -25,6 +25,15 @@ jobs:
           fi
           echo "Schema sync: OK"
 
+      # Self-counts (TT-1676). The harness runs first: a checker whose own
+      # tests are red must not be trusted to judge the prose. No
+      # continue-on-error on either step — exit 1 or 2 fails the job.
+      - name: Test the stale-counts checker
+        run: bash scripts/test-check-stale-counts.sh
+
+      - name: Check published counts against the v3/ tree
+        run: python3 scripts/check-stale-counts.py
+
       - name: Check extensions-registry sync
         run: |
           if ! diff extensions-registry.json packages/schema/extensions-registry.json > /dev/null 2>&1; then

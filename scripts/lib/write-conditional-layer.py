@@ -10,7 +10,10 @@ The Zod and pydantic generators drop three things that v3/ relies on:
   3. `unevaluatedProperties: false`, wherever (1) decides which members are
      evaluated;
   4. a schema's own top-level `not`, such as bequest.json's and wish.json's
-     "an item or a whole collection, not both".
+     "an item or a whole collection, not both";
+  5. a schema's own top-level `dependentRequired`, such as
+     asset-collection.json's "an estimate flag needs a count";
+  6. `uniqueItems` on a top-level array member (Zod only; pydantic keeps it).
 
 Without this layer, a regenerated root validator accepts a document with no
 `estate`, `people` or `schemaVersion`. This script reads the v3/ sources and
@@ -40,9 +43,9 @@ cannot be null. The generated pydantic fields for members a branch requires
 are Optional, and "present" must not be satisfied by null.
 
 Inside a branch or overlay, the layer evaluates only: required, const, enum,
-minItems, maxItems, minimum, maximum, exclusiveMinimum, exclusiveMaximum,
-properties, allOf, not, contains, if/then/else, and $ref to a whole v3 document
-schema. A $ref is delegated to that schema's own
+minItems, maxItems, uniqueItems, minimum, maximum, exclusiveMinimum,
+exclusiveMaximum, properties, allOf, not, contains, dependentRequired,
+if/then/else, and $ref to a whole v3 document schema. A $ref is delegated to that schema's own
 (layered) validator. Annotations are ignored. Any other keyword in those
 positions is a hard failure, so a construct the layer cannot evaluate can
 never be dropped silently.
@@ -67,8 +70,8 @@ ANNOTATIONS = {
     "readOnly", "writeOnly", "$id", "$schema", "x-inherit-pii",
 }
 SUPPORTED = {
-    "required", "const", "enum", "minItems", "maxItems", "properties",
-    "allOf", "not", "contains", "if", "then", "else", "$ref",
+    "required", "const", "enum", "minItems", "maxItems", "uniqueItems", "properties",
+    "allOf", "not", "contains", "dependentRequired", "if", "then", "else", "$ref",
     "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum",
 }
 APPLICATORS = ("allOf", "anyOf", "oneOf", "if", "then", "else", "dependentSchemas", "$ref")
@@ -171,6 +174,17 @@ class Compiler:
         # unconditional assertion. It evaluates no members, so it plays no part
         # in the unevaluatedProperties count below.
         asserts = [self.compile({"not": doc["not"]}, sid, f"{sid} not")] if "not" in doc else []
+        # A top-level `dependentRequired` likewise applies to every instance and
+        # evaluates no members.
+        if "dependentRequired" in doc:
+            asserts.append({"dependentRequired": doc["dependentRequired"]})
+        # The Zod generator drops `uniqueItems`. On a top-level array member it
+        # is compiled as an assertion on that member alone. pydantic already
+        # enforces it, so there it is checked twice, to the same verdict.
+        unique = sorted(p for p, sub in doc.get("properties", {}).items()
+                        if isinstance(sub, dict) and sub.get("uniqueItems") is True)
+        if unique:
+            asserts.append({"properties": {p: {"uniqueItems": True} for p in unique}})
         if not conds and not overlays and not asserts:
             return None
         rule = {"conditionals": conds, "asserts": asserts, "overlays": overlays, "closed": None,
@@ -274,9 +288,13 @@ function evaluate(s: any, v: unknown, path: (string | number)[], out: Issue[]): 
     if (s.maxItems !== undefined && v.length > s.maxItems) out.push({ path, message: `must have at most ${s.maxItems} items` });
     if (s.minItems !== undefined && v.length < s.minItems) out.push({ path, message: `must have at least ${s.minItems} items` });
     if (s.contains !== undefined && !v.some((x) => passes(s.contains, x))) out.push({ path, message: 'must contain a matching item' });
+    if (s.uniqueItems === true && v.some((x, i) => v.slice(0, i).some((y) => same(x, y)))) out.push({ path, message: 'must not repeat an item' });
   }
   if (isObj(v)) {
     for (const k of s.required ?? []) if (!(k in v)) out.push({ path: [...path, k], message: `required: ${k}` });
+    for (const [k, needs] of Object.entries(s.dependentRequired ?? {}) as [string, string[]][]) {
+      if (k in v) for (const r of needs) if (!(r in v)) out.push({ path: [...path, r], message: `required when ${k} is present: ${r}` });
+    }
     for (const [k, sub] of Object.entries(s.properties ?? {})) if (k in v) evaluate(sub, v[k], [...path, k], out);
   }
   for (const sub of s.allOf ?? []) evaluate(sub, v, path, out);
@@ -460,10 +478,17 @@ def _evaluate(s, v, path, out):
             out.append(("/".join(map(str, path)), f"must have at least {s['minItems']} items"))
         if "contains" in s and not any(_passes(s["contains"], x) for x in v):
             out.append(("/".join(map(str, path)), "must contain a matching item"))
+        if s.get("uniqueItems") is True and any(_same(x, y) for i, x in enumerate(v) for y in v[:i]):
+            out.append(("/".join(map(str, path)), "must not repeat an item"))
     if isinstance(v, dict):
         for k in s.get("required", []):
             if k not in v:
                 out.append(("/".join(map(str, [*path, k])), f"required: {k}"))
+        for k, needs in s.get("dependentRequired", {}).items():
+            if k in v:
+                for r in needs:
+                    if r not in v:
+                        out.append(("/".join(map(str, [*path, r])), f"required when {k} is present: {r}"))
         for k, sub in s.get("properties", {}).items():
             if k in v:
                 _evaluate(sub, v[k], [*path, k], out)
@@ -581,16 +606,20 @@ def pydantic(bundle: Path, models: Path) -> None:
             fail("models.py has no `from pydantic import (` block to extend")
     for sid in rules:
         name = ids[sid]
+        # A schema whose top level is a union generates a RootModel. Its
+        # model_dump is the root value, so the same validator applies.
+        head = re.search(rf"^class {name}\((BaseModel|RootModel\[[^\n]*\])\):\n", text, re.M)
+        base = head.group(1) if head else "BaseModel"
         method = (
-            f"class {name}(BaseModel):\n"
+            f"class {name}({base}):\n"
             f"    @model_validator(mode='after')\n"
             f"    def _inherit_conditional_layer(self) -> Any:\n"
             f"        _layer_check({sid!r}, self.model_dump(mode='json', by_alias=True, exclude_unset=True))\n"
             f"        return self\n\n"
         )
-        text, n = re.subn(rf"^class {name}\(BaseModel\):\n", method, text, count=1, flags=re.M)
+        text, n = re.subn(rf"^class {name}\({re.escape(base)}\):\n", method, text, count=1, flags=re.M)
         if n != 1:
-            fail(f"models.py: class {name}(BaseModel) not found once")
+            fail(f"models.py: class {name}({base}) not found once")
     models_map = {s: ids[s] for s in sorted({*rules, *refkeys})}
     # Aliased fields whose Python name pydantic would silently discard, for
     # every closed layered class, plus any RootModel wrapping one.

@@ -1925,6 +1925,9 @@ type Asset_IncludedDocuments_Item struct {
 
 // AssetCollection A named group of related assets — e.g. a model railway collection, vinyl record library, or art portfolio. Lets families and dealers understand which items belong together and should be considered as a set
 type AssetCollection struct {
+	// AdditionalCategories Further categories the collection spans beyond its primary category, e.g. a watch collection that also holds jewellery
+	AdditionalCategories *[]interface{} `json:"additionalCategories,omitempty"`
+
 	// Category The primary category of items in this collection
 	Category interface{} `json:"category,omitempty"`
 
@@ -1970,11 +1973,20 @@ type AssetCollection struct {
 	// EstimatedValue Monetary value in integer minor currency units with ISO 4217 code. Never floating point
 	EstimatedValue *Money `json:"estimatedValue,omitempty"`
 
+	// ExpectedItemCount How many items the owner says the collection holds, whether or not any has been listed. Declared by the owner, never computed from the listed items: the gap between this and what has been listed is what shows a collection is incomplete
+	ExpectedItemCount *int `json:"expectedItemCount,omitempty"`
+
+	// ExpectedItemCountIsEstimate True when expectedItemCount is the owner's approximation ('roughly 20') rather than an exact count. Requires expectedItemCount
+	ExpectedItemCountIsEstimate *bool `json:"expectedItemCountIsEstimate,omitempty"`
+
 	// Id Unique identifier for this asset collection
 	Id openapi_types.UUID `json:"id"`
 
 	// Images Overview photographs and videos of the collection as a whole — the display, the storage, the scale of the collection
 	Images *[]Media `json:"images,omitempty"`
+
+	// Location Where the collection is physically kept — a property, room, safe or storage facility. Same meaning as location on an individual asset, and recordable before any item is listed
+	Location *string `json:"location,omitempty"`
 
 	// MergedInto Records that this entity was merged into another entity — the target entity is the canonical version
 	MergedInto *struct {

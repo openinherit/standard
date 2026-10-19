@@ -35,7 +35,6 @@
       "$comment": "ISO 3166-2 US-XX"
     },
     "propertyRegime": {
-      "type": "string",
       "enum": [
         "community_property",
         "community_property_with_survivorship",
@@ -98,7 +97,6 @@
       "maxItems": 50
     },
     "perStirpesVariant": {
-      "type": "string",
       "enum": [
         "strict_per_stirpes",
         "modern_per_stirpes",
@@ -147,7 +145,6 @@
           "maximum": 100
         },
         "basis": {
-          "type": "string",
           "enum": [
             "fixed",
             "conditional"
@@ -282,7 +279,6 @@
           "$ref": "../../common/temporal-rule.json"
         },
         "administrationType": {
-          "type": "string",
           "enum": [
             "supervised",
             "unsupervised",
@@ -366,7 +362,6 @@
                 "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
               },
               "edbCategory": {
-                "type": "string",
                 "enum": [
                   "surviving_spouse",
                   "minor_child",
@@ -418,7 +413,6 @@
           "type": "boolean"
         },
         "halfBloodRule": {
-          "type": "string",
           "$comment": "Most states apply the same half-blood rule at all kinship levels. Some states (e.g. Florida) treat half-blood differently at uncle/aunt level. Implementers should apply the rule to uncle_aunt kinship records using the core bloodDegree property",
           "enum": [
             "equal_to_whole_blood",
@@ -457,7 +451,6 @@
             "type": "boolean"
           },
           "status": {
-            "type": "string",
             "enum": [
               "not_filed",
               "filed",
@@ -496,7 +489,6 @@
           "type": "boolean"
         },
         "healthcareDirectiveType": {
-          "type": "string",
           "enum": [
             "living_will",
             "healthcare_proxy",
@@ -509,7 +501,6 @@
           "type": "boolean"
         },
         "financialPoaType": {
-          "type": "string",
           "enum": [
             "durable",
             "springing",
@@ -533,7 +524,6 @@
       "type": "object",
       "properties": {
         "communityPropertyState": {
-          "type": "string",
           "enum": [
             "US-AZ",
             "US-CA",

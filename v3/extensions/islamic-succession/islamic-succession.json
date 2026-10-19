@@ -49,7 +49,6 @@
           "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
         },
         "heirClass": {
-          "type": "string",
           "$comment": "son: ibn. daughter: bint. father: ab. mother: umm. grandfather: jadd sahih (true/paternal grandfather). grandmother: jaddah sahihah. brother_full: akh shaqiq. brother_paternal: akh li-ab (consanguine). brother_maternal: akh li-umm (uterine). sister_full: ukht shaqiqah. sister_paternal: ukht li-ab. sister_maternal: ukht li-umm. husband: zawj. wife: zawja. son_of_son: ibn al-ibn. daughter_of_son: bint al-ibn. uncle_paternal: amm shaqiq (full paternal uncle, asaba rank 9). uncle_paternal_half: amm li-ab (consanguine paternal uncle, asaba rank 10). nephew_brother_full: ibn al-akh al-shaqiq (son of full brother, asaba rank 7). nephew_brother_paternal: ibn al-akh li-ab (son of consanguine brother, asaba rank 8). cousin_paternal_full: ibn amm shaqiq (son of full paternal uncle, asaba rank 11). cousin_paternal_half: ibn amm li-ab (son of consanguine paternal uncle, asaba rank 12). Full asaba hierarchy: 1-son, 2-son's son, 3-father, 4-true grandfather, 5-full brother, 6-consanguine brother, 7-son of full brother, 8-son of consanguine brother, 9-full paternal uncle, 10-consanguine paternal uncle, 11-son of full paternal uncle, 12-son of consanguine paternal uncle, 13-15 ascending paternal uncles. Maternal uncle (khal), paternal aunt (amma), maternal aunt (khala) are dhawu al-arham — model with core uncle_aunt kinship type + lineage property, not as heirClass values. Under Jafari (Shia) law, maternal uncle/aunt are Class 3 heirs with equal standing.",
           "enum": [
             "son",
@@ -83,7 +82,6 @@
           "$comment": "Quranic fixed share as a fraction, e.g. 1/6, 1/8, 2/3."
         },
         "residuaryClass": {
-          "type": "string",
           "enum": [
             "asaba_by_self",
             "asaba_with_other",
@@ -151,7 +149,6 @@
           "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
         },
         "periodType": {
-          "type": "string",
           "enum": [
             "divorce",
             "death",
@@ -197,7 +194,6 @@
           "$comment": "Reference to Trust.id for the waqf entity."
         },
         "waqfType": {
-          "type": "string",
           "enum": [
             "ahli",
             "khairi",
@@ -228,7 +224,6 @@
           "maxLength": 2000
         },
         "type": {
-          "type": "string",
           "enum": [
             "mahr",
             "kafan",
@@ -260,7 +255,6 @@
   },
   "properties": {
     "school": {
-      "type": "string",
       "enum": [
         "hanafi",
         "shafii",

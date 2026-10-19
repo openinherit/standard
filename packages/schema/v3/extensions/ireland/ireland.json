@@ -245,7 +245,6 @@
             "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           },
           "localType": {
-            "type": "string",
             "enum": [
               "freehold",
               "leasehold",
@@ -275,7 +274,6 @@
           },
           "register": {
             "description": "land_registry: title registered in a folio at the Land Registry (Tailte Éireann). registry_of_deeds: unregistered title, with deeds recorded in the Registry of Deeds (Tailte Éireann)",
-            "type": "string",
             "enum": [
               "land_registry",
               "registry_of_deeds"
@@ -292,7 +290,6 @@
           },
           "titleClass": {
             "description": "Class of title registered on the folio",
-            "type": "string",
             "enum": [
               "absolute",
               "qualified",

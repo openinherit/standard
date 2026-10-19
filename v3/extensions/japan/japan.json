@@ -68,7 +68,6 @@
         },
         "relationshipCategory": {
           "description": "Relationship category determining iryubun (reserved share) eligibility under the Japanese Civil Code",
-          "type": "string",
           "$comment": "spouse: always entitled to iryubun. child: entitled (including adopted). lineal_ascendant: parents/grandparents — entitled only when no children exist. sibling: siblings have NO iryubun right (common misconception). Included in enum for explicit exclusion documentation. Reserved share fractions: Spouse + children: spouse 1/4, each child 1/4 / n. Spouse + lineal ascendants: spouse 1/3, ascendants 1/6. Spouse only: 1/2. Children only: 1/2 equally. Lineal ascendants only: 1/3. Siblings: no reserved share",
           "enum": [
             "spouse",
@@ -107,7 +106,6 @@
           "type": "boolean"
         },
         "claimOutcome": {
-          "type": "string",
           "enum": [
             "pending",
             "upheld",
@@ -132,7 +130,6 @@
           "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
         },
         "adoptionType": {
-          "type": "string",
           "enum": [
             "futsu_yoshi",
             "tokubetsu_yoshi"
@@ -145,7 +142,6 @@
           "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
         },
         "inheritanceScope": {
-          "type": "string",
           "enum": [
             "both_families",
             "adoptive_only",
@@ -174,7 +170,6 @@
           "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
         },
         "rightType": {
-          "type": "string",
           "enum": [
             "short_term",
             "long_term"
@@ -232,7 +227,6 @@
       "$comment": "Custodial succession to ancestral rites (祭祀承継) — family graves, Buddhist altar (butsudan), genealogy records. NOT inheritance of property. Not modelled as a kinship type. The designated successor may be any person, not necessarily an heir"
     },
     "localWillFormality": {
-      "type": "string",
       "enum": [
         "jihi_shosho",
         "kosei_shosho",
@@ -249,7 +243,6 @@
       "$comment": "Estate division agreement (遺産分割協議). Requires unanimous heir consent.",
       "properties": {
         "type": {
-          "type": "string",
           "enum": [
             "voluntary",
             "court_mediated",
@@ -310,7 +303,6 @@
             "minLength": 1
           },
           "status": {
-            "type": "string",
             "enum": [
               "enacted",
               "royal_assent",

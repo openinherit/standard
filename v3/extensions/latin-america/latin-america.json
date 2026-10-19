@@ -50,7 +50,6 @@
                 "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
               },
               "category": {
-                "type": "string",
                 "enum": [
                   "descendant",
                   "ascendant",
@@ -111,7 +110,6 @@
       "type": "object",
       "properties": {
         "system": {
-          "type": "string",
           "enum": [
             "fourths"
           ]
@@ -188,7 +186,6 @@
           "type": "boolean"
         },
         "intestacyOrder": {
-          "type": "string",
           "enum": [
             "descendants",
             "spouse",
@@ -299,7 +296,6 @@
         "forcedHeirCategories": {
           "type": "array",
           "items": {
-            "type": "string",
             "enum": [
               "descendants",
               "ascendants",
@@ -328,7 +324,6 @@
   "properties": {
     "country": {
       "description": "ISO 3166-1 alpha-2 country code identifying which Latin American jurisdiction's succession rules apply",
-      "type": "string",
       "enum": [
         "BR",
         "AR",

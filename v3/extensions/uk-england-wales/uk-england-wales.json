@@ -82,7 +82,6 @@
             "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           },
           "category": {
-            "type": "string",
             "enum": [
               "spouse",
               "former_spouse",
@@ -117,7 +116,6 @@
             "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           },
           "localType": {
-            "type": "string",
             "enum": [
               "detached_house",
               "semi_detached_house",
@@ -154,7 +152,6 @@
             "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           },
           "localType": {
-            "type": "string",
             "enum": [
               "freehold",
               "leasehold",
@@ -183,7 +180,6 @@
             "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           },
           "localType": {
-            "type": "string",
             "enum": [
               "grant_of_probate",
               "letters_of_administration",
@@ -213,7 +209,6 @@
             "minLength": 1
           },
           "status": {
-            "type": "string",
             "enum": [
               "enacted",
               "royal_assent",

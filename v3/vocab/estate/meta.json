@@ -14,7 +14,6 @@
       "type": "object",
       "properties": {
         "legalTradition": {
-          "type": "string",
           "enum": [
             "common_law",
             "civil_law",
@@ -34,7 +33,6 @@
     },
     "maturity": {
       "title": "Schema lifecycle stage",
-      "type": "string",
       "enum": [
         "draft",
         "stable",
@@ -43,7 +41,6 @@
     },
     "extensionType": {
       "title": "Classification of extension schema",
-      "type": "string",
       "enum": [
         "tradition",
         "geographic"
@@ -104,7 +101,6 @@
             "maxLength": 255
           },
           "role": {
-            "type": "string",
             "enum": [
               "lead",
               "contributor",

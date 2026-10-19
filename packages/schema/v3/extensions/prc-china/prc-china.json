@@ -41,7 +41,6 @@
               },
               "relationshipCategory": {
                 "description": "Relationship category under PRC Civil Code Article 1127 first order",
-                "type": "string",
                 "$comment": "spouse: surviving spouse. child: children including adopted, stepchildren who maintained the deceased, and children born out of wedlock (Article 1071). parent: parents including adoptive parents, stepparents who maintained the deceased",
                 "enum": [
                   "spouse",
@@ -73,7 +72,6 @@
               },
               "relationshipCategory": {
                 "description": "Relationship category under PRC Civil Code Article 1127 second order",
-                "type": "string",
                 "$comment": "sibling: brothers and sisters including half-siblings, adoptive siblings, step-siblings who maintained each other. grandparent_paternal: paternal grandparents (祖父母). grandparent_maternal: maternal grandparents (外祖父母). PRC law treats paternal and maternal grandparents equally within second order but distinguishes them terminologically. Maps to core grandparent_grandchild kinship type with lineage property",
                 "enum": [
                   "sibling",
@@ -109,7 +107,6 @@
           "maxLength": 255
         },
         "hukouType": {
-          "type": "string",
           "enum": [
             "agricultural",
             "non_agricultural"
@@ -149,7 +146,6 @@
       "type": "object",
       "properties": {
         "applicableOrder": {
-          "type": "string",
           "enum": [
             "first_order",
             "second_order"
@@ -196,7 +192,6 @@
       "type": "object",
       "properties": {
         "type": {
-          "type": "string",
           "enum": [
             "notarised",
             "holograph",
@@ -231,7 +226,6 @@
       "type": "object",
       "properties": {
         "maritalPropertyRegime": {
-          "type": "string",
           "enum": [
             "community",
             "separate",
@@ -298,7 +292,6 @@
   "properties": {
     "applicableLaw": {
       "description": "Which PRC legislative framework governs this succession — the 1985 Succession Law or the 2021 Civil Code (Book 6)",
-      "type": "string",
       "enum": [
         "prc_succession_law_1985",
         "prc_civil_code_2021"

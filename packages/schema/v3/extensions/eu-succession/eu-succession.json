@@ -97,7 +97,6 @@
       "type": "object",
       "properties": {
         "region": {
-          "type": "string",
           "enum": [
             "common_civil",
             "catalan",
@@ -127,7 +126,6 @@
       "type": "object",
       "properties": {
         "model": {
-          "type": "string",
           "enum": [
             "french_reserve",
             "german_pflichtteil",
@@ -220,7 +218,6 @@
             "minLength": 1
           },
           "status": {
-            "type": "string",
             "enum": [
               "enacted",
               "royal_assent",

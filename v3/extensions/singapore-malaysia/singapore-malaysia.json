@@ -41,7 +41,6 @@
             "properties": {
               "relationshipCategory": {
                 "description": "Kinship category for this share allocation, aligned with the ISA distribution rules",
-                "type": "string",
                 "$comment": "Maps to core kinshipType values. spouse: surviving spouse (relationship.json). children: children of the deceased (parent_child_*). parents: parents (parent_child_*). siblings: brothers and sisters (sibling, half_sibling). grandparents: grandparents (grandparent_grandchild). uncles_aunts: uncles and aunts (uncle_aunt)",
                 "enum": [
                   "spouse",
@@ -83,7 +82,6 @@
           "type": "boolean"
         },
         "school": {
-          "type": "string",
           "enum": [
             "shafii",
             "hanafi"
@@ -181,7 +179,6 @@
             "properties": {
               "relationshipCategory": {
                 "description": "Kinship category for this share allocation, aligned with the Malaysian Distribution Act 1958 rules",
-                "type": "string",
                 "$comment": "Maps to core kinshipType values. spouse: surviving spouse (relationship.json). children: children of the deceased (parent_child_*). parents: parents (parent_child_*). siblings: brothers and sisters (sibling, half_sibling). grandparents: grandparents (grandparent_grandchild). uncles_aunts: uncles and aunts (uncle_aunt)",
                 "enum": [
                   "spouse",
@@ -273,7 +270,6 @@
   "properties": {
     "country": {
       "description": "ISO 3166-1 alpha-2 country code — SG for Singapore, MY for Malaysia. Determines which succession framework applies",
-      "type": "string",
       "enum": [
         "SG",
         "MY"

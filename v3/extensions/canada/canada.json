@@ -132,7 +132,6 @@
           "maxLength": 255
         },
         "landType": {
-          "type": "string",
           "enum": [
             "reserve",
             "treaty",
@@ -159,7 +158,6 @@
   "properties": {
     "province": {
       "description": "Canadian province or territory whose succession law applies. Critical — every province has different intestacy rules, preferential shares, and property regimes",
-      "type": "string",
       "pattern": "^CA-[A-Z]{2}$",
       "$comment": "ISO 3166-2:CA subdivision codes. All 13 provinces and territories enumerated.",
       "enum": [

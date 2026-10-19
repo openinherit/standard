@@ -35,7 +35,9 @@ N = r"(?<![\d.\-])(\d+)"
 PATTERNS = [
     (N + r"\s+(?:core\s+)?entit(?:y|ies)\s+schema", "entitySchemas", "entity schemas"),
     (N + r"\s+common\s+type", "commonTypes", "common types"),
-    (N + r"\s+(?:jurisdiction(?:al)?(?:/cultural)?\s+)?extensions?\b(?!\s+guide)",
+    # "22 jurisdiction extensions" / "22 extension schemas", never a bare
+    # "N extensions" ("Tier 3 Extensions" is a tier, not a count).
+    (N + r"\s+(?:jurisdiction(?:al)?(?:/cultural)?\s+extension|extension\s+(?:schema|director))",
      "extensionDirectories", "extension directories"),
     (N + r"\s+reference[- ]data\s+file", "referenceDataFiles", "reference data files"),
     (N + r"\s+(?:root\s+)?propert(?:y|ies)\s+(?:on|in)\s+(?:root|schema)", "rootProperties", "root properties"),

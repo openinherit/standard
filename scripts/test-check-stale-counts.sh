@@ -157,6 +157,12 @@ run "$T" check-stale-counts.py
 expect_rc "6a a version number ending in digits is not read as a count" 0
 rm "$T/README.md"
 
+# ── 6b. "Tier 3 Extensions" is a tier, not a count ─────────────────────────
+echo '# Kinship Enrichment — Tier 3 Extensions' > "$T/proposal.md"
+run "$T" check-stale-counts.py
+expect_rc "6b a tier number before 'Extensions' is not read as a count" 0
+rm "$T/proposal.md"
+
 # ── 7. A schema added without regenerating is drift ─────────────────────────
 mkdir -p "$T/v3/extensions/wales"; echo '{}' > "$T/v3/extensions/wales/wales.json"
 run "$T" check-stale-counts.py

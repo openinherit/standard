@@ -2,125 +2,61 @@
   "targets": 79,
   "findings": {
     "v3/extensions/africa-customary/africa-customary.json": {
-      "description_trailing_period": 1,
-      "enum_with_type": 8,
-      "unknown_keywords_prefix": 8,
-      "unsatisfiable_min_properties": 2
+      "unknown_keywords_prefix": 8
     },
     "v3/extensions/australia-nz/australia-nz.json": {
-      "description_trailing_period": 1,
-      "enum_with_type": 12,
-      "unknown_keywords_prefix": 8,
-      "unsatisfiable_min_properties": 2
+      "unknown_keywords_prefix": 8
     },
     "v3/extensions/brazil/brazil.json": {
-      "description_trailing_period": 1,
       "unknown_keywords_prefix": 8
     },
     "v3/extensions/canada/canada.json": {
-      "description_trailing_period": 1,
-      "enum_with_type": 4,
-      "unknown_keywords_prefix": 8,
-      "unsatisfiable_min_properties": 2
-    },
-    "v3/extensions/eu-succession/eu-succession.json": {
-      "description_trailing_period": 1,
-      "enum_with_type": 6,
-      "unknown_keywords_prefix": 8,
-      "unsatisfiable_min_properties": 2
-    },
-    "v3/extensions/hindu-succession/hindu-succession.json": {
-      "description_trailing_period": 1,
-      "enum_with_type": 8,
-      "unknown_keywords_prefix": 8,
-      "unsatisfiable_min_properties": 2
-    },
-    "v3/extensions/hong-kong/hong-kong.json": {
-      "description_trailing_period": 1,
       "unknown_keywords_prefix": 8
     },
-    "v3/extensions/india/india.json": {
-      "description_trailing_period": 1,
-      "unsatisfiable_min_properties": 2
+    "v3/extensions/eu-succession/eu-succession.json": {
+      "unknown_keywords_prefix": 8
     },
-    "v3/extensions/ireland/ireland.json": {
-      "description_trailing_period": 2,
-      "enum_with_type": 6
+    "v3/extensions/hindu-succession/hindu-succession.json": {
+      "unknown_keywords_prefix": 8
+    },
+    "v3/extensions/hong-kong/hong-kong.json": {
+      "unknown_keywords_prefix": 8
     },
     "v3/extensions/islamic-succession/islamic-succession.json": {
-      "description_trailing_period": 1,
-      "enum_with_type": 12,
-      "oneof_to_anyof_disjoint_types": 1,
-      "unknown_keywords_prefix": 8,
-      "unsatisfiable_min_properties": 2
+      "unknown_keywords_prefix": 8
     },
     "v3/extensions/israel/israel.json": {
-      "description_trailing_period": 13,
       "unknown_keywords_prefix": 8
     },
     "v3/extensions/japan/japan.json": {
-      "description_trailing_period": 1,
-      "enum_with_type": 16,
       "unknown_keywords_prefix": 7
     },
     "v3/extensions/jewish-succession/jewish-succession.json": {
-      "description_trailing_period": 1,
-      "enum_with_type": 14,
-      "unknown_keywords_prefix": 8,
-      "unsatisfiable_min_properties": 2
+      "unknown_keywords_prefix": 8
     },
     "v3/extensions/latin-america/latin-america.json": {
-      "description_trailing_period": 1,
-      "enum_to_const": 1,
-      "enum_with_type": 10,
-      "unknown_keywords_prefix": 7,
-      "unsatisfiable_min_properties": 2
-    },
-    "v3/extensions/northern-ireland/northern-ireland.json": {
-      "enum_with_type": 6
+      "unknown_keywords_prefix": 7
     },
     "v3/extensions/prc-china/prc-china.json": {
-      "description_trailing_period": 1,
-      "enum_with_type": 14,
-      "unknown_keywords_prefix": 7,
-      "unsatisfiable_min_properties": 2
+      "unknown_keywords_prefix": 7
     },
     "v3/extensions/scotland/scotland.json": {
-      "description_trailing_period": 1,
-      "enum_with_type": 28,
       "unknown_keywords_prefix": 2
     },
     "v3/extensions/singapore-malaysia/singapore-malaysia.json": {
-      "description_trailing_period": 2,
-      "enum_with_type": 8,
-      "unknown_keywords_prefix": 8,
-      "unsatisfiable_min_properties": 2
-    },
-    "v3/extensions/switzerland/switzerland.json": {
-      "description_trailing_period": 7,
       "unknown_keywords_prefix": 8
     },
-    "v3/extensions/uae/uae.json": {
-      "description_trailing_period": 1,
-      "unsatisfiable_min_properties": 2
+    "v3/extensions/switzerland/switzerland.json": {
+      "unknown_keywords_prefix": 8
     },
     "v3/extensions/uk-england-wales/uk-england-wales.json": {
-      "description_trailing_period": 6,
-      "enum_with_type": 10,
       "unknown_keywords_prefix": 8
     },
     "v3/extensions/us-estate/us-estate.json": {
-      "description_trailing_period": 1,
-      "enum_with_type": 20,
-      "unknown_keywords_prefix": 8,
-      "unsatisfiable_min_properties": 2
-    },
-    "v3/organisation.json": {
-      "description_trailing_period": 1
-    },
-    "v3/vocab/estate/meta.json": {
-      "description_trailing_period": 1,
-      "enum_with_type": 8
+      "unknown_keywords_prefix": 8
     }
+  },
+  "reasons": {
+    "unknown_keywords_prefix": "Kept. The flagged keywords (maturity, extensionType, applicableJurisdictions, inheritVersion, legalSystems, dataProvenance, maintainers, compatibleWith) are not stray: they are the published INHERIT estate vocabulary https://openinherit.org/v3/vocab/estate, declared in v3/dialect.json, defined in v3/vocab/estate/meta.json and read by src/vocab-estate.mjs, scripts/test-extensions.mjs and scripts/check-jurisdiction-cascade.py. Renaming them to x-* would break every reader of that vocabulary, so it needs a formal proposal, not a lint fix."
   }
 }

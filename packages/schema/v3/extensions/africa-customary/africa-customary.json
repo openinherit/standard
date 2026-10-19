@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinherit.org/v3/extensions/africa-customary/africa-customary.json",
   "title": "Africa Customary Succession Extension",
-  "description": "Customary succession rules across African ethnic groups: patrilineal/matrilineal systems, family council decisions, communal property, widow rights, lobola, land tenure, and constitutional challenges.",
+  "description": "Customary succession rules across African ethnic groups: patrilineal/matrilineal systems, family council decisions, communal property, widow rights, lobola, land tenure, and constitutional challenges",
   "maturity": "draft",
   "extensionType": "tradition",
   "applicableJurisdictions": [
@@ -66,7 +66,6 @@
           "maxLength": 255
         },
         "constitutionalChallengeOutcome": {
-          "type": "string",
           "enum": [
             "not_challenged",
             "upheld",
@@ -91,7 +90,6 @@
           "maxLength": 255
         },
         "successionSystem": {
-          "type": "string",
           "enum": [
             "patrilineal_primogeniture",
             "patrilineal_equal",
@@ -101,7 +99,6 @@
           ]
         },
         "widowInheritanceRight": {
-          "type": "string",
           "enum": [
             "full_inheritance",
             "usufruct_only",
@@ -300,7 +297,6 @@
             "maxLength": 500
           },
           "outcome": {
-            "type": "string",
             "enum": [
               "not_challenged",
               "upheld",
@@ -328,7 +324,6 @@
   "required": [
     "ethnicGroup"
   ],
-  "minProperties": 1,
   "patternProperties": {
     "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
       "type": "object",

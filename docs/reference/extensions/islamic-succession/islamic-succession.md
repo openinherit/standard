@@ -2,7 +2,7 @@
 
 # Islamic Succession Extension
 
-Faraid (Islamic inheritance) rules: heir classification, fixed shares, residuary (asaba), awl/radd adjustments, wasiyya limits, iddah periods, waqf details, and priority debts including mahr.
+Faraid (Islamic inheritance) rules: heir classification, fixed shares, residuary (asaba), awl/radd adjustments, wasiyya limits, iddah periods, waqf details, and priority debts including mahr
 
 Source: [`v3/extensions/islamic-succession/islamic-succession.json`](../../../../v3/extensions/islamic-succession/islamic-succession.json)
 
@@ -12,7 +12,7 @@ Schema `$id`: `https://openinherit.org/v3/extensions/islamic-succession/islamic-
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `school` | `string` — one of `hanafi`, `shafii`, `maliki`, `hanbali`, `jafari`, `ibadi`, `zahiri` | yes | |
+| `school` | one of `hanafi`, `shafii`, `maliki`, `hanbali`, `jafari`, `ibadi`, `zahiri` | yes | |
 | `faraidApplies` | `boolean` | | |
 | `heirClassifications` | array of [HeirClassification](#def-HeirClassification) | | |
 | `awlApplied` | `boolean` | | |
@@ -37,9 +37,9 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `personId` | `string` (uuid) | yes | |
-| `heirClass` | `string` — one of `son`, `daughter`, `father`, `mother`, `grandfather`, `grandmother`, `brother_full`, `brother_paternal`, `brother_maternal`, `sister_full`, `sister_paternal`, `sister_maternal`, `husband`, `wife`, `son_of_son`, `daughter_of_son`, `uncle_paternal`, `uncle_paternal_half`, `nephew_brother_full`, `nephew_brother_paternal`, … (+2 more) | yes | |
+| `heirClass` | one of `son`, `daughter`, `father`, `mother`, `grandfather`, `grandmother`, `brother_full`, `brother_paternal`, `brother_maternal`, `sister_full`, `sister_paternal`, `sister_maternal`, `husband`, `wife`, `son_of_son`, `daughter_of_son`, `uncle_paternal`, `uncle_paternal_half`, `nephew_brother_full`, `nephew_brother_paternal`, … (+2 more) | yes | |
 | `fixedShareFraction` | `string` | | |
-| `residuaryClass` | `string` — one of `asaba_by_self`, `asaba_with_other`, `asaba_through_other`, `none` | | |
+| `residuaryClass` | one of `asaba_by_self`, `asaba_with_other`, `asaba_through_other`, `none` | | |
 | `blocked` | `boolean` | | |
 | `blockedBy` | `string` (uuid) | | |
 | `notes` | `string` | | |
@@ -52,7 +52,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `personId` | `string` (uuid) | yes | |
-| `periodType` | `string` — one of `divorce`, `death`, `pregnancy` | yes | |
+| `periodType` | one of `divorce`, `death`, `pregnancy` | yes | |
 | `startDate` | `string` (date) | yes | |
 | `endDate` | `string` (date) or `null` | | |
 | `notes` | `string` | | |
@@ -64,7 +64,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `description` | `string` | yes | |
-| `type` | `string` — one of `mahr`, `kafan`, `funeral_costs`, `tax`, `debts_of_deceased` | yes | |
+| `type` | one of `mahr`, `kafan`, `funeral_costs`, `tax`, `debts_of_deceased` | yes | |
 | `amount` | [Money](../../common/money.md) | yes | |
 | `creditorPersonId` | `string` (uuid) | | |
 | `notes` | `string` | | |
@@ -76,7 +76,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `waqfId` | `string` (uuid) | yes | |
-| `waqfType` | `string` — one of `ahli`, `khairi`, `mushtarak` | yes | |
+| `waqfType` | one of `ahli`, `khairi`, `mushtarak` | yes | |
 | `dedicationDate` | `string` (date) | | |
 | `notes` | `string` | | |
 

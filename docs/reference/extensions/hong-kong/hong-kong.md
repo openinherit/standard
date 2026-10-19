@@ -2,7 +2,7 @@
 
 # Hong Kong Extension
 
-Hong Kong succession rules: local grant types under Cap. 10, MPF death benefit nominations under Cap. 485, cross-border PRC asset considerations, intestacy distribution under the Intestates' Estates Ordinance (Cap. 73), and small estate grants.
+Hong Kong succession rules: local grant types under Cap. 10, MPF death benefit nominations under Cap. 485, cross-border PRC asset considerations, intestacy distribution under the Intestates' Estates Ordinance (Cap. 73), and small estate grants
 
 Source: [`v3/extensions/hong-kong/hong-kong.json`](../../../../v3/extensions/hong-kong/hong-kong.json)
 

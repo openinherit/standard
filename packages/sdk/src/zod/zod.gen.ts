@@ -3259,7 +3259,7 @@ export const zTemporalRule2 = zTemporalRule;
 /**
  * UK England & Wales Extension
  *
- * IHT thresholds, intestacy rules, IFPA 1975 eligibility, and legislative changes for England & Wales estates. Temporal-rule wrapping on key values.
+ * IHT thresholds, intestacy rules, IFPA 1975 eligibility, and legislative changes for England & Wales estates. Temporal-rule wrapping on key values
  */
 export const zUkEnglandWales = z.object({
     intestacyStatutoryLegacy: zTemporalRule.optional(),
@@ -3706,7 +3706,7 @@ export const zExtensionNorthernIreland = zNorthernIreland;
 /**
  * US Estate Extension
  *
- * US-specific estate planning: federal and state estate tax, community/separate property regimes, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes, RUFADAA, Louisiana forced heirship, probate variation, trust features, SECURE Act retirement rules, ancillary probate, advance directives.
+ * US-specific estate planning: federal and state estate tax, community/separate property regimes, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes, RUFADAA, Louisiana forced heirship, probate variation, trust features, SECURE Act retirement rules, ancillary probate, advance directives
  */
 export const zUsEstate = z.object({
     state: z.string().max(255).regex(/^US-[A-Z]{2}$/),
@@ -3948,7 +3948,7 @@ export const zIndigenousLandDetails = z.strictObject({
 /**
  * Canada Extension
  *
- * Provincial succession rules for Canada: Quebec patrimony, Ontario equalization, BC WESA variation, Alberta dower rights, and Indigenous land succession details.
+ * Provincial succession rules for Canada: Quebec patrimony, Ontario equalization, BC WESA variation, Alberta dower rights, and Indigenous land succession details
  */
 export const zCanada = z.object({
     province: z.enum([
@@ -4095,7 +4095,7 @@ export const zMaoriLandDetails = z.strictObject({
 /**
  * Australia & New Zealand Extension
  *
- * Succession rules for AU and NZ: superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ Property (Relationships) Act, testamentary promises, and Maori land under Te Ture Whenua.
+ * Succession rules for AU and NZ: superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ Property (Relationships) Act, testamentary promises, and Maori land under Te Ture Whenua
  */
 export const zAustraliaNz = z.object({
     jurisdiction: z.enum([
@@ -4178,7 +4178,7 @@ export const zPostBrexitAssetHandling = z.strictObject({
 /**
  * EU Succession Extension
  *
- * European succession rules: Brussels IV choice of law and European Certificate of Succession, Spanish regional regimes, forced heirship variants across civil law traditions, and post-Brexit UK asset handling.
+ * European succession rules: Brussels IV choice of law and European Certificate of Succession, Spanish regional regimes, forced heirship variants across civil law traditions, and post-Brexit UK asset handling
  */
 export const zEuSuccession = z.object({
     memberState: z.string().regex(/^[A-Z]{2}$/),
@@ -4260,7 +4260,7 @@ export const zSpousesResidenceRight = z.strictObject({
 /**
  * Japan Extension
  *
- * Japanese succession law — koseki records, iryubun (reserved share) claims, yōshi (adoption), spousal residence right (2019 reform), isan bunkatsu (estate division), saishi succession, local will formalities.
+ * Japanese succession law — koseki records, iryubun (reserved share) claims, yōshi (adoption), spousal residence right (2019 reform), isan bunkatsu (estate division), saishi succession, local will formalities
  */
 export const zJapan = z.object({
     kosekiRecords: z.array(zKosekiRecord).max(50).optional(),
@@ -4413,7 +4413,7 @@ export const zInheritanceTaxStatus = z.strictObject({
 /**
  * PRC China Extension
  *
- * People's Republic of China succession law — forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling, intestacy order (Arts. 1127-1132), will forms (6 types, Art. 1142), community property division (Art. 1153), rural land rights, and inheritance tax status.
+ * People's Republic of China succession law — forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling, intestacy order (Arts. 1127-1132), will forms (6 types, Art. 1142), community property division (Art. 1153), rural land rights, and inheritance tax status
  */
 export const zPrcChina = z.object({
     applicableLaw: z.enum(['prc_succession_law_1985', 'prc_civil_code_2021']),
@@ -4515,7 +4515,7 @@ export const zEpfNomination = z.strictObject({
 /**
  * Singapore / Malaysia Extension
  *
- * Singapore and Malaysia succession law — ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction.
+ * Singapore and Malaysia succession law — ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction
  */
 export const zSingaporeMalaysia = z.object({
     country: z.enum(['SG', 'MY']),
@@ -4565,7 +4565,7 @@ export const zArgentineSuccession = z.strictObject({
 });
 
 export const zColombianSuccession = z.strictObject({
-    system: z.enum(['fourths']).optional(),
+    system: z.literal('fourths').optional(),
     legitimaRigurosa: z.string().max(255).optional(),
     cuartaDeMejoras: z.string().max(255).optional(),
     cuartaDeLibreDisposicion: z.string().max(255).optional(),
@@ -4643,7 +4643,7 @@ export const zForcedHeirshipPattern = z.strictObject({
 /**
  * Latin America Extension
  *
- * Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions.
+ * Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions
  */
 export const zLatinAmerica = z.object({
     country: z.enum([
@@ -4758,7 +4758,7 @@ export const zPriorityDebt = z.strictObject({
 /**
  * Islamic Succession Extension
  *
- * Faraid (Islamic inheritance) rules: heir classification, fixed shares, residuary (asaba), awl/radd adjustments, wasiyya limits, iddah periods, waqf details, and priority debts including mahr.
+ * Faraid (Islamic inheritance) rules: heir classification, fixed shares, residuary (asaba), awl/radd adjustments, wasiyya limits, iddah periods, waqf details, and priority debts including mahr
  */
 export const zIslamicSuccession = z.object({
     school: z.enum([
@@ -4879,7 +4879,7 @@ export const zBequestClassification = z.strictObject({
 /**
  * Jewish Succession Extension
  *
- * Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law.
+ * Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law
  */
 export const zJewishSuccession = z.object({
     denomination: z.enum([
@@ -4946,7 +4946,7 @@ export const zStridhanAsset = z.strictObject({
 /**
  * Hindu Succession Extension
  *
- * Hindu succession law specifics: Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications under the Hindu Succession Act 1956, stridhan assets, agricultural land ceiling rules, and NRI complications.
+ * Hindu succession law specifics: Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications under the Hindu Succession Act 1956, stridhan assets, agricultural land ceiling rules, and NRI complications
  */
 export const zHinduSuccession = z.object({
     applicableLaw: z.enum([
@@ -5047,7 +5047,7 @@ export const zWidowRights = z.strictObject({
 /**
  * Africa Customary Succession Extension
  *
- * Customary succession rules across African ethnic groups: patrilineal/matrilineal systems, family council decisions, communal property, widow rights, lobola, land tenure, and constitutional challenges.
+ * Customary succession rules across African ethnic groups: patrilineal/matrilineal systems, family council decisions, communal property, widow rights, lobola, land tenure, and constitutional challenges
  */
 export const zAfricaCustomary = z.object({
     ethnicGroup: z.string().min(1).max(255),
@@ -5090,7 +5090,7 @@ export const zExtensionAfricaCustomary = zAfricaCustomary;
 /**
  * Brazil Extension
  *
- * Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário process types, cartório attestation, disponível (testamentary freedom portion), and união estável (stable union recognition).
+ * Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário process types, cartório attestation, disponível (testamentary freedom portion), and união estável (stable union recognition)
  */
 export const zBrazil = z.object({
     meacao: z.strictObject({
@@ -5158,7 +5158,7 @@ export const zExtensionBrazil = zBrazil;
 /**
  * Hong Kong Extension
  *
- * Hong Kong succession rules: local grant types under Cap. 10, MPF death benefit nominations under Cap. 485, cross-border PRC asset considerations, intestacy distribution under the Intestates' Estates Ordinance (Cap. 73), and small estate grants.
+ * Hong Kong succession rules: local grant types under Cap. 10, MPF death benefit nominations under Cap. 485, cross-border PRC asset considerations, intestacy distribution under the Intestates' Estates Ordinance (Cap. 73), and small estate grants
  */
 export const zHongKong = z.object({
     localGrantTypes: z.array(z.strictObject({
@@ -5249,7 +5249,7 @@ export const zExtensionHongKong = zHongKong;
 /**
  * Switzerland Extension
  *
- * Swiss succession rules: Pflichtteil (forced heirship, 2023 Erbrechtsrevision), cantonal inheritance tax variation, matrimonial property regimes, Erbschein (certificate of inheritance), and notarial will forms.
+ * Swiss succession rules: Pflichtteil (forced heirship, 2023 Erbrechtsrevision), cantonal inheritance tax variation, matrimonial property regimes, Erbschein (certificate of inheritance), and notarial will forms
  */
 export const zSwitzerland = z.object({
     pflichtteil: z.strictObject({
@@ -5302,7 +5302,7 @@ export const zExtensionSwitzerland = zSwitzerland;
 /**
  * Israel Extension
  *
- * Israeli succession rules: parallel court systems (civil family court, rabbinical, sharia, druze), Inheritance Law 1965 process types, religious authority orders, kibbutz/moshav communal property, and Holocaust restitution assets.
+ * Israeli succession rules: parallel court systems (civil family court, rabbinical, sharia, druze), Inheritance Law 1965 process types, religious authority orders, kibbutz/moshav communal property, and Holocaust restitution assets
  */
 export const zIsrael = z.object({
     parallelCourtSystems: z.strictObject({

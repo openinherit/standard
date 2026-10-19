@@ -2,7 +2,7 @@
 
 # Singapore / Malaysia Extension
 
-Singapore and Malaysia succession law — ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction.
+Singapore and Malaysia succession law — ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction
 
 Source: [`v3/extensions/singapore-malaysia/singapore-malaysia.json`](../../../../v3/extensions/singapore-malaysia/singapore-malaysia.json)
 
@@ -12,7 +12,7 @@ Schema `$id`: `https://openinherit.org/v3/extensions/singapore-malaysia/singapor
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `country` | `string` — one of `SG`, `MY` | yes | ISO 3166-1 alpha-2 country code — SG for Singapore, MY for Malaysia. Determines which succession framework applies |
+| `country` | one of `SG`, `MY` | yes | ISO 3166-1 alpha-2 country code — SG for Singapore, MY for Malaysia. Determines which succession framework applies |
 | `singaporeISA` | [SingaporeISADistribution](#def-SingaporeISADistribution) | | |
 | `singaporeAMLA` | [SingaporeAMLADistribution](#def-SingaporeAMLADistribution) | | |
 | `cpfNominations` | array of [CPFNomination](#def-CPFNomination) | | |
@@ -20,7 +20,7 @@ Schema `$id`: `https://openinherit.org/v3/extensions/singapore-malaysia/singapor
 | `malaysianShariah` | [MalaysianShariah](#def-MalaysianShariah) | | |
 | `epfNominations` | array of [EPFNomination](#def-EPFNomination) | | |
 | `notes` | `string` | | |
-| `marriageRevocation` | `object` | | Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia. |
+| `marriageRevocation` | `object` | | Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia |
 
 Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 
@@ -80,7 +80,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `applicable` | `boolean` | | |
-| `school` | `string` — one of `shafii`, `hanafi` | | |
+| `school` | one of `shafii`, `hanafi` | | |
 | `faraidRef` | `string` | | |
 | `notes` | `string` | | |
 

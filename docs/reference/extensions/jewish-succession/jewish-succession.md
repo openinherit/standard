@@ -2,7 +2,7 @@
 
 # Jewish Succession Extension
 
-Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law.
+Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law
 
 Source: [`v3/extensions/jewish-succession/jewish-succession.json`](../../../../v3/extensions/jewish-succession/jewish-succession.json)
 
@@ -12,10 +12,10 @@ Schema `$id`: `https://openinherit.org/v3/extensions/jewish-succession/jewish-su
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `denomination` | `string` — one of `orthodox`, `conservative`, `reform`, `reconstructionist`, `traditional`, `unaffiliated` | yes | Jewish denominational tradition — affects interpretation of halachic succession rules and mechanisms (e.g. Orthodox requires kinyan, Reform may not) |
+| `denomination` | one of `orthodox`, `conservative`, `reform`, `reconstructionist`, `traditional`, `unaffiliated` | yes | Jewish denominational tradition — affects interpretation of halachic succession rules and mechanisms (e.g. Orthodox requires kinyan, Reform may not) |
 | `halachicHeirs` | array of [HalachicHeir](#def-HalachicHeir) | | |
 | `mezonotDetails` | [MezonotDetails](#def-MezonotDetails) | | |
-| `halachicMechanism` | `string` — one of `shtar_chov`, `matnat_bari`, `matnat_shechiv_mera`, `matnat_bari_conditional` | | |
+| `halachicMechanism` | one of `shtar_chov`, `matnat_bari`, `matnat_shechiv_mera`, `matnat_bari_conditional` | | |
 | `bekhorRules` | [BekhorRules](#def-BekhorRules) | | |
 | `hebrewNames` | array of [HebrewName](#def-HebrewName) | | |
 | `halachicWitnessValidity` | array of [HalachicWitnessValidity](#def-HalachicWitnessValidity) | | |
@@ -44,7 +44,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `type` | `string` — one of `matanah`, `yerusha`, `shtar_chov_gift` | yes | |
+| `type` | one of `matanah`, `yerusha`, `shtar_chov_gift` | yes | |
 | `bequestId` | `string` (uuid) | yes | |
 | `notes` | `string` | | |
 
@@ -56,8 +56,8 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | --- | --- | --- | --- |
 | `personId` | `string` (uuid) | yes | |
 | `relationship` | `string` | yes | |
-| `heirOrder` | `string` — one of `bechor`, `regular` | | |
-| `halachicClass` | `string` — one of `ben`, `bat`, `av`, `em`, `ach`, `achot`, `ben_ben`, `av_av`, `ach_av`, `ben_ach`, `ben_ach_av`, `other` | yes | |
+| `heirOrder` | one of `bechor`, `regular` | | |
+| `halachicClass` | one of `ben`, `bat`, `av`, `em`, `ach`, `achot`, `ben_ben`, `av_av`, `ach_av`, `ben_ach`, `ben_ach_av`, `other` | yes | |
 
 <a id="def-HalachicWitnessValidity"></a>
 
@@ -79,7 +79,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | `personId` | `string` (uuid) | yes | |
 | `hebrewGivenName` | `string` | yes | |
 | `hebrewFamilyName` | `string` | | |
-| `benOrBat` | `string` — one of `ben`, `bat` | yes | |
+| `benOrBat` | one of `ben`, `bat` | yes | |
 
 <a id="def-KinyanDetails"></a>
 
@@ -87,7 +87,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `type` | `string` — one of `kinyan_sudar`, `kinyan_agav`, `kinyan_meshichah`, `kinyan_hagbahah` | yes | |
+| `type` | one of `kinyan_sudar`, `kinyan_agav`, `kinyan_meshichah`, `kinyan_hagbahah` | yes | |
 | `performed` | `boolean` | yes | |
 | `witnessPersonIds` | array of `string` (uuid) | | |
 | `notes` | `string` | | |

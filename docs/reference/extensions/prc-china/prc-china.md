@@ -2,7 +2,7 @@
 
 # PRC China Extension
 
-People's Republic of China succession law — forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling, intestacy order (Arts. 1127-1132), will forms (6 types, Art. 1142), community property division (Art. 1153), rural land rights, and inheritance tax status.
+People's Republic of China succession law — forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling, intestacy order (Arts. 1127-1132), will forms (6 types, Art. 1142), community property division (Art. 1153), rural land rights, and inheritance tax status
 
 Source: [`v3/extensions/prc-china/prc-china.json`](../../../../v3/extensions/prc-china/prc-china.json)
 
@@ -12,7 +12,7 @@ Schema `$id`: `https://openinherit.org/v3/extensions/prc-china/prc-china.json`
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `applicableLaw` | `string` — one of `prc_succession_law_1985`, `prc_civil_code_2021` | yes | Which PRC legislative framework governs this succession — the 1985 Succession Law or the 2021 Civil Code (Book 6) |
+| `applicableLaw` | one of `prc_succession_law_1985`, `prc_civil_code_2021` | yes | Which PRC legislative framework governs this succession — the 1985 Succession Law or the 2021 Civil Code (Book 6) |
 | `forcedHeirship` | [PRCForcedHeirship](#def-PRCForcedHeirship) | | |
 | `hukouReferences` | array of [HukouReference](#def-HukouReference) | | |
 | `notarisationRequired` | `boolean` | | |
@@ -37,7 +37,7 @@ Division of joint marital property under Civil Code Book Five
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `maritalPropertyRegime` | `string` — one of `community`, `separate`, `mixed_agreement` | | |
+| `maritalPropertyRegime` | one of `community`, `separate`, `mixed_agreement` | | |
 | `communityPropertyIdentified` | `boolean` | | |
 | `spouseShareExcluded` | `boolean` | | Surviving spouse's half of community property excluded from estate (Art. 1153) |
 | `notes` | `string` | | |
@@ -61,7 +61,7 @@ Division of joint marital property under Civil Code Book Five
 | --- | --- | --- | --- |
 | `personId` | `string` (uuid) | yes | |
 | `hukouLocation` | `string` | | |
-| `hukouType` | `string` — one of `agricultural`, `non_agricultural` | | |
+| `hukouType` | one of `agricultural`, `non_agricultural` | | |
 
 <a id="def-InheritanceTaxStatus"></a>
 
@@ -83,7 +83,7 @@ Statutory succession order under Civil Code Book Six Chapter 2 (Articles 1127-11
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `applicableOrder` | `string` — one of `first_order`, `second_order` | | |
+| `applicableOrder` | one of `first_order`, `second_order` | | |
 | `equalDistribution` | `boolean` | | |
 | `dependantMaintenance` | `boolean` | | Non-heir who maintained the deceased may receive a share under Art. 1131 |
 | `contributingInLaws` | array of `object` | | Widowed daughters-in-law or sons-in-law who made predominant contributions to supporting their parents-in-law, treated as first-order heirs under Article 1129. Unique to PRC law — in-laws elevated to heir status based on conduct, not kinship |
@@ -121,7 +121,7 @@ Will form under PRC Civil Code — 6 types recognised, latest will prevails (Art
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `type` | `string` — one of `notarised`, `holograph`, `scrivener`, `printed`, `audio_visual`, `oral_emergency` | | |
+| `type` | one of `notarised`, `holograph`, `scrivener`, `printed`, `audio_visual`, `oral_emergency` | | |
 | `dateExecuted` | `string` (date) | | |
 | `notarisationOffice` | `string` | | |
 | `witnesses` | `integer` | | |

@@ -261,7 +261,7 @@
     },
     "marriageRevocation": {
       "type": "object",
-      "description": "Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs.",
+      "description": "Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs",
       "properties": {
         "revokesPriorWill": { "type": "boolean" },
         "statute": { "type": "string", "maxLength": 255 },
@@ -274,7 +274,6 @@
       "additionalProperties": false
     }
   },
-  "minProperties": 1,
   "patternProperties": {
     "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
       "type": "object",

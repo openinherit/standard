@@ -3,7 +3,7 @@
   "$id": "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json",
   "$comment": "This extension implements succession rules derived from Jewish law as codified in specific jurisdictions. The extension name references the legal tradition, not the personal religious beliefs of any individual. A person of any faith (or none) may be subject to these rules depending on their jurisdiction of domicile. Extension type values: x-inherit-ketubah (document), x-inherit-shtar-chov (document), x-inherit-halachic-yerusha (distribution method), x-inherit-halachic-matanah (bequest)",
   "title": "Jewish Succession Extension",
-  "description": "Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law.",
+  "description": "Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law",
   "maturity": "draft",
   "extensionType": "tradition",
   "applicableJurisdictions": [
@@ -48,7 +48,6 @@
           "maxLength": 255
         },
         "heirOrder": {
-          "type": "string",
           "enum": [
             "bechor",
             "regular"
@@ -56,7 +55,6 @@
         },
         "halachicClass": {
           "$comment": "ben: son (ibn). bat: daughter. av: father. em: mother — included for mezonot (maintenance) eligibility, NOT for inheritance. Under halacha the mother does not inherit from her children and maternal relatives have no inheritance rights. ach: brother. achot: sister. ben_ben: son's son. av_av: father's father (paternal grandfather) — inherits when father predeceases. ach_av: father's brother (paternal uncle) — inherits after father's father. ben_ach: brother's son (nephew) — inherits when brothers predecease. ben_ach_av: father's brother's son (paternal cousin) — inherits after father's brothers. other: catch-all for more distant patrilineal relatives. Full halachic inheritance order (Numbers 27 + Bava Batra): 1. Sons and their descendants (ben, ben_ben). 2. Daughters and their descendants (bat). 3. Father (av). 4. Father's brothers and their descendants (ach_av, ben_ach_av). 5. Father's father (av_av). 6. Ascending paternal line indefinitely. Inheritance is strictly patrilineal — maternal relatives never inherit under halacha.",
-          "type": "string",
           "enum": [
             "ben",
             "bat",
@@ -145,7 +143,6 @@
           "maxLength": 255
         },
         "benOrBat": {
-          "type": "string",
           "enum": [
             "ben",
             "bat"
@@ -189,7 +186,6 @@
       "type": "object",
       "properties": {
         "type": {
-          "type": "string",
           "enum": [
             "kinyan_sudar",
             "kinyan_agav",
@@ -225,7 +221,6 @@
       "type": "object",
       "properties": {
         "type": {
-          "type": "string",
           "enum": [
             "matanah",
             "yerusha",
@@ -252,7 +247,6 @@
   "properties": {
     "denomination": {
       "description": "Jewish denominational tradition — affects interpretation of halachic succession rules and mechanisms (e.g. Orthodox requires kinyan, Reform may not)",
-      "type": "string",
       "enum": [
         "orthodox",
         "conservative",
@@ -273,7 +267,6 @@
       "$ref": "#/$defs/MezonotDetails"
     },
     "halachicMechanism": {
-      "type": "string",
       "enum": [
         "shtar_chov",
         "matnat_bari",
@@ -316,7 +309,6 @@
   "required": [
     "denomination"
   ],
-  "minProperties": 1,
   "patternProperties": {
     "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
       "type": "object",

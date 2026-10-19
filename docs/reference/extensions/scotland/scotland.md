@@ -16,7 +16,7 @@ Schema `$id`: `https://openinherit.org/v3/extensions/scotland/scotland.json`
 | `legalRights` | `object` | | Legal rights (jus relictae/jus relicti for spouse, legitim for children) — fixed fractions of moveable estate that cannot be defeated by will |
 | `confirmation` | `object` | | Scottish equivalent of probate — confirmation is granted by the Sheriff Court |
 | `cohabitationClaim` | `object` | | Claims by cohabitants under Family Law (Scotland) Act 2006 s.29 |
-| `forcedHeirship` | `object` | | Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights. |
+| `forcedHeirship` | `object` | | Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights |
 | `legislativeChanges` | array of [TemporalRule](../../common/temporal-rule.md) | | Tracked changes to Scottish succession legislation |
 | `notes` | `string` | | |
 | `intestacy` | `object` | | Intestacy calculation under Succession (Scotland) Act 1964 as amended by Trusts and Succession (Scotland) Act 2024 |

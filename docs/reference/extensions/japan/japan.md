@@ -2,7 +2,7 @@
 
 # Japan Extension
 
-Japanese succession law — koseki records, iryubun (reserved share) claims, yōshi (adoption), spousal residence right (2019 reform), isan bunkatsu (estate division), saishi succession, local will formalities.
+Japanese succession law — koseki records, iryubun (reserved share) claims, yōshi (adoption), spousal residence right (2019 reform), isan bunkatsu (estate division), saishi succession, local will formalities
 
 Source: [`v3/extensions/japan/japan.json`](../../../../v3/extensions/japan/japan.json)
 
@@ -17,7 +17,7 @@ Schema `$id`: `https://openinherit.org/v3/extensions/japan/japan.json`
 | `yoshiAdoptions` | array of [YoshiAdoption](#def-YoshiAdoption) | | |
 | `spousesResidenceRight` | [SpousesResidenceRight](#def-SpousesResidenceRight) | | |
 | `saishiSuccessor` | `string` (uuid) | | |
-| `localWillFormality` | `string` — one of `jihi_shosho`, `kosei_shosho`, `himitsusho` | | |
+| `localWillFormality` | one of `jihi_shosho`, `kosei_shosho`, `himitsusho` | | |
 | `inkanVerified` | `boolean` | | |
 | `isanBunkatsu` | `object` | | |
 | `legislativeChanges` | array of `object` | | |
@@ -35,12 +35,12 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | --- | --- | --- | --- |
 | `personId` | `string` (uuid) | yes | |
 | `relationship` | `string` | | |
-| `relationshipCategory` | `string` — one of `spouse`, `child`, `lineal_ascendant`, `sibling` | | Relationship category determining iryubun (reserved share) eligibility under the Japanese Civil Code |
+| `relationshipCategory` | one of `spouse`, `child`, `lineal_ascendant`, `sibling` | | Relationship category determining iryubun (reserved share) eligibility under the Japanese Civil Code |
 | `reservedFraction` | `string` | | |
 | `targetAssetIds` | array of `string` (uuid) | | |
 | `targetPropertyIds` | array of `string` (uuid) | | |
 | `claimFiled` | `boolean` | | |
-| `claimOutcome` | `string` — one of `pending`, `upheld`, `dismissed`, `settled`, `waived` | | |
+| `claimOutcome` | one of `pending`, `upheld`, `dismissed`, `settled`, `waived` | | |
 
 <a id="def-KosekiRecord"></a>
 
@@ -62,7 +62,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | --- | --- | --- | --- |
 | `propertyId` | `string` (uuid) | yes | |
 | `spousePersonId` | `string` (uuid) | yes | |
-| `rightType` | `string` — one of `short_term`, `long_term` | yes | |
+| `rightType` | one of `short_term`, `long_term` | yes | |
 | `duration` | `string` | | |
 | `actuarialValue` | [Money](../../common/money.md) | | |
 | `registeredAtLegalAffairsBureau` | `boolean` | | |
@@ -74,6 +74,6 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `personId` | `string` (uuid) | yes | |
-| `adoptionType` | `string` — one of `futsu_yoshi`, `tokubetsu_yoshi` | yes | |
+| `adoptionType` | one of `futsu_yoshi`, `tokubetsu_yoshi` | yes | |
 | `adoptionDate` | `string` (date) | | |
-| `inheritanceScope` | `string` — one of `both_families`, `adoptive_only`, `biological_only` | | |
+| `inheritanceScope` | one of `both_families`, `adoptive_only`, `biological_only` | | |

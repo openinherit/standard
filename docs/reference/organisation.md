@@ -32,7 +32,7 @@ Schema `$id`: `https://openinherit.org/v3/organisation.json`
 | `provenance` | [Provenance](common/provenance.md) | | Consolidated provenance metadata — how this entity was created, by whom, and whether a human has verified it |
 | `vatConfiguration` | `object` | | The organisation's VAT registration status and scheme. Affects how VAT is calculated on transactions involving this organisation |
 | `internationalShipping` | `object` | | International shipping capabilities and policies for this organisation |
-| `identifiers` | array of [Identifier](common/identifier.md) | | External identifiers — charity number, company registration, UEN, etc. |
+| `identifiers` | array of [Identifier](common/identifier.md) | | External identifiers, such as a charity number, company registration or UEN |
 | `dealerProfile` | `object` | | Dealer-specific profile information. Only relevant for organisations that operate as dealers on marketplace or catalogue platforms |
 
 Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.

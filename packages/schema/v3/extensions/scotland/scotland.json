@@ -113,7 +113,6 @@
           "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
         },
         "claimDeadlineVersion": {
-          "type": "string",
           "enum": ["pre_2024_six_months", "post_2024_twelve_months"]
         },
         "externalBenefits": {
@@ -134,7 +133,6 @@
           "maxItems": 20
         },
         "courtOrderType": {
-          "type": "string",
           "enum": ["capital_sum", "property_transfer", "none", "pending"]
         },
         "awardAmount": {
@@ -148,7 +146,7 @@
       "additionalProperties": false
     },
     "forcedHeirship": {
-      "description": "Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights.",
+      "description": "Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights",
       "type": "object",
       "properties": {
         "legalRightsDefeated": {
@@ -189,7 +187,6 @@
           "description": "Whether this is partial intestacy (will exists but doesn't cover all estate)"
         },
         "rulesVersion": {
-          "type": "string",
           "enum": ["pre_2024", "post_2024"],
           "description": "Which ranking order applies (post_2024 for deaths on or after 1 May 2024)"
         },
@@ -209,7 +206,6 @@
               "$ref": "../../common/money.json"
             },
             "financialProvisionRate": {
-              "type": "string",
               "enum": ["with_children", "without_children"]
             }
           },
@@ -282,7 +278,6 @@
         "type": "object",
         "properties": {
           "entityType": {
-            "type": "string",
             "enum": ["property", "asset"]
           },
           "entityId": {
@@ -291,7 +286,6 @@
             "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           },
           "classification": {
-            "type": "string",
             "enum": ["heritable", "moveable"]
           },
           "basis": {
@@ -327,7 +321,6 @@
             "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           },
           "appointmentType": {
-            "type": "string",
             "enum": ["executor_nominate", "executor_dative", "executor_creditor"]
           },
           "bondOfCaution": {
@@ -380,7 +373,6 @@
             "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           },
           "destinationType": {
-            "type": "string",
             "enum": ["survivorship", "pro_indiviso"]
           },
           "survivorPersonIds": {
@@ -399,7 +391,6 @@
             "type": "boolean"
           },
           "evacuationMethod": {
-            "type": "string",
             "enum": ["agreement", "divorce_automatic", "court_order"]
           },
           "evacuationDate": {
@@ -443,7 +434,6 @@
                 "maxLength": 100
               },
               "tenureType": {
-                "type": "string",
                 "enum": ["tenant", "owner_occupier", "absentee"]
               },
               "landlordName": {
@@ -451,7 +441,6 @@
                 "maxLength": 255
               },
               "successionRoute": {
-                "type": "string",
                 "enum": ["bequest", "intestate_transfer", "not_yet_determined"]
               },
               "legateePersonId": {
@@ -479,7 +468,6 @@
                 "type": "boolean"
               },
               "commissionDecision": {
-                "type": "string",
                 "enum": ["pending", "approved", "refused"]
               },
               "agriculturalPropertyRelief": {
@@ -508,7 +496,6 @@
           "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
         },
         "executionType": {
-          "type": "string",
           "enum": ["attested", "holograph", "notarial"]
         },
         "witnessCount": {
@@ -524,7 +511,6 @@
           "maxLength": 255
         },
         "notarialExecutorRole": {
-          "type": "string",
           "enum": ["solicitor", "advocate", "justice_of_peace", "sheriff_clerk"]
         },
         "marriageRevokes": {

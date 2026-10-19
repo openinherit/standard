@@ -2,7 +2,7 @@
 
 # US Estate Extension
 
-US-specific estate planning: federal and state estate tax, community/separate property regimes, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes, RUFADAA, Louisiana forced heirship, probate variation, trust features, SECURE Act retirement rules, ancillary probate, advance directives.
+US-specific estate planning: federal and state estate tax, community/separate property regimes, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes, RUFADAA, Louisiana forced heirship, probate variation, trust features, SECURE Act retirement rules, ancillary probate, advance directives
 
 Source: [`v3/extensions/us-estate/us-estate.json`](../../../../v3/extensions/us-estate/us-estate.json)
 
@@ -13,10 +13,10 @@ Schema `$id`: `https://openinherit.org/v3/extensions/us-estate/us-estate.json`
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `state` | `string` | yes | US state in ISO 3166-2 format (e.g. US-CA, US-NY) — determines which state succession, property regime, and tax laws apply |
-| `propertyRegime` | `string` — one of `community_property`, `community_property_with_survivorship`, `separate_property`, `quasi_community` | | |
+| `propertyRegime` | one of `community_property`, `community_property_with_survivorship`, `separate_property`, `quasi_community` | | |
 | `electiveShareDetails` | `object` | | |
 | `homesteadExemptions` | array of `object` | | |
-| `perStirpesVariant` | `string` — one of `strict_per_stirpes`, `modern_per_stirpes`, `per_capita_at_each_generation` | | |
+| `perStirpesVariant` | one of `strict_per_stirpes`, `modern_per_stirpes`, `per_capita_at_each_generation` | | |
 | `noContestEnforceable` | `boolean` | | |
 | `pretermittedHeirStatute` | `string` | | |
 | `rufadaaAdopted` | `boolean` | | |

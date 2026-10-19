@@ -5780,7 +5780,7 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json",
       "title": "UK England & Wales Extension",
-      "description": "IHT thresholds, intestacy rules, IFPA 1975 eligibility, and legislative changes for England & Wales estates. Temporal-rule wrapping on key values.",
+      "description": "IHT thresholds, intestacy rules, IFPA 1975 eligibility, and legislative changes for England & Wales estates. Temporal-rule wrapping on key values",
       "$comment": "English intestacy (AEA 1925 s.46) is the primary use case for the core bloodDegree property. Implementers building English intestacy calculators should populate bloodDegree on all uncle_aunt and cousin kinship records. Whole blood takes absolute priority over half blood at sibling and uncle/aunt levels — they are separate tiers, not weighted shares.",
       "type": "object",
       "minProperties": 1,
@@ -5845,7 +5845,6 @@
                 "format": "uuid"
               },
               "category": {
-                "type": "string",
                 "enum": [
                   "spouse",
                   "former_spouse",
@@ -5877,7 +5876,6 @@
                 "format": "uuid"
               },
               "localType": {
-                "type": "string",
                 "enum": [
                   "detached_house",
                   "semi_detached_house",
@@ -5911,7 +5909,6 @@
                 "format": "uuid"
               },
               "localType": {
-                "type": "string",
                 "enum": [
                   "freehold",
                   "leasehold",
@@ -5937,7 +5934,6 @@
                 "format": "uuid"
               },
               "localType": {
-                "type": "string",
                 "enum": [
                   "grant_of_probate",
                   "letters_of_administration",
@@ -5963,7 +5959,6 @@
                 "minLength": 1
               },
               "status": {
-                "type": "string",
                 "enum": [
                   "enacted",
                   "royal_assent",
@@ -6044,16 +6039,16 @@
           }
         },
         "marriageRevocation": {
-          "description": "Whether and how marriage revokes a prior will. For England & Wales, see s.18 Wills Act 1837 and the contemplation-of-marriage exception in s.18(3)–(4).",
+          "description": "Whether and how marriage revokes a prior will. For England & Wales, see s.18 Wills Act 1837 and the contemplation-of-marriage exception in s.18(3)–(4)",
           "type": "object",
           "required": [ "revokesPriorWill", "statute" ],
           "properties": {
             "revokesPriorWill": {
-              "description": "Whether a marriage (after execution of the will) automatically revokes the will.",
+              "description": "Whether a marriage (after execution of the will) automatically revokes the will",
               "type": "boolean"
             },
             "statute": {
-              "description": "Citation of the primary statute governing revocation-by-marriage.",
+              "description": "Citation of the primary statute governing revocation-by-marriage",
               "type": "string",
               "maxLength": 255
             },
@@ -6063,11 +6058,11 @@
               "maxLength": 500
             },
             "contemplationException": {
-              "description": "Whether a will made in contemplation of a specific marriage survives that marriage.",
+              "description": "Whether a will made in contemplation of a specific marriage survives that marriage",
               "type": "boolean"
             },
             "contemplationRule": {
-              "description": "Plain-English description of the contemplation-of-marriage rule.",
+              "description": "Plain-English description of the contemplation-of-marriage rule",
               "type": "string",
               "maxLength": 2000
             },
@@ -6226,7 +6221,6 @@
               "format": "date"
             },
             "claimDeadlineVersion": {
-              "type": "string",
               "enum": [ "pre_2024_six_months", "post_2024_twelve_months" ]
             },
             "externalBenefits": {
@@ -6247,7 +6241,6 @@
               }
             },
             "courtOrderType": {
-              "type": "string",
               "enum": [ "capital_sum", "property_transfer", "none", "pending" ]
             },
             "awardAmount": {
@@ -6261,7 +6254,7 @@
           "additionalProperties": false
         },
         "forcedHeirship": {
-          "description": "Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights.",
+          "description": "Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights",
           "type": "object",
           "properties": {
             "legalRightsDefeated": {
@@ -6303,7 +6296,6 @@
             },
             "rulesVersion": {
               "description": "Which ranking order applies (post_2024 for deaths on or after 1 May 2024)",
-              "type": "string",
               "enum": [ "pre_2024", "post_2024" ]
             },
             "priorRightsClaimed": {
@@ -6322,7 +6314,6 @@
                   "$ref": "https://openinherit.org/v3/common/money.json"
                 },
                 "financialProvisionRate": {
-                  "type": "string",
                   "enum": [ "with_children", "without_children" ]
                 }
               },
@@ -6397,7 +6388,6 @@
             "required": [ "entityType", "entityId", "classification" ],
             "properties": {
               "entityType": {
-                "type": "string",
                 "enum": [ "property", "asset" ]
               },
               "entityId": {
@@ -6406,7 +6396,6 @@
                 "format": "uuid"
               },
               "classification": {
-                "type": "string",
                 "enum": [ "heritable", "moveable" ]
               },
               "basis": {
@@ -6442,7 +6431,6 @@
                 "format": "uuid"
               },
               "appointmentType": {
-                "type": "string",
                 "enum": [
                   "executor_nominate",
                   "executor_dative",
@@ -6499,7 +6487,6 @@
                 "format": "uuid"
               },
               "destinationType": {
-                "type": "string",
                 "enum": [ "survivorship", "pro_indiviso" ]
               },
               "survivorPersonIds": {
@@ -6518,7 +6505,6 @@
                 "type": "boolean"
               },
               "evacuationMethod": {
-                "type": "string",
                 "enum": [ "agreement", "divorce_automatic", "court_order" ]
               },
               "evacuationDate": {
@@ -6562,7 +6548,6 @@
                     "maxLength": 100
                   },
                   "tenureType": {
-                    "type": "string",
                     "enum": [ "tenant", "owner_occupier", "absentee" ]
                   },
                   "landlordName": {
@@ -6570,7 +6555,6 @@
                     "maxLength": 255
                   },
                   "successionRoute": {
-                    "type": "string",
                     "enum": [
                       "bequest",
                       "intestate_transfer",
@@ -6602,7 +6586,6 @@
                     "type": "boolean"
                   },
                   "commissionDecision": {
-                    "type": "string",
                     "enum": [ "pending", "approved", "refused" ]
                   },
                   "agriculturalPropertyRelief": {
@@ -6629,7 +6612,6 @@
               "format": "uuid"
             },
             "executionType": {
-              "type": "string",
               "enum": [ "attested", "holograph", "notarial" ]
             },
             "witnessCount": {
@@ -6645,7 +6627,6 @@
               "maxLength": 255
             },
             "notarialExecutorRole": {
-              "type": "string",
               "enum": [
                 "solicitor",
                 "advocate",
@@ -6726,7 +6707,7 @@
       },
       "properties": {
         "spouseLegalRightShare": {
-          "description": "Spouse legal right share under Succession Act 1965 s.111 — 1/3 with children, 1/2 without. Cannot be defeated by will.",
+          "description": "Spouse legal right share under Succession Act 1965 s.111 — 1/3 with children, 1/2 without. Cannot be defeated by will",
           "type": "object",
           "properties": {
             "fraction": {
@@ -6813,7 +6794,7 @@
           "additionalProperties": false
         },
         "enduringPowerOfAttorney": {
-          "description": "Irish EPA — different from English LPA. Must be registered with the court before it can be used.",
+          "description": "Irish EPA — different from English LPA. Must be registered with the court before it can be used",
           "type": "object",
           "properties": {
             "registered": {
@@ -6965,7 +6946,6 @@
                 "format": "uuid"
               },
               "localType": {
-                "type": "string",
                 "enum": [ "freehold", "leasehold", "fee_farm_grant" ]
               }
             },
@@ -7019,7 +6999,6 @@
               },
               "register": {
                 "description": "land_registry: title registered in a folio at the Land Registry (Tailte Éireann). registry_of_deeds: unregistered title, with deeds recorded in the Registry of Deeds (Tailte Éireann)",
-                "type": "string",
                 "enum": [ "land_registry", "registry_of_deeds" ]
               },
               "folioNumber": {
@@ -7030,7 +7009,6 @@
               },
               "titleClass": {
                 "description": "Class of title registered on the folio",
-                "type": "string",
                 "enum": [
                   "absolute",
                   "qualified",
@@ -7105,7 +7083,6 @@
                 "format": "uuid"
               },
               "localType": {
-                "type": "string",
                 "enum": [ "freehold", "leasehold", "fee_farm_grant" ]
               }
             },
@@ -7159,7 +7136,6 @@
               },
               "register": {
                 "description": "land_registry: title registered in a folio at the Land Registry of Northern Ireland (Land & Property Services). registry_of_deeds: unregistered title, with deeds recorded in the Registry of Deeds (Land & Property Services)",
-                "type": "string",
                 "enum": [ "land_registry", "registry_of_deeds" ]
               },
               "folioNumber": {
@@ -7170,7 +7146,6 @@
               },
               "titleClass": {
                 "description": "Class of title registered on the folio",
-                "type": "string",
                 "enum": [
                   "absolute",
                   "qualified",
@@ -7215,10 +7190,9 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/us-estate/us-estate.json",
       "title": "US Estate Extension",
-      "description": "US-specific estate planning: federal and state estate tax, community/separate property regimes, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes, RUFADAA, Louisiana forced heirship, probate variation, trust features, SECURE Act retirement rules, ancillary probate, advance directives.",
+      "description": "US-specific estate planning: federal and state estate tax, community/separate property regimes, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes, RUFADAA, Louisiana forced heirship, probate variation, trust features, SECURE Act retirement rules, ancillary probate, advance directives",
       "type": "object",
       "required": [ "state" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
@@ -7231,7 +7205,6 @@
           "maxLength": 255
         },
         "propertyRegime": {
-          "type": "string",
           "enum": [
             "community_property",
             "community_property_with_survivorship",
@@ -7292,7 +7265,6 @@
           }
         },
         "perStirpesVariant": {
-          "type": "string",
           "enum": [
             "strict_per_stirpes",
             "modern_per_stirpes",
@@ -7341,7 +7313,6 @@
               "minimum": 0
             },
             "basis": {
-              "type": "string",
               "enum": [ "fixed", "conditional" ]
             },
             "notes": {
@@ -7473,7 +7444,6 @@
               "$ref": "https://openinherit.org/v3/common/temporal-rule.json"
             },
             "administrationType": {
-              "type": "string",
               "enum": [
                 "supervised",
                 "unsupervised",
@@ -7559,7 +7529,6 @@
                     "format": "uuid"
                   },
                   "edbCategory": {
-                    "type": "string",
                     "enum": [
                       "surviving_spouse",
                       "minor_child",
@@ -7607,7 +7576,6 @@
             },
             "halfBloodRule": {
               "$comment": "Most states apply the same half-blood rule at all kinship levels. Some states (e.g. Florida) treat half-blood differently at uncle/aunt level. Implementers should apply the rule to uncle_aunt kinship records using the core bloodDegree property",
-              "type": "string",
               "enum": [ "equal_to_whole_blood", "half_share", "excluded" ]
             },
             "notes": {
@@ -7643,7 +7611,6 @@
                 "type": "boolean"
               },
               "status": {
-                "type": "string",
                 "enum": [
                   "not_filed",
                   "filed",
@@ -7678,7 +7645,6 @@
               "type": "boolean"
             },
             "healthcareDirectiveType": {
-              "type": "string",
               "enum": [
                 "living_will",
                 "healthcare_proxy",
@@ -7691,7 +7657,6 @@
               "type": "boolean"
             },
             "financialPoaType": {
-              "type": "string",
               "enum": [ "durable", "springing", "limited", "none" ]
             },
             "statute": {
@@ -7710,7 +7675,6 @@
           "type": "object",
           "properties": {
             "communityPropertyState": {
-              "type": "string",
               "enum": [
                 "US-AZ",
                 "US-CA",
@@ -7819,11 +7783,10 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/canada/canada.json",
       "title": "Canada Extension",
-      "description": "Provincial succession rules for Canada: Quebec patrimony, Ontario equalization, BC WESA variation, Alberta dower rights, and Indigenous land succession details.",
+      "description": "Provincial succession rules for Canada: Quebec patrimony, Ontario equalization, BC WESA variation, Alberta dower rights, and Indigenous land succession details",
       "$comment": "Canadian provinces generally do NOT distinguish whole blood from half blood. Half-siblings inherit equally with full siblings in all provinces.",
       "type": "object",
       "required": [ "province" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
@@ -7831,7 +7794,6 @@
         "province": {
           "description": "Canadian province or territory whose succession law applies. Critical — every province has different intestacy rules, preferential shares, and property regimes",
           "$comment": "ISO 3166-2:CA subdivision codes. All 13 provinces and territories enumerated.",
-          "type": "string",
           "enum": [
             "CA-AB",
             "CA-BC",
@@ -8033,7 +7995,6 @@
               "maxLength": 255
             },
             "landType": {
-              "type": "string",
               "enum": [
                 "reserve",
                 "treaty",
@@ -8076,16 +8037,14 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/australia-nz/australia-nz.json",
       "title": "Australia & New Zealand Extension",
-      "description": "Succession rules for AU and NZ: superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ Property (Relationships) Act, testamentary promises, and Maori land under Te Ture Whenua.",
+      "description": "Succession rules for AU and NZ: superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ Property (Relationships) Act, testamentary promises, and Maori land under Te Ture Whenua",
       "type": "object",
       "required": [ "jurisdiction" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
       "properties": {
         "jurisdiction": {
-          "type": "string",
           "enum": [
             "AU-NSW",
             "AU-VIC",
@@ -8163,7 +8122,6 @@
               "format": "uuid"
             },
             "fundType": {
-              "type": "string",
               "enum": [
                 "smsf",
                 "industry",
@@ -8173,7 +8131,6 @@
               ]
             },
             "nominationType": {
-              "type": "string",
               "enum": [
                 "bdbn_lapsing",
                 "bdbn_non_lapsing",
@@ -8235,7 +8192,6 @@
             "relationshipCategory": {
               "description": "Statutory relationship category for family provision eligibility",
               "$comment": "Categories vary by state/territory. spouse: spouse or de facto partner. child: child including adopted. former_spouse: former spouse. dependant: person maintained by the deceased. grandchild: grandchild (some states e.g. Qld). step_child: step-child. member_of_household: person who was a member of the deceased's household",
-              "type": "string",
               "enum": [
                 "spouse",
                 "child",
@@ -8270,7 +8226,6 @@
               "format": "date"
             },
             "outcome": {
-              "type": "string",
               "enum": [ "pending", "upheld", "dismissed", "settled" ]
             },
             "notes": {
@@ -8290,7 +8245,6 @@
               "format": "uuid"
             },
             "landType": {
-              "type": "string",
               "enum": [
                 "native_title",
                 "alra",
@@ -8426,10 +8380,9 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/eu-succession/eu-succession.json",
       "title": "EU Succession Extension",
-      "description": "European succession rules: Brussels IV choice of law and European Certificate of Succession, Spanish regional regimes, forced heirship variants across civil law traditions, and post-Brexit UK asset handling.",
+      "description": "European succession rules: Brussels IV choice of law and European Certificate of Succession, Spanish regional regimes, forced heirship variants across civil law traditions, and post-Brexit UK asset handling",
       "type": "object",
       "required": [ "memberState" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
@@ -8468,7 +8421,6 @@
                 "minLength": 1
               },
               "status": {
-                "type": "string",
                 "enum": [
                   "enacted",
                   "royal_assent",
@@ -8554,7 +8506,6 @@
           "required": [ "region" ],
           "properties": {
             "region": {
-              "type": "string",
               "enum": [
                 "common_civil",
                 "catalan",
@@ -8582,7 +8533,6 @@
           "required": [ "model" ],
           "properties": {
             "model": {
-              "type": "string",
               "enum": [
                 "french_reserve",
                 "german_pflichtteil",
@@ -8685,7 +8635,7 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/japan/japan.json",
       "title": "Japan Extension",
-      "description": "Japanese succession law — koseki records, iryubun (reserved share) claims, yōshi (adoption), spousal residence right (2019 reform), isan bunkatsu (estate division), saishi succession, local will formalities.",
+      "description": "Japanese succession law — koseki records, iryubun (reserved share) claims, yōshi (adoption), spousal residence right (2019 reform), isan bunkatsu (estate division), saishi succession, local will formalities",
       "type": "object",
       "minProperties": 1,
       "propertyNames": {
@@ -8724,7 +8674,6 @@
         },
         "localWillFormality": {
           "$comment": "jihi_shosho = holographic (自筆証書). kosei_shosho = notarised (公正証書). himitsusho = secret will (秘密証書).",
-          "type": "string",
           "enum": [ "jihi_shosho", "kosei_shosho", "himitsusho" ]
         },
         "inkanVerified": {
@@ -8736,7 +8685,6 @@
           "type": "object",
           "properties": {
             "type": {
-              "type": "string",
               "enum": [ "voluntary", "court_mediated", "court_adjudicated" ]
             },
             "agreed": {
@@ -8795,7 +8743,6 @@
                 "minLength": 1
               },
               "status": {
-                "type": "string",
                 "enum": [
                   "enacted",
                   "royal_assent",
@@ -8880,7 +8827,6 @@
             "relationshipCategory": {
               "description": "Relationship category determining iryubun (reserved share) eligibility under the Japanese Civil Code",
               "$comment": "spouse: always entitled to iryubun. child: entitled (including adopted). lineal_ascendant: parents/grandparents — entitled only when no children exist. sibling: siblings have NO iryubun right (common misconception). Included in enum for explicit exclusion documentation. Reserved share fractions: Spouse + children: spouse 1/4, each child 1/4 / n. Spouse + lineal ascendants: spouse 1/3, ascendants 1/6. Spouse only: 1/2. Children only: 1/2 equally. Lineal ascendants only: 1/3. Siblings: no reserved share",
-              "type": "string",
               "enum": [ "spouse", "child", "lineal_ascendant", "sibling" ]
             },
             "reservedFraction": {
@@ -8913,7 +8859,6 @@
               "type": "boolean"
             },
             "claimOutcome": {
-              "type": "string",
               "enum": [ "pending", "upheld", "dismissed", "settled", "waived" ]
             }
           },
@@ -8931,7 +8876,6 @@
             },
             "adoptionType": {
               "$comment": "futsu_yoshi = regular adoption (maintains ties to biological family). tokubetsu_yoshi = special adoption (severs biological ties).",
-              "type": "string",
               "enum": [ "futsu_yoshi", "tokubetsu_yoshi" ]
             },
             "adoptionDate": {
@@ -8940,7 +8884,6 @@
               "format": "date"
             },
             "inheritanceScope": {
-              "type": "string",
               "enum": [ "both_families", "adoptive_only", "biological_only" ]
             }
           },
@@ -8963,7 +8906,6 @@
             },
             "rightType": {
               "$comment": "short_term = 6 months minimum. long_term = lifetime or fixed period.",
-              "type": "string",
               "enum": [ "short_term", "long_term" ]
             },
             "duration": {
@@ -8998,17 +8940,15 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/prc-china/prc-china.json",
       "title": "PRC China Extension",
-      "description": "People's Republic of China succession law — forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling, intestacy order (Arts. 1127-1132), will forms (6 types, Art. 1142), community property division (Art. 1153), rural land rights, and inheritance tax status.",
+      "description": "People's Republic of China succession law — forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling, intestacy order (Arts. 1127-1132), will forms (6 types, Art. 1142), community property division (Art. 1153), rural land rights, and inheritance tax status",
       "type": "object",
       "required": [ "applicableLaw" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
       "properties": {
         "applicableLaw": {
           "description": "Which PRC legislative framework governs this succession — the 1985 Succession Law or the 2021 Civil Code (Book 6)",
-          "type": "string",
           "enum": [ "prc_succession_law_1985", "prc_civil_code_2021" ]
         },
         "forcedHeirship": {
@@ -9086,7 +9026,6 @@
                   "relationshipCategory": {
                     "description": "Relationship category under PRC Civil Code Article 1127 first order",
                     "$comment": "spouse: surviving spouse. child: children including adopted, stepchildren who maintained the deceased, and children born out of wedlock (Article 1071). parent: parents including adoptive parents, stepparents who maintained the deceased",
-                    "type": "string",
                     "enum": [ "spouse", "child", "parent" ]
                   }
                 },
@@ -9112,7 +9051,6 @@
                   "relationshipCategory": {
                     "description": "Relationship category under PRC Civil Code Article 1127 second order",
                     "$comment": "sibling: brothers and sisters including half-siblings, adoptive siblings, step-siblings who maintained each other. grandparent_paternal: paternal grandparents (祖父母). grandparent_maternal: maternal grandparents (外祖父母). PRC law treats paternal and maternal grandparents equally within second order but distinguishes them terminologically. Maps to core grandparent_grandchild kinship type with lineage property",
-                    "type": "string",
                     "enum": [
                       "sibling",
                       "grandparent_paternal",
@@ -9144,7 +9082,6 @@
               "maxLength": 255
             },
             "hukouType": {
-              "type": "string",
               "enum": [ "agricultural", "non_agricultural" ]
             }
           },
@@ -9178,7 +9115,6 @@
           "type": "object",
           "properties": {
             "applicableOrder": {
-              "type": "string",
               "enum": [ "first_order", "second_order" ]
             },
             "equalDistribution": {
@@ -9220,7 +9156,6 @@
           "type": "object",
           "properties": {
             "type": {
-              "type": "string",
               "enum": [
                 "notarised",
                 "holograph",
@@ -9255,7 +9190,6 @@
           "type": "object",
           "properties": {
             "maritalPropertyRegime": {
-              "type": "string",
               "enum": [ "community", "separate", "mixed_agreement" ]
             },
             "communityPropertyIdentified": {
@@ -9333,17 +9267,15 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json",
       "title": "Singapore / Malaysia Extension",
-      "description": "Singapore and Malaysia succession law — ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction.",
+      "description": "Singapore and Malaysia succession law — ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction",
       "type": "object",
       "required": [ "country" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
       "properties": {
         "country": {
           "description": "ISO 3166-1 alpha-2 country code — SG for Singapore, MY for Malaysia. Determines which succession framework applies",
-          "type": "string",
           "enum": [ "SG", "MY" ]
         },
         "singaporeISA": {
@@ -9377,7 +9309,7 @@
           "maxLength": 2000
         },
         "marriageRevocation": {
-          "description": "Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia.",
+          "description": "Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia",
           "type": "object",
           "required": [ "revokesPriorWill", "statute" ],
           "properties": {
@@ -9436,7 +9368,6 @@
                   "relationshipCategory": {
                     "description": "Kinship category for this share allocation, aligned with the ISA distribution rules",
                     "$comment": "Maps to core kinshipType values. spouse: surviving spouse (relationship.json). children: children of the deceased (parent_child_*). parents: parents (parent_child_*). siblings: brothers and sisters (sibling, half_sibling). grandparents: grandparents (grandparent_grandchild). uncles_aunts: uncles and aunts (uncle_aunt)",
-                    "type": "string",
                     "enum": [
                       "spouse",
                       "children",
@@ -9476,7 +9407,6 @@
               "type": "boolean"
             },
             "school": {
-              "type": "string",
               "enum": [ "shafii", "hanafi" ]
             },
             "faraidRef": {
@@ -9571,7 +9501,6 @@
                   "relationshipCategory": {
                     "description": "Kinship category for this share allocation, aligned with the Malaysian Distribution Act 1958 rules",
                     "$comment": "Maps to core kinshipType values. spouse: surviving spouse (relationship.json). children: children of the deceased (parent_child_*). parents: parents (parent_child_*). siblings: brothers and sisters (sibling, half_sibling). grandparents: grandparents (grandparent_grandchild). uncles_aunts: uncles and aunts (uncle_aunt)",
-                    "type": "string",
                     "enum": [
                       "spouse",
                       "children",
@@ -9675,17 +9604,15 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/latin-america/latin-america.json",
       "title": "Latin America Extension",
-      "description": "Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions.",
+      "description": "Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions",
       "type": "object",
       "required": [ "country" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
       "properties": {
         "country": {
           "description": "ISO 3166-1 alpha-2 country code identifying which Latin American jurisdiction's succession rules apply",
-          "type": "string",
           "enum": [ "BR", "AR", "CO", "VE", "MX", "CL", "PE" ]
         },
         "brazilianSuccession": {
@@ -9763,7 +9690,6 @@
                     "format": "uuid"
                   },
                   "category": {
-                    "type": "string",
                     "enum": [ "descendant", "ascendant", "spouse" ]
                   }
                 },
@@ -9815,8 +9741,7 @@
           "type": "object",
           "properties": {
             "system": {
-              "type": "string",
-              "enum": [ "fourths" ]
+              "const": "fourths"
             },
             "legitimaRigurosa": {
               "type": "string",
@@ -9888,7 +9813,6 @@
               "type": "boolean"
             },
             "intestacyOrder": {
-              "type": "string",
               "enum": [
                 "descendants",
                 "spouse",
@@ -9998,7 +9922,6 @@
               "type": "array",
               "maxItems": 10,
               "items": {
-                "type": "string",
                 "enum": [ "descendants", "ascendants", "spouse" ]
               }
             },
@@ -10047,18 +9970,16 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json",
       "title": "Islamic Succession Extension",
-      "description": "Faraid (Islamic inheritance) rules: heir classification, fixed shares, residuary (asaba), awl/radd adjustments, wasiyya limits, iddah periods, waqf details, and priority debts including mahr.",
+      "description": "Faraid (Islamic inheritance) rules: heir classification, fixed shares, residuary (asaba), awl/radd adjustments, wasiyya limits, iddah periods, waqf details, and priority debts including mahr",
       "$comment": "This extension implements succession rules derived from Islamic law as codified in specific jurisdictions. The extension name references the legal tradition, not the personal religious beliefs of any individual. A person of any faith (or none) may be subject to these rules depending on their jurisdiction of domicile. Extension type values: x-inherit-nikah-nama (document), x-inherit-waqfiyyah (document), x-inherit-waqf (trust), x-inherit-wasiyya (bequest), x-inherit-sadaqah-jariyah (bequest), x-inherit-halachic-yerusha is NOT from this extension.",
       "type": "object",
       "required": [ "school" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
       "properties": {
         "school": {
           "$comment": "Islamic school of jurisprudence (madhab) governing succession.",
-          "type": "string",
           "enum": [
             "hanafi",
             "shafii",
@@ -10220,7 +10141,6 @@
             },
             "heirClass": {
               "$comment": "son: ibn. daughter: bint. father: ab. mother: umm. grandfather: jadd sahih (true/paternal grandfather). grandmother: jaddah sahihah. brother_full: akh shaqiq. brother_paternal: akh li-ab (consanguine). brother_maternal: akh li-umm (uterine). sister_full: ukht shaqiqah. sister_paternal: ukht li-ab. sister_maternal: ukht li-umm. husband: zawj. wife: zawja. son_of_son: ibn al-ibn. daughter_of_son: bint al-ibn. uncle_paternal: amm shaqiq (full paternal uncle, asaba rank 9). uncle_paternal_half: amm li-ab (consanguine paternal uncle, asaba rank 10). nephew_brother_full: ibn al-akh al-shaqiq (son of full brother, asaba rank 7). nephew_brother_paternal: ibn al-akh li-ab (son of consanguine brother, asaba rank 8). cousin_paternal_full: ibn amm shaqiq (son of full paternal uncle, asaba rank 11). cousin_paternal_half: ibn amm li-ab (son of consanguine paternal uncle, asaba rank 12). Full asaba hierarchy: 1-son, 2-son's son, 3-father, 4-true grandfather, 5-full brother, 6-consanguine brother, 7-son of full brother, 8-son of consanguine brother, 9-full paternal uncle, 10-consanguine paternal uncle, 11-son of full paternal uncle, 12-son of consanguine paternal uncle, 13-15 ascending paternal uncles. Maternal uncle (khal), paternal aunt (amma), maternal aunt (khala) are dhawu al-arham — model with core uncle_aunt kinship type + lineage property, not as heirClass values. Under Jafari (Shia) law, maternal uncle/aunt are Class 3 heirs with equal standing.",
-              "type": "string",
               "enum": [
                 "son",
                 "daughter",
@@ -10253,7 +10173,6 @@
               "maxLength": 255
             },
             "residuaryClass": {
-              "type": "string",
               "enum": [
                 "asaba_by_self",
                 "asaba_with_other",
@@ -10318,7 +10237,6 @@
               "format": "uuid"
             },
             "periodType": {
-              "type": "string",
               "enum": [ "divorce", "death", "pregnancy" ]
             },
             "startDate": {
@@ -10327,7 +10245,7 @@
               "format": "date"
             },
             "endDate": {
-              "oneOf": [
+              "anyOf": [
                 {
                   "type": "string",
                   "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
@@ -10356,7 +10274,6 @@
               "format": "uuid"
             },
             "waqfType": {
-              "type": "string",
               "enum": [ "ahli", "khairi", "mushtarak" ]
             },
             "dedicationDate": {
@@ -10380,7 +10297,6 @@
               "maxLength": 2000
             },
             "type": {
-              "type": "string",
               "enum": [
                 "mahr",
                 "kafan",
@@ -10442,18 +10358,16 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json",
       "title": "Jewish Succession Extension",
-      "description": "Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law.",
+      "description": "Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law",
       "$comment": "This extension implements succession rules derived from Jewish law as codified in specific jurisdictions. The extension name references the legal tradition, not the personal religious beliefs of any individual. A person of any faith (or none) may be subject to these rules depending on their jurisdiction of domicile. Extension type values: x-inherit-ketubah (document), x-inherit-shtar-chov (document), x-inherit-halachic-yerusha (distribution method), x-inherit-halachic-matanah (bequest)",
       "type": "object",
       "required": [ "denomination" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
       "properties": {
         "denomination": {
           "description": "Jewish denominational tradition — affects interpretation of halachic succession rules and mechanisms (e.g. Orthodox requires kinyan, Reform may not)",
-          "type": "string",
           "enum": [
             "orthodox",
             "conservative",
@@ -10474,7 +10388,6 @@
           "$ref": "#/$defs/MezonotDetails"
         },
         "halachicMechanism": {
-          "type": "string",
           "enum": [
             "shtar_chov",
             "matnat_bari",
@@ -10540,12 +10453,10 @@
               "maxLength": 255
             },
             "heirOrder": {
-              "type": "string",
               "enum": [ "bechor", "regular" ]
             },
             "halachicClass": {
               "$comment": "ben: son (ibn). bat: daughter. av: father. em: mother — included for mezonot (maintenance) eligibility, NOT for inheritance. Under halacha the mother does not inherit from her children and maternal relatives have no inheritance rights. ach: brother. achot: sister. ben_ben: son's son. av_av: father's father (paternal grandfather) — inherits when father predeceases. ach_av: father's brother (paternal uncle) — inherits after father's father. ben_ach: brother's son (nephew) — inherits when brothers predecease. ben_ach_av: father's brother's son (paternal cousin) — inherits after father's brothers. other: catch-all for more distant patrilineal relatives. Full halachic inheritance order (Numbers 27 + Bava Batra): 1. Sons and their descendants (ben, ben_ben). 2. Daughters and their descendants (bat). 3. Father (av). 4. Father's brothers and their descendants (ach_av, ben_ach_av). 5. Father's father (av_av). 6. Ascending paternal line indefinitely. Inheritance is strictly patrilineal — maternal relatives never inherit under halacha.",
-              "type": "string",
               "enum": [
                 "ben",
                 "bat",
@@ -10626,7 +10537,6 @@
               "maxLength": 255
             },
             "benOrBat": {
-              "type": "string",
               "enum": [ "ben", "bat" ]
             }
           },
@@ -10660,7 +10570,6 @@
           "required": [ "type", "performed" ],
           "properties": {
             "type": {
-              "type": "string",
               "enum": [
                 "kinyan_sudar",
                 "kinyan_agav",
@@ -10693,7 +10602,6 @@
           "required": [ "type", "bequestId" ],
           "properties": {
             "type": {
-              "type": "string",
               "enum": [ "matanah", "yerusha", "shtar_chov_gift" ]
             },
             "bequestId": {
@@ -10734,17 +10642,15 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/hindu-succession/hindu-succession.json",
       "title": "Hindu Succession Extension",
-      "description": "Hindu succession law specifics: Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications under the Hindu Succession Act 1956, stridhan assets, agricultural land ceiling rules, and NRI complications.",
+      "description": "Hindu succession law specifics: Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications under the Hindu Succession Act 1956, stridhan assets, agricultural land ceiling rules, and NRI complications",
       "$comment": "This extension implements succession rules derived from Hindu law as codified in specific jurisdictions. The extension name references the legal tradition, not the personal religious beliefs of any individual. A person of any faith (or none) may be subject to these rules depending on their jurisdiction of domicile.",
       "type": "object",
       "required": [ "applicableLaw" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
       "properties": {
         "applicableLaw": {
-          "type": "string",
           "enum": [
             "hindu_succession_act_1956",
             "indian_succession_act_1925",
@@ -10755,7 +10661,6 @@
           ]
         },
         "school": {
-          "type": "string",
           "enum": [ "mitakshara", "dayabhaga" ]
         },
         "hufDetails": {
@@ -10827,7 +10732,6 @@
         "instrumentType": {
           "description": "Type of probate instrument being sought or granted. India has three distinct instruments depending on whether the deceased left a will and the nature of the assets",
           "$comment": "probate: testate estates (deceased left a valid will). letters_of_administration: intestate estates (no will) — movable assets and debts only, does not cover immovable property. succession_certificate: establishes heir's right to specific movable assets (bank accounts, shares, insurance) — often used alongside or instead of probate.",
-          "type": "string",
           "enum": [
             "probate",
             "letters_of_administration",
@@ -10919,7 +10823,6 @@
             },
             "heirClass": {
               "$comment": "class_I: 16 heirs under the 2005 Amendment — spouse (relationship.json), children (parent_child_biological), mother, grandchildren through sons and daughters (grandparent_grandchild + lineage), great-grandchildren (chained parent_child), widow of predeceased son (derived from relationship + kinship chain). class_II: 9 entries — Entry V: father's father/mother (grandparent_grandchild + lineage: paternal). Entry VII: father's brother/sister (uncle_aunt + lineage: paternal = agnate). Entry VIII: mother's father/mother (grandparent_grandchild + lineage: maternal). Entry IX: mother's brother/sister (uncle_aunt + lineage: maternal = cognate). agnate: relatives traced wholly through males — every kinship hop has lineage: paternal. cognate: at least one female link in the chain — at least one hop has lineage: maternal. The agnate-before-cognate priority means uncle_aunt + lineage: paternal inherits before uncle_aunt + lineage: maternal.",
-              "type": "string",
               "enum": [ "class_I", "class_II", "agnate", "cognate" ]
             },
             "scheduleParagraph": {
@@ -11001,10 +10904,9 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/africa-customary/africa-customary.json",
       "title": "Africa Customary Succession Extension",
-      "description": "Customary succession rules across African ethnic groups: patrilineal/matrilineal systems, family council decisions, communal property, widow rights, lobola, land tenure, and constitutional challenges.",
+      "description": "Customary succession rules across African ethnic groups: patrilineal/matrilineal systems, family council decisions, communal property, widow rights, lobola, land tenure, and constitutional challenges",
       "type": "object",
       "required": [ "ethnicGroup" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
@@ -11112,7 +11014,6 @@
                 "maxLength": 500
               },
               "outcome": {
-                "type": "string",
                 "enum": [ "not_challenged", "upheld", "struck_down", "pending" ]
               },
               "notes": {
@@ -11177,7 +11078,6 @@
               "maxLength": 255
             },
             "constitutionalChallengeOutcome": {
-              "type": "string",
               "enum": [ "not_challenged", "upheld", "struck_down", "pending" ]
             },
             "challengeable": {
@@ -11195,7 +11095,6 @@
               "maxLength": 255
             },
             "successionSystem": {
-              "type": "string",
               "enum": [
                 "patrilineal_primogeniture",
                 "patrilineal_equal",
@@ -11205,7 +11104,6 @@
               ]
             },
             "widowInheritanceRight": {
-              "type": "string",
               "enum": [
                 "full_inheritance",
                 "usufruct_only",
@@ -11311,7 +11209,7 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/brazil/brazil.json",
       "title": "Brazil Extension",
-      "description": "Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário process types, cartório attestation, disponível (testamentary freedom portion), and união estável (stable union recognition).",
+      "description": "Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário process types, cartório attestation, disponível (testamentary freedom portion), and união estável (stable union recognition)",
       "type": "object",
       "minProperties": 1,
       "propertyNames": {
@@ -11561,7 +11459,7 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/hong-kong/hong-kong.json",
       "title": "Hong Kong Extension",
-      "description": "Hong Kong succession rules: local grant types under Cap. 10, MPF death benefit nominations under Cap. 485, cross-border PRC asset considerations, intestacy distribution under the Intestates' Estates Ordinance (Cap. 73), and small estate grants.",
+      "description": "Hong Kong succession rules: local grant types under Cap. 10, MPF death benefit nominations under Cap. 485, cross-border PRC asset considerations, intestacy distribution under the Intestates' Estates Ordinance (Cap. 73), and small estate grants",
       "type": "object",
       "minProperties": 1,
       "propertyNames": {
@@ -11876,7 +11774,7 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/switzerland/switzerland.json",
       "title": "Switzerland Extension",
-      "description": "Swiss succession rules: Pflichtteil (forced heirship, 2023 Erbrechtsrevision), cantonal inheritance tax variation, matrimonial property regimes, Erbschein (certificate of inheritance), and notarial will forms.",
+      "description": "Swiss succession rules: Pflichtteil (forced heirship, 2023 Erbrechtsrevision), cantonal inheritance tax variation, matrimonial property regimes, Erbschein (certificate of inheritance), and notarial will forms",
       "$comment": "Swiss succession law recognises only three parenteles (ZGB Art. 457-466): 1. Descendants. 2. Parents and their issue (siblings, nephews/nieces). 3. Grandparents and their issue (uncles/aunts, cousins). There is no fourth parentele — unlike Germany which extends to unlimited Ordnungen. If no heir is found in the three parenteles, the estate goes to the canton.",
       "type": "object",
       "minProperties": 1,
@@ -11885,7 +11783,7 @@
       },
       "properties": {
         "pflichtteil": {
-          "description": "Pflichtteil — the statutory reserved portion under Swiss law. Since the 2023 Erbrechtsrevision (ZGB Art. 470–480), parents are no longer protected heirs; descendants retain 1/2 of their intestate share and the surviving spouse 1/2 of their intestate share.",
+          "description": "Pflichtteil — the statutory reserved portion under Swiss law. Since the 2023 Erbrechtsrevision (ZGB Art. 470–480), parents are no longer protected heirs; descendants retain 1/2 of their intestate share and the surviving spouse 1/2 of their intestate share",
           "type": "object",
           "properties": {
             "reformApplies": {
@@ -11907,7 +11805,7 @@
                     "format": "uuid"
                   },
                   "heirClass": {
-                    "description": "Class of protected heir. Since 2023, only descendants and surviving_spouse are protected heirs; parent is included for pre-2023 deaths.",
+                    "description": "Class of protected heir. Since 2023, only descendants and surviving_spouse are protected heirs; parent is included for pre-2023 deaths",
                     "$comment": "parent is no longer a protected heir since the 1 January 2023 reform (revision of the Swiss Civil Code, in force 1 January 2023). The enum value is retained for pre-2023 estates. The 2023 reform increased the freely disposable share from 3/8 to 1/2 (when there are descendants and a surviving spouse).",
                     "enum": [ "descendant", "surviving_spouse", "parent" ]
                   },
@@ -11948,7 +11846,7 @@
           "additionalProperties": false
         },
         "cantonalVariation": {
-          "description": "Cantonal inheritance tax and succession law variation. Switzerland has 26 cantons; direct-line heirs are exempt in most cantons, but rates and exemptions differ significantly.",
+          "description": "Cantonal inheritance tax and succession law variation. Switzerland has 26 cantons; direct-line heirs are exempt in most cantons, but rates and exemptions differ significantly",
           "type": "object",
           "properties": {
             "canton": {
@@ -11974,7 +11872,7 @@
           "additionalProperties": false
         },
         "matrimonialPropertyRegime": {
-          "description": "The matrimonial property regime governing the split of matrimonial property before succession begins. participation_in_acquisitions is the default regime under ZGB Art. 181.",
+          "description": "The matrimonial property regime governing the split of matrimonial property before succession begins. participation_in_acquisitions is the default regime under ZGB Art. 181",
           "enum": [
             "participation_in_acquisitions",
             "community_of_property",
@@ -11982,7 +11880,7 @@
           ]
         },
         "erbschein": {
-          "description": "Erbschein — the Swiss certificate of inheritance (Erbenbescheinigung) issued by the competent cantonal authority confirming the identity of heirs and their shares.",
+          "description": "Erbschein — the Swiss certificate of inheritance (Erbenbescheinigung) issued by the competent cantonal authority confirming the identity of heirs and their shares",
           "type": "object",
           "properties": {
             "issued": {
@@ -12009,7 +11907,7 @@
           "additionalProperties": false
         },
         "notarialWillForm": {
-          "description": "Form of will used under Swiss law. public_will: notarially authenticated before two witnesses (ZGB Art. 499–508). holographic_will: entirely handwritten, dated, and signed by the testator (ZGB Art. 505). oral_will: emergency oral will before two witnesses when notarial form is impossible (ZGB Art. 506–508).",
+          "description": "Form of will used under Swiss law. public_will: notarially authenticated before two witnesses (ZGB Art. 499–508). holographic_will: entirely handwritten, dated, and signed by the testator (ZGB Art. 505). oral_will: emergency oral will before two witnesses when notarial form is impossible (ZGB Art. 506–508)",
           "enum": [ "public_will", "holographic_will", "oral_will" ]
         },
         "notes": {
@@ -12047,7 +11945,7 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://openinherit.org/v3/extensions/israel/israel.json",
       "title": "Israel Extension",
-      "description": "Israeli succession rules: parallel court systems (civil family court, rabbinical, sharia, druze), Inheritance Law 1965 process types, religious authority orders, kibbutz/moshav communal property, and Holocaust restitution assets.",
+      "description": "Israeli succession rules: parallel court systems (civil family court, rabbinical, sharia, druze), Inheritance Law 1965 process types, religious authority orders, kibbutz/moshav communal property, and Holocaust restitution assets",
       "type": "object",
       "minProperties": 1,
       "propertyNames": {
@@ -12055,11 +11953,11 @@
       },
       "properties": {
         "parallelCourtSystems": {
-          "description": "The adjudicating court system handling this succession matter. Israel operates parallel civil and religious court systems, each with jurisdiction over different communities and matter types.",
+          "description": "The adjudicating court system handling this succession matter. Israel operates parallel civil and religious court systems, each with jurisdiction over different communities and matter types",
           "type": "object",
           "properties": {
             "adjudicatingCourt": {
-              "description": "The court system with jurisdiction over this succession matter. civil_family_court: Family Court under Family Court Law 1995 (default for most succession matters). rabbinical_court: Rabbinical Court with jurisdiction over Jewish personal status and succession where all parties consent. sharia_court: Sharia Court with jurisdiction over Muslim personal status matters. druze_court: Druze Religious Court with jurisdiction over Druze personal status. registrar_of_inheritance: Registrar of Inheritance (Rasham HaYerushot) for uncontested applications.",
+              "description": "The court system with jurisdiction over this succession matter. civil_family_court: Family Court under Family Court Law 1995 (default for most succession matters). rabbinical_court: Rabbinical Court with jurisdiction over Jewish personal status and succession where all parties consent. sharia_court: Sharia Court with jurisdiction over Muslim personal status matters. druze_court: Druze Religious Court with jurisdiction over Druze personal status. registrar_of_inheritance: Registrar of Inheritance (Rasham HaYerushot) for uncontested applications",
               "enum": [
                 "civil_family_court",
                 "rabbinical_court",
@@ -12087,11 +11985,11 @@
           "additionalProperties": false
         },
         "inheritanceLaw1965": {
-          "description": "Details of the succession process under the Inheritance Law 1965 (Chok HaYerusha). The law provides two tracks: tzevu kiyum (probate order for wills) and tzevu yerusha (succession order for intestate estates).",
+          "description": "Details of the succession process under the Inheritance Law 1965 (Chok HaYerusha). The law provides two tracks: tzevu kiyum (probate order for wills) and tzevu yerusha (succession order for intestate estates)",
           "type": "object",
           "properties": {
             "successionOrderType": {
-              "description": "Type of succession order sought or obtained. tzevu_kiyum: probate order (tzav kiyum tzava'a) confirming the validity of a will. tzevu_yerusha: succession order (tzav yerusha) determining heirs on intestacy. combined: both orders sought together, e.g. where a partial will exists.",
+              "description": "Type of succession order sought or obtained. tzevu_kiyum: probate order (tzav kiyum tzava'a) confirming the validity of a will. tzevu_yerusha: succession order (tzav yerusha) determining heirs on intestacy. combined: both orders sought together, e.g. where a partial will exists",
               "enum": [ "tzevu_kiyum", "tzevu_yerusha", "combined" ]
             },
             "objectionPeriodExpired": {
@@ -12103,7 +12001,7 @@
               "type": "boolean"
             },
             "spouseEntitlement": {
-              "description": "Surviving spouse entitlement under Inheritance Law 1965. On intestacy, the spouse's share depends on the class of heirs surviving alongside them.",
+              "description": "Surviving spouse entitlement under Inheritance Law 1965. On intestacy, the spouse's share depends on the class of heirs surviving alongside them",
               "type": "object",
               "properties": {
                 "moveableFraction": {
@@ -12129,15 +12027,15 @@
           "additionalProperties": false
         },
         "religiousAuthorityOrder": {
-          "description": "An order or ruling issued by a religious court with jurisdiction over this succession matter. Applicable where a religious court has issued a binding ruling recognised under Israeli law.",
+          "description": "An order or ruling issued by a religious court with jurisdiction over this succession matter. Applicable where a religious court has issued a binding ruling recognised under Israeli law",
           "type": "object",
           "properties": {
             "authority": {
-              "description": "The religious authority issuing the order. bet_din: Rabbinical court (Jewish law). sharia_court: Sharia court (Islamic law). druze_court: Druze religious court.",
+              "description": "The religious authority issuing the order. bet_din: Rabbinical court (Jewish law). sharia_court: Sharia court (Islamic law). druze_court: Druze religious court",
               "enum": [ "bet_din", "sharia_court", "druze_court" ]
             },
             "orderType": {
-              "description": "Type of religious authority order. succession_ruling: ruling on intestate distribution. halachic_will_validation: validation of a will under halachic principles. waqf_ruling: ruling concerning waqf (Islamic religious endowment) assets. consent_order: order by consent of all parties.",
+              "description": "Type of religious authority order. succession_ruling: ruling on intestate distribution. halachic_will_validation: validation of a will under halachic principles. waqf_ruling: ruling concerning waqf (Islamic religious endowment) assets. consent_order: order by consent of all parties",
               "enum": [
                 "succession_ruling",
                 "halachic_will_validation",
@@ -12164,11 +12062,11 @@
           "additionalProperties": false
         },
         "kibbutzProperty": {
-          "description": "Communal or cooperative property held through a kibbutz or moshav. These structures create special succession rules as membership rights, housing allocations, and production quotas may not be freely transferable.",
+          "description": "Communal or cooperative property held through a kibbutz or moshav. These structures create special succession rules as membership rights, housing allocations, and production quotas may not be freely transferable",
           "type": "object",
           "properties": {
             "communalOwnershipType": {
-              "description": "Type of communal or cooperative structure. kibbutz_communal: traditional collective kibbutz where all property is collectively owned. kibbutz_renewed: renewed (mתחדש) kibbutz operating on differential pay and partial private ownership. moshav: cooperative smallholder settlement where land is state-leased and individually farmed. moshav_shitufi: collective moshav combining kibbutz production with moshav family life.",
+              "description": "Type of communal or cooperative structure. kibbutz_communal: traditional collective kibbutz where all property is collectively owned. kibbutz_renewed: renewed (mתחדש) kibbutz operating on differential pay and partial private ownership. moshav: cooperative smallholder settlement where land is state-leased and individually farmed. moshav_shitufi: collective moshav combining kibbutz production with moshav family life",
               "enum": [
                 "kibbutz_communal",
                 "kibbutz_renewed",
@@ -12193,7 +12091,7 @@
           "additionalProperties": false
         },
         "holocaustRestitution": {
-          "description": "Holocaust restitution assets — property or claims arising from Nazi persecution and subsequent restitution programmes. Israel has a significant number of estates involving Holocaust-era assets due to its founding population.",
+          "description": "Holocaust restitution assets — property or claims arising from Nazi persecution and subsequent restitution programmes. Israel has a significant number of estates involving Holocaust-era assets due to its founding population",
           "type": "object",
           "properties": {
             "restitutionAssetsExist": {
@@ -12201,7 +12099,7 @@
               "type": "boolean"
             },
             "restitutionSource": {
-              "description": "Source programme or authority from which restitution is or was sought. claims_conference: Conference on Jewish Material Claims Against Germany. german_government: German federal or state government restitution. austrian_government: Austrian government restitution. swiss_banks_settlement: Swiss Banks Settlement (Volcker process). art_restitution: looted art restitution. property_restitution: real property restitution. other: other restitution programme.",
+              "description": "Source programme or authority from which restitution is or was sought. claims_conference: Conference on Jewish Material Claims Against Germany. german_government: German federal or state government restitution. austrian_government: Austrian government restitution. swiss_banks_settlement: Swiss Banks Settlement (Volcker process). art_restitution: looted art restitution. property_restitution: real property restitution. other: other restitution programme",
               "enum": [
                 "claims_conference",
                 "german_government",
@@ -12265,7 +12163,6 @@
       "description": "Indian succession — multi-personal-law system covering Hindu (coparcenary, HUF), Muslim personal law (school-based heir shares), Christian, Parsi, and Goa civil code estates; includes succession certificates and property classification",
       "type": "object",
       "required": [ "personalLaw" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
@@ -12287,7 +12184,7 @@
           "maxLength": 100
         },
         "probateRequired": {
-          "description": "Whether probate is required — varies by religion and state. Mandatory for wills under Indian Succession Act in certain cities.",
+          "description": "Whether probate is required — varies by religion and state. Mandatory for wills under Indian Succession Act in certain cities",
           "type": "boolean"
         },
         "probateJurisdiction": {
@@ -12557,7 +12454,6 @@
       "description": "UAE succession law — dual-track (Sharia default vs DIFC common law), DWSC registered wills, expatriate handling under Federal Decree-Law No. 41/2022; includes ADGM wills service, non-Muslim court registration, UAE real property treatment, and dual-track dispute resolution (Sharia vs common law)",
       "type": "object",
       "required": [ "successionTrack" ],
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)$"
       },
@@ -12796,7 +12692,7 @@
           "maxLength": 2000
         },
         "marriageRevocation": {
-          "description": "Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs.",
+          "description": "Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs",
           "type": "object",
           "required": [ "revokesPriorWill", "statute" ],
           "properties": {
@@ -25037,7 +24933,7 @@
           "additionalProperties": false
         },
         "identifiers": {
-          "description": "External identifiers — charity number, company registration, UEN, etc.",
+          "description": "External identifiers, such as a charity number, company registration or UEN",
           "type": "array",
           "maxItems": 50,
           "items": {

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinherit.org/v3/extensions/latin-america/latin-america.json",
   "title": "Latin America Extension",
-  "description": "Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions.",
+  "description": "Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions",
   "maturity": "draft",
   "extensionType": "geographic",
   "applicableJurisdictions": [
@@ -50,7 +50,6 @@
                 "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
               },
               "category": {
-                "type": "string",
                 "enum": [
                   "descendant",
                   "ascendant",
@@ -111,10 +110,7 @@
       "type": "object",
       "properties": {
         "system": {
-          "type": "string",
-          "enum": [
-            "fourths"
-          ]
+          "const": "fourths"
         },
         "legitimaRigurosa": {
           "type": "string",
@@ -188,7 +184,6 @@
           "type": "boolean"
         },
         "intestacyOrder": {
-          "type": "string",
           "enum": [
             "descendants",
             "spouse",
@@ -299,7 +294,6 @@
         "forcedHeirCategories": {
           "type": "array",
           "items": {
-            "type": "string",
             "enum": [
               "descendants",
               "ascendants",
@@ -328,7 +322,6 @@
   "properties": {
     "country": {
       "description": "ISO 3166-1 alpha-2 country code identifying which Latin American jurisdiction's succession rules apply",
-      "type": "string",
       "enum": [
         "BR",
         "AR",
@@ -383,7 +376,6 @@
   "required": [
     "country"
   ],
-  "minProperties": 1,
   "patternProperties": {
     "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
       "type": "object",

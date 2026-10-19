@@ -2,7 +2,7 @@
 
 # Australia & New Zealand Extension
 
-Succession rules for AU and NZ: superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ Property (Relationships) Act, testamentary promises, and Maori land under Te Ture Whenua.
+Succession rules for AU and NZ: superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ Property (Relationships) Act, testamentary promises, and Maori land under Te Ture Whenua
 
 Source: [`v3/extensions/australia-nz/australia-nz.json`](../../../../v3/extensions/australia-nz/australia-nz.json)
 
@@ -12,7 +12,7 @@ Schema `$id`: `https://openinherit.org/v3/extensions/australia-nz/australia-nz.j
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `jurisdiction` | `string` — one of `AU-NSW`, `AU-VIC`, `AU-QLD`, `AU-WA`, `AU-SA`, `AU-TAS`, `AU-ACT`, `AU-NT`, `NZ` | yes | |
+| `jurisdiction` | one of `AU-NSW`, `AU-VIC`, `AU-QLD`, `AU-WA`, `AU-SA`, `AU-TAS`, `AU-ACT`, `AU-NT`, `NZ` | yes | |
 | `superannuationNominations` | array of [SuperannuationNomination](#def-SuperannuationNomination) | | |
 | `familyProvisionClaims` | array of [FamilyProvisionClaim](#def-FamilyProvisionClaim) | | |
 | `aboriginalLandDetails` | array of [AboriginalLandDetails](#def-AboriginalLandDetails) | | |
@@ -32,7 +32,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `propertyId` | `string` (uuid) | yes | |
-| `landType` | `string` — one of `native_title`, `alra`, `aboriginal_freehold`, `ilua`, `torres_strait` | yes | |
+| `landType` | one of `native_title`, `alra`, `aboriginal_freehold`, `ilua`, `torres_strait` | yes | |
 | `nativeTitleDetermination` | `string` | | |
 | `landCouncil` | `string` | | |
 | `successionRestrictions` | `string` | | |
@@ -47,14 +47,14 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | --- | --- | --- | --- |
 | `claimantPersonId` | `string` (uuid) | yes | |
 | `relationship` | `string` | | |
-| `relationshipCategory` | `string` — one of `spouse`, `child`, `former_spouse`, `dependant`, `grandchild`, `step_child`, `member_of_household` | | Statutory relationship category for family provision eligibility |
+| `relationshipCategory` | one of `spouse`, `child`, `former_spouse`, `dependant`, `grandchild`, `step_child`, `member_of_household` | | Statutory relationship category for family provision eligibility |
 | `statute` | `string` | | |
 | `eligibleUnderStatute` | `boolean` | | |
 | `limitationPeriod` | `string` | | |
 | `notionalEstateEngaged` | `boolean` | | |
 | `claimFiled` | `boolean` | | |
 | `filedDate` | `string` (date) | | |
-| `outcome` | `string` — one of `pending`, `upheld`, `dismissed`, `settled` | | |
+| `outcome` | one of `pending`, `upheld`, `dismissed`, `settled` | | |
 | `notes` | `string` | | |
 
 <a id="def-MaoriLandDetails"></a>
@@ -89,8 +89,8 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `assetId` | `string` (uuid) | yes | |
-| `fundType` | `string` — one of `smsf`, `industry`, `retail`, `public_sector`, `corporate` | | |
-| `nominationType` | `string` — one of `bdbn_lapsing`, `bdbn_non_lapsing`, `non_binding`, `reversionary_pension` | yes | |
+| `fundType` | one of `smsf`, `industry`, `retail`, `public_sector`, `corporate` | | |
+| `nominationType` | one of `bdbn_lapsing`, `bdbn_non_lapsing`, `non_binding`, `reversionary_pension` | yes | |
 | `binding` | `boolean` | | |
 | `expiryDate` | `string` (date) | | |
 | `expiryRule` | `string` | | |

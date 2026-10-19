@@ -43,17 +43,21 @@ function tree(files, baseline) {
   }
   return t;
 }
-const pin = (targets, findings = {}) => ({ targets, findings });
+const pin = (targets, findings = {}, reasons) => (reasons ? { targets, findings, reasons } : { targets, findings });
 const TP = 'description_trailing_period';
+const WHY = { [TP]: 'kept on purpose, for a reason a reviewer can read' };
 
 const cases = [
   ['a clean tree against an empty baseline', tree({ 'v3/a.json': schema('a') }, pin(1)), 0, null, []],
   ['a new finding the baseline does not hold', tree({ 'v3/a.json': schema('a', DIRTY) }, pin(1)), 1, 'REGRESSION', []],
-  ['a finding the baseline holds', tree({ 'v3/a.json': schema('a', DIRTY) }, pin(1, { 'v3/a.json': { [TP]: 1 } })), 0, null, []],
+  ['a finding the baseline holds, with a recorded reason', tree({ 'v3/a.json': schema('a', DIRTY) }, pin(1, { 'v3/a.json': { [TP]: 1 } }, WHY)), 0, null, []],
+  ['a held finding with no recorded reason', tree({ 'v3/a.json': schema('a', DIRTY) }, pin(1, { 'v3/a.json': { [TP]: 1 } })), 1, 'UNREASONED', []],
+  ['a held finding whose reason is blank', tree({ 'v3/a.json': schema('a', DIRTY) }, pin(1, { 'v3/a.json': { [TP]: 1 } }, { [TP]: '  ' })), 1, 'UNREASONED', []],
+  ['a reason left behind after its findings were fixed', tree({ 'v3/a.json': schema('a') }, pin(1, {}, WHY)), 1, 'RATCHET', []],
   ['a count that rose above the baseline', tree({
     'v3/a.json': schema('a', DIRTY).replace('"type": "object"', '"type": "object",\n  "$comment": "x"').replace('"A thing"', '"A thing."'),
-  }, pin(1, { 'v3/a.json': { [TP]: 1 } })), 1, 'REGRESSION', []],
-  ['a finding fixed without re-pinning the baseline', tree({ 'v3/a.json': schema('a') }, pin(1, { 'v3/a.json': { [TP]: 1 } })), 1, 'RATCHET', []],
+  }, pin(1, { 'v3/a.json': { [TP]: 1 } }, WHY)), 1, 'REGRESSION', []],
+  ['a finding fixed without re-pinning the baseline', tree({ 'v3/a.json': schema('a') }, pin(1, { 'v3/a.json': { [TP]: 1 } }, WHY)), 1, 'RATCHET', []],
   ['an extension schema is linted, not only resolved', tree({
     'v3/a.json': schema('a'),
     'v3/extensions/x/x.json': schema('x', DIRTY),
@@ -65,8 +69,11 @@ const cases = [
   ['fewer schemas found than the baseline pins', tree({ 'v3/a.json': schema('a') }, pin(2)), 2, 'CANNOT ANSWER', []],
   ['more schemas found than the baseline pins', tree({ 'v3/a.json': schema('a'), 'v3/b.json': schema('b') }, pin(1)), 1, 'RATCHET', []],
   ['no baseline at all', tree({ 'v3/a.json': schema('a') }), 2, 'CANNOT ANSWER', []],
-  ['--write-baseline pins the current state', tree({ 'v3/a.json': schema('a', DIRTY) }), 0, null, ['--write-baseline']],
+  ['--write-baseline pins the current state', tree({ 'v3/a.json': schema('a') }), 0, null, ['--write-baseline']],
+  ['--write-baseline keeps the reason of a rule it still holds', tree({ 'v3/a.json': schema('a', DIRTY) }, pin(1, { 'v3/a.json': { [TP]: 2 } }, WHY)), 0, null, ['--write-baseline']],
 ];
+// A fresh pin of a dirty tree has no reason to carry, so the check that follows must refuse it.
+const unreasoned = tree({ 'v3/a.json': schema('a', DIRTY) });
 
 let failed = 0;
 function run(name, cwd, want, says, args) {
@@ -81,6 +88,9 @@ for (const [name, cwd, want, says, args] of cases) {
   if (run(name, cwd, want, says, args) && args.includes('--write-baseline')) {
     run('…and the tree then checks green against what was written', cwd, 0, null, []);
   }
+}
+if (run('--write-baseline on a dirty tree with no reason to carry', unreasoned, 0, null, ['--write-baseline'])) {
+  run('…and the check then refuses the unreasoned finding it pinned', unreasoned, 1, 'UNREASONED', []);
 }
 rmSync(work, { recursive: true, force: true });
 console.log(failed ? `\n${failed} failed` : '\nall cases passed');

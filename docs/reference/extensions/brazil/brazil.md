@@ -2,7 +2,7 @@
 
 # Brazil Extension
 
-Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário process types, cartório attestation, disponível (testamentary freedom portion), and união estável (stable union recognition).
+Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário process types, cartório attestation, disponível (testamentary freedom portion), and união estável (stable union recognition)
 
 Source: [`v3/extensions/brazil/brazil.json`](../../../../v3/extensions/brazil/brazil.json)
 

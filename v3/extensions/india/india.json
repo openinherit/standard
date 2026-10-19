@@ -25,7 +25,7 @@
       "maxLength": 100
     },
     "probateRequired": {
-      "description": "Whether probate is required — varies by religion and state. Mandatory for wills under Indian Succession Act in certain cities.",
+      "description": "Whether probate is required — varies by religion and state. Mandatory for wills under Indian Succession Act in certain cities",
       "type": "boolean"
     },
     "probateJurisdiction": {
@@ -291,7 +291,6 @@
       "maxLength": 2000
     }
   },
-  "minProperties": 1,
   "patternProperties": {
     "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
       "type": "object",

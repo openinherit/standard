@@ -4087,7 +4087,7 @@ class Organisation(BaseModel):
     )
     identifiers: list[Identifier] | None = Field(
         None,
-        description='External identifiers — charity number, company registration, UEN, etc.',
+        description='External identifiers, such as a charity number, company registration or UEN',
         max_length=50,
     )
     dealerProfile: DealerProfile | None = Field(
@@ -7208,7 +7208,7 @@ class CohabitantRights(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Category5(StrEnum):
+class Category5(Enum):
     spouse = 'spouse'
     former_spouse = 'former_spouse'
     child = 'child'
@@ -7226,7 +7226,7 @@ class Ifpa1975EligibleItem(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class LocalType(StrEnum):
+class LocalType(Enum):
     detached_house = 'detached_house'
     semi_detached_house = 'semi_detached_house'
     terraced_house = 'terraced_house'
@@ -7249,7 +7249,7 @@ class LocalPropertyType(BaseModel):
     localType: LocalType
 
 
-class LocalType1(StrEnum):
+class LocalType1(Enum):
     freehold = 'freehold'
     leasehold = 'leasehold'
     commonhold = 'commonhold'
@@ -7264,7 +7264,7 @@ class LocalTenureType(BaseModel):
     localType: LocalType1
 
 
-class LocalType2(StrEnum):
+class LocalType2(Enum):
     grant_of_probate = 'grant_of_probate'
     letters_of_administration = 'letters_of_administration'
     letters_of_administration_with_will_annexed = 'letters_of_administration_with_will_annexed'
@@ -7280,20 +7280,12 @@ class LocalGrantType(BaseModel):
     localType: LocalType2
 
 
-class Status6(StrEnum):
-    enacted = 'enacted'
-    royal_assent = 'royal_assent'
-    bill_stage = 'bill_stage'
-    consultation = 'consultation'
-    announced = 'announced'
-
-
 class LegislativeChange(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     description: constr(min_length=1, max_length=2000)
-    status: Status6
+    status: Status5
     effectiveDate: date_aliased | None = None
     notes: constr(max_length=2000) | None = None
 
@@ -7342,20 +7334,20 @@ class MarriageRevocation(BaseModel):
     )
     revokesPriorWill: bool = Field(
         ...,
-        description='Whether a marriage (after execution of the will) automatically revokes the will.',
+        description='Whether a marriage (after execution of the will) automatically revokes the will',
     )
     statute: constr(max_length=255) = Field(
         ...,
-        description='Citation of the primary statute governing revocation-by-marriage.',
+        description='Citation of the primary statute governing revocation-by-marriage',
     )
     statuteUrl: AnyUrl | None = None
     contemplationException: bool | None = Field(
         None,
-        description='Whether a will made in contemplation of a specific marriage survives that marriage.',
+        description='Whether a will made in contemplation of a specific marriage survives that marriage',
     )
     contemplationRule: constr(max_length=2000) | None = Field(
         None,
-        description='Plain-English description of the contemplation-of-marriage rule.',
+        description='Plain-English description of the contemplation-of-marriage rule',
     )
     notes: constr(max_length=2000) | None = None
 
@@ -7386,7 +7378,7 @@ class UkEnglandWales(BaseModel):
     )
     marriageRevocation: MarriageRevocation | None = Field(
         None,
-        description='Whether and how marriage revokes a prior will. For England & Wales, see s.18 Wills Act 1837 and the contemplation-of-marriage exception in s.18(3)–(4).',
+        description='Whether and how marriage revokes a prior will. For England & Wales, see s.18 Wills Act 1837 and the contemplation-of-marriage exception in s.18(3)–(4)',
     )
 
 
@@ -7448,7 +7440,7 @@ class Confirmation(BaseModel):
     )
 
 
-class ClaimDeadlineVersion(StrEnum):
+class ClaimDeadlineVersion(Enum):
     pre_2024_six_months = 'pre_2024_six_months'
     post_2024_twelve_months = 'post_2024_twelve_months'
 
@@ -7461,7 +7453,7 @@ class ExternalBenefit(BaseModel):
     amount: Money | None = None
 
 
-class CourtOrderType(StrEnum):
+class CourtOrderType(Enum):
     capital_sum = 'capital_sum'
     property_transfer = 'property_transfer'
     none = 'none'
@@ -7506,12 +7498,12 @@ class ForcedHeirship(BaseModel):
     dischargeDetails: constr(max_length=1000) | None = None
 
 
-class RulesVersion(StrEnum):
+class RulesVersion(Enum):
     pre_2024 = 'pre_2024'
     post_2024 = 'post_2024'
 
 
-class FinancialProvisionRate(StrEnum):
+class FinancialProvisionRate(Enum):
     with_children = 'with_children'
     without_children = 'without_children'
 
@@ -7570,12 +7562,12 @@ class Intestacy(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class EntityType5(StrEnum):
+class EntityType5(Enum):
     property = 'property'
     asset = 'asset'
 
 
-class Classification(StrEnum):
+class Classification(Enum):
     heritable = 'heritable'
     moveable = 'moveable'
 
@@ -7591,7 +7583,7 @@ class HeritableMoveableClassification(BaseModel):
     overridden: bool | None = None
 
 
-class AppointmentType(StrEnum):
+class AppointmentType(Enum):
     executor_nominate = 'executor_nominate'
     executor_dative = 'executor_dative'
     executor_creditor = 'executor_creditor'
@@ -7619,7 +7611,7 @@ class ExecutryAppointment(BaseModel):
     courtPetitionDate: date_aliased | None = None
 
 
-class DestinationType(StrEnum):
+class DestinationType(Enum):
     survivorship = 'survivorship'
     pro_indiviso = 'pro_indiviso'
 
@@ -7628,7 +7620,7 @@ class SurvivorPersonId(RootModel[UUID]):
     root: UUID
 
 
-class EvacuationMethod(StrEnum):
+class EvacuationMethod(Enum):
     agreement = 'agreement'
     divorce_automatic = 'divorce_automatic'
     court_order = 'court_order'
@@ -7649,19 +7641,19 @@ class SurvivorshipDestination(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class TenureType1(StrEnum):
+class TenureType1(Enum):
     tenant = 'tenant'
     owner_occupier = 'owner_occupier'
     absentee = 'absentee'
 
 
-class SuccessionRoute(StrEnum):
+class SuccessionRoute(Enum):
     bequest = 'bequest'
     intestate_transfer = 'intestate_transfer'
     not_yet_determined = 'not_yet_determined'
 
 
-class CommissionDecision(StrEnum):
+class CommissionDecision(Enum):
     pending = 'pending'
     approved = 'approved'
     refused = 'refused'
@@ -7695,13 +7687,13 @@ class CroftingSuccession(BaseModel):
     crofts: list[Croft] | None = Field(None, max_length=20)
 
 
-class ExecutionType(StrEnum):
+class ExecutionType(Enum):
     attested = 'attested'
     holograph = 'holograph'
     notarial = 'notarial'
 
 
-class NotarialExecutorRole(StrEnum):
+class NotarialExecutorRole(Enum):
     solicitor = 'solicitor'
     advocate = 'advocate'
     justice_of_peace = 'justice_of_peace'
@@ -7765,7 +7757,7 @@ class Scotland(BaseModel):
     )
     forcedHeirship: ForcedHeirship | None = Field(
         None,
-        description='Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights.',
+        description='Scotland has no forced heirship for heritable property — only legal rights apply to moveables. This field records whether the testator has attempted to defeat legal rights',
     )
     legislativeChanges: list[TemporalRule] | None = Field(
         None, description='Tracked changes to Scottish succession legislation'
@@ -7949,7 +7941,7 @@ class Section56Advancement(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class LocalType3(StrEnum):
+class LocalType3(Enum):
     freehold = 'freehold'
     leasehold = 'leasehold'
     fee_farm_grant = 'fee_farm_grant'
@@ -7963,16 +7955,9 @@ class LocalTenureType1(BaseModel):
     localType: LocalType3
 
 
-class Register(StrEnum):
+class Register(Enum):
     land_registry = 'land_registry'
     registry_of_deeds = 'registry_of_deeds'
-
-
-class TitleClass1(StrEnum):
-    absolute = 'absolute'
-    qualified = 'qualified'
-    possessory = 'possessory'
-    good_leasehold = 'good_leasehold'
 
 
 class LandRegistrationItem(BaseModel):
@@ -7990,7 +7975,7 @@ class LandRegistrationItem(BaseModel):
         description='Land registry folio number, including the county prefix',
         examples=['DN12345F', 'CK6789L'],
     )
-    titleClass: TitleClass1 | None = Field(
+    titleClass: TitleClass | None = Field(
         None, description='Class of title registered on the folio'
     )
     deedsReference: constr(max_length=100) | None = Field(
@@ -8008,7 +7993,7 @@ class Ireland(BaseModel):
     )
     spouseLegalRightShare: SpouseLegalRightShare | None = Field(
         None,
-        description='Spouse legal right share under Succession Act 1965 s.111 — 1/3 with children, 1/2 without. Cannot be defeated by will.',
+        description='Spouse legal right share under Succession Act 1965 s.111 — 1/3 with children, 1/2 without. Cannot be defeated by will',
     )
     section117Claim: Section117Claim | None = Field(
         None,
@@ -8024,7 +8009,7 @@ class Ireland(BaseModel):
     )
     enduringPowerOfAttorney: EnduringPowerOfAttorney | None = Field(
         None,
-        description='Irish EPA — different from English LPA. Must be registered with the court before it can be used.',
+        description='Irish EPA — different from English LPA. Must be registered with the court before it can be used',
     )
     intestacyRules: IntestacyRules | None = Field(
         None, description='Distribution order under Part VI of the Succession Act 1965'
@@ -8068,7 +8053,7 @@ class LocalTenureType2(BaseModel):
     localType: LocalType3
 
 
-class TitleClass2(StrEnum):
+class TitleClass2(Enum):
     absolute = 'absolute'
     qualified = 'qualified'
     possessory = 'possessory'
@@ -8120,7 +8105,7 @@ class NorthernIreland(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class PropertyRegime(StrEnum):
+class PropertyRegime(Enum):
     community_property = 'community_property'
     community_property_with_survivorship = 'community_property_with_survivorship'
     separate_property = 'separate_property'
@@ -8148,7 +8133,7 @@ class HomesteadExemption(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class PerStirpesVariant(StrEnum):
+class PerStirpesVariant(Enum):
     strict_per_stirpes = 'strict_per_stirpes'
     modern_per_stirpes = 'modern_per_stirpes'
     per_capita_at_each_generation = 'per_capita_at_each_generation'
@@ -8162,7 +8147,7 @@ class EligibleChildrenItem(BaseModel):
     ageOrCondition: constr(max_length=255) | None = None
 
 
-class Basis(StrEnum):
+class Basis(Enum):
     fixed = 'fixed'
     conditional = 'conditional'
 
@@ -8225,7 +8210,7 @@ class StateEstateTax(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class AdministrationType(StrEnum):
+class AdministrationType(Enum):
     supervised = 'supervised'
     unsupervised = 'unsupervised'
     independent = 'independent'
@@ -8262,7 +8247,7 @@ class TrustFeatures(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class EdbCategory(StrEnum):
+class EdbCategory(Enum):
     surviving_spouse = 'surviving_spouse'
     minor_child = 'minor_child'
     disabled = 'disabled'
@@ -8294,7 +8279,7 @@ class RetirementAccountRules(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class HalfBloodRule(StrEnum):
+class HalfBloodRule(Enum):
     equal_to_whole_blood = 'equal_to_whole_blood'
     half_share = 'half_share'
     excluded = 'excluded'
@@ -8313,7 +8298,7 @@ class IntestacyRules1(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Status7(StrEnum):
+class Status7(Enum):
     not_filed = 'not_filed'
     filed = 'filed'
     granted = 'granted'
@@ -8333,7 +8318,7 @@ class AncillaryProbateItem(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class HealthcareDirectiveType(StrEnum):
+class HealthcareDirectiveType(Enum):
     living_will = 'living_will'
     healthcare_proxy = 'healthcare_proxy'
     combined_directive = 'combined_directive'
@@ -8341,7 +8326,7 @@ class HealthcareDirectiveType(StrEnum):
     none = 'none'
 
 
-class FinancialPoaType(StrEnum):
+class FinancialPoaType(Enum):
     durable = 'durable'
     springing = 'springing'
     limited = 'limited'
@@ -8362,7 +8347,7 @@ class AdvanceDirectives(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class CommunityPropertyState(StrEnum):
+class CommunityPropertyState(Enum):
     US_AZ = 'US-AZ'
     US_CA = 'US-CA'
     US_ID = 'US-ID'
@@ -8525,7 +8510,7 @@ class AlbertaDower(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class LandType(StrEnum):
+class LandType(Enum):
     reserve = 'reserve'
     treaty = 'treaty'
     fee_simple_on_reserve = 'fee_simple_on_reserve'
@@ -8544,7 +8529,7 @@ class IndigenousLandDetails(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Province(StrEnum):
+class Province(Enum):
     CA_AB = 'CA-AB'
     CA_BC = 'CA-BC'
     CA_MB = 'CA-MB'
@@ -8620,7 +8605,7 @@ class Canada(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class FundType(StrEnum):
+class FundType(Enum):
     smsf = 'smsf'
     industry = 'industry'
     retail = 'retail'
@@ -8628,7 +8613,7 @@ class FundType(StrEnum):
     corporate = 'corporate'
 
 
-class NominationType(StrEnum):
+class NominationType(Enum):
     bdbn_lapsing = 'bdbn_lapsing'
     bdbn_non_lapsing = 'bdbn_non_lapsing'
     non_binding = 'non_binding'
@@ -8656,7 +8641,7 @@ class SuperannuationNomination(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class RelationshipCategory1(StrEnum):
+class RelationshipCategory1(Enum):
     spouse = 'spouse'
     child = 'child'
     former_spouse = 'former_spouse'
@@ -8666,7 +8651,7 @@ class RelationshipCategory1(StrEnum):
     member_of_household = 'member_of_household'
 
 
-class Outcome(StrEnum):
+class Outcome(Enum):
     pending = 'pending'
     upheld = 'upheld'
     dismissed = 'dismissed'
@@ -8693,7 +8678,7 @@ class FamilyProvisionClaim(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class LandType1(StrEnum):
+class LandType1(Enum):
     native_title = 'native_title'
     alra = 'alra'
     aboriginal_freehold = 'aboriginal_freehold'
@@ -8758,7 +8743,7 @@ class MaoriLandDetails(BaseModel):
     )
 
 
-class Jurisdiction2(StrEnum):
+class Jurisdiction2(Enum):
     AU_NSW = 'AU-NSW'
     AU_VIC = 'AU-VIC'
     AU_QLD = 'AU-QLD'
@@ -8810,7 +8795,7 @@ class EuropeanCertificateOfSuccession(BaseModel):
     issueDate: date_aliased | None = None
 
 
-class Region(StrEnum):
+class Region(Enum):
     common_civil = 'common_civil'
     catalan = 'catalan'
     basque = 'basque'
@@ -8829,7 +8814,7 @@ class SpanishRegionalRegime(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Model1(StrEnum):
+class Model1(Enum):
     french_reserve = 'french_reserve'
     german_pflichtteil = 'german_pflichtteil'
     scandinavian_laglott = 'scandinavian_laglott'
@@ -8861,7 +8846,7 @@ class PostBrexitAssetHandling(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Status8(StrEnum):
+class Status8(Enum):
     enacted = 'enacted'
     royal_assent = 'royal_assent'
     bill_stage = 'bill_stage'
@@ -8907,7 +8892,7 @@ class KosekiRecord(BaseModel):
     registrationType: constr(max_length=255) | None = None
 
 
-class RelationshipCategory2(StrEnum):
+class RelationshipCategory2(Enum):
     spouse = 'spouse'
     child = 'child'
     lineal_ascendant = 'lineal_ascendant'
@@ -8922,7 +8907,7 @@ class TargetPropertyId(RootModel[UUID]):
     root: UUID
 
 
-class ClaimOutcome(StrEnum):
+class ClaimOutcome(Enum):
     pending = 'pending'
     upheld = 'upheld'
     dismissed = 'dismissed'
@@ -8947,12 +8932,12 @@ class IryubunClaim(BaseModel):
     claimOutcome: ClaimOutcome | None = None
 
 
-class AdoptionType(StrEnum):
+class AdoptionType(Enum):
     futsu_yoshi = 'futsu_yoshi'
     tokubetsu_yoshi = 'tokubetsu_yoshi'
 
 
-class InheritanceScope(StrEnum):
+class InheritanceScope(Enum):
     both_families = 'both_families'
     adoptive_only = 'adoptive_only'
     biological_only = 'biological_only'
@@ -8968,7 +8953,7 @@ class YoshiAdoption(BaseModel):
     inheritanceScope: InheritanceScope | None = None
 
 
-class RightType(StrEnum):
+class RightType(Enum):
     short_term = 'short_term'
     long_term = 'long_term'
 
@@ -8985,13 +8970,13 @@ class SpousesResidenceRight(BaseModel):
     registeredAtLegalAffairsBureau: bool | None = None
 
 
-class LocalWillFormality(StrEnum):
+class LocalWillFormality(Enum):
     jihi_shosho = 'jihi_shosho'
     kosei_shosho = 'kosei_shosho'
     himitsusho = 'himitsusho'
 
 
-class Type3(StrEnum):
+class Type3(Enum):
     voluntary = 'voluntary'
     court_mediated = 'court_mediated'
     court_adjudicated = 'court_adjudicated'
@@ -9042,7 +9027,7 @@ class Japan(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class RelationshipCategory3(StrEnum):
+class RelationshipCategory3(Enum):
     spouse = 'spouse'
     child = 'child'
     parent = 'parent'
@@ -9060,7 +9045,7 @@ class FirstOrderHeir(BaseModel):
     )
 
 
-class RelationshipCategory4(StrEnum):
+class RelationshipCategory4(Enum):
     sibling = 'sibling'
     grandparent_paternal = 'grandparent_paternal'
     grandparent_maternal = 'grandparent_maternal'
@@ -9087,7 +9072,7 @@ class PRCForcedHeirship(BaseModel):
     mandatoryShareRule: constr(max_length=255) | None = None
 
 
-class HukouType(StrEnum):
+class HukouType(Enum):
     agricultural = 'agricultural'
     non_agricultural = 'non_agricultural'
 
@@ -9111,7 +9096,7 @@ class CrossBorderHKPRC(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class ApplicableOrder(StrEnum):
+class ApplicableOrder(Enum):
     first_order = 'first_order'
     second_order = 'second_order'
 
@@ -9141,7 +9126,7 @@ class IntestacyOrder(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Type4(StrEnum):
+class Type4(Enum):
     notarised = 'notarised'
     holograph = 'holograph'
     scrivener = 'scrivener'
@@ -9161,7 +9146,7 @@ class WillForm(BaseModel):
     validityNotes: constr(max_length=2000) | None = None
 
 
-class MaritalPropertyRegime(StrEnum):
+class MaritalPropertyRegime(Enum):
     community = 'community'
     separate = 'separate'
     mixed_agreement = 'mixed_agreement'
@@ -9202,7 +9187,7 @@ class InheritanceTaxStatus(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class ApplicableLaw(StrEnum):
+class ApplicableLaw(Enum):
     prc_succession_law_1985 = 'prc_succession_law_1985'
     prc_civil_code_2021 = 'prc_civil_code_2021'
 
@@ -9228,7 +9213,7 @@ class PrcChina(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class RelationshipCategory5(StrEnum):
+class RelationshipCategory5(Enum):
     spouse = 'spouse'
     children = 'children'
     parents = 'parents'
@@ -9259,7 +9244,7 @@ class SingaporeISADistribution(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class School(StrEnum):
+class School(Enum):
     shafii = 'shafii'
     hanafi = 'hanafi'
 
@@ -9359,7 +9344,7 @@ class EPFNomination(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Country(StrEnum):
+class Country(Enum):
     SG = 'SG'
     MY = 'MY'
 
@@ -9393,11 +9378,11 @@ class SingaporeMalaysia(BaseModel):
     notes: constr(max_length=2000) | None = None
     marriageRevocation: MarriageRevocation1 | None = Field(
         None,
-        description='Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia.',
+        description='Whether and how marriage revokes a prior will. For Singapore non-Muslim testators, see s.13 Wills Act (Cap 352). Muslim testators are governed by AMLA and Sharia',
     )
 
 
-class Category6(StrEnum):
+class Category6(Enum):
     descendant = 'descendant'
     ascendant = 'ascendant'
     spouse = 'spouse'
@@ -9435,10 +9420,6 @@ class ArgentineSuccession(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class System(StrEnum):
-    fourths = 'fourths'
-
-
 class ForcedHeir(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -9451,7 +9432,7 @@ class ColombianSuccession(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    system: System | None = None
+    system: Literal['fourths'] | None = None
     legitimaRigurosa: constr(max_length=255) | None = None
     cuartaDeMejoras: constr(max_length=255) | None = None
     cuartaDeLibreDisposicion: constr(max_length=255) | None = None
@@ -9468,7 +9449,7 @@ class VenezuelanSuccession(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class IntestacyOrder1(StrEnum):
+class IntestacyOrder1(Enum):
     descendants = 'descendants'
     spouse = 'spouse'
     ascendants = 'ascendants'
@@ -9533,7 +9514,7 @@ class NotarialSuccession(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class ForcedHeirCategory(StrEnum):
+class ForcedHeirCategory(Enum):
     descendants = 'descendants'
     ascendants = 'ascendants'
     spouse = 'spouse'
@@ -9554,7 +9535,7 @@ class ForcedHeirshipPattern(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Country1(StrEnum):
+class Country1(Enum):
     BR = 'BR'
     AR = 'AR'
     CO = 'CO'
@@ -9600,7 +9581,7 @@ class LatinAmerica(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class HeirClass(StrEnum):
+class HeirClass(Enum):
     son = 'son'
     daughter = 'daughter'
     father = 'father'
@@ -9625,7 +9606,7 @@ class HeirClass(StrEnum):
     cousin_paternal_half = 'cousin_paternal_half'
 
 
-class ResiduaryClass(StrEnum):
+class ResiduaryClass(Enum):
     asaba_by_self = 'asaba_by_self'
     asaba_with_other = 'asaba_with_other'
     asaba_through_other = 'asaba_through_other'
@@ -9659,7 +9640,7 @@ class WasiyyaRules(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class PeriodType(StrEnum):
+class PeriodType(Enum):
     divorce = 'divorce'
     death = 'death'
     pregnancy = 'pregnancy'
@@ -9676,7 +9657,7 @@ class IddahPeriod(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class WaqfType(StrEnum):
+class WaqfType(Enum):
     ahli = 'ahli'
     khairi = 'khairi'
     mushtarak = 'mushtarak'
@@ -9692,7 +9673,7 @@ class WaqfDetail(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Type5(StrEnum):
+class Type5(Enum):
     mahr = 'mahr'
     kafan = 'kafan'
     funeral_costs = 'funeral_costs'
@@ -9711,7 +9692,7 @@ class PriorityDebt(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class School1(StrEnum):
+class School1(Enum):
     hanafi = 'hanafi'
     shafii = 'shafii'
     maliki = 'maliki'
@@ -9789,12 +9770,12 @@ class IslamicSuccession(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class HeirOrder(StrEnum):
+class HeirOrder(Enum):
     bechor = 'bechor'
     regular = 'regular'
 
 
-class HalachicClass(StrEnum):
+class HalachicClass(Enum):
     ben = 'ben'
     bat = 'bat'
     av = 'av'
@@ -9839,7 +9820,7 @@ class BekhorRules(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class BenOrBat(StrEnum):
+class BenOrBat(Enum):
     ben = 'ben'
     bat = 'bat'
 
@@ -9864,7 +9845,7 @@ class HalachicWitnessValidity(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Type6(StrEnum):
+class Type6(Enum):
     kinyan_sudar = 'kinyan_sudar'
     kinyan_agav = 'kinyan_agav'
     kinyan_meshichah = 'kinyan_meshichah'
@@ -9885,7 +9866,7 @@ class KinyanDetails(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Type7(StrEnum):
+class Type7(Enum):
     matanah = 'matanah'
     yerusha = 'yerusha'
     shtar_chov_gift = 'shtar_chov_gift'
@@ -9900,7 +9881,7 @@ class BequestClassification(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Denomination(StrEnum):
+class Denomination(Enum):
     orthodox = 'orthodox'
     conservative = 'conservative'
     reform = 'reform'
@@ -9909,7 +9890,7 @@ class Denomination(StrEnum):
     unaffiliated = 'unaffiliated'
 
 
-class HalachicMechanism(StrEnum):
+class HalachicMechanism(Enum):
     shtar_chov = 'shtar_chov'
     matnat_bari = 'matnat_bari'
     matnat_shechiv_mera = 'matnat_shechiv_mera'
@@ -9959,7 +9940,7 @@ class HUFDetails(BaseModel):
     panNumber: constr(max_length=255) | None = None
 
 
-class HeirClass1(StrEnum):
+class HeirClass1(Enum):
     class_I = 'class_I'
     class_II = 'class_II'
     agnate = 'agnate'
@@ -9991,7 +9972,7 @@ class StridhanAsset(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class ApplicableLaw1(StrEnum):
+class ApplicableLaw1(Enum):
     hindu_succession_act_1956 = 'hindu_succession_act_1956'
     indian_succession_act_1925 = 'indian_succession_act_1925'
     muslim_personal_law = 'muslim_personal_law'
@@ -10000,7 +9981,7 @@ class ApplicableLaw1(StrEnum):
     goa_civil_code = 'goa_civil_code'
 
 
-class School2(StrEnum):
+class School2(Enum):
     mitakshara = 'mitakshara'
     dayabhaga = 'dayabhaga'
 
@@ -10025,7 +10006,7 @@ class NriComplications(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class InstrumentType(StrEnum):
+class InstrumentType(Enum):
     probate = 'probate'
     letters_of_administration = 'letters_of_administration'
     succession_certificate = 'succession_certificate'
@@ -10063,7 +10044,7 @@ class HinduSuccession(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class SuccessionSystem(StrEnum):
+class SuccessionSystem(Enum):
     patrilineal_primogeniture = 'patrilineal_primogeniture'
     patrilineal_equal = 'patrilineal_equal'
     matrilineal = 'matrilineal'
@@ -10071,7 +10052,7 @@ class SuccessionSystem(StrEnum):
     ultimogeniture = 'ultimogeniture'
 
 
-class WidowInheritanceRight(StrEnum):
+class WidowInheritanceRight(Enum):
     full_inheritance = 'full_inheritance'
     usufruct_only = 'usufruct_only'
     levirate_marriage = 'levirate_marriage'
@@ -10091,7 +10072,7 @@ class CustomarySuccessionRule(BaseModel):
     caseReference: constr(max_length=500) | None = None
 
 
-class ConstitutionalChallengeOutcome(StrEnum):
+class ConstitutionalChallengeOutcome(Enum):
     not_challenged = 'not_challenged'
     upheld = 'upheld'
     struck_down = 'struck_down'
@@ -10157,7 +10138,7 @@ class LandTenureDetail(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class Outcome1(StrEnum):
+class Outcome1(Enum):
     not_challenged = 'not_challenged'
     upheld = 'upheld'
     struck_down = 'struck_down'
@@ -10629,7 +10610,7 @@ class ProtectedHeir(BaseModel):
     )
     heirClass: HeirClass3 = Field(
         ...,
-        description='Class of protected heir. Since 2023, only descendants and surviving_spouse are protected heirs; parent is included for pre-2023 deaths.',
+        description='Class of protected heir. Since 2023, only descendants and surviving_spouse are protected heirs; parent is included for pre-2023 deaths',
     )
     statutoryShareFraction: constr(pattern=r'^[0-9]+/[0-9]+$', max_length=20) | None = (
         Field(
@@ -10732,24 +10713,24 @@ class Switzerland(BaseModel):
     )
     pflichtteil: Pflichtteil | None = Field(
         None,
-        description='Pflichtteil — the statutory reserved portion under Swiss law. Since the 2023 Erbrechtsrevision (ZGB Art. 470–480), parents are no longer protected heirs; descendants retain 1/2 of their intestate share and the surviving spouse 1/2 of their intestate share.',
+        description='Pflichtteil — the statutory reserved portion under Swiss law. Since the 2023 Erbrechtsrevision (ZGB Art. 470–480), parents are no longer protected heirs; descendants retain 1/2 of their intestate share and the surviving spouse 1/2 of their intestate share',
     )
     cantonalVariation: CantonalVariation | None = Field(
         None,
-        description='Cantonal inheritance tax and succession law variation. Switzerland has 26 cantons; direct-line heirs are exempt in most cantons, but rates and exemptions differ significantly.',
+        description='Cantonal inheritance tax and succession law variation. Switzerland has 26 cantons; direct-line heirs are exempt in most cantons, but rates and exemptions differ significantly',
     )
     matrimonialPropertyRegime: (
         MatrimonialPropertyRegime | None
     ) = (
-        Field(None, description='The matrimonial property regime governing the split of matrimonial property before succession begins. participation_in_acquisitions is the default regime under ZGB Art. 181.')
+        Field(None, description='The matrimonial property regime governing the split of matrimonial property before succession begins. participation_in_acquisitions is the default regime under ZGB Art. 181')
     )
     erbschein: Erbschein | None = Field(
         None,
-        description='Erbschein — the Swiss certificate of inheritance (Erbenbescheinigung) issued by the competent cantonal authority confirming the identity of heirs and their shares.',
+        description='Erbschein — the Swiss certificate of inheritance (Erbenbescheinigung) issued by the competent cantonal authority confirming the identity of heirs and their shares',
     )
     notarialWillForm: NotarialWillForm | None = Field(
         None,
-        description='Form of will used under Swiss law. public_will: notarially authenticated before two witnesses (ZGB Art. 499–508). holographic_will: entirely handwritten, dated, and signed by the testator (ZGB Art. 505). oral_will: emergency oral will before two witnesses when notarial form is impossible (ZGB Art. 506–508).',
+        description='Form of will used under Swiss law. public_will: notarially authenticated before two witnesses (ZGB Art. 499–508). holographic_will: entirely handwritten, dated, and signed by the testator (ZGB Art. 505). oral_will: emergency oral will before two witnesses when notarial form is impossible (ZGB Art. 506–508)',
     )
     notes: constr(max_length=2000) | None = None
 
@@ -10768,7 +10749,7 @@ class ParallelCourtSystems(BaseModel):
     )
     adjudicatingCourt: AdjudicatingCourt | None = Field(
         None,
-        description='The court system with jurisdiction over this succession matter. civil_family_court: Family Court under Family Court Law 1995 (default for most succession matters). rabbinical_court: Rabbinical Court with jurisdiction over Jewish personal status and succession where all parties consent. sharia_court: Sharia Court with jurisdiction over Muslim personal status matters. druze_court: Druze Religious Court with jurisdiction over Druze personal status. registrar_of_inheritance: Registrar of Inheritance (Rasham HaYerushot) for uncontested applications.',
+        description='The court system with jurisdiction over this succession matter. civil_family_court: Family Court under Family Court Law 1995 (default for most succession matters). rabbinical_court: Rabbinical Court with jurisdiction over Jewish personal status and succession where all parties consent. sharia_court: Sharia Court with jurisdiction over Muslim personal status matters. druze_court: Druze Religious Court with jurisdiction over Druze personal status. registrar_of_inheritance: Registrar of Inheritance (Rasham HaYerushot) for uncontested applications',
     )
     courtOrderReference: constr(max_length=100) | None = Field(
         None, description='Reference number of the court order or application'
@@ -10813,7 +10794,7 @@ class InheritanceLaw1965(BaseModel):
     )
     successionOrderType: SuccessionOrderType | None = Field(
         None,
-        description="Type of succession order sought or obtained. tzevu_kiyum: probate order (tzav kiyum tzava'a) confirming the validity of a will. tzevu_yerusha: succession order (tzav yerusha) determining heirs on intestacy. combined: both orders sought together, e.g. where a partial will exists.",
+        description="Type of succession order sought or obtained. tzevu_kiyum: probate order (tzav kiyum tzava'a) confirming the validity of a will. tzevu_yerusha: succession order (tzav yerusha) determining heirs on intestacy. combined: both orders sought together, e.g. where a partial will exists",
     )
     objectionPeriodExpired: bool | None = Field(
         None,
@@ -10825,7 +10806,7 @@ class InheritanceLaw1965(BaseModel):
     )
     spouseEntitlement: SpouseEntitlement | None = Field(
         None,
-        description="Surviving spouse entitlement under Inheritance Law 1965. On intestacy, the spouse's share depends on the class of heirs surviving alongside them.",
+        description="Surviving spouse entitlement under Inheritance Law 1965. On intestacy, the spouse's share depends on the class of heirs surviving alongside them",
     )
 
 
@@ -10848,11 +10829,11 @@ class ReligiousAuthorityOrder(BaseModel):
     )
     authority: Authority | None = Field(
         None,
-        description='The religious authority issuing the order. bet_din: Rabbinical court (Jewish law). sharia_court: Sharia court (Islamic law). druze_court: Druze religious court.',
+        description='The religious authority issuing the order. bet_din: Rabbinical court (Jewish law). sharia_court: Sharia court (Islamic law). druze_court: Druze religious court',
     )
     orderType: OrderType | None = Field(
         None,
-        description='Type of religious authority order. succession_ruling: ruling on intestate distribution. halachic_will_validation: validation of a will under halachic principles. waqf_ruling: ruling concerning waqf (Islamic religious endowment) assets. consent_order: order by consent of all parties.',
+        description='Type of religious authority order. succession_ruling: ruling on intestate distribution. halachic_will_validation: validation of a will under halachic principles. waqf_ruling: ruling concerning waqf (Islamic religious endowment) assets. consent_order: order by consent of all parties',
     )
     orderReference: constr(max_length=100) | None = Field(
         None, description='Reference number of the religious authority order'
@@ -10879,7 +10860,7 @@ class KibbutzProperty(BaseModel):
     )
     communalOwnershipType: CommunalOwnershipType | None = Field(
         None,
-        description='Type of communal or cooperative structure. kibbutz_communal: traditional collective kibbutz where all property is collectively owned. kibbutz_renewed: renewed (mתחדש) kibbutz operating on differential pay and partial private ownership. moshav: cooperative smallholder settlement where land is state-leased and individually farmed. moshav_shitufi: collective moshav combining kibbutz production with moshav family life.',
+        description='Type of communal or cooperative structure. kibbutz_communal: traditional collective kibbutz where all property is collectively owned. kibbutz_renewed: renewed (mתחדש) kibbutz operating on differential pay and partial private ownership. moshav: cooperative smallholder settlement where land is state-leased and individually farmed. moshav_shitufi: collective moshav combining kibbutz production with moshav family life',
     )
     membershipRightsTransferable: (
         bool | None
@@ -10915,7 +10896,7 @@ class HolocaustRestitution(BaseModel):
     )
     restitutionSource: RestitutionSource | None = Field(
         None,
-        description='Source programme or authority from which restitution is or was sought. claims_conference: Conference on Jewish Material Claims Against Germany. german_government: German federal or state government restitution. austrian_government: Austrian government restitution. swiss_banks_settlement: Swiss Banks Settlement (Volcker process). art_restitution: looted art restitution. property_restitution: real property restitution. other: other restitution programme.',
+        description='Source programme or authority from which restitution is or was sought. claims_conference: Conference on Jewish Material Claims Against Germany. german_government: German federal or state government restitution. austrian_government: Austrian government restitution. swiss_banks_settlement: Swiss Banks Settlement (Volcker process). art_restitution: looted art restitution. property_restitution: real property restitution. other: other restitution programme',
     )
     originalOwnerKnown: bool | None = Field(
         None,
@@ -10937,23 +10918,23 @@ class Israel(BaseModel):
     )
     parallelCourtSystems: ParallelCourtSystems | None = Field(
         None,
-        description='The adjudicating court system handling this succession matter. Israel operates parallel civil and religious court systems, each with jurisdiction over different communities and matter types.',
+        description='The adjudicating court system handling this succession matter. Israel operates parallel civil and religious court systems, each with jurisdiction over different communities and matter types',
     )
     inheritanceLaw1965: InheritanceLaw1965 | None = Field(
         None,
-        description='Details of the succession process under the Inheritance Law 1965 (Chok HaYerusha). The law provides two tracks: tzevu kiyum (probate order for wills) and tzevu yerusha (succession order for intestate estates).',
+        description='Details of the succession process under the Inheritance Law 1965 (Chok HaYerusha). The law provides two tracks: tzevu kiyum (probate order for wills) and tzevu yerusha (succession order for intestate estates)',
     )
     religiousAuthorityOrder: ReligiousAuthorityOrder | None = Field(
         None,
-        description='An order or ruling issued by a religious court with jurisdiction over this succession matter. Applicable where a religious court has issued a binding ruling recognised under Israeli law.',
+        description='An order or ruling issued by a religious court with jurisdiction over this succession matter. Applicable where a religious court has issued a binding ruling recognised under Israeli law',
     )
     kibbutzProperty: KibbutzProperty | None = Field(
         None,
-        description='Communal or cooperative property held through a kibbutz or moshav. These structures create special succession rules as membership rights, housing allocations, and production quotas may not be freely transferable.',
+        description='Communal or cooperative property held through a kibbutz or moshav. These structures create special succession rules as membership rights, housing allocations, and production quotas may not be freely transferable',
     )
     holocaustRestitution: HolocaustRestitution | None = Field(
         None,
-        description='Holocaust restitution assets — property or claims arising from Nazi persecution and subsequent restitution programmes. Israel has a significant number of estates involving Holocaust-era assets due to its founding population.',
+        description='Holocaust restitution assets — property or claims arising from Nazi persecution and subsequent restitution programmes. Israel has a significant number of estates involving Holocaust-era assets due to its founding population',
     )
     notes: constr(max_length=2000) | None = None
 
@@ -11028,16 +11009,11 @@ class StampDuty(BaseModel):
     exemptions: list[constr(max_length=255)] | None = None
 
 
-class School3(Enum):
-    mitakshara = 'mitakshara'
-    dayabhaga = 'dayabhaga'
-
-
 class CoparcenaryDetails(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    school: School3 | None = None
+    school: School2 | None = None
     amendment2005Applies: bool | None = Field(
         None,
         description='Hindu Succession (Amendment) Act 2005 — daughters equal coparceners',
@@ -11148,7 +11124,7 @@ class India(BaseModel):
     )
     probateRequired: bool | None = Field(
         None,
-        description='Whether probate is required — varies by religion and state. Mandatory for wills under Indian Succession Act in certain cities.',
+        description='Whether probate is required — varies by religion and state. Mandatory for wills under Indian Succession Act in certain cities',
     )
     probateJurisdiction: ProbateJurisdiction | None = Field(
         None,
@@ -11400,7 +11376,7 @@ class Uae(BaseModel):
     notes: constr(max_length=2000) | None = None
     marriageRevocation: MarriageRevocation1 | None = Field(
         None,
-        description="Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs.",
+        description="Whether and how marriage revokes a prior will. For UAE non-Muslim wills registered with DIFC or ADGM, marriage does not automatically revoke the will. Muslim estates are governed by Sharia fara'id regardless of marital status — will limited to 1/3 for non-heirs",
     )
 
 
@@ -12147,7 +12123,7 @@ class DeathRecord(BaseModel):
     )
 
 
-class System1(RootModel[constr(max_length=500)]):
+class System(RootModel[constr(max_length=500)]):
     root: constr(max_length=500)
 
 
@@ -12167,7 +12143,7 @@ class SuccessionConflict(BaseModel):
         description='Summary of the conflict between legal systems',
         examples=['Statutory will gives daughter the house; Igbo customary law gives eldest son custodianship', 'French forced heirship claim conflicts with English testamentary freedom'],
     )
-    systems: list[System1] | None = Field(
+    systems: list[System] | None = Field(
         None,
         description='The legal systems in conflict',
         examples=[['statutory', 'Igbo customary'], ['French civil law', 'English common law']],
@@ -13896,7 +13872,7 @@ class RitualName(BaseModel):
     )
 
 
-class System2(Enum):
+class System1(Enum):
     statutory = 'statutory'
     customary = 'customary'
     religious = 'religious'
@@ -13907,7 +13883,7 @@ class LegalPersonality(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    system: System2 = Field(
+    system: System1 = Field(
         ..., description='The legal system under which this personality exists'
     )
     role: constr(min_length=1, max_length=255) = Field(

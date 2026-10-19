@@ -4550,6 +4550,55 @@ components:
             - ceramics
             - memorabilia
             - other
+        additionalCategories:
+          description: Further categories the collection spans beyond its primary category, e.g. a watch collection that also holds jewellery
+          $comment: Drawn from the same values as category, which stays the single primary category, so existing documents and generated clients are unaffected. Requires category. Should not repeat category; that rule is stated, not enforced, because expressing it needs one conditional per value.
+          examples:
+            - - jewellery
+          type: array
+          maxItems: 16
+          minItems: 1
+          uniqueItems: true
+          items:
+            enum:
+              - model_railways
+              - vinyl_records
+              - art
+              - jewellery
+              - wine
+              - stamps
+              - coins
+              - books
+              - musical_instruments
+              - fishing_gear
+              - handbags
+              - power_tools
+              - watches
+              - ceramics
+              - memorabilia
+              - other
+        expectedItemCount:
+          description: 'How many items the owner says the collection holds, whether or not any has been listed. Declared by the owner, never computed from the listed items: the gap between this and what has been listed is what shows a collection is incomplete'
+          $comment: 'A single integer, not a range: ''9 of 12 listed'' needs one denominator. Listed items may outnumber it (the owner under-counted); the schema does not compare them. No default: an absent count is not zero.'
+          examples:
+            - 12
+            - 20
+            - 0
+          type: integer
+          minimum: 0
+        expectedItemCountIsEstimate:
+          description: True when expectedItemCount is the owner's approximation ('roughly 20') rather than an exact count. Requires expectedItemCount
+          examples:
+            - true
+          type: boolean
+        location:
+          description: Where the collection is physically kept — a property, room, safe or storage facility. Same meaning as location on an individual asset, and recordable before any item is listed
+          examples:
+            - Wilmslow
+            - Loft at Oakfield Road
+            - Bonhams storage, London
+          type: string
+          maxLength: 255
         estimatedValue:
           description: Estimated total value of the collection as a whole
           examples:
@@ -4778,6 +4827,11 @@ components:
           propertyNames:
             pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
             maxLength: 64
+      dependentRequired:
+        additionalCategories:
+          - category
+        expectedItemCountIsEstimate:
+          - expectedItemCount
       unevaluatedProperties: false
     address:
       $schema: https://json-schema.org/draft/2020-12/schema

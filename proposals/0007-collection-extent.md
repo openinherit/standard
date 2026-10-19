@@ -1,5 +1,5 @@
 ---
-github_issue: TBD
+github_issue: https://github.com/openinherit/standard/pull/84
 ---
 
 # Proposal 0007: A collection can state its own extent before any item is listed

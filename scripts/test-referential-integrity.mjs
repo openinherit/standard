@@ -7,6 +7,7 @@
 import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { spawnSync } from 'child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -136,7 +137,10 @@ const validDoc = {
     { id: 'kk000001-0000-4000-a000-000000000001', fromPersonId: 'aaaa0001-0000-4000-a000-000000000001', toPersonId: 'aaaa0003-0000-4000-a000-000000000003', kinshipType: 'parent_child_biological' }
   ],
   relationships: [
-    { id: 'rr000001-0000-4000-a000-000000000001', person1Id: 'aaaa0001-0000-4000-a000-000000000001', person2Id: 'aaaa0002-0000-4000-a000-000000000002', relationshipType: 'married' }
+    { id: 'rr000001-0000-4000-a000-000000000001', type: 'marriage_civil', partners: [
+      { personId: 'aaaa0001-0000-4000-a000-000000000001', ordinal: 1 },
+      { personId: 'aaaa0002-0000-4000-a000-000000000002', ordinal: 2 },
+    ] }
   ],
   assets: [
     { id: 'bb000001-0000-4000-a000-000000000001', name: 'Savings', category: 'financial', spaceId: 'ss000001-0000-4000-a000-000000000001', propertyId: 'pp000001-0000-4000-a000-000000000001', assetCollectionId: 'ac000001-0000-4000-a000-000000000001' }
@@ -157,7 +161,7 @@ const validDoc = {
     { id: 'dddd0001-0000-4000-a000-000000000001', personId: 'aaaa0002-0000-4000-a000-000000000002', role: 'executor' }
   ],
   guardians: [
-    { id: 'gg000001-0000-4000-a000-000000000001', personId: 'aaaa0003-0000-4000-a000-000000000003' }
+    { id: 'gg000001-0000-4000-a000-000000000001', personId: 'aaaa0002-0000-4000-a000-000000000002', childPersonId: 'aaaa0003-0000-4000-a000-000000000003' }
   ],
   proxyAuthorisations: [
     { id: 'pa000001-0000-4000-a000-000000000001', agentPersonId: 'aaaa0002-0000-4000-a000-000000000002', type: 'lasting_power_of_attorney' }
@@ -364,20 +368,22 @@ test('kinships[].fromPersonId — broken ref detected', () => {
   if (broken.length === 0) throw new Error('Should have found broken kinship fromPersonId ref');
 });
 
-test('relationships[].person1Id — broken ref detected', () => {
+test('guardians[].childPersonId — broken ref detected', () => {
   const doc = JSON.parse(JSON.stringify(validDoc));
-  doc.relationships[0].person1Id = 'aaaa9999-0000-4000-a000-000000000999';
-  const c = constraints.find(c => c.field === 'relationships[].person1Id');
+  doc.guardians[0].childPersonId = 'aaaa9999-0000-4000-a000-000000000999';
+  const c = constraints.find(c => c.field === 'guardians[].childPersonId');
   const broken = checkConstraint(doc, c);
-  if (broken.length === 0) throw new Error('Should have found broken relationship person1Id ref');
+  if (broken.length === 0) throw new Error('Should have found broken guardian childPersonId ref');
 });
 
-test('relationships[].person2Id — broken ref detected', () => {
-  const doc = JSON.parse(JSON.stringify(validDoc));
-  doc.relationships[0].person2Id = 'aaaa9999-0000-4000-a000-000000000999';
-  const c = constraints.find(c => c.field === 'relationships[].person2Id');
-  const broken = checkConstraint(doc, c);
-  if (broken.length === 0) throw new Error('Should have found broken relationship person2Id ref');
+test('relationships[].partners[].personId — broken ref detected, at any partner position', () => {
+  const c = constraints.find(c => c.field === 'relationships[].partners[].personId');
+  for (const j of [0, 1]) {
+    const doc = JSON.parse(JSON.stringify(validDoc));
+    doc.relationships[0].partners[j].personId = 'aaaa9999-0000-4000-a000-000000000999';
+    const broken = checkConstraint(doc, c);
+    if (broken.length === 0) throw new Error(`Should have found broken partners[${j}].personId ref`);
+  }
 });
 
 test('assets[].propertyId — broken ref detected', () => {
@@ -704,36 +710,28 @@ const NOT_BY_CHECKREF = new Map([
   ['spaces[].containedInSpaceId', 'walked by the acyclic containment check, not a flat reference check'],
 ]);
 
-// ⛔ KNOWN DIVERGENCES — a ratcheting floor, not a permission.
+// ⛔ KNOWN DIVERGENCES — a floor at zero, not a permission.
 //
-// Each of these is declared in schema.json and NOT enforced on a real
-// document. They are recorded here so the list is visible and cannot grow
-// silently; this test fails on any divergence that is not named below, so a
-// new one cannot be added without deleting a line from this file. Every
-// entry is a defect that wants fixing; none of them is a design decision.
-//
-// ⚠️ The first two groups are worse than "unimplemented": validate-refs.mjs
-// DOES have a checkRef for them, spelled with a field name that does not
-// exist in the entity's schema, so the check runs and can never fire.
-const KNOWN_DIVERGENCES = new Map([
-  ['guardians[].personId', 'validate-refs.mjs checks guardianPersonId / childPersonIds; guardian.json declares personId / childPersonId — the checks can never fire'],
-  ['kinships[].fromPersonId', 'validate-refs.mjs checks personId1 / personId2; kinship.json declares fromPersonId / toPersonId — the checks can never fire'],
-  ['kinships[].toPersonId', 'as above'],
-  ['relationships[].person1Id', 'neither name exists: relationship.json models parties as partners[], so the declared constraint itself is wrong'],
-  ['relationships[].person2Id', 'as above'],
-  ['pets[].petCareArrangement.trustId', 'declared, real field, no check implemented'],
-  ['pets[].petCareArrangement.bequestId', 'declared, real field, no check implemented'],
-  ['pets[].petCareArrangement.nominatedCarerPersonId', 'declared, real field, no check implemented'],
-  ['trusts[].petId', 'declared, real field, no check implemented'],
-]);
+// Each entry would be a constraint declared in schema.json and NOT enforced
+// on a real document. Until proposal 0008 there were nine: guardians and
+// kinships were checked under field names the entities do not have (so the
+// check ran and could never fire), relationships declared person1Id /
+// person2Id where the schema has partners[], and the pet-care references
+// were never implemented. The list is empty, and a test below keeps it so:
+// fix the declaration or implement the check, never add a line here.
+const KNOWN_DIVERGENCES = new Map([]);
 
 function checkRefCallExists(field) {
   // field is "entities[].fieldName" — validate-refs.mjs spells that
-  // checkRef('entities', i, 'fieldName', ...)
+  // checkRef('entities', i, 'fieldName', ...). A nested array segment,
+  // "entities[].items[].fieldName", is spelt with a template literal:
+  // checkRef('entities', i, `items[${j}].fieldName`, ...).
   const m = field.match(/^([A-Za-z]+)\[\]\.(.+)$/);
   if (!m) return null;
   const [, entity, name] = m;
-  const needle = new RegExp(`checkRef\\(\\s*'${entity}'\\s*,[^,]+,\\s*'${name.replace(/\./g, "\\.")}'`);
+  const spelt = name.split('[]').map(part => part.replace(/\./g, '\\.')).join('\\[\\$\\{\\w+\\}\\]');
+  const quote = name.includes('[]') ? '`' : "'";
+  const needle = new RegExp(`checkRef\\(\\s*'${entity}'\\s*,[^,]+,\\s*${quote}${spelt}${quote}`);
   return needle.test(VALIDATOR_SRC);
 }
 
@@ -751,6 +749,12 @@ test('every declared referentialIntegrity constraint is implemented in validate-
       `declared in schema.json but not enforced by validate-refs.mjs: ${missing.join(', ')}. ` +
       'Implement the rule, or add it to KNOWN_DIVERGENCES with the reason.'
     );
+  }
+});
+
+test('KNOWN_DIVERGENCES is empty — every declared rule is enforced', () => {
+  if (KNOWN_DIVERGENCES.size !== 0) {
+    throw new Error(`KNOWN_DIVERGENCES must stay empty; it holds: ${[...KNOWN_DIVERGENCES.keys()].join(', ')}`);
   }
 });
 
@@ -772,6 +776,88 @@ test('assets[].propertyId and spaces[].propertyId are both enforced, not just de
       throw new Error(`${field} is declared but validate-refs.mjs has no checkRef for it`);
     }
   }
+});
+
+// === Each rule, run through the shipped validator ===
+//
+// The tests above check the declared list against this file's own
+// interpreter, and grep validate-refs.mjs for a checkRef call. Neither runs
+// the validator. That is how nine rules stayed unenforced: a checkRef spelt
+// with a field name the entity does not have is found by the grep and can
+// never fire. So each rule below has a fixture with exactly one broken
+// reference, and validate-refs.mjs itself must reject it.
+
+console.log('\nShipped validator — one fixture per rule:');
+
+const RI_DIR = resolve(ROOT, 'tests/referential-integrity');
+const INTACT_PATH = resolve(RI_DIR, 'intact.json');
+const intact = JSON.parse(readFileSync(INTACT_PATH, 'utf8'));
+
+// fixture basename → the declared field it breaks, and the field path
+// validate-refs.mjs must name in its BROKEN REF line.
+const RULE_FIXTURES = [
+  ['guardians-personId', 'guardians[].personId', 'guardians[0].personId'],
+  ['guardians-childPersonId', 'guardians[].childPersonId', 'guardians[0].childPersonId'],
+  ['kinships-fromPersonId', 'kinships[].fromPersonId', 'kinships[0].fromPersonId'],
+  ['kinships-toPersonId', 'kinships[].toPersonId', 'kinships[0].toPersonId'],
+  ['relationships-partners-0-personId', 'relationships[].partners[].personId', 'relationships[0].partners[0].personId'],
+  ['relationships-partners-1-personId', 'relationships[].partners[].personId', 'relationships[0].partners[1].personId'],
+  ['pets-petCareArrangement-trustId', 'pets[].petCareArrangement.trustId', 'pets[0].petCareArrangement.trustId'],
+  ['pets-petCareArrangement-bequestId', 'pets[].petCareArrangement.bequestId', 'pets[0].petCareArrangement.bequestId'],
+  ['pets-petCareArrangement-nominatedCarerPersonId', 'pets[].petCareArrangement.nominatedCarerPersonId', 'pets[0].petCareArrangement.nominatedCarerPersonId'],
+  ['trusts-petId', 'trusts[].petId', 'trusts[0].petId'],
+];
+
+function runValidator(path) {
+  const r = spawnSync(process.execPath, [resolve(ROOT, 'scripts/validate-refs.mjs'), path], { encoding: 'utf8' });
+  return { status: r.status, out: `${r.stdout}${r.stderr}` };
+}
+
+// Leaf values that differ between two JSON trees, as "a.b[0].c" paths.
+function diffLeaves(a, b, path = '') {
+  if (a === b) return [];
+  if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return [path];
+  const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+  return [...keys].flatMap(k => {
+    const p = Array.isArray(a) ? `${path}[${k}]` : (path ? `${path}.${k}` : k);
+    return diffLeaves(a[k], b[k], p);
+  });
+}
+
+test('intact.json passes validate-refs.mjs', () => {
+  const { status, out } = runValidator(INTACT_PATH);
+  if (status !== 0) throw new Error(`exit ${status}, expected 0:\n${out}`);
+});
+
+test('intact.json carries a value at every rule it is the baseline for (not vacuous)', () => {
+  const empty = RULE_FIXTURES.filter(([, field]) => resolvePath(intact, field).length === 0);
+  if (empty.length > 0) throw new Error(`no value to break at: ${empty.map(r => r[1]).join(', ')}`);
+});
+
+test('every rule fixture is declared in schema.json', () => {
+  const undeclared = RULE_FIXTURES.filter(([, field]) => !constraints.some(c => c.field === field));
+  if (undeclared.length > 0) throw new Error(`not declared: ${undeclared.map(r => r[1]).join(', ')}`);
+});
+
+for (const [name, field, reported] of RULE_FIXTURES) {
+  const path = resolve(RI_DIR, 'broken', `${name}.json`);
+  test(`${field} — broken/${name}.json is rejected by validate-refs.mjs`, () => {
+    const broken = JSON.parse(readFileSync(path, 'utf8'));
+    const changed = diffLeaves(intact, broken);
+    if (changed.length !== 1 || changed[0] !== reported) {
+      throw new Error(`must differ from intact.json at exactly ${reported}; differs at ${JSON.stringify(changed)}`);
+    }
+    const { status, out } = runValidator(path);
+    if (status !== 1) throw new Error(`exit ${status}, expected 1 — the broken reference was not caught`);
+    if (!out.includes(`${reported} =`)) throw new Error(`exit 1, but not for ${reported}:\n${out}`);
+  });
+}
+
+test('every declared rule on guardians, kinships, relationships, pets and trusts has a fixture', () => {
+  const covered = new Set(RULE_FIXTURES.map(r => r[1]));
+  const ENTITIES = /^(guardians|kinships|relationships|pets|trusts)\[\]/;
+  const gaps = constraints.filter(c => ENTITIES.test(c.field) && !covered.has(c.field)).map(c => c.field);
+  if (gaps.length > 0) throw new Error(`declared without a fixture: ${gaps.join(', ')}`);
 });
 
 console.log('\n' + '═'.repeat(50));

@@ -275,7 +275,10 @@ const baseDoc = {
     { id: 'kk000001-0000-4000-a000-000000000001', fromPersonId: 'aaaa0001-0000-4000-a000-000000000001', toPersonId: 'aaaa0003-0000-4000-a000-000000000003', kinshipType: 'parent_child_biological' }
   ],
   relationships: [
-    { id: 'rr000001-0000-4000-a000-000000000001', person1Id: 'aaaa0001-0000-4000-a000-000000000001', person2Id: 'aaaa0002-0000-4000-a000-000000000002', relationshipType: 'married' }
+    { id: 'rr000001-0000-4000-a000-000000000001', type: 'marriage_civil', partners: [
+      { personId: 'aaaa0001-0000-4000-a000-000000000001', ordinal: 1 },
+      { personId: 'aaaa0002-0000-4000-a000-000000000002', ordinal: 2 },
+    ] }
   ],
   assets: [
     { id: 'bb000001-0000-4000-a000-000000000001', name: 'Savings account', category: 'financial', spaceId: 'ss000001-0000-4000-a000-000000000001', propertyId: 'pp000001-0000-4000-a000-000000000001', assetCollectionId: 'ac000001-0000-4000-a000-000000000001' }
@@ -296,7 +299,7 @@ const baseDoc = {
     { id: 'dddd0001-0000-4000-a000-000000000001', personId: 'aaaa0002-0000-4000-a000-000000000002', role: 'executor' }
   ],
   guardians: [
-    { id: 'gg000001-0000-4000-a000-000000000001', personId: 'aaaa0003-0000-4000-a000-000000000003' }
+    { id: 'gg000001-0000-4000-a000-000000000001', personId: 'aaaa0002-0000-4000-a000-000000000002', childPersonId: 'aaaa0003-0000-4000-a000-000000000003' }
   ],
   proxyAuthorisations: [
     { id: 'pa000001-0000-4000-a000-000000000001', agentPersonId: 'aaaa0002-0000-4000-a000-000000000002', type: 'lasting_power_of_attorney' }

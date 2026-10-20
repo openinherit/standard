@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- A written support window and dist-tag policy in `docs/policies/versioning.md`: only the newest
+  release line is supported, every release is published under the npm dist-tag `latest`, and there
+  is no prerelease channel. "Addressing a release" states that a schema's `$id` is stable across
+  releases and the package version is what pins one. `scripts/release-policy.mjs` enforces it:
+  `release.sh` and the publish workflow refuse a version that is not newer than every version on
+  the registry, and every publish step passes `--tag latest`, so `latest` never moves backwards.
+  `check-release-wiring.mjs` gains A8 to A10, which go red if a publish drops the tag, the policy
+  check is removed or runs late, or the policy text stops stating what the machinery does.
 - Four gov-oracles for lifetime transfers in `tests/oracles/`, 20 cases, each quoting its source:
   `pet-taper-iht1984-s7` (taper relief and cumulation on a failed potentially exempt transfer, IHTA
   1984 s.3A(4), s.7(1), s.7(4): GOV.UK's Sally example and taper table), `lifetime-gift-exemptions-iht1984`

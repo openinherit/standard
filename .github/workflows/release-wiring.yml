@@ -22,6 +22,11 @@ jobs:
       - name: The wiring check can go red
         run: node scripts/test-check-release-wiring.mjs
 
+      # release-policy.mjs is the support window and the dist-tag as machinery;
+      # publish.yml and release.sh run it. Prove each refusal on injected input.
+      - name: The release policy refuses what the support window does not allow
+        run: node scripts/test-release-policy.mjs
+
       # publish.yml runs the contents check against the tag. Running it here too
       # means a root schema or reference-data edit that is not copied into
       # packages/schema reds the PR that makes it, not the tag pushed weeks later.

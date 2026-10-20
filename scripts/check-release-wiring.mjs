@@ -12,6 +12,7 @@
 
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
+import { DIST_TAG } from "./release-policy.mjs";
 
 const REPO_SLUG = "github.com/openinherit/standard";
 // Anchored on a boundary: openinherit/standard-archived contains the slug as a
@@ -196,6 +197,66 @@ if (existsSync(KIT_MANIFEST)) {
         }
       }
     }
+  }
+}
+
+// ---- A8: every publish names the dist-tag ----------------------------------
+// Without --tag, npm moves `latest` to whatever was just published -- a LOWER
+// version included. The policy has one dist-tag; every publish must say it.
+if (publishWorkflow) {
+  for (const line of publishWorkflow.text.split("\n")) {
+    if (!publishLineRe().test(line)) continue;
+    const tag = /\s--tag[=\s]+["']?([^\s"']+)/.exec(line);
+    if (!tag || tag[1] !== DIST_TAG) {
+      fail(
+        "A8",
+        `${publishWorkflow.name} publishes without \`--tag ${DIST_TAG}\`: ${line.trim()} -- ` +
+          `docs/policies/versioning.md promises one dist-tag, "${DIST_TAG}".`,
+      );
+    }
+  }
+}
+
+// ---- A9: the support window is checked before anything is published -------
+// release-policy.mjs refuses a version that is not newer than every released
+// one. It protects a release only if the tag workflow runs it before the first
+// publish, and release.sh runs it before it bumps and tags.
+const POLICY_RUN = /^[^#\n]*\bnode\s+[^\n#]*scripts\/release-policy\.mjs\b[^#\n]*--version\b/;
+if (publishWorkflow) {
+  const lines = publishWorkflow.text.split("\n");
+  const firstPublish = lines.findIndex((l) => publishLineRe().test(l));
+  const policy = lines.findIndex((l) => POLICY_RUN.test(l));
+  if (policy === -1) {
+    fail(
+      "A9",
+      `${publishWorkflow.name} never runs \`node scripts/release-policy.mjs --version ...\` -- ` +
+        `nothing stops a backport or an already-released version reaching the registry.`,
+    );
+  } else if (firstPublish !== -1 && policy > firstPublish) {
+    fail("A9", `${publishWorkflow.name} runs release-policy.mjs after its first publish step. Move it before.`);
+  }
+}
+if (existsSync(RELEASE_SCRIPT) && !readFileSync(RELEASE_SCRIPT, "utf8").split("\n").some((l) => POLICY_RUN.test(l))) {
+  fail(
+    "A9",
+    `${RELEASE_SCRIPT} never runs \`node scripts/release-policy.mjs --version ...\`, so it would ` +
+      `bump and tag a version the publish workflow then refuses.`,
+  );
+}
+
+// ---- A10: the policy says what the machinery does ---------------------------
+const POLICY_DOC = "docs/policies/versioning.md";
+if (!existsSync(POLICY_DOC)) {
+  fail("A10", `${POLICY_DOC} does not exist; the release rules A8 and A9 enforce are written nowhere.`);
+} else {
+  const doc = readFileSync(POLICY_DOC, "utf8");
+  for (const heading of ["Support window", "Distribution tags"]) {
+    if (!new RegExp(`^##\\s+${heading}\\s*$`, "m").test(doc)) {
+      fail("A10", `${POLICY_DOC} has no "## ${heading}" section; A8/A9 enforce a rule it does not state.`);
+    }
+  }
+  if (!doc.includes(`\`${DIST_TAG}\``)) {
+    fail("A10", `${POLICY_DOC} never names \`${DIST_TAG}\`, the dist-tag every publish uses.`);
   }
 }
 

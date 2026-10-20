@@ -55,18 +55,26 @@ jobs:
       - name: Refuse to publish a tarball that is not the standard
         run: node scripts/check-release-contents.mjs --tag "${GITHUB_REF_NAME}"
 
+      # Only the newest release line is supported (docs/policies/versioning.md,
+      # "Support window"): a version that is not newer than everything already on
+      # the registry is refused here, before it could become `latest`.
+      - name: Refuse a release the support window does not allow
+        run: node scripts/release-policy.mjs --version "${GITHUB_REF_NAME#v}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish @openinherit/schema
-        run: pnpm --filter @openinherit/schema publish --provenance --no-git-checks
+        run: pnpm --filter @openinherit/schema publish --tag latest --provenance --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @openinherit/sdk
-        run: pnpm --filter @openinherit/sdk publish --provenance --no-git-checks
+        run: pnpm --filter @openinherit/sdk publish --tag latest --provenance --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @openinherit/conformance
-        run: pnpm --filter @openinherit/conformance publish --provenance --no-git-checks
+        run: pnpm --filter @openinherit/conformance publish --tag latest --provenance --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

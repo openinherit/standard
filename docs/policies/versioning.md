@@ -151,6 +151,38 @@ If `schemaVersion` is missing, treat it as `"3.0.0"`, the first release that use
 
 If `schemaVersion` is newer than your validator supports, validate in lenient mode (strip unknown fields, process what you can).
 
+## Support window
+
+Only the newest release is supported. There is one release line: when a release is published, earlier releases receive no further fixes, and when a new major release is published, the previous major is no longer maintained.
+
+- A fix ships as a new release after the newest one, never as a backport to an older minor or major.
+- A version that is not newer than every version already published is refused at release time. `scripts/release-policy.mjs` checks this against the npm registry; `scripts/release.sh` runs it before bumping, and the publish workflow runs it again before publishing.
+- Published versions stay on the registry and remain installable. "Not supported" means that line gets no further releases, not that it is withdrawn.
+- Plan an upgrade at each major release. Breaking changes between majors are listed in `CHANGELOG.md`, and a deprecated field is announced at least one minor release before a major removes it (see [Deprecation lifecycle](#deprecation-lifecycle)).
+
+Any change to this window will be stated in this section and recorded in `CHANGELOG.md` before it takes effect.
+
+## Distribution tags
+
+Every release is published to npm under the dist-tag `latest`, and every `@openinherit/*` package in a release carries the same version. There is no prerelease channel: a release version is always `MAJOR.MINOR.PATCH`, and a version with a prerelease suffix such as `7.0.0-rc.1` is refused. Because a release must be newer than every published version, `latest` only moves forward.
+
+```bash
+npm install @openinherit/schema          # the newest release (dist-tag latest)
+npm install @openinherit/schema@6.7.0    # one exact, immutable release
+```
+
+## Addressing a release
+
+Release numbers are semver, not dates. A schema's `$id`, for example `https://openinherit.org/v3/schema.json`, identifies the schema, not a release: it stays the same from one release to the next (see [Three Version Numbers](#three-version-numbers)). It is the floating name; the package version is the fixed one.
+
+| You need | Use |
+|----------|-----|
+| the schemas of the newest release | `@openinherit/schema` at the dist-tag `latest` |
+| one fixed release that never changes | `@openinherit/schema@<version>`; releases cut from this repository are also tagged `v<version>` |
+| to record which release a document follows | its `schemaVersion` |
+
+A published release is never changed; a correction is a new release. For reproducible validation, pin the package version, not the `$id`.
+
 ## Extension Compatibility
 
 Extensions (jurisdiction-specific schemas) follow the same maturity model independently. An extension can be draft while the core schemas are candidate. The `extension.json` manifest includes:

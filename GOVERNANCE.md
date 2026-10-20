@@ -34,7 +34,7 @@ INHERIT carries three version numbers, and each one means one thing:
 
 - **Within a major version:** Additive only — new optional properties, new enum values, new schemas. Never remove, rename, or tighten cardinality. The package's minor or patch version increases.
 - **Across major versions:** Breaking changes permitted, and the package's major version increases. Schemas stay in `v3/` under the same `$id`s: releases 4.0.0, 5.0.0 and 6.0.0 were all published there. Moving the schemas to a new namespace would change every `$id`, so it is a decision of its own and needs a proposal in `proposals/`. It does not follow automatically from a major release.
-- **Schemas are immutable once published.** To change a published schema, publish a new version.
+- **A published release is immutable.** To change a schema, publish a new package version. A schema's `$id` stays the same across releases, so pin the package version, not the `$id`, when you need a fixed schema.
 
 ## Extension Promotion
 

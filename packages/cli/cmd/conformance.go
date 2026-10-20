@@ -263,7 +263,7 @@ func refusedBy(ve *jsonschema.ValidationError, inst any, keyword, instancePath s
 	switch k := ve.ErrorKind.(type) {
 	case *kind.FalseSchema:
 		loc := ve.InstanceLocation
-		if len(loc) > 0 && lastSchemaToken(ve.SchemaURL) == keyword && jsonPointer(loc[:len(loc)-1]) == instancePath {
+		if len(loc) > 0 && lastSchemaToken(ve.SchemaURL) == keyword+"-seed" && jsonPointer(loc[:len(loc)-1]) == instancePath {
 			return true
 		}
 	case *kind.PropertyNames:

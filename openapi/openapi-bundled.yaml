@@ -27023,6 +27023,11 @@ components:
               required: true
               code: INHERIT_REF_BROKEN
               errorMessage: Guardian references a person who does not exist
+            - field: guardians[].childPersonId
+              references: people[].id
+              required: true
+              code: INHERIT_REF_BROKEN
+              errorMessage: Guardian childPersonId references a person who does not exist
             - field: bequests[].beneficiaryId
               references: people[].id
               required: true
@@ -27058,16 +27063,11 @@ components:
               required: true
               code: INHERIT_REF_BROKEN
               errorMessage: Kinship toPersonId references a person who does not exist
-            - field: relationships[].person1Id
+            - field: relationships[].partners[].personId
               references: people[].id
               required: true
               code: INHERIT_REF_BROKEN
-              errorMessage: Relationship person1Id references a person who does not exist
-            - field: relationships[].person2Id
-              references: people[].id
-              required: true
-              code: INHERIT_REF_BROKEN
-              errorMessage: Relationship person2Id references a person who does not exist
+              errorMessage: Relationship partner references a person who does not exist
             - field: assets[].spaceId
               references: spaces[].id
               required: false

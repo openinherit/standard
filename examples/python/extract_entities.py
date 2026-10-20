@@ -348,7 +348,7 @@ def assemble_inherit_document(result: dict) -> dict:
     # Assemble the complete INHERIT v3 document
     return {
         "$schema": "https://openinherit.org/v3/schema.json",
-        "schemaVersion": 3,
+        "schemaVersion": "6.7.0",
         "exportedAt": today,
         "generator": {
             "name": "INHERIT Python Extraction Example",

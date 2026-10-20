@@ -137,7 +137,10 @@ const validDoc = {
     { id: 'kk000001-0000-4000-a000-000000000001', fromPersonId: 'aaaa0001-0000-4000-a000-000000000001', toPersonId: 'aaaa0003-0000-4000-a000-000000000003', kinshipType: 'parent_child_biological' }
   ],
   relationships: [
-    { id: 'rr000001-0000-4000-a000-000000000001', person1Id: 'aaaa0001-0000-4000-a000-000000000001', person2Id: 'aaaa0002-0000-4000-a000-000000000002', relationshipType: 'married' }
+    { id: 'rr000001-0000-4000-a000-000000000001', type: 'marriage_civil', partners: [
+      { personId: 'aaaa0001-0000-4000-a000-000000000001', ordinal: 1 },
+      { personId: 'aaaa0002-0000-4000-a000-000000000002', ordinal: 2 },
+    ] }
   ],
   assets: [
     { id: 'bb000001-0000-4000-a000-000000000001', name: 'Savings', category: 'financial', spaceId: 'ss000001-0000-4000-a000-000000000001', propertyId: 'pp000001-0000-4000-a000-000000000001', assetCollectionId: 'ac000001-0000-4000-a000-000000000001' }
@@ -158,7 +161,7 @@ const validDoc = {
     { id: 'dddd0001-0000-4000-a000-000000000001', personId: 'aaaa0002-0000-4000-a000-000000000002', role: 'executor' }
   ],
   guardians: [
-    { id: 'gg000001-0000-4000-a000-000000000001', personId: 'aaaa0003-0000-4000-a000-000000000003' }
+    { id: 'gg000001-0000-4000-a000-000000000001', personId: 'aaaa0002-0000-4000-a000-000000000002', childPersonId: 'aaaa0003-0000-4000-a000-000000000003' }
   ],
   proxyAuthorisations: [
     { id: 'pa000001-0000-4000-a000-000000000001', agentPersonId: 'aaaa0002-0000-4000-a000-000000000002', type: 'lasting_power_of_attorney' }
@@ -365,20 +368,22 @@ test('kinships[].fromPersonId — broken ref detected', () => {
   if (broken.length === 0) throw new Error('Should have found broken kinship fromPersonId ref');
 });
 
-test('relationships[].person1Id — broken ref detected', () => {
+test('guardians[].childPersonId — broken ref detected', () => {
   const doc = JSON.parse(JSON.stringify(validDoc));
-  doc.relationships[0].person1Id = 'aaaa9999-0000-4000-a000-000000000999';
-  const c = constraints.find(c => c.field === 'relationships[].person1Id');
+  doc.guardians[0].childPersonId = 'aaaa9999-0000-4000-a000-000000000999';
+  const c = constraints.find(c => c.field === 'guardians[].childPersonId');
   const broken = checkConstraint(doc, c);
-  if (broken.length === 0) throw new Error('Should have found broken relationship person1Id ref');
+  if (broken.length === 0) throw new Error('Should have found broken guardian childPersonId ref');
 });
 
-test('relationships[].person2Id — broken ref detected', () => {
-  const doc = JSON.parse(JSON.stringify(validDoc));
-  doc.relationships[0].person2Id = 'aaaa9999-0000-4000-a000-000000000999';
-  const c = constraints.find(c => c.field === 'relationships[].person2Id');
-  const broken = checkConstraint(doc, c);
-  if (broken.length === 0) throw new Error('Should have found broken relationship person2Id ref');
+test('relationships[].partners[].personId — broken ref detected, at any partner position', () => {
+  const c = constraints.find(c => c.field === 'relationships[].partners[].personId');
+  for (const j of [0, 1]) {
+    const doc = JSON.parse(JSON.stringify(validDoc));
+    doc.relationships[0].partners[j].personId = 'aaaa9999-0000-4000-a000-000000000999';
+    const broken = checkConstraint(doc, c);
+    if (broken.length === 0) throw new Error(`Should have found broken partners[${j}].personId ref`);
+  }
 });
 
 test('assets[].propertyId — broken ref detected', () => {
@@ -705,36 +710,28 @@ const NOT_BY_CHECKREF = new Map([
   ['spaces[].containedInSpaceId', 'walked by the acyclic containment check, not a flat reference check'],
 ]);
 
-// ⛔ KNOWN DIVERGENCES — a ratcheting floor, not a permission.
+// ⛔ KNOWN DIVERGENCES — a floor at zero, not a permission.
 //
-// Each of these is declared in schema.json and NOT enforced on a real
-// document. They are recorded here so the list is visible and cannot grow
-// silently; this test fails on any divergence that is not named below, so a
-// new one cannot be added without deleting a line from this file. Every
-// entry is a defect that wants fixing; none of them is a design decision.
-//
-// ⚠️ The first two groups are worse than "unimplemented": validate-refs.mjs
-// DOES have a checkRef for them, spelled with a field name that does not
-// exist in the entity's schema, so the check runs and can never fire.
-const KNOWN_DIVERGENCES = new Map([
-  ['guardians[].personId', 'validate-refs.mjs checks guardianPersonId / childPersonIds; guardian.json declares personId / childPersonId — the checks can never fire'],
-  ['kinships[].fromPersonId', 'validate-refs.mjs checks personId1 / personId2; kinship.json declares fromPersonId / toPersonId — the checks can never fire'],
-  ['kinships[].toPersonId', 'as above'],
-  ['relationships[].person1Id', 'neither name exists: relationship.json models parties as partners[], so the declared constraint itself is wrong'],
-  ['relationships[].person2Id', 'as above'],
-  ['pets[].petCareArrangement.trustId', 'declared, real field, no check implemented'],
-  ['pets[].petCareArrangement.bequestId', 'declared, real field, no check implemented'],
-  ['pets[].petCareArrangement.nominatedCarerPersonId', 'declared, real field, no check implemented'],
-  ['trusts[].petId', 'declared, real field, no check implemented'],
-]);
+// Each entry would be a constraint declared in schema.json and NOT enforced
+// on a real document. Until proposal 0008 there were nine: guardians and
+// kinships were checked under field names the entities do not have (so the
+// check ran and could never fire), relationships declared person1Id /
+// person2Id where the schema has partners[], and the pet-care references
+// were never implemented. The list is empty, and a test below keeps it so:
+// fix the declaration or implement the check, never add a line here.
+const KNOWN_DIVERGENCES = new Map([]);
 
 function checkRefCallExists(field) {
   // field is "entities[].fieldName" — validate-refs.mjs spells that
-  // checkRef('entities', i, 'fieldName', ...)
+  // checkRef('entities', i, 'fieldName', ...). A nested array segment,
+  // "entities[].items[].fieldName", is spelt with a template literal:
+  // checkRef('entities', i, `items[${j}].fieldName`, ...).
   const m = field.match(/^([A-Za-z]+)\[\]\.(.+)$/);
   if (!m) return null;
   const [, entity, name] = m;
-  const needle = new RegExp(`checkRef\\(\\s*'${entity}'\\s*,[^,]+,\\s*'${name.replace(/\./g, "\\.")}'`);
+  const spelt = name.split('[]').map(part => part.replace(/\./g, '\\.')).join('\\[\\$\\{\\w+\\}\\]');
+  const quote = name.includes('[]') ? '`' : "'";
+  const needle = new RegExp(`checkRef\\(\\s*'${entity}'\\s*,[^,]+,\\s*${quote}${spelt}${quote}`);
   return needle.test(VALIDATOR_SRC);
 }
 
@@ -752,6 +749,12 @@ test('every declared referentialIntegrity constraint is implemented in validate-
       `declared in schema.json but not enforced by validate-refs.mjs: ${missing.join(', ')}. ` +
       'Implement the rule, or add it to KNOWN_DIVERGENCES with the reason.'
     );
+  }
+});
+
+test('KNOWN_DIVERGENCES is empty — every declared rule is enforced', () => {
+  if (KNOWN_DIVERGENCES.size !== 0) {
+    throw new Error(`KNOWN_DIVERGENCES must stay empty; it holds: ${[...KNOWN_DIVERGENCES.keys()].join(', ')}`);
   }
 });
 

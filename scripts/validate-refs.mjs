@@ -8,7 +8,7 @@
  * to actual entries in the document. For example:
  * - bequest.beneficiaryId must exist in people[].id
  * - executor.personId must exist in people[].id
- * - kinship.personId1 must exist in people[].id
+ * - kinship.fromPersonId must exist in people[].id
  * - valuation.entityId must exist in assets[].id, properties[].id, or assetCollections[].id
  * - asset.propertyId must exist in properties[].id
  *
@@ -63,6 +63,7 @@ const lifetimeTransferIds = collectIds(doc.lifetimeTransfers);
 const eventIds = collectIds((doc.applicationState || {}).events);
 const organisationIds = collectIds(doc.organisations);
 const spaceIds = collectIds(doc.spaces);
+const petIds = collectIds(doc.pets);
 // Include the estate's own ID in the lookup set
 const estateId = doc.estate?.id ? [doc.estate.id] : [];
 const allEntityIds = new Set([
@@ -119,20 +120,30 @@ if (doc.estate) {
 
 // Guardians
 (doc.guardians || []).forEach((g, i) => {
-  checkRef('guardians', i, 'guardianPersonId', g.guardianPersonId, [peopleIds], 'people');
-  checkRefArray('guardians', i, 'childPersonIds', g.childPersonIds, [peopleIds], 'people');
+  checkRef('guardians', i, 'personId', g.personId, [peopleIds], 'people');
+  checkRef('guardians', i, 'childPersonId', g.childPersonId, [peopleIds], 'people');
 });
 
 // Kinships
 (doc.kinships || []).forEach((k, i) => {
-  checkRef('kinships', i, 'personId1', k.personId1, [peopleIds], 'people');
-  checkRef('kinships', i, 'personId2', k.personId2, [peopleIds], 'people');
+  checkRef('kinships', i, 'fromPersonId', k.fromPersonId, [peopleIds], 'people');
+  checkRef('kinships', i, 'toPersonId', k.toPersonId, [peopleIds], 'people');
 });
 
-// Relationships
+// Relationships — every partner, not a fixed pair: partners[] has no upper
+// bound below the array cap, because a polygamous marriage is in scope.
 (doc.relationships || []).forEach((r, i) => {
-  checkRef('relationships', i, 'personId1', r.personId1, [peopleIds], 'people');
-  checkRef('relationships', i, 'personId2', r.personId2, [peopleIds], 'people');
+  (Array.isArray(r.partners) ? r.partners : []).forEach((p, j) => {
+    checkRef('relationships', i, `partners[${j}].personId`, p?.personId, [peopleIds], 'people');
+  });
+});
+
+// Pets — the trust, bequest and carer that provide for the pet's care
+(doc.pets || []).forEach((p, i) => {
+  const care = p.petCareArrangement || {};
+  checkRef('pets', i, 'petCareArrangement.trustId', care.trustId, [trustIds], 'trusts');
+  checkRef('pets', i, 'petCareArrangement.bequestId', care.bequestId, [bequestIds], 'bequests');
+  checkRef('pets', i, 'petCareArrangement.nominatedCarerPersonId', care.nominatedCarerPersonId, [peopleIds], 'people');
 });
 
 // Trusts
@@ -147,6 +158,7 @@ if (doc.estate) {
       checkRef('trusts', i, `beneficiaries[${j}].personId`, ben.personId, [peopleIds], 'people');
     });
   }
+  checkRef('trusts', i, 'petId', t.petId, [petIds], 'pets');
 });
 
 // Valuations

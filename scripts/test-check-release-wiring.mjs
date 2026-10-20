@@ -2,10 +2,11 @@
 /**
  * Hermetic tests for scripts/check-release-wiring.mjs.
  *
- * Each case copies the real workflows and package manifests into a temporary
- * directory, mutates the publish workflow, and runs the check there. Covers A6
- * (the contents check runs before the first publish) and A1, the assertion the
- * rest depend on. Every case is shown going red, so a green means something.
+ * Each case copies the real workflows, package manifests and release.sh into a
+ * temporary directory, mutates one of them, and runs the check there. Covers A6
+ * (the contents check runs before the first publish), A7 (the kit's release zip
+ * carries every path its npm tarball packs) and A1, the assertion the rest
+ * depend on. Every case is shown going red, so a green means something.
  */
 import { spawnSync } from 'child_process';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync } from 'fs';
@@ -17,6 +18,8 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const GATE = join(ROOT, 'scripts/check-release-wiring.mjs');
 const work = mkdtempSync(join(tmpdir(), 'release-wiring-'));
 const PUBLISH = '.github/workflows/publish.yml';
+const RELEASE = 'scripts/release.sh';
+const KIT_MANIFEST = 'packages/conformance/package.json';
 const CHECK_STEP = /\n {6}- name: Refuse to publish a tarball that is not the standard\n {8}run: node scripts\/check-release-contents\.mjs --tag "\$\{GITHUB_REF_NAME\}"\n/;
 
 let n = 0;
@@ -29,12 +32,35 @@ function tree(mutate = (s) => s) {
     mkdirSync(join(t, 'packages', dir), { recursive: true });
     cpSync(manifest, join(t, 'packages', dir, 'package.json'));
   }
+  mkdirSync(join(t, 'scripts'), { recursive: true });
+  cpSync(join(ROOT, RELEASE), join(t, RELEASE));
   const p = join(t, PUBLISH);
   const before = readFileSync(p, 'utf8');
   const after = mutate(before);
   writeFileSync(p, after);
   return t;
 }
+/** A tree whose release.sh is mutated instead of the publish workflow. */
+function releaseTree(mutate) {
+  const t = tree();
+  const p = join(t, RELEASE);
+  const before = readFileSync(p, 'utf8');
+  const after = mutate(before);
+  if (after === before) throw new Error('fixture drift: the release.sh mutation changed nothing');
+  writeFileSync(p, after);
+  return t;
+}
+/** A tree whose conformance package.json `files` list gains an entry. */
+function kitFilesTree(extra) {
+  const t = tree();
+  const p = join(t, KIT_MANIFEST);
+  const pkg = JSON.parse(readFileSync(p, 'utf8'));
+  pkg.files.push(extra);
+  writeFileSync(p, JSON.stringify(pkg, null, 2));
+  return t;
+}
+const KIT_ZIP = /^(\s*zip\b[^\n]*openinherit-conformance-[^\n]*)$/m;
+const dropFromKitZip = (word) => (s) => s.replace(KIT_ZIP, (line) => line.replace(` ${word}`, ''));
 const withoutStep = (s) => {
   if (!CHECK_STEP.test(s)) throw new Error('fixture drift: the contents-check step is not where this test expects it');
   return s.replace(CHECK_STEP, '\n');
@@ -50,6 +76,11 @@ const cases = [
     return withoutStep(s).trimEnd() + match[0].replace(/^\n/, '\n\n');
   }), 1, 'A6'],
   ['the workflow no longer fires on a tag', tree((s) => s.replace(/- "v\*"/, '- "release-*"')), 1, 'A1'],
+  ['the release zip of the kit leaves out its manifest', releaseTree(dropFromKitZip('manifest.json')), 1, 'A7'],
+  ['the release zip of the kit leaves out its test documents', releaseTree(dropFromKitZip('estate/')), 1, 'A7'],
+  ['the kit gains a packed path the release zip does not carry', kitFilesTree('new-dir/'), 1, 'A7'],
+  ['the kit zip line is commented out', releaseTree((s) => s.replace(KIT_ZIP, (line) => `# ${line.trimStart()}`)), 1, 'A7'],
+  ['release.sh is gone', (() => { const t = tree(); rmSync(join(t, RELEASE)); return t; })(), 1, 'A7'],
 ];
 
 let failed = 0;

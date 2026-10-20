@@ -262,3 +262,44 @@ func itoa(n int) string {
 	b, _ := json.Marshal(n)
 	return string(b)
 }
+
+func TestConformanceManifestMustCoverBothSchemas(t *testing.T) {
+	kit := copyKit(t)
+	m := readJSON(t, filepath.Join(kit, "manifest.json"))
+	s := m["schemas"].([]any)
+	m["schemas"] = []any{s[0], s[0]} // the catalogue schema is never checked
+	writeJSON(t, filepath.Join(kit, "manifest.json"), m)
+
+	out, code := runConformance(t, kit, false)
+	if code != 2 || !strings.Contains(out, "does not list") {
+		t.Fatalf("expected exit 2 naming the unlisted schema, got %d\n%s", code, out)
+	}
+}
+
+func TestConformanceExpectedFileMustAgreeWithManifest(t *testing.T) {
+	kit := copyKit(t)
+	p := filepath.Join(kit, "expected", "bad-uuid.expected.json")
+	e := readJSON(t, p)
+	e["valid"] = true // the manifest still says false
+	writeJSON(t, p, e)
+	rehash(t, kit)
+
+	out, code := runConformance(t, kit, false)
+	if code != 2 || !strings.Contains(out, "bad-uuid.expected.json") {
+		t.Fatalf("expected exit 2 naming the disagreeing expected file, got %d\n%s", code, out)
+	}
+}
+
+func TestConformanceMissNamesWhatWasRefused(t *testing.T) {
+	kit := copyKit(t)
+	p := filepath.Join(kit, "estate", "valid", "minimal-estate.json")
+	doc := readJSON(t, p)
+	doc["notAField"] = true
+	writeJSON(t, p, doc)
+	rehash(t, kit)
+
+	out, _ := runConformance(t, kit, false)
+	if !strings.Contains(out, "/notAField") {
+		t.Fatalf("expected the refused location in the reason\n%s", out)
+	}
+}

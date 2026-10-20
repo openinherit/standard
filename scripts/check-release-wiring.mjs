@@ -166,6 +166,39 @@ if (publishWorkflow) {
   }
 }
 
+// ---- A7: the release zip of the conformance kit carries the whole kit -------
+// release.sh attaches openinherit-conformance-<version>.zip to the GitHub
+// release as the kit to "validate your implementation against". It once zipped
+// only schemas/, so the download had no test documents, no expected results
+// and no manifest. The npm tarball is defined by the package's `files` list;
+// the zip must carry every one of those paths too.
+const RELEASE_SCRIPT = "scripts/release.sh";
+const KIT_MANIFEST = join(PACKAGES_DIR, "conformance", "package.json");
+if (existsSync(KIT_MANIFEST)) {
+  const kitFiles = JSON.parse(readFileSync(KIT_MANIFEST, "utf8")).files || [];
+  if (!existsSync(RELEASE_SCRIPT)) {
+    fail("A7", `${RELEASE_SCRIPT} does not exist, so nothing builds the conformance kit's release zip.`);
+  } else {
+    const zipLine = readFileSync(RELEASE_SCRIPT, "utf8")
+      .split("\n")
+      .find((l) => /^[^#]*\bzip\b[^#]*openinherit-conformance-/.test(l));
+    if (!zipLine) {
+      fail("A7", `${RELEASE_SCRIPT} has no \`zip ... openinherit-conformance-...\` line.`);
+    } else {
+      const args = new Set(zipLine.split(/\s+/));
+      for (const entry of ["package.json", ...kitFiles]) {
+        if (!args.has(entry)) {
+          fail(
+            "A7",
+            `${RELEASE_SCRIPT} zips the conformance kit without \`${entry}\`, which ` +
+              `${KIT_MANIFEST} packs -- the release download would not be the kit npm ships.`,
+          );
+        }
+      }
+    }
+  }
+}
+
 // ---- report ----------------------------------------------------------------
 if (failures.length > 0) {
   for (const { id, message } of failures) console.error(`::error::[${id}] ${message}`);

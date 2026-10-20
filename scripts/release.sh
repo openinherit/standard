@@ -221,9 +221,11 @@ zip -r "$RELEASE_DIR/openinherit-sdk-${NEW_VERSION}.zip" dist/ package.json tsup
 cd "$REPO_DIR"
 log "  Built: openinherit-sdk-${NEW_VERSION}.zip ($(du -h "$RELEASE_DIR/openinherit-sdk-${NEW_VERSION}.zip" | cut -f1))"
 
-# Conformance test suite
+# Conformance test suite -- the same paths the npm tarball packs (package.json
+# `files`), so the download carries the test documents, expected results and
+# sha256 manifest, not only the schemas. check-release-wiring.mjs A7 holds this.
 cd packages/conformance
-zip -r "$RELEASE_DIR/openinherit-conformance-${NEW_VERSION}.zip" schemas/ package.json README.md 2>/dev/null
+zip -r "$RELEASE_DIR/openinherit-conformance-${NEW_VERSION}.zip" package.json schemas/ estate/ catalogue/ expected/ runners/ manifest.json mutations.json README.md
 cd "$REPO_DIR"
 log "  Built: openinherit-conformance-${NEW_VERSION}.zip ($(du -h "$RELEASE_DIR/openinherit-conformance-${NEW_VERSION}.zip" | cut -f1))"
 

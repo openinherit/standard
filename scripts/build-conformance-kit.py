@@ -58,6 +58,9 @@ def build(kit):
         problems.append(f"mutations.json: id {dup} is used more than once")
 
     tests = []
+    valid_stems = {p.stem for m in MODES for p in (kit / m / "valid").glob("*.json")}
+    for clash in sorted(valid_stems & set(ids)):
+        problems.append(f"mutations.json: id {clash} is also a VALID fixture's name -- they would share an expected file")
     for mode in MODES:
         for path in sorted((kit / mode / "valid").glob("*.json")):
             rel = str(path.relative_to(kit))
@@ -131,6 +134,8 @@ def main():
     strays = sorted(str(p.relative_to(kit)) for m in MODES for p in (kit / m / "invalid").glob("*.json")
                     if str(p.relative_to(kit)) not in generated_invalid)
 
+    if problems:
+        args.check = True  # never write over a kit the catalogue cannot build cleanly
     if args.check:
         for rel, text in sorted(out.items()):
             path = kit / rel
@@ -144,7 +149,7 @@ def main():
         for rel in strays:
             (kit / rel).unlink()
             stale_expected = kit / "expected" / (Path(rel).stem + ".expected.json")
-            if stale_expected.exists():
+            if stale_expected.exists() and load_json(stale_expected).get("valid") is False:
                 stale_expected.unlink()
         for rel, text in out.items():
             (kit / rel).parent.mkdir(parents=True, exist_ok=True)

@@ -4,6 +4,7 @@
 import copy
 import hashlib
 import json
+import re
 from pathlib import Path
 
 
@@ -38,7 +39,14 @@ def apply_op(document, op):
         target = target[int(token)] if isinstance(target, list) else target[token]
     kind = op["op"]
     if isinstance(target, list):
-        index = len(target) if last == "-" else int(last)
+        if last == "-" and kind == "add":
+            index = len(target)
+        elif re.fullmatch(r"0|[1-9][0-9]*", last):
+            index = int(last)
+        else:
+            raise ValueError(f"{op['path']}: {last!r} is not an array index")
+        if index > len(target) or (kind != "add" and index == len(target)):
+            raise IndexError(f"{op['path']}: index {index} is out of range")
         if kind == "add":
             target.insert(index, op["value"])
         elif kind == "replace":

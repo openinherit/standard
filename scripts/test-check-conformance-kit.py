@@ -134,6 +134,17 @@ class Kit(unittest.TestCase):
         self.rebuild()
         self.assertRed("K6", "no INVALID case in the class(es): x-inherit")
 
+    def test_the_builder_will_not_overwrite_a_VALID_expected_file(self):
+        before = (self.kit / "expected" / "minimal-estate.expected.json").read_text()
+        self.add_case({"id": "minimal-estate", "schemaMode": "estate", "base": "estate/valid/minimal-estate.json",
+                       "op": {"op": "remove", "path": "/people"},
+                       "rule": {"class": "required", "keyword": "required", "instancePath": ""},
+                       "description": "x"})
+        r = run(self.root, "build-conformance-kit.py")
+        self.assertEqual(r.returncode, 1, r.stdout + r.stderr)
+        self.assertIn("also a VALID fixture's name", r.stderr)
+        self.assertEqual((self.kit / "expected" / "minimal-estate.expected.json").read_text(), before)
+
     def test_cannot_answer_is_exit_2_never_green(self):
         (self.kit / "mutations.json").unlink()
         r = run(self.root)

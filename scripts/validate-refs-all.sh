@@ -73,12 +73,13 @@ for fixture in $(find "$ROOT_DIR/examples/wills" -name '*-inherit-*.json' 2>/dev
 done
 
 # Conformance fixtures MUST pass — these are the standard's contract.
-# Skip broken-references.json — it is intentionally Level 2 invalid.
+# Skip the two that are intentionally Level 2 invalid: Level 1 valid, so they
+# live in estate/valid/, with a dangling reference the kit's notes describe.
 echo ""
 echo "Conformance (mandatory — failures block CI):"
 for fixture in "$ROOT_DIR"/packages/conformance/estate/valid/*.json; do
   filename=$(basename "$fixture")
-  if [ "$filename" = "broken-references.json" ]; then
+  if [ "$filename" = "broken-references.json" ] || [ "$filename" = "broken-extension-refs.json" ]; then
     echo "  $filename ... SKIP (intentionally broken)"
     SKIPPED=$((SKIPPED + 1))
     continue

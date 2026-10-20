@@ -1,1 +1,17 @@
-{ "valid": false, "schemaMode": "estate", "minErrors": 1 }
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "people must be an array.",
+  "rule": {
+    "class": "type",
+    "keyword": "type",
+    "instancePath": "/people"
+  },
+  "base": "estate/valid/minimal-estate.json",
+  "op": {
+    "op": "replace",
+    "path": "/people",
+    "value": "not-an-array"
+  }
+}

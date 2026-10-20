@@ -1,1 +1,17 @@
-{ "valid": false, "schemaMode": "estate", "minErrors": 1 }
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "estate.id must be a UUID.",
+  "rule": {
+    "class": "format",
+    "keyword": "pattern",
+    "instancePath": "/estate/id"
+  },
+  "base": "estate/valid/minimal-estate.json",
+  "op": {
+    "op": "replace",
+    "path": "/estate/id",
+    "value": "not-a-uuid"
+  }
+}

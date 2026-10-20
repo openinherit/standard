@@ -36,7 +36,7 @@ run_test() {
     fi
 }
 
-echo "INHERIT Conformance Test Kit v6.1.1"
+echo "INHERIT Conformance Test Kit v$(python3 -c "import json; print(json.load(open('$SCRIPT_DIR/manifest.json'))['version'])")"
 echo "Validator: $VALIDATOR"
 echo "---"
 

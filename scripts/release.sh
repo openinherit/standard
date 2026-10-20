@@ -126,6 +126,11 @@ else
     fi
   done
 
+  # The conformance kit's manifest carries the package version and the sha256
+  # of every fixture; it is generated, so it moves with the bump.
+  python3 scripts/build-conformance-kit.py || fail "could not rebuild the conformance kit manifest"
+  log "  Rebuilt packages/conformance/manifest.json at $NEW_VERSION"
+
   # ── Step 2: Update ROADMAP.md heading ────────────────────────────
   log "[2/8] Updating ROADMAP.md heading..."
 
@@ -167,7 +172,7 @@ else
   # ── Step 5: Commit and push ──────────────────────────────────────
   log "[5/8] Committing and pushing..."
 
-  git add package.json packages/schema/package.json packages/sdk/package.json packages/conformance/package.json ROADMAP.md CHANGELOG.md
+  git add package.json packages/schema/package.json packages/sdk/package.json packages/conformance/package.json packages/conformance/manifest.json ROADMAP.md CHANGELOG.md
 
   git commit -m "chore: release v${NEW_VERSION}
 

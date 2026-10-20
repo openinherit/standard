@@ -1055,7 +1055,7 @@ export const zFieldProvenance2 = zFieldProvenance;
  *
  * Records which AI model produced a piece of data and whether a human has verified it. Basic provenance is in INHERIT core; implementation-specific detail (exact model version, pipeline, reasoning, cost) should use x-inherit-* extension properties
  */
-export const zAiProvenance = z.object({
+const zAiProvenance$generated = z.object({
     model: z.union([
         z.enum([
             'claude',
@@ -1074,6 +1074,7 @@ export const zAiProvenance = z.object({
     reviewedBy: z.string().max(255).optional(),
     reviewedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional()
 });
+export const zAiProvenance = layer('https://openinherit.org/v3/common/ai-provenance.json', zAiProvenance$generated);
 
 /**
  * Provenance metadata for AI-generated content
@@ -1803,7 +1804,7 @@ export const zRegistration = z.object({
  *
  * An organisation that interacts with the estate — legal firms, financial institutions, charities, dealers, funeral providers, employers, government bodies, and others. Maps to schema:Organization in JSON-LD
  */
-export const zOrganisation = z.object({
+const zOrganisation$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     name: z.string().min(1).max(255),
     organisationType: z.union([
@@ -1926,6 +1927,7 @@ export const zOrganisation = z.object({
         averageResponseTime: z.string().max(50).optional()
     }).optional()
 });
+export const zOrganisation = layer('https://openinherit.org/v3/organisation.json', zOrganisation$generated);
 
 /**
  * An organisation (charity, company, institution) referenced in the estate
@@ -2235,7 +2237,7 @@ export const zProperty2 = zProperty;
  *
  * A distinguishable space within or associated with a property — rooms, outbuildings, storage areas, and outdoor zones where assets may be located. Maps to schema:Place in JSON-LD
  */
-export const zSpace = z.intersection(z.unknown(), z.object({
+const zSpace$generated = z.intersection(z.unknown(), z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     propertyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
     containedInSpaceId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
@@ -2362,6 +2364,7 @@ export const zSpace = z.intersection(z.unknown(), z.object({
     images: z.array(zMedia).max(50).optional(),
     provenance: zProvenance.optional()
 }));
+export const zSpace = layer('https://openinherit.org/v3/space.json', zSpace$generated);
 
 /**
  * A physical or virtual space associated with the estate
@@ -2404,7 +2407,7 @@ export const zComparable = z.strictObject({
  *
  * A valuation of an estate asset, property, or asset collection. Supports multiple valuations per entity over time — owner estimates, professional valuations, AI analyses, dealer offers, and probate-agreed figures
  */
-export const zValuation = z.object({
+const zValuation$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     entityType: z.enum([
         'asset',
@@ -2476,6 +2479,7 @@ export const zValuation = z.object({
     validUntil: z.iso.date().regex(/^\d{4}-\d{2}-\d{2}$/).nullish(),
     provenance: zProvenance.optional()
 });
+export const zValuation = layer('https://openinherit.org/v3/valuation.json', zValuation$generated);
 
 /**
  * A formal or estimated valuation of an asset or estate
@@ -2512,7 +2516,7 @@ export const zLegacyContact = z.strictObject({
     notes: z.string().max(2000).optional()
 });
 
-export const zAssetInterest = z.intersection(z.unknown(), z.object({
+const zAssetInterest$generated = z.intersection(z.unknown(), z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     rootDocumentId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     assetId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
@@ -2598,6 +2602,7 @@ export const zAssetInterest = z.intersection(z.unknown(), z.object({
     }).optional(),
     provenance: zProvenance.optional()
 }));
+export const zAssetInterest = layer('https://openinherit.org/v3/asset-interest.json', zAssetInterest$generated);
 
 /**
  * A fractional or beneficial interest in an asset
@@ -2802,7 +2807,7 @@ export const zImportSource = z.strictObject({
  *
  * A completeness score derived from a weighted checklist of estate data categories, scoped to a specific jurisdiction and estate status
  */
-export const zCompleteness = z.object({
+const zCompleteness$generated = z.object({
     score: z.int().gte(0).lte(100).readonly().default(0),
     maxScore: z.int().gte(0).readonly(),
     jurisdiction: z.string().max(255).optional(),
@@ -2832,6 +2837,7 @@ export const zCompleteness = z.object({
         details: z.string().max(255).optional()
     })).max(100)
 });
+export const zCompleteness = layer('https://openinherit.org/v3/common/completeness.json', zCompleteness$generated);
 
 /**
  * Completeness scoring for an estate or entity
@@ -2895,7 +2901,7 @@ export const zConformance2 = zConformance;
  *
  * A standalone insurance policy entity — life, home, health, motor, travel, pet, or professional indemnity. Life insurance is often the single largest estate asset. Policies written in trust pass outside the estate
  */
-export const zInsurancePolicy = z.object({
+const zInsurancePolicy$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     policyType: z.union([
         z.enum([
@@ -2999,6 +3005,7 @@ export const zInsurancePolicy = z.object({
     }).optional(),
     provenance: zProvenance.optional()
 });
+export const zInsurancePolicy = layer('https://openinherit.org/v3/insurance-policy.json', zInsurancePolicy$generated);
 
 /**
  * Life or other insurance policy linked to the estate
@@ -3074,7 +3081,7 @@ export const zOfferDetails = z.strictObject({
  *
  * Level D data — records third-party interest in estate assets (art dealers, property investors, collectors). Privacy-controlled. Managed via proxy authorisation
  */
-export const zDealerInterest = z.object({
+const zDealerInterest$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     interestedParty: zInterestedParty,
     assets: z.array(zAssetInterestItem).max(100).optional(),
@@ -3124,6 +3131,7 @@ export const zDealerInterest = z.object({
     }).optional(),
     provenance: zProvenance.optional()
 });
+export const zDealerInterest = layer('https://openinherit.org/v3/dealer-interest.json', zDealerInterest$generated);
 
 /**
  * Professional interest in the estate
@@ -3284,7 +3292,7 @@ export const zTemporalRule2 = zTemporalRule;
  *
  * IHT thresholds, intestacy rules, IFPA 1975 eligibility, and legislative changes for England & Wales estates. Temporal-rule wrapping on key values
  */
-export const zUkEnglandWales = z.object({
+const zUkEnglandWales$generated = z.object({
     intestacyStatutoryLegacy: zTemporalRule.optional(),
     nilRateBand: zTemporalRule.optional(),
     residenceNilRateBand: zTemporalRule.optional(),
@@ -3390,6 +3398,7 @@ export const zUkEnglandWales = z.object({
         notes: z.string().max(2000).optional()
     }).optional()
 });
+export const zUkEnglandWales = layer('https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json', zUkEnglandWales$generated);
 
 /**
  * IHT thresholds, intestacy rules, IFPA 1975 for England & Wales
@@ -3401,7 +3410,7 @@ export const zExtensionUkEnglandWales = zUkEnglandWales;
  *
  * Scottish succession law — prior rights, legal rights, confirmation, cohabitation claims under Family Law (Scotland) Act 2006, intestacy (Succession (Scotland) Act 1964 as amended 2024), heritable/moveable classification, executry, survivorship destinations, crofting succession, LBTT
  */
-export const zScotland = z.object({
+const zScotland$generated = z.object({
     priorRights: z.strictObject({
         dwellinghouseRight: zTemporalRule.optional(),
         furnitureRight: zTemporalRule.optional(),
@@ -3577,6 +3586,7 @@ export const zScotland = z.object({
         notes: z.string().max(2000).optional()
     }).optional()
 });
+export const zScotland = layer('https://openinherit.org/v3/extensions/scotland/scotland.json', zScotland$generated);
 
 /**
  * Scottish succession — prior rights, legal rights, confirmation
@@ -3588,7 +3598,7 @@ export const zExtensionScotland = zScotland;
  *
  * Irish succession law — Succession Act 1965, spouse legal right share, Section 117 moral duty provision, Capital Acquisitions Tax, intestacy distribution, dwelling house exemption, civil partnership provisions
  */
-export const zIreland = z.object({
+const zIreland$generated = z.object({
     spouseLegalRightShare: z.strictObject({
         fraction: z.string().max(10).optional(),
         hasChildren: z.boolean().optional(),
@@ -3684,6 +3694,7 @@ export const zIreland = z.object({
     legislativeChanges: z.array(zTemporalRule).max(50).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zIreland = layer('https://openinherit.org/v3/extensions/ireland/ireland.json', zIreland$generated);
 
 /**
  * Irish succession — legal right share, Section 117, CAT
@@ -3695,7 +3706,7 @@ export const zExtensionIreland = zIreland;
  *
  * Northern Ireland real property — local tenure (including fee farm grants) and the two land registers, the Land Registry of folios and the Registry of Deeds, with classes of registered title. Northern Ireland succession, probate and tax are not yet modelled in this extension
  */
-export const zNorthernIreland = z.object({
+const zNorthernIreland$generated = z.object({
     localTenureTypes: z.array(z.strictObject({
         propertyId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
         localType: z.enum([
@@ -3720,6 +3731,7 @@ export const zNorthernIreland = z.object({
     }))).max(50).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zNorthernIreland = layer('https://openinherit.org/v3/extensions/northern-ireland/northern-ireland.json', zNorthernIreland$generated);
 
 /**
  * Northern Ireland real property — local tenure, land registry folio and Registry of Deeds
@@ -3731,7 +3743,7 @@ export const zExtensionNorthernIreland = zNorthernIreland;
  *
  * US-specific estate planning: federal and state estate tax, community/separate property regimes, elective share, homestead exemptions, per stirpes variants, no-contest clauses, pretermitted heir statutes, RUFADAA, Louisiana forced heirship, probate variation, trust features, SECURE Act retirement rules, ancillary probate, advance directives
  */
-export const zUsEstate = z.object({
+const zUsEstate$generated = z.object({
     state: z.string().max(255).regex(/^US-[A-Z]{2}$/),
     propertyRegime: z.enum([
         'community_property',
@@ -3920,6 +3932,7 @@ export const zUsEstate = z.object({
         representationAtCollateralLevel: z.boolean().optional()
     }).optional()
 });
+export const zUsEstate = layer('https://openinherit.org/v3/extensions/us-estate/us-estate.json', zUsEstate$generated);
 
 /**
  * US estate planning — community property, elective share, homestead
@@ -3973,7 +3986,7 @@ export const zIndigenousLandDetails = z.strictObject({
  *
  * Provincial succession rules for Canada: Quebec patrimony, Ontario equalization, BC WESA variation, Alberta dower rights, and Indigenous land succession details
  */
-export const zCanada = z.object({
+const zCanada$generated = z.object({
     province: z.enum([
         'CA-AB',
         'CA-BC',
@@ -4016,6 +4029,7 @@ export const zCanada = z.object({
     }).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zCanada = layer('https://openinherit.org/v3/extensions/canada/canada.json', zCanada$generated);
 
 /**
  * Canadian provincial succession rules
@@ -4120,7 +4134,7 @@ export const zMaoriLandDetails = z.strictObject({
  *
  * Succession rules for AU and NZ: superannuation binding death benefit nominations, family provision claims, Aboriginal/Torres Strait Islander land, NZ Property (Relationships) Act, testamentary promises, and Maori land under Te Ture Whenua
  */
-export const zAustraliaNz = z.object({
+const zAustraliaNz$generated = z.object({
     jurisdiction: z.enum([
         'AU-NSW',
         'AU-VIC',
@@ -4140,6 +4154,7 @@ export const zAustraliaNz = z.object({
     maoriLandDetails: z.array(zMaoriLandDetails).max(50).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zAustraliaNz = layer('https://openinherit.org/v3/extensions/australia-nz/australia-nz.json', zAustraliaNz$generated);
 
 /**
  * AU/NZ superannuation, family provision, Maori land
@@ -4203,7 +4218,7 @@ export const zPostBrexitAssetHandling = z.strictObject({
  *
  * European succession rules: Brussels IV choice of law and European Certificate of Succession, Spanish regional regimes, forced heirship variants across civil law traditions, and post-Brexit UK asset handling
  */
-export const zEuSuccession = z.object({
+const zEuSuccession$generated = z.object({
     memberState: z.string().regex(/^[A-Z]{2}$/),
     brusselsIV: zBrusselsIvChoiceOfLaw.optional(),
     europeanCertificate: zEuropeanCertificateOfSuccession.optional(),
@@ -4224,6 +4239,7 @@ export const zEuSuccession = z.object({
     })).max(50).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zEuSuccession = layer('https://openinherit.org/v3/extensions/eu-succession/eu-succession.json', zEuSuccession$generated);
 
 /**
  * Brussels IV, European Certificate of Succession, forced heirship
@@ -4285,7 +4301,7 @@ export const zSpousesResidenceRight = z.strictObject({
  *
  * Japanese succession law — koseki records, iryubun (reserved share) claims, yōshi (adoption), spousal residence right (2019 reform), isan bunkatsu (estate division), saishi succession, local will formalities
  */
-export const zJapan = z.object({
+const zJapan$generated = z.object({
     kosekiRecords: z.array(zKosekiRecord).max(50).optional(),
     iryubunClaims: z.array(zIryubunClaim).max(50).optional(),
     yoshiAdoptions: z.array(zYoshiAdoption).max(50).optional(),
@@ -4326,6 +4342,7 @@ export const zJapan = z.object({
     })).max(50).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zJapan = layer('https://openinherit.org/v3/extensions/japan/japan.json', zJapan$generated);
 
 /**
  * Japanese succession — koseki, iryubun, yōshi, isan bunkatsu
@@ -4438,7 +4455,7 @@ export const zInheritanceTaxStatus = z.strictObject({
  *
  * People's Republic of China succession law — forced heirship (first/second order heirs), hukou registration, notarised succession certificates, cross-border HK/PRC asset handling, intestacy order (Arts. 1127-1132), will forms (6 types, Art. 1142), community property division (Art. 1153), rural land rights, and inheritance tax status
  */
-export const zPrcChina = z.object({
+const zPrcChina$generated = z.object({
     applicableLaw: z.enum(['prc_succession_law_1985', 'prc_civil_code_2021']),
     forcedHeirship: zPrcForcedHeirship.optional(),
     hukouReferences: z.array(zHukouReference).max(50).optional(),
@@ -4452,6 +4469,7 @@ export const zPrcChina = z.object({
     inheritanceTaxStatus: zInheritanceTaxStatus.optional(),
     notes: z.string().max(2000).optional()
 });
+export const zPrcChina = layer('https://openinherit.org/v3/extensions/prc-china/prc-china.json', zPrcChina$generated);
 
 /**
  * PRC succession — forced heirship, hukou, notarised certificates
@@ -4540,7 +4558,7 @@ export const zEpfNomination = z.strictObject({
  *
  * Singapore and Malaysia succession law — ISA intestate distribution, AMLA Islamic distribution, CPF/EPF nominations, Malaysian Distribution Act, Shariah court jurisdiction
  */
-export const zSingaporeMalaysia = z.object({
+const zSingaporeMalaysia$generated = z.object({
     country: z.enum(['SG', 'MY']),
     singaporeISA: zSingaporeIsaDistribution.optional(),
     singaporeAMLA: zSingaporeAmlaDistribution.optional(),
@@ -4558,6 +4576,7 @@ export const zSingaporeMalaysia = z.object({
         notes: z.string().max(2000).optional()
     }).optional()
 });
+export const zSingaporeMalaysia = layer('https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json', zSingaporeMalaysia$generated);
 
 /**
  * SG/MY — ISA, AMLA, CPF/EPF nominations, Distribution Act
@@ -4668,7 +4687,7 @@ export const zForcedHeirshipPattern = z.strictObject({
  *
  * Latin American succession law — Brazilian legítima and stable union rights, Argentine forced heirship with collation, Colombian fourths system, Venezuelan succession, Mexican alimentos obligations, Chilean mitad legitimaria, notarial succession, general forced heirship patterns, and other civil-law jurisdictions
  */
-export const zLatinAmerica = z.object({
+const zLatinAmerica$generated = z.object({
     country: z.enum([
         'BR',
         'AR',
@@ -4689,6 +4708,7 @@ export const zLatinAmerica = z.object({
     legislativeChanges: z.array(zTemporalRule).max(50).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zLatinAmerica = layer('https://openinherit.org/v3/extensions/latin-america/latin-america.json', zLatinAmerica$generated);
 
 /**
  * Latin American succession — legítima, forced heirship, fourths system
@@ -4783,7 +4803,7 @@ export const zPriorityDebt = z.strictObject({
  *
  * Faraid (Islamic inheritance) rules: heir classification, fixed shares, residuary (asaba), awl/radd adjustments, wasiyya limits, iddah periods, waqf details, and priority debts including mahr
  */
-export const zIslamicSuccession = z.object({
+const zIslamicSuccession$generated = z.object({
     school: z.enum([
         'hanafi',
         'shafii',
@@ -4823,6 +4843,7 @@ export const zIslamicSuccession = z.object({
     }).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zIslamicSuccession = layer('https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json', zIslamicSuccession$generated);
 
 /**
  * Faraid — fixed shares, residuary, awl/radd, wasiyya, waqf
@@ -4904,7 +4925,7 @@ export const zBequestClassification = z.strictObject({
  *
  * Halachic inheritance rules including heir classification, bekhor (firstborn) double-share, mezonot (maintenance), kinyan (acquisition), and bequest classification under Jewish law
  */
-export const zJewishSuccession = z.object({
+const zJewishSuccession$generated = z.object({
     denomination: z.enum([
         'orthodox',
         'conservative',
@@ -4928,6 +4949,7 @@ export const zJewishSuccession = z.object({
     bequestClassifications: z.array(zBequestClassification).max(50).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zJewishSuccession = layer('https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json', zJewishSuccession$generated);
 
 /**
  * Halachic inheritance — bekhor, mezonot, kinyan
@@ -4971,7 +4993,7 @@ export const zStridhanAsset = z.strictObject({
  *
  * Hindu succession law specifics: Mitakshara/Dayabhaga schools, HUF coparcenary, heir classifications under the Hindu Succession Act 1956, stridhan assets, agricultural land ceiling rules, and NRI complications
  */
-export const zHinduSuccession = z.object({
+const zHinduSuccession$generated = z.object({
     applicableLaw: z.enum([
         'hindu_succession_act_1956',
         'indian_succession_act_1925',
@@ -5006,6 +5028,7 @@ export const zHinduSuccession = z.object({
     hufProperty: z.boolean().optional(),
     notes: z.string().max(2000).optional()
 });
+export const zHinduSuccession = layer('https://openinherit.org/v3/extensions/hindu-succession/hindu-succession.json', zHinduSuccession$generated);
 
 /**
  * Hindu succession — Mitakshara/Dayabhaga, HUF, stridhan
@@ -5072,7 +5095,7 @@ export const zWidowRights = z.strictObject({
  *
  * Customary succession rules across African ethnic groups: patrilineal/matrilineal systems, family council decisions, communal property, widow rights, lobola, land tenure, and constitutional challenges
  */
-export const zAfricaCustomary = z.object({
+const zAfricaCustomary$generated = z.object({
     ethnicGroup: z.string().min(1).max(255),
     customaryRules: z.array(zCustomarySuccessionRule).max(50).optional(),
     familyCouncilDecisions: z.array(zFamilyCouncilDecision).max(50).optional(),
@@ -5104,6 +5127,7 @@ export const zAfricaCustomary = z.object({
     })).max(50).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zAfricaCustomary = layer('https://openinherit.org/v3/extensions/africa-customary/africa-customary.json', zAfricaCustomary$generated);
 
 /**
  * Customary succession — patrilineal/matrilineal, family council, lobola
@@ -5115,7 +5139,7 @@ export const zExtensionAfricaCustomary = zAfricaCustomary;
  *
  * Brazilian succession rules: meação (community property split), legítima (forced heirship), inventário process types, cartório attestation, disponível (testamentary freedom portion), and união estável (stable union recognition)
  */
-export const zBrazil = z.object({
+const zBrazil$generated = z.object({
     meacao: z.strictObject({
         applicable: z.boolean().optional(),
         propertyRegime: z.enum([
@@ -5172,6 +5196,7 @@ export const zBrazil = z.object({
     }).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zBrazil = layer('https://openinherit.org/v3/extensions/brazil/brazil.json', zBrazil$generated);
 
 /**
  * Brazilian succession — meação, legítima, inventário, ITCMD
@@ -5183,7 +5208,7 @@ export const zExtensionBrazil = zBrazil;
  *
  * Hong Kong succession rules: local grant types under Cap. 10, MPF death benefit nominations under Cap. 485, cross-border PRC asset considerations, intestacy distribution under the Intestates' Estates Ordinance (Cap. 73), and small estate grants
  */
-export const zHongKong = z.object({
+const zHongKong$generated = z.object({
     localGrantTypes: z.array(z.strictObject({
         executorId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
         localType: z.enum([
@@ -5263,6 +5288,7 @@ export const zHongKong = z.object({
     }).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zHongKong = layer('https://openinherit.org/v3/extensions/hong-kong/hong-kong.json', zHongKong$generated);
 
 /**
  * Hong Kong succession — Intestates Estates Ordinance, MPF, probate
@@ -5274,7 +5300,7 @@ export const zExtensionHongKong = zHongKong;
  *
  * Swiss succession rules: Pflichtteil (forced heirship, 2023 Erbrechtsrevision), cantonal inheritance tax variation, matrimonial property regimes, Erbschein (certificate of inheritance), and notarial will forms
  */
-export const zSwitzerland = z.object({
+const zSwitzerland$generated = z.object({
     pflichtteil: z.strictObject({
         reformApplies: z.boolean().optional(),
         protectedHeirs: z.array(z.strictObject({
@@ -5316,6 +5342,7 @@ export const zSwitzerland = z.object({
     ]).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zSwitzerland = layer('https://openinherit.org/v3/extensions/switzerland/switzerland.json', zSwitzerland$generated);
 
 /**
  * Swiss succession — Pflichtteil, Erbvertrag, ZGB, IPRG
@@ -5327,7 +5354,7 @@ export const zExtensionSwitzerland = zSwitzerland;
  *
  * Israeli succession rules: parallel court systems (civil family court, rabbinical, sharia, druze), Inheritance Law 1965 process types, religious authority orders, kibbutz/moshav communal property, and Holocaust restitution assets
  */
-export const zIsrael = z.object({
+const zIsrael$generated = z.object({
     parallelCourtSystems: z.strictObject({
         adjudicatingCourt: z.enum([
             'civil_family_court',
@@ -5398,6 +5425,7 @@ export const zIsrael = z.object({
     }).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zIsrael = layer('https://openinherit.org/v3/extensions/israel/israel.json', zIsrael$generated);
 
 /**
  * Israeli succession — Inheritance Law 1965, religious community rules
@@ -5409,7 +5437,7 @@ export const zExtensionIsrael = zIsrael;
  *
  * Indian succession — multi-personal-law system covering Hindu (coparcenary, HUF), Muslim personal law (school-based heir shares), Christian, Parsi, and Goa civil code estates; includes succession certificates and property classification
  */
-export const zIndia = z.object({
+const zIndia$generated = z.object({
     personalLaw: z.enum([
         'hindu_succession_act_1956',
         'indian_succession_act_1925',
@@ -5501,6 +5529,7 @@ export const zIndia = z.object({
     }).optional(),
     notes: z.string().max(2000).optional()
 });
+export const zIndia = layer('https://openinherit.org/v3/extensions/india/india.json', zIndia$generated);
 
 /**
  * Indian succession — Hindu Succession Act, personal law plurality
@@ -5512,7 +5541,7 @@ export const zExtensionIndia = zIndia;
  *
  * UAE succession law — dual-track (Sharia default vs DIFC common law), DWSC registered wills, expatriate handling under Federal Decree-Law No. 41/2022; includes ADGM wills service, non-Muslim court registration, UAE real property treatment, and dual-track dispute resolution (Sharia vs common law)
  */
-export const zUae = z.object({
+const zUae$generated = z.object({
     successionTrack: z.enum([
         'sharia',
         'difc',
@@ -5617,6 +5646,7 @@ export const zUae = z.object({
         notes: z.string().max(2000).optional()
     }).optional()
 });
+export const zUae = layer('https://openinherit.org/v3/extensions/uae/uae.json', zUae$generated);
 
 /**
  * UAE succession — federal law, DIFC/ADGM wills, Sharia default
@@ -6780,7 +6810,7 @@ export const zPerson2 = zPerson;
  *
  * A familial bond between two people. Essential for intestacy calculation — inheritance rules in every jurisdiction depend on parent-child, sibling, and other familial relationships. Direction: fromPersonId is the parent/elder, toPersonId is the child/younger (for parent-child types). Indian extensions may add parent_child_coparcenary, karta_member. See extensions/hindu-succession/hindu-succession.json
  */
-export const zKinship = z.intersection(z.unknown(), z.object({
+const zKinship$generated = z.intersection(z.unknown(), z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     kinshipType: z.enum([
         'parent_child_biological',
@@ -6838,6 +6868,7 @@ export const zKinship = z.intersection(z.unknown(), z.object({
         biologicalParentIds: z.array(z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/)).optional()
     }).optional()
 }));
+export const zKinship = layer('https://openinherit.org/v3/kinship.json', zKinship$generated);
 
 /**
  * Family group structure
@@ -6951,7 +6982,7 @@ export const zFinancialInstrument = z.intersection(z.unknown(), z.strictObject({
  *
  * Spousal/partnership relationship. N-partner support (no structural two-partner limit). Event-based timeline (status derived from events). No gendered role names. Financial instruments with MAHR/KETUBAH subtype validation. Cross-jurisdiction recognition for dual civil/religious status
  */
-export const zRelationship = z.object({
+const zRelationship$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     type: z.enum([
         'marriage_civil',
@@ -6998,6 +7029,7 @@ export const zRelationship = z.object({
     notes: z.string().max(2000).optional(),
     provenance: zProvenance.optional()
 });
+export const zRelationship = layer('https://openinherit.org/v3/relationship.json', zRelationship$generated);
 
 /**
  * Relationship between two people
@@ -7358,7 +7390,7 @@ export const zTrustBeneficiary = z.strictObject({
  *
  * A trust instrument — testamentary or inter vivos. Covers discretionary, bare, life interest, charitable, nil rate band, and offshore structures with governance features (reserved powers, flee clauses, protector powers). Extension types (e.g. x-inherit-waqf) support cultural and jurisdiction-specific trust forms
  */
-export const zTrust = z.object({
+const zTrust$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     name: z.string().min(1).max(255),
     trustType: z.union([
@@ -7513,6 +7545,7 @@ export const zTrust = z.object({
         notes: z.string().max(2000).optional()
     })).max(50).optional()
 });
+export const zTrust = layer('https://openinherit.org/v3/trust.json', zTrust$generated);
 
 /**
  * Trust arrangements
@@ -7579,7 +7612,7 @@ export const zExecutor = layer('https://openinherit.org/v3/executor.json', zExec
  */
 export const zExecutor2 = zExecutor;
 
-export const zGuardian = z.intersection(z.unknown(), z.object({
+const zGuardian$generated = z.intersection(z.unknown(), z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     personId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
     personIdDisplay: z.string().max(255).optional(),
@@ -7625,6 +7658,7 @@ export const zGuardian = z.intersection(z.unknown(), z.object({
         'custom'
     ]).optional()
 }));
+export const zGuardian = layer('https://openinherit.org/v3/guardian.json', zGuardian$generated);
 
 /**
  * Guardian appointment for minor children
@@ -8023,7 +8057,7 @@ export const zProxyAuthorisation2 = zProxyAuthorisation;
  *
  * A testamentary power granting someone the authority to decide how assets or trust interests are distributed. Common in complex wills — the testator grants discretion to an appointee (typically an executor or trustee) to allocate among a defined class of beneficiaries
  */
-export const zPowerOfAppointment = z.object({
+const zPowerOfAppointment$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     appointorPersonId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     appointorPersonIdDisplay: z.string().max(255).optional(),
@@ -8046,6 +8080,7 @@ export const zPowerOfAppointment = z.object({
     notes: z.string().max(2000).optional(),
     provenance: zProvenance.optional()
 });
+export const zPowerOfAppointment = layer('https://openinherit.org/v3/power-of-appointment.json', zPowerOfAppointment$generated);
 
 /**
  * Testamentary power granting authority to decide distribution (general, special, hybrid)
@@ -8128,7 +8163,7 @@ export const zLifetimeTransfer2 = zLifetimeTransfer;
  *
  * A pet or animal requiring care arrangements after the owner's death
  */
-export const zPet = z.object({
+const zPet$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     petName: z.string().min(1).max(255),
     species: z.union([
@@ -8176,6 +8211,7 @@ export const zPet = z.object({
         careInstructions: z.string().max(2000).optional()
     }).optional()
 });
+export const zPet = layer('https://openinherit.org/v3/pet.json', zPet$generated);
 
 /**
  * A pet or animal with care arrangements
@@ -8187,7 +8223,7 @@ export const zPet2 = zPet;
  *
  * A notification sent to a person or organisation during estate administration — beneficiary notifications, executor appointments, probate grants, document requests
  */
-export const zNotification = z.object({
+const zNotification$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     notificationType: z.union([
         z.enum([
@@ -8224,6 +8260,7 @@ export const zNotification = z.object({
     notes: z.string().max(2000).optional(),
     provenance: zProvenance.optional()
 });
+export const zNotification = layer('https://openinherit.org/v3/notification.json', zNotification$generated);
 
 /**
  * A notification event recorded against the estate
@@ -8235,7 +8272,7 @@ export const zNotification2 = zNotification;
  *
  * An estimated tax position for an estate in a specific jurisdiction, including gross and net values, available exemptions, and estimated liability
  */
-export const zTaxPosition = z.object({
+const zTaxPosition$generated = z.object({
     jurisdiction: z.string().min(1).max(255),
     calculatedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).readonly(),
     grossEstateValue: zMoney,
@@ -8260,6 +8297,7 @@ export const zTaxPosition = z.object({
     charitableGiftsTotal: zMoney.optional(),
     charitableGiftsAsPercentage: z.number().gte(0).lte(100).optional()
 });
+export const zTaxPosition = layer('https://openinherit.org/v3/common/tax-position.json', zTaxPosition$generated);
 
 /**
  * Tax liability or exemption position
@@ -8370,7 +8408,7 @@ export const zEvent2 = zEvent;
  *
  * Records that a person has acknowledged a role or entitlement in the estate
  */
-export const zAcknowledgement = z.object({
+const zAcknowledgement$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     entityType: z.enum([
         'bequest',
@@ -8392,6 +8430,7 @@ export const zAcknowledgement = z.object({
     notes: z.string().max(2000).optional(),
     provenance: zProvenance.optional()
 });
+export const zAcknowledgement = layer('https://openinherit.org/v3/acknowledgement.json', zAcknowledgement$generated);
 
 /**
  * A formal acknowledgement of receipt or consent
@@ -8403,7 +8442,7 @@ export const zAcknowledgement2 = zAcknowledgement;
  *
  * A recurring subscription that needs to be cancelled, transferred, or maintained after death — streaming, utilities, memberships, software
  */
-export const zSubscription = z.object({
+const zSubscription$generated = z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     serviceName: z.string().min(1).max(255),
     cost: zMoney.optional(),
@@ -8441,6 +8480,7 @@ export const zSubscription = z.object({
     }).optional(),
     provenance: zProvenance.optional()
 });
+export const zSubscription = layer('https://openinherit.org/v3/subscription.json', zSubscription$generated);
 
 /**
  * A recurring digital or financial subscription held by the estate

@@ -52,6 +52,7 @@
     "test:release-wiring": "node scripts/test-check-release-wiring.mjs",
     "check:release-contents": "node scripts/check-release-contents.mjs",
     "test:release-contents": "node scripts/test-check-release-contents.mjs",
+    "test:conformance-kit": "python3 scripts/check-conformance-kit.py && python3 scripts/test-check-conformance-kit.py",
     "lint:schemas": "node scripts/check-schema-lint.mjs",
     "test:lint-schemas": "node scripts/test-check-schema-lint.mjs",
     "test:workflow-path-filters": "node scripts/test-check-workflow-path-filters.mjs",

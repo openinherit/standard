@@ -1,0 +1,16 @@
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "A person requires an id.",
+  "rule": {
+    "class": "required",
+    "keyword": "required",
+    "instancePath": "/people/0"
+  },
+  "base": "estate/valid/minimal-estate.json",
+  "op": {
+    "op": "remove",
+    "path": "/people/0/id"
+  }
+}

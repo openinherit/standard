@@ -1,1 +1,17 @@
-{ "valid": false, "schemaMode": "catalogue", "minErrors": 1 }
+{
+  "valid": false,
+  "schemaMode": "catalogue",
+  "minErrors": 1,
+  "description": "assets must be an array.",
+  "rule": {
+    "class": "type",
+    "keyword": "type",
+    "instancePath": "/assets"
+  },
+  "base": "catalogue/valid/catalogue-only.json",
+  "op": {
+    "op": "replace",
+    "path": "/assets",
+    "value": "not-an-array"
+  }
+}

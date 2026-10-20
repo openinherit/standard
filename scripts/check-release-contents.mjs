@@ -16,12 +16,16 @@
 //   R3  every reference-data file the schema package ships is byte-identical to root
 //   R4  the packed schema carries the catalogue room-gap fix (proposal 0003, PR #29)
 //   R5  the packed conformance kit carries it too: fixture, expected result, bundles
+//   R6  the packed conformance kit matches its own manifest: the manifest is at
+//       the package's version, and every file it names is packed, byte for byte
+//       at the sha256 it records
 //
 // USAGE: node scripts/check-release-contents.mjs [--root <dir>] [--tag vX.Y.Z]
 // EXIT CODES: 0 clean - 1 one or more assertions failed - 2 cannot answer.
 // Exit 2 is never "no failures".
 
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative, resolve } from "node:path";
@@ -189,6 +193,31 @@ for (const bundle of ["inherit-v3-bundled.json", "catalogue-v3-bundled.json"]) {
   const space = b.$id === SPACE_ID ? b : defs[SPACE_ID];
   if (!catalogueHasProperties(cat)) fail("R5", `schemas/${bundle} carries no catalogue properties[] -- it predates the room-gap fix.`);
   if (!spaceHasConditionalPropertyId(space)) fail("R5", `schemas/${bundle} carries no conditional space.propertyId -- it predates the room-gap fix.`);
+}
+
+// ---- R6: the conformance kit matches its manifest ----------------------------------
+const packedManifest = join(conformance, "manifest.json");
+if (!existsSync(packedManifest)) {
+  fail("R6", "the packed @openinherit/conformance has no manifest.json.");
+} else {
+  const manifest = readJson(packedManifest);
+  const kitVersion = readJson(join(conformance, "package.json")).version;
+  if (manifest.version !== kitVersion) {
+    fail("R6", `the packed conformance manifest is at ${manifest.version}; the package is ${kitVersion} -- run: python3 scripts/build-conformance-kit.py`);
+  }
+  const named = [
+    ...(manifest.schemas ?? []).map((s) => [s.file, s.sha256]),
+    ...(manifest.tests ?? []).flatMap((t) => [[t.file, t.sha256], [t.expected, t.expectedSha256]]),
+  ];
+  if (!named.length) fail("R6", "the packed conformance manifest names no files.");
+  for (const [file, sha256] of named) {
+    const path = join(conformance, file);
+    if (!existsSync(path)) {
+      fail("R6", `the packed conformance manifest names ${file}, which is not in the package.`);
+    } else if (createHash("sha256").update(readFileSync(path)).digest("hex") !== sha256) {
+      fail("R6", `the packed ${file} does not match its sha256 in the conformance manifest.`);
+    }
+  }
 }
 
 // ---- report ------------------------------------------------------------------------

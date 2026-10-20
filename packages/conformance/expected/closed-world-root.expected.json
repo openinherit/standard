@@ -1,0 +1,17 @@
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "The root is closed: a property the schema does not declare is refused.",
+  "rule": {
+    "class": "closed-world",
+    "keyword": "unevaluatedProperties",
+    "instancePath": ""
+  },
+  "base": "estate/valid/minimal-estate.json",
+  "op": {
+    "op": "add",
+    "path": "/unknownTopLevelField",
+    "value": true
+  }
+}

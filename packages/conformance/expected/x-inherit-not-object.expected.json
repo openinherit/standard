@@ -1,0 +1,17 @@
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "An x-inherit-* block must be an object.",
+  "rule": {
+    "class": "x-inherit",
+    "keyword": "type",
+    "instancePath": "/x-inherit-acme"
+  },
+  "base": "estate/valid/minimal-estate.json",
+  "op": {
+    "op": "add",
+    "path": "/x-inherit-acme",
+    "value": "not-an-object"
+  }
+}

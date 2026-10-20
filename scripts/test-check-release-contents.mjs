@@ -53,6 +53,7 @@ function makeTree() {
   const conf = join(t, 'packages/conformance');
   cpSync(join(ROOT, 'packages/conformance'), conf, { recursive: true });
   set(t, 'packages/conformance/package.json', (p) => { p.version = FIXTURE_VERSION; });
+  set(t, 'packages/conformance/manifest.json', (m) => { m.version = FIXTURE_VERSION; });
   return t;
 }
 const set = (t, rel, fn) => {
@@ -73,7 +74,7 @@ const cases = [
 
   // R1 -- version
   ['the schema package is at a different version from root', tree((t) => set(t, 'packages/schema/package.json', (p) => { p.version = '6.6.1'; })), 1, 'R1'],
-  ['the conformance package is at a different version from root', tree((t) => set(t, 'packages/conformance/package.json', (p) => { p.version = '6.5.0'; })), 1, 'R1'],
+  ['the conformance package is at a different version from root', tree((t) => set(t, 'packages/conformance/package.json', (p) => { p.version = '6.5.0'; })), 1, 'R1+R6'],
   ['--tag names a version the packages are not at', [...tree(), '--tag', 'v6.7.0'], 1, 'R1'],
   ['--tag names the version the packages are at', [...tree(), '--tag', 'v6.6.0'], 0],
   ['--tag is not a version tag', [...tree(), '--tag', 'main'], 2],
@@ -100,13 +101,23 @@ const cases = [
   ['the load-bearing inner required on spaceType is dropped', tree((t) => both(t, 'v3/space.json', (s) => { delete spaceConditional(s).if.required; })), 1, 'R4'],
 
   // R5 -- the room-gap fix in the packed conformance kit
-  ['the catalogue-only fixture is missing', tree((t) => unlinkSync(join(t, 'packages/conformance/catalogue/valid/catalogue-only.json'))), 1, 'R5'],
-  ['the catalogue-only expected result is missing', tree((t) => unlinkSync(join(t, 'packages/conformance/expected/catalogue-only.expected.json'))), 1, 'R5'],
-  ['the catalogue bundle predates the room-gap fix', tree((t) => set(t, 'packages/conformance/schemas/catalogue-v3-bundled.json', (b) => { delete b.properties.properties; })), 1, 'R5'],
+  // The kit's manifest hashes these files too, so removing or editing one also fires R6.
+  ['the catalogue-only fixture is missing', tree((t) => unlinkSync(join(t, 'packages/conformance/catalogue/valid/catalogue-only.json'))), 1, 'R5+R6'],
+  ['the catalogue-only expected result is missing', tree((t) => unlinkSync(join(t, 'packages/conformance/expected/catalogue-only.expected.json'))), 1, 'R5+R6'],
+  ['the catalogue bundle predates the room-gap fix', tree((t) => set(t, 'packages/conformance/schemas/catalogue-v3-bundled.json', (b) => { delete b.properties.properties; })), 1, 'R5+R6'],
   ['the inherit bundle predates the room-gap fix', tree((t) => set(t, 'packages/conformance/schemas/inherit-v3-bundled.json', (b) => {
     const s = b.$defs['https://openinherit.org/v3/space.json'];
     s.allOf = s.allOf.filter((m) => !(m.then && m.then.required));
-  })), 1, 'R5'],
+  })), 1, 'R5+R6'],
+
+  // R6 -- the packed conformance kit matches its own manifest
+  ['the packed manifest is behind the package version', tree((t) => set(t, 'packages/conformance/manifest.json', (m) => { m.version = '6.1.1'; })), 1, 'R6'],
+  ['one byte of a packed fixture differs from its manifest hash', tree((t) => {
+    const p = join(t, 'packages/conformance/estate/valid/minimal-estate.json');
+    writeFileSync(p, readFileSync(p, 'utf8').replace('"James"', '"Jameson"'));
+  }), 1, 'R6'],
+  ['an INVALID fixture the manifest names is not packed', tree((t) => unlinkSync(join(t, 'packages/conformance/estate/invalid/bad-uuid.json'))), 1, 'R6'],
+  ['"files" stops shipping the manifest', tree((t) => set(t, 'packages/conformance/package.json', (p) => { p.files = p.files.filter((f) => f !== 'manifest.json'); })), 1, 'R6'],
 
   // exit 2 -- cannot answer is never a pass
   ['--root does not exist', ['--root', join(work, 'nowhere')], 2],

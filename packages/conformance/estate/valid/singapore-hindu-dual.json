@@ -330,8 +330,7 @@
           "relationship": "daughter",
           "coparcenaryShareFraction": "1/3"
         }
-      ],
-      "notes": "HUF property held in India. Under the 2005 Amendment, daughters have equal coparcenary rights."
+      ]
     },
     "heirClassifications": [
       {
@@ -361,6 +360,6 @@
     },
     "probateAdvisable": true,
     "crossStateAssets": false,
-    "notes": "Mitakshara coparcenary rules apply to the HUF property in India. The 2005 Amendment gives Deepa equal coparcenary rights. Singaporean assets are governed by the ISA, not Hindu law."
+    "notes": "HUF property held in India. Mitakshara coparcenary rules apply to it, and the 2005 Amendment gives Deepa equal coparcenary rights. Singaporean assets are governed by the ISA, not Hindu law."
   }
 }

@@ -28,13 +28,33 @@ def test_a_const_discriminator_is_compiled():
     assert layer.is_discriminator({"if": DISC, "then": {}})
 
 
-def test_an_enum_or_required_only_if_is_not_a_discriminator():
+def test_an_enum_if_is_not_a_discriminator():
     assert not layer.is_discriminator({"if": {"properties": {"kind": {"enum": ["x", "y"]}}}})
-    assert not layer.is_discriminator({"if": {"required": ["x-inherit-uk"]}})
+
+
+def test_a_presence_if_is_compiled_but_only_on_one_member():
+    # The root's core-extension members: "if x-inherit-uk is present, it is a
+    # UK extension block". Without them neither validator looked inside one.
+    assert layer.is_discriminator({"if": {"required": ["x-inherit-uk"]}})
+    assert not layer.is_discriminator({"if": {"required": ["a", "b"]}})
+
+
+def test_a_presence_conditional_delegates_to_the_extension_schema():
+    doc = {"$id": A, "allOf": [{"if": {"required": ["x-inherit-b"]},
+                                "then": {"properties": {"x-inherit-b": {"$ref": "b.json"}}}}]}
+    rule = compiler({A: doc, B: {"$id": B}}).rule(A)
+    assert rule["conditionals"] == [{"if": {"required": ["x-inherit-b"]},
+                                     "then": {"properties": {"x-inherit-b": {"$ref": B}}}}]
+
+
+def test_top_level_pattern_properties_are_an_assertion():
+    block = {"type": "object", "maxProperties": 2, "propertyNames": {"pattern": "^[a-z]+$", "maxLength": 8}}
+    doc = {"$id": A, "patternProperties": {"^x-inherit-": block}}
+    assert compiler({A: doc}).rule(A)["asserts"] == [{"patternProperties": {"^x-inherit-": block}}]
 
 
 def test_an_unsupported_keyword_in_a_branch_fails_generation():
-    doc = {"$id": A, "allOf": [{"if": DISC, "then": {"properties": {"n": {"pattern": "^a"}}}}]}
+    doc = {"$id": A, "allOf": [{"if": DISC, "then": {"properties": {"n": {"minLength": 1}}}}]}
     with pytest.raises(SystemExit):
         compiler({A: doc}).rule(A)
 
@@ -51,7 +71,7 @@ def test_annotations_are_ignored():
 
 
 def test_closed_counts_names_from_members_the_layer_does_not_compile():
-    other = {"if": {"required": ["k"]}, "then": {"properties": {"extra": {}}}}
+    other = {"if": {"properties": {"k": {"enum": ["a", "b"]}}}, "then": {"properties": {"extra": {}}}}
     doc = {"$id": A, "unevaluatedProperties": False, "properties": {"kind": {}},
            "allOf": [{"if": DISC, "then": {"$ref": "b.json"}}, other]}
     rule = compiler({A: doc, B: {"$id": B, "properties": {"fromB": {}}}}).rule(A)

@@ -4,7 +4,9 @@
 The Zod and pydantic generators drop three things that v3/ relies on:
 
   1. an `if` / `then` / `else` keyed on one member's const value: a
-     discriminator, such as the root's `conformanceProfile`;
+     discriminator, such as the root's `conformanceProfile`; or keyed on one
+     member's presence, such as the root's "if x-inherit-us-estate is present,
+     it is a US estate extension block";
   2. validation keywords next to a `$ref`, such as catalogue.json's
      `conformance: {$ref, properties: {profile: {const: "catalogue"}}}`;
   3. `unevaluatedProperties: false`, wherever (1) decides which members are
@@ -13,7 +15,9 @@ The Zod and pydantic generators drop three things that v3/ relies on:
      "an item or a whole collection, not both";
   5. a schema's own top-level `dependentRequired`, such as
      asset-collection.json's "an estimate flag needs a count";
-  6. `uniqueItems` on a top-level array member (Zod only; pydantic keeps it).
+  6. `uniqueItems` on a top-level array member (Zod only; pydantic keeps it);
+  7. a schema's own top-level `patternProperties`: what an `x-inherit-*`
+     block may hold (an object, of bounded size, with identifier keys).
 
 Without this layer, a regenerated root validator accepts a document with no
 `estate`, `people` or `schemaVersion`. This script reads the v3/ sources and
@@ -44,7 +48,8 @@ are Optional, and "present" must not be satisfied by null.
 
 Inside a branch or overlay, the layer evaluates only: required, const, enum,
 minItems, maxItems, uniqueItems, minimum, maximum, exclusiveMinimum,
-exclusiveMaximum, properties, allOf, not, contains, dependentRequired,
+exclusiveMaximum, type, maxProperties, pattern, maxLength, properties,
+patternProperties, propertyNames, allOf, not, contains, dependentRequired,
 if/then/else, and $ref to a whole v3 document schema. A $ref is delegated to that schema's own
 (layered) validator. Annotations are ignored. Any other keyword in those
 positions is a hard failure, so a construct the layer cannot evaluate can
@@ -73,6 +78,7 @@ SUPPORTED = {
     "required", "const", "enum", "minItems", "maxItems", "uniqueItems", "properties",
     "allOf", "not", "contains", "dependentRequired", "if", "then", "else", "$ref",
     "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum",
+    "type", "maxProperties", "pattern", "maxLength", "patternProperties", "propertyNames",
 }
 APPLICATORS = ("allOf", "anyOf", "oneOf", "if", "then", "else", "dependentSchemas", "$ref")
 
@@ -105,8 +111,11 @@ def sources() -> dict[str, dict]:
 
 
 def is_discriminator(cond: dict) -> bool:
-    """if: {required: [p], properties: {p: {const: v}}}, the only `if` shape compiled."""
+    """The two `if` shapes compiled: if: {required: [p], properties: {p: {const: v}}},
+    and if: {required: [p]} (p is present)."""
     s = cond.get("if")
+    if isinstance(s, dict) and set(s) == {"required"}:
+        return isinstance(s["required"], list) and len(s["required"]) == 1
     if not isinstance(s, dict) or set(s) - {"required", "properties"} or "properties" not in s:
         return False
     props = s["properties"]
@@ -137,11 +146,11 @@ class Compiler:
                     fail(f"{where}: $ref {v!r} is not a whole v3 document schema with a generated validator")
                 self.refs.add(target)
                 out["$ref"] = target
-            elif k == "properties":
-                out[k] = {p: self.compile(sub, base, f"{where}/properties/{p}") for p, sub in v.items()}
+            elif k in ("properties", "patternProperties"):
+                out[k] = {p: self.compile(sub, base, f"{where}/{k}/{p}") for p, sub in v.items()}
             elif k == "allOf":
                 out[k] = [self.compile(sub, base, f"{where}/allOf/{i}") for i, sub in enumerate(v)]
-            elif k in ("not", "contains", "if", "then", "else"):
+            elif k in ("not", "contains", "if", "then", "else", "propertyNames"):
                 out[k] = self.compile(v, base, f"{where}/{k}")
             else:
                 out[k] = v
@@ -185,6 +194,12 @@ class Compiler:
                         if isinstance(sub, dict) and sub.get("uniqueItems") is True)
         if unique:
             asserts.append({"properties": {p: {"uniqueItems": True} for p in unique}})
+        # Both generators drop what a patternProperties member may hold, so an
+        # x-inherit-* block could be a string, or have any keys. It applies to
+        # every instance and is compiled as an assertion. The member names it
+        # evaluates are already in the unevaluatedProperties count below.
+        if "patternProperties" in doc:
+            asserts.append(self.compile({"patternProperties": doc["patternProperties"]}, sid, f"{sid} patternProperties"))
         if not conds and not overlays and not asserts:
             return None
         rule = {"conditionals": conds, "asserts": asserts, "overlays": overlays, "closed": None,
@@ -276,6 +291,7 @@ function evaluate(s: any, v: unknown, path: (string | number)[], out: Issue[]): 
     const r = byId(s.$ref).safeParse(v);
     if (!r.success) for (const i of r.error.issues) out.push({ path: [...path, ...(i.path as (string | number)[])], message: i.message });
   }
+  if (s.type !== undefined && !(Array.isArray(s.type) ? s.type : [s.type]).some((t: string) => isType(v, t))) out.push({ path, message: `must be of type ${JSON.stringify(s.type)}` });
   if (s.const !== undefined && !same(v, s.const)) out.push({ path, message: `must be ${JSON.stringify(s.const)}` });
   if (s.enum !== undefined && !s.enum.some((e: unknown) => same(v, e))) out.push({ path, message: `must be one of ${JSON.stringify(s.enum)}` });
   if (typeof v === 'number') {
@@ -283,6 +299,10 @@ function evaluate(s: any, v: unknown, path: (string | number)[], out: Issue[]): 
     if (s.maximum !== undefined && v > s.maximum) out.push({ path, message: `must be <= ${s.maximum}` });
     if (s.exclusiveMinimum !== undefined && v <= s.exclusiveMinimum) out.push({ path, message: `must be > ${s.exclusiveMinimum}` });
     if (s.exclusiveMaximum !== undefined && v >= s.exclusiveMaximum) out.push({ path, message: `must be < ${s.exclusiveMaximum}` });
+  }
+  if (typeof v === 'string') {
+    if (s.maxLength !== undefined && [...v].length > s.maxLength) out.push({ path, message: `must be at most ${s.maxLength} characters` });
+    if (s.pattern !== undefined && !new RegExp(s.pattern, 'u').test(v)) out.push({ path, message: `must match ${s.pattern}` });
   }
   if (Array.isArray(v)) {
     if (s.maxItems !== undefined && v.length > s.maxItems) out.push({ path, message: `must have at most ${s.maxItems} items` });
@@ -296,12 +316,31 @@ function evaluate(s: any, v: unknown, path: (string | number)[], out: Issue[]): 
       if (k in v) for (const r of needs) if (!(r in v)) out.push({ path: [...path, r], message: `required when ${k} is present: ${r}` });
     }
     for (const [k, sub] of Object.entries(s.properties ?? {})) if (k in v) evaluate(sub, v[k], [...path, k], out);
+    if (s.maxProperties !== undefined && Object.keys(v).length > s.maxProperties) out.push({ path, message: `must have at most ${s.maxProperties} properties` });
+    if (s.propertyNames !== undefined) for (const k of Object.keys(v)) evaluate(s.propertyNames, k, [...path, k], out);
+    for (const [p, sub] of Object.entries(s.patternProperties ?? {})) {
+      const re = new RegExp(p, 'u');
+      for (const k of Object.keys(v)) if (re.test(k)) evaluate(sub, v[k], [...path, k], out);
+    }
   }
   for (const sub of s.allOf ?? []) evaluate(sub, v, path, out);
   if (s.not !== undefined && passes(s.not, v)) out.push({ path, message: 'must not match the excluded shape' });
   if (s.if !== undefined) {
     const branch = passes(s.if, v) ? s.then : s.else;
     if (branch !== undefined) evaluate(branch, v, path, out);
+  }
+}
+
+function isType(v: unknown, t: string): boolean {
+  switch (t) {
+    case 'object': return isObj(v);
+    case 'array': return Array.isArray(v);
+    case 'string': return typeof v === 'string';
+    case 'number': return typeof v === 'number';
+    case 'integer': return typeof v === 'number' && Number.isInteger(v);
+    case 'boolean': return typeof v === 'boolean';
+    case 'null': return v === null;
+    default: throw new Error(`conditional layer: unknown type ${t}`);
   }
 }
 
@@ -314,6 +353,7 @@ function passes(s: any, v: unknown): boolean {
 /** Member names a branch evaluates, for unevaluatedProperties. */
 function evaluated(s: any, names: Set<string>, patterns: string[]): void {
   for (const k of Object.keys(s.properties ?? {})) names.add(k);
+  patterns.push(...Object.keys(s.patternProperties ?? {}));
   if (s.$ref !== undefined) {
     const k = REFKEYS[s.$ref];
     for (const p of k.props) names.add(p);
@@ -462,6 +502,8 @@ def _evaluate(s, v, path, out):
         except _ValidationError as e:
             for err in e.errors():
                 out.append(("/".join(map(str, [*path, *err["loc"]])), err["msg"]))
+    if "type" in s and not any(_is_type(v, t) for t in (s["type"] if isinstance(s["type"], list) else [s["type"]])):
+        out.append(("/".join(map(str, path)), f"must be of type {_json.dumps(s['type'])}"))
     if "const" in s and not _same(v, s["const"]):
         out.append(("/".join(map(str, path)), f"must be {_json.dumps(s['const'])}"))
     if "enum" in s and not any(_same(v, e) for e in s["enum"]):
@@ -471,6 +513,11 @@ def _evaluate(s, v, path, out):
                              ("exclusiveMinimum", v.__le__, ">"), ("exclusiveMaximum", v.__ge__, "<")):
             if k in s and bad(s[k]):
                 out.append(("/".join(map(str, path)), f"must be {word} {s[k]}"))
+    if isinstance(v, str):
+        if "maxLength" in s and len(v) > s["maxLength"]:
+            out.append(("/".join(map(str, path)), f"must be at most {s['maxLength']} characters"))
+        if "pattern" in s and not _re.search(s["pattern"], v):
+            out.append(("/".join(map(str, path)), f"must match {s['pattern']}"))
     if isinstance(v, list):
         if "maxItems" in s and len(v) > s["maxItems"]:
             out.append(("/".join(map(str, path)), f"must have at most {s['maxItems']} items"))
@@ -492,6 +539,15 @@ def _evaluate(s, v, path, out):
         for k, sub in s.get("properties", {}).items():
             if k in v:
                 _evaluate(sub, v[k], [*path, k], out)
+        if "maxProperties" in s and len(v) > s["maxProperties"]:
+            out.append(("/".join(map(str, path)), f"must have at most {s['maxProperties']} properties"))
+        if "propertyNames" in s:
+            for k in v:
+                _evaluate(s["propertyNames"], k, [*path, k], out)
+        for p, sub in s.get("patternProperties", {}).items():
+            for k in v:
+                if _re.search(p, k):
+                    _evaluate(sub, v[k], [*path, k], out)
     for sub in s.get("allOf", []):
         _evaluate(sub, v, path, out)
     if "not" in s and _passes(s["not"], v):
@@ -502,6 +558,24 @@ def _evaluate(s, v, path, out):
             _evaluate(branch, v, path, out)
 
 
+def _is_type(v, t):
+    if t == "object":
+        return isinstance(v, dict)
+    if t == "array":
+        return isinstance(v, list)
+    if t == "string":
+        return isinstance(v, str)
+    if t == "number":
+        return isinstance(v, (int, float)) and not isinstance(v, bool)
+    if t == "integer":
+        return (isinstance(v, int) and not isinstance(v, bool)) or (isinstance(v, float) and v.is_integer())
+    if t == "boolean":
+        return isinstance(v, bool)
+    if t == "null":
+        return v is None
+    raise ValueError(f"conditional layer: unknown type {t}")
+
+
 def _passes(s, v):
     out = []
     _evaluate(s, v, [], out)
@@ -510,6 +584,7 @@ def _passes(s, v):
 
 def _evaluated(s, names, patterns):
     names.update(s.get("properties", {}))
+    patterns.extend(s.get("patternProperties", {}))
     if "$ref" in s:
         names.update(_REFKEYS[s["$ref"]]["props"])
         patterns.extend(_REFKEYS[s["$ref"]]["patterns"])

@@ -1,0 +1,17 @@
+{
+  "valid": false,
+  "schemaMode": "catalogue",
+  "minErrors": 1,
+  "description": "The catalogue profile's root is closed: an undeclared property is refused.",
+  "rule": {
+    "class": "closed-world",
+    "keyword": "unevaluatedProperties",
+    "instancePath": ""
+  },
+  "base": "catalogue/valid/catalogue-only.json",
+  "op": {
+    "op": "add",
+    "path": "/unknownTopLevelField",
+    "value": true
+  }
+}

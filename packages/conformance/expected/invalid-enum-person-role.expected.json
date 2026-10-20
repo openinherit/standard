@@ -1,0 +1,17 @@
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "A person's role is not one of the declared values.",
+  "rule": {
+    "class": "enum",
+    "keyword": "enum",
+    "instancePath": "/people/0/roles/0"
+  },
+  "base": "estate/valid/minimal-estate.json",
+  "op": {
+    "op": "replace",
+    "path": "/people/0/roles/0",
+    "value": "emperor"
+  }
+}

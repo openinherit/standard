@@ -7,14 +7,17 @@ Requires: pip install jsonschema
 Validates INHERIT conformance fixtures against the bundled schemas
 using the standard Python jsonschema library. Any JSON Schema 2020-12
 compliant validator can be substituted.
+
+Every file is checked against the sha256 manifest.json records for it before
+it is used, so a kit altered after it was published is refused, not graded.
 """
+import hashlib
 import json
 import sys
 from pathlib import Path
 
 try:
-    from jsonschema import Draft202012Validator, ValidationError
-    from jsonschema.validators import RefResolver
+    from jsonschema import Draft202012Validator
 except ImportError:
     print("Error: jsonschema package not installed. Run: pip install jsonschema")
     sys.exit(2)
@@ -22,9 +25,18 @@ except ImportError:
 KIT_DIR = Path(__file__).parent.parent
 MANIFEST = json.loads((KIT_DIR / "manifest.json").read_text())
 
+def verified(rel, sha256):
+    data = (KIT_DIR / rel).read_bytes()
+    if hashlib.sha256(data).hexdigest() != sha256:
+        print(f"Error: {rel} does not match its sha256 in manifest.json -- the kit has been altered.")
+        sys.exit(2)
+    return json.loads(data)
+
+
+HASHES = {s["file"]: s["sha256"] for s in MANIFEST["schemas"]}
 # Load bundled schemas
-ESTATE_SCHEMA = json.loads((KIT_DIR / "schemas" / "inherit-v3-bundled.json").read_text())
-CATALOGUE_SCHEMA = json.loads((KIT_DIR / "schemas" / "catalogue-v3-bundled.json").read_text())
+ESTATE_SCHEMA = verified("schemas/inherit-v3-bundled.json", HASHES["schemas/inherit-v3-bundled.json"])
+CATALOGUE_SCHEMA = verified("schemas/catalogue-v3-bundled.json", HASHES["schemas/catalogue-v3-bundled.json"])
 
 passed = 0
 failed = 0
@@ -34,12 +46,8 @@ print("Runner: Python (jsonschema)")
 print("---")
 
 for test in MANIFEST["tests"]:
-    fixture_path = KIT_DIR / test["file"]
-    expected_path = KIT_DIR / test["expected"]
-
-    with open(fixture_path) as f:
-        doc = json.load(f)
-    expected = json.loads(expected_path.read_text())
+    doc = verified(test["file"], test["sha256"])
+    expected = verified(test["expected"], test["expectedSha256"])
 
     # Pick schema based on schemaMode in expected result
     schema_mode = expected.get("schemaMode", "estate")

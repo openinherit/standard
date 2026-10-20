@@ -1,9 +1,9 @@
 ---
 title: "INHERIT Conformance Test Kit"
-version: "2.0"
+version: "3.0"
 status: approved
 date: 2026-04-06T00:00
-lastmod: 2026-04-12T23:59
+lastmod: 2026-10-20T00:00
 author: "Rich Davies"
 source: "packages/conformance/README.md"
 supersedes: null
@@ -12,13 +12,14 @@ supersedes: null
 # INHERIT Conformance Test Kit
 
 Validate your INHERIT implementation against the open estate data standard. The main
-schema test suite (77 suites, 2,000+ test cases) lives in the `tests/` directory of the
+schema test suite lives in the `tests/` directory of the
 [standard repo](https://github.com/openinherit/standard). This conformance kit provides
 a standalone, language-agnostic subset: bundled schemas + fixture documents + expected
 results, runnable without Node.js or the Sourcemeta CLI.
 
-**Schema version:** v3 (package 6.4.x) — 31 entity schemas, 14 common types, 5 asset
-categories, 21 jurisdiction extensions, 1 new PowerOfAppointment entity.
+**Versioned with the standard.** The kit is released with every version of the standard, at the
+same version number: `manifest.json`'s `version` is the package's, and the release tag `vX.Y.Z`
+names both.
 
 ## Install
 
@@ -33,53 +34,76 @@ Or download from [GitHub Releases](https://github.com/openinherit/standard/relea
 | Path | Contents |
 |------|----------|
 | `schemas/` | Bundled JSON Schemas (`inherit-v3-bundled.json`, `catalogue-v3-bundled.json`) |
-| `estate/valid/` | 12 valid estate documents |
-| `estate/invalid/` | 9 invalid estate documents (each targets a specific validation rule) |
-| `catalogue/valid/` | 1 valid catalogue document |
-| `catalogue/invalid/` | 2 invalid catalogue documents |
-| `expected/` | Expected results — one `.expected.json` per fixture |
-| `manifest.json` | Machine-readable list of all tests |
+| `estate/valid/`, `catalogue/valid/` | VALID documents — every one must be accepted |
+| `estate/invalid/`, `catalogue/invalid/` | INVALID documents — every one must be refused, and each breaks exactly one rule |
+| `expected/` | One `.expected.json` per document |
+| `mutations.json` | How each INVALID document is made: a VALID base, one operation, the rule it breaks |
+| `manifest.json` | Every test, with the sha256 of its document, its expected result and each bundled schema |
 | `runners/` | Reference test runners (Python, bash) |
 
-## Invalid fixture catalogue
+## The INVALID cases: one rule each
 
-| File | What it tests |
-|------|--------------|
-| `estate/invalid/missing-required-fields.json` | Missing `estate` and `people` required fields |
-| `estate/invalid/wrong-type-people.json` | `people` is a string instead of an array |
-| `estate/invalid/bad-uuid.json` | `id` and `testatorPersonId` are not valid UUIDs |
-| `estate/invalid/invalid-enum.json` | `status` is not a recognised enum value |
-| `estate/invalid/extra-property-name.json` | Top-level property name violates the `propertyNames` pattern |
-| `estate/invalid/invalid-extension-values.json` | Hindu succession extension has invalid enum value (`school: "invalid_school"`). Level 1 valid — the base schema does not validate extension-specific content. Extension-level invalid when the `x-inherit-hindu-succession` schema is loaded |
-| `estate/invalid/missing-extension-required.json` | US estate extension missing required `propertyId` in `homesteadExemptions`. Level 1 valid — extension-level invalid when the `x-inherit-us-estate` schema is loaded |
-| `catalogue/invalid/missing-assets.json` | Missing required `assets` field |
-| `catalogue/invalid/assets-wrong-type.json` | `assets` is a string instead of an array |
+Every INVALID document is a VALID document from this kit with **one** JSON Patch operation
+(RFC 6902 `add`, `replace` or `remove`) applied. `mutations.json` records, for each:
 
-## Extension-level fixtures
+| Field | Meaning |
+|---|---|
+| `base` | the VALID document it starts from |
+| `op` | the single operation applied |
+| `rule.class` | `closed-world`, `enum`, `required`, `type`, `format` or `x-inherit` |
+| `rule.keyword` | the JSON Schema keyword that refuses it, e.g. `unevaluatedProperties` |
+| `rule.instancePath` | where that keyword reports it, as a JSON Pointer |
 
-Some fixtures in `estate/invalid/` are **Level 1 valid** (they pass the base bundled
-schema) but contain errors that only surface when the relevant extension schema is also
-loaded. These have `"valid": true` in their expected results because the conformance kit
-ships only the base schema. The `note` field describes the extension-level error.
+The same three fields are in each INVALID document's expected file and manifest entry. Because
+the base is accepted and only one thing changes, a validator that refuses the document for any
+other reason, or accepts it, is wrong about that rule specifically.
 
-If your validator loads extension schemas alongside the base schema, these fixtures should
-fail. If it validates against the base schema only, they should pass.
+The classes:
+
+- **closed-world** — an undeclared property, refused by `unevaluatedProperties: false` at the
+  root, on an entity, inside a core extension block, and at the catalogue root.
+- **enum**, **required**, **type**, **format** — a value outside an enumeration, a missing
+  required member, a value of the wrong type, an identifier that is not a UUID.
+- **x-inherit** — misuse of the extension namespace: an `x-inherit-*` block that is not an
+  object, has a key that is not an identifier, or has more than 200 keys; and content a core
+  extension's own schema refuses (an unknown Hindu succession `school`, a US homestead exemption
+  with no `propertyId`).
+
+## Level 1 only
+
+The kit grades **Level 1 (schema valid)**. Three VALID documents are deliberately broken at
+Level 2 and say so in their expected file's `note`: `broken-references.json` and
+`broken-extension-refs.json` carry references that resolve to nothing, and
+`empty-extension-data.json` declares an extension without its data block. A Level 1 validator
+must accept all three.
 
 ## Expected result format
-
-Each `.expected.json` contains:
 
 ```json
 { "valid": true, "schemaMode": "estate" }
 ```
 
-or for invalid documents:
+or for an INVALID document:
 
 ```json
-{ "valid": false, "schemaMode": "estate", "minErrors": 1 }
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "estate.status is not one of the declared values.",
+  "rule": { "class": "enum", "keyword": "enum", "instancePath": "/estate/status" },
+  "base": "estate/valid/minimal-estate.json",
+  "op": { "op": "replace", "path": "/estate/status", "value": "not_a_status" }
+}
 ```
 
 Your validator must return a JSON object with at least a `valid` boolean field.
+
+## Integrity
+
+`manifest.json` lists every test as `file`, `sha256`, `expected`, `expectedSha256`, `valid`,
+`schemaMode` (and `rule` for INVALID tests), and every bundled schema as `file`, `sha256`. Check
+a file's sha256 before trusting it; the Python runner refuses to run against an altered kit.
 
 ## Running with the Python runner
 
@@ -106,13 +130,30 @@ The bash runner calls your validator as `<command> <fixture-path>` and parses th
 
 Read `manifest.json` to enumerate all tests. For each entry:
 
-1. Load the document at `file`
-2. Validate it using your implementation
-3. Load the expected result at `expected`
-4. Assert `result.valid === expected.valid`
+1. Load the document at `file` and check its `sha256`
+2. Validate it using your implementation, against the bundle for its `schemaMode`
+3. Assert your verdict equals the entry's `valid`
+4. For an INVALID entry, check that your validator reports `rule.keyword` at
+   `rule.instancePath` — the right verdict for the wrong reason is still a defect
 
-The `minErrors` field in expected results is advisory — use it to verify your
-validator is producing specific errors, not just returning the right boolean.
+`minErrors` is kept for older runners; every INVALID case breaks exactly one rule.
+
+## Implementations graded on every change
+
+In the standard's CI, three independent implementations run every case and must all give the
+manifest's verdict, with no list of tolerated disagreements: Python `jsonschema` over the bundles
+(`runners/run-tests.py`), the generated Zod validators (`@openinherit/sdk/zod`) and the generated
+pydantic models (`openinherit.models`).
+
+## Maintaining the kit
+
+The INVALID documents, their expected files and `manifest.json` are generated. Edit
+`mutations.json` (or a VALID document), then, from the repository root:
+
+```bash
+python3 scripts/build-conformance-kit.py          # regenerate
+python3 scripts/check-conformance-kit.py          # one rule per INVALID, hashes, versions
+```
 
 ## Known lint false positives in bundled schemas
 

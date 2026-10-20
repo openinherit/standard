@@ -1,1 +1,16 @@
-{ "valid": false, "schemaMode": "estate", "minErrors": 1 }
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "The root requires people.",
+  "rule": {
+    "class": "required",
+    "keyword": "required",
+    "instancePath": ""
+  },
+  "base": "estate/valid/minimal-estate.json",
+  "op": {
+    "op": "remove",
+    "path": "/people"
+  }
+}

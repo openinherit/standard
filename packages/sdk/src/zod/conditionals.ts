@@ -7,6 +7,51 @@
 import * as z from 'zod';
 
 const RULES: Record<string, Rule> = {
+  "https://openinherit.org/v3/acknowledgement.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "acknowledgedAt",
+        "entityId",
+        "entityType",
+        "id",
+        "method",
+        "notes",
+        "personId",
+        "personIdDisplay",
+        "provenance"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "acknowledgedAt",
+      "entityId",
+      "entityType",
+      "id",
+      "method",
+      "notes",
+      "personId",
+      "personIdDisplay",
+      "provenance"
+    ]
+  },
   "https://openinherit.org/v3/asset-collection.json": {
     "conditionals": [],
     "asserts": [
@@ -24,6 +69,18 @@ const RULES: Record<string, Rule> = {
         "properties": {
           "additionalCategories": {
             "uniqueItems": true
+          }
+        }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
           }
         }
       }
@@ -85,6 +142,67 @@ const RULES: Record<string, Rule> = {
       "valuationComparison",
       "valuationDate",
       "valuationSource"
+    ]
+  },
+  "https://openinherit.org/v3/asset-interest.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "assetId",
+        "collectionId",
+        "expressedAt",
+        "expressedByRole",
+        "id",
+        "intentType",
+        "interestLevel",
+        "notes",
+        "organisationId",
+        "organisationIdDisplay",
+        "personId",
+        "personIdDisplay",
+        "preOrderStatus",
+        "productMatch",
+        "provenance",
+        "quantity",
+        "rootDocumentId",
+        "sourceType",
+        "testatorAcknowledged"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "expressedAt",
+      "id",
+      "interestLevel",
+      "notes",
+      "organisationId",
+      "organisationIdDisplay",
+      "personId",
+      "personIdDisplay",
+      "preOrderStatus",
+      "productMatch",
+      "provenance",
+      "quantity",
+      "rootDocumentId",
+      "sourceType",
+      "testatorAcknowledged"
     ]
   },
   "https://openinherit.org/v3/asset.json": {
@@ -155,6 +273,18 @@ const RULES: Record<string, Rule> = {
         "properties": {
           "identifiers": {
             "uniqueItems": true
+          }
+        }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
           }
         }
       }
@@ -335,6 +465,18 @@ const RULES: Record<string, Rule> = {
             "uniqueItems": true
           }
         }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
       }
     ],
     "overlays": {},
@@ -502,6 +644,18 @@ const RULES: Record<string, Rule> = {
             "uniqueItems": true
           }
         }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
       }
     ],
     "overlays": {},
@@ -611,7 +765,20 @@ const RULES: Record<string, Rule> = {
   },
   "https://openinherit.org/v3/catalogue.json": {
     "conditionals": [],
-    "asserts": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 200,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
     "overlays": {
       "conformance": {
         "properties": {
@@ -690,6 +857,83 @@ const RULES: Record<string, Rule> = {
       "wishes"
     ]
   },
+  "https://openinherit.org/v3/common/ai-provenance.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "confidence",
+        "generatedAt",
+        "humanReviewed",
+        "model",
+        "reviewedAt",
+        "reviewedBy"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "confidence",
+      "generatedAt",
+      "humanReviewed",
+      "reviewedAt",
+      "reviewedBy"
+    ]
+  },
+  "https://openinherit.org/v3/common/completeness.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "calculatedAt",
+        "checklist",
+        "estateStatus",
+        "jurisdiction",
+        "maxScore",
+        "score"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "calculatedAt",
+      "checklist",
+      "estateStatus",
+      "jurisdiction",
+      "maxScore",
+      "score"
+    ]
+  },
   "https://openinherit.org/v3/common/jurisdiction.json": {
     "conditionals": [],
     "asserts": [
@@ -716,6 +960,69 @@ const RULES: Record<string, Rule> = {
       "legalSystems",
       "name",
       "subdivision"
+    ]
+  },
+  "https://openinherit.org/v3/common/tax-position.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "availableExemptions",
+        "calculatedAt",
+        "charitableGiftsAsPercentage",
+        "charitableGiftsTotal",
+        "charitableReliefApplicable",
+        "charitableReliefBasis",
+        "charitableReliefJurisdiction",
+        "charitableReliefPercentage",
+        "disclaimer",
+        "effectiveRate",
+        "estimatedLiability",
+        "grossEstateValue",
+        "jurisdiction",
+        "lifetimeTransfersInLookback",
+        "lookbackPeriod",
+        "netEstateValue",
+        "taxableEstate",
+        "warnings"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "availableExemptions",
+      "calculatedAt",
+      "charitableGiftsAsPercentage",
+      "charitableGiftsTotal",
+      "charitableReliefApplicable",
+      "charitableReliefBasis",
+      "charitableReliefJurisdiction",
+      "charitableReliefPercentage",
+      "disclaimer",
+      "effectiveRate",
+      "estimatedLiability",
+      "grossEstateValue",
+      "jurisdiction",
+      "lifetimeTransfersInLookback",
+      "lookbackPeriod",
+      "netEstateValue",
+      "taxableEstate",
+      "warnings"
     ]
   },
   "https://openinherit.org/v3/conformance-declaration.json": {
@@ -778,6 +1085,61 @@ const RULES: Record<string, Rule> = {
       "validatorDetails"
     ]
   },
+  "https://openinherit.org/v3/dealer-interest.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "assets",
+        "collection",
+        "communicationInitiatedBy",
+        "id",
+        "interestedParty",
+        "linkedBequestId",
+        "managedByProxyId",
+        "notes",
+        "offerDetails",
+        "offerStatus",
+        "privacyLevel",
+        "provenance",
+        "testatorDisposition",
+        "verificationResult"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "assets",
+      "collection",
+      "communicationInitiatedBy",
+      "id",
+      "interestedParty",
+      "linkedBequestId",
+      "managedByProxyId",
+      "notes",
+      "offerDetails",
+      "offerStatus",
+      "privacyLevel",
+      "provenance",
+      "testatorDisposition",
+      "verificationResult"
+    ]
+  },
   "https://openinherit.org/v3/document.json": {
     "conditionals": [],
     "asserts": [
@@ -789,6 +1151,18 @@ const RULES: Record<string, Rule> = {
           "entityType": [
             "entityId"
           ]
+        }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
         }
       }
     ],
@@ -860,6 +1234,18 @@ const RULES: Record<string, Rule> = {
         "properties": {
           "revokesDocumentIds": {
             "uniqueItems": true
+          }
+        }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
           }
         }
       }
@@ -1077,6 +1463,18 @@ const RULES: Record<string, Rule> = {
             "issuingCourt"
           ]
         }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
       }
     ],
     "overlays": {},
@@ -1126,6 +1524,1263 @@ const RULES: Record<string, Rule> = {
       "scope"
     ]
   },
+  "https://openinherit.org/v3/extensions/africa-customary/africa-customary.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "communalPropertyDetails",
+        "constitutionalChallenges",
+        "customaryRules",
+        "ethnicGroup",
+        "familyCouncilDecisions",
+        "landTenureDetails",
+        "lobolaDetails",
+        "notes",
+        "widowRights"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "communalPropertyDetails",
+      "constitutionalChallenges",
+      "customaryRules",
+      "ethnicGroup",
+      "familyCouncilDecisions",
+      "landTenureDetails",
+      "lobolaDetails",
+      "notes",
+      "widowRights"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/australia-nz/australia-nz.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "aboriginalLandDetails",
+        "familyProvisionClaims",
+        "jurisdiction",
+        "maoriLandDetails",
+        "notes",
+        "nzPRA",
+        "superannuationNominations",
+        "testamentaryPromises"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "aboriginalLandDetails",
+      "familyProvisionClaims",
+      "jurisdiction",
+      "maoriLandDetails",
+      "notes",
+      "nzPRA",
+      "superannuationNominations",
+      "testamentaryPromises"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/brazil/brazil.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "cartorioAttestation",
+        "disponivel",
+        "inventarioType",
+        "itcmdRate",
+        "legitima",
+        "meacao",
+        "notes",
+        "uniaoEstavel"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "cartorioAttestation",
+      "disponivel",
+      "inventarioType",
+      "itcmdRate",
+      "legitima",
+      "meacao",
+      "notes",
+      "uniaoEstavel"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/canada/canada.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "albertaDower",
+        "bcWesaVariation",
+        "indigenousLandDetails",
+        "intestacyRules",
+        "notes",
+        "ontarioEqualization",
+        "province",
+        "quebecCivilLaw",
+        "quebecPatrimony"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "albertaDower",
+      "bcWesaVariation",
+      "indigenousLandDetails",
+      "intestacyRules",
+      "notes",
+      "ontarioEqualization",
+      "province",
+      "quebecCivilLaw",
+      "quebecPatrimony"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/eu-succession/eu-succession.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "brusselsIV",
+        "europeanCertificate",
+        "forcedHeirshipVariant",
+        "legislativeChanges",
+        "memberState",
+        "notes",
+        "postBrexitHandling",
+        "spanishRegionalRegime"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "brusselsIV",
+      "europeanCertificate",
+      "forcedHeirshipVariant",
+      "legislativeChanges",
+      "memberState",
+      "notes",
+      "postBrexitHandling",
+      "spanishRegionalRegime"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/hindu-succession/hindu-succession.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "agriculturalLand",
+        "applicableLaw",
+        "crossStateAssets",
+        "heirClassifications",
+        "hufDetails",
+        "hufProperty",
+        "instrumentType",
+        "notes",
+        "nriComplications",
+        "probateAdvisable",
+        "school",
+        "stridhanAssets"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "agriculturalLand",
+      "applicableLaw",
+      "crossStateAssets",
+      "heirClassifications",
+      "hufDetails",
+      "hufProperty",
+      "instrumentType",
+      "notes",
+      "nriComplications",
+      "probateAdvisable",
+      "school",
+      "stridhanAssets"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/hong-kong/hong-kong.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "crossBorderPrcAssets",
+        "intestacyDistribution",
+        "intestacyHierarchy",
+        "localGrantTypes",
+        "mpfNomination",
+        "newTerritoriesCustomaryLaw",
+        "notes",
+        "preReformCustomaryLaw",
+        "smallEstateGrant"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "crossBorderPrcAssets",
+      "intestacyDistribution",
+      "intestacyHierarchy",
+      "localGrantTypes",
+      "mpfNomination",
+      "newTerritoriesCustomaryLaw",
+      "notes",
+      "preReformCustomaryLaw",
+      "smallEstateGrant"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/india/india.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "agriculturalLand",
+        "christianSuccessionRules",
+        "coparcenaryDetails",
+        "goaException",
+        "hufImplications",
+        "muslimSuccessionRules",
+        "notes",
+        "nriComplications",
+        "parsiSuccessionRules",
+        "personalLaw",
+        "probateJurisdiction",
+        "probateRequired",
+        "propertyClassification",
+        "stampDuty",
+        "state",
+        "successionCertificate"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "agriculturalLand",
+      "christianSuccessionRules",
+      "coparcenaryDetails",
+      "goaException",
+      "hufImplications",
+      "muslimSuccessionRules",
+      "notes",
+      "nriComplications",
+      "parsiSuccessionRules",
+      "personalLaw",
+      "probateJurisdiction",
+      "probateRequired",
+      "propertyClassification",
+      "stampDuty",
+      "state",
+      "successionCertificate"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/ireland/ireland.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "capitalAcquisitionsTax",
+        "civilPartnershipProvisions",
+        "dwellingHouseExemption",
+        "enduringPowerOfAttorney",
+        "intestacyRules",
+        "landRegistration",
+        "legislativeChanges",
+        "localTenureTypes",
+        "notes",
+        "probateProcess",
+        "section117Claim",
+        "section56Advancement",
+        "spouseLegalRightShare"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "capitalAcquisitionsTax",
+      "civilPartnershipProvisions",
+      "dwellingHouseExemption",
+      "enduringPowerOfAttorney",
+      "intestacyRules",
+      "landRegistration",
+      "legislativeChanges",
+      "localTenureTypes",
+      "notes",
+      "probateProcess",
+      "section117Claim",
+      "section56Advancement",
+      "spouseLegalRightShare"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "awlApplied",
+        "faraidApplies",
+        "heirClassifications",
+        "hijriDates",
+        "iddahPeriods",
+        "islamicFormalities",
+        "mahr",
+        "notes",
+        "priorityDebts",
+        "raddApplied",
+        "school",
+        "waqfDetails",
+        "wasiyyaRules"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "awlApplied",
+      "faraidApplies",
+      "heirClassifications",
+      "hijriDates",
+      "iddahPeriods",
+      "islamicFormalities",
+      "mahr",
+      "notes",
+      "priorityDebts",
+      "raddApplied",
+      "school",
+      "waqfDetails",
+      "wasiyyaRules"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/israel/israel.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "holocaustRestitution",
+        "inheritanceLaw1965",
+        "kibbutzProperty",
+        "notes",
+        "parallelCourtSystems",
+        "religiousAuthorityOrder"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "holocaustRestitution",
+      "inheritanceLaw1965",
+      "kibbutzProperty",
+      "notes",
+      "parallelCourtSystems",
+      "religiousAuthorityOrder"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/japan/japan.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "inkanVerified",
+        "iryubunClaims",
+        "isanBunkatsu",
+        "kosekiRecords",
+        "legislativeChanges",
+        "localWillFormality",
+        "notes",
+        "saishiSuccessor",
+        "spousesResidenceRight",
+        "yoshiAdoptions"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "inkanVerified",
+      "iryubunClaims",
+      "isanBunkatsu",
+      "kosekiRecords",
+      "legislativeChanges",
+      "localWillFormality",
+      "notes",
+      "saishiSuccessor",
+      "spousesResidenceRight",
+      "yoshiAdoptions"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "bekhorRules",
+        "bequestClassifications",
+        "denomination",
+        "halachicHeirs",
+        "halachicMechanism",
+        "halachicWitnessValidity",
+        "hebrewNames",
+        "kinyanDetails",
+        "mezonotDetails",
+        "notes"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "bekhorRules",
+      "bequestClassifications",
+      "denomination",
+      "halachicHeirs",
+      "halachicMechanism",
+      "halachicWitnessValidity",
+      "hebrewNames",
+      "kinyanDetails",
+      "mezonotDetails",
+      "notes"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/latin-america/latin-america.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "argentineSuccession",
+        "brazilianSuccession",
+        "chileanSuccession",
+        "colombianSuccession",
+        "country",
+        "forcedHeirshipPattern",
+        "legislativeChanges",
+        "mexicanSuccession",
+        "notarialSuccession",
+        "notes",
+        "venezuelanSuccession"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "argentineSuccession",
+      "brazilianSuccession",
+      "chileanSuccession",
+      "colombianSuccession",
+      "country",
+      "forcedHeirshipPattern",
+      "legislativeChanges",
+      "mexicanSuccession",
+      "notarialSuccession",
+      "notes",
+      "venezuelanSuccession"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/northern-ireland/northern-ireland.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "landRegistration",
+        "localTenureTypes",
+        "notes"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "landRegistration",
+      "localTenureTypes",
+      "notes"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/prc-china/prc-china.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "applicableLaw",
+        "communityProperty",
+        "crossBorderHandling",
+        "forcedHeirship",
+        "hukouReferences",
+        "inheritanceTaxStatus",
+        "intestacyOrder",
+        "notarisationDetails",
+        "notarisationRequired",
+        "notes",
+        "ruralLandRights",
+        "willForm"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "applicableLaw",
+      "communityProperty",
+      "crossBorderHandling",
+      "forcedHeirship",
+      "hukouReferences",
+      "inheritanceTaxStatus",
+      "intestacyOrder",
+      "notarisationDetails",
+      "notarisationRequired",
+      "notes",
+      "ruralLandRights",
+      "willForm"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/scotland/scotland.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "cohabitationClaim",
+        "confirmation",
+        "croftingSuccession",
+        "executryAppointments",
+        "forcedHeirship",
+        "heritableMoveableClassifications",
+        "intestacy",
+        "lbttExemption",
+        "legalRights",
+        "legislativeChanges",
+        "notes",
+        "priorRights",
+        "survivorshipDestinations",
+        "totalHeritableValue",
+        "totalMoveableValue",
+        "willFormalities"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "cohabitationClaim",
+      "confirmation",
+      "croftingSuccession",
+      "executryAppointments",
+      "forcedHeirship",
+      "heritableMoveableClassifications",
+      "intestacy",
+      "lbttExemption",
+      "legalRights",
+      "legislativeChanges",
+      "notes",
+      "priorRights",
+      "survivorshipDestinations",
+      "totalHeritableValue",
+      "totalMoveableValue",
+      "willFormalities"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "country",
+        "cpfNominations",
+        "epfNominations",
+        "malaysianDistributionAct",
+        "malaysianShariah",
+        "marriageRevocation",
+        "notes",
+        "singaporeAMLA",
+        "singaporeISA"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "country",
+      "cpfNominations",
+      "epfNominations",
+      "malaysianDistributionAct",
+      "malaysianShariah",
+      "marriageRevocation",
+      "notes",
+      "singaporeAMLA",
+      "singaporeISA"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/switzerland/switzerland.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "cantonalVariation",
+        "erbschein",
+        "matrimonialPropertyRegime",
+        "notarialWillForm",
+        "notes",
+        "pflichtteil"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "cantonalVariation",
+      "erbschein",
+      "matrimonialPropertyRegime",
+      "notarialWillForm",
+      "notes",
+      "pflichtteil"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/uae/uae.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "adgmWill",
+        "difcWill",
+        "disputeResolution",
+        "emirate",
+        "expatriateHandling",
+        "freeZoneAssets",
+        "homeCountryLawElection",
+        "marriageRevocation",
+        "nonMuslimWillRegistration",
+        "notes",
+        "propertyTreatment",
+        "shariaFixedShares",
+        "successionTrack"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "adgmWill",
+      "difcWill",
+      "disputeResolution",
+      "emirate",
+      "expatriateHandling",
+      "freeZoneAssets",
+      "homeCountryLawElection",
+      "marriageRevocation",
+      "nonMuslimWillRegistration",
+      "notes",
+      "propertyTreatment",
+      "shariaFixedShares",
+      "successionTrack"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "cohabitantRights",
+        "ifpa1975Eligible",
+        "inheritanceTaxRate",
+        "intestacyHierarchy",
+        "intestacyStatutoryLegacy",
+        "legislativeChanges",
+        "localGrantTypes",
+        "localPropertyTypes",
+        "localTenureTypes",
+        "marriageRevocation",
+        "nilRateBand",
+        "residenceNilRateBand",
+        "statutoryLegacy",
+        "transferableNilRateBand",
+        "transferableNilRateBandPercentage"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "cohabitantRights",
+      "ifpa1975Eligible",
+      "inheritanceTaxRate",
+      "intestacyHierarchy",
+      "intestacyStatutoryLegacy",
+      "legislativeChanges",
+      "localGrantTypes",
+      "localPropertyTypes",
+      "localTenureTypes",
+      "marriageRevocation",
+      "nilRateBand",
+      "residenceNilRateBand",
+      "statutoryLegacy",
+      "transferableNilRateBand",
+      "transferableNilRateBandPercentage"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/us-estate/us-estate.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "advanceDirectives",
+        "ancillaryProbate",
+        "collateralHeirRules",
+        "communityPropertyDetails",
+        "electiveShareDetails",
+        "federalEstateTax",
+        "homesteadExemptions",
+        "intestacyDepth",
+        "intestacyRules",
+        "louisianaForcedHeirship",
+        "noContestEnforceable",
+        "notes",
+        "perStirpesVariant",
+        "pretermittedHeirStatute",
+        "probateVariation",
+        "propertyRegime",
+        "retirementAccountRules",
+        "rufadaaAdopted",
+        "state",
+        "stateEstateTax",
+        "trustFeatures"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "advanceDirectives",
+      "ancillaryProbate",
+      "collateralHeirRules",
+      "communityPropertyDetails",
+      "electiveShareDetails",
+      "federalEstateTax",
+      "homesteadExemptions",
+      "intestacyDepth",
+      "intestacyRules",
+      "louisianaForcedHeirship",
+      "noContestEnforceable",
+      "notes",
+      "perStirpesVariant",
+      "pretermittedHeirStatute",
+      "probateVariation",
+      "propertyRegime",
+      "retirementAccountRules",
+      "rufadaaAdopted",
+      "state",
+      "stateEstateTax",
+      "trustFeatures"
+    ]
+  },
+  "https://openinherit.org/v3/guardian.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "appointmentType",
+        "childPersonId",
+        "childPersonIdDisplay",
+        "conditions",
+        "dependantType",
+        "familyCouncilDecisionRef",
+        "guardianshipModel",
+        "guardianshipStructure",
+        "id",
+        "notes",
+        "organisationId",
+        "organisationIdDisplay",
+        "personId",
+        "personIdDisplay",
+        "provenance",
+        "role"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "appointmentType",
+      "childPersonId",
+      "childPersonIdDisplay",
+      "conditions",
+      "dependantType",
+      "familyCouncilDecisionRef",
+      "guardianshipModel",
+      "guardianshipStructure",
+      "id",
+      "notes",
+      "organisationId",
+      "organisationIdDisplay",
+      "personId",
+      "personIdDisplay",
+      "provenance",
+      "role"
+    ]
+  },
+  "https://openinherit.org/v3/insurance-policy.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "claimStatus",
+        "coverAmount",
+        "deathBenefit",
+        "depositorProtection",
+        "externalPolicyRef",
+        "funeralPlanDetails",
+        "id",
+        "maturityDate",
+        "nominationLifecycle",
+        "notes",
+        "policyConditions",
+        "policyNumber",
+        "policyType",
+        "premiumAmount",
+        "premiumFrequency",
+        "provenance",
+        "providerOrganisationId",
+        "providerOrganisationIdDisplay",
+        "renewalDate",
+        "trustDetails",
+        "writtenInTrust"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "claimStatus",
+      "coverAmount",
+      "deathBenefit",
+      "depositorProtection",
+      "externalPolicyRef",
+      "funeralPlanDetails",
+      "id",
+      "maturityDate",
+      "nominationLifecycle",
+      "notes",
+      "policyConditions",
+      "policyNumber",
+      "premiumAmount",
+      "premiumFrequency",
+      "provenance",
+      "providerOrganisationId",
+      "providerOrganisationIdDisplay",
+      "renewalDate",
+      "trustDetails",
+      "writtenInTrust"
+    ]
+  },
+  "https://openinherit.org/v3/kinship.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "adoptionDate",
+        "bloodDegree",
+        "courtOrderRef",
+        "effectiveFrom",
+        "effectiveTo",
+        "fromPersonId",
+        "fromPersonIdDisplay",
+        "id",
+        "kinshipType",
+        "legalBasis",
+        "legalStatus",
+        "legitimacy",
+        "lineage",
+        "notes",
+        "parentalOrderDetails",
+        "provenance",
+        "recognisedIn",
+        "toPersonId",
+        "toPersonIdDisplay"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "adoptionDate",
+      "courtOrderRef",
+      "effectiveFrom",
+      "fromPersonId",
+      "fromPersonIdDisplay",
+      "id",
+      "kinshipType",
+      "legalBasis",
+      "legalStatus",
+      "legitimacy",
+      "notes",
+      "parentalOrderDetails",
+      "provenance",
+      "recognisedIn",
+      "toPersonId",
+      "toPersonIdDisplay"
+    ]
+  },
   "https://openinherit.org/v3/liability.json": {
     "conditionals": [],
     "asserts": [
@@ -1143,6 +2798,18 @@ const RULES: Record<string, Rule> = {
           "chargeReference": [
             "securedAgainst"
           ]
+        }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
         }
       }
     ],
@@ -1203,6 +2870,18 @@ const RULES: Record<string, Rule> = {
           },
           "doneePersonIds": {
             "uniqueItems": true
+          }
+        }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
           }
         }
       }
@@ -1278,6 +2957,18 @@ const RULES: Record<string, Rule> = {
             "uniqueItems": true
           }
         }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
       }
     ],
     "overlays": {},
@@ -1329,6 +3020,124 @@ const RULES: Record<string, Rule> = {
       "trustId"
     ]
   },
+  "https://openinherit.org/v3/notification.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "channel",
+        "id",
+        "notes",
+        "notificationType",
+        "provenance",
+        "recipientId",
+        "recipientIdDisplay",
+        "recipientType",
+        "sentAt",
+        "status",
+        "templateId"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "channel",
+      "id",
+      "notes",
+      "provenance",
+      "recipientId",
+      "recipientIdDisplay",
+      "recipientType",
+      "sentAt",
+      "status",
+      "templateId"
+    ]
+  },
+  "https://openinherit.org/v3/organisation.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "address",
+        "contactPerson",
+        "dealerProfile",
+        "description",
+        "email",
+        "estateRoles",
+        "id",
+        "identifiers",
+        "internationalShipping",
+        "jurisdiction",
+        "logo",
+        "name",
+        "notes",
+        "organisationType",
+        "phone",
+        "provenance",
+        "ratings",
+        "registrations",
+        "sameAs",
+        "url",
+        "vatConfiguration",
+        "wikidataId"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "address",
+      "contactPerson",
+      "dealerProfile",
+      "description",
+      "email",
+      "estateRoles",
+      "id",
+      "identifiers",
+      "internationalShipping",
+      "jurisdiction",
+      "logo",
+      "name",
+      "notes",
+      "phone",
+      "provenance",
+      "ratings",
+      "registrations",
+      "sameAs",
+      "url",
+      "vatConfiguration",
+      "wikidataId"
+    ]
+  },
   "https://openinherit.org/v3/person.json": {
     "conditionals": [],
     "asserts": [
@@ -1339,6 +3148,18 @@ const RULES: Record<string, Rule> = {
           },
           "roles": {
             "uniqueItems": true
+          }
+        }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
           }
         }
       }
@@ -1416,9 +3237,157 @@ const RULES: Record<string, Rule> = {
       "titles"
     ]
   },
+  "https://openinherit.org/v3/pet.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "alternativeCaregiverPersonId",
+        "alternativeCaregiverPersonIdDisplay",
+        "breed",
+        "caregiverPersonId",
+        "caregiverPersonIdDisplay",
+        "dateOfBirth",
+        "dietaryNeeds",
+        "estimatedMonthlyCareCost",
+        "fundingForCare",
+        "healthConditions",
+        "id",
+        "images",
+        "immediateActionRequired",
+        "keyLocationForPet",
+        "medicationRequired",
+        "microchipNumber",
+        "notes",
+        "petCareArrangement",
+        "petInsuranceOrganisationId",
+        "petInsuranceOrganisationIdDisplay",
+        "petName",
+        "provenance",
+        "species",
+        "temperament",
+        "transportInstructions",
+        "vaccinesUpToDate",
+        "veterinarianOrganisationId",
+        "veterinarianOrganisationIdDisplay"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "alternativeCaregiverPersonId",
+      "alternativeCaregiverPersonIdDisplay",
+      "breed",
+      "caregiverPersonId",
+      "caregiverPersonIdDisplay",
+      "dateOfBirth",
+      "dietaryNeeds",
+      "estimatedMonthlyCareCost",
+      "fundingForCare",
+      "healthConditions",
+      "id",
+      "images",
+      "immediateActionRequired",
+      "keyLocationForPet",
+      "medicationRequired",
+      "microchipNumber",
+      "notes",
+      "petCareArrangement",
+      "petInsuranceOrganisationId",
+      "petInsuranceOrganisationIdDisplay",
+      "petName",
+      "provenance",
+      "temperament",
+      "transportInstructions",
+      "vaccinesUpToDate",
+      "veterinarianOrganisationId",
+      "veterinarianOrganisationIdDisplay"
+    ]
+  },
+  "https://openinherit.org/v3/power-of-appointment.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "appointeePersonId",
+        "appointeePersonIdDisplay",
+        "appointorPersonId",
+        "appointorPersonIdDisplay",
+        "classOfBeneficiaries",
+        "exerciseConditions",
+        "exercisedDate",
+        "exercisedDocumentId",
+        "id",
+        "notes",
+        "powerType",
+        "provenance",
+        "scope"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "appointeePersonId",
+      "appointeePersonIdDisplay",
+      "appointorPersonId",
+      "appointorPersonIdDisplay",
+      "classOfBeneficiaries",
+      "exerciseConditions",
+      "exercisedDate",
+      "exercisedDocumentId",
+      "id",
+      "notes",
+      "powerType",
+      "provenance",
+      "scope"
+    ]
+  },
   "https://openinherit.org/v3/property.json": {
     "conditionals": [],
-    "asserts": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
     "overlays": {
       "netEquity": {
         "properties": {
@@ -1601,7 +3570,20 @@ const RULES: Record<string, Rule> = {
         }
       }
     ],
-    "asserts": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
     "overlays": {},
     "closed": {
       "props": [
@@ -1679,6 +3661,59 @@ const RULES: Record<string, Rule> = {
       "testatorPersonIdDisplay"
     ]
   },
+  "https://openinherit.org/v3/relationship.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "currentStatus",
+        "events",
+        "financialInstruments",
+        "id",
+        "jurisdiction",
+        "jurisdictionalRecognition",
+        "notes",
+        "partners",
+        "propertyRegime",
+        "provenance",
+        "religiousSubtype",
+        "selfDeclaredType",
+        "type"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "currentStatus",
+      "events",
+      "financialInstruments",
+      "id",
+      "jurisdiction",
+      "jurisdictionalRecognition",
+      "notes",
+      "partners",
+      "propertyRegime",
+      "provenance",
+      "religiousSubtype",
+      "selfDeclaredType",
+      "type"
+    ]
+  },
   "https://openinherit.org/v3/schema.json": {
     "conditionals": [
       {
@@ -1732,6 +3767,314 @@ const RULES: Record<string, Rule> = {
             }
           }
         }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-uk-england-wales"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-uk-england-wales": {
+              "$ref": "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-scotland"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-scotland": {
+              "$ref": "https://openinherit.org/v3/extensions/scotland/scotland.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-ireland"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-ireland": {
+              "$ref": "https://openinherit.org/v3/extensions/ireland/ireland.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-northern-ireland"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-northern-ireland": {
+              "$ref": "https://openinherit.org/v3/extensions/northern-ireland/northern-ireland.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-us-estate"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-us-estate": {
+              "$ref": "https://openinherit.org/v3/extensions/us-estate/us-estate.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-canada"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-canada": {
+              "$ref": "https://openinherit.org/v3/extensions/canada/canada.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-australia-nz"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-australia-nz": {
+              "$ref": "https://openinherit.org/v3/extensions/australia-nz/australia-nz.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-eu-succession"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-eu-succession": {
+              "$ref": "https://openinherit.org/v3/extensions/eu-succession/eu-succession.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-japan"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-japan": {
+              "$ref": "https://openinherit.org/v3/extensions/japan/japan.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-prc-china"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-prc-china": {
+              "$ref": "https://openinherit.org/v3/extensions/prc-china/prc-china.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-singapore-malaysia"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-singapore-malaysia": {
+              "$ref": "https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-latin-america"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-latin-america": {
+              "$ref": "https://openinherit.org/v3/extensions/latin-america/latin-america.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-islamic-succession"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-islamic-succession": {
+              "$ref": "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-jewish-succession"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-jewish-succession": {
+              "$ref": "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-hindu-succession"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-hindu-succession": {
+              "$ref": "https://openinherit.org/v3/extensions/hindu-succession/hindu-succession.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-africa-customary"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-africa-customary": {
+              "$ref": "https://openinherit.org/v3/extensions/africa-customary/africa-customary.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-brazil"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-brazil": {
+              "$ref": "https://openinherit.org/v3/extensions/brazil/brazil.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-hong-kong"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-hong-kong": {
+              "$ref": "https://openinherit.org/v3/extensions/hong-kong/hong-kong.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-switzerland"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-switzerland": {
+              "$ref": "https://openinherit.org/v3/extensions/switzerland/switzerland.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-israel"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-israel": {
+              "$ref": "https://openinherit.org/v3/extensions/israel/israel.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-india"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-india": {
+              "$ref": "https://openinherit.org/v3/extensions/india/india.json"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "x-inherit-uae"
+          ]
+        },
+        "then": {
+          "properties": {
+            "x-inherit-uae": {
+              "$ref": "https://openinherit.org/v3/extensions/uae/uae.json"
+            }
+          }
+        }
       }
     ],
     "asserts": [
@@ -1739,6 +4082,18 @@ const RULES: Record<string, Rule> = {
         "properties": {
           "powersOfAppointment": {
             "uniqueItems": true
+          }
+        }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 200,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
           }
         }
       }
@@ -1790,29 +4145,7 @@ const RULES: Record<string, Rule> = {
         "trusts",
         "valuations",
         "versionedAt",
-        "wishes",
-        "x-inherit-africa-customary",
-        "x-inherit-australia-nz",
-        "x-inherit-brazil",
-        "x-inherit-canada",
-        "x-inherit-eu-succession",
-        "x-inherit-hindu-succession",
-        "x-inherit-hong-kong",
-        "x-inherit-india",
-        "x-inherit-ireland",
-        "x-inherit-islamic-succession",
-        "x-inherit-israel",
-        "x-inherit-japan",
-        "x-inherit-jewish-succession",
-        "x-inherit-latin-america",
-        "x-inherit-northern-ireland",
-        "x-inherit-prc-china",
-        "x-inherit-scotland",
-        "x-inherit-singapore-malaysia",
-        "x-inherit-switzerland",
-        "x-inherit-uae",
-        "x-inherit-uk-england-wales",
-        "x-inherit-us-estate"
+        "wishes"
       ],
       "patterns": [
         "^x-inherit-[a-z][a-z0-9-]{1,54}$"
@@ -1864,6 +4197,264 @@ const RULES: Record<string, Rule> = {
       "wishes"
     ]
   },
+  "https://openinherit.org/v3/space.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "containedInSpaceId",
+        "floor",
+        "id",
+        "images",
+        "name",
+        "notes",
+        "propertyId",
+        "provenance",
+        "spaceType"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "floor",
+      "id",
+      "images",
+      "name",
+      "notes",
+      "propertyId",
+      "provenance"
+    ]
+  },
+  "https://openinherit.org/v3/subscription.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "accountIdentifier",
+        "billingFrequency",
+        "cancelAction",
+        "cancellationInfo",
+        "cost",
+        "id",
+        "notes",
+        "provenance",
+        "renewalDate",
+        "serviceName",
+        "transferToPersonId",
+        "transferToPersonIdDisplay"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "accountIdentifier",
+      "billingFrequency",
+      "cancelAction",
+      "cancellationInfo",
+      "cost",
+      "id",
+      "notes",
+      "provenance",
+      "renewalDate",
+      "serviceName",
+      "transferToPersonId",
+      "transferToPersonIdDisplay"
+    ]
+  },
+  "https://openinherit.org/v3/trust.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "assetProtectionFeatures",
+        "beneficiaries",
+        "charitableRemainderDetails",
+        "conditionType",
+        "conditions",
+        "conflictsOfInterest",
+        "contingentInterests",
+        "createdAt",
+        "creationType",
+        "fleeClause",
+        "generationSkipping",
+        "governingLaw",
+        "id",
+        "isTestamentary",
+        "jurisdictionalRecognition",
+        "letterOfWishesDocumentId",
+        "letterOfWishesStatus",
+        "name",
+        "notes",
+        "perpetual",
+        "petId",
+        "protectorPersonId",
+        "protectorPersonIdDisplay",
+        "protectorPowers",
+        "provenance",
+        "reservedPowers",
+        "reviewDate",
+        "revocability",
+        "settlor",
+        "settlorDisplay",
+        "taxPlanningDetails",
+        "trustPeriod",
+        "trustType",
+        "trusteePersonIds",
+        "trustees",
+        "vestingAge",
+        "vestingConditions",
+        "vestingDate",
+        "visibility"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "assetProtectionFeatures",
+      "beneficiaries",
+      "charitableRemainderDetails",
+      "conditionType",
+      "conditions",
+      "conflictsOfInterest",
+      "contingentInterests",
+      "createdAt",
+      "creationType",
+      "fleeClause",
+      "generationSkipping",
+      "governingLaw",
+      "id",
+      "isTestamentary",
+      "jurisdictionalRecognition",
+      "letterOfWishesDocumentId",
+      "letterOfWishesStatus",
+      "name",
+      "notes",
+      "perpetual",
+      "petId",
+      "protectorPersonId",
+      "protectorPersonIdDisplay",
+      "protectorPowers",
+      "provenance",
+      "reservedPowers",
+      "reviewDate",
+      "revocability",
+      "settlor",
+      "settlorDisplay",
+      "taxPlanningDetails",
+      "trustPeriod",
+      "trusteePersonIds",
+      "trustees",
+      "vestingAge",
+      "vestingConditions",
+      "vestingDate",
+      "visibility"
+    ]
+  },
+  "https://openinherit.org/v3/valuation.json": {
+    "conditionals": [],
+    "asserts": [
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
+          }
+        }
+      }
+    ],
+    "overlays": {},
+    "closed": {
+      "props": [
+        "auctionData",
+        "comparables",
+        "confidence",
+        "entityId",
+        "entityType",
+        "fieldProvenance",
+        "id",
+        "method",
+        "notes",
+        "provenance",
+        "provider",
+        "providerType",
+        "validUntil",
+        "valuationDate",
+        "valuationPurpose",
+        "valuedAmount",
+        "valuerRegistration"
+      ],
+      "patterns": [
+        "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+      ]
+    },
+    "nonnull": [
+      "auctionData",
+      "comparables",
+      "confidence",
+      "entityId",
+      "entityType",
+      "fieldProvenance",
+      "id",
+      "method",
+      "notes",
+      "provenance",
+      "provider",
+      "providerType",
+      "valuationDate",
+      "valuationPurpose",
+      "valuedAmount",
+      "valuerRegistration"
+    ]
+  },
   "https://openinherit.org/v3/wish.json": {
     "conditionals": [],
     "asserts": [
@@ -1879,6 +4470,18 @@ const RULES: Record<string, Rule> = {
         "properties": {
           "relatedTrustIds": {
             "uniqueItems": true
+          }
+        }
+      },
+      {
+        "patternProperties": {
+          "^x-inherit-[a-z][a-z0-9-]{1,54}$": {
+            "type": "object",
+            "maxProperties": 50,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "maxLength": 64
+            }
           }
         }
       }
@@ -2057,6 +4660,397 @@ const REFKEYS: Record<string, { props: string[]; patterns: string[] }> = {
     "patterns": [
       "^x-inherit-[a-z][a-z0-9-]{1,54}$"
     ]
+  },
+  "https://openinherit.org/v3/extensions/africa-customary/africa-customary.json": {
+    "props": [
+      "communalPropertyDetails",
+      "constitutionalChallenges",
+      "customaryRules",
+      "ethnicGroup",
+      "familyCouncilDecisions",
+      "landTenureDetails",
+      "lobolaDetails",
+      "notes",
+      "widowRights"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/australia-nz/australia-nz.json": {
+    "props": [
+      "aboriginalLandDetails",
+      "familyProvisionClaims",
+      "jurisdiction",
+      "maoriLandDetails",
+      "notes",
+      "nzPRA",
+      "superannuationNominations",
+      "testamentaryPromises"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/brazil/brazil.json": {
+    "props": [
+      "cartorioAttestation",
+      "disponivel",
+      "inventarioType",
+      "itcmdRate",
+      "legitima",
+      "meacao",
+      "notes",
+      "uniaoEstavel"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/canada/canada.json": {
+    "props": [
+      "albertaDower",
+      "bcWesaVariation",
+      "indigenousLandDetails",
+      "intestacyRules",
+      "notes",
+      "ontarioEqualization",
+      "province",
+      "quebecCivilLaw",
+      "quebecPatrimony"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/eu-succession/eu-succession.json": {
+    "props": [
+      "brusselsIV",
+      "europeanCertificate",
+      "forcedHeirshipVariant",
+      "legislativeChanges",
+      "memberState",
+      "notes",
+      "postBrexitHandling",
+      "spanishRegionalRegime"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/hindu-succession/hindu-succession.json": {
+    "props": [
+      "agriculturalLand",
+      "applicableLaw",
+      "crossStateAssets",
+      "heirClassifications",
+      "hufDetails",
+      "hufProperty",
+      "instrumentType",
+      "notes",
+      "nriComplications",
+      "probateAdvisable",
+      "school",
+      "stridhanAssets"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/hong-kong/hong-kong.json": {
+    "props": [
+      "crossBorderPrcAssets",
+      "intestacyDistribution",
+      "intestacyHierarchy",
+      "localGrantTypes",
+      "mpfNomination",
+      "newTerritoriesCustomaryLaw",
+      "notes",
+      "preReformCustomaryLaw",
+      "smallEstateGrant"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/india/india.json": {
+    "props": [
+      "agriculturalLand",
+      "christianSuccessionRules",
+      "coparcenaryDetails",
+      "goaException",
+      "hufImplications",
+      "muslimSuccessionRules",
+      "notes",
+      "nriComplications",
+      "parsiSuccessionRules",
+      "personalLaw",
+      "probateJurisdiction",
+      "probateRequired",
+      "propertyClassification",
+      "stampDuty",
+      "state",
+      "successionCertificate"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/ireland/ireland.json": {
+    "props": [
+      "capitalAcquisitionsTax",
+      "civilPartnershipProvisions",
+      "dwellingHouseExemption",
+      "enduringPowerOfAttorney",
+      "intestacyRules",
+      "landRegistration",
+      "legislativeChanges",
+      "localTenureTypes",
+      "notes",
+      "probateProcess",
+      "section117Claim",
+      "section56Advancement",
+      "spouseLegalRightShare"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/islamic-succession/islamic-succession.json": {
+    "props": [
+      "awlApplied",
+      "faraidApplies",
+      "heirClassifications",
+      "hijriDates",
+      "iddahPeriods",
+      "islamicFormalities",
+      "mahr",
+      "notes",
+      "priorityDebts",
+      "raddApplied",
+      "school",
+      "waqfDetails",
+      "wasiyyaRules"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/israel/israel.json": {
+    "props": [
+      "holocaustRestitution",
+      "inheritanceLaw1965",
+      "kibbutzProperty",
+      "notes",
+      "parallelCourtSystems",
+      "religiousAuthorityOrder"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/japan/japan.json": {
+    "props": [
+      "inkanVerified",
+      "iryubunClaims",
+      "isanBunkatsu",
+      "kosekiRecords",
+      "legislativeChanges",
+      "localWillFormality",
+      "notes",
+      "saishiSuccessor",
+      "spousesResidenceRight",
+      "yoshiAdoptions"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/jewish-succession/jewish-succession.json": {
+    "props": [
+      "bekhorRules",
+      "bequestClassifications",
+      "denomination",
+      "halachicHeirs",
+      "halachicMechanism",
+      "halachicWitnessValidity",
+      "hebrewNames",
+      "kinyanDetails",
+      "mezonotDetails",
+      "notes"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/latin-america/latin-america.json": {
+    "props": [
+      "argentineSuccession",
+      "brazilianSuccession",
+      "chileanSuccession",
+      "colombianSuccession",
+      "country",
+      "forcedHeirshipPattern",
+      "legislativeChanges",
+      "mexicanSuccession",
+      "notarialSuccession",
+      "notes",
+      "venezuelanSuccession"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/northern-ireland/northern-ireland.json": {
+    "props": [
+      "landRegistration",
+      "localTenureTypes",
+      "notes"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/prc-china/prc-china.json": {
+    "props": [
+      "applicableLaw",
+      "communityProperty",
+      "crossBorderHandling",
+      "forcedHeirship",
+      "hukouReferences",
+      "inheritanceTaxStatus",
+      "intestacyOrder",
+      "notarisationDetails",
+      "notarisationRequired",
+      "notes",
+      "ruralLandRights",
+      "willForm"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/scotland/scotland.json": {
+    "props": [
+      "cohabitationClaim",
+      "confirmation",
+      "croftingSuccession",
+      "executryAppointments",
+      "forcedHeirship",
+      "heritableMoveableClassifications",
+      "intestacy",
+      "lbttExemption",
+      "legalRights",
+      "legislativeChanges",
+      "notes",
+      "priorRights",
+      "survivorshipDestinations",
+      "totalHeritableValue",
+      "totalMoveableValue",
+      "willFormalities"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/singapore-malaysia/singapore-malaysia.json": {
+    "props": [
+      "country",
+      "cpfNominations",
+      "epfNominations",
+      "malaysianDistributionAct",
+      "malaysianShariah",
+      "marriageRevocation",
+      "notes",
+      "singaporeAMLA",
+      "singaporeISA"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/switzerland/switzerland.json": {
+    "props": [
+      "cantonalVariation",
+      "erbschein",
+      "matrimonialPropertyRegime",
+      "notarialWillForm",
+      "notes",
+      "pflichtteil"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/uae/uae.json": {
+    "props": [
+      "adgmWill",
+      "difcWill",
+      "disputeResolution",
+      "emirate",
+      "expatriateHandling",
+      "freeZoneAssets",
+      "homeCountryLawElection",
+      "marriageRevocation",
+      "nonMuslimWillRegistration",
+      "notes",
+      "propertyTreatment",
+      "shariaFixedShares",
+      "successionTrack"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/uk-england-wales/uk-england-wales.json": {
+    "props": [
+      "cohabitantRights",
+      "ifpa1975Eligible",
+      "inheritanceTaxRate",
+      "intestacyHierarchy",
+      "intestacyStatutoryLegacy",
+      "legislativeChanges",
+      "localGrantTypes",
+      "localPropertyTypes",
+      "localTenureTypes",
+      "marriageRevocation",
+      "nilRateBand",
+      "residenceNilRateBand",
+      "statutoryLegacy",
+      "transferableNilRateBand",
+      "transferableNilRateBandPercentage"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
+  },
+  "https://openinherit.org/v3/extensions/us-estate/us-estate.json": {
+    "props": [
+      "advanceDirectives",
+      "ancillaryProbate",
+      "collateralHeirRules",
+      "communityPropertyDetails",
+      "electiveShareDetails",
+      "federalEstateTax",
+      "homesteadExemptions",
+      "intestacyDepth",
+      "intestacyRules",
+      "louisianaForcedHeirship",
+      "noContestEnforceable",
+      "notes",
+      "perStirpesVariant",
+      "pretermittedHeirStatute",
+      "probateVariation",
+      "propertyRegime",
+      "retirementAccountRules",
+      "rufadaaAdopted",
+      "state",
+      "stateEstateTax",
+      "trustFeatures"
+    ],
+    "patterns": [
+      "^x-inherit-[a-z][a-z0-9-]{1,54}$"
+    ]
   }
 };
 
@@ -2073,6 +5067,7 @@ function evaluate(s: any, v: unknown, path: (string | number)[], out: Issue[]): 
     const r = byId(s.$ref).safeParse(v);
     if (!r.success) for (const i of r.error.issues) out.push({ path: [...path, ...(i.path as (string | number)[])], message: i.message });
   }
+  if (s.type !== undefined && !(Array.isArray(s.type) ? s.type : [s.type]).some((t: string) => isType(v, t))) out.push({ path, message: `must be of type ${JSON.stringify(s.type)}` });
   if (s.const !== undefined && !same(v, s.const)) out.push({ path, message: `must be ${JSON.stringify(s.const)}` });
   if (s.enum !== undefined && !s.enum.some((e: unknown) => same(v, e))) out.push({ path, message: `must be one of ${JSON.stringify(s.enum)}` });
   if (typeof v === 'number') {
@@ -2080,6 +5075,10 @@ function evaluate(s: any, v: unknown, path: (string | number)[], out: Issue[]): 
     if (s.maximum !== undefined && v > s.maximum) out.push({ path, message: `must be <= ${s.maximum}` });
     if (s.exclusiveMinimum !== undefined && v <= s.exclusiveMinimum) out.push({ path, message: `must be > ${s.exclusiveMinimum}` });
     if (s.exclusiveMaximum !== undefined && v >= s.exclusiveMaximum) out.push({ path, message: `must be < ${s.exclusiveMaximum}` });
+  }
+  if (typeof v === 'string') {
+    if (s.maxLength !== undefined && [...v].length > s.maxLength) out.push({ path, message: `must be at most ${s.maxLength} characters` });
+    if (s.pattern !== undefined && !new RegExp(s.pattern, 'u').test(v)) out.push({ path, message: `must match ${s.pattern}` });
   }
   if (Array.isArray(v)) {
     if (s.maxItems !== undefined && v.length > s.maxItems) out.push({ path, message: `must have at most ${s.maxItems} items` });
@@ -2093,12 +5092,31 @@ function evaluate(s: any, v: unknown, path: (string | number)[], out: Issue[]): 
       if (k in v) for (const r of needs) if (!(r in v)) out.push({ path: [...path, r], message: `required when ${k} is present: ${r}` });
     }
     for (const [k, sub] of Object.entries(s.properties ?? {})) if (k in v) evaluate(sub, v[k], [...path, k], out);
+    if (s.maxProperties !== undefined && Object.keys(v).length > s.maxProperties) out.push({ path, message: `must have at most ${s.maxProperties} properties` });
+    if (s.propertyNames !== undefined) for (const k of Object.keys(v)) evaluate(s.propertyNames, k, [...path, k], out);
+    for (const [p, sub] of Object.entries(s.patternProperties ?? {})) {
+      const re = new RegExp(p, 'u');
+      for (const k of Object.keys(v)) if (re.test(k)) evaluate(sub, v[k], [...path, k], out);
+    }
   }
   for (const sub of s.allOf ?? []) evaluate(sub, v, path, out);
   if (s.not !== undefined && passes(s.not, v)) out.push({ path, message: 'must not match the excluded shape' });
   if (s.if !== undefined) {
     const branch = passes(s.if, v) ? s.then : s.else;
     if (branch !== undefined) evaluate(branch, v, path, out);
+  }
+}
+
+function isType(v: unknown, t: string): boolean {
+  switch (t) {
+    case 'object': return isObj(v);
+    case 'array': return Array.isArray(v);
+    case 'string': return typeof v === 'string';
+    case 'number': return typeof v === 'number';
+    case 'integer': return typeof v === 'number' && Number.isInteger(v);
+    case 'boolean': return typeof v === 'boolean';
+    case 'null': return v === null;
+    default: throw new Error(`conditional layer: unknown type ${t}`);
   }
 }
 
@@ -2111,6 +5129,7 @@ function passes(s: any, v: unknown): boolean {
 /** Member names a branch evaluates, for unevaluatedProperties. */
 function evaluated(s: any, names: Set<string>, patterns: string[]): void {
   for (const k of Object.keys(s.properties ?? {})) names.add(k);
+  patterns.push(...Object.keys(s.patternProperties ?? {}));
   if (s.$ref !== undefined) {
     const k = REFKEYS[s.$ref];
     for (const p of k.props) names.add(p);

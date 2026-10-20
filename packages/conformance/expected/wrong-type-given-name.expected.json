@@ -1,0 +1,17 @@
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "givenName must be a string.",
+  "rule": {
+    "class": "type",
+    "keyword": "type",
+    "instancePath": "/people/0/givenName"
+  },
+  "base": "estate/valid/minimal-estate.json",
+  "op": {
+    "op": "replace",
+    "path": "/people/0/givenName",
+    "value": 42
+  }
+}

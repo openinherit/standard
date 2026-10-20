@@ -1,1 +1,16 @@
-{ "valid": true, "schemaMode": "estate", "note": "Level 1 valid — the base schema permits any object under x-inherit-* via patternProperties and does not validate extension-specific content. Extension-level invalid: x-inherit-us-estate/homesteadExemptions items are missing the required 'propertyId' field. A validator that loads the x-inherit-us-estate extension schema MUST reject this document." }
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "A registered extension's content is validated: a US homestead exemption requires propertyId.",
+  "rule": {
+    "class": "x-inherit",
+    "keyword": "required",
+    "instancePath": "/x-inherit-us-estate/homesteadExemptions/0"
+  },
+  "base": "estate/valid/us-japan-cultural.json",
+  "op": {
+    "op": "remove",
+    "path": "/x-inherit-us-estate/homesteadExemptions/0/propertyId"
+  }
+}

@@ -57,7 +57,8 @@
     "test:workflow-path-filters": "node scripts/test-check-workflow-path-filters.mjs",
     "test:go-models-fresh": "node --test scripts/test-openapi30-for-oapi-codegen.mjs && bash scripts/test-check-go-models-fresh.sh && bash scripts/check-go-models-fresh.sh",
     "test:schema-index": "node scripts/generate-schema-index.mjs --check && node scripts/test-generate-schema-index.mjs",
-    "test:proposal-numbers": "node scripts/check-proposal-numbers.mjs && node scripts/test-check-proposal-numbers.mjs"
+    "test:proposal-numbers": "node scripts/check-proposal-numbers.mjs && node scripts/test-check-proposal-numbers.mjs",
+    "test:maturity-matrix": "node scripts/generate-maturity-matrix.mjs --check && node scripts/test-generate-maturity-matrix.mjs"
   },
   "devDependencies": {
     "@apiture/openapi-down-convert": "0.14.2",

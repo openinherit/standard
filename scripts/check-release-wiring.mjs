@@ -232,16 +232,42 @@ if (publishWorkflow) {
       `${publishWorkflow.name} never runs \`node scripts/release-policy.mjs --version ...\` -- ` +
         `nothing stops a backport or an already-released version reaching the registry.`,
     );
-  } else if (firstPublish !== -1 && policy > firstPublish) {
-    fail("A9", `${publishWorkflow.name} runs release-policy.mjs after its first publish step. Move it before.`);
+  } else {
+    if (firstPublish !== -1 && policy > firstPublish) {
+      fail("A9", `${publishWorkflow.name} runs release-policy.mjs after its first publish step. Move it before.`);
+    }
+    // A step that cannot fail does not refuse anything: no `|| ...` on the
+    // command, and no continue-on-error or if: on the step that holds it.
+    if (/\|\|/.test(lines[policy])) {
+      fail("A9", `${publishWorkflow.name} runs release-policy.mjs with \`||\`, so its refusal is swallowed.`);
+    }
+    let start = policy;
+    while (start > 0 && !/^\s*-\s+(name|uses|run):/.test(lines[start])) start--;
+    let end = policy + 1;
+    while (end < lines.length && !/^\s*-\s+(name|uses|run):/.test(lines[end])) end++;
+    const step = lines.slice(start, end).join("\n");
+    if (/^\s*(-\s+)?continue-on-error:/m.test(step) || /^\s*(-\s+)?if:/m.test(step)) {
+      fail(
+        "A9",
+        `${publishWorkflow.name}'s release-policy step carries continue-on-error or if:, so it may ` +
+          `not run or not stop the publish.`,
+      );
+    }
   }
 }
-if (existsSync(RELEASE_SCRIPT) && !readFileSync(RELEASE_SCRIPT, "utf8").split("\n").some((l) => POLICY_RUN.test(l))) {
-  fail(
-    "A9",
-    `${RELEASE_SCRIPT} never runs \`node scripts/release-policy.mjs --version ...\`, so it would ` +
-      `bump and tag a version the publish workflow then refuses.`,
-  );
+if (existsSync(RELEASE_SCRIPT)) {
+  const lines = readFileSync(RELEASE_SCRIPT, "utf8").split("\n");
+  const policy = lines.findIndex((l) => POLICY_RUN.test(l));
+  const firstBump = lines.findIndex((l) => /^[^#]*\bpkg\.version\s*=/.test(l));
+  if (policy === -1) {
+    fail(
+      "A9",
+      `${RELEASE_SCRIPT} never runs \`node scripts/release-policy.mjs --version ...\`, so it would ` +
+        `bump and tag a version the publish workflow then refuses.`,
+    );
+  } else if (firstBump !== -1 && policy > firstBump) {
+    fail("A9", `${RELEASE_SCRIPT} runs release-policy.mjs after it bumps the version. Move it before.`);
+  }
 }
 
 // ---- A10: the policy says what the machinery does ---------------------------

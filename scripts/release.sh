@@ -70,7 +70,7 @@ log "Pre-flight checks..."
 # than every version already on the registry. Asked before anything is bumped,
 # so a refusal costs nothing; publish.yml asks again on the tag.
 node "$REPO_DIR/scripts/release-policy.mjs" --root "$REPO_DIR" --version "$NEW_VERSION" >/dev/null \
-  || fail "release-policy.mjs refused $NEW_VERSION (reason above)"
+  || fail "release-policy.mjs refused $NEW_VERSION or could not read the registry (reason above)"
 
 CURRENT_VERSION=$(node -p "require('$REPO_DIR/package.json').version")
 log "  Current version: $CURRENT_VERSION"

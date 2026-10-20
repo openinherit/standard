@@ -156,7 +156,7 @@ If `schemaVersion` is newer than your validator supports, validate in lenient mo
 Only the newest release is supported. There is one release line: when a release is published, earlier releases receive no further fixes, and when a new major release is published, the previous major is no longer maintained.
 
 - A fix ships as a new release after the newest one, never as a backport to an older minor or major.
-- A version that is not newer than every version already published is refused at release time. `scripts/release-policy.mjs` checks this against the npm registry; `scripts/release.sh` runs it before bumping, and the publish workflow runs it again before publishing.
+- A version that is not newer than every version already published is refused at release time. `scripts/release-policy.mjs` checks this against the npm registry; `scripts/release.sh` runs it before bumping, and the publish workflow runs it again before publishing. A release whose publish stopped part-way, so that its version is on the registry for some packages only, may be finished; it is not reopened afterwards.
 - Published versions stay on the registry and remain installable. "Not supported" means that line gets no further releases, not that it is withdrawn.
 - Plan an upgrade at each major release. Breaking changes between majors are listed in `CHANGELOG.md`, and a deprecated field is announced at least one minor release before a major removes it (see [Deprecation lifecycle](#deprecation-lifecycle)).
 

@@ -113,6 +113,14 @@ const cases = [
     if (!match) throw new Error('fixture drift: the release-policy step is not where this test expects it');
     return withoutPolicyStep(s).trimEnd() + match[0].replace(/^\n/, '\n\n');
   }), 1, 'A9'],
+  ['the release-policy step is made unable to fail with || true', tree(once('release-policy.mjs --version "${GITHUB_REF_NAME#v}"', 'release-policy.mjs --version "${GITHUB_REF_NAME#v}" || true')), 1, 'A9'],
+  ['the release-policy step gets continue-on-error', tree(once('      - name: Refuse a release the support window does not allow\n', '      - name: Refuse a release the support window does not allow\n        continue-on-error: true\n')), 1, 'A9'],
+  ['the release-policy step gets an if: condition', tree(once('      - name: Refuse a release the support window does not allow\n', '      - name: Refuse a release the support window does not allow\n        if: false\n')), 1, 'A9'],
+  ['release.sh runs the release policy after bumping', releaseTree((s) => {
+    const m = s.match(/\n(node "\$REPO_DIR\/scripts\/release-policy\.mjs"[^\n]*\n[^\n]*\n)/);
+    if (!m) throw new Error('fixture drift: the release.sh policy line is not where this test expects it');
+    return s.replace(m[0], '\n').replace(/(\n\s*# Verify all match\n)/, `\n${m[1]}$1`);
+  }), 1, 'A9'],
   ['release.sh stops running the release policy', releaseTree((s) => s.replace(/^([^#\n]*node[^\n]*scripts\/release-policy\.mjs)/m, '# $1')), 1, 'A9'],
   ['the policy loses its support window', docTree(once('## Support window', '## Support')), 1, 'A10'],
   ['the policy loses its distribution tags', docTree(once('## Distribution tags', '## Tags')), 1, 'A10'],

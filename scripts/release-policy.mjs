@@ -49,10 +49,16 @@ function compare(a, b) {
 }
 
 /**
- * Decide whether `version` may be released, given every released version.
- * Returns { ok: true, distTag } or { ok: false, exit, reason }.
+ * Decide whether `version` may be released, given the released versions of
+ * each publishable package ({ name: [versions] }; an array means one package).
+ * Returns { ok: true, distTag, resuming } or { ok: false, exit, reason }.
+ *
+ * A version that is the newest on the registry but missing from some packages
+ * is a release whose publish stopped part-way. It may be finished: refusing it
+ * would leave the packages of one release at different versions.
  */
-export function evaluate(version, released) {
+export function evaluate(version, releasedByPackage) {
+  const byPackage = Array.isArray(releasedByPackage) ? { released: releasedByPackage } : releasedByPackage;
   const candidate = parse(version, CORE);
   if (!candidate) {
     return {
@@ -64,15 +70,20 @@ export function evaluate(version, released) {
     };
   }
   let newest = null;
-  for (const v of released) {
-    const p = parse(v, ANY);
-    if (!p) return { ok: false, exit: 2, reason: `released version ${JSON.stringify(v)} is not semver` };
-    if (!newest || compare(p, newest.p) > 0) newest = { v, p };
+  for (const versions of Object.values(byPackage)) {
+    for (const v of versions) {
+      const p = parse(v, ANY);
+      if (!p) return { ok: false, exit: 2, reason: `released version ${JSON.stringify(v)} is not semver` };
+      if (!newest || compare(p, newest.p) > 0) newest = { v, p };
+    }
   }
-  if (released.includes(version)) {
+  const names = Object.keys(byPackage);
+  const have = names.filter((n) => byPackage[n].includes(version));
+  if (names.length > 0 && have.length === names.length) {
     return { ok: false, exit: 1, reason: `${version} is already released; a published version is immutable.` };
   }
-  if (newest && compare(candidate, newest.p) <= 0) {
+  const order = newest ? compare(candidate, newest.p) : 1;
+  if (order < 0 || (order === 0 && have.length === 0)) {
     return {
       ok: false,
       exit: 1,
@@ -82,7 +93,7 @@ export function evaluate(version, released) {
         `backport, and "${DIST_TAG}" never moves backwards.`,
     };
   }
-  return { ok: true, distTag: DIST_TAG };
+  return { ok: true, distTag: DIST_TAG, resuming: have.length > 0 ? names.filter((n) => !have.includes(n)) : [] };
 }
 
 function cannot(message) {
@@ -151,7 +162,7 @@ function main(argv) {
     }
     if (!Array.isArray(released)) cannot(`${releasedFile} is not a JSON array`);
   } else {
-    released = [...new Set(publishablePackages(root).flatMap(registryVersions))];
+    released = Object.fromEntries(publishablePackages(root).map((name) => [name, registryVersions(name)]));
   }
 
   const verdict = evaluate(version, released);
@@ -159,6 +170,9 @@ function main(argv) {
     if (verdict.exit === 2) cannot(verdict.reason);
     console.error(`::error::release refused: ${verdict.reason}`);
     process.exit(1);
+  }
+  if (verdict.resuming.length > 0) {
+    console.error(`release policy: ${version} is on the registry for some packages only; finishing it for ${verdict.resuming.join(", ")}.`);
   }
   console.error(`release policy: ${version} may be released under "${verdict.distTag}".`);
   console.log(verdict.distTag);

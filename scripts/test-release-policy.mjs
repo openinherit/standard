@@ -55,6 +55,13 @@ case "$2" in
 esac`);
 const npmDown = fakeNpm('npm-down', 'echo "npm error code ENOTFOUND" >&2; exit 1');
 const npmGarbage = fakeNpm('npm-garbage', `echo '["6.6.0","not-a-version"]'`);
+// A release that reached one package and failed before the next: 6.7.0 is on
+// @x/schema only. Re-running the publish must be allowed to finish it.
+const npmPartial = fakeNpm('npm-partial', `
+case "$2" in
+  @x/schema) echo '["6.6.0","6.7.0"]' ;;
+  *) echo '["6.6.0"]' ;;
+esac`);
 const npmAsksPrivate = fakeNpm('npm-asks-private', `
 case "$2" in
   @x/internal) echo '["99.0.0"]' ;;
@@ -91,6 +98,9 @@ const cases = [
   ['registry: a never-published package is not an error', viaNpm('6.6.1', npmNew), 0, 'latest'],
   ['registry: unreachable is CANNOT ANSWER, not "nothing released"', viaNpm('99.0.0', npmDown), 2, 'CANNOT ANSWER'],
   ['registry: an unparseable released version', viaNpm('99.0.0', npmGarbage), 2, 'CANNOT ANSWER'],
+  ['registry: finishing a release that reached only some packages', viaNpm('6.7.0', npmPartial), 0, 'latest'],
+  ['registry: a partial release does not reopen an older version', viaNpm('6.6.0', npmPartial), 1, 'already released'],
+  ['registry: nor allow one below it', viaNpm('6.6.1', npmPartial), 1, 'not newer than 6.7.0'],
   ['registry: private packages are not consulted', viaNpm('7.0.0', npmAsksPrivate), 0, 'latest'],
 ];
 

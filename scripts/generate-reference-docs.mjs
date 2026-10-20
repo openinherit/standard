@@ -33,6 +33,7 @@ const SKIP = [
   [(rel) => rel.startsWith('v3/vocab/'), 'vocabulary metaschemas'],
   [(rel) => rel.startsWith('v3/context/'), 'JSON-LD contexts, not schemas'],
   [(rel) => /^v3\/extensions\/[^/]+\/extension\.json$/.test(rel), 'extension manifests, not schemas'],
+  [(rel) => rel === 'v3/index.json', 'the generated list of schemas, not a schema'],
 ];
 
 const SECTIONS = [

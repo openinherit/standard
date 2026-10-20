@@ -462,7 +462,7 @@ async function import_from_addepar(
 
   // 7. Assemble the INHERIT document
   const inherit_document = {
-    "$schema": "https://openinherit.org/v4/inherit.json",
+    "$schema": "https://openinherit.org/v3/schema.json",
     persons,
     trusts,
     organisations,

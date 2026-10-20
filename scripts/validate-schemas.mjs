@@ -68,8 +68,8 @@ for (const file of allFiles) {
     continue;
   }
 
-  // Skip non-schema files (extension manifests, JSON-LD context)
-  if (file.endsWith('extension.json') || file.includes('/context/')) {
+  // Skip non-schema files (extension manifests, JSON-LD context, the schema index)
+  if (file.endsWith('extension.json') || file.includes('/context/') || relative === 'v3/index.json') {
     continue;
   }
 

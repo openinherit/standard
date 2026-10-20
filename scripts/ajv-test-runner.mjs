@@ -32,7 +32,8 @@ const ajv = new Ajv({
 });
 addFormats(ajv);
 
-const schemaFiles = walk(join(ROOT, 'v3'));
+// v3/index.json lists the schemas and is not one (scripts/generate-schema-index.mjs).
+const schemaFiles = walk(join(ROOT, 'v3')).filter((f) => f !== join(ROOT, 'v3', 'index.json'));
 const schemas = [];
 for (const file of schemaFiles) {
   try {

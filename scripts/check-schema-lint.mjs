@@ -10,7 +10,7 @@
  * 2026), so they are pinned here as a baseline rather than fixed in one change.
  *
  * Targets are discovered from disk, not listed: every *.json under v3/ except
- * extension.json manifests, which are not JSON Schemas. A schema added later is
+ * extension.json manifests and v3/index.json, which are not JSON Schemas. A schema added later is
  * linted without anyone remembering to add it. The lint flags (--resolve,
  * --exclude, --rule) are read from package.json's `lint` script, so they have
  * one home.
@@ -51,7 +51,7 @@ function walk(dir) {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
     if (e.isDirectory()) out.push(...walk(p));
-    else if (e.name.endsWith('.json') && e.name !== 'extension.json') out.push(p);
+    else if (e.name.endsWith('.json') && e.name !== 'extension.json' && p !== join(cwd, 'v3', 'index.json')) out.push(p);
   }
   return out;
 }

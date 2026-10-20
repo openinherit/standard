@@ -52,7 +52,8 @@ class CannotAnswer(Exception):
 
 
 def _stems(directory: Path) -> list:
-    return sorted(f.stem for f in directory.glob("*.json")) if directory.is_dir() else []
+    # v3/index.json lists the schemas; it is not one (scripts/generate-schema-index.mjs).
+    return sorted(f.stem for f in directory.glob("*.json") if f.name != "index.json") if directory.is_dir() else []
 
 
 def derive(root: Path) -> dict:

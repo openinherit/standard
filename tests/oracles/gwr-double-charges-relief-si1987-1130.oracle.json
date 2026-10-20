@@ -1,0 +1,43 @@
+{
+  "_doc": "Independent reference oracle, money kind. Asserts that GwrDoubleChargesRelief applies regulation 5 of the Inheritance Tax (Double Charges Relief) Regulations 1987 as the Regulations' own Schedule, Part II, works it: where a gift with reservation is both a chargeable transfer and property in the death estate, the total tax due because of the death is calculated twice (reg 5(3)(a) and (b)), the higher is charged, and under (a) tax already paid is credited up to the tax attributable to the property (reg 5(4)(a)). The two calculations are inputs: each is a whole death computation, which the caller builds. The Schedule's figures illustrate the mechanism rather than any year's rate table, so they are asserted as the Schedule states them. Not asserted, deliberately: a case where the pre-credit and post-credit readings of reg 5(4) pick different calculations; the Schedule has none and the rule routes it to a person. Text read from legislation.gov.uk on sourced_at.",
+  "rule": {
+    "rule_file": "catala/transfer/GwrDoubleChargesRelief.catala_en",
+    "module": "GwrDoubleChargesRelief",
+    "scope": "Relief",
+    "result_field": "verdict",
+    "depends_modules": [
+      "catala/contract/ComputedOrNeedsHuman.catala_en"
+    ]
+  },
+  "statute": "Inheritance Tax (Double Charges Relief) Regulations 1987 (SI 1987/1130) reg 5 and Schedule Part II; Finance Act 1986 s.102 and s.104(1)(b)",
+  "currency": "GBP",
+  "sourced_at": "2026-10-20",
+  "cases": [
+    {
+      "label": "schedule-part-ii-example-1-first-calculation-higher",
+      "inputs": {
+        "first_calculation_tax": "144000",
+        "first_calculation_tax_attributable_to_property": "108000",
+        "tax_paid_before_death": "19500",
+        "second_calculation_tax": "67500"
+      },
+      "expected_money": "124500",
+      "citation_url": "https://www.legislation.gov.uk/uksi/1987/1130",
+      "citation_quote": "Tax £144,000 less £19,500 already paid on GWR £124,500 ... Total tax due as result of A's death £124,500 ... Total tax due as result of A's death £67,500 Result First calculation yields higher amount of tax.",
+      "note": "Credit min(£19,500 paid, £108,000 attributable) = £19,500; £144,000 − £19,500 = £124,500, which exceeds the second calculation's £67,500 on either reading of reg 5(4)."
+    },
+    {
+      "label": "schedule-part-ii-example-2-second-calculation-higher",
+      "inputs": {
+        "first_calculation_tax": "87000",
+        "first_calculation_tax_attributable_to_property": "0",
+        "tax_paid_before_death": "0",
+        "second_calculation_tax": "118000"
+      },
+      "expected_money": "118000",
+      "citation_url": "https://www.legislation.gov.uk/uksi/1987/1130",
+      "citation_quote": "Feb 1996 Death estate including GWR shares £300,000. No previous cumulation £87,000 Total tax due as result of A's death £87,000 ... Total tax due as result of A's death £118,000 Result Second calculation yields higher amount of tax.",
+      "note": "No tax was paid before death on the 1993 PET, so there is no credit and the attributable amount does not matter; the Schedule does not state it. Reg 5(5): the second calculation is charged."
+    }
+  ]
+}

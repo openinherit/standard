@@ -1,0 +1,129 @@
+{
+  "_doc": "Independent reference oracle, money kind. Asserts that PetTaperCharge charges a failed potentially exempt transfer as gov.uk and IHTA 1984 say: tax on the part of the gift above the nil-rate band still available after earlier chargeable transfers (cumulation, s.7(1)), at 40% reduced by taper relief for the band of years between gift and death (s.7(4)), and nothing for a gift made seven years or more before the death (s.3A(4)). One gift per case: available_nil_rate_band is the band left after the transfers made before it, which is how the gov.uk Sally example works through her three gifts. The gift-to-death interval is an input in the statute's own bands; turning two dates into a band is the caller's job. Not asserted, deliberately: chargeable lifetime transfers and the s.7(5) floor, which gov.uk does not work an example of. Figures read from gov.uk and legislation.gov.uk on sourced_at.",
+  "rule": {
+    "rule_file": "catala/transfer/PetTaperCharge.catala_en",
+    "module": "PetTaperCharge",
+    "scope": "Charge",
+    "result_field": "verdict",
+    "depends_modules": [
+      "catala/contract/ComputedOrNeedsHuman.catala_en"
+    ]
+  },
+  "statute": "IHTA 1984 s.3A(4) (PET exempt after seven years), s.7(1) (cumulation), s.7(4) (taper relief)",
+  "currency": "GBP",
+  "sourced_at": "2026-10-20",
+  "cases": [
+    {
+      "label": "sally-brother-9-years",
+      "inputs": {
+        "gift_value": "50000",
+        "available_nil_rate_band": "325000",
+        "gift_to_death_interval": {
+          "enum": "SevenYearsOrMore"
+        }
+      },
+      "expected_money": "0",
+      "citation_url": "https://www.gov.uk/inheritance-tax/gifts",
+      "citation_quote": "There's no Inheritance Tax to pay on the £50,000 gift to her brother as it was given more than 7 years before she died.",
+      "note": "IHTA 1984 s.3A(4): a PET made seven years or more before the death is exempt, so it is not a chargeable transfer and does not use the nil-rate band of the later gifts."
+    },
+    {
+      "label": "sally-sister-4y2m-within-threshold",
+      "inputs": {
+        "gift_value": "325000",
+        "available_nil_rate_band": "325000",
+        "gift_to_death_interval": {
+          "enum": "MoreThanFourNotMoreThanFiveYears"
+        }
+      },
+      "expected_money": "0",
+      "citation_url": "https://www.gov.uk/inheritance-tax/gifts",
+      "citation_quote": "There's also no Inheritance Tax to pay on the £325,000 she gave her sister, as this is within the Inheritance Tax threshold.",
+      "note": "Given 4 years and 2 months before death (s.7(4)(b) band), but £325,000 does not exceed the £325,000 available, so there is no tax to taper. This gift leaves no nil-rate band for the next one (cumulation, s.7(1))."
+    },
+    {
+      "label": "sally-friend-3-to-4-years-nrb-used",
+      "inputs": {
+        "gift_value": "100000",
+        "available_nil_rate_band": "0",
+        "gift_to_death_interval": {
+          "enum": "MoreThanThreeNotMoreThanFourYears"
+        }
+      },
+      "expected_money": "32000",
+      "citation_url": "https://www.gov.uk/inheritance-tax/gifts",
+      "citation_quote": "But her friend must pay Inheritance Tax on her £100,000 gift at a rate of 32%, as it's above the tax-free threshold and was given 3 years before Sally died. The Inheritance Tax due is £32,000.",
+      "note": "Cumulation: the sister's earlier £325,000 used the whole nil-rate band, so available_nil_rate_band is £0. gov.uk applies the 32% (3 to 4 years) rate, which under s.7(4)(a) means the gift was made more than three years before the death; the band input says so. £100,000 × 40% × 80% = £32,000."
+    },
+    {
+      "label": "band-NotMoreThanThreeYears-100k-above-threshold",
+      "inputs": {
+        "gift_value": "425000",
+        "available_nil_rate_band": "325000",
+        "gift_to_death_interval": {
+          "enum": "NotMoreThanThreeYears"
+        }
+      },
+      "expected_money": "40000",
+      "citation_url": "https://www.gov.uk/inheritance-tax/gifts",
+      "citation_quote": "Gifts given in the 3 years before your death are taxed at 40%. Gifts given 3 to 7 years before your death are taxed on a sliding scale known as 'taper relief'.",
+      "note": "£100,000 above the threshold taxed at the gov.uk rate 40% = £40,000. Statute: IHTA 1984 s.7(4) (full rate within three years) of the 40% rate."
+    },
+    {
+      "label": "band-MoreThanThreeNotMoreThanFourYears-100k-above-threshold",
+      "inputs": {
+        "gift_value": "425000",
+        "available_nil_rate_band": "325000",
+        "gift_to_death_interval": {
+          "enum": "MoreThanThreeNotMoreThanFourYears"
+        }
+      },
+      "expected_money": "32000",
+      "citation_url": "https://www.gov.uk/inheritance-tax/gifts",
+      "citation_quote": "3 to 4 years 32%",
+      "note": "£100,000 above the threshold taxed at the gov.uk rate 32% = £32,000. Statute: IHTA 1984 s.7(4)(a), 80 per cent of the 40% rate."
+    },
+    {
+      "label": "band-MoreThanFourNotMoreThanFiveYears-100k-above-threshold",
+      "inputs": {
+        "gift_value": "425000",
+        "available_nil_rate_band": "325000",
+        "gift_to_death_interval": {
+          "enum": "MoreThanFourNotMoreThanFiveYears"
+        }
+      },
+      "expected_money": "24000",
+      "citation_url": "https://www.gov.uk/inheritance-tax/gifts",
+      "citation_quote": "4 to 5 years 24%",
+      "note": "£100,000 above the threshold taxed at the gov.uk rate 24% = £24,000. Statute: IHTA 1984 s.7(4)(b), 60 per cent of the 40% rate."
+    },
+    {
+      "label": "band-MoreThanFiveNotMoreThanSixYears-100k-above-threshold",
+      "inputs": {
+        "gift_value": "425000",
+        "available_nil_rate_band": "325000",
+        "gift_to_death_interval": {
+          "enum": "MoreThanFiveNotMoreThanSixYears"
+        }
+      },
+      "expected_money": "16000",
+      "citation_url": "https://www.gov.uk/inheritance-tax/gifts",
+      "citation_quote": "5 to 6 years 16%",
+      "note": "£100,000 above the threshold taxed at the gov.uk rate 16% = £16,000. Statute: IHTA 1984 s.7(4)(c), 40 per cent of the 40% rate."
+    },
+    {
+      "label": "band-MoreThanSixLessThanSevenYears-100k-above-threshold",
+      "inputs": {
+        "gift_value": "425000",
+        "available_nil_rate_band": "325000",
+        "gift_to_death_interval": {
+          "enum": "MoreThanSixLessThanSevenYears"
+        }
+      },
+      "expected_money": "8000",
+      "citation_url": "https://www.gov.uk/inheritance-tax/gifts",
+      "citation_quote": "6 to 7 years 8%",
+      "note": "£100,000 above the threshold taxed at the gov.uk rate 8% = £8,000. Statute: IHTA 1984 s.7(4)(d), 20 per cent of the 40% rate."
+    }
+  ]
+}

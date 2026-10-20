@@ -130,6 +130,7 @@ func ExecuteConformance(kit string, jsonOutput bool, w io.Writer) int {
 		"inherit-v3-bundled.json":   schemas.EstateBundled,
 		"catalogue-v3-bundled.json": schemas.CatalogueBundled,
 	}
+	listed := map[string]bool{}
 	for _, s := range m.Schemas {
 		data, err := readKitFile(kit, s.File, s.SHA256)
 		if err != nil {
@@ -141,6 +142,12 @@ func ExecuteConformance(kit string, jsonOutput bool, w io.Writer) int {
 		}
 		if !bytes.Equal(data, want) {
 			return fail("kit schema %s differs from the schema this CLI embeds: the kit is from another release", s.File)
+		}
+		listed[path.Base(s.File)] = true
+	}
+	for name := range embedded {
+		if !listed[name] {
+			return fail("kit manifest does not list %s, so the kit cannot be checked against it", name)
 		}
 	}
 
@@ -154,8 +161,16 @@ func ExecuteConformance(kit string, jsonOutput bool, w io.Writer) int {
 		if err != nil {
 			return fail("%s", err)
 		}
-		if _, err := readKitFile(kit, tc.Expected, tc.ExpectedSHA256); err != nil {
+		exp, err := readKitFile(kit, tc.Expected, tc.ExpectedSHA256)
+		if err != nil {
 			return fail("%s", err)
+		}
+		var e struct {
+			Valid      *bool  `json:"valid"`
+			SchemaMode string `json:"schemaMode"`
+		}
+		if err := json.Unmarshal(exp, &e); err != nil || e.Valid == nil || *e.Valid != tc.Valid || e.SchemaMode != tc.SchemaMode {
+			return fail("%s does not agree with the manifest's valid=%t schemaMode=%s for %s", tc.Expected, tc.Valid, tc.SchemaMode, tc.File)
 		}
 		reason, err := gradeCase(tc, data)
 		if err != nil {
@@ -231,7 +246,7 @@ func gradeCase(tc kitTest, data []byte) (string, error) {
 
 	if tc.Valid {
 		if verr != nil {
-			return "VALID case refused: " + firstLine(verr.Error()), nil
+			return "VALID case refused: " + describe(verr), nil
 		}
 		return "", nil
 	}
@@ -246,7 +261,7 @@ func gradeCase(tc kitTest, data []byte) (string, error) {
 		return "", fmt.Errorf("validator error: %s", verr)
 	}
 	if !refusedBy(ve, inst, tc.Rule.Keyword, tc.Rule.InstancePath) {
-		return fmt.Sprintf("refused, but not by its rule (%s at '%s'): %s", tc.Rule.Keyword, tc.Rule.InstancePath, firstLine(ve.Error())), nil
+		return fmt.Sprintf("refused, but not by its rule (%s at '%s'): %s", tc.Rule.Keyword, tc.Rule.InstancePath, describe(ve)), nil
 	}
 	return "", nil
 }
@@ -324,9 +339,22 @@ func jsonPointer(tokens []string) string {
 	return b.String()
 }
 
-func firstLine(s string) string {
-	if i := strings.IndexByte(s, '\n'); i >= 0 {
-		return s[:i]
+// describe names what the validator refused, from the leaf errors -- the
+// top-level message only says which schema failed.
+func describe(err error) string {
+	ve, ok := err.(*jsonschema.ValidationError)
+	if !ok {
+		return err.Error()
 	}
-	return s
+	var errs []validationError
+	collectValidationErrors(ve, &errs)
+	parts := make([]string, 0, len(errs))
+	for _, e := range errs {
+		msg := e.Message
+		if i := strings.LastIndex(msg, ": "); i >= 0 {
+			msg = msg[i+2:]
+		}
+		parts = append(parts, e.Path+": "+msg)
+	}
+	return strings.Join(parts, "; ")
 }

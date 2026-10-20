@@ -58,13 +58,13 @@ Every INHERIT document starts with a root envelope:
 ```json
 {
   "$schema": "https://openinherit.org/v3/schema.json",
-  "schemaVersion": 3,
+  "schemaVersion": "6.7.0",
   "exportedAt": "2026-03-26"
 }
 ```
 
-- `$schema` points to the schema version
-- `schemaVersion` is `3` for INHERIT v3
+- `$schema` is the `$id` of the root schema
+- `schemaVersion` is the release of the standard the document was written against, as a semver string such as `"6.7.0"` — not `3`. The `v3` in `$schema` is the schema namespace, not the release ([Versioning](../policies/versioning.md#three-version-numbers))
 - `exportedAt` is when the document was created (ISO 8601)
 
 ```typescript
@@ -73,7 +73,7 @@ import type { InheritDocument } from '@openinherit/sdk';
 
 const envelope: Pick<InheritDocument, '$schema' | 'schemaVersion' | 'exportedAt'> = {
   $schema: 'https://openinherit.org/v3/schema.json',
-  schemaVersion: 3,
+  schemaVersion: "6.7.0",
   exportedAt: '2026-03-26',
 };
 ```

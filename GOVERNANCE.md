@@ -22,8 +22,18 @@ Changes are governed by schema maturity level:
 
 ## Versioning
 
-- **Within a major version (v1.x):** Additive only — new optional properties, new enum values, new schemas. Never remove, rename, or tighten cardinality.
-- **Across major versions:** Breaking changes permitted. New version = new directory (`v2/`).
+INHERIT carries three version numbers, and each one means one thing:
+
+| Number | Where it appears | What it means |
+|--------|------------------|---------------|
+| `v3` | the schema directory, and the `/v3/` in every schema `$id` | the namespace schemas are identified by. It is not a release number |
+| package version | `package.json`, the npm packages, release tags, `CHANGELOG.md` | the release of the standard, in semver |
+| `schemaVersion` | the root of each INHERIT document | the package version the document was written against |
+
+[Versioning and Compatibility](docs/policies/versioning.md#three-version-numbers) is the full statement. [`v3/index.json`](v3/index.json) lists every schema in the namespace.
+
+- **Within a major version:** Additive only — new optional properties, new enum values, new schemas. Never remove, rename, or tighten cardinality. The package's minor or patch version increases.
+- **Across major versions:** Breaking changes permitted, and the package's major version increases. Schemas stay in `v3/` under the same `$id`s: releases 4.0.0, 5.0.0 and 6.0.0 were all published there. Moving the schemas to a new namespace would change every `$id`, so it is a decision of its own and needs a proposal in `proposals/`. It does not follow automatically from a major release.
 - **Schemas are immutable once published.** To change a published schema, publish a new version.
 
 ## Extension Promotion

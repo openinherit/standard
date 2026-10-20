@@ -24,7 +24,7 @@ The smallest valid INHERIT document requires:
 ```json
 {
   "$schema": "https://openinherit.org/v3/schema.json",
-  "schemaVersion": 3,
+  "schemaVersion": "6.7.0",
   "exportedAt": "2026-03-27",
   "generator": {
     "name": "My App",
@@ -325,7 +325,7 @@ After the LLM returns extracted entities, assemble a valid INHERIT document:
    ```json
    {
      "$schema": "https://openinherit.org/v3/schema.json",
-     "schemaVersion": 3,
+     "schemaVersion": "6.7.0",
      "exportedAt": "2026-03-27",
      "generator": { "name": "Your App", "version": "1.0.0" }
    }

@@ -7,6 +7,7 @@
 import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { spawnSync } from 'child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -772,6 +773,88 @@ test('assets[].propertyId and spaces[].propertyId are both enforced, not just de
       throw new Error(`${field} is declared but validate-refs.mjs has no checkRef for it`);
     }
   }
+});
+
+// === Each rule, run through the shipped validator ===
+//
+// The tests above check the declared list against this file's own
+// interpreter, and grep validate-refs.mjs for a checkRef call. Neither runs
+// the validator. That is how nine rules stayed unenforced: a checkRef spelt
+// with a field name the entity does not have is found by the grep and can
+// never fire. So each rule below has a fixture with exactly one broken
+// reference, and validate-refs.mjs itself must reject it.
+
+console.log('\nShipped validator — one fixture per rule:');
+
+const RI_DIR = resolve(ROOT, 'tests/referential-integrity');
+const INTACT_PATH = resolve(RI_DIR, 'intact.json');
+const intact = JSON.parse(readFileSync(INTACT_PATH, 'utf8'));
+
+// fixture basename → the declared field it breaks, and the field path
+// validate-refs.mjs must name in its BROKEN REF line.
+const RULE_FIXTURES = [
+  ['guardians-personId', 'guardians[].personId', 'guardians[0].personId'],
+  ['guardians-childPersonId', 'guardians[].childPersonId', 'guardians[0].childPersonId'],
+  ['kinships-fromPersonId', 'kinships[].fromPersonId', 'kinships[0].fromPersonId'],
+  ['kinships-toPersonId', 'kinships[].toPersonId', 'kinships[0].toPersonId'],
+  ['relationships-partners-0-personId', 'relationships[].partners[].personId', 'relationships[0].partners[0].personId'],
+  ['relationships-partners-1-personId', 'relationships[].partners[].personId', 'relationships[0].partners[1].personId'],
+  ['pets-petCareArrangement-trustId', 'pets[].petCareArrangement.trustId', 'pets[0].petCareArrangement.trustId'],
+  ['pets-petCareArrangement-bequestId', 'pets[].petCareArrangement.bequestId', 'pets[0].petCareArrangement.bequestId'],
+  ['pets-petCareArrangement-nominatedCarerPersonId', 'pets[].petCareArrangement.nominatedCarerPersonId', 'pets[0].petCareArrangement.nominatedCarerPersonId'],
+  ['trusts-petId', 'trusts[].petId', 'trusts[0].petId'],
+];
+
+function runValidator(path) {
+  const r = spawnSync(process.execPath, [resolve(ROOT, 'scripts/validate-refs.mjs'), path], { encoding: 'utf8' });
+  return { status: r.status, out: `${r.stdout}${r.stderr}` };
+}
+
+// Leaf values that differ between two JSON trees, as "a.b[0].c" paths.
+function diffLeaves(a, b, path = '') {
+  if (a === b) return [];
+  if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return [path];
+  const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+  return [...keys].flatMap(k => {
+    const p = Array.isArray(a) ? `${path}[${k}]` : (path ? `${path}.${k}` : k);
+    return diffLeaves(a[k], b[k], p);
+  });
+}
+
+test('intact.json passes validate-refs.mjs', () => {
+  const { status, out } = runValidator(INTACT_PATH);
+  if (status !== 0) throw new Error(`exit ${status}, expected 0:\n${out}`);
+});
+
+test('intact.json carries a value at every rule it is the baseline for (not vacuous)', () => {
+  const empty = RULE_FIXTURES.filter(([, field]) => resolvePath(intact, field).length === 0);
+  if (empty.length > 0) throw new Error(`no value to break at: ${empty.map(r => r[1]).join(', ')}`);
+});
+
+test('every rule fixture is declared in schema.json', () => {
+  const undeclared = RULE_FIXTURES.filter(([, field]) => !constraints.some(c => c.field === field));
+  if (undeclared.length > 0) throw new Error(`not declared: ${undeclared.map(r => r[1]).join(', ')}`);
+});
+
+for (const [name, field, reported] of RULE_FIXTURES) {
+  const path = resolve(RI_DIR, 'broken', `${name}.json`);
+  test(`${field} — broken/${name}.json is rejected by validate-refs.mjs`, () => {
+    const broken = JSON.parse(readFileSync(path, 'utf8'));
+    const changed = diffLeaves(intact, broken);
+    if (changed.length !== 1 || changed[0] !== reported) {
+      throw new Error(`must differ from intact.json at exactly ${reported}; differs at ${JSON.stringify(changed)}`);
+    }
+    const { status, out } = runValidator(path);
+    if (status !== 1) throw new Error(`exit ${status}, expected 1 — the broken reference was not caught`);
+    if (!out.includes(`${reported} =`)) throw new Error(`exit 1, but not for ${reported}:\n${out}`);
+  });
+}
+
+test('every declared rule on guardians, kinships, relationships, pets and trusts has a fixture', () => {
+  const covered = new Set(RULE_FIXTURES.map(r => r[1]));
+  const ENTITIES = /^(guardians|kinships|relationships|pets|trusts)\[\]/;
+  const gaps = constraints.filter(c => ENTITIES.test(c.field) && !covered.has(c.field)).map(c => c.field);
+  if (gaps.length > 0) throw new Error(`declared without a fixture: ${gaps.join(', ')}`);
 });
 
 console.log('\n' + '═'.repeat(50));

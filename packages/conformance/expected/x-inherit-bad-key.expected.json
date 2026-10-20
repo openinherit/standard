@@ -1,0 +1,19 @@
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "Keys inside an x-inherit-* block must be identifiers (letters, digits, underscore).",
+  "rule": {
+    "class": "x-inherit",
+    "keyword": "propertyNames",
+    "instancePath": "/x-inherit-acme"
+  },
+  "base": "estate/valid/minimal-estate.json",
+  "op": {
+    "op": "add",
+    "path": "/x-inherit-acme",
+    "value": {
+      "bad-key": 1
+    }
+  }
+}

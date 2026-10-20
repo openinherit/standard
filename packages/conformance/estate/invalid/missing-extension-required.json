@@ -16,7 +16,9 @@
         "jurisdiction": {
           "country": "US",
           "subdivision": "US-CA",
-          "legalSystems": ["common_law"],
+          "legalSystems": [
+            "common_law"
+          ],
           "name": "California"
         },
         "legalTradition": "common_law",
@@ -24,20 +26,22 @@
       },
       "determinedBy": "domicile",
       "binding": true,
-      "notes": "California is a community property state."
+      "notes": "California is a community property state. Community property is divided equally upon death. Separate property passes under the will or by intestacy."
     },
     "religiousConsideration": {
       "tradition": "civil_law",
       "binding": false,
-      "notes": "The family observes Japanese Buddhist traditions."
+      "notes": "The family observes Japanese Buddhist traditions. Ancestral rites (saishi) and family graves are designated to pass to a saishi successor under Japanese custom."
     },
-    "notes": "US citizen of Japanese heritage, domiciled in California. Required fields stripped from extension subobjects to test extension validation boundary.",
+    "notes": "US citizen of Japanese heritage, domiciled in California. Community property regime applies. Japanese cultural traditions observed for ancestral rites and koseki family registration.",
     "createdAt": "2026-03-01T00:00:00Z",
     "lastModifiedAt": "2026-04-07T00:00:00Z",
     "domicile": {
       "country": "US",
       "subdivision": "US-CA",
-      "legalSystems": ["common_law"],
+      "legalSystems": [
+        "common_law"
+      ],
       "name": "California"
     }
   },
@@ -48,7 +52,9 @@
       "familyName": "Tanaka",
       "dateOfBirth": "1960-04-15",
       "gender": "male",
-      "roles": ["testator"],
+      "roles": [
+        "testator"
+      ],
       "phoneticReading": {
         "givenName": "けんじ",
         "familyName": "たなか",
@@ -75,7 +81,10 @@
       "familyName": "Tanaka",
       "dateOfBirth": "1963-10-28",
       "gender": "female",
-      "roles": ["beneficiary", "executor"]
+      "roles": [
+        "beneficiary",
+        "executor"
+      ]
     },
     {
       "id": "a3000001-0000-4000-a000-000000000003",
@@ -83,7 +92,9 @@
       "familyName": "Tanaka",
       "dateOfBirth": "1992-06-12",
       "gender": "female",
-      "roles": ["beneficiary"],
+      "roles": [
+        "beneficiary"
+      ],
       "phoneticReading": {
         "givenName": "はな",
         "familyName": "たなか",
@@ -138,7 +149,8 @@
         "addressRegion": "California",
         "postalCode": "95125",
         "addressCountry": "US"
-      }
+      },
+      "notes": "Community property held as joint tenants with right of survivorship. Acquired during marriage."
     }
   ],
   "assets": [
@@ -150,6 +162,17 @@
       "estimatedValue": {
         "amount": 45000000,
         "currency": "USD"
+      },
+      "notes": "Community property investment account. Includes US equities and Japanese ETFs."
+    },
+    {
+      "id": "e3000001-0000-4000-a000-000000000002",
+      "name": "Chase Savings Account",
+      "category": "financial",
+      "subcategory": "savings_account",
+      "estimatedValue": {
+        "amount": 8500000,
+        "currency": "USD"
       }
     }
   ],
@@ -159,7 +182,7 @@
       "id": "f3000001-0000-4000-a000-000000000001",
       "bequestType": "specific",
       "beneficiaryId": "a3000001-0000-4000-a000-000000000002",
-      "description": "I give my interest in the family home to my wife Yuki Tanaka."
+      "description": "I give my interest in the family home at 2847 Cherry Blossom Lane, San Jose to my wife Yuki Tanaka."
     },
     {
       "id": "f3000001-0000-4000-a000-000000000002",
@@ -192,14 +215,18 @@
       "id": "us-estate",
       "version": "1.0.0",
       "schema": "https://openinherit.org/v3/extensions/us-estate/us-estate.json",
-      "scope": ["estate"],
+      "scope": [
+        "estate"
+      ],
       "dataBlock": "x-inherit-us-estate"
     },
     {
       "id": "japan",
       "version": "1.0.0",
       "schema": "https://openinherit.org/v3/extensions/japan/japan.json",
-      "scope": ["estate"],
+      "scope": [
+        "estate"
+      ],
       "dataBlock": "x-inherit-japan"
     }
   ],
@@ -226,7 +253,7 @@
       "jurisdiction": "US",
       "calculatedAt": "2026-04-07T12:00:00Z",
       "grossEstateValue": {
-        "amount": 170000000,
+        "amount": 178500000,
         "currency": "USD"
       },
       "disclaimer": "Estimated for planning purposes only. This is not tax advice. Consult a qualified tax adviser."
@@ -243,17 +270,25 @@
           "currency": "USD"
         },
         "constitutional": false,
-        "notes": "propertyId intentionally omitted — required field missing from homesteadExemptions item."
+        "notes": "California homestead exemption of $300,000 (effective 1 January 2021, CCP s.704.730)."
       }
     ],
     "perStirpesVariant": "modern_per_stirpes",
     "noContestEnforceable": true,
     "rufadaaAdopted": true,
-    "notes": "homesteadExemptions item is missing the required 'propertyId' field."
+    "notes": "California is a community property state. Community property is owned equally by both spouses during marriage and does not pass through probate if held with right of survivorship."
   },
   "x-inherit-japan": {
     "kosekiRecords": [
       {
+        "personId": "a3000001-0000-4000-a000-000000000001",
+        "honseki": "東京都新宿区",
+        "kosekiHead": "田中健二",
+        "kosekiReference": "Tokyo Shinjuku Ward Family Register No. 12345",
+        "registrationType": "birth"
+      },
+      {
+        "personId": "a3000001-0000-4000-a000-000000000003",
         "honseki": "東京都新宿区",
         "kosekiHead": "田中健二",
         "kosekiReference": "Tokyo Shinjuku Ward Family Register No. 12345",
@@ -262,7 +297,15 @@
     ],
     "iryubunClaims": [
       {
+        "personId": "a3000001-0000-4000-a000-000000000002",
         "relationship": "spouse",
+        "reservedFraction": "1/4",
+        "claimFiled": false,
+        "claimOutcome": "waived"
+      },
+      {
+        "personId": "a3000001-0000-4000-a000-000000000003",
+        "relationship": "daughter",
         "reservedFraction": "1/4",
         "claimFiled": false,
         "claimOutcome": "waived"
@@ -271,6 +314,16 @@
     "saishiSuccessor": "a3000001-0000-4000-a000-000000000003",
     "localWillFormality": "kosei_shosho",
     "inkanVerified": true,
-    "notes": "kosekiRecords[0] and iryubunClaims[0] are each missing their required 'personId' field."
+    "isanBunkatsu": {
+      "type": "voluntary",
+      "agreed": true,
+      "agreementDate": "2026-03-15",
+      "allHeirsConsented": true,
+      "participants": [
+        "a3000001-0000-4000-a000-000000000002",
+        "a3000001-0000-4000-a000-000000000003"
+      ]
+    },
+    "notes": "Kenji retains his koseki registration in Tokyo. Hana is designated as the saishi successor to maintain the family graves and Buddhist altar. Iryubun claims have been waived by all heirs. Estate division agreement reached voluntarily."
   }
 }

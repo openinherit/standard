@@ -1,0 +1,17 @@
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "The estate object is closed: an undeclared property is refused.",
+  "rule": {
+    "class": "closed-world",
+    "keyword": "unevaluatedProperties",
+    "instancePath": "/estate"
+  },
+  "base": "estate/valid/minimal-estate.json",
+  "op": {
+    "op": "add",
+    "path": "/estate/unknownField",
+    "value": true
+  }
+}

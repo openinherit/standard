@@ -1,0 +1,16 @@
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "An estate requires testatorPersonId.",
+  "rule": {
+    "class": "required",
+    "keyword": "required",
+    "instancePath": "/estate"
+  },
+  "base": "estate/valid/minimal-estate.json",
+  "op": {
+    "op": "remove",
+    "path": "/estate/testatorPersonId"
+  }
+}

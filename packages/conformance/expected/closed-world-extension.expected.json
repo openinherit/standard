@@ -1,0 +1,17 @@
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "A registered extension's data block is closed too: an undeclared property inside x-inherit-us-estate is refused.",
+  "rule": {
+    "class": "closed-world",
+    "keyword": "unevaluatedProperties",
+    "instancePath": "/x-inherit-us-estate"
+  },
+  "base": "estate/valid/us-japan-cultural.json",
+  "op": {
+    "op": "add",
+    "path": "/x-inherit-us-estate/unknownField",
+    "value": true
+  }
+}

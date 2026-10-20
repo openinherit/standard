@@ -1,1 +1,17 @@
-{ "valid": false, "schemaMode": "estate", "minErrors": 1 }
+{
+  "valid": false,
+  "schemaMode": "estate",
+  "minErrors": 1,
+  "description": "estate.status is not one of the declared values.",
+  "rule": {
+    "class": "enum",
+    "keyword": "enum",
+    "instancePath": "/estate/status"
+  },
+  "base": "estate/valid/minimal-estate.json",
+  "op": {
+    "op": "replace",
+    "path": "/estate/status",
+    "value": "not_a_status"
+  }
+}

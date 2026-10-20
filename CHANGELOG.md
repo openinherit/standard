@@ -36,6 +36,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Level 2 (referential integrity) now enforces every constraint `v3/schema.json` declares
+  (proposal 0008). Nine were not enforced: `scripts/validate-refs.mjs` checked guardians and
+  kinships under field names those entities do not have, so the checks could never fire; the
+  relationship rows named `person1Id` / `person2Id`, which do not exist; and the pet-care trust,
+  bequest and carer references and `trusts[].petId` were never implemented. A document naming a
+  guardian, parent, partner or pet carer who is not in it now fails Level 2. In
+  `referentialIntegrity`, `relationships[].partners[].personId` replaces the two relationship rows
+  and `guardians[].childPersonId` is added; the count stays 28. No property changes.
 - The generated Zod and pydantic validators now enforce a schema's own top-level
   `dependentRequired`, and Zod now enforces `uniqueItems` on a top-level array member. Before this
   they accepted, for example, a document naming `entityId` without `entityType`, an executor's

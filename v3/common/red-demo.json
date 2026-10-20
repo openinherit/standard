@@ -1,7 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openinherit.org/v3/common/red-demo.json",
-  "title": "Red demo",
-  "description": "Temporary: added without regenerating v3/index.json to show the staleness check fail. Reverted in the next commit.",
-  "type": "object"
-}

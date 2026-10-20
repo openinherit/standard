@@ -94,7 +94,16 @@ const cases = [
     d.extensions.push({ ...d.extensions[0], id: 'https://openinherit.org/v3/extensions/z/z.json', path: 'v3/extensions/z/' });
   })), 1],
 
+  // Write mode, so the refusal cannot be mistaken for staleness.
+  ['a duplicate registry entry for one extension', (() => {
+    const r = tree();
+    edit(r, 'extensions-registry.json', (d) => { d.extensions.push({ ...d.extensions[0], maturity: 'stable' }); });
+    return ['--root', r];
+  })(), 1],
+
   // 2 — never read as clear.
+  ['an index entry with no path', generated((r) => edit(r, 'v3/index.json', (d) => { d.schemas.push({ title: 'orphan' }); })), 2],
+  ['a schema whose JSON is null', generated((r) => put(r, 'v3/person.json', 'null')), 2],
   ['no matrix yet', ['--check', '--root', tree()], 2],
   ['no v3/index.json', ['--check', '--root', join(base, 'absent')], 2],
   ['a registry that does not parse', generated((r) => put(r, 'extensions-registry.json', '{')), 2],

@@ -50,6 +50,10 @@ for (let i = 0; i < args.length; i++) {
   else cannotAnswer(`unknown argument ${args[i]}`);
 }
 
+// A crash is not a finding. Node exits 1 on an uncaught error, which would
+// read as "refused"; report it as cannot-answer instead.
+process.on('uncaughtException', (e) => cannotAnswer(`unexpected input: ${e.message}`));
+
 function cannotAnswer(msg) {
   console.error(`CANNOT ANSWER — ${msg}`);
   process.exit(2);
@@ -62,7 +66,9 @@ function readJson(path, { optional = false } = {}) {
     cannotAnswer(`no ${path} at ${root}`);
   }
   try {
-    return JSON.parse(readFileSync(file, 'utf8'));
+    const doc = JSON.parse(readFileSync(file, 'utf8'));
+    if (!doc || typeof doc !== 'object' || Array.isArray(doc)) cannotAnswer(`${path} is not a JSON object`);
+    return doc;
   } catch (e) {
     return cannotAnswer(`${path} does not parse: ${e.message}`);
   }
@@ -95,6 +101,7 @@ if (!Array.isArray(registry.extensions)) cannotAnswer('extensions-registry.json 
 
 // Core rows: every indexed schema outside v3/extensions/. Extension schemas
 // are reported once, on their extension's row.
+for (const e of index.schemas) if (typeof e?.path !== 'string') cannotAnswer('v3/index.json has an entry with no "path"');
 const schemas = index.schemas
   .filter((e) => !e.path.startsWith('v3/extensions/'))
   .map((e) => {
@@ -110,7 +117,12 @@ const inTree = existsSync(extDir)
   ? readdirSync(extDir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name).sort()
   : [];
 const nameOf = (entry) => (entry.path ?? '').replace(/^v3\/extensions\//, '').replace(/\/$/, '');
-const inRegistry = new Map(registry.extensions.map((e) => [nameOf(e), e]));
+const inRegistry = new Map();
+for (const e of registry.extensions) {
+  const name = nameOf(e);
+  if (inRegistry.has(name)) refused.push(`extensions-registry.json lists "${name}" more than once`);
+  else inRegistry.set(name, e);
+}
 for (const name of inTree) if (!inRegistry.has(name)) refused.push(`v3/extensions/${name}/ is in the tree but not in extensions-registry.json`);
 for (const name of inRegistry.keys()) if (!inTree.includes(name)) refused.push(`extensions-registry.json lists "${name}" but v3/extensions/${name}/ does not exist`);
 

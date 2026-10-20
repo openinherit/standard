@@ -25,6 +25,17 @@ jobs:
           fi
           echo "Schema sync: OK"
 
+      # v3/index.json lists every schema under v3/ (TT-1970). The harness runs
+      # first so a red checker is never trusted; then the index is regenerated
+      # in memory and compared with the committed one. A schema added or
+      # removed without regenerating fails here. The copy in packages/schema/
+      # is held equal by the sync step above.
+      - name: Test the schema-index generator
+        run: node scripts/test-generate-schema-index.mjs
+
+      - name: Check v3/index.json is current
+        run: node scripts/generate-schema-index.mjs --check
+
       # Self-counts (TT-1676). The harness runs first: a checker whose own
       # tests are red must not be trusted to judge the prose. No
       # continue-on-error on either step — exit 1 or 2 fails the job.

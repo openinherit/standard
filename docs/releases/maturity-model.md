@@ -86,6 +86,6 @@ Each schema carries maturity information in the OpenAPI schema bundle via `x-inh
 
 ## Versioning Rules
 
-- **Within v3.x:** Additive only — new optional properties, new enum values, new schemas
-- **Across major versions:** Breaking changes permitted via new directory (e.g. `v4/`)
+- **Within a major version (e.g. 6.x):** Additive only — new optional properties, new enum values, new schemas
+- **Across major versions:** Breaking changes permitted; the package's major version increases and the schemas stay in `v3/` under the same `$id`s (see [Versioning](../policies/versioning.md#three-version-numbers))
 - **Published schemas are immutable** — to change one, publish a new version

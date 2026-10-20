@@ -6,5 +6,5 @@
   "defaultDialect": "https://openinherit.org/v3/dialect.json",
   "path": "./v3",
   "extension": [".json"],
-  "ignore": ["./v3/context"]
+  "ignore": ["./v3/context", "./v3/index.json"]
 }

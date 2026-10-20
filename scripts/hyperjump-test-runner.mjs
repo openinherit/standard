@@ -25,7 +25,8 @@ function walk(dir) {
 }
 
 // Phase 1: Register all schemas
-const schemaFiles = walk(join(ROOT, 'v3'));
+// v3/index.json lists the schemas and is not one (scripts/generate-schema-index.mjs).
+const schemaFiles = walk(join(ROOT, 'v3')).filter((f) => f !== join(ROOT, 'v3', 'index.json'));
 let registered = 0;
 
 // Sort: common types first, then entities, then extensions, then root schemas

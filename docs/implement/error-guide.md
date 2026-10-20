@@ -402,7 +402,7 @@ const estate = {
 // Wrong — only includes arrays that have data
 const doc = {
   $schema: "https://openinherit.org/v3/schema.json",
-  schemaVersion: 3,
+  schemaVersion: "6.7.0",
   estate: { /* ... */ },
   people: [{ /* ... */ }],
   bequests: [{ /* ... */ }],
@@ -415,7 +415,7 @@ const doc = {
 // Correct — include all required arrays, even if empty
 const doc = {
   $schema: "https://openinherit.org/v3/schema.json",
-  schemaVersion: 3,
+  schemaVersion: "6.7.0",
   estate: { /* ... */ },
   people: [{ /* ... */ }],
   kinships: [],

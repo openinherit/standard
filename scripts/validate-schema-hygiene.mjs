@@ -21,7 +21,8 @@ function walk(dir) {
   return files;
 }
 
-const files = walk(join(ROOT, 'v3'));
+// v3/index.json lists the schemas and is not one (scripts/generate-schema-index.mjs).
+const files = walk(join(ROOT, 'v3')).filter((f) => f !== join(ROOT, 'v3', 'index.json'));
 let errors = 0;
 let warnings = 0;
 

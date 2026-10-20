@@ -37,7 +37,7 @@ done
 
 # Every schema in v3/, so cross-file $refs resolve.
 RESOLVE=()
-while IFS= read -r f; do RESOLVE+=(--resolve "$f"); done < <(find v3 -name '*.json' -not -path 'v3/context/*' | sort)
+while IFS= read -r f; do RESOLVE+=(--resolve "$f"); done < <(find v3 -name '*.json' -not -path 'v3/context/*' -not -path 'v3/index.json' | sort)
 
 # Discover catalogue fixtures by what they say they are, not by a hand list:
 # a hand list is how the room-gap fixture was skipped for a release.

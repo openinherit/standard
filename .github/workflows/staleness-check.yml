@@ -36,6 +36,17 @@ jobs:
       - name: Check v3/index.json is current
         run: node scripts/generate-schema-index.mjs --check
 
+      # maturity-matrix.json is the public maturity matrix (docs/policies/
+      # maturity-matrix.md), derived from the maturity the schemas, manifests
+      # and registry declare. Harness first, so a red checker is never
+      # trusted; then the matrix is regenerated in memory and compared. A
+      # maturity declaration changed without regenerating fails here.
+      - name: Test the maturity-matrix generator
+        run: node scripts/test-generate-maturity-matrix.mjs
+
+      - name: Check maturity-matrix.json is current
+        run: node scripts/generate-maturity-matrix.mjs --check
+
       # Self-counts (TT-1676). The harness runs first: a checker whose own
       # tests are red must not be trusted to judge the prose. No
       # continue-on-error on either step — exit 1 or 2 fails the job.

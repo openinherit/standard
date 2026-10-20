@@ -14,30 +14,6 @@
     "false_reject": [],
     "false_accept": [
       {
-        "case": "tests/v3/acknowledgement/acknowledgement.test.json::invalid — unevaluated property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/africa-customary/africa-customary.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/ai-provenance/ai-provenance.test.json::invalid — additional property not allowed (outside x-inherit-)",
-        "json_schema_keywords": [
-          "additionalProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/ai-provenance/ai-provenance.test.json::invalid — extension block is string not object",
-        "json_schema_keywords": [
-          "type"
-        ]
-      },
-      {
         "case": "tests/v3/asset-interest/asset-interest.test.json::invalid — missing required personId",
         "json_schema_keywords": [
           "anyOf",
@@ -63,12 +39,6 @@
         ]
       },
       {
-        "case": "tests/v3/australia-nz/australia-nz.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/bequest/bequest.test.json::invalid — debt_forgiveness without beneficiaryId or beneficiaryOrganisation",
         "json_schema_keywords": [
           "anyOf",
@@ -85,21 +55,9 @@
         ]
       },
       {
-        "case": "tests/v3/brazil/brazil.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/completeness/completeness.test.json::invalid — missing required score",
         "json_schema_keywords": [
           "required"
-        ]
-      },
-      {
-        "case": "tests/v3/dealer-interest/dealer-interest.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -109,54 +67,10 @@
         ]
       },
       {
-        "case": "tests/v3/eu-succession/eu-succession.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/executor/executor.test.json::invalid — missing required personId",
         "json_schema_keywords": [
           "anyOf",
           "required"
-        ]
-      },
-      {
-        "case": "tests/v3/guardian/guardian.test.json::invalid — unknown additional property at root level (unevaluatedProperties false)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/hindu-succession/hindu-succession.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/hong-kong/hong-kong.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/india/india.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/insurance-policy/insurance-policy.test.json::invalid — non-camelCase property name",
-        "json_schema_keywords": [
-          "pattern",
-          "propertyNames",
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/insurance-policy/insurance-policy.test.json::invalid — unknown additional property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -190,65 +104,15 @@
         ]
       },
       {
-        "case": "tests/v3/ireland/ireland.test.json::invalid — unknown property at root",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/islamic-succession/islamic-succession.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/israel/israel.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/japan-extension/japan-extension.test.json::invalid — empty object violates minProperties: 1",
         "json_schema_keywords": [
           "minProperties"
         ]
       },
       {
-        "case": "tests/v3/japan-extension/japan-extension.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/japan/japan.test.json::invalid — empty object (minProperties: 1)",
         "json_schema_keywords": [
           "minProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/japan/japan.test.json::invalid — extensibility property with wrong name pattern",
-        "json_schema_keywords": [
-          "pattern",
-          "propertyNames",
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/japan/japan.test.json::invalid — unknown root property (unevaluatedProperties: false)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/jewish-succession/jewish-succession.test.json::invalid — additionalProperties at top level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/kinship/kinship.test.json::invalid — aiProvenance at root level (must be inside provenance)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -288,12 +152,6 @@
         "json_schema_keywords": [
           "enum",
           "if",
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/latin-america/latin-america.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
           "unevaluatedProperties"
         ]
       },
@@ -328,39 +186,9 @@
         ]
       },
       {
-        "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — unknown property at root",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/notification/notification.test.json::invalid — unevaluated property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/organisation/organisation.test.json::invalid — unevaluated property rejected",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/person/person.test.json::invalid — extension block is a string (must be object)",
-        "json_schema_keywords": [
-          "type"
-        ]
-      },
-      {
         "case": "tests/v3/person/person.test.json::invalid — phoneticReading with no properties (minProperties: 1)",
         "json_schema_keywords": [
           "minProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/pet/pet.test.json::invalid — unevaluated property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -384,33 +212,9 @@
         ]
       },
       {
-        "case": "tests/v3/relationship/relationship.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/scotland/scotland.test.json::invalid — empty object (minProperties: 1 requires at least one property)",
         "json_schema_keywords": [
           "minProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/scotland/scotland.test.json::invalid — unknown property at root",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/singapore-malaysia/singapore-malaysia.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/space/space.test.json::invalid — an off-site space may omit propertyId but not carry an unevaluated property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -421,52 +225,10 @@
         ]
       },
       {
-        "case": "tests/v3/space/space.test.json::invalid — unevaluated property rejected",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/space/space.test.json::invalid — x-inherit- space type still requires propertyId (extensions are not off-site)",
         "json_schema_keywords": [
           "if",
           "required"
-        ]
-      },
-      {
-        "case": "tests/v3/subscription/subscription.test.json::invalid — unevaluated property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/switzerland/switzerland.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/trust/trust.test.json::invalid — unknown additional property at root level (unevaluatedProperties: false)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/uae/uae.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/uk-england-wales/uk-england-wales.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/us-estate/us-estate.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       }
     ]
@@ -474,30 +236,6 @@
   "pydantic": {
     "false_reject": [],
     "false_accept": [
-      {
-        "case": "tests/v3/acknowledgement/acknowledgement.test.json::invalid — unevaluated property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/africa-customary/africa-customary.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/ai-provenance/ai-provenance.test.json::invalid — additional property not allowed (outside x-inherit-)",
-        "json_schema_keywords": [
-          "additionalProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/ai-provenance/ai-provenance.test.json::invalid — extension block is string not object",
-        "json_schema_keywords": [
-          "type"
-        ]
-      },
       {
         "case": "tests/v3/asset/asset.test.json::invalid — gemologicalCertificate with invalid laboratory enum",
         "json_schema_keywords": [
@@ -517,12 +255,6 @@
         ]
       },
       {
-        "case": "tests/v3/australia-nz/australia-nz.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/bequest/bequest.test.json::invalid — debt_forgiveness without beneficiaryId or beneficiaryOrganisation",
         "json_schema_keywords": [
           "anyOf",
@@ -536,62 +268,6 @@
           "anyOf",
           "if",
           "required"
-        ]
-      },
-      {
-        "case": "tests/v3/brazil/brazil.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/dealer-interest/dealer-interest.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/eu-succession/eu-succession.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/guardian/guardian.test.json::invalid — unknown additional property at root level (unevaluatedProperties false)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/hindu-succession/hindu-succession.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/hong-kong/hong-kong.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/india/india.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/insurance-policy/insurance-policy.test.json::invalid — non-camelCase property name",
-        "json_schema_keywords": [
-          "pattern",
-          "propertyNames",
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/insurance-policy/insurance-policy.test.json::invalid — unknown additional property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -625,65 +301,15 @@
         ]
       },
       {
-        "case": "tests/v3/ireland/ireland.test.json::invalid — unknown property at root",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/islamic-succession/islamic-succession.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/israel/israel.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/japan-extension/japan-extension.test.json::invalid — empty object violates minProperties: 1",
         "json_schema_keywords": [
           "minProperties"
         ]
       },
       {
-        "case": "tests/v3/japan-extension/japan-extension.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/japan/japan.test.json::invalid — empty object (minProperties: 1)",
         "json_schema_keywords": [
           "minProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/japan/japan.test.json::invalid — extensibility property with wrong name pattern",
-        "json_schema_keywords": [
-          "pattern",
-          "propertyNames",
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/japan/japan.test.json::invalid — unknown root property (unevaluatedProperties: false)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/jewish-succession/jewish-succession.test.json::invalid — additionalProperties at top level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/kinship/kinship.test.json::invalid — aiProvenance at root level (must be inside provenance)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -723,12 +349,6 @@
         "json_schema_keywords": [
           "enum",
           "if",
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/latin-america/latin-america.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
           "unevaluatedProperties"
         ]
       },
@@ -775,39 +395,9 @@
         ]
       },
       {
-        "case": "tests/v3/northern-ireland/northern-ireland.test.json::invalid — unknown property at root",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/notification/notification.test.json::invalid — unevaluated property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/organisation/organisation.test.json::invalid — unevaluated property rejected",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/person/person.test.json::invalid — extension block is a string (must be object)",
-        "json_schema_keywords": [
-          "type"
-        ]
-      },
-      {
         "case": "tests/v3/person/person.test.json::invalid — phoneticReading with no properties (minProperties: 1)",
         "json_schema_keywords": [
           "minProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/pet/pet.test.json::invalid — unevaluated property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -825,33 +415,9 @@
         ]
       },
       {
-        "case": "tests/v3/relationship/relationship.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/scotland/scotland.test.json::invalid — empty object (minProperties: 1 requires at least one property)",
         "json_schema_keywords": [
           "minProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/scotland/scotland.test.json::invalid — unknown property at root",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/singapore-malaysia/singapore-malaysia.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/space/space.test.json::invalid — an off-site space may omit propertyId but not carry an unevaluated property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       },
       {
@@ -862,52 +428,10 @@
         ]
       },
       {
-        "case": "tests/v3/space/space.test.json::invalid — unevaluated property rejected",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
         "case": "tests/v3/space/space.test.json::invalid — x-inherit- space type still requires propertyId (extensions are not off-site)",
         "json_schema_keywords": [
           "if",
           "required"
-        ]
-      },
-      {
-        "case": "tests/v3/subscription/subscription.test.json::invalid — unevaluated property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/switzerland/switzerland.test.json::invalid — unknown property at root level",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/trust/trust.test.json::invalid — unknown additional property at root level (unevaluatedProperties: false)",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/uae/uae.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/uk-england-wales/uk-england-wales.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
-        ]
-      },
-      {
-        "case": "tests/v3/us-estate/us-estate.test.json::invalid — unknown root property",
-        "json_schema_keywords": [
-          "unevaluatedProperties"
         ]
       }
     ]

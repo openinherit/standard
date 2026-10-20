@@ -5,8 +5,10 @@
  * Each case copies the real workflows, package manifests and release.sh into a
  * temporary directory, mutates one of them, and runs the check there. Covers A6
  * (the contents check runs before the first publish), A7 (the kit's release zip
- * carries every path its npm tarball packs) and A1, the assertion the rest
- * depend on. Every case is shown going red, so a green means something.
+ * carries every path its npm tarball packs), A8-A10 (the dist-tag and the
+ * support window are enforced, and the policy says what the machinery does)
+ * and A1, the assertion the rest depend on. Every case is shown going red, so a
+ * green means something.
  */
 import { spawnSync } from 'child_process';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync } from 'fs';
@@ -20,6 +22,8 @@ const work = mkdtempSync(join(tmpdir(), 'release-wiring-'));
 const PUBLISH = '.github/workflows/publish.yml';
 const RELEASE = 'scripts/release.sh';
 const KIT_MANIFEST = 'packages/conformance/package.json';
+const POLICY_DOC = 'docs/policies/versioning.md';
+const POLICY_STEP = /\n {6}- name: Refuse a release the support window does not allow\n {8}run: node scripts\/release-policy\.mjs --version "\$\{GITHUB_REF_NAME#v\}"\n/;
 const CHECK_STEP = /\n {6}- name: Refuse to publish a tarball that is not the standard\n {8}run: node scripts\/check-release-contents\.mjs --tag "\$\{GITHUB_REF_NAME\}"\n/;
 
 let n = 0;
@@ -34,6 +38,8 @@ function tree(mutate = (s) => s) {
   }
   mkdirSync(join(t, 'scripts'), { recursive: true });
   cpSync(join(ROOT, RELEASE), join(t, RELEASE));
+  mkdirSync(join(t, 'docs/policies'), { recursive: true });
+  cpSync(join(ROOT, POLICY_DOC), join(t, POLICY_DOC));
   const p = join(t, PUBLISH);
   const before = readFileSync(p, 'utf8');
   const after = mutate(before);
@@ -50,6 +56,25 @@ function releaseTree(mutate) {
   writeFileSync(p, after);
   return t;
 }
+/** A tree whose versioning policy is mutated. */
+function docTree(mutate) {
+  const t = tree();
+  const p = join(t, POLICY_DOC);
+  const before = readFileSync(p, 'utf8');
+  const after = mutate(before);
+  if (after === before) throw new Error('fixture drift: the versioning.md mutation changed nothing');
+  writeFileSync(p, after);
+  return t;
+}
+/** Remove `needle` once, and refuse to pass silently if it is not there. */
+const once = (needle, by = '') => (s) => {
+  if (!s.includes(needle)) throw new Error(`fixture drift: ${JSON.stringify(needle)} not found`);
+  return s.replace(needle, by);
+};
+const withoutPolicyStep = (s) => {
+  if (!POLICY_STEP.test(s)) throw new Error('fixture drift: the release-policy step is not where this test expects it');
+  return s.replace(POLICY_STEP, '\n');
+};
 /** A tree whose conformance package.json `files` list gains an entry. */
 function kitFilesTree(extra) {
   const t = tree();
@@ -80,13 +105,33 @@ const cases = [
   ['the release zip of the kit leaves out its test documents', releaseTree(dropFromKitZip('estate/')), 1, 'A7'],
   ['the kit gains a packed path the release zip does not carry', kitFilesTree('new-dir/'), 1, 'A7'],
   ['the kit zip line is commented out', releaseTree((s) => s.replace(KIT_ZIP, (line) => `# ${line.trimStart()}`)), 1, 'A7'],
+  ['a publish step loses --tag latest', tree(once('publish --tag latest --provenance', 'publish --provenance')), 1, 'A8'],
+  ['a publish step uses another dist-tag', tree(once('publish --tag latest --provenance', 'publish --tag next --provenance')), 1, 'A8'],
+  ['the release-policy step is removed', tree(withoutPolicyStep), 1, 'A9'],
+  ['the release-policy step moves after the first publish', tree((s) => {
+    const match = s.match(POLICY_STEP);
+    if (!match) throw new Error('fixture drift: the release-policy step is not where this test expects it');
+    return withoutPolicyStep(s).trimEnd() + match[0].replace(/^\n/, '\n\n');
+  }), 1, 'A9'],
+  ['the release-policy step is made unable to fail with || true', tree(once('release-policy.mjs --version "${GITHUB_REF_NAME#v}"', 'release-policy.mjs --version "${GITHUB_REF_NAME#v}" || true')), 1, 'A9'],
+  ['the release-policy step gets continue-on-error', tree(once('      - name: Refuse a release the support window does not allow\n', '      - name: Refuse a release the support window does not allow\n        continue-on-error: true\n')), 1, 'A9'],
+  ['the release-policy step gets an if: condition', tree(once('      - name: Refuse a release the support window does not allow\n', '      - name: Refuse a release the support window does not allow\n        if: false\n')), 1, 'A9'],
+  ['release.sh runs the release policy after bumping', releaseTree((s) => {
+    const m = s.match(/\n(node "\$REPO_DIR\/scripts\/release-policy\.mjs"[^\n]*\n[^\n]*\n)/);
+    if (!m) throw new Error('fixture drift: the release.sh policy line is not where this test expects it');
+    return s.replace(m[0], '\n').replace(/(\n\s*# Verify all match\n)/, `\n${m[1]}$1`);
+  }), 1, 'A9'],
+  ['release.sh stops running the release policy', releaseTree((s) => s.replace(/^([^#\n]*node[^\n]*scripts\/release-policy\.mjs)/m, '# $1')), 1, 'A9'],
+  ['the policy loses its support window', docTree(once('## Support window', '## Support')), 1, 'A10'],
+  ['the policy loses its distribution tags', docTree(once('## Distribution tags', '## Tags')), 1, 'A10'],
+  ['the policy stops naming the dist-tag', docTree((s) => s.replaceAll('`latest`', '`stable`')), 1, 'A10'],
   ['release.sh is gone', (() => { const t = tree(); rmSync(join(t, RELEASE)); return t; })(), 1, 'A7'],
 ];
 
 let failed = 0;
 for (const [name, cwd, want, rule] of cases) {
   const r = spawnSync(process.execPath, [GATE], { cwd, encoding: 'utf8' });
-  const fired = [...new Set([...r.stderr.matchAll(/\[(A\d)\]/g)].map((m) => m[1]))];
+  const fired = [...new Set([...r.stderr.matchAll(/\[(A\d+)\]/g)].map((m) => m[1]))];
   const rightRule = !rule || fired.includes(rule);
   if (r.status === want && rightRule) {
     console.log(`  ok   ${name} (exit ${want})`);

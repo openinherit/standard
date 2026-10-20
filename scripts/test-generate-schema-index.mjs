@@ -6,7 +6,9 @@
  * Each case builds a temporary v3/ tree, writes an index for it, then changes
  * the tree (or the index) and asserts the gate's exit code. Every way the
  * index can go stale is shown going red before a green from the gate on the
- * real tree means anything.
+ * real tree means anything. The real tree itself is not checked here: that is
+ * the next CI step, `generate-schema-index.mjs --check`, so a stale index fails
+ * on the step named for it and a red harness always means a broken checker.
  */
 import { spawnSync } from 'child_process';
 import { mkdtempSync, mkdirSync, rmSync, unlinkSync, writeFileSync, readFileSync } from 'fs';
@@ -50,7 +52,6 @@ const generated = (change = () => {}) => {
 };
 
 const cases = [
-  ['the real tree is current', ['--check'], 0],
   ['freshly generated', generated(), 0],
 
   // The defect this gate exists for: a schema added or removed without

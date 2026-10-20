@@ -1,5 +1,5 @@
 ---
-github_issue: https://github.com/openinherit/standard/pulls
+github_issue: https://github.com/openinherit/standard/pull/86
 ---
 
 # Proposal 0008: Every declared referential-integrity rule is enforced

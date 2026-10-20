@@ -114,6 +114,21 @@ pip install jsonschema
 python runners/run-tests.py
 ```
 
+## Running with the `inherit` CLI
+
+The standard's CLI (`packages/cli`) grades its own validator against this kit:
+
+```bash
+cd packages/cli
+go run . conformance --kit ../conformance          # or --json
+```
+
+It checks every file against the manifest's sha256 and refuses a kit whose bundled schemas are
+not the ones the CLI embeds (exit 2). Then each VALID case must be accepted and each INVALID case
+refused **by its declared rule** — `rule.keyword` at `rule.instancePath`. The verdict is
+`CONFORMANT (n/n)` (exit 0) or `NOT CONFORMANT`, naming each case that missed (exit 1). With the
+kit installed from npm, `--kit` defaults to `node_modules/@openinherit/conformance`.
+
 ## Running with the bash runner
 
 Requires a validator that accepts a file path and outputs JSON with a `valid` field:
@@ -140,10 +155,11 @@ Read `manifest.json` to enumerate all tests. For each entry:
 
 ## Implementations graded on every change
 
-In the standard's CI, three independent implementations run every case and must all give the
+In the standard's CI, four independent implementations run every case and must all give the
 manifest's verdict, with no list of tolerated disagreements: Python `jsonschema` over the bundles
-(`runners/run-tests.py`), the generated Zod validators (`@openinherit/sdk/zod`) and the generated
-pydantic models (`openinherit.models`).
+(`runners/run-tests.py`), the generated Zod validators (`@openinherit/sdk/zod`), the generated
+pydantic models (`openinherit.models`) and the `inherit` CLI (`inherit conformance`, which also
+checks each INVALID case is refused by its declared rule).
 
 ## Maintaining the kit
 

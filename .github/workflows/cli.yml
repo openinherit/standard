@@ -1,0 +1,38 @@
+name: CLI
+
+# packages/cli is the `inherit` command adopters run (validate, lint, diff,
+# conformance). Before this workflow nothing built it or ran its tests, so a
+# change could break the validator adopters use and every check stayed green.
+#   build       — the module builds, vets and passes its tests
+#   conformance — the CLI grades itself against packages/conformance: every
+#                 VALID case accepted, every INVALID case refused by its
+#                 declared rule (exit 1 otherwise; exit 2 if the kit's schemas
+#                 are not the ones the CLI embeds)
+#
+# No path filter, on purpose: a v3/ change moves both the kit and the schemas
+# the CLI embeds, and a filter on packages/cli/** would never see it.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  cli:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/cli
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: packages/cli/go.mod
+          cache-dependency-path: packages/cli/go.sum
+      - name: Build, vet and test the module
+        run: |
+          go build ./...
+          go vet ./...
+          go test ./...
+      - name: The CLI is conformant to the kit released with it
+        run: go run . conformance --kit ../conformance

@@ -58,6 +58,7 @@
     "expected/",
     "runners/",
     "manifest.json",
+    "mutations.json",
     "README.md"
   ],
   "engines": {

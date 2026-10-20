@@ -7,6 +7,10 @@ name: Runtime Validators
 #   zod     — every tests/v3 corpus case, against the register
 #   pydantic — the same corpus and register, on the lowest supported pydantic
 #              and on the newest
+#   kit      — @openinherit/conformance grades itself: one rule per INVALID
+#              case, a sha256 manifest at the kit's version. Zod (below) and
+#              pydantic (tests/test_conformance_kit.py) must then run every kit
+#              case green -- there is no register for the kit.
 
 on:
   push:
@@ -50,6 +54,25 @@ jobs:
         run: node --test scripts/test-runtime-validator-profile.mjs
       - name: Zod agrees with JSON Schema and pydantic on the agreement fixtures
         run: node --test scripts/test-runtime-validator-agreement.mjs
+      - name: Zod runs the conformance kit green
+        run: node --test scripts/test-conformance-kit-zod.mjs
+
+  kit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install jsonschema
+      - name: The kit is what the mutation catalogue builds
+        run: python3 scripts/build-conformance-kit.py --check
+      - name: The kit grades itself (K1-K6)
+        run: python3 scripts/check-conformance-kit.py
+      - name: Each kit check goes red on its defect
+        run: python3 scripts/test-check-conformance-kit.py
+      - name: The kit's own reference runner passes it
+        run: python3 packages/conformance/runners/run-tests.py
 
   pydantic:
     runs-on: ubuntu-latest

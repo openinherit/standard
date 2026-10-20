@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Four gov-oracles for lifetime transfers in `tests/oracles/`, 20 cases, each quoting its source:
+  `pet-taper-iht1984-s7` (taper relief and cumulation on a failed potentially exempt transfer, IHTA
+  1984 s.3A(4), s.7(1), s.7(4): GOV.UK's Sally example and taper table), `lifetime-gift-exemptions-iht1984`
+  (annual exemption with carry-forward, small gifts, marriage gifts, ss.19, 20, 22: GOV.UK's Mark and
+  wedding examples), `gwr-double-charges-relief-si1987-1130` (a gift with reservation charged once,
+  SI 1987/1130 reg 5: the two worked examples in its Schedule, Part II) and `poat-land-fa2004-sch15`
+  (the pre-owned assets income tax base for land, FA 2004 Sch 15 paras 4 and 13: HMRC IHTM44012 and
+  IHTM44056). Added to the Open Government Licence list in `THIRD-PARTY-NOTICES`.
 - `ProxyAuthorisation.decisionModel` (proposal 0005): whether the owner still makes the decision
   the proxy acts on (`supported`), makes it jointly with the proxy (`co_decision`), or lacks
   capacity for it so the proxy decides in their place (`substituted`). Optional; absence means not

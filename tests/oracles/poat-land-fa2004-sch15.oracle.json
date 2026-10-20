@@ -1,0 +1,85 @@
+{
+  "_doc": "Independent reference oracle, money kind. Asserts that PoatLandChargeableAmount computes the pre-owned assets income tax base for land as FA 2004 Schedule 15 enacts and HMRC's Inheritance Tax Manual works it: the appropriate rental value R × DV ÷ V (para 4(2)) less rent paid under a legal obligation (para 4(1)), with no charge where the aggregate appropriate rental value for the year is £5,000 or less (para 13), tested before the rent paid is deducted (IHTM44056). The output is the chargeable amount on which income tax is charged, not the tax. Not asserted, deliberately: the 'reduced by such proportion as is reasonable' cases of para 11(2) and (4), which need a judgement and route to a person in the rule's own fixtures. Figures read from gov.uk on sourced_at.",
+  "rule": {
+    "rule_file": "catala/transfer/PoatLandChargeableAmount.catala_en",
+    "module": "PoatLandChargeableAmount",
+    "scope": "Charge",
+    "result_field": "verdict",
+    "depends_modules": [
+      "catala/contract/ComputedOrNeedsHuman.catala_en"
+    ]
+  },
+  "statute": "Finance Act 2004 Schedule 15 paras 3, 4, 11, 13, 21",
+  "currency": "GBP",
+  "sourced_at": "2026-10-20",
+  "cases": [
+    {
+      "label": "ihtm44012-xavier-ingram-scheme",
+      "inputs": {
+        "rental_value": "40000",
+        "interest_value": "500000",
+        "land_value": "800000",
+        "rent_paid_under_legal_obligation": "0",
+        "other_appropriate_amounts_this_year": "0",
+        "exclusion": {
+          "enum": "NoExclusion"
+        }
+      },
+      "expected_money": "25000",
+      "citation_url": "https://www.gov.uk/hmrc-internal-manuals/inheritance-tax-manual/ihtm44012",
+      "citation_quote": "The POA charge first applies to Xavier on 6 April 2005 when the freehold of Greenacre is worth £800,000 and the encumbered freehold is worth £500,000. The rental value for 2005/06 is put at £40,000. The appropriate rental value is therefore 40,000 × (500,000 ÷ 800,000) = £25,000.",
+      "note": "Para 4(2): R × DV ÷ V."
+    },
+    {
+      "label": "ihtm44012-xavier-pays-20000-rent",
+      "inputs": {
+        "rental_value": "40000",
+        "interest_value": "500000",
+        "land_value": "800000",
+        "rent_paid_under_legal_obligation": "20000",
+        "other_appropriate_amounts_this_year": "0",
+        "exclusion": {
+          "enum": "NoExclusion"
+        }
+      },
+      "expected_money": "5000",
+      "citation_url": "https://www.gov.uk/hmrc-internal-manuals/inheritance-tax-manual/ihtm44012",
+      "citation_quote": "Note that if Xavier had paid £20,000 towards the rent, leaving only £5,000 in charge, this would not bring the charge within the de minimis limit",
+      "note": "Para 4(1) deducts the rent; para 13 tests the £25,000 appropriate rental value, not the £5,000 left, so the exemption does not apply."
+    },
+    {
+      "label": "ihtm44056-rental-8000-rent-4000",
+      "inputs": {
+        "rental_value": "8000",
+        "interest_value": "400000",
+        "land_value": "400000",
+        "rent_paid_under_legal_obligation": "4000",
+        "other_appropriate_amounts_this_year": "0",
+        "exclusion": {
+          "enum": "NoExclusion"
+        }
+      },
+      "expected_money": "4000",
+      "citation_url": "https://www.gov.uk/hmrc-internal-manuals/inheritance-tax-manual/ihtm44056",
+      "citation_quote": "So if the annual rental value is £8,000 and the donor pays £4,000 in rent so that the amount actually chargeable is £4,000, the exemption is lost as the annual rental value exceeds £5,000",
+      "note": "IHTM44056 gives the appropriate rental value directly; DV = V is used so that R × DV ÷ V = R. The values of DV and V are not from the manual."
+    },
+    {
+      "label": "para13-aggregate-5000-exempt",
+      "inputs": {
+        "rental_value": "5000",
+        "interest_value": "400000",
+        "land_value": "400000",
+        "rent_paid_under_legal_obligation": "0",
+        "other_appropriate_amounts_this_year": "0",
+        "exclusion": {
+          "enum": "NoExclusion"
+        }
+      },
+      "expected_money": "0",
+      "citation_url": "https://www.legislation.gov.uk/ukpga/2004/12/schedule/15/paragraph/13",
+      "citation_quote": "This paragraph applies where, in relation to any person who would (apart from this paragraph) be chargeable under this Schedule for any year of assessment, the aggregate of the amounts specified in sub-paragraph (2) in respect of that year does not exceed £5,000.",
+      "note": "Derived from the statute: exactly £5,000 does not exceed £5,000, so there is no charge. Pins the comparison as 'not more than'."
+    }
+  ]
+}

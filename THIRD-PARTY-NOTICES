@@ -43,6 +43,10 @@ citations of the rule files:
   tests/oracles/will-validity-wa1837.oracle.json
   tests/oracles/advancement-quantum-ta1925-s32.oracle.json
   tests/oracles/real-property-title-lra2002.oracle.json
+  tests/oracles/pet-taper-iht1984-s7.oracle.json
+  tests/oracles/lifetime-gift-exemptions-iht1984.oracle.json
+  tests/oracles/gwr-double-charges-relief-si1987-1130.oracle.json
+  tests/oracles/poat-land-fa2004-sch15.oracle.json
   catala/probate/IntestacyCascade.catala_en
   catala/probate/InsolventEstateAbatement.catala_en
 

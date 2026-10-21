@@ -49,7 +49,7 @@
             "const": false
           }
         },
-        "required": [ "testatorAcknowledged", "interestStatus" ]
+        "required": [ "testatorAcknowledged" ]
       },
       "then": {
         "properties": {
@@ -67,7 +67,7 @@
             "const": true
           }
         },
-        "required": [ "testatorAcknowledged", "interestStatus" ]
+        "required": [ "testatorAcknowledged" ]
       },
       "then": {
         "properties": {

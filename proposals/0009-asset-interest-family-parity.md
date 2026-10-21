@@ -1,5 +1,5 @@
 ---
-github_issue: pending
+github_issue: https://github.com/openinherit/standard/pull/98
 ---
 
 # Proposal 0009: The family interest record is as expressive as the dealer one

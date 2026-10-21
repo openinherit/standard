@@ -511,6 +511,212 @@
         }
       },
       "valid": false
+    },
+    {
+      "description": "valid — family interest carrying visibility, media, initiator, status and disposition",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a00",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "visibility": "beneficiary_visible",
+        "images": [
+          {
+            "url": "https://storage.example.com/interests/watch-video.mp4",
+            "caption": "Tom explaining why he would like Grandad's watch",
+            "mediaType": "video/mp4"
+          }
+        ],
+        "communicationInitiatedBy": "testator",
+        "interestStatus": "responded",
+        "testatorDisposition": "tentatively_earmarked",
+        "testatorAcknowledged": true,
+        "notes": "Asked by Grandad at the family lunch which things each grandchild would like. Not a gift — only the will disposes."
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — a submitted interest the person raised themselves, visible to the testator only",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a01",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "visibility": "testator_only",
+        "communicationInitiatedBy": "interested_party",
+        "interestStatus": "submitted"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — acknowledged with no decision yet (undecided)",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a02",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "interestStatus": "acknowledged",
+        "communicationInitiatedBy": "proxy"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — withdrawn after the testator had declined",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a03",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "interestStatus": "withdrawn",
+        "testatorDisposition": "declined",
+        "communicationInitiatedBy": "executor"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — superseded after being noted",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a04",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "interestStatus": "superseded",
+        "testatorDisposition": "noted"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — visibility is not a common/visibility.json value",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a05",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "visibility": "everyone"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — an image without a url",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a06",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "images": [
+          {
+            "caption": "no url"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — communicationInitiatedBy buyer is the commercial edge's value",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a07",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "communicationInitiatedBy": "buyer"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — interestStatus accepted: an expression of interest binds no one",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a08",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "interestStatus": "accepted"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — testatorDisposition willing_to_sell is the commercial edge's value",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a09",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "interestStatus": "responded",
+        "testatorDisposition": "willing_to_sell"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — responded without a testatorDisposition",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a10",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "interestStatus": "responded"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — a testatorDisposition on an interest the testator has not seen",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a11",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "interestStatus": "submitted",
+        "testatorDisposition": "noted"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — a testatorDisposition with no interestStatus",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a12",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "testatorDisposition": "declined"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — testatorAcknowledged false but interestStatus acknowledged",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a13",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "testatorAcknowledged": false,
+        "interestStatus": "acknowledged"
+      },
+      "valid": false
+    },
+    {
+      "description": "invalid — testatorAcknowledged true but interestStatus submitted",
+      "data": {
+        "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a14",
+        "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
+        "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+        "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
+        "interestLevel": "strongly_wants",
+        "testatorAcknowledged": true,
+        "interestStatus": "submitted"
+      },
+      "valid": false
     }
   ]
 }

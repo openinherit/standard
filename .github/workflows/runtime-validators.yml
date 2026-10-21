@@ -81,6 +81,10 @@ jobs:
       matrix:
         # 2.11 is the floor in pyproject.toml: 2.8–2.10 refuse valid corpus
         # documents with these models. "latest" catches the next break early.
+        # Each value names a required check on main ("pydantic (2.11.7)",
+        # "pydantic (latest)"). Changing a value renames its check, and the
+        # old name then never reports, so every PR waits on it: update the
+        # main-protection ruleset in the same change.
         pydantic: ["2.11.7", "latest"]
     steps:
       - uses: actions/checkout@v6

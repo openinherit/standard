@@ -170,7 +170,7 @@ Records that an entity was deleted. Carries the entity's type and id and when it
 
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
-| `entityType` | one of `person`, `kinship`, `relationship`, `property`, `asset`, `asset_collection`, `liability`, `bequest`, `trust`, `executor`, `guardian`, `wish`, `document`, `nonprobate_transfer`, `proxy_authorisation`, `power_of_appointment`, `valuation`, `lifetime_transfer`, `organisation`, `space`, … (+4 more) | yes | The type of entity that was deleted. asset and asset_collection are spelt as on splitFrom and mergedInto; every other entity with its own root array is named the same way |
+| `entityType` | one of `person`, `kinship`, `relationship`, `property`, `asset`, `asset_collection`, `liability`, `bequest`, `trust`, `executor`, `guardian`, `wish`, `document`, `nonprobate_transfer`, `proxy_authorisation`, `power_of_appointment`, `valuation`, `lifetime_transfer`, `organisation`, `space`, … (+6 more) | yes | The type of entity that was deleted. asset and asset_collection are spelt as on splitFrom and mergedInto; every other entity with its own root array in schema.json or catalogue.json is named the same way |
 | `id` | `string` (uuid) | yes | The id the deleted entity had |
 | `deletedAt` | `string` (date-time) | yes | When the entity was deleted |
 | `reason` | `string` | | Why the entity was deleted |

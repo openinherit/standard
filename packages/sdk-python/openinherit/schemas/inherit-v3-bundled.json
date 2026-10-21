@@ -1406,6 +1406,22 @@
           "required": true,
           "code": "INHERIT_TOMBSTONE_LIVE",
           "errorMessage": "A tombstoned id is still a live dealer interest"
+        },
+        {
+          "field": "tombstones[].id",
+          "references": "legacyContacts[].id",
+          "kind": "absent",
+          "required": true,
+          "code": "INHERIT_TOMBSTONE_LIVE",
+          "errorMessage": "A tombstoned id is still a live legacy contact"
+        },
+        {
+          "field": "tombstones[].id",
+          "references": "recommendedActions[].id",
+          "kind": "absent",
+          "required": true,
+          "code": "INHERIT_TOMBSTONE_LIVE",
+          "errorMessage": "A tombstoned id is still a live recommended action"
         }
       ],
       "type": "array",
@@ -1485,7 +1501,7 @@
       "required": [ "entityType", "id", "deletedAt" ],
       "properties": {
         "entityType": {
-          "description": "The type of entity that was deleted. asset and asset_collection are spelt as on splitFrom and mergedInto; every other entity with its own root array is named the same way",
+          "description": "The type of entity that was deleted. asset and asset_collection are spelt as on splitFrom and mergedInto; every other entity with its own root array in schema.json or catalogue.json is named the same way",
           "enum": [
             "person",
             "kinship",
@@ -1510,7 +1526,9 @@
             "insurance_policy",
             "pet",
             "asset_interest",
-            "dealer_interest"
+            "dealer_interest",
+            "legacy_contact",
+            "recommended_action"
           ]
         },
         "id": {

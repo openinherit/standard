@@ -1067,7 +1067,7 @@ type Tombstone struct {
 	// DeletedAt When the entity was deleted
 	DeletedAt time.Time `json:"deletedAt"`
 
-	// EntityType The type of entity that was deleted. asset and asset_collection are spelt as on splitFrom and mergedInto; every other entity with its own root array is named the same way
+	// EntityType The type of entity that was deleted. asset and asset_collection are spelt as on splitFrom and mergedInto; every other entity with its own root array in schema.json or catalogue.json is named the same way
 	EntityType interface{} `json:"entityType"`
 
 	// Id The id the deleted entity had

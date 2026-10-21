@@ -9490,9 +9490,9 @@ export type IntegrityPath = string;
  */
 export type Tombstone = {
     /**
-     * The type of entity that was deleted. asset and asset_collection are spelt as on splitFrom and mergedInto; every other entity with its own root array is named the same way
+     * The type of entity that was deleted. asset and asset_collection are spelt as on splitFrom and mergedInto; every other entity with its own root array in schema.json or catalogue.json is named the same way
      */
-    entityType: 'person' | 'kinship' | 'relationship' | 'property' | 'asset' | 'asset_collection' | 'liability' | 'bequest' | 'trust' | 'executor' | 'guardian' | 'wish' | 'document' | 'nonprobate_transfer' | 'proxy_authorisation' | 'power_of_appointment' | 'valuation' | 'lifetime_transfer' | 'organisation' | 'space' | 'insurance_policy' | 'pet' | 'asset_interest' | 'dealer_interest';
+    entityType: 'person' | 'kinship' | 'relationship' | 'property' | 'asset' | 'asset_collection' | 'liability' | 'bequest' | 'trust' | 'executor' | 'guardian' | 'wish' | 'document' | 'nonprobate_transfer' | 'proxy_authorisation' | 'power_of_appointment' | 'valuation' | 'lifetime_transfer' | 'organisation' | 'space' | 'insurance_policy' | 'pet' | 'asset_interest' | 'dealer_interest' | 'legacy_contact' | 'recommended_action';
     /**
      * The id the deleted entity had
      */

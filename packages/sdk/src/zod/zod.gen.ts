@@ -78,7 +78,9 @@ export const zTombstone = z.strictObject({
         'insurance_policy',
         'pet',
         'asset_interest',
-        'dealer_interest'
+        'dealer_interest',
+        'legacy_contact',
+        'recommended_action'
     ]),
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     deletedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
@@ -9107,6 +9109,22 @@ const zSchema$generated = z.intersection(z.unknown(), z.object({
             required: true,
             code: 'INHERIT_TOMBSTONE_LIVE',
             errorMessage: 'A tombstoned id is still a live dealer interest'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'legacyContacts[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live legacy contact'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'recommendedActions[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live recommended action'
         }
     ])
 }));

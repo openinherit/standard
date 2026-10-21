@@ -245,7 +245,7 @@ const LIVE_ENTITY_ARRAYS = [
   'liabilities', 'bequests', 'trusts', 'executors', 'guardians', 'wishes', 'documents',
   'nonprobateTransfers', 'proxyAuthorisations', 'powersOfAppointment', 'valuations',
   'lifetimeTransfers', 'organisations', 'spaces', 'insurancePolicies', 'pets',
-  'assetInterests', 'dealerInterests',
+  'assetInterests', 'dealerInterests', 'legacyContacts', 'recommendedActions',
 ];
 
 (doc.tombstones || []).forEach((t, i) => {

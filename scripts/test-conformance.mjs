@@ -90,6 +90,15 @@ function checkAcyclic(doc, constraint) {
 }
 
 /**
+ * kind 'absent' — the value at field must NOT be present at references (proposal
+ * 0010): a tombstoned id must not also be a live entity.
+ */
+function checkAbsent(doc, constraint) {
+  const live = new Set(resolvePath(doc, constraint.references).map(String));
+  return resolvePath(doc, constraint.field).filter(v => live.has(String(v)));
+}
+
+/**
  * Run all 26 integrity constraints against a document.
  * Returns an array of { constraint, broken } for any failures.
  */
@@ -107,13 +116,14 @@ function checkAllConstraints(doc) {
   for (const group of Object.values(fieldGroups)) {
     const field = group[0].field;
     const kind = group[0].kind ?? 'existence';
-    if (kind !== 'existence' && kind !== 'acyclic') {
+    if (kind !== 'existence' && kind !== 'acyclic' && kind !== 'absent') {
       // A skipped constraint is a gate that reports green.
       throw new Error(`INHERIT_CONSTRAINT_UNKNOWN: ${kind} on ${field}`);
     }
-    if (kind === 'acyclic') {
+    if (kind === 'acyclic' || kind === 'absent') {
+      // Every row must hold on its own: neither kind has multi-target semantics.
       for (const c of group) {
-        const broken = checkAcyclic(doc, c);
+        const broken = kind === 'acyclic' ? checkAcyclic(doc, c) : checkAbsent(doc, c);
         if (broken.length > 0) failures.push({ field, broken, constraint: c });
       }
       continue;

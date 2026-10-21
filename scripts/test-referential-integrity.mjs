@@ -885,6 +885,7 @@ console.log('\nTombstones — a deleted id must not be live:');
 const TOMB_DIR = resolve(RI_DIR, 'tombstones');
 const WITH_TOMBSTONES = resolve(TOMB_DIR, 'with-tombstones.json');
 const LIVE_SAME_ID = resolve(TOMB_DIR, 'live-same-id.json');
+const NO_TOMBSTONES = resolve(TOMB_DIR, 'no-tombstones.json');
 const withTombstones = JSON.parse(readFileSync(WITH_TOMBSTONES, 'utf8'));
 const absentRows = constraints.filter(c => (c.kind ?? 'existence') === 'absent');
 
@@ -893,11 +894,14 @@ const absentRows = constraints.filter(c => (c.kind ?? 'existence') === 'absent')
 // without a tombstone row.
 function entityArrays(rootFile) {
   const root = JSON.parse(readFileSync(resolve(ROOT, 'v3', rootFile), 'utf8'));
-  const load = ref => {
+  // Follow $ref until it lands on a definition: catalogue.json's legacyContacts
+  // points at an items node that is itself only a $ref.
+  const load = (ref, from = rootFile) => {
     const [file, frag = ''] = ref.split('#');
-    let node = JSON.parse(readFileSync(resolve(ROOT, 'v3', file || rootFile), 'utf8'));
+    const at = file || from;
+    let node = JSON.parse(readFileSync(resolve(ROOT, 'v3', at), 'utf8'));
     for (const seg of frag.split('/').filter(Boolean)) node = node[seg];
-    return node;
+    return node.$ref ? load(node.$ref, at) : node;
   };
   return Object.entries(root.properties)
     .filter(([, p]) => p.items?.$ref)
@@ -909,7 +913,7 @@ function entityArrays(rootFile) {
 
 test('every entity array in schema.json and catalogue.json has a tombstone row', () => {
   const arrays = new Set([...entityArrays('schema.json'), ...entityArrays('catalogue.json')]);
-  if (arrays.size < 20) throw new Error(`only ${arrays.size} entity arrays found — the derivation is broken`);
+  if (arrays.size < 26) throw new Error(`only ${arrays.size} entity arrays found — the derivation is broken`);
   const covered = new Set(absentRows.filter(c => c.field === 'tombstones[].id').map(c => c.references));
   const gaps = [...arrays].filter(a => !covered.has(`${a}[].id`));
   if (gaps.length > 0) throw new Error(`no tombstones[].id absent row for: ${gaps.join(', ')}`);
@@ -926,6 +930,15 @@ test('every tombstone row is required and reports INHERIT_TOMBSTONE_LIVE, a regi
 test('with-tombstones.json carries tombstones and passes validate-refs.mjs', () => {
   if (!(withTombstones.tombstones?.length > 0)) throw new Error('the fixture carries no tombstones — vacuous');
   const { status, out } = runValidator(WITH_TOMBSTONES);
+  if (status !== 0) throw new Error(`exit ${status}, expected 0:\n${out}`);
+});
+
+test('no-tombstones.json — a versioned document that deletes nothing — passes validate-refs.mjs', () => {
+  const none = JSON.parse(readFileSync(NO_TOMBSTONES, 'utf8'));
+  if ('tombstones' in none) throw new Error('the fixture carries tombstones — it is not the none case');
+  const hits = absentRows.flatMap(c => checkAbsent(none, c));
+  if (hits.length > 0) throw new Error(`absent rows fired with no tombstones: ${JSON.stringify(hits)}`);
+  const { status, out } = runValidator(NO_TOMBSTONES);
   if (status !== 0) throw new Error(`exit ${status}, expected 0:\n${out}`);
 });
 

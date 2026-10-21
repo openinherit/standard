@@ -14,6 +14,7 @@ on:
       - 'reference-data/jurisdiction-*.json'
       - 'extensions-registry.json'
       - 'scripts/check-jurisdiction-cascade.py'
+      - 'scripts/test-conformance.mjs'
   pull_request:
     paths:
       - 'v3/**'
@@ -25,6 +26,7 @@ on:
       - 'reference-data/jurisdiction-*.json'
       - 'extensions-registry.json'
       - 'scripts/check-jurisdiction-cascade.py'
+      - 'scripts/test-conformance.mjs'
 
 jobs:
   validate:
@@ -76,3 +78,6 @@ jobs:
 
       - name: The cascade gate can still go red
         run: bash scripts/test-check-jurisdiction-cascade.sh
+
+      - name: Conformance levels 1-3 hold, and the constraint list is the one pinned
+        run: pnpm run test:conformance-levels

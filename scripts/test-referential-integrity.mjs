@@ -903,7 +903,8 @@ function entityArrays(rootFile) {
     .filter(([, p]) => p.items?.$ref)
     .filter(([, p]) => (load(p.items.$ref).required ?? []).includes('id'))
     .map(([name]) => name)
-    .filter(name => name !== 'importSources'); // document metadata, not an entity
+    // importSources is document metadata, and tombstones are the deleted, not the live
+    .filter(name => name !== 'importSources' && name !== 'tombstones');
 }
 
 test('every entity array in schema.json and catalogue.json has a tombstone row', () => {

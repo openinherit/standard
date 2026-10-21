@@ -97,6 +97,14 @@
       "type": "string",
       "maxLength": 2000
     },
+    "tombstones": {
+      "description": "Entities deleted since the version named by previousVersionId, one entry each (proposal 0010). Same shape and same Level 2 rule as the root schema",
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "schema.json#/properties/tombstones/items"
+      }
+    },
     "assets": {
       "description": "The catalogued items",
       "type": "array",

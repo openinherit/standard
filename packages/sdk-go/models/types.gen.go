@@ -2078,6 +2078,9 @@ type AssetInterest struct {
 	// CollectionId Reference to an AssetCollection.id, if the interest is in an entire collection
 	CollectionId *openapi_types.UUID `json:"collectionId,omitempty"`
 
+	// CommunicationInitiatedBy Who raised this interest. Modelled on dealer-interest communicationInitiatedBy. An interest the testator invited is evidence of the testator's own initiative, and one the person raised unprompted is the case an undue-influence review looks at, so the two are recorded rather than inferred. Distinct from sourceType, which is the channel
+	CommunicationInitiatedBy interface{} `json:"communicationInitiatedBy,omitempty"`
+
 	// ExpressedAt When this interest was expressed or recorded
 	ExpressedAt *time.Time `json:"expressedAt,omitempty"`
 
@@ -2087,11 +2090,17 @@ type AssetInterest struct {
 	// Id Unique identifier for this interest record
 	Id openapi_types.UUID `json:"id"`
 
+	// Images Photographs, videos, voice notes or document scans supporting this expression of interest — for example the person explaining why the item matters to them. Use mediaType for the format
+	Images *[]Media `json:"images,omitempty"`
+
 	// IntentType The nature of the interest being expressed. Distinguishes between wanting to acquire, wanting to receive, wanting to allocate to someone, willingness to sell, and soft admiration
 	IntentType *AssetInterest_IntentType `json:"intentType,omitempty"`
 
 	// InterestLevel How strongly the beneficiary has expressed interest
 	InterestLevel interface{} `json:"interestLevel"`
+
+	// InterestStatus Where this expression of interest has got to. Modelled on dealer-interest offerStatus, without the stages of a priced offer. An expression of interest binds no one at any stage; the testator's answer is testatorDisposition
+	InterestStatus interface{} `json:"interestStatus,omitempty"`
 
 	// Notes Additional context about this interest
 	Notes *string `json:"notes,omitempty"`
@@ -2174,9 +2183,16 @@ type AssetInterest struct {
 	// SourceType How this interest was communicated or recorded
 	SourceType interface{} `json:"sourceType,omitempty"`
 
-	// TestatorAcknowledged Whether the testator has seen and acknowledged this interest
+	// TestatorAcknowledged Whether the testator has seen and acknowledged this interest. Deprecated: use interestStatus, which says what happened after acknowledgement as well. true corresponds to an interestStatus other than submitted, false to submitted; the two may not disagree
+	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 	TestatorAcknowledged *bool `json:"testatorAcknowledged,omitempty"`
-	union                json.RawMessage
+
+	// TestatorDisposition The testator's response to this expression of interest. Modelled on dealer-interest testatorDisposition. Never a gift and never a disposition: only a will or a bequest disposes. A direction about how the item should be distributed is a wish, not a response
+	TestatorDisposition interface{} `json:"testatorDisposition,omitempty"`
+
+	// Visibility Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records
+	Visibility *Visibility `json:"visibility,omitempty"`
+	union      json.RawMessage
 }
 
 // AssetInterestExpressedByRole0 defines model for .
@@ -2871,8 +2887,8 @@ type DealerInterest struct {
 	// OfferStatus Current status of the offer or expression of interest
 	OfferStatus interface{} `json:"offerStatus"`
 
-	// PrivacyLevel Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches
-	PrivacyLevel interface{} `json:"privacyLevel"`
+	// PrivacyLevel Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records
+	PrivacyLevel Visibility `json:"privacyLevel"`
 
 	// Provenance Consolidated provenance metadata for any entity — replaces the 5-7 scattered provenance fields that were previously repeated on every entity. Tracks how the data was created, by whom, and whether a human has verified it
 	Provenance *Provenance `json:"provenance,omitempty"`
@@ -8325,6 +8341,11 @@ func (t AssetInterest) MarshalJSON() ([]byte, error) {
 		}
 	}
 
+	object["communicationInitiatedBy"], err = json.Marshal(t.CommunicationInitiatedBy)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'communicationInitiatedBy': %w", err)
+	}
+
 	if t.ExpressedAt != nil {
 		object["expressedAt"], err = json.Marshal(t.ExpressedAt)
 		if err != nil {
@@ -8344,6 +8365,13 @@ func (t AssetInterest) MarshalJSON() ([]byte, error) {
 		return nil, fmt.Errorf("error marshaling 'id': %w", err)
 	}
 
+	if t.Images != nil {
+		object["images"], err = json.Marshal(t.Images)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'images': %w", err)
+		}
+	}
+
 	if t.IntentType != nil {
 		object["intentType"], err = json.Marshal(t.IntentType)
 		if err != nil {
@@ -8354,6 +8382,11 @@ func (t AssetInterest) MarshalJSON() ([]byte, error) {
 	object["interestLevel"], err = json.Marshal(t.InterestLevel)
 	if err != nil {
 		return nil, fmt.Errorf("error marshaling 'interestLevel': %w", err)
+	}
+
+	object["interestStatus"], err = json.Marshal(t.InterestStatus)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'interestStatus': %w", err)
 	}
 
 	if t.Notes != nil {
@@ -8435,6 +8468,18 @@ func (t AssetInterest) MarshalJSON() ([]byte, error) {
 			return nil, fmt.Errorf("error marshaling 'testatorAcknowledged': %w", err)
 		}
 	}
+
+	object["testatorDisposition"], err = json.Marshal(t.TestatorDisposition)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'testatorDisposition': %w", err)
+	}
+
+	if t.Visibility != nil {
+		object["visibility"], err = json.Marshal(t.Visibility)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'visibility': %w", err)
+		}
+	}
 	b, err = json.Marshal(object)
 	return b, err
 }
@@ -8464,6 +8509,13 @@ func (t *AssetInterest) UnmarshalJSON(b []byte) error {
 		}
 	}
 
+	if raw, found := object["communicationInitiatedBy"]; found {
+		err = json.Unmarshal(raw, &t.CommunicationInitiatedBy)
+		if err != nil {
+			return fmt.Errorf("error reading 'communicationInitiatedBy': %w", err)
+		}
+	}
+
 	if raw, found := object["expressedAt"]; found {
 		err = json.Unmarshal(raw, &t.ExpressedAt)
 		if err != nil {
@@ -8485,6 +8537,13 @@ func (t *AssetInterest) UnmarshalJSON(b []byte) error {
 		}
 	}
 
+	if raw, found := object["images"]; found {
+		err = json.Unmarshal(raw, &t.Images)
+		if err != nil {
+			return fmt.Errorf("error reading 'images': %w", err)
+		}
+	}
+
 	if raw, found := object["intentType"]; found {
 		err = json.Unmarshal(raw, &t.IntentType)
 		if err != nil {
@@ -8496,6 +8555,13 @@ func (t *AssetInterest) UnmarshalJSON(b []byte) error {
 		err = json.Unmarshal(raw, &t.InterestLevel)
 		if err != nil {
 			return fmt.Errorf("error reading 'interestLevel': %w", err)
+		}
+	}
+
+	if raw, found := object["interestStatus"]; found {
+		err = json.Unmarshal(raw, &t.InterestStatus)
+		if err != nil {
+			return fmt.Errorf("error reading 'interestStatus': %w", err)
 		}
 	}
 
@@ -8580,6 +8646,20 @@ func (t *AssetInterest) UnmarshalJSON(b []byte) error {
 		err = json.Unmarshal(raw, &t.TestatorAcknowledged)
 		if err != nil {
 			return fmt.Errorf("error reading 'testatorAcknowledged': %w", err)
+		}
+	}
+
+	if raw, found := object["testatorDisposition"]; found {
+		err = json.Unmarshal(raw, &t.TestatorDisposition)
+		if err != nil {
+			return fmt.Errorf("error reading 'testatorDisposition': %w", err)
+		}
+	}
+
+	if raw, found := object["visibility"]; found {
+		err = json.Unmarshal(raw, &t.Visibility)
+		if err != nil {
+			return fmt.Errorf("error reading 'visibility': %w", err)
 		}
 	}
 

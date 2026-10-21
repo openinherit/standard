@@ -23,6 +23,7 @@ Schema `$id`: `https://openinherit.org/v3/catalogue.json`
 | `versionedAt` | `string` (date-time) | | When this version of the document was created. Courts and regulators care about when changes were made, not just which version number |
 | `previousVersionId` | `string` or `null` (uuid) | | Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version |
 | `changeDescription` | `string` | | Human-readable summary of what changed in this version. Like a commit message for the document |
+| `tombstones` | array of `$ref: schema.json#/properties/tombstones/items` | | Entities deleted since the version named by previousVersionId, one entry each (proposal 0010). Same shape and same Level 2 rule as the root schema |
 | `assets` | array of [Asset](asset.md) | yes | The catalogued items |
 | `assetCollections` | array of [Asset Collection](asset-collection.md) | | Named groupings of assets |
 | `organisations` | array of [Organisation](organisation.md) | | Organisations associated with catalogued assets — dealers, retailers, valuers, auction houses |

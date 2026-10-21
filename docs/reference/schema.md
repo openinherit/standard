@@ -24,6 +24,7 @@ Schema `$id`: `https://openinherit.org/v3/schema.json`
 | `versionedAt` | `string` (date-time) | | When this version of the document was created. Courts and regulators care about when changes were made, not just which version number |
 | `previousVersionId` | `string` or `null` (uuid) | | Reference to the document ID of the previous version. Creates a linked list of document versions enabling version chain traversal. Null for the first version |
 | `changeDescription` | `string` | | Human-readable summary of what changed in this version. Like a commit message for the document |
+| `tombstones` | array of [Tombstone](#def-Tombstone) | | Entities deleted since the version named by previousVersionId, one entry each. A tombstone is what lets a document carry a change set and not only a full snapshot: without one, an entity missing from a newer version may have been deleted or may simply not have been exported (proposal 0010) |
 | `estate` | [Estate](estate.md) | yes, unless `conformanceProfile` is `catalogue` | The single estate record for this document |
 | `people` | array of [Person](person.md) | yes, unless `conformanceProfile` is `catalogue` | All people involved in the estate — testator, beneficiaries, executors, witnesses, guardians, etc |
 | `kinships` | array of [Kinship](kinship.md) | | Familial bonds between people in the estate. Essential for intestacy calculations |
@@ -112,7 +113,7 @@ Also accepts properties whose names match `^x-inherit-[a-z][a-z0-9-]{1,54}$`.
 | `field` | [IntegrityPath](#def-IntegrityPath) | yes | The field containing the reference (source) |
 | `references` | [IntegrityPath](#def-IntegrityPath) | yes | The target array + id field that must contain the referenced value |
 | `required` | `boolean` | | If true, a broken reference is always an error. If false, the field may reference multiple target arrays (grouped by field path) |
-| `kind` | one of `existence`, `acyclic` | | The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops |
+| `kind` | one of `existence`, `acyclic`, `absent` | | The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops. 'absent' requires the reverse of 'existence': the value at field must NOT be present in the target array. The tombstone rows use it — an id the document says was deleted must not also be live |
 | `maxDepth` | `integer` | | For kind 'acyclic': the maximum number of hops a containment chain may have before it is rejected as unreasonably deep. A chain longer than this fails with INHERIT_DEPTH_EXCEEDED even if it is acyclic |
 | `code` | `string` | yes | Machine-readable error code from the INHERIT error vocabulary |
 | `errorMessage` | `string` | yes | Human-readable description of the constraint violation |
@@ -160,3 +161,16 @@ Type: `string`
 | `triggeredBy` | `string` | | What data gap or condition generated this action |
 | `relatedEntityType` | `string` | | Entity type this action relates to |
 | `relatedEntityId` | `string` (uuid) | | ID of the specific entity this action relates to |
+
+<a id="def-Tombstone"></a>
+
+### Tombstone
+
+Records that an entity was deleted. Carries the entity's type and id and when it was deleted, never the deleted record itself
+
+| Property | Type | Required | Description |
+| --- | --- | --- | --- |
+| `entityType` | one of `person`, `kinship`, `relationship`, `property`, `asset`, `asset_collection`, `liability`, `bequest`, `trust`, `executor`, `guardian`, `wish`, `document`, `nonprobate_transfer`, `proxy_authorisation`, `power_of_appointment`, `valuation`, `lifetime_transfer`, `organisation`, `space`, … (+4 more) | yes | The type of entity that was deleted. asset and asset_collection are spelt as on splitFrom and mergedInto; every other entity with its own root array is named the same way |
+| `id` | `string` (uuid) | yes | The id the deleted entity had |
+| `deletedAt` | `string` (date-time) | yes | When the entity was deleted |
+| `reason` | `string` | | Why the entity was deleted |

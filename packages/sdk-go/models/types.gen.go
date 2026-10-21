@@ -533,7 +533,7 @@ type IntegrityConstraint struct {
 	// Field A path expression for referential integrity constraints. Supports camelCase field paths and x-inherit-* extension block paths
 	Field IntegrityPath `json:"field"`
 
-	// Kind The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops
+	// Kind The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops. 'absent' requires the reverse of 'existence': the value at field must NOT be present in the target array. The tombstone rows use it — an id the document says was deleted must not also be live
 	Kind interface{} `json:"kind,omitempty"`
 
 	// MaxDepth For kind 'acyclic': the maximum number of hops a containment chain may have before it is rejected as unreasonably deep. A chain longer than this fails with INHERIT_DEPTH_EXCEEDED even if it is acyclic
@@ -1060,6 +1060,21 @@ type TestamentaryCapacity struct {
 
 	// Notes Additional notes on the capacity assessment
 	Notes *string `json:"notes,omitempty"`
+}
+
+// Tombstone Records that an entity was deleted. Carries the entity's type and id and when it was deleted, never the deleted record itself
+type Tombstone struct {
+	// DeletedAt When the entity was deleted
+	DeletedAt time.Time `json:"deletedAt"`
+
+	// EntityType The type of entity that was deleted. asset and asset_collection are spelt as on splitFrom and mergedInto; every other entity with its own root array is named the same way
+	EntityType interface{} `json:"entityType"`
+
+	// Id The id the deleted entity had
+	Id openapi_types.UUID `json:"id"`
+
+	// Reason Why the entity was deleted
+	Reason *string `json:"reason,omitempty"`
 }
 
 // TrustAppointee A person appointed to a governance role in the trust — trustee, protector, or enforcer
@@ -2763,6 +2778,9 @@ type Catalogue struct {
 
 	// Spaces Physical storage locations for items in this catalogue. Each asset can reference a space via spaceId. Critical for collectors with items across multiple properties or countries — affects probate jurisdiction and dealer collection logistics
 	Spaces *[]Space `json:"spaces,omitempty"`
+
+	// Tombstones Entities deleted since the version named by previousVersionId, one entry each (proposal 0010). Same shape and same Level 2 rule as the root schema
+	Tombstones *[]Tombstone `json:"tombstones,omitempty"`
 
 	// Valuations Valuations of items and collections
 	Valuations *[]Valuation `json:"valuations,omitempty"`
@@ -6079,6 +6097,9 @@ type Schema struct {
 
 	// Spaces Spaces within properties — rooms, outbuildings, storage areas, and outdoor zones where assets are located
 	Spaces *[]Space `json:"spaces,omitempty"`
+
+	// Tombstones Entities deleted since the version named by previousVersionId, one entry each. A tombstone is what lets a document carry a change set and not only a full snapshot: without one, an entity missing from a newer version may have been deleted or may simply not have been exported (proposal 0010)
+	Tombstones *[]Tombstone `json:"tombstones,omitempty"`
 
 	// Trusts Trusts — testamentary or inter vivos — associated with the estate
 	Trusts *[]Trust `json:"trusts,omitempty"`

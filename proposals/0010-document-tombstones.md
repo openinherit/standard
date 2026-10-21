@@ -1,5 +1,5 @@
 ---
-github_issue: https://github.com/openinherit/standard/pulls
+github_issue: https://github.com/openinherit/standard/pull/100
 ---
 
 # Proposal 0010: A document can say an entity was deleted

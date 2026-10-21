@@ -72,15 +72,9 @@
       "format": "uuid"
     },
     "privacyLevel": {
-      "description": "Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches",
-      "$comment": "testator_only: only the testator can see this dealer interest. proxy_visible: the testator and authorised proxy can see it. executor_visible: the testator, proxy, and executor can see it. all_parties: visible to all parties with access to the estate data.",
+      "description": "Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches. Uses the shared common/visibility.json levels, so a dealer interest and an asset interest say who may see them the same way",
       "examples": [ "proxy_visible", "executor_visible" ],
-      "enum": [
-        "testator_only",
-        "proxy_visible",
-        "executor_visible",
-        "all_parties"
-      ]
+      "$ref": "common/visibility.json"
     },
     "communicationInitiatedBy": {
       "description": "Who initiated the communication about this potential transaction",

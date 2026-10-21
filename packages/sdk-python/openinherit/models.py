@@ -5315,6 +5315,27 @@ class SourceType(Enum):
     manual = 'manual'
 
 
+class InterestStatus(Enum):
+    submitted = 'submitted'
+    acknowledged = 'acknowledged'
+    responded = 'responded'
+    withdrawn = 'withdrawn'
+    superseded = 'superseded'
+
+
+class TestatorDisposition(Enum):
+    noted = 'noted'
+    tentatively_earmarked = 'tentatively_earmarked'
+    declined = 'declined'
+
+
+class CommunicationInitiatedBy(Enum):
+    interested_party = 'interested_party'
+    testator = 'testator'
+    proxy = 'proxy'
+    executor = 'executor'
+
+
 class ExpressedByRole(Enum):
     testator = 'testator'
     beneficiary = 'beneficiary'
@@ -5466,8 +5487,33 @@ class AssetInterest2(BaseModel):
     )
     testatorAcknowledged: bool | None = Field(
         False,
-        description='Whether the testator has seen and acknowledged this interest',
+        deprecated=True,
+        description='Whether the testator has seen and acknowledged this interest. Deprecated: use interestStatus, which says what happened after acknowledgement as well. true corresponds to an interestStatus other than submitted, false to submitted; the two may not disagree',
         examples=[True, False],
+    )
+    interestStatus: InterestStatus | None = Field(
+        None,
+        description="Where this expression of interest has got to. Modelled on dealer-interest offerStatus, without the stages of a priced offer. An expression of interest binds no one at any stage; the testator's answer is testatorDisposition",
+        examples=['submitted', 'responded'],
+    )
+    testatorDisposition: TestatorDisposition | None = Field(
+        None,
+        description="The testator's response to this expression of interest. Modelled on dealer-interest testatorDisposition. Never a gift and never a disposition: only a will or a bequest disposes. A direction about how the item should be distributed is a wish, not a response",
+        examples=['noted', 'tentatively_earmarked'],
+    )
+    communicationInitiatedBy: CommunicationInitiatedBy | None = Field(
+        None,
+        description="Who raised this interest. Modelled on dealer-interest communicationInitiatedBy. An interest the testator invited is evidence of the testator's own initiative, and one the person raised unprompted is the case an undue-influence review looks at, so the two are recorded rather than inferred. Distinct from sourceType, which is the channel",
+        examples=['testator', 'interested_party'],
+    )
+    visibility: Visibility | None = Field(
+        'all_parties',
+        description="Who may see this interest record. An heir's request can be sensitive among siblings, and the testator may want it private",
+    )
+    images: list[Media] | None = Field(
+        None,
+        description='Photographs, videos, voice notes or document scans supporting this expression of interest — for example the person explaining why the item matters to them. Use mediaType for the format',
+        max_length=20,
     )
     notes: constr(max_length=2000) | None = Field(
         None,
@@ -5627,8 +5673,33 @@ class AssetInterest3(BaseModel):
     )
     testatorAcknowledged: bool | None = Field(
         False,
-        description='Whether the testator has seen and acknowledged this interest',
+        deprecated=True,
+        description='Whether the testator has seen and acknowledged this interest. Deprecated: use interestStatus, which says what happened after acknowledgement as well. true corresponds to an interestStatus other than submitted, false to submitted; the two may not disagree',
         examples=[True, False],
+    )
+    interestStatus: InterestStatus | None = Field(
+        None,
+        description="Where this expression of interest has got to. Modelled on dealer-interest offerStatus, without the stages of a priced offer. An expression of interest binds no one at any stage; the testator's answer is testatorDisposition",
+        examples=['submitted', 'responded'],
+    )
+    testatorDisposition: TestatorDisposition | None = Field(
+        None,
+        description="The testator's response to this expression of interest. Modelled on dealer-interest testatorDisposition. Never a gift and never a disposition: only a will or a bequest disposes. A direction about how the item should be distributed is a wish, not a response",
+        examples=['noted', 'tentatively_earmarked'],
+    )
+    communicationInitiatedBy: CommunicationInitiatedBy | None = Field(
+        None,
+        description="Who raised this interest. Modelled on dealer-interest communicationInitiatedBy. An interest the testator invited is evidence of the testator's own initiative, and one the person raised unprompted is the case an undue-influence review looks at, so the two are recorded rather than inferred. Distinct from sourceType, which is the channel",
+        examples=['testator', 'interested_party'],
+    )
+    visibility: Visibility | None = Field(
+        'all_parties',
+        description="Who may see this interest record. An heir's request can be sensitive among siblings, and the testator may want it private",
+    )
+    images: list[Media] | None = Field(
+        None,
+        description='Photographs, videos, voice notes or document scans supporting this expression of interest — for example the person explaining why the item matters to them. Use mediaType for the format',
+        max_length=20,
     )
     notes: constr(max_length=2000) | None = Field(
         None,
@@ -6815,7 +6886,7 @@ class OfferStatus(Enum):
     withdrawn = 'withdrawn'
 
 
-class TestatorDisposition(Enum):
+class TestatorDisposition2(Enum):
     willing_to_sell = 'willing_to_sell'
     prefer_not_to_sell = 'prefer_not_to_sell'
     hold_for_executor = 'hold_for_executor'
@@ -6824,14 +6895,7 @@ class TestatorDisposition(Enum):
     undecided = 'undecided'
 
 
-class PrivacyLevel(Enum):
-    testator_only = 'testator_only'
-    proxy_visible = 'proxy_visible'
-    executor_visible = 'executor_visible'
-    all_parties = 'all_parties'
-
-
-class CommunicationInitiatedBy(Enum):
+class CommunicationInitiatedBy2(Enum):
     buyer = 'buyer'
     testator = 'testator'
     proxy = 'proxy'
@@ -6898,7 +6962,7 @@ class DealerInterest(BaseModel):
     offerDetails: OfferDetails | None = Field(
         None, description='Details of a specific offer, if one has been made'
     )
-    testatorDisposition: TestatorDisposition | None = Field(
+    testatorDisposition: TestatorDisposition2 | None = Field(
         None,
         description="The testator's disposition towards selling this asset",
         examples=['willing_to_sell', 'hold_for_executor'],
@@ -6907,12 +6971,12 @@ class DealerInterest(BaseModel):
         None,
         description='Reference to a Bequest.id if this asset is also subject to a bequest. A dealer interest and a bequest may conflict',
     )
-    privacyLevel: PrivacyLevel = Field(
+    privacyLevel: Visibility = Field(
         ...,
-        description='Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches',
+        description='Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches. Uses the shared common/visibility.json levels, so a dealer interest and an asset interest say who may see them the same way',
         examples=['proxy_visible', 'executor_visible'],
     )
-    communicationInitiatedBy: CommunicationInitiatedBy | None = Field(
+    communicationInitiatedBy: CommunicationInitiatedBy2 | None = Field(
         None,
         description='Who initiated the communication about this potential transaction',
         examples=['buyer', 'proxy'],
@@ -19523,7 +19587,22 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                                   'valuationComparison',
                                                                   'valuationDate',
                                                                   'valuationSource']},
- 'https://openinherit.org/v3/asset-interest.json': {'conditionals': [],
+ 'https://openinherit.org/v3/asset-interest.json': {'conditionals': [{'if': {'properties': {'interestStatus': {'const': 'responded'}},
+                                                                             'required': ['interestStatus']},
+                                                                      'then': {'required': ['testatorDisposition']}},
+                                                                     {'if': {'required': ['testatorDisposition']},
+                                                                      'then': {'required': ['interestStatus'],
+                                                                               'properties': {'interestStatus': {'enum': ['responded',
+                                                                                                                          'withdrawn',
+                                                                                                                          'superseded']}}}},
+                                                                     {'if': {'properties': {'testatorAcknowledged': {'const': False}},
+                                                                             'required': ['testatorAcknowledged']},
+                                                                      'then': {'properties': {'interestStatus': {'enum': ['submitted',
+                                                                                                                          'withdrawn',
+                                                                                                                          'superseded']}}}},
+                                                                     {'if': {'properties': {'testatorAcknowledged': {'const': True}},
+                                                                             'required': ['testatorAcknowledged']},
+                                                                      'then': {'properties': {'interestStatus': {'not': {'const': 'submitted'}}}}}],
                                                     'asserts': [{'patternProperties': {'^x-inherit-[a-z][a-z0-9-]{1,54}$': {'type': 'object',
                                                                                                                             'maxProperties': 50,
                                                                                                                             'propertyNames': {'pattern': '^[a-zA-Z_][a-zA-Z0-9_]*$',
@@ -19531,11 +19610,14 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                     'overlays': {},
                                                     'closed': {'props': ['assetId',
                                                                          'collectionId',
+                                                                         'communicationInitiatedBy',
                                                                          'expressedAt',
                                                                          'expressedByRole',
                                                                          'id',
+                                                                         'images',
                                                                          'intentType',
                                                                          'interestLevel',
+                                                                         'interestStatus',
                                                                          'notes',
                                                                          'organisationId',
                                                                          'organisationIdDisplay',
@@ -19547,11 +19629,16 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                                          'quantity',
                                                                          'rootDocumentId',
                                                                          'sourceType',
-                                                                         'testatorAcknowledged'],
+                                                                         'testatorAcknowledged',
+                                                                         'testatorDisposition',
+                                                                         'visibility'],
                                                                'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
-                                                    'nonnull': ['expressedAt',
+                                                    'nonnull': ['communicationInitiatedBy',
+                                                                'expressedAt',
                                                                 'id',
+                                                                'images',
                                                                 'interestLevel',
+                                                                'interestStatus',
                                                                 'notes',
                                                                 'organisationId',
                                                                 'organisationIdDisplay',
@@ -19563,7 +19650,9 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                                 'quantity',
                                                                 'rootDocumentId',
                                                                 'sourceType',
-                                                                'testatorAcknowledged']},
+                                                                'testatorAcknowledged',
+                                                                'testatorDisposition',
+                                                                'visibility']},
  'https://openinherit.org/v3/asset.json': {'conditionals': [{'if': {'required': ['category'],
                                                                     'properties': {'category': {'const': 'financial'}}},
                                                              'then': {'$ref': 'https://openinherit.org/v3/asset-categories/financial.json'}},
@@ -20024,7 +20113,8 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                          'asserts': [{'patternProperties': {'^x-inherit-[a-z][a-z0-9-]{1,54}$': {'type': 'object',
                                                                                                                                  'maxProperties': 50,
                                                                                                                                  'propertyNames': {'pattern': '^[a-zA-Z_][a-zA-Z0-9_]*$',
-                                                                                                                                                   'maxLength': 64}}}}],
+                                                                                                                                                   'maxLength': 64}}}},
+                                                                     {'required': ['score']}],
                                                          'overlays': {},
                                                          'closed': {'props': ['calculatedAt',
                                                                               'checklist',
@@ -20128,7 +20218,8 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                      'asserts': [{'patternProperties': {'^x-inherit-[a-z][a-z0-9-]{1,54}$': {'type': 'object',
                                                                                                                              'maxProperties': 50,
                                                                                                                              'propertyNames': {'pattern': '^[a-zA-Z_][a-zA-Z0-9_]*$',
-                                                                                                                                               'maxLength': 64}}}}],
+                                                                                                                                               'maxLength': 64}}}},
+                                                                 {'required': ['privacyLevel']}],
                                                      'overlays': {},
                                                      'closed': {'props': ['assets',
                                                                           'collection',
@@ -20217,7 +20308,8 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                         {'patternProperties': {'^x-inherit-[a-z][a-z0-9-]{1,54}$': {'type': 'object',
                                                                                                                     'maxProperties': 50,
                                                                                                                     'propertyNames': {'pattern': '^[a-zA-Z_][a-zA-Z0-9_]*$',
-                                                                                                                                      'maxLength': 64}}}}],
+                                                                                                                                      'maxLength': 64}}}},
+                                                        {'required': ['status']}],
                                             'overlays': {'netEstateEquity': {'properties': {'amount': {'minimum': 0}}}},
                                             'closed': {'props': ['adjudicatingBodies',
                                                                  'administration',

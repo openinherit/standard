@@ -55,18 +55,6 @@
         ]
       },
       {
-        "case": "tests/v3/completeness/completeness.test.json::invalid — missing required score",
-        "json_schema_keywords": [
-          "required"
-        ]
-      },
-      {
-        "case": "tests/v3/estate/estate.test.json::invalid — missing status",
-        "json_schema_keywords": [
-          "required"
-        ]
-      },
-      {
         "case": "tests/v3/executor/executor.test.json::invalid — missing required personId",
         "json_schema_keywords": [
           "anyOf",

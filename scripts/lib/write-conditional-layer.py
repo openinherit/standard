@@ -200,6 +200,15 @@ class Compiler:
         # evaluates are already in the unevaluatedProperties count below.
         if "patternProperties" in doc:
             asserts.append(self.compile({"patternProperties": doc["patternProperties"]}, sid, f"{sid} patternProperties"))
+        # A required member whose schema carries a `default` (often through a
+        # $ref to a shared file) is filled in by the Zod generator when it is
+        # absent, so a document missing it would pass. JSON Schema's `default`
+        # is an annotation and never satisfies `required`, so presence is
+        # asserted on the raw input.
+        defaulted = sorted(p for p in doc.get("required", [])
+                           if self.defaulted(doc.get("properties", {}).get(p), sid, set()))
+        if defaulted:
+            asserts.append({"required": defaulted})
         if not conds and not overlays and not asserts:
             return None
         rule = {"conditionals": conds, "asserts": asserts, "overlays": overlays, "closed": None,
@@ -212,6 +221,23 @@ class Compiler:
                 print(f"write-conditional-layer: {sid}: unevaluatedProperties left to the generated validator "
                       "(a member it cannot resolve could evaluate any name)", file=sys.stderr)
         return rule
+
+    def defaulted(self, s, base, seen) -> bool:
+        """True when s, or a schema it reaches by $ref or allOf, declares a default."""
+        if not isinstance(s, dict):
+            return False
+        if "default" in s or any(self.defaulted(x, base, seen) for x in s.get("allOf", [])):
+            return True
+        if "$ref" in s:
+            target = urljoin(base, s["$ref"])
+            doc_id, _, frag = target.partition("#")
+            node = self.srcs.get(doc_id)
+            for part in [p for p in frag.split("/") if p]:
+                node = node.get(part.replace("~1", "/").replace("~0", "~")) if isinstance(node, dict) else None
+            if node is None or target in seen:
+                return False
+            return self.defaulted(node, doc_id, seen | {target})
+        return False
 
     def nonnull(self, s, base, seen) -> bool:
         """True only when s certainly refuses null. Unsure means False, which never refuses."""

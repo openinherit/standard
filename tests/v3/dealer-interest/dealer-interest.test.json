@@ -467,6 +467,45 @@
         }
       },
       "valid": false
+    },
+    {
+      "description": "valid — privacyLevel beneficiary_visible (a common/visibility.json value)",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Christie's",
+          "type": "auction_house"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "beneficiary_visible"
+      },
+      "valid": true
+    },
+    {
+      "description": "valid — privacyLevel companion_visible (a common/visibility.json value)",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Christie's",
+          "type": "auction_house"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "companion_visible"
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — privacyLevel everyone (not a common/visibility.json value)",
+      "data": {
+        "id": "e7f8a9b0-c1d2-3456-e789-abcdef012345",
+        "interestedParty": {
+          "name": "Christie's",
+          "type": "auction_house"
+        },
+        "offerStatus": "standing_interest",
+        "privacyLevel": "everyone"
+      },
+      "valid": false
     }
   ]
 }

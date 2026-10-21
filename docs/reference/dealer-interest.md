@@ -20,7 +20,7 @@ Schema `$id`: `https://openinherit.org/v3/dealer-interest.json`
 | `offerDetails` | [OfferDetails](#def-OfferDetails) | | Details of a specific offer, if one has been made |
 | `testatorDisposition` | one of `willing_to_sell`, `prefer_not_to_sell`, `hold_for_executor`, `deferred_to_family`, `promised_to_institution`, `undecided` | | The testator's disposition towards selling this asset |
 | `linkedBequestId` | `string` (uuid) | | Reference to a Bequest.id if this asset is also subject to a bequest. A dealer interest and a bequest may conflict |
-| `privacyLevel` | one of `testator_only`, `proxy_visible`, `executor_visible`, `all_parties` | yes | Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches |
+| `privacyLevel` | [Visibility](common/visibility.md) | yes | Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches. Uses the shared common/visibility.json levels, so a dealer interest and an asset interest say who may see them the same way |
 | `communicationInitiatedBy` | one of `buyer`, `testator`, `proxy`, `executor` | | Who initiated the communication about this potential transaction |
 | `managedByProxyId` | `string` (uuid) | | Reference to the ProxyAuthorisation.id that governs this dealer interest — the proxy managing the negotiation |
 | `notes` | `string` | | Free-text notes about this dealer interest |

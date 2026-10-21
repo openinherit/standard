@@ -7251,6 +7251,58 @@ components:
             - personId
         - required:
             - organisationId
+      allOf:
+        - $comment: A responded interest carries the testator's response
+          if:
+            properties:
+              interestStatus:
+                const: responded
+            required:
+              - interestStatus
+          then:
+            required:
+              - testatorDisposition
+        - $comment: No response on an interest the testator has not seen or answered
+          if:
+            required:
+              - testatorDisposition
+          then:
+            required:
+              - interestStatus
+            properties:
+              interestStatus:
+                enum:
+                  - responded
+                  - withdrawn
+                  - superseded
+        - $comment: 'The deprecated testatorAcknowledged may not disagree with interestStatus: false means not yet seen'
+          if:
+            properties:
+              testatorAcknowledged:
+                const: false
+            required:
+              - testatorAcknowledged
+              - interestStatus
+          then:
+            properties:
+              interestStatus:
+                enum:
+                  - submitted
+                  - withdrawn
+                  - superseded
+        - $comment: 'The deprecated testatorAcknowledged may not disagree with interestStatus: true means seen'
+          if:
+            properties:
+              testatorAcknowledged:
+                const: true
+            required:
+              - testatorAcknowledged
+              - interestStatus
+          then:
+            properties:
+              interestStatus:
+                not:
+                  const: submitted
       required:
         - id
         - rootDocumentId
@@ -7328,12 +7380,55 @@ components:
             - testator_observed
             - manual
         testatorAcknowledged:
-          description: Whether the testator has seen and acknowledged this interest
+          description: 'Whether the testator has seen and acknowledged this interest. Deprecated: use interestStatus, which says what happened after acknowledgement as well. true corresponds to an interestStatus other than submitted, false to submitted; the two may not disagree'
           examples:
             - true
             - false
           default: false
+          deprecated: true
           type: boolean
+        interestStatus:
+          description: Where this expression of interest has got to. Modelled on dealer-interest offerStatus, without the stages of a priced offer. An expression of interest binds no one at any stage; the testator's answer is testatorDisposition
+          $comment: 'submitted: recorded; the testator has not yet seen it. acknowledged: the testator has seen it and has not decided (dealer-interest testatorDisposition undecided). responded: the testator has decided; testatorDisposition says what. withdrawn: the person expressing interest has taken it back. superseded: replaced by a later interest record from the same person.'
+          examples:
+            - submitted
+            - responded
+          enum:
+            - submitted
+            - acknowledged
+            - responded
+            - withdrawn
+            - superseded
+        testatorDisposition:
+          description: 'The testator''s response to this expression of interest. Modelled on dealer-interest testatorDisposition. Never a gift and never a disposition: only a will or a bequest disposes. A direction about how the item should be distributed is a wish, not a response'
+          $comment: 'noted: taken into account, without commitment. tentatively_earmarked: the testator is minded to give the item to this person; not a gift. declined: the testator does not intend to give the item to this person, including because it is promised elsewhere.'
+          examples:
+            - noted
+            - tentatively_earmarked
+          enum:
+            - noted
+            - tentatively_earmarked
+            - declined
+        communicationInitiatedBy:
+          description: Who raised this interest. Modelled on dealer-interest communicationInitiatedBy. An interest the testator invited is evidence of the testator's own initiative, and one the person raised unprompted is the case an undue-influence review looks at, so the two are recorded rather than inferred. Distinct from sourceType, which is the channel
+          $comment: 'interested_party: the person or organisation expressing interest raised it unprompted. testator: the testator asked. proxy: an authorised proxy raised it with the person. executor: an executor raised it.'
+          examples:
+            - testator
+            - interested_party
+          enum:
+            - interested_party
+            - testator
+            - proxy
+            - executor
+        visibility:
+          description: Who may see this interest record. An heir's request can be sensitive among siblings, and the testator may want it private
+          $ref: '#/components/schemas/visibility'
+        images:
+          description: Photographs, videos, voice notes or document scans supporting this expression of interest — for example the person explaining why the item matters to them. Use mediaType for the format
+          type: array
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/media'
         notes:
           description: Additional context about this interest
           examples:
@@ -8876,16 +8971,11 @@ components:
           pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
           format: uuid
         privacyLevel:
-          description: Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches
-          $comment: 'testator_only: only the testator can see this dealer interest. proxy_visible: the testator and authorised proxy can see it. executor_visible: the testator, proxy, and executor can see it. all_parties: visible to all parties with access to the estate data.'
+          description: Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches. Uses the shared common/visibility.json levels, so a dealer interest and an asset interest say who may see them the same way
           examples:
             - proxy_visible
             - executor_visible
-          enum:
-            - testator_only
-            - proxy_visible
-            - executor_visible
-            - all_parties
+          $ref: '#/components/schemas/visibility'
         communicationInitiatedBy:
           description: Who initiated the communication about this potential transaction
           $comment: 'buyer: the interested party initiated contact. testator: the testator reached out to the interested party. proxy: the proxy initiated contact on behalf of the testator. executor: the executor initiated contact post-death.'

@@ -145,7 +145,46 @@ const RULES: Record<string, Rule> = {
     ]
   },
   "https://openinherit.org/v3/asset-interest.json": {
-    "conditionals": [],
+    "conditionals": [
+      {
+        "if": {
+          "properties": {
+            "interestStatus": {
+              "const": "responded"
+            }
+          },
+          "required": [
+            "interestStatus"
+          ]
+        },
+        "then": {
+          "required": [
+            "testatorDisposition"
+          ]
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "testatorDisposition"
+          ]
+        },
+        "then": {
+          "required": [
+            "interestStatus"
+          ],
+          "properties": {
+            "interestStatus": {
+              "enum": [
+                "responded",
+                "withdrawn",
+                "superseded"
+              ]
+            }
+          }
+        }
+      }
+    ],
     "asserts": [
       {
         "patternProperties": {
@@ -165,11 +204,14 @@ const RULES: Record<string, Rule> = {
       "props": [
         "assetId",
         "collectionId",
+        "communicationInitiatedBy",
         "expressedAt",
         "expressedByRole",
         "id",
+        "images",
         "intentType",
         "interestLevel",
+        "interestStatus",
         "notes",
         "organisationId",
         "organisationIdDisplay",
@@ -181,16 +223,21 @@ const RULES: Record<string, Rule> = {
         "quantity",
         "rootDocumentId",
         "sourceType",
-        "testatorAcknowledged"
+        "testatorAcknowledged",
+        "testatorDisposition",
+        "visibility"
       ],
       "patterns": [
         "^x-inherit-[a-z][a-z0-9-]{1,54}$"
       ]
     },
     "nonnull": [
+      "communicationInitiatedBy",
       "expressedAt",
       "id",
+      "images",
       "interestLevel",
+      "interestStatus",
       "notes",
       "organisationId",
       "organisationIdDisplay",
@@ -202,7 +249,9 @@ const RULES: Record<string, Rule> = {
       "quantity",
       "rootDocumentId",
       "sourceType",
-      "testatorAcknowledged"
+      "testatorAcknowledged",
+      "testatorDisposition",
+      "visibility"
     ]
   },
   "https://openinherit.org/v3/asset.json": {

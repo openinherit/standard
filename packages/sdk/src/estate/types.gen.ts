@@ -4996,6 +4996,11 @@ export type LegacyContact = {
     notes?: string;
 };
 
+/**
+ * Asset Interest
+ *
+ * Captures expressions of interest about an asset, collection, or product from any perspective — owner wishlists, beneficiary preferences, executor observations, proxy-relayed interests, and cross-system collector interest. Qualified by expressedByRole (who), intentType (what kind), and optionally productMatch (product-level vs asset-level). Maps to Schema.org ReactAction + Role
+ */
 export type AssetInterest2 = unknown & {
     /**
      * Unique identifier for this interest record
@@ -5030,9 +5035,31 @@ export type AssetInterest2 = unknown & {
      */
     sourceType?: 'family_conversation' | 'written_request' | 'chat_message' | 'platform_private_message' | 'platform_group_message' | 'proxy_reported' | 'testator_observed' | 'manual';
     /**
-     * Whether the testator has seen and acknowledged this interest
+     * Whether the testator has seen and acknowledged this interest. Deprecated: use interestStatus, which says what happened after acknowledgement as well. true corresponds to an interestStatus other than submitted, false to submitted; the two may not disagree
+     *
+     * @deprecated
      */
     testatorAcknowledged?: boolean;
+    /**
+     * Where this expression of interest has got to. Modelled on dealer-interest offerStatus, without the stages of a priced offer. An expression of interest binds no one at any stage; the testator's answer is testatorDisposition
+     */
+    interestStatus?: 'submitted' | 'acknowledged' | 'responded' | 'withdrawn' | 'superseded';
+    /**
+     * The testator's response to this expression of interest. Modelled on dealer-interest testatorDisposition. Never a gift and never a disposition: only a will or a bequest disposes. A direction about how the item should be distributed is a wish, not a response
+     */
+    testatorDisposition?: 'noted' | 'tentatively_earmarked' | 'declined';
+    /**
+     * Who raised this interest. Modelled on dealer-interest communicationInitiatedBy. An interest the testator invited is evidence of the testator's own initiative, and one the person raised unprompted is the case an undue-influence review looks at, so the two are recorded rather than inferred. Distinct from sourceType, which is the channel
+     */
+    communicationInitiatedBy?: 'interested_party' | 'testator' | 'proxy' | 'executor';
+    /**
+     * Who may see this interest record. An heir's request can be sensitive among siblings, and the testator may want it private
+     */
+    visibility?: Visibility2;
+    /**
+     * Photographs, videos, voice notes or document scans supporting this expression of interest — for example the person explaining why the item matters to them. Use mediaType for the format
+     */
+    images?: Array<Media2>;
     /**
      * Additional context about this interest
      */
@@ -5141,7 +5168,7 @@ export type AssetInterest2 = unknown & {
     provenance?: Provenance2;
     [key: string]: {
         [key: string]: unknown;
-    } | string | string | null | string | null | string | 'mentioned' | 'expressed_interest' | 'strongly_wants' | 'agreed' | 'family_conversation' | 'written_request' | 'chat_message' | 'platform_private_message' | 'platform_group_message' | 'proxy_reported' | 'testator_observed' | 'manual' | boolean | string | 'testator' | 'beneficiary' | 'executor' | 'proxy' | string | 'acquire' | 'receive' | 'allocate' | 'sell' | 'admire' | string | {
+    } | string | string | null | string | null | string | 'mentioned' | 'expressed_interest' | 'strongly_wants' | 'agreed' | 'family_conversation' | 'written_request' | 'chat_message' | 'platform_private_message' | 'platform_group_message' | 'proxy_reported' | 'testator_observed' | 'manual' | boolean | 'submitted' | 'acknowledged' | 'responded' | 'withdrawn' | 'superseded' | 'noted' | 'tentatively_earmarked' | 'declined' | 'interested_party' | 'testator' | 'proxy' | 'executor' | Visibility2 | Array<Media2> | string | 'testator' | 'beneficiary' | 'executor' | 'proxy' | string | 'acquire' | 'receive' | 'allocate' | 'sell' | 'admire' | string | {
         /**
          * The identifier system, from reference-data/identifier-systems.json
          */
@@ -6250,9 +6277,9 @@ export type DealerInterest2 = {
      */
     linkedBequestId?: string;
     /**
-     * Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches
+     * Who may see this dealer interest record. Privacy is critical — the testator may not want family to know about dealer approaches. Uses the shared common/visibility.json levels, so a dealer interest and an asset interest say who may see them the same way
      */
-    privacyLevel: 'testator_only' | 'proxy_visible' | 'executor_visible' | 'all_parties';
+    privacyLevel: Visibility2;
     /**
      * Who initiated the communication about this potential transaction
      */
@@ -6300,7 +6327,7 @@ export type DealerInterest2 = {
     provenance?: Provenance2;
     [key: string]: {
         [key: string]: unknown;
-    } | string | InterestedParty | Array<AssetInterestItem> | CollectionInterest | 'standing_interest' | 'verbal_offer' | 'written_offer' | 'formal_valuation' | 'conditional_offer' | 'accepted' | 'declined' | 'expired' | 'withdrawn' | OfferDetails | 'willing_to_sell' | 'prefer_not_to_sell' | 'hold_for_executor' | 'deferred_to_family' | 'promised_to_institution' | 'undecided' | 'testator_only' | 'proxy_visible' | 'executor_visible' | 'all_parties' | 'buyer' | 'testator' | 'proxy' | 'executor' | string | {
+    } | string | InterestedParty | Array<AssetInterestItem> | CollectionInterest | 'standing_interest' | 'verbal_offer' | 'written_offer' | 'formal_valuation' | 'conditional_offer' | 'accepted' | 'declined' | 'expired' | 'withdrawn' | OfferDetails | 'willing_to_sell' | 'prefer_not_to_sell' | 'hold_for_executor' | 'deferred_to_family' | 'promised_to_institution' | 'undecided' | Visibility2 | 'buyer' | 'testator' | 'proxy' | 'executor' | string | {
         /**
          * Whether the item has been through verification
          */

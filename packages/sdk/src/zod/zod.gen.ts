@@ -2516,6 +2516,11 @@ export const zLegacyContact = z.strictObject({
     notes: z.string().max(2000).optional()
 });
 
+/**
+ * Asset Interest
+ *
+ * Captures expressions of interest about an asset, collection, or product from any perspective — owner wishlists, beneficiary preferences, executor observations, proxy-relayed interests, and cross-system collector interest. Qualified by expressedByRole (who), intentType (what kind), and optionally productMatch (product-level vs asset-level). Maps to Schema.org ReactAction + Role
+ */
 const zAssetInterest$generated = z.intersection(z.unknown(), z.object({
     id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
     rootDocumentId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
@@ -2540,6 +2545,26 @@ const zAssetInterest$generated = z.intersection(z.unknown(), z.object({
         'manual'
     ]).optional(),
     testatorAcknowledged: z.boolean().optional().default(false),
+    interestStatus: z.enum([
+        'submitted',
+        'acknowledged',
+        'responded',
+        'withdrawn',
+        'superseded'
+    ]).optional(),
+    testatorDisposition: z.enum([
+        'noted',
+        'tentatively_earmarked',
+        'declined'
+    ]).optional(),
+    communicationInitiatedBy: z.enum([
+        'interested_party',
+        'testator',
+        'proxy',
+        'executor'
+    ]).optional(),
+    visibility: zVisibility.optional(),
+    images: z.array(zMedia).max(20).optional(),
     notes: z.string().max(2000).optional(),
     organisationId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
     organisationIdDisplay: z.string().max(255).optional(),
@@ -3107,12 +3132,7 @@ const zDealerInterest$generated = z.object({
         'undecided'
     ]).optional(),
     linkedBequestId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).optional(),
-    privacyLevel: z.enum([
-        'testator_only',
-        'proxy_visible',
-        'executor_visible',
-        'all_parties'
-    ]),
+    privacyLevel: zVisibility,
     communicationInitiatedBy: z.enum([
         'buyer',
         'testator',

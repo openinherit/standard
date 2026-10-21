@@ -129,11 +129,47 @@ The test cases are written first and shown failing against the unchanged schemas
 | generated artefacts are current | `check-openapi-fresh.sh`, `check-runtime-validators-fresh.sh`, `docs:reference:check`, `test:schema-index`, `diff -r v3/ packages/schema/v3/` | editing the schema without regenerating |
 | nothing is lost | `schema-diff.sh origin/main` (0 breaking), the v1 completeness floor | deleting or narrowing an existing field |
 
+### What the proof found, and the two fixes it led to
+
+- **Two conditionals were dropped by the validator generators.** `write-conditional-layer.py`
+  compiles an `if` only in the one-property discriminator shape. The two `testatorAcknowledged`
+  rules first used `if.required: [testatorAcknowledged, interestStatus]`, and both the Zod and
+  pydantic legs reported them as `REGRESSION false_accept`. They now use
+  `if.required: [testatorAcknowledged]`; the `then` branch's `properties` already bind only when
+  `interestStatus` is present, so the meaning is unchanged.
+- **Zod filled in a missing required `privacyLevel`.** `common/visibility.json` declares
+  `default: all_parties`, and the Zod generator renders a default as `.default(...)`, so a dealer
+  interest *without* its required `privacyLevel` parsed, and came out at the least private level.
+  `write-conditional-layer.py` now asserts presence on the raw input for every top-level required
+  property whose schema declares a default, directly or through `$ref` / `allOf`. JSON Schema's
+  `default` is an annotation and never satisfies `required`. The same cause let Zod accept a
+  `Completeness` without `score` and an `Estate` without `status`; those two register entries no
+  longer reproduce and are removed.
+
+Red, then green, for each:
+
+| Gate | Red | Green |
+|---|---|---|
+| `pnpm test` | the 7 new valid cases fail against v6.7.0 (commit `test(...) — deliberately red`) | asset-interest 53/53, dealer-interest 34/34 |
+| each constraint | deleting each of the 4 conditionals, the 2 `$ref`s and the 3 enums, and re-inlining dealer's 4-value enum: 11 of 11 deletions fail the case written for them | restored |
+| `test-runtime-validators.mjs` / `test_corpus.py` | `REGRESSION` on both `testatorAcknowledged` rules (both legs), and on `missing privacyLevel` (Zod); disabling the new presence assertion brings back the dealer, completeness and estate regressions | register matches, 29 Zod `false_accept` (was 31); pytest 322 passed |
+| `check-openapi-fresh.sh`, `check-runtime-validators-fresh.sh`, `docs:reference:check` | STALE before regeneration | fresh |
+
+### Two checks that misread a `$ref`
+
+Both report a loss that is not one. The four old `privacyLevel` values are still accepted, and
+`tests/v3/dealer-interest` has a valid case for each of the six.
+
+- `scripts/schema-diff.sh` reports `Removed enum value(s)` on `dealer-interest.json`. It compares
+  inline `enum` arrays and does not follow `$ref`. It warns and exits 0.
+- The v1 completeness floor keys an enum value by where it is written, so the four values moving
+  behind the `$ref` read as four lost keys.
+
 ## Alternatives considered
 
 - **Remove `testatorAcknowledged` now.** Rejected for 6.x: a removal, which `GOVERNANCE.md` reserves
   for a major version.
-- **One combined response field, as the engine models it** (`submitted → acknowledged → noted |
+- **One combined response field** (`submitted → acknowledged → noted |
   tentatively_earmarked | declined`). Rejected here because it cannot say `withdrawn` or
   `superseded` without mixing the asker's actions into the testator's answer, and because
   `dealer-interest` already separates status from disposition. The two shapes map one to one:
@@ -143,3 +179,17 @@ The test cases are written first and shown failing against the unchanged schemas
   in every consumer.
 - **Rename `dealer-interest.privacyLevel` to `visibility`.** Rejected: a rename of a required field
   is breaking.
+- **Widen `privacyLevel`'s inline enum to six values instead of a `$ref`.** Not chosen: it would be
+  a second copy of the vocabulary, which the next change to `common/visibility.json` would leave
+  behind.
+
+## Open questions — not settled by this proposal
+
+1. **When `testatorAcknowledged` goes.** It is deprecated here and can only be removed in a major
+   release.
+2. **The generators drop an `if` they cannot compile.** `write-conditional-layer.py`'s own docstring
+   says a construct it cannot evaluate is never dropped silently, yet a multi-property `if` in a
+   top-level `allOf` is skipped. The corpus caught it here only because a case existed for each
+   rule. Refusing such an `if` outright is a change of its own.
+3. **Timestamps for the response.** When the testator acknowledged and when they responded are not
+   recorded. `expressedAt` covers only the interest itself.

@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- `AssetInterest` is as expressive as `DealerInterest` (proposal 0009). Five optional properties:
+  `visibility` (`common/visibility.json`), `images` (`common/media.json`, as on `asset`, `pet` and
+  `space`), `communicationInitiatedBy` (`interested_party | testator | proxy | executor`: who
+  raised the interest, which `sourceType`, the channel, does not say), `interestStatus`
+  (`submitted | acknowledged | responded | withdrawn | superseded`) and `testatorDisposition`
+  (`noted | tentatively_earmarked | declined`). An expression of interest binds no one at any
+  stage. Four conditionals keep them consistent: a `responded` interest carries a disposition, a
+  disposition needs a status the testator has reached, and `testatorAcknowledged` may not
+  contradict `interestStatus`.
+
 - A written support window and dist-tag policy in `docs/policies/versioning.md`: only the newest
   release line is supported, every release is published under the npm dist-tag `latest`, and there
   is no prerelease channel. "Addressing a release" states that a schema's `$id` is stable across
@@ -68,7 +78,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   and every schema's `patternProperties`. Against `tests/v3`, the Zod divergence register falls
   from 70 accepted-invalid cases to 31 and pydantic's from 67 to 28; neither refuses a valid one.
 
+### Changed
+
+- `DealerInterest.privacyLevel` uses the shared `common/visibility.json` levels instead of its own
+  four (proposal 0009). Every old value is still valid; `companion_visible` and
+  `beneficiary_visible` are new.
+
+### Deprecated
+
+- `AssetInterest.testatorAcknowledged`, superseded by `interestStatus`. It stays valid throughout
+  6.x and may not contradict `interestStatus`.
+
 ### Fixed
+
+- The generated Zod validators no longer fill in a missing required property whose schema declares
+  a `default`: `write-conditional-layer.py` asserts its presence on the raw input. Zod accepted a
+  `Completeness` without `score` and an `Estate` without `status`; both register entries are gone.
 
 - The conformance kit failed its own reference runner on 5 of 24 cases.
   `singapore-hindu-dual.json` carried a note where the Hindu succession extension allows none.

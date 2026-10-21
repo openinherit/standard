@@ -90,7 +90,7 @@ function checkAcyclic(doc, constraint) {
 }
 
 /**
- * Run all 26 integrity constraints against a document.
+ * Run every declared integrity constraint against a document.
  * Returns an array of { constraint, broken } for any failures.
  */
 function checkAllConstraints(doc) {
@@ -346,7 +346,7 @@ test('Level 2 valid — conformance declaration present and correct', () => {
   assertEmpty(errors, 'Conformance declaration errors');
 });
 
-test('Level 2 valid — all 26 integrity constraints pass', () => {
+test('Level 2 valid — all 28 integrity constraints pass', () => {
   const failures = checkAllConstraints(level2ValidDoc);
   if (failures.length > 0) {
     const details = failures.map(f => `${f.field}: ${f.broken.join(', ')}`).join('; ');
@@ -354,8 +354,18 @@ test('Level 2 valid — all 26 integrity constraints pass', () => {
   }
 });
 
-test('Level 2 valid — constraint count is 26', () => {
-  assertEqual(constraints.length, 26, 'Constraint count');
+// Pinned per kind, so a constraint added, removed or re-kinded changes this test in the same
+// commit. It read 26 from 9b1bed3 (spatial containment) while c671f27 (space + liability) took
+// the list to 28, because nothing ran this script; validate-examples.yml now does.
+test('Level 2 valid — constraint count is 28 (26 existence + 2 acyclic)', () => {
+  assertEqual(constraints.length, 28, 'Constraint count');
+  const byKind = constraints.reduce((n, c) => {
+    const kind = c.kind ?? 'existence';
+    n[kind] = (n[kind] ?? 0) + 1;
+    return n;
+  }, {});
+  assertEqual(byKind.existence, 26, 'Existence constraint count');
+  assertEqual(byKind.acyclic, 2, 'Acyclic constraint count');
 });
 
 // Containment cycle check — a containment cycle whose every link resolves is still a Level 2 failure.

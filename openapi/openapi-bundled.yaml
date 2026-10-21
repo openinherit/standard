@@ -7275,32 +7275,6 @@ components:
                   - responded
                   - withdrawn
                   - superseded
-        - $comment: 'The deprecated testatorAcknowledged may not disagree with interestStatus: false means not yet seen'
-          if:
-            properties:
-              testatorAcknowledged:
-                const: false
-            required:
-              - testatorAcknowledged
-          then:
-            properties:
-              interestStatus:
-                enum:
-                  - submitted
-                  - withdrawn
-                  - superseded
-        - $comment: 'The deprecated testatorAcknowledged may not disagree with interestStatus: true means seen'
-          if:
-            properties:
-              testatorAcknowledged:
-                const: true
-            required:
-              - testatorAcknowledged
-          then:
-            properties:
-              interestStatus:
-                not:
-                  const: submitted
       required:
         - id
         - rootDocumentId
@@ -7377,14 +7351,6 @@ components:
             - proxy_reported
             - testator_observed
             - manual
-        testatorAcknowledged:
-          description: 'Whether the testator has seen and acknowledged this interest. Deprecated: use interestStatus, which says what happened after acknowledgement as well. true corresponds to an interestStatus other than submitted, false to submitted; the two may not disagree'
-          examples:
-            - true
-            - false
-          default: false
-          deprecated: true
-          type: boolean
         interestStatus:
           description: Where this expression of interest has got to. Modelled on dealer-interest offerStatus, without the stages of a priced offer. An expression of interest binds no one at any stage; the testator's answer is testatorDisposition
           $comment: 'submitted: recorded; the testator has not yet seen it. acknowledged: the testator has seen it and has not decided (dealer-interest testatorDisposition undecided). responded: the testator has decided; testatorDisposition says what. withdrawn: the person expressing interest has taken it back. superseded: replaced by a later interest record from the same person.'

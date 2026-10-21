@@ -2544,7 +2544,6 @@ const zAssetInterest$generated = z.intersection(z.unknown(), z.object({
         'testator_observed',
         'manual'
     ]).optional(),
-    testatorAcknowledged: z.boolean().optional().default(false),
     interestStatus: z.enum([
         'submitted',
         'acknowledged',

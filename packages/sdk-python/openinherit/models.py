@@ -5485,12 +5485,6 @@ class AssetInterest2(BaseModel):
         description='How this interest was communicated or recorded',
         examples=['family_conversation', 'platform_private_message'],
     )
-    testatorAcknowledged: bool | None = Field(
-        False,
-        deprecated=True,
-        description='Whether the testator has seen and acknowledged this interest. Deprecated: use interestStatus, which says what happened after acknowledgement as well. true corresponds to an interestStatus other than submitted, false to submitted; the two may not disagree',
-        examples=[True, False],
-    )
     interestStatus: InterestStatus | None = Field(
         None,
         description="Where this expression of interest has got to. Modelled on dealer-interest offerStatus, without the stages of a priced offer. An expression of interest binds no one at any stage; the testator's answer is testatorDisposition",
@@ -5670,12 +5664,6 @@ class AssetInterest3(BaseModel):
         None,
         description='How this interest was communicated or recorded',
         examples=['family_conversation', 'platform_private_message'],
-    )
-    testatorAcknowledged: bool | None = Field(
-        False,
-        deprecated=True,
-        description='Whether the testator has seen and acknowledged this interest. Deprecated: use interestStatus, which says what happened after acknowledgement as well. true corresponds to an interestStatus other than submitted, false to submitted; the two may not disagree',
-        examples=[True, False],
     )
     interestStatus: InterestStatus | None = Field(
         None,
@@ -19594,15 +19582,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                                       'then': {'required': ['interestStatus'],
                                                                                'properties': {'interestStatus': {'enum': ['responded',
                                                                                                                           'withdrawn',
-                                                                                                                          'superseded']}}}},
-                                                                     {'if': {'properties': {'testatorAcknowledged': {'const': False}},
-                                                                             'required': ['testatorAcknowledged']},
-                                                                      'then': {'properties': {'interestStatus': {'enum': ['submitted',
-                                                                                                                          'withdrawn',
-                                                                                                                          'superseded']}}}},
-                                                                     {'if': {'properties': {'testatorAcknowledged': {'const': True}},
-                                                                             'required': ['testatorAcknowledged']},
-                                                                      'then': {'properties': {'interestStatus': {'not': {'const': 'submitted'}}}}}],
+                                                                                                                          'superseded']}}}}],
                                                     'asserts': [{'patternProperties': {'^x-inherit-[a-z][a-z0-9-]{1,54}$': {'type': 'object',
                                                                                                                             'maxProperties': 50,
                                                                                                                             'propertyNames': {'pattern': '^[a-zA-Z_][a-zA-Z0-9_]*$',
@@ -19629,7 +19609,6 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                                          'quantity',
                                                                          'rootDocumentId',
                                                                          'sourceType',
-                                                                         'testatorAcknowledged',
                                                                          'testatorDisposition',
                                                                          'visibility'],
                                                                'patterns': ['^x-inherit-[a-z][a-z0-9-]{1,54}$']},
@@ -19650,7 +19629,6 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                                 'quantity',
                                                                 'rootDocumentId',
                                                                 'sourceType',
-                                                                'testatorAcknowledged',
                                                                 'testatorDisposition',
                                                                 'visibility']},
  'https://openinherit.org/v3/asset.json': {'conditionals': [{'if': {'required': ['category'],

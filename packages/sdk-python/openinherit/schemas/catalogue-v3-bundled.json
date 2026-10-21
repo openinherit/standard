@@ -1015,7 +1015,7 @@
         {
           "$comment": "The deprecated testatorAcknowledged may not disagree with interestStatus: false means not yet seen",
           "if": {
-            "required": [ "testatorAcknowledged", "interestStatus" ],
+            "required": [ "testatorAcknowledged" ],
             "properties": {
               "testatorAcknowledged": {
                 "const": false
@@ -1033,7 +1033,7 @@
         {
           "$comment": "The deprecated testatorAcknowledged may not disagree with interestStatus: true means seen",
           "if": {
-            "required": [ "testatorAcknowledged", "interestStatus" ],
+            "required": [ "testatorAcknowledged" ],
             "properties": {
               "testatorAcknowledged": {
                 "const": true

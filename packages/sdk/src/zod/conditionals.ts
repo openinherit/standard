@@ -183,6 +183,50 @@ const RULES: Record<string, Rule> = {
             }
           }
         }
+      },
+      {
+        "if": {
+          "properties": {
+            "testatorAcknowledged": {
+              "const": false
+            }
+          },
+          "required": [
+            "testatorAcknowledged"
+          ]
+        },
+        "then": {
+          "properties": {
+            "interestStatus": {
+              "enum": [
+                "submitted",
+                "withdrawn",
+                "superseded"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "testatorAcknowledged": {
+              "const": true
+            }
+          },
+          "required": [
+            "testatorAcknowledged"
+          ]
+        },
+        "then": {
+          "properties": {
+            "interestStatus": {
+              "not": {
+                "const": "submitted"
+              }
+            }
+          }
+        }
       }
     ],
     "asserts": [
@@ -958,6 +1002,11 @@ const RULES: Record<string, Rule> = {
             }
           }
         }
+      },
+      {
+        "required": [
+          "score"
+        ]
       }
     ],
     "overlays": {},
@@ -1148,6 +1197,11 @@ const RULES: Record<string, Rule> = {
             }
           }
         }
+      },
+      {
+        "required": [
+          "privacyLevel"
+        ]
       }
     ],
     "overlays": {},
@@ -1297,6 +1351,11 @@ const RULES: Record<string, Rule> = {
             }
           }
         }
+      },
+      {
+        "required": [
+          "status"
+        ]
       }
     ],
     "overlays": {

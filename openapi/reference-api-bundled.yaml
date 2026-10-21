@@ -19890,7 +19890,6 @@ components:
                 const: false
             required:
               - testatorAcknowledged
-              - interestStatus
           then:
             properties:
               interestStatus:
@@ -19905,7 +19904,6 @@ components:
                 const: true
             required:
               - testatorAcknowledged
-              - interestStatus
           then:
             properties:
               interestStatus:

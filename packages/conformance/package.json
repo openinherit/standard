@@ -1,6 +1,6 @@
 {
   "name": "@openinherit/conformance",
-  "version": "6.7.0",
+  "version": "6.8.0",
   "description": "INHERIT Conformance Test Kit — validate your estate planning implementation against the open standard. 77 test suites, 2,000+ test cases across 31 entity schemas and 21 jurisdiction extensions. Levels 1 (schema valid), 2 (referentially intact), 3 (jurisdiction complete).",
   "type": "module",
   "license": "Apache-2.0",

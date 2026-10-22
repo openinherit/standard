@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [6.8.0] — 2026-10-22
+
 ### Added
 
 - `AssetInterest` is as expressive as `DealerInterest` (proposal 0009). Five optional properties:

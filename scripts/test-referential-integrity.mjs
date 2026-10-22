@@ -4,8 +4,9 @@
  * Tests that cross-reference constraints defined in schema.json
  * actually catch broken references in documents.
  */
-import { readFileSync } from 'fs';
-import { resolve, dirname } from 'path';
+import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'fs';
+import { tmpdir } from 'os';
+import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { spawnSync } from 'child_process';
 
@@ -99,6 +100,16 @@ function checkAcyclic(doc, constraint) {
 }
 
 /**
+ * kind 'absent' — the value at field must NOT be present at references. Used by
+ * the tombstone rows (proposal 0010): an id a document says was deleted must not
+ * also be a live entity in that document.
+ */
+function checkAbsent(doc, constraint) {
+  const live = new Set(resolvePath(doc, constraint.references).map(String));
+  return resolvePath(doc, constraint.field).filter(v => live.has(String(v)));
+}
+
+/**
  * Dispatch on constraint kind. An unrecognised kind is a hard error: a silently
  * skipped constraint is a gate that reports green.
  */
@@ -106,6 +117,7 @@ function checkAny(doc, constraint) {
   const kind = constraint.kind ?? 'existence';
   if (kind === 'existence') return checkConstraint(doc, constraint);
   if (kind === 'acyclic') return checkAcyclic(doc, constraint);
+  if (kind === 'absent') return checkAbsent(doc, constraint);
   throw new Error(`INHERIT_CONSTRAINT_UNKNOWN: ${kind} on ${constraint.field}`);
 }
 
@@ -708,6 +720,7 @@ const VALIDATOR_SRC = readFileSync(resolve(ROOT, 'scripts/validate-refs.mjs'), '
 const NOT_BY_CHECKREF = new Map([
   ['assets[].containedInAssetId', 'walked by the acyclic containment check, not a flat reference check'],
   ['spaces[].containedInSpaceId', 'walked by the acyclic containment check, not a flat reference check'],
+  ['tombstones[].id', 'checked against every live entity array at once; the tombstone cases below plant the id in each array'],
 ]);
 
 // ⛔ KNOWN DIVERGENCES — a floor at zero, not a permission.
@@ -859,6 +872,115 @@ test('every declared rule on guardians, kinships, relationships, pets and trusts
   const gaps = constraints.filter(c => ENTITIES.test(c.field) && !covered.has(c.field)).map(c => c.field);
   if (gaps.length > 0) throw new Error(`declared without a fixture: ${gaps.join(', ')}`);
 });
+
+// === Tombstones (proposal 0010) ===
+//
+// A tombstone says an entity was deleted since previousVersionId. Level 2
+// refuses a document that tombstones an id and keeps it alive. The rule is one
+// 'absent' row per entity array, so a tombstoned id is refused wherever it
+// reappears — not only in the array its entityType names.
+
+console.log('\nTombstones — a deleted id must not be live:');
+
+const TOMB_DIR = resolve(RI_DIR, 'tombstones');
+const WITH_TOMBSTONES = resolve(TOMB_DIR, 'with-tombstones.json');
+const LIVE_SAME_ID = resolve(TOMB_DIR, 'live-same-id.json');
+const NO_TOMBSTONES = resolve(TOMB_DIR, 'no-tombstones.json');
+const withTombstones = JSON.parse(readFileSync(WITH_TOMBSTONES, 'utf8'));
+const absentRows = constraints.filter(c => (c.kind ?? 'existence') === 'absent');
+
+// Every root array, in either document root, whose items are entities with a
+// required id. Derived from the schemas so a new entity array cannot arrive
+// without a tombstone row.
+function entityArrays(rootFile) {
+  const root = JSON.parse(readFileSync(resolve(ROOT, 'v3', rootFile), 'utf8'));
+  // Follow $ref until it lands on a definition: catalogue.json's legacyContacts
+  // points at an items node that is itself only a $ref.
+  const load = (ref, from = rootFile) => {
+    const [file, frag = ''] = ref.split('#');
+    const at = file || from;
+    let node = JSON.parse(readFileSync(resolve(ROOT, 'v3', at), 'utf8'));
+    for (const seg of frag.split('/').filter(Boolean)) node = node[seg];
+    return node.$ref ? load(node.$ref, at) : node;
+  };
+  return Object.entries(root.properties)
+    .filter(([, p]) => p.items?.$ref)
+    .filter(([, p]) => (load(p.items.$ref).required ?? []).includes('id'))
+    .map(([name]) => name)
+    // importSources is document metadata, and tombstones are the deleted, not the live
+    .filter(name => name !== 'importSources' && name !== 'tombstones');
+}
+
+test('every entity array in schema.json and catalogue.json has a tombstone row', () => {
+  const arrays = new Set([...entityArrays('schema.json'), ...entityArrays('catalogue.json')]);
+  if (arrays.size < 26) throw new Error(`only ${arrays.size} entity arrays found — the derivation is broken`);
+  const covered = new Set(absentRows.filter(c => c.field === 'tombstones[].id').map(c => c.references));
+  const gaps = [...arrays].filter(a => !covered.has(`${a}[].id`));
+  if (gaps.length > 0) throw new Error(`no tombstones[].id absent row for: ${gaps.join(', ')}`);
+});
+
+test('every tombstone row is required and reports INHERIT_TOMBSTONE_LIVE, a registered level-2 code', () => {
+  const registry = JSON.parse(readFileSync(resolve(ROOT, 'v3/common/error-codes.json'), 'utf8'));
+  const entry = registry.default.codes.find(c => c.code === 'INHERIT_TOMBSTONE_LIVE');
+  if (!entry || entry.level !== 2) throw new Error('INHERIT_TOMBSTONE_LIVE is not a level-2 code in error-codes.json');
+  const wrong = absentRows.filter(c => c.field !== 'tombstones[].id' || c.required !== true || c.code !== 'INHERIT_TOMBSTONE_LIVE');
+  if (wrong.length > 0) throw new Error(`malformed absent rows: ${JSON.stringify(wrong)}`);
+});
+
+test('with-tombstones.json carries tombstones and passes validate-refs.mjs', () => {
+  if (!(withTombstones.tombstones?.length > 0)) throw new Error('the fixture carries no tombstones — vacuous');
+  const { status, out } = runValidator(WITH_TOMBSTONES);
+  if (status !== 0) throw new Error(`exit ${status}, expected 0:\n${out}`);
+});
+
+test('no-tombstones.json — a versioned document that deletes nothing — passes validate-refs.mjs', () => {
+  const none = JSON.parse(readFileSync(NO_TOMBSTONES, 'utf8'));
+  if ('tombstones' in none) throw new Error('the fixture carries tombstones — it is not the none case');
+  const hits = absentRows.flatMap(c => checkAbsent(none, c));
+  if (hits.length > 0) throw new Error(`absent rows fired with no tombstones: ${JSON.stringify(hits)}`);
+  const { status, out } = runValidator(NO_TOMBSTONES);
+  if (status !== 0) throw new Error(`exit ${status}, expected 0:\n${out}`);
+});
+
+test('this file\'s interpreter agrees: with-tombstones.json breaks no absent row', () => {
+  const hits = absentRows.flatMap(c => checkAbsent(withTombstones, c));
+  if (hits.length > 0) throw new Error(`absent rows fired on the intact fixture: ${JSON.stringify(hits)}`);
+});
+
+test('live-same-id.json — a tombstone for a live person — is rejected by validate-refs.mjs', () => {
+  const live = JSON.parse(readFileSync(LIVE_SAME_ID, 'utf8'));
+  const changed = diffLeaves(withTombstones, live);
+  if (changed.length !== 1 || changed[0] !== 'tombstones[0].id') {
+    throw new Error(`must differ from with-tombstones.json at exactly tombstones[0].id; differs at ${JSON.stringify(changed)}`);
+  }
+  const { status, out } = runValidator(LIVE_SAME_ID);
+  if (status !== 1) throw new Error(`exit ${status}, expected 1 — the live tombstoned id was not caught`);
+  if (!out.includes('INHERIT_TOMBSTONE_LIVE') || !out.includes('tombstones[0].id')) {
+    throw new Error(`exit 1, but not for the tombstone:\n${out}`);
+  }
+});
+
+// The same refusal for every row: plant the first tombstone's id as a live
+// entity in each row's array, one document per array, and run the shipped
+// validator. An array the validator forgets exits 0 here.
+const tmp = mkdtempSync(join(tmpdir(), 'inherit-tombstones-'));
+try {
+  for (const c of absentRows) {
+    const array = c.references.replace(/\[\]\.id$/, '');
+    test(`tombstones[].id absent from ${c.references} — a live ${array} entry with a tombstoned id is rejected`, () => {
+      const doc = structuredClone(withTombstones);
+      doc[array] = [...(Array.isArray(doc[array]) ? doc[array] : []), { id: doc.tombstones[0].id }];
+      const path = join(tmp, `${array}.json`);
+      writeFileSync(path, JSON.stringify(doc));
+      if (checkAbsent(doc, c).length !== 1) throw new Error('this file\'s interpreter does not see the planted id');
+      const { status, out } = runValidator(path);
+      if (status !== 1) throw new Error(`exit ${status}, expected 1 — validate-refs.mjs does not check ${array}`);
+      if (!out.includes(`${array}[`)) throw new Error(`exit 1, but the live ${array} entry is not named:\n${out}`);
+    });
+  }
+} finally {
+  rmSync(tmp, { recursive: true, force: true });
+}
 
 console.log('\n' + '═'.repeat(50));
 console.log(`Cross-reference tests: ${passed} passed, ${failed} failed, ${passed + failed} total`);

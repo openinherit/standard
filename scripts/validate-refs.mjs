@@ -11,6 +11,7 @@
  * - kinship.fromPersonId must exist in people[].id
  * - valuation.entityId must exist in assets[].id, properties[].id, or assetCollections[].id
  * - asset.propertyId must exist in properties[].id
+ * - a tombstones[].id must NOT exist in any live entity array
  *
  * Usage: node scripts/validate-refs.mjs <inherit-document.json>
  *
@@ -233,6 +234,32 @@ if (doc.estate) {
 // Spaces — property references
 (doc.spaces || []).forEach((s, i) => {
   checkRef('spaces', i, 'propertyId', s.propertyId, [propertyIds], 'properties');
+});
+
+// Tombstones (proposal 0010) — an id the document says was deleted must not
+// also be live in it. Every entity array is searched, not only the one the
+// tombstone's entityType names: a deleted person kept alive as an asset is
+// the same contradiction.
+const LIVE_ENTITY_ARRAYS = [
+  'people', 'kinships', 'relationships', 'properties', 'assets', 'assetCollections',
+  'liabilities', 'bequests', 'trusts', 'executors', 'guardians', 'wishes', 'documents',
+  'nonprobateTransfers', 'proxyAuthorisations', 'powersOfAppointment', 'valuations',
+  'lifetimeTransfers', 'organisations', 'spaces', 'insurancePolicies', 'pets',
+  'assetInterests', 'dealerInterests', 'legacyContacts', 'recommendedActions',
+];
+
+(doc.tombstones || []).forEach((t, i) => {
+  if (!t?.id) return;
+  for (const array of LIVE_ENTITY_ARRAYS) {
+    (Array.isArray(doc[array]) ? doc[array] : []).forEach((entity, j) => {
+      if (entity?.id !== t.id) return;
+      console.error(
+        `${RED}INHERIT_TOMBSTONE_LIVE:${NC} tombstones[${i}].id = "${t.id}" ` +
+        `→ still live at ${array}[${j}]`
+      );
+      errors++;
+    });
+  }
 });
 
 // ── Report ─────────────────────────────────────────────────────────

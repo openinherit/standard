@@ -6,11 +6,11 @@
   "schemas": [
     {
       "file": "schemas/inherit-v3-bundled.json",
-      "sha256": "d683b994dc9afc67cb1176850620208a62a6313fecd45f18624d10fe886234bd"
+      "sha256": "e43e2df031675e6902162f2386e820cd6a7932c75a91085799083d2f43fd76ab"
     },
     {
       "file": "schemas/catalogue-v3-bundled.json",
-      "sha256": "2fa03777a28fbe4f8d9f9a09d881fef166955c765473e6f44e28ba3db489d9fc"
+      "sha256": "09d058716afade459dd31d41fc274dd1d474921df766b810ac7c204b3defc205"
     }
   ],
   "tests": [

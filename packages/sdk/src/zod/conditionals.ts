@@ -910,6 +910,7 @@ const RULES: Record<string, Rule> = {
         "recommendedActions",
         "schemaVersion",
         "spaces",
+        "tombstones",
         "valuations",
         "versionedAt",
         "wishes"
@@ -945,6 +946,7 @@ const RULES: Record<string, Rule> = {
       "recommendedActions",
       "schemaVersion",
       "spaces",
+      "tombstones",
       "valuations",
       "versionedAt",
       "wishes"
@@ -4250,6 +4252,7 @@ const RULES: Record<string, Rule> = {
         "relationships",
         "schemaVersion",
         "spaces",
+        "tombstones",
         "trusts",
         "valuations",
         "versionedAt",
@@ -4299,6 +4302,7 @@ const RULES: Record<string, Rule> = {
       "relationships",
       "schemaVersion",
       "spaces",
+      "tombstones",
       "trusts",
       "valuations",
       "versionedAt",
@@ -4761,6 +4765,7 @@ const REFKEYS: Record<string, { props: string[]; patterns: string[] }> = {
       "recommendedActions",
       "schemaVersion",
       "spaces",
+      "tombstones",
       "valuations",
       "versionedAt",
       "wishes"

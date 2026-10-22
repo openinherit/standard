@@ -4,7 +4,7 @@
   "commonTypes": 16,
   "extensionDirectories": 22,
   "referenceDataFiles": 38,
-  "rootProperties": 45,
+  "rootProperties": 46,
   "fixtures": 37,
   "totalSchemas": 72,
   "entities": [
@@ -127,6 +127,7 @@
     "relationships",
     "schemaVersion",
     "spaces",
+    "tombstones",
     "trusts",
     "valuations",
     "versionedAt",
@@ -171,7 +172,7 @@
     "tokyo-estate",
     "wealth-com-export"
   ],
-  "_generatedAt": "2026-10-19T17:36:54Z",
+  "_generatedAt": "2026-10-21T17:45:49Z",
   "_generator": "scripts/generate-stats.py",
   "_warning": "Auto-generated. Do not edit manually. Run: python3 scripts/generate-stats.py",
   "version": "6.7.0",

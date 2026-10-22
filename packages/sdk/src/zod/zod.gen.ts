@@ -51,6 +51,43 @@ export const zProblemDetails = z.object({
 export const zIntegrityPath = z.string().max(200).regex(/^(x-inherit-[a-z][a-z0-9-]*|[a-z][a-zA-Z0-9]*)(\[\])?(\.[a-z][a-zA-Z0-9]*(\[\])?)*$/);
 
 /**
+ * Records that an entity was deleted. Carries the entity's type and id and when it was deleted, never the deleted record itself
+ */
+export const zTombstone = z.strictObject({
+    entityType: z.enum([
+        'person',
+        'kinship',
+        'relationship',
+        'property',
+        'asset',
+        'asset_collection',
+        'liability',
+        'bequest',
+        'trust',
+        'executor',
+        'guardian',
+        'wish',
+        'document',
+        'nonprobate_transfer',
+        'proxy_authorisation',
+        'power_of_appointment',
+        'valuation',
+        'lifetime_transfer',
+        'organisation',
+        'space',
+        'insurance_policy',
+        'pet',
+        'asset_interest',
+        'dealer_interest',
+        'legacy_contact',
+        'recommended_action'
+    ]),
+    id: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/),
+    deletedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
+    reason: z.string().max(2000).optional()
+});
+
+/**
  * Money
  *
  * Monetary value in integer minor currency units with ISO 4217 code. Never floating point
@@ -3217,6 +3254,7 @@ const zCatalogue$generated = z.object({
     versionedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
     previousVersionId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
     changeDescription: z.string().max(2000).optional(),
+    tombstones: z.array(zTombstone).max(10000).optional(),
     assets: z.array(zAsset).max(10000),
     assetCollections: z.array(zAssetCollection).max(500).optional(),
     organisations: z.array(zOrganisation).max(200).optional(),
@@ -8511,7 +8549,11 @@ export const zIntegrityConstraint = z.strictObject({
     field: zIntegrityPath,
     references: zIntegrityPath,
     required: z.boolean().optional(),
-    kind: z.enum(['existence', 'acyclic']).optional().default('existence'),
+    kind: z.enum([
+        'existence',
+        'acyclic',
+        'absent'
+    ]).optional().default('existence'),
     maxDepth: z.int().gte(1).lte(64).optional(),
     code: z.string().max(100),
     errorMessage: z.string().max(500)
@@ -8546,6 +8588,7 @@ const zSchema$generated = z.intersection(z.unknown(), z.object({
     versionedAt: z.iso.datetime({ offset: true }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/).optional(),
     previousVersionId: z.guid().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/).nullish(),
     changeDescription: z.string().max(2000).optional(),
+    tombstones: z.array(zTombstone).max(10000).optional(),
     estate: zEstate.optional(),
     people: z.array(zPerson).min(1).max(500).optional(),
     kinships: z.array(zKinship).max(1000).optional(),
@@ -8874,6 +8917,214 @@ const zSchema$generated = z.intersection(z.unknown(), z.object({
             required: false,
             code: 'INHERIT_REF_BROKEN',
             errorMessage: 'Trust petId references a pet that does not exist'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'people[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live person'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'kinships[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live kinship'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'relationships[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live relationship'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'properties[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live property'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'assets[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live asset'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'assetCollections[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live asset collection'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'liabilities[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live liability'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'bequests[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live bequest'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'trusts[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live trust'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'executors[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live executor'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'guardians[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live guardian'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'wishes[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live wish'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'documents[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live document'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'nonprobateTransfers[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live nonprobate transfer'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'proxyAuthorisations[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live proxy authorisation'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'powersOfAppointment[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live power of appointment'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'valuations[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live valuation'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'lifetimeTransfers[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live lifetime transfer'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'organisations[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live organisation'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'spaces[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live space'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'insurancePolicies[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live insurance policy'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'pets[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live pet'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'assetInterests[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live asset interest'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'dealerInterests[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live dealer interest'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'legacyContacts[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live legacy contact'
+        },
+        {
+            field: 'tombstones[].id',
+            references: 'recommendedActions[].id',
+            kind: 'absent',
+            required: true,
+            code: 'INHERIT_TOMBSTONE_LIVE',
+            errorMessage: 'A tombstoned id is still a live recommended action'
         }
     ])
 }));

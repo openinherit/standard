@@ -16,7 +16,7 @@
         "serviceType": "reserved_probate_activities",
         "jurisdiction": "E&W"
       },
-      "expected": "deny",
+      "expected": "allow",
       "basis": "A solicitor is an authorised person for reserved probate activities: Legal Services Act 2007 s.18 and Sch 4 (the SRA as approved regulator)."
     },
     {

@@ -219,3 +219,21 @@ func TestJudgePerHeirNamesAmountsInPounds(t *testing.T) {
 		t.Errorf("detail = %q", detail)
 	}
 }
+
+// oracle_verify.py defaults a rule key only when it is ABSENT; an explicit
+// empty or null value is not the default, so it is refused here.
+func TestParseRefusesExplicitEmptyRuleKeys(t *testing.T) {
+	for _, rule := range []string{
+		`{"rule_file": "r.catala_en", "scope": "S", "result_field": ""}`,
+		`{"rule_file": "r.catala_en", "scope": "S", "result_kind": null}`,
+		`{"rule_file": "r.catala_en", "scope": "S", "list_field": ""}`,
+	} {
+		raw := `{"rule": ` + rule + `, "cases": [{"label": "x", "inputs": {}, "expected_money": "1"}]}`
+		if _, err := Parse([]byte(raw)); err == nil {
+			t.Errorf("Parse accepted %s", rule)
+		}
+	}
+	if _, err := Parse([]byte(`{"rule": {"rule_file": "r", "scope": "S"}, "currency": "", "cases": [{"label": "x", "inputs": {}}]}`)); err == nil {
+		t.Error("Parse accepted an explicit empty currency")
+	}
+}

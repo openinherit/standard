@@ -36,15 +36,15 @@ type Case struct {
 	Expect          string        // per_heir: match | wrong_split
 }
 
-// Rule names the rule an oracle runs.
+// Rule names the rule an oracle runs (oracle.rule), defaults applied.
 type Rule struct {
-	RuleFile       string   `json:"rule_file"`
-	Scope          string   `json:"scope"`
-	ResultField    string   `json:"result_field"`
-	ResultKind     string   `json:"result_kind"`
-	ListField      string   `json:"list_field"`
-	RepeatBy       *string  `json:"repeat_by"`
-	DependsModules []string `json:"depends_modules"`
+	RuleFile       string
+	Scope          string
+	ResultField    string
+	ResultKind     string
+	ListField      string
+	RepeatBy       *string
+	DependsModules []string
 }
 
 // Oracle is a parsed tests/oracles/*.oracle.json.
@@ -54,34 +54,70 @@ type Oracle struct {
 	Currency string
 }
 
-// Parse reads an oracle, applying oracle_verify.py's defaults.
+// Parse reads an oracle, applying oracle_verify.py's defaults. As there, a
+// default applies only to an ABSENT key: an explicit empty or null value is
+// refused, not read as the default.
 func Parse(raw []byte) (*Oracle, error) {
 	var top struct {
-		Rule     *Rule             `json:"rule"`
-		Cases    []json.RawMessage `json:"cases"`
-		Currency string            `json:"currency"`
+		Rule     map[string]json.RawMessage `json:"rule"`
+		Cases    []json.RawMessage          `json:"cases"`
+		Currency json.RawMessage            `json:"currency"`
 	}
 	if err := json.Unmarshal(raw, &top); err != nil {
 		return nil, fmt.Errorf("not valid JSON: %w", err)
 	}
-	if top.Rule == nil || top.Rule.RuleFile == "" || top.Rule.Scope == "" {
+	if top.Rule == nil {
 		return nil, fmt.Errorf("oracle.rule must set rule_file + scope")
+	}
+	o := &Oracle{}
+	str := func(key, def string, dst *string) error {
+		v, ok := top.Rule[key]
+		if !ok {
+			*dst = def
+			return nil
+		}
+		if err := json.Unmarshal(v, dst); err != nil || *dst == "" {
+			return fmt.Errorf("oracle.rule.%s must be a non-empty string, got %s", key, v)
+		}
+		return nil
+	}
+	for _, f := range []struct {
+		key, def string
+		dst      *string
+	}{
+		{"rule_file", "", &o.Rule.RuleFile},
+		{"scope", "", &o.Rule.Scope},
+		{"result_field", "verdict", &o.Rule.ResultField},
+		{"result_kind", "scalar", &o.Rule.ResultKind},
+		{"list_field", "per_member_amounts", &o.Rule.ListField},
+	} {
+		if err := str(f.key, f.def, f.dst); err != nil {
+			return nil, err
+		}
+	}
+	if o.Rule.RuleFile == "" || o.Rule.Scope == "" {
+		return nil, fmt.Errorf("oracle.rule must set rule_file + scope")
+	}
+	if v, ok := top.Rule["repeat_by"]; ok && string(v) != "null" {
+		var r string
+		if err := json.Unmarshal(v, &r); err != nil {
+			return nil, fmt.Errorf("oracle.rule.repeat_by must be a string, got %s", v)
+		}
+		o.Rule.RepeatBy = &r
+	}
+	if v, ok := top.Rule["depends_modules"]; ok {
+		if err := json.Unmarshal(v, &o.Rule.DependsModules); err != nil {
+			return nil, fmt.Errorf("oracle.rule.depends_modules must be a list of paths, got %s", v)
+		}
 	}
 	if len(top.Cases) == 0 {
 		return nil, fmt.Errorf("oracle has no cases (would vacuously pass)")
 	}
-	o := &Oracle{Rule: *top.Rule, Currency: top.Currency}
-	if o.Rule.ResultField == "" {
-		o.Rule.ResultField = "verdict"
-	}
-	if o.Rule.ResultKind == "" {
-		o.Rule.ResultKind = "scalar"
-	}
-	if o.Rule.ListField == "" {
-		o.Rule.ListField = "per_member_amounts"
-	}
-	if o.Currency == "" {
-		o.Currency = "GBP"
+	o.Currency = "GBP"
+	if top.Currency != nil {
+		if err := json.Unmarshal(top.Currency, &o.Currency); err != nil {
+			return nil, fmt.Errorf("currency must be one of EUR, GBP, USD, got %s", top.Currency)
+		}
 	}
 	switch o.Currency {
 	case "GBP", "EUR", "USD":

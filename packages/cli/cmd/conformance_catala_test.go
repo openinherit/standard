@@ -298,3 +298,38 @@ func TestRulesCatalaRealTreeAccountsForEveryOracle(t *testing.T) {
 	}
 	t.Logf("%d oracles, %d with an unpublished rule", len(files), unpublished)
 }
+
+// A clerk that runs but cannot build the project (catala missing, a compile
+// error) has not shown that any figure differs: that is unanswered, not RED.
+func TestRulesCatalaToolchainFailureIsNotRed(t *testing.T) {
+	clerk := fakeClerk(t, "this text is in no driver", "")
+	if err := os.WriteFile(clerk, []byte("#!/bin/sh\n[ \"$1\" = --version ] && { echo 1.2.0; exit 0; }\n[ \"$1\" = start ] && exit 0\necho 'clerk: error: cannot find catala'; exit 1\n"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	code, out := runCatala(t, catalaTree(t), clerk)
+	if code != 2 {
+		t.Fatalf("exit %d, want 2 (a toolchain failure is not a wrong answer)\n%s", code, out)
+	}
+}
+
+func TestRulesCatalaRelativeClerkPath(t *testing.T) {
+	std, _ := filepath.Abs(catalaTree(t))
+	clerk := fakeClerk(t, "assertion c1_amt = $322,000", "")
+	t.Chdir(filepath.Dir(clerk))
+	if code, out := runCatala(t, std, "./clerk"); code != 0 {
+		t.Fatalf("exit %d, want 0 with --clerk ./clerk\n%s", code, out)
+	}
+}
+
+func TestRulesCatalaPerHeirCaseWithoutClaimCannotBeAnswered(t *testing.T) {
+	std := perHeirTree(t, []int{25000, 25000, 25000, 25000})
+	editJSON(t, filepath.Join(std, "tests/oracles/class-gift.oracle.json"), func(d map[string]any) {
+		c := d["cases"].([]any)[0].(map[string]any)
+		delete(c, "expected_per_heir_gbp")
+		d["cases"] = []any{c}
+	})
+	clerk := fakeClerk(t, "", `{ "per_member": [] }`)
+	if code, out := runCatala(t, std, clerk); code != 2 {
+		t.Fatalf("exit %d, want 2 (a case with nothing to compare cannot pass)\n%s", code, out)
+	}
+}

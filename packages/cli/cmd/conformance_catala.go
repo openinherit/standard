@@ -26,6 +26,11 @@ func runCatalaLeg(standard, clerk string) (rulesLegResult, error) {
 	if err != nil {
 		return lr, unanswerable("clerk not found (%s): the Catala leg needs catala and clerk 1.2.0 on PATH, or --clerk", err)
 	}
+	// clerk runs in a throwaway project directory, where a relative path
+	// would no longer resolve.
+	if bin, err = filepath.Abs(bin); err != nil {
+		return lr, unanswerable("cannot resolve %s: %s", clerk, err)
+	}
 	ver, err := exec.Command(bin, "--version").Output()
 	if err != nil {
 		return lr, unanswerable("cannot run %s --version: %s", bin, err)
@@ -106,8 +111,14 @@ func gradeOracle(standard, clerk, file string) ruleOutcome {
 			o.Status, o.Detail = "GREEN", fmt.Sprintf("%d case(s) reproduced", len(orc.Cases))
 			return o
 		}
-		o.Status, o.Detail = "RED", "clerk: "+clerkFailureLines(out)
-		return o
+		// RED only when an assertion ran and failed. Anything else -- catala
+		// missing, a rule that does not build -- has not shown that any figure
+		// differs, so it is unanswered, never a pass.
+		if strings.Contains(out, "Assertion failed") {
+			o.Status, o.Detail = "RED", "clerk: "+clerkFailureLines(out)
+			return o
+		}
+		return errored("clerk did not run the assertions: %s", clerkFailureLines(out))
 
 	case "per_heir":
 		var red []string
@@ -134,6 +145,9 @@ func gradeOracle(standard, clerk, file string) ruleOutcome {
 			computed, err := oracle.ExpandPerHeir(perBranch, counts)
 			if err != nil {
 				return errored("case %s: %s", c.Label, err)
+			}
+			if c.ExpectedPerHeir == nil {
+				return errored("case %s has no expected_per_heir_gbp", c.Label)
 			}
 			claimed := make([]int64, len(c.ExpectedPerHeir))
 			for i, n := range c.ExpectedPerHeir {

@@ -1,6 +1,6 @@
 {
   "name": "openinherit",
-  "version": "6.7.0",
+  "version": "6.8.0",
   "private": true,
   "description": "INHERIT — open estate data interchange standard",
   "type": "module",
@@ -28,6 +28,7 @@
     "validate:examples": "bash scripts/validate-examples.sh",
     "test:catalogue-profile": "bash scripts/check-catalogue-profile.sh",
     "test:cross-border": "node scripts/test-cross-border-fixture.mjs",
+    "test:conformance-levels": "node scripts/test-conformance.mjs",
     "test:cascade": "python3 scripts/check-jurisdiction-cascade.py --tree . --min-tokens 69",
     "validate:refs": "node scripts/validate-refs.mjs",
     "validate:net-equity": "node scripts/validate-net-equity.mjs",

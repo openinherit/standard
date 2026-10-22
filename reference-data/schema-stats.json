@@ -172,9 +172,9 @@
     "tokyo-estate",
     "wealth-com-export"
   ],
-  "_generatedAt": "2026-10-21T17:45:49Z",
+  "_generatedAt": "2026-10-22T11:10:50Z",
   "_generator": "scripts/generate-stats.py",
   "_warning": "Auto-generated. Do not edit manually. Run: python3 scripts/generate-stats.py",
-  "version": "6.7.0",
+  "version": "6.8.0",
   "_healthWarnings": []
 }

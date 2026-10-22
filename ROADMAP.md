@@ -8,7 +8,7 @@ title: Roadmap
      When bumping the version: update package.json first, then this heading.
      Note: v6.0.0 schema changes are merged but the npm package version bump is pending. -->
 
-## Current: v6.7.0 (October 2026)
+## Current: v6.8.0 (October 2026)
 
 *Schema changes merged to `main`. npm publish pending.*
 

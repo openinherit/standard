@@ -22,6 +22,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   without `tombstones` validates exactly as before. Vendored bundles, generated clients, runtime
   validators, Go models and the reference pages are regenerated.
 
+## [6.8.0] — 2026-10-22
+
+### Added
+
 - `AssetInterest` is as expressive as `DealerInterest` (proposal 0009). Five optional properties:
   `visibility` (`common/visibility.json`), `images` (`common/media.json`, as on `asset`, `pet` and
   `space`), `communicationInitiatedBy` (`interested_party | testator | proxy | executor`: who
@@ -104,6 +108,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   6.x and may not contradict `interestStatus`.
 
 ### Fixed
+
+- `scripts/test-conformance.mjs` pinned 26 referential-integrity constraints after the list grew
+  to 28, and failed. It now pins 28 per kind (26 existence + 2 acyclic) and runs in
+  `validate-examples.yml`, so the next change to the list is caught in the pull request.
 
 - The generated Zod validators no longer fill in a missing required property whose schema declares
   a `default`: `write-conditional-layer.py` asserts its presence on the raw input. Zod accepted a

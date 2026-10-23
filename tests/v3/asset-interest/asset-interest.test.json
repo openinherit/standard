@@ -21,7 +21,7 @@
         "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
         "interestLevel": "agreed",
         "sourceType": "family_conversation",
-        "testatorAcknowledged": true,
+        "interestStatus": "acknowledged",
         "notes": "Sarah mentioned at Christmas 2024 that she'd love Mum's engagement ring. Mum seemed pleased and would like Sarah to have it."
       },
       "valid": true
@@ -35,7 +35,7 @@
         "personId": "b3f2a357-814f-46ab-ac49-715dcf86314d",
         "interestLevel": "strongly_wants",
         "sourceType": "testator_observed",
-        "testatorAcknowledged": false,
+        "interestStatus": "submitted",
         "notes": "Haruki has always admired the woodblock print collection — discussed at Obon 2024. He has studied Japanese art history and would be a natural custodian."
       },
       "valid": true
@@ -49,7 +49,7 @@
         "personId": "12c51788-d3ae-4df7-8f89-3fc257b49433",
         "interestLevel": "mentioned",
         "sourceType": "proxy_reported",
-        "testatorAcknowledged": false,
+        "interestStatus": "submitted",
         "notes": "Amara expressed interest in the family compound during the last family council meeting in Lagos. Reported by elder brother Emeka."
       },
       "valid": true
@@ -531,7 +531,6 @@
         "communicationInitiatedBy": "testator",
         "interestStatus": "responded",
         "testatorDisposition": "tentatively_earmarked",
-        "testatorAcknowledged": true,
         "notes": "Asked by Grandad at the family lunch which things each grandchild would like. Not a gift — only the will disposes."
       },
       "valid": true
@@ -693,27 +692,27 @@
       "valid": false
     },
     {
-      "description": "invalid — testatorAcknowledged false but interestStatus acknowledged",
+      "description": "invalid — testatorAcknowledged was removed in 7.0.0; use interestStatus (true, agreeing with acknowledged)",
       "data": {
         "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a13",
         "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
         "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
         "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
         "interestLevel": "strongly_wants",
-        "testatorAcknowledged": false,
+        "testatorAcknowledged": true,
         "interestStatus": "acknowledged"
       },
       "valid": false
     },
     {
-      "description": "invalid — testatorAcknowledged true but interestStatus submitted",
+      "description": "invalid — testatorAcknowledged was removed in 7.0.0; use interestStatus (false, agreeing with submitted)",
       "data": {
         "id": "5f0e8c1a-2b3d-4e5f-8a9b-0c1d2e3f4a14",
         "rootDocumentId": "bf5bece3-3df1-4769-b928-2eb0b32131a3",
         "assetId": "9176cc24-3355-4b8b-a872-fbb8786e088c",
         "personId": "8160be9a-3fac-4976-b4c7-21175f4c4569",
         "interestLevel": "strongly_wants",
-        "testatorAcknowledged": true,
+        "testatorAcknowledged": false,
         "interestStatus": "submitted"
       },
       "valid": false

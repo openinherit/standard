@@ -2183,10 +2183,6 @@ type AssetInterest struct {
 	// SourceType How this interest was communicated or recorded
 	SourceType interface{} `json:"sourceType,omitempty"`
 
-	// TestatorAcknowledged Whether the testator has seen and acknowledged this interest. Deprecated: use interestStatus, which says what happened after acknowledgement as well. true corresponds to an interestStatus other than submitted, false to submitted; the two may not disagree
-	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
-	TestatorAcknowledged *bool `json:"testatorAcknowledged,omitempty"`
-
 	// TestatorDisposition The testator's response to this expression of interest. Modelled on dealer-interest testatorDisposition. Never a gift and never a disposition: only a will or a bequest disposes. A direction about how the item should be distributed is a wish, not a response
 	TestatorDisposition interface{} `json:"testatorDisposition,omitempty"`
 
@@ -8462,13 +8458,6 @@ func (t AssetInterest) MarshalJSON() ([]byte, error) {
 		return nil, fmt.Errorf("error marshaling 'sourceType': %w", err)
 	}
 
-	if t.TestatorAcknowledged != nil {
-		object["testatorAcknowledged"], err = json.Marshal(t.TestatorAcknowledged)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'testatorAcknowledged': %w", err)
-		}
-	}
-
 	object["testatorDisposition"], err = json.Marshal(t.TestatorDisposition)
 	if err != nil {
 		return nil, fmt.Errorf("error marshaling 'testatorDisposition': %w", err)
@@ -8639,13 +8628,6 @@ func (t *AssetInterest) UnmarshalJSON(b []byte) error {
 		err = json.Unmarshal(raw, &t.SourceType)
 		if err != nil {
 			return fmt.Errorf("error reading 'sourceType': %w", err)
-		}
-	}
-
-	if raw, found := object["testatorAcknowledged"]; found {
-		err = json.Unmarshal(raw, &t.TestatorAcknowledged)
-		if err != nil {
-			return fmt.Errorf("error reading 'testatorAcknowledged': %w", err)
 		}
 	}
 

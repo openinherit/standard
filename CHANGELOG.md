@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Removed
+
+- **BREAKING (7.0.0):** `AssetInterest.testatorAcknowledged` is removed, together with the two
+  conditionals that kept it consistent with `interestStatus`. It was deprecated in 6.8.0
+  (proposal 0009). `asset-interest.json` does not accept unevaluated properties, so a document that
+  still carries the field is now invalid. To migrate, delete `testatorAcknowledged` and, where the
+  record has no `interestStatus`, set one:
+  - `testatorAcknowledged: true` becomes `interestStatus: "acknowledged"`, or `responded`,
+    `withdrawn` or `superseded` if the record already says more than that the testator has seen it.
+  - `testatorAcknowledged: false` becomes `interestStatus: "submitted"`.
+  - A record without the field needs no change.
+
+  Records that already carry an `interestStatus` lose nothing: in 6.x the two fields could not
+  disagree. Vendored bundles, generated clients, the Zod, pydantic and Go types, the conformance kit
+  and the reference page are regenerated.
+
 ## [6.8.0] — 2026-10-22
 
 ### Added

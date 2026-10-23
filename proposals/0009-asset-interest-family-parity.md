@@ -186,7 +186,8 @@ Both report a loss that is not one. The four old `privacyLevel` values are still
 ## Open questions — not settled by this proposal
 
 1. **When `testatorAcknowledged` goes.** It is deprecated here and can only be removed in a major
-   release.
+   release. *Settled 21 October 2026:* it stays deprecated through 6.x and is removed in 7.0.0; the
+   removal and its migration are recorded in `CHANGELOG.md`.
 2. **The generators drop an `if` they cannot compile.** `write-conditional-layer.py`'s own docstring
    says a construct it cannot evaluate is never dropped silently, yet a multi-property `if` in a
    top-level `allOf` is skipped. The corpus caught it here only because a case existed for each

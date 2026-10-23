@@ -10564,12 +10564,6 @@ export type AssetInterest = unknown & {
      */
     sourceType?: 'family_conversation' | 'written_request' | 'chat_message' | 'platform_private_message' | 'platform_group_message' | 'proxy_reported' | 'testator_observed' | 'manual';
     /**
-     * Whether the testator has seen and acknowledged this interest. Deprecated: use interestStatus, which says what happened after acknowledgement as well. true corresponds to an interestStatus other than submitted, false to submitted; the two may not disagree
-     *
-     * @deprecated
-     */
-    testatorAcknowledged?: boolean;
-    /**
      * Where this expression of interest has got to. Modelled on dealer-interest offerStatus, without the stages of a priced offer. An expression of interest binds no one at any stage; the testator's answer is testatorDisposition
      */
     interestStatus?: 'submitted' | 'acknowledged' | 'responded' | 'withdrawn' | 'superseded';
@@ -10697,7 +10691,7 @@ export type AssetInterest = unknown & {
     provenance?: Provenance;
     [key: string]: {
         [key: string]: unknown;
-    } | string | string | null | string | null | string | 'mentioned' | 'expressed_interest' | 'strongly_wants' | 'agreed' | 'family_conversation' | 'written_request' | 'chat_message' | 'platform_private_message' | 'platform_group_message' | 'proxy_reported' | 'testator_observed' | 'manual' | boolean | 'submitted' | 'acknowledged' | 'responded' | 'withdrawn' | 'superseded' | 'noted' | 'tentatively_earmarked' | 'declined' | 'interested_party' | 'testator' | 'proxy' | 'executor' | Visibility | Array<Media> | string | 'testator' | 'beneficiary' | 'executor' | 'proxy' | string | 'acquire' | 'receive' | 'allocate' | 'sell' | 'admire' | string | {
+    } | string | string | null | string | null | string | 'mentioned' | 'expressed_interest' | 'strongly_wants' | 'agreed' | 'family_conversation' | 'written_request' | 'chat_message' | 'platform_private_message' | 'platform_group_message' | 'proxy_reported' | 'testator_observed' | 'manual' | 'submitted' | 'acknowledged' | 'responded' | 'withdrawn' | 'superseded' | 'noted' | 'tentatively_earmarked' | 'declined' | 'interested_party' | 'testator' | 'proxy' | 'executor' | Visibility | Array<Media> | string | 'testator' | 'beneficiary' | 'executor' | 'proxy' | string | 'acquire' | 'receive' | 'allocate' | 'sell' | 'admire' | string | {
         /**
          * The identifier system, from reference-data/identifier-systems.json
          */

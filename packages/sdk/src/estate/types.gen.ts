@@ -455,6 +455,28 @@ export type ProblemDetails = {
 export type IntegrityPath = string;
 
 /**
+ * Records that an entity was deleted. Carries the entity's type and id and when it was deleted, never the deleted record itself
+ */
+export type Tombstone = {
+    /**
+     * The type of entity that was deleted. asset and asset_collection are spelt as on splitFrom and mergedInto; every other entity with its own root array in schema.json or catalogue.json is named the same way
+     */
+    entityType: 'person' | 'kinship' | 'relationship' | 'property' | 'asset' | 'asset_collection' | 'liability' | 'bequest' | 'trust' | 'executor' | 'guardian' | 'wish' | 'document' | 'nonprobate_transfer' | 'proxy_authorisation' | 'power_of_appointment' | 'valuation' | 'lifetime_transfer' | 'organisation' | 'space' | 'insurance_policy' | 'pet' | 'asset_interest' | 'dealer_interest' | 'legacy_contact' | 'recommended_action';
+    /**
+     * The id the deleted entity had
+     */
+    id: string;
+    /**
+     * When the entity was deleted
+     */
+    deletedAt: string;
+    /**
+     * Why the entity was deleted
+     */
+    reason?: string;
+};
+
+/**
  * Money
  *
  * Monetary value in integer minor currency units with ISO 4217 code. Never floating point
@@ -6453,6 +6475,10 @@ export type Catalogue2 = {
      */
     changeDescription?: string;
     /**
+     * Entities deleted since the version named by previousVersionId, one entry each (proposal 0010). Same shape and same Level 2 rule as the root schema
+     */
+    tombstones?: Array<Tombstone>;
+    /**
      * The catalogued items
      */
     assets: Array<Asset2>;
@@ -6566,7 +6592,7 @@ export type Catalogue2 = {
         name: string;
         version?: string;
         url?: string;
-    } | number | string | null | string | Array<Asset2> | Array<AssetCollection2> | Array<Organisation2> | Array<Property2> | Array<Space2> | Array<Valuation2> | Array<LegacyContact> | Array<AssetInterest2> | Array<Wish2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | Array<ImportSource> | Completeness2 | Array<RecommendedAction> | Conformance2 | Array<InsurancePolicy2> | Array<DealerInterest2> | {
+    } | number | string | null | string | Array<Tombstone> | Array<Asset2> | Array<AssetCollection2> | Array<Organisation2> | Array<Property2> | Array<Space2> | Array<Valuation2> | Array<LegacyContact> | Array<AssetInterest2> | Array<Wish2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | Array<ImportSource> | Completeness2 | Array<RecommendedAction> | Conformance2 | Array<InsurancePolicy2> | Array<DealerInterest2> | {
         /**
          * Whether the gift list is currently shareable
          */
@@ -16476,9 +16502,9 @@ export type IntegrityConstraint = {
      */
     required?: boolean;
     /**
-     * The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops
+     * The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops. 'absent' requires the reverse of 'existence': the value at field must NOT be present in the target array. The tombstone rows use it — an id the document says was deleted must not also be live
      */
-    kind?: 'existence' | 'acyclic';
+    kind?: 'existence' | 'acyclic' | 'absent';
     /**
      * For kind 'acyclic': the maximum number of hops a containment chain may have before it is rejected as unreasonably deep. A chain longer than this fails with INHERIT_DEPTH_EXCEEDED even if it is acyclic
      */
@@ -16573,6 +16599,10 @@ export type Schema = unknown & {
      * Human-readable summary of what changed in this version. Like a commit message for the document
      */
     changeDescription?: string;
+    /**
+     * Entities deleted since the version named by previousVersionId, one entry each. A tombstone is what lets a document carry a change set and not only a full snapshot: without one, an entity missing from a newer version may have been deleted or may simply not have been exported (proposal 0010)
+     */
+    tombstones?: Array<Tombstone>;
     /**
      * The single estate record for this document
      */
@@ -16883,7 +16913,7 @@ export type Schema = unknown & {
          * URL of the generating software or organisation
          */
         url?: string;
-    } | number | string | null | string | Estate2 | Array<Person2> | Array<Kinship2> | Array<Relationship2> | Array<Property2> | Array<Asset2> | Array<AssetCollection2> | Array<Liability2> | Array<Bequest2> | Array<Trust2> | Array<Executor2> | Array<Guardian2> | Array<Wish2> | Array<Document2> | Array<NonprobateTransfer2> | Array<ProxyAuthorisation2> | Array<PowerOfAppointment2> | Array<Valuation2> | Array<LifetimeTransfer2> | Array<Organisation2> | Array<Space2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | boolean | 'document' | 'collection' | 'transaction' | Array<ImportSource> | Conformance | Array<{
+    } | number | string | null | string | Array<Tombstone> | Estate2 | Array<Person2> | Array<Kinship2> | Array<Relationship2> | Array<Property2> | Array<Asset2> | Array<AssetCollection2> | Array<Liability2> | Array<Bequest2> | Array<Trust2> | Array<Executor2> | Array<Guardian2> | Array<Wish2> | Array<Document2> | Array<NonprobateTransfer2> | Array<ProxyAuthorisation2> | Array<PowerOfAppointment2> | Array<Valuation2> | Array<LifetimeTransfer2> | Array<Organisation2> | Array<Space2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | boolean | 'document' | 'collection' | 'transaction' | Array<ImportSource> | Conformance | Array<{
         /**
          * Unique extension identifier, e.g. 'uk-england-wales', 'islamic-succession'
          */
@@ -18735,6 +18765,10 @@ export type CatalogueWritable2 = {
      */
     changeDescription?: string;
     /**
+     * Entities deleted since the version named by previousVersionId, one entry each (proposal 0010). Same shape and same Level 2 rule as the root schema
+     */
+    tombstones?: Array<Tombstone>;
+    /**
      * The catalogued items
      */
     assets: Array<AssetWritable2>;
@@ -18841,7 +18875,7 @@ export type CatalogueWritable2 = {
     auditLog?: Array<AuditEvent2>;
     [key: string]: {
         [key: string]: unknown;
-    } | 'https://openinherit.org/v3/catalogue.json' | 'catalogue' | string | string | number | string | string | null | string | Array<AssetWritable2> | Array<AssetCollection2> | Array<OrganisationWritable2> | Array<Property2> | Array<Space2> | Array<Valuation2> | Array<LegacyContact> | Array<AssetInterest2> | Array<Wish2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | Array<ImportSource> | CompletenessWritable2 | Array<RecommendedAction> | Conformance2 | Array<InsurancePolicy2> | Array<DealerInterest2> | {
+    } | 'https://openinherit.org/v3/catalogue.json' | 'catalogue' | string | string | number | string | string | null | string | Array<Tombstone> | Array<AssetWritable2> | Array<AssetCollection2> | Array<OrganisationWritable2> | Array<Property2> | Array<Space2> | Array<Valuation2> | Array<LegacyContact> | Array<AssetInterest2> | Array<Wish2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | Array<ImportSource> | CompletenessWritable2 | Array<RecommendedAction> | Conformance2 | Array<InsurancePolicy2> | Array<DealerInterest2> | {
         /**
          * Whether the gift list is currently shareable
          */
@@ -21181,6 +21215,10 @@ export type SchemaWritable = unknown & {
      */
     changeDescription?: string;
     /**
+     * Entities deleted since the version named by previousVersionId, one entry each. A tombstone is what lets a document carry a change set and not only a full snapshot: without one, an entity missing from a newer version may have been deleted or may simply not have been exported (proposal 0010)
+     */
+    tombstones?: Array<Tombstone>;
+    /**
      * The single estate record for this document
      */
     estate?: EstateWritable2;
@@ -21464,7 +21502,7 @@ export type SchemaWritable = unknown & {
     referentialIntegrity?: Array<IntegrityConstraint>;
     [key: string]: {
         [key: string]: unknown;
-    } | 'https://openinherit.org/v3/schema.json' | 'https://openinherit.org/v3/catalogue.json' | string | string | 'estate' | 'catalogue' | string | number | string | string | null | string | EstateWritable2 | Array<PersonWritable2> | Array<Kinship2> | Array<Relationship2> | Array<Property2> | Array<AssetWritable2> | Array<AssetCollection2> | Array<Liability2> | Array<Bequest2> | Array<Trust2> | Array<Executor2> | Array<Guardian2> | Array<Wish2> | Array<Document2> | Array<NonprobateTransfer2> | Array<ProxyAuthorisation2> | Array<PowerOfAppointment2> | Array<Valuation2> | Array<LifetimeTransfer2> | Array<OrganisationWritable2> | Array<Space2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | boolean | 'document' | 'collection' | 'transaction' | Array<ImportSource> | Conformance | Array<{
+    } | 'https://openinherit.org/v3/schema.json' | 'https://openinherit.org/v3/catalogue.json' | string | string | 'estate' | 'catalogue' | string | number | string | string | null | string | Array<Tombstone> | EstateWritable2 | Array<PersonWritable2> | Array<Kinship2> | Array<Relationship2> | Array<Property2> | Array<AssetWritable2> | Array<AssetCollection2> | Array<Liability2> | Array<Bequest2> | Array<Trust2> | Array<Executor2> | Array<Guardian2> | Array<Wish2> | Array<Document2> | Array<NonprobateTransfer2> | Array<ProxyAuthorisation2> | Array<PowerOfAppointment2> | Array<Valuation2> | Array<LifetimeTransfer2> | Array<OrganisationWritable2> | Array<Space2> | 'manual_entry' | 'ai_extracted' | 'ocr_scanned' | 'imported' | 'migrated' | 'system_generated' | boolean | 'document' | 'collection' | 'transaction' | Array<ImportSource> | Conformance | Array<{
         /**
          * Unique extension identifier, e.g. 'uk-england-wales', 'islamic-succession'
          */

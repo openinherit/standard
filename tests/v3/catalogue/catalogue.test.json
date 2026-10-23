@@ -1118,6 +1118,51 @@
         }
       },
       "valid": false
+    },
+    {
+      "description": "valid — tombstones: a catalogue carries tombstones for deleted assets (proposal 0010)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "documentVersion": 3,
+        "previousVersionId": "8e1d2c3b-4a5f-4e6d-9c8b-7a6f5e4d3c2b",
+        "assets": [],
+        "tombstones": [
+          {
+            "entityType": "asset",
+            "id": "d73880dc-c616-4724-ad29-79364bad1719",
+            "deletedAt": "2026-10-21T10:00:00Z",
+            "reason": "Sold at auction"
+          },
+          {
+            "entityType": "asset_interest",
+            "id": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+            "deletedAt": "2026-10-21T10:05:00Z"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "description": "invalid — tombstones: a catalogue tombstone without deletedAt (proposal 0010)",
+      "data": {
+        "$schema": "https://openinherit.org/v3/catalogue.json",
+        "documentVersion": 3,
+        "previousVersionId": "8e1d2c3b-4a5f-4e6d-9c8b-7a6f5e4d3c2b",
+        "assets": [],
+        "tombstones": [
+          {
+            "entityType": "asset",
+            "id": "d73880dc-c616-4724-ad29-79364bad1719",
+            "reason": "Sold at auction"
+          },
+          {
+            "entityType": "asset_interest",
+            "id": "9176cc24-3355-4b8b-a872-fbb8786e088c",
+            "deletedAt": "2026-10-21T10:05:00Z"
+          }
+        ]
+      },
+      "valid": false
     }
   ]
 }

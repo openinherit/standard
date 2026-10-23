@@ -113,6 +113,52 @@ class IntegrityPath(
     )
 
 
+class EntityType(Enum):
+    person = 'person'
+    kinship = 'kinship'
+    relationship = 'relationship'
+    property = 'property'
+    asset = 'asset'
+    asset_collection = 'asset_collection'
+    liability = 'liability'
+    bequest = 'bequest'
+    trust = 'trust'
+    executor = 'executor'
+    guardian = 'guardian'
+    wish = 'wish'
+    document = 'document'
+    nonprobate_transfer = 'nonprobate_transfer'
+    proxy_authorisation = 'proxy_authorisation'
+    power_of_appointment = 'power_of_appointment'
+    valuation = 'valuation'
+    lifetime_transfer = 'lifetime_transfer'
+    organisation = 'organisation'
+    space = 'space'
+    insurance_policy = 'insurance_policy'
+    pet = 'pet'
+    asset_interest = 'asset_interest'
+    dealer_interest = 'dealer_interest'
+    legacy_contact = 'legacy_contact'
+    recommended_action = 'recommended_action'
+
+
+class Tombstone(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    entityType: EntityType = Field(
+        ...,
+        description='The type of entity that was deleted. asset and asset_collection are spelt as on splitFrom and mergedInto; every other entity with its own root array in schema.json or catalogue.json is named the same way',
+    )
+    id: UUID = Field(..., description='The id the deleted entity had')
+    deletedAt: AwareDatetime = Field(..., description='When the entity was deleted')
+    reason: constr(max_length=2000) | None = Field(
+        None,
+        description='Why the entity was deleted',
+        examples=['Duplicate entry removed during estate inventory'],
+    )
+
+
 class Money(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -2690,7 +2736,7 @@ class Insurance(BaseModel):
     )
 
 
-class EntityType(Enum):
+class EntityType1(Enum):
     asset = 'asset'
     asset_collection = 'asset_collection'
 
@@ -2699,7 +2745,9 @@ class SplitFrom(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    entityType: EntityType = Field(..., description='The type of entity that was split')
+    entityType: EntityType1 = Field(
+        ..., description='The type of entity that was split'
+    )
     entityId: UUID = Field(
         ..., description='The id of the original entity that was split'
     )
@@ -2790,7 +2838,9 @@ class MergedInto(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    entityType: EntityType | None = Field(None, description='Type of the target entity')
+    entityType: EntityType1 | None = Field(
+        None, description='Type of the target entity'
+    )
     entityId: UUID | None = Field(None, description='ID of the target entity')
     mergedAt: AwareDatetime | None = Field(None, description='When the merge occurred')
     reason: constr(max_length=2000) | None = Field(
@@ -3450,7 +3500,9 @@ class SplitFrom1(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    entityType: EntityType = Field(..., description='The type of entity that was split')
+    entityType: EntityType1 = Field(
+        ..., description='The type of entity that was split'
+    )
     entityId: UUID = Field(
         ..., description='The id of the original entity that was split'
     )
@@ -3502,7 +3554,9 @@ class MergedInto1(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    entityType: EntityType | None = Field(None, description='Type of the target entity')
+    entityType: EntityType1 | None = Field(
+        None, description='Type of the target entity'
+    )
     entityId: UUID | None = Field(None, description='ID of the target entity')
     mergedAt: AwareDatetime | None = Field(None, description='When the merge occurred')
     reason: constr(max_length=2000) | None = Field(
@@ -5041,7 +5095,7 @@ class Comparable(BaseModel):
     )
 
 
-class EntityType4(Enum):
+class EntityType5(Enum):
     asset = 'asset'
     property = 'property'
     asset_collection = 'asset_collection'
@@ -5157,7 +5211,7 @@ class Valuation(BaseModel):
         description='Unique identifier for this valuation within the INHERIT document',
         examples=['a1b2c3d4-e5f6-7890-abcd-ef0123456789'],
     )
-    entityType: EntityType4 = Field(
+    entityType: EntityType5 = Field(
         ...,
         description='The type of entity being valued',
         examples=['asset', 'property'],
@@ -7225,6 +7279,11 @@ class Catalogue(BaseModel):
         None,
         description='Human-readable summary of what changed in this version. Like a commit message for the document',
     )
+    tombstones: list[Tombstone] | None = Field(
+        None,
+        description='Entities deleted since the version named by previousVersionId, one entry each (proposal 0010). Same shape and same Level 2 rule as the root schema',
+        max_length=10000,
+    )
     assets: list[Asset] = Field(
         ..., description='The catalogued items', max_length=10000
     )
@@ -7722,7 +7781,7 @@ class Intestacy(BaseModel):
     notes: constr(max_length=2000) | None = None
 
 
-class EntityType5(Enum):
+class EntityType6(Enum):
     property = 'property'
     asset = 'asset'
 
@@ -7736,7 +7795,7 @@ class HeritableMoveableClassification(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    entityType: EntityType5
+    entityType: EntityType6
     entityId: UUID
     classification: Classification
     basis: constr(max_length=500) | None = None
@@ -18348,7 +18407,7 @@ class Event(BaseModel):
     )
 
 
-class EntityType6(Enum):
+class EntityType7(Enum):
     bequest = 'bequest'
     executor_appointment = 'executor_appointment'
     guardian_appointment = 'guardian_appointment'
@@ -18373,7 +18432,7 @@ class Acknowledgement(BaseModel):
         extra='allow',
     )
     id: UUID = Field(..., description='Unique identifier')
-    entityType: EntityType6 = Field(
+    entityType: EntityType7 = Field(
         ..., description='The type of entity being acknowledged'
     )
     entityId: UUID = Field(
@@ -18501,6 +18560,7 @@ class Subscription(BaseModel):
 class Kind(Enum):
     existence = 'existence'
     acyclic = 'acyclic'
+    absent = 'absent'
 
 
 class IntegrityConstraint(BaseModel):
@@ -18520,7 +18580,7 @@ class IntegrityConstraint(BaseModel):
     )
     kind: Kind | None = Field(
         'existence',
-        description="The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops",
+        description="The constraint's semantics. 'existence' (the default when absent, and the shape of every constraint before this keyword existed) requires the referenced id to be present in the target array. 'acyclic' additionally requires that following the reference repeatedly terminates — no node reachable from itself — within maxDepth hops. 'absent' requires the reverse of 'existence': the value at field must NOT be present in the target array. The tombstone rows use it — an id the document says was deleted must not also be live",
     )
     maxDepth: conint(ge=1, le=64) | None = Field(
         None,
@@ -18852,6 +18912,11 @@ class Schema(BaseModel):
         None,
         description='Human-readable summary of what changed in this version. Like a commit message for the document',
     )
+    tombstones: list[Tombstone] | None = Field(
+        None,
+        description='Entities deleted since the version named by previousVersionId, one entry each. A tombstone is what lets a document carry a change set and not only a full snapshot: without one, an entity missing from a newer version may have been deleted or may simply not have been exported (proposal 0010)',
+        max_length=10000,
+    )
     estate: Estate | None = Field(
         None, description='The single estate record for this document'
     )
@@ -18993,7 +19058,7 @@ class Schema(BaseModel):
         description='Application-specific state that is NOT part of the INHERIT interchange standard. Implementations may use these fields internally but should not expect other systems to populate or consume them. Implementations may add custom fields beyond those listed here',
     )
     referentialIntegrity: list[IntegrityConstraint] | None = Field(
-        [{'field': 'estate.testatorPersonId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Estate testator is not in the people array'}, {'field': 'executors[].personId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Executor references a person who does not exist'}, {'field': 'guardians[].personId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Guardian references a person who does not exist'}, {'field': 'guardians[].childPersonId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Guardian childPersonId references a person who does not exist'}, {'field': 'bequests[].beneficiaryId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Bequest beneficiary references a person who does not exist'}, {'field': 'bequests[].sourceAssetId', 'references': 'assets[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Bequest source references an asset that does not exist'}, {'field': 'bequests[].sourceAssetId', 'references': 'properties[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Bequest source references a property that does not exist'}, {'field': 'liabilities[].securedAgainst', 'references': 'assets[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Liability securedAgainst references an asset that does not exist'}, {'field': 'liabilities[].securedAgainst', 'references': 'properties[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Liability securedAgainst references a property that does not exist'}, {'field': 'kinships[].fromPersonId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Kinship fromPersonId references a person who does not exist'}, {'field': 'kinships[].toPersonId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Kinship toPersonId references a person who does not exist'}, {'field': 'relationships[].partners[].personId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Relationship partner references a person who does not exist'}, {'field': 'assets[].spaceId', 'references': 'spaces[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Asset spaceId references a space that does not exist'}, {'field': 'assets[].propertyId', 'references': 'properties[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Asset propertyId references a property that does not exist'}, {'field': 'assets[].assetCollectionId', 'references': 'assetCollections[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Asset assetCollectionId references a collection that does not exist'}, {'field': 'assets[].containedInAssetId', 'references': 'assets[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Asset containedInAssetId references an asset that does not exist'}, {'field': 'spaces[].containedInSpaceId', 'references': 'spaces[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Space containedInSpaceId references a space that does not exist'}, {'field': 'spaces[].propertyId', 'references': 'properties[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Space propertyId references a property that does not exist'}, {'field': 'assets[].containedInAssetId', 'references': 'assets[].id', 'kind': 'acyclic', 'maxDepth': 16, 'required': False, 'code': 'INHERIT_CONTAINMENT_CYCLE', 'errorMessage': 'Asset containment chain loops or exceeds the depth guard'}, {'field': 'spaces[].containedInSpaceId', 'references': 'spaces[].id', 'kind': 'acyclic', 'maxDepth': 16, 'required': False, 'code': 'INHERIT_CONTAINMENT_CYCLE', 'errorMessage': 'Space containment chain loops or exceeds the depth guard'}, {'field': 'proxyAuthorisations[].agentPersonId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Proxy authorisation agent references a person who does not exist'}, {'field': 'estate.testamentaryScenarios[].conditions[].personId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Scenario condition references a person who does not exist'}, {'field': 'estate.testamentaryScenarios[].activeBequests[]', 'references': 'bequests[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Scenario activeBequest references a bequest that does not exist'}, {'field': 'estate.testamentaryScenarios[].activeExecutors[]', 'references': 'executors[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Scenario activeExecutor references an executor that does not exist'}, {'field': 'pets[].petCareArrangement.trustId', 'references': 'trusts[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Pet care trust reference does not exist'}, {'field': 'pets[].petCareArrangement.bequestId', 'references': 'bequests[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Pet care bequest reference does not exist'}, {'field': 'pets[].petCareArrangement.nominatedCarerPersonId', 'references': 'people[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Pet care nominated carer does not exist'}, {'field': 'trusts[].petId', 'references': 'pets[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Trust petId references a pet that does not exist'}],
+        [{'field': 'estate.testatorPersonId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Estate testator is not in the people array'}, {'field': 'executors[].personId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Executor references a person who does not exist'}, {'field': 'guardians[].personId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Guardian references a person who does not exist'}, {'field': 'guardians[].childPersonId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Guardian childPersonId references a person who does not exist'}, {'field': 'bequests[].beneficiaryId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Bequest beneficiary references a person who does not exist'}, {'field': 'bequests[].sourceAssetId', 'references': 'assets[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Bequest source references an asset that does not exist'}, {'field': 'bequests[].sourceAssetId', 'references': 'properties[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Bequest source references a property that does not exist'}, {'field': 'liabilities[].securedAgainst', 'references': 'assets[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Liability securedAgainst references an asset that does not exist'}, {'field': 'liabilities[].securedAgainst', 'references': 'properties[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Liability securedAgainst references a property that does not exist'}, {'field': 'kinships[].fromPersonId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Kinship fromPersonId references a person who does not exist'}, {'field': 'kinships[].toPersonId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Kinship toPersonId references a person who does not exist'}, {'field': 'relationships[].partners[].personId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Relationship partner references a person who does not exist'}, {'field': 'assets[].spaceId', 'references': 'spaces[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Asset spaceId references a space that does not exist'}, {'field': 'assets[].propertyId', 'references': 'properties[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Asset propertyId references a property that does not exist'}, {'field': 'assets[].assetCollectionId', 'references': 'assetCollections[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Asset assetCollectionId references a collection that does not exist'}, {'field': 'assets[].containedInAssetId', 'references': 'assets[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Asset containedInAssetId references an asset that does not exist'}, {'field': 'spaces[].containedInSpaceId', 'references': 'spaces[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Space containedInSpaceId references a space that does not exist'}, {'field': 'spaces[].propertyId', 'references': 'properties[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Space propertyId references a property that does not exist'}, {'field': 'assets[].containedInAssetId', 'references': 'assets[].id', 'kind': 'acyclic', 'maxDepth': 16, 'required': False, 'code': 'INHERIT_CONTAINMENT_CYCLE', 'errorMessage': 'Asset containment chain loops or exceeds the depth guard'}, {'field': 'spaces[].containedInSpaceId', 'references': 'spaces[].id', 'kind': 'acyclic', 'maxDepth': 16, 'required': False, 'code': 'INHERIT_CONTAINMENT_CYCLE', 'errorMessage': 'Space containment chain loops or exceeds the depth guard'}, {'field': 'proxyAuthorisations[].agentPersonId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Proxy authorisation agent references a person who does not exist'}, {'field': 'estate.testamentaryScenarios[].conditions[].personId', 'references': 'people[].id', 'required': True, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Scenario condition references a person who does not exist'}, {'field': 'estate.testamentaryScenarios[].activeBequests[]', 'references': 'bequests[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Scenario activeBequest references a bequest that does not exist'}, {'field': 'estate.testamentaryScenarios[].activeExecutors[]', 'references': 'executors[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Scenario activeExecutor references an executor that does not exist'}, {'field': 'pets[].petCareArrangement.trustId', 'references': 'trusts[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Pet care trust reference does not exist'}, {'field': 'pets[].petCareArrangement.bequestId', 'references': 'bequests[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Pet care bequest reference does not exist'}, {'field': 'pets[].petCareArrangement.nominatedCarerPersonId', 'references': 'people[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Pet care nominated carer does not exist'}, {'field': 'trusts[].petId', 'references': 'pets[].id', 'required': False, 'code': 'INHERIT_REF_BROKEN', 'errorMessage': 'Trust petId references a pet that does not exist'}, {'field': 'tombstones[].id', 'references': 'people[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live person'}, {'field': 'tombstones[].id', 'references': 'kinships[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live kinship'}, {'field': 'tombstones[].id', 'references': 'relationships[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live relationship'}, {'field': 'tombstones[].id', 'references': 'properties[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live property'}, {'field': 'tombstones[].id', 'references': 'assets[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live asset'}, {'field': 'tombstones[].id', 'references': 'assetCollections[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live asset collection'}, {'field': 'tombstones[].id', 'references': 'liabilities[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live liability'}, {'field': 'tombstones[].id', 'references': 'bequests[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live bequest'}, {'field': 'tombstones[].id', 'references': 'trusts[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live trust'}, {'field': 'tombstones[].id', 'references': 'executors[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live executor'}, {'field': 'tombstones[].id', 'references': 'guardians[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live guardian'}, {'field': 'tombstones[].id', 'references': 'wishes[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live wish'}, {'field': 'tombstones[].id', 'references': 'documents[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live document'}, {'field': 'tombstones[].id', 'references': 'nonprobateTransfers[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live nonprobate transfer'}, {'field': 'tombstones[].id', 'references': 'proxyAuthorisations[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live proxy authorisation'}, {'field': 'tombstones[].id', 'references': 'powersOfAppointment[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live power of appointment'}, {'field': 'tombstones[].id', 'references': 'valuations[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live valuation'}, {'field': 'tombstones[].id', 'references': 'lifetimeTransfers[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live lifetime transfer'}, {'field': 'tombstones[].id', 'references': 'organisations[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live organisation'}, {'field': 'tombstones[].id', 'references': 'spaces[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live space'}, {'field': 'tombstones[].id', 'references': 'insurancePolicies[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live insurance policy'}, {'field': 'tombstones[].id', 'references': 'pets[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live pet'}, {'field': 'tombstones[].id', 'references': 'assetInterests[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live asset interest'}, {'field': 'tombstones[].id', 'references': 'dealerInterests[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live dealer interest'}, {'field': 'tombstones[].id', 'references': 'legacyContacts[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live legacy contact'}, {'field': 'tombstones[].id', 'references': 'recommendedActions[].id', 'kind': 'absent', 'required': True, 'code': 'INHERIT_TOMBSTONE_LIVE', 'errorMessage': 'A tombstoned id is still a live recommended action'}],
         description='Machine-readable cross-reference integrity constraints. Defined in the schema, not in individual documents. Validators read these rules and check that every referenced ID exists in the target array',
         max_length=10000,
         validate_default=True,
@@ -20058,6 +20123,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                                     'recommendedActions',
                                                                     'schemaVersion',
                                                                     'spaces',
+                                                                    'tombstones',
                                                                     'valuations',
                                                                     'versionedAt',
                                                                     'wishes'],
@@ -20088,6 +20154,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                            'recommendedActions',
                                                            'schemaVersion',
                                                            'spaces',
+                                                           'tombstones',
                                                            'valuations',
                                                            'versionedAt',
                                                            'wishes']},
@@ -21992,6 +22059,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                                  'relationships',
                                                                  'schemaVersion',
                                                                  'spaces',
+                                                                 'tombstones',
                                                                  'trusts',
                                                                  'valuations',
                                                                  'versionedAt',
@@ -22036,6 +22104,7 @@ _LAYER_RULES = {'https://openinherit.org/v3/acknowledgement.json': {'conditional
                                                         'relationships',
                                                         'schemaVersion',
                                                         'spaces',
+                                                        'tombstones',
                                                         'trusts',
                                                         'valuations',
                                                         'versionedAt',
@@ -22363,6 +22432,7 @@ _REFKEYS = {'https://openinherit.org/v3/asset-categories/business.json': {'props
                                                          'recommendedActions',
                                                          'schemaVersion',
                                                          'spaces',
+                                                         'tombstones',
                                                          'valuations',
                                                          'versionedAt',
                                                          'wishes'],

@@ -24,6 +24,12 @@
         "severity": "warning"
       },
       {
+        "code": "INHERIT_TOMBSTONE_LIVE",
+        "level": 2,
+        "description": "A document carries a tombstone for an id that is also a live entity in the same document",
+        "severity": "error"
+      },
+      {
         "code": "INHERIT_COMPLETENESS_FIELD_MISSING",
         "level": 3,
         "description": "Required jurisdiction-specific field is absent",

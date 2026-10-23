@@ -90,6 +90,15 @@ function checkAcyclic(doc, constraint) {
 }
 
 /**
+ * kind 'absent' — the value at field must NOT be present at references (proposal
+ * 0010): a tombstoned id must not also be a live entity.
+ */
+function checkAbsent(doc, constraint) {
+  const live = new Set(resolvePath(doc, constraint.references).map(String));
+  return resolvePath(doc, constraint.field).filter(v => live.has(String(v)));
+}
+
+/**
  * Run every declared integrity constraint against a document.
  * Returns an array of { constraint, broken } for any failures.
  */
@@ -107,13 +116,14 @@ function checkAllConstraints(doc) {
   for (const group of Object.values(fieldGroups)) {
     const field = group[0].field;
     const kind = group[0].kind ?? 'existence';
-    if (kind !== 'existence' && kind !== 'acyclic') {
+    if (kind !== 'existence' && kind !== 'acyclic' && kind !== 'absent') {
       // A skipped constraint is a gate that reports green.
       throw new Error(`INHERIT_CONSTRAINT_UNKNOWN: ${kind} on ${field}`);
     }
-    if (kind === 'acyclic') {
+    if (kind === 'acyclic' || kind === 'absent') {
+      // Every row must hold on its own: neither kind has multi-target semantics.
       for (const c of group) {
-        const broken = checkAcyclic(doc, c);
+        const broken = kind === 'acyclic' ? checkAcyclic(doc, c) : checkAbsent(doc, c);
         if (broken.length > 0) failures.push({ field, broken, constraint: c });
       }
       continue;
@@ -346,7 +356,7 @@ test('Level 2 valid — conformance declaration present and correct', () => {
   assertEmpty(errors, 'Conformance declaration errors');
 });
 
-test('Level 2 valid — all 28 integrity constraints pass', () => {
+test('Level 2 valid — all 54 integrity constraints pass', () => {
   const failures = checkAllConstraints(level2ValidDoc);
   if (failures.length > 0) {
     const details = failures.map(f => `${f.field}: ${f.broken.join(', ')}`).join('; ');
@@ -356,9 +366,10 @@ test('Level 2 valid — all 28 integrity constraints pass', () => {
 
 // Pinned per kind, so a constraint added, removed or re-kinded changes this test in the same
 // commit. It read 26 from 9b1bed3 (spatial containment) while c671f27 (space + liability) took
-// the list to 28, because nothing ran this script; validate-examples.yml now does.
-test('Level 2 valid — constraint count is 28 (26 existence + 2 acyclic)', () => {
-  assertEqual(constraints.length, 28, 'Constraint count');
+// the list to 28, because nothing ran this script; validate-examples.yml now does. Proposal 0010
+// (tombstones) adds one 'absent' row per entity array: 26 more, 54 in all.
+test('Level 2 valid — constraint count is 54 (26 existence + 2 acyclic + 26 absent)', () => {
+  assertEqual(constraints.length, 54, 'Constraint count');
   const byKind = constraints.reduce((n, c) => {
     const kind = c.kind ?? 'existence';
     n[kind] = (n[kind] ?? 0) + 1;
@@ -366,6 +377,7 @@ test('Level 2 valid — constraint count is 28 (26 existence + 2 acyclic)', () =
   }, {});
   assertEqual(byKind.existence, 26, 'Existence constraint count');
   assertEqual(byKind.acyclic, 2, 'Acyclic constraint count');
+  assertEqual(byKind.absent, 26, 'Absent constraint count');
 });
 
 // Containment cycle check — a containment cycle whose every link resolves is still a Level 2 failure.

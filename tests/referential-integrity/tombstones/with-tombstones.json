@@ -1,0 +1,142 @@
+{
+  "$schema": "https://openinherit.org/v3/schema.json",
+  "schemaVersion": "6.7.0",
+  "documentVersion": 2,
+  "versionedAt": "2026-10-21T09:00:00Z",
+  "previousVersionId": "7e000000-0000-4000-d000-000000000001",
+  "changeDescription": "Removed a beneficiary who predeceased the testator and a bequest of a sold car",
+  "estate": {
+    "id": "7e000000-0000-4000-f000-000000000001",
+    "testatorPersonId": "7e000000-0000-4000-a000-000000000001",
+    "status": "planning",
+    "domicile": {
+      "country": "GB",
+      "subdivision": "GB-ENG",
+      "legalSystems": [
+        "common_law"
+      ],
+      "name": "England & Wales"
+    },
+    "createdAt": "2026-10-20T09:00:00Z",
+    "lastModifiedAt": "2026-10-20T09:00:00Z"
+  },
+  "people": [
+    {
+      "id": "7e000000-0000-4000-a000-000000000001",
+      "givenName": "Ada",
+      "familyName": "Hale",
+      "roles": [
+        "testator"
+      ]
+    },
+    {
+      "id": "7e000000-0000-4000-a000-000000000002",
+      "givenName": "Ben",
+      "familyName": "Hale",
+      "roles": [
+        "beneficiary"
+      ]
+    },
+    {
+      "id": "7e000000-0000-4000-a000-000000000003",
+      "givenName": "Cara",
+      "familyName": "Hale",
+      "roles": [
+        "beneficiary"
+      ]
+    },
+    {
+      "id": "7e000000-0000-4000-a000-000000000004",
+      "givenName": "Dev",
+      "familyName": "Okafor",
+      "roles": [
+        "guardian"
+      ]
+    }
+  ],
+  "kinships": [
+    {
+      "id": "7e000000-0000-4000-a100-000000000001",
+      "kinshipType": "parent_child_biological",
+      "fromPersonId": "7e000000-0000-4000-a000-000000000001",
+      "toPersonId": "7e000000-0000-4000-a000-000000000003"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "7e000000-0000-4000-a200-000000000001",
+      "type": "marriage_civil",
+      "partners": [
+        {
+          "personId": "7e000000-0000-4000-a000-000000000001",
+          "ordinal": 1
+        },
+        {
+          "personId": "7e000000-0000-4000-a000-000000000002",
+          "ordinal": 2
+        }
+      ]
+    }
+  ],
+  "guardians": [
+    {
+      "id": "7e000000-0000-4000-a300-000000000001",
+      "personId": "7e000000-0000-4000-a000-000000000004",
+      "childPersonId": "7e000000-0000-4000-a000-000000000003",
+      "role": "primary",
+      "appointmentType": "testamentary"
+    }
+  ],
+  "bequests": [
+    {
+      "id": "7e000000-0000-4000-c000-000000000001",
+      "bequestType": "pecuniary",
+      "beneficiaryId": "7e000000-0000-4000-a000-000000000004"
+    }
+  ],
+  "trusts": [
+    {
+      "id": "7e000000-0000-4000-b000-000000000001",
+      "name": "Pip's care trust",
+      "trustType": "discretionary",
+      "petId": "7e000000-0000-4000-d000-000000000001",
+      "trustees": [
+        {
+          "personId": "7e000000-0000-4000-a000-000000000004",
+          "role": "trustee"
+        }
+      ],
+      "beneficiaries": [
+        {
+          "personId": "7e000000-0000-4000-a000-000000000004",
+          "interestType": "discretionary"
+        }
+      ]
+    }
+  ],
+  "pets": [
+    {
+      "id": "7e000000-0000-4000-d000-000000000001",
+      "petName": "Pip",
+      "species": "dog",
+      "petCareArrangement": {
+        "trustId": "7e000000-0000-4000-b000-000000000001",
+        "bequestId": "7e000000-0000-4000-c000-000000000001",
+        "nominatedCarerPersonId": "7e000000-0000-4000-a000-000000000004"
+      }
+    }
+  ],
+  "tombstones": [
+    {
+      "entityType": "person",
+      "id": "7e000000-0000-4000-a000-000000000099",
+      "deletedAt": "2026-10-21T08:30:00Z",
+      "reason": "Predeceased the testator; removed from the plan"
+    },
+    {
+      "entityType": "bequest",
+      "id": "7e000000-0000-4000-c000-000000000099",
+      "deletedAt": "2026-10-21T08:31:00Z"
+    }
+  ]
+}

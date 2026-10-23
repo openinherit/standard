@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- A document can say an entity was deleted (proposal 0010). `schema.json` and `catalogue.json`
+  gain an optional `tombstones` array of `Tombstone`: `entityType`, `id` and `deletedAt`
+  (required) and `reason`, one entry per entity deleted since `previousVersionId`, so an export
+  can carry a change set and not only a full snapshot. `entityType` names the 26 entities with
+  their own root array in either root (`asset` and `asset_collection` spelt as on `splitFrom` and
+  `mergedInto`).
+  Level 2 refuses a tombstoned id that is still a live entity in the same document:
+  `IntegrityConstraint.kind` gains `absent`, `referentialIntegrity` declares one
+  `tombstones[].id` row per entity array, `validate-refs.mjs` and `test-conformance.mjs` enforce
+  them, and
+  `INHERIT_TOMBSTONE_LIVE` is registered in `common/error-codes.json`. Additive: a document
+  without `tombstones` validates exactly as before. Vendored bundles, generated clients, runtime
+  validators, Go models and the reference pages are regenerated.
+
 ## [6.8.0] — 2026-10-22
 
 ### Added

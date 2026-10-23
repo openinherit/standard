@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [6.8.0] — 2026-10-22
+
 ### Added
 
 - `AssetInterest` is as expressive as `DealerInterest` (proposal 0009). Five optional properties:
@@ -106,6 +108,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   and the reference page are regenerated.
 
 ### Fixed
+
+- `scripts/test-conformance.mjs` pinned 26 referential-integrity constraints after the list grew
+  to 28, and failed. It now pins 28 per kind (26 existence + 2 acyclic) and runs in
+  `validate-examples.yml`, so the next change to the list is caught in the pull request.
 
 - The generated Zod validators no longer fill in a missing required property whose schema declares
   a `default`: `write-conditional-layer.py` asserts its presence on the raw input. Zod accepted a

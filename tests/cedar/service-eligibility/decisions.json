@@ -1,0 +1,223 @@
+{
+  "_doc": "Request-to-decision fixtures for the Cedar service-eligibility packs. `inherit conformance --rules` loads every *.cedar pack in packDir as one policy set and requires each case's decision to equal `expected`. Every pack must have at least one allow case it grants itself and at least one deny case, or the leg cannot answer (exit 2). Complements the symbolic proof in manifest.yaml: that proves no forbidden request is reachable; these pin what specific requests decide. `basis` cites why the expected decision is right.",
+  "schema": "cedar/service-eligibility/service-eligibility.cedarschema",
+  "packDir": "cedar/service-eligibility",
+  "principalType": "Professional",
+  "resourceType": "ServiceRequest",
+  "action": "OfferService",
+  "cases": [
+    {
+      "label": "ew-solicitor-reserved-probate",
+      "pack": "cedar/service-eligibility/ew.cedar",
+      "principal": {
+        "category": "solicitor"
+      },
+      "resource": {
+        "serviceType": "reserved_probate_activities",
+        "jurisdiction": "E&W"
+      },
+      "expected": "allow",
+      "basis": "A solicitor is an authorised person for reserved probate activities: Legal Services Act 2007 s.18 and Sch 4 (the SRA as approved regulator)."
+    },
+    {
+      "label": "ew-tax-adviser-iht-typical-range",
+      "pack": "cedar/service-eligibility/ew.cedar",
+      "principal": {
+        "category": "tax_adviser"
+      },
+      "resource": {
+        "serviceType": "iht_advice",
+        "jurisdiction": "E&W",
+        "quoteMode": "typical-range"
+      },
+      "expected": "allow",
+      "basis": "Tax advice is unregulated in England and Wales; a typical-range quote is inside the quote_estimation ceiling."
+    },
+    {
+      "label": "ew-unregulated-reserved-probate",
+      "pack": "cedar/service-eligibility/ew.cedar",
+      "principal": {
+        "category": "unregulated_will_writer"
+      },
+      "resource": {
+        "serviceType": "reserved_probate_activities",
+        "jurisdiction": "E&W"
+      },
+      "expected": "deny",
+      "basis": "Reserved probate activities may not be carried on by an unauthorised person: Legal Services Act 2007 s.12(1)(d); s.14 makes it an offence."
+    },
+    {
+      "label": "ew-solicitor-platform-computed-quote",
+      "pack": "cedar/service-eligibility/ew.cedar",
+      "principal": {
+        "category": "solicitor"
+      },
+      "resource": {
+        "serviceType": "will_drafting",
+        "jurisdiction": "E&W",
+        "quoteMode": "platform-computed"
+      },
+      "expected": "deny",
+      "basis": "quote_estimation is professional-authored-only: a platform-computed quote is outside the ceiling."
+    },
+    {
+      "label": "ew-solicitor-opaque-routing",
+      "pack": "cedar/service-eligibility/ew.cedar",
+      "principal": {
+        "category": "solicitor"
+      },
+      "resource": {
+        "serviceType": "estate_administration",
+        "jurisdiction": "E&W",
+        "proximityMode": "opaque-routing"
+      },
+      "expected": "deny",
+      "basis": "proximity_matching is user-sort-ok: opaque routing is outside the ceiling."
+    },
+    {
+      "label": "ew-tax-adviser-will-drafting",
+      "pack": "cedar/service-eligibility/ew.cedar",
+      "principal": {
+        "category": "tax_adviser"
+      },
+      "resource": {
+        "serviceType": "will_drafting",
+        "jurisdiction": "E&W"
+      },
+      "expected": "deny",
+      "basis": "Default-deny: the pack surfaces will drafting from solicitors only. Will drafting is unreserved in law (LSA 2007 Sch 2); the pack is deliberately narrower."
+    },
+    {
+      "label": "ew-solicitor-scottish-confirmation",
+      "pack": "cedar/service-eligibility/ew.cedar",
+      "principal": {
+        "category": "solicitor"
+      },
+      "resource": {
+        "serviceType": "reserved_confirmation_activities",
+        "jurisdiction": "E&W"
+      },
+      "expected": "deny",
+      "basis": "reserved_confirmation_activities is the Scottish service type (Solicitors (Scotland) Act 1980 s.32(1)(c)); the E&W pack does not grant it."
+    },
+    {
+      "label": "sct-solicitor-confirmation",
+      "pack": "cedar/service-eligibility/sct.cedar",
+      "principal": {
+        "category": "solicitor"
+      },
+      "resource": {
+        "serviceType": "reserved_confirmation_activities",
+        "jurisdiction": "GB-SCT"
+      },
+      "expected": "allow",
+      "basis": "A solicitor may prepare papers to found an application for confirmation: Solicitors (Scotland) Act 1980 s.32(1)(c) reserves it to qualified solicitors."
+    },
+    {
+      "label": "sct-tax-adviser-iht",
+      "pack": "cedar/service-eligibility/sct.cedar",
+      "principal": {
+        "category": "tax_adviser"
+      },
+      "resource": {
+        "serviceType": "iht_advice",
+        "jurisdiction": "GB-SCT"
+      },
+      "expected": "allow",
+      "basis": "Inheritance Tax is UK-wide (IHTA 1984) and tax advice is unregulated in Scotland."
+    },
+    {
+      "label": "sct-unregulated-confirmation",
+      "pack": "cedar/service-eligibility/sct.cedar",
+      "principal": {
+        "category": "unregulated_will_writer"
+      },
+      "resource": {
+        "serviceType": "reserved_confirmation_activities",
+        "jurisdiction": "GB-SCT"
+      },
+      "expected": "deny",
+      "basis": "An unqualified person may not prepare confirmation papers for reward: Solicitors (Scotland) Act 1980 s.32(1)(c)."
+    },
+    {
+      "label": "sct-unregulated-estate-writ",
+      "pack": "cedar/service-eligibility/sct.cedar",
+      "principal": {
+        "category": "unregulated_will_writer"
+      },
+      "resource": {
+        "serviceType": "reserved_instrument_activities",
+        "jurisdiction": "GB-SCT"
+      },
+      "expected": "deny",
+      "basis": "An unqualified person may not draw a writ relating to heritable or moveable estate for reward: Solicitors (Scotland) Act 1980 s.32(1)(a)."
+    },
+    {
+      "label": "sct-solicitor-ew-probate-term",
+      "pack": "cedar/service-eligibility/sct.cedar",
+      "principal": {
+        "category": "solicitor"
+      },
+      "resource": {
+        "serviceType": "reserved_probate_activities",
+        "jurisdiction": "GB-SCT"
+      },
+      "expected": "deny",
+      "basis": "reserved_probate_activities is the E&W service type; Scotland's counterpart is reserved_confirmation_activities, so the Scottish pack does not grant it."
+    },
+    {
+      "label": "nir-solicitor-reserved-probate",
+      "pack": "cedar/service-eligibility/nir.cedar",
+      "principal": {
+        "category": "solicitor"
+      },
+      "resource": {
+        "serviceType": "reserved_probate_activities",
+        "jurisdiction": "GB-NIR"
+      },
+      "expected": "allow",
+      "basis": "A solicitor may prepare probate and administration papers: Solicitors (Northern Ireland) Order 1976 art.23 reserves them to qualified solicitors."
+    },
+    {
+      "label": "nir-tax-adviser-iht-user-sort",
+      "pack": "cedar/service-eligibility/nir.cedar",
+      "principal": {
+        "category": "tax_adviser"
+      },
+      "resource": {
+        "serviceType": "iht_advice",
+        "jurisdiction": "GB-NIR",
+        "proximityMode": "user-sort"
+      },
+      "expected": "allow",
+      "basis": "Inheritance Tax is UK-wide (IHTA 1984); user-sort proximity is inside the proximity_matching ceiling."
+    },
+    {
+      "label": "nir-unregulated-estate-instrument",
+      "pack": "cedar/service-eligibility/nir.cedar",
+      "principal": {
+        "category": "unregulated_will_writer"
+      },
+      "resource": {
+        "serviceType": "reserved_instrument_activities",
+        "jurisdiction": "GB-NIR"
+      },
+      "expected": "deny",
+      "basis": "An unqualified person may not draw an instrument relating to real or personal estate for reward: Solicitors (Northern Ireland) Order 1976 art.23."
+    },
+    {
+      "label": "nir-solicitor-platform-computed-quote",
+      "pack": "cedar/service-eligibility/nir.cedar",
+      "principal": {
+        "category": "solicitor"
+      },
+      "resource": {
+        "serviceType": "trust_administration",
+        "jurisdiction": "GB-NIR",
+        "quoteMode": "platform-computed"
+      },
+      "expected": "deny",
+      "basis": "quote_estimation is professional-authored-only: a platform-computed quote is outside the ceiling."
+    }
+  ]
+}

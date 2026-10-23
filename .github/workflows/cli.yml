@@ -8,6 +8,12 @@ name: CLI
 #                 VALID case accepted, every INVALID case refused by its
 #                 declared rule (exit 1 otherwise; exit 2 if the kit's schemas
 #                 are not the ones the CLI embeds)
+#   rules (cedar) — the CLI evaluates every published Cedar service-eligibility
+#                 pack against tests/cedar/service-eligibility/decisions.json
+#                 (exit 1 on a wrong decision; exit 2 on a pack no fixture
+#                 exercises). The Catala leg of --rules is not run here: it
+#                 needs clerk 1.2.0, and on main 11 of the 16 gov-oracles name a
+#                 rule body that is not published, so it answers exit 2.
 #
 # No path filter, on purpose: a v3/ change moves both the kit and the schemas
 # the CLI embeds, and a filter on packages/cli/** would never see it.
@@ -40,3 +46,6 @@ jobs:
         run: |
           go build -o "$RUNNER_TEMP/inherit" .
           "$RUNNER_TEMP/inherit" conformance --kit ../conformance
+      - name: The published Cedar packs decide every published request as expected
+        run: |
+          "$RUNNER_TEMP/inherit" conformance --rules --leg cedar --standard ../..

@@ -84,9 +84,25 @@ sha256 in its manifest.
 Exit codes:
   0 — CONFORMANT: every case graded as the kit expects
   1 — NOT CONFORMANT: at least one case missed
-  2 — the kit cannot be trusted or read (missing, tampered, or from another release)`,
+  2 — the kit cannot be trusted or read (missing, tampered, or from another release)
+
+With --rules, the standard's own published rules are checked instead, from
+the standard at --standard:
+  catala — every tests/oracles/*.oracle.json gov-oracle is re-run through the
+           published Catala with clerk 1.2.0, and the computed answer must
+           equal the cited authoritative figure. clerk not found is exit 2.
+           An oracle whose rule body is not published is UNPUBLISHED RULE.
+  cedar  — every published cedar/service-eligibility pack is evaluated, as
+           one policy set, against tests/cedar/service-eligibility/
+           decisions.json; every decision must equal the expected one.
+  0 — every published answer reproduced
+  1 — at least one differs (whatever else could not run)
+  2 — something could not be answered: never a pass`,
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
+		if conformanceRulesFlag {
+			os.Exit(ExecuteConformanceRules(conformanceStandardFlag, conformanceLegFlag, conformanceClerkFlag, conformanceJSONFlag, os.Stdout))
+		}
 		os.Exit(ExecuteConformance(conformanceKitFlag, conformanceJSONFlag, os.Stdout))
 	},
 }

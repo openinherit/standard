@@ -42,6 +42,18 @@ The gate + an every-run "LEAKY mutant must fail" self-test run as the
 `cedar-analysis / Cedar service-eligibility analysis (no disallowed service reachable, E&W)`
 required check on `main-protection`.
 
+## Request→decision fixtures (`inherit conformance --rules`)
+
+The proof above says no forbidden request is reachable. It does not say what a given request
+decides. `tests/cedar/service-eligibility/decisions.json` does: each case is one professional
+category, one service request and the decision the packs must reach, with the statute or posture
+that makes it right in `basis`.
+
+`inherit conformance --rules --leg cedar` (in `packages/cli`) loads every `*.cedar` pack here as one
+policy set and evaluates each case. A wrong decision is exit 1. It is exit 2, never a pass, when a
+pack lacks an `allow` case it grants itself or a `deny` case, or when a request does not conform to
+the schema. **A new pack therefore needs fixtures in the same change**, or the `cli` check goes red.
+
 ## Toolchain provenance
 
 | Tool                 | Pin                                        | Note                                                                                                                                                                                                                           |

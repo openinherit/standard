@@ -33,6 +33,8 @@ function makeTree() {
   const t = join(work, `tree-${++n}`);
   mkdirSync(t);
   writeJson(join(t, 'package.json'), { name: 'openinherit', version: FIXTURE_VERSION, private: true });
+  // A CHANGELOG as release.sh leaves it: [Unreleased] closed, the release on top.
+  writeFileSync(join(t, 'CHANGELOG.md'), changelog('', FIXTURE_VERSION));
   cpSync(join(ROOT, 'v3'), join(t, 'v3'), { recursive: true });
   cpSync(join(ROOT, 'extensions-registry.json'), join(t, 'extensions-registry.json'));
   // Root and package reference-data start identical; the package ships only these two.
@@ -56,6 +58,11 @@ function makeTree() {
   set(t, 'packages/conformance/manifest.json', (m) => { m.version = FIXTURE_VERSION; });
   return t;
 }
+/** A CHANGELOG whose [Unreleased] section holds `unreleased`, above the given release. */
+function changelog(unreleased, ...versions) {
+  return ['# Changelog', '', '## [Unreleased]', '', unreleased,
+    ...versions.flatMap((v) => [`## [${v}] — 2026-10-22`, '', `- Released ${v}.`, ''])].join('\n');
+}
 const set = (t, rel, fn) => {
   const p = join(t, rel);
   const d = readJson(p);
@@ -75,7 +82,7 @@ const cases = [
   // R1 -- version
   ['the schema package is at a different version from root', tree((t) => set(t, 'packages/schema/package.json', (p) => { p.version = '6.6.1'; })), 1, 'R1'],
   ['the conformance package is at a different version from root', tree((t) => set(t, 'packages/conformance/package.json', (p) => { p.version = '6.5.0'; })), 1, 'R1+R6'],
-  ['--tag names a version the packages are not at', [...tree(), '--tag', 'v6.7.0'], 1, 'R1'],
+  ['--tag names a version the packages are not at', [...tree(), '--tag', 'v6.7.0'], 1, 'R1+R7'],
   ['--tag names the version the packages are at', [...tree(), '--tag', 'v6.6.0'], 0],
   ['--tag is not a version tag', [...tree(), '--tag', 'main'], 2],
 
@@ -118,6 +125,19 @@ const cases = [
   }), 1, 'R6'],
   ['an INVALID fixture the manifest names is not packed', tree((t) => unlinkSync(join(t, 'packages/conformance/estate/invalid/bad-uuid.json'))), 1, 'R6'],
   ['"files" stops shipping the manifest', tree((t) => set(t, 'packages/conformance/package.json', (p) => { p.files = p.files.filter((f) => f !== 'manifest.json'); })), 1, 'R6'],
+
+  // R7 -- the tagged commit's CHANGELOG says the tag is everything in it
+  ['--tag on a tree with a change still under [Unreleased]', [...tree((t) => writeFileSync(join(t, 'CHANGELOG.md'),
+    changelog('### Removed\n\n- **BREAKING (7.0.0):** a field is removed.\n', '6.6.0'))), '--tag', 'v6.6.0'], 1, 'R7'],
+  ['--tag on a tree whose newest CHANGELOG release is not the tag', [...tree((t) => writeFileSync(join(t, 'CHANGELOG.md'),
+    changelog('', '6.7.0', '6.6.0'))), '--tag', 'v6.6.0'], 1, 'R7'],
+  ['--tag on a tree with no CHANGELOG entry for the tag', [...tree((t) => writeFileSync(join(t, 'CHANGELOG.md'),
+    changelog('', '6.5.0'))), '--tag', 'v6.6.0'], 1, 'R7'],
+  ['--tag on a tree with no CHANGELOG.md', [...tree((t) => unlinkSync(join(t, 'CHANGELOG.md'))), '--tag', 'v6.6.0'], 1, 'R7'],
+  ['no --tag: work under [Unreleased] is normal between releases', tree((t) => writeFileSync(join(t, 'CHANGELOG.md'),
+    changelog('### Added\n\n- Something new.\n', '6.6.0'))), 0],
+  ['--tag on a tree whose [Unreleased] holds only blank lines', [...tree((t) => writeFileSync(join(t, 'CHANGELOG.md'),
+    changelog('\n\n', '6.6.0'))), '--tag', 'v6.6.0'], 0],
 
   // exit 2 -- cannot answer is never a pass
   ['--root does not exist', ['--root', join(work, 'nowhere')], 2],

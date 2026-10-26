@@ -202,6 +202,12 @@ Update ROADMAP.md heading and close CHANGELOG.md [Unreleased] section."
   fi
 fi
 
+# The tag goes on main as it is NOW. Refuse before tagging if that is not the
+# release: a stale package, or work merged after the bump that the CHANGELOG
+# says is not in this version (R7). publish.yml asks again on the tag.
+node "$REPO_DIR/scripts/check-release-contents.mjs" --root "$REPO_DIR" --tag "v${NEW_VERSION}" \
+  || fail "check-release-contents.mjs refused main as v${NEW_VERSION} (reason above). Nothing is tagged."
+
 # ── Step 6: Build release assets ─────────────────────────────────
 log "[6/8] Building release assets..."
 

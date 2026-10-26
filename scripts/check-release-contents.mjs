@@ -19,6 +19,10 @@
 //   R6  the packed conformance kit matches its own manifest: the manifest is at
 //       the package's version, and every file it names is packed, byte for byte
 //       at the sha256 it records
+//   R7  with --tag: the CHANGELOG's newest release is the tag and [Unreleased] is
+//       empty. publish.yml packs the TAGGED commit, so a change merged after the
+//       version bump -- a breaking one, even -- would otherwise ship under a
+//       version whose CHANGELOG says it is not in it
 //
 // USAGE: node scripts/check-release-contents.mjs [--root <dir>] [--tag vX.Y.Z]
 // EXIT CODES: 0 clean - 1 one or more assertions failed - 2 cannot answer.
@@ -216,6 +220,32 @@ if (!existsSync(packedManifest)) {
       fail("R6", `the packed conformance manifest names ${file}, which is not in the package.`);
     } else if (createHash("sha256").update(readFileSync(path)).digest("hex") !== sha256) {
       fail("R6", `the packed ${file} does not match its sha256 in the conformance manifest.`);
+    }
+  }
+}
+
+// ---- R7: the tagged commit's CHANGELOG ------------------------------------------
+if (tag !== null) {
+  const changelogPath = join(root, "CHANGELOG.md");
+  if (!existsSync(changelogPath)) {
+    fail("R7", `there is no CHANGELOG.md, so nothing says what ${tag} contains.`);
+  } else {
+    const lines = readFileSync(changelogPath, "utf8").split(/\r?\n/);
+    const sections = [];
+    for (const line of lines) {
+      const heading = /^## \[([^\]]+)\]/.exec(line);
+      if (heading) sections.push({ name: heading[1], body: [] });
+      else if (sections.length) sections.at(-1).body.push(line);
+    }
+    const unreleased = sections.find((s) => s.name === "Unreleased");
+    const pending = unreleased ? unreleased.body.filter((l) => l.trim() !== "") : [];
+    if (pending.length) {
+      fail("R7", `CHANGELOG.md still has ${pending.length} line(s) under [Unreleased] ("${pending[0].trim()}"), so this commit holds work that is not in ${tag}. Tag the commit that closed ${tag}, or cut a new version.`);
+    }
+    const newest = sections.find((s) => s.name !== "Unreleased");
+    if (!newest) fail("R7", `CHANGELOG.md has no release section, so nothing says what ${tag} contains.`);
+    else if (`v${newest.name}` !== tag) {
+      fail("R7", `the newest release in CHANGELOG.md is [${newest.name}], but the tag is ${tag}.`);
     }
   }
 }

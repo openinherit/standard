@@ -22,6 +22,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   disagree. Vendored bundles, generated clients, the Zod, pydantic and Go types, the conformance kit
   and the reference page are regenerated.
 
+### Added
+
+- `check-release-contents.mjs` gains R7: with `--tag vX.Y.Z`, the tagged commit's `CHANGELOG.md`
+  must have nothing under `[Unreleased]`, and its newest release must be `X.Y.Z`. A tag packs the
+  commit it sits on, so without this a change merged after the version bump, breaking or not,
+  would be published under a version whose changelog says it is not in it. `release.sh` now runs
+  the check before it tags, as well as `publish.yml` before it publishes.
+
 ## [6.8.0] — 2026-10-22
 
 ### Added
